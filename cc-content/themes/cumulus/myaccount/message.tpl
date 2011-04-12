@@ -1,0 +1,39 @@
+
+<h1><?=Language::GetText('message_header')?></h1>
+
+<?php if ($success): ?>
+    <div id="success"><?=$success?></div>
+<?php elseif ($error_msg): ?>
+    <div id="error"><?=$error_msg?></div>
+<?php endif; ?>
+
+
+<div class="block">
+
+    <form action="<?=HOST?>/myaccount/message/" method="post">
+
+        <div class="row">
+            <label<?=(isset ($Errors['recipient'])) ? ' class="errors"' : ''?>><?=Language::GetText('to')?>: </label>
+            <input class="text" type="text" name="to" value="<?=$to?>" /> *<?=Language::GetText('members_username')?>
+        </div>
+
+        <div class="row">
+            <label<?=(isset ($Errors['subject'])) ? ' class="errors"' : ''?>><?=Language::GetText('subject')?>: </label>
+            <input class="text" type="text" name="subject" value="<?=$subject?>" />
+        </div>
+
+        <div class="row">
+            <label<?=(isset ($Errors['message'])) ? ' class="errors"' : ''?>><?=Language::GetText('message')?>: </label>
+            <textarea class="text" name="message"><?=$msg?></textarea>
+        </div>
+
+        <div class="row-shift">
+            <input type="hidden" name="submitted" value="yes" />
+            <input type="submit" name="button" value="Send Message" />
+            <a href="" class="button"><span><?=Language::GetText('message_button')?></span></a>
+        </div>
+
+    </form>
+
+</div>
+

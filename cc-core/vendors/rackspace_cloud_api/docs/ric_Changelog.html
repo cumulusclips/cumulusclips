@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>Changelog</title>
+<link rel="stylesheet" type="text/css" href="media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">php-cloudfiles</td>
+  </tr>
+  <tr><td class="header_line"><img src="media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                    
+                                                                      		  [ <a href="classtrees_php-cloudfiles.html" class="menu">class tree: php-cloudfiles</a> ]
+		  [ <a href="elementindex_php-cloudfiles.html" class="menu">index: php-cloudfiles</a> ]
+		  	    [ <a href="elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="ric">
+					<p><a href="ric_Changelog.html">Changelog</a></p>
+					<p><a href="ric_AUTHORS.html">AUTHORS</a></p>
+					<p><a href="ric_README.html">README</a></p>
+					<p><a href="ric_COPYING.html">COPYING</a></p>
+			</div>
+      <b>Packages:</b><br />
+              <a href="li_php-cloudfiles.html">php-cloudfiles</a><br />
+              <a href="li_php-cloudfiles-exceptions.html">php-cloudfiles-exceptions</a><br />
+              <a href="li_php-cloudfiles-http.html">php-cloudfiles-http</a><br />
+            <br /><br />
+                  
+      
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1 align="center">Changelog</h1>
+<pre>
+1.7.1 - Conrad Weidenkeller &lt;conrad.weidenkeller@rackspace.com&gt;
+  * Added Support for Auth Token Caching. 
+
+1.7.0 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt;
+  * Adjust api auth to rackspacecloud not mosso (mshuler).
+
+1.6.2 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt;
+  * Add a close method to close all the current connection.
+  * Fix when container_name is named 0.
+
+1.6.1 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt;
+  * Fix setting etag on objects.
+  * Fix throwing proper exception when an invalid etag has been set.
+  * Fix throwing proper exception when no content type has been set.
+
+1.6.0 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt;
+  * Add CDN ACL restriction by referrer feature.
+  * Add CDN ACL restriction by User Agent feature.
+  * Add documentation for log_retention method.
+  * Return True if log_retention as succeeded.
+  * Invalid the PHP stats cache before getting filesize.
+
+1.5.1 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt; - 20091020
+  * If the environement variable RACKSPACE_SERVICENET is defined then force to
+    connect via rakcspace servicenet.
+
+1.5.0 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt; - 20091015
+  * Add the option servicenet to connection to use Rackspace service net
+    instead of public network.
+
+1.4.0 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt; - 20090808
+
+  * Add the ability to store the container log.
+
+1.3.2 - Chmouel Boudjnah &lt;chmouel.boudjnah@rackspace.co.uk&gt; - 20090606
+
+  * Change the Unit Tests to phpunit.
+  * Automatically set the updated CA bundle when on the windows OS.
+  * More simplification of the mimetype detection and support for PHP 5.3.
+  * Fix documentation information about the ttl for cached object.
+  * Use the hash library to compute MD5 for streams instead of storing the
+    stream in memory.
+  * Fix CF_Connection::get_containers to display the container name properly.
+
+1.3.1 - &lt;ej@racklabs.com&gt; - 20090325
+
+  * Simplify use of FileInfo, remove packaged MIME/Magic file
+  * Throw Exception if no Content-Type is set
+  * Fix bug with tracking bytes transferred
+  * Support/tested on Windows XP (PHP v5.2.9)
+
+1.3.0  - &lt;ej@racklabs.com&gt; - 20090311
+
+  * Support for list operations in JSON/XML
+  * Added support for FileInfo automatic Content-Type/MIME detection
+  * Workaround for cURL's old CA bundle with CF_Connection-&gt;ssl_use_cabundle()
+  * Supports limit/marker on Account and Container lists
+  * Support &quot;pathname&quot; traversal on Container lists
+  * Helper function on Container to create directory marker Objects
+  * Support for chunked transfer on PUT requests
+
+1.2.3 - &lt;ej@racklabs.com&gt; - 20081210
+
+  * Improved in-line comments and generated HTML docs
+  * Callbacks for read/write progress on CF_Connection class
+  * Fixed minor bugs
+  * Started this Changelog
+
+</pre>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Fri, 26 Mar 2010 12:08:47 -0500 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.3</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

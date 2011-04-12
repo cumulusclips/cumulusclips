@@ -1,0 +1,371 @@
+<html>
+<head>
+<title>Docs for page cloudfiles_http.php</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">php-cloudfiles-http</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                                                            
+                              		  [ <a href="../classtrees_php-cloudfiles-http.html" class="menu">class tree: php-cloudfiles-http</a> ]
+		  [ <a href="../elementindex_php-cloudfiles-http.html" class="menu">index: php-cloudfiles-http</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="ric">
+					<p><a href="../ric_Changelog.html">Changelog</a></p>
+					<p><a href="../ric_AUTHORS.html">AUTHORS</a></p>
+					<p><a href="../ric_README.html">README</a></p>
+					<p><a href="../ric_COPYING.html">COPYING</a></p>
+			</div>
+      <b>Packages:</b><br />
+              <a href="../li_php-cloudfiles.html">php-cloudfiles</a><br />
+              <a href="../li_php-cloudfiles-exceptions.html">php-cloudfiles-exceptions</a><br />
+              <a href="../li_php-cloudfiles-http.html">php-cloudfiles-http</a><br />
+            <br /><br />
+                        <b>Files:</b><br />
+      	  <div class="package">
+			<a href="../php-cloudfiles-http/_cloudfiles_http.php.html">		cloudfiles_http.php
+		</a><br>
+	  </div><br />
+      
+      
+            <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../php-cloudfiles-http/CF_Http.html">CF_Http</a><br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Procedural File: cloudfiles_http.php</h1>
+Source Location: /cloudfiles_http.php<br /><br />
+
+<br>
+<br>
+
+<div class="contents">
+<h2>Classes:</h2>
+<dt><a href="../php-cloudfiles-http/CF_Http.html">CF_Http</a></dt>
+	<dd>HTTP/cURL wrapper for Cloud Files</dd>
+</div><br /><br />
+
+<h2>Page Details:</h2>
+This is an HTTP client class for Cloud Files.  It uses PHP's cURL module  to handle the actual HTTP request/response.  This is NOT a generic HTTP  client class and is only used to abstract out the HTTP communication for  the PHP Cloud Files API.<br /><br /><p>This module was designed to re-use existing HTTP(S) connections between  subsequent operations.  For example, performing multiple PUT operations  will re-use the same connection.</p><p>This modules also provides support for streaming content into and out  of Cloud Files.  The majority (all?) of the PHP HTTP client modules expect  to read the server's response into a string variable.  This will not work  with large files without killing your server.  Methods like,  get_object_to_stream() and put_object() take an open filehandle  argument for streaming data out of or into Cloud Files.</p><p>Requres PHP 5.x (for Exceptions and OO syntax)</p><p>See COPYING for license information.</p><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>author:</b>&nbsp;&nbsp;</td><td>Eric &quot;EJ&quot; Johnson &lt;<a href="mailto:ej@racklabs.com">ej@racklabs.com</a>&gt;</td>
+  </tr>
+  <tr>
+    <td><b>copyright:</b>&nbsp;&nbsp;</td><td>Copyright (c) 2008, Rackspace US, Inc.</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+<h4>Includes:</h4>
+<div class="tags">
+require_once(<a href="../php-cloudfiles-exceptions/_cloudfiles_exceptions.php.html">"cloudfiles_exceptions.php"</a>) [line 30]<br />
+</div>
+<br /><br />
+<br /><br />
+  <hr />
+	<a name="defineACCOUNT_BYTES_USED"></a>
+	<h3>ACCOUNT_BYTES_USED <span class="smalllinenumber">[line 35]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>ACCOUNT_BYTES_USED = &quot;X-Account-Bytes-Used&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineACCOUNT_CONTAINER_COUNT"></a>
+	<h3>ACCOUNT_CONTAINER_COUNT <span class="smalllinenumber">[line 34]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>ACCOUNT_CONTAINER_COUNT = &quot;X-Account-Container-Count&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_KEY_HEADER"></a>
+	<h3>AUTH_KEY_HEADER <span class="smalllinenumber">[line 49]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_KEY_HEADER = &quot;X-Auth-Key&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_KEY_HEADER_LEGACY"></a>
+	<h3>AUTH_KEY_HEADER_LEGACY <span class="smalllinenumber">[line 51]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_KEY_HEADER_LEGACY = &quot;X-Storage-Pass&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_TOKEN"></a>
+	<h3>AUTH_TOKEN <span class="smalllinenumber">[line 47]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_TOKEN = &quot;X-Auth-Token&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_TOKEN_LEGACY"></a>
+	<h3>AUTH_TOKEN_LEGACY <span class="smalllinenumber">[line 52]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_TOKEN_LEGACY = &quot;X-Storage-Token&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_USER_HEADER"></a>
+	<h3>AUTH_USER_HEADER <span class="smalllinenumber">[line 48]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_USER_HEADER = &quot;X-Auth-User&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineAUTH_USER_HEADER_LEGACY"></a>
+	<h3>AUTH_USER_HEADER_LEGACY <span class="smalllinenumber">[line 50]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>AUTH_USER_HEADER_LEGACY = &quot;X-Storage-User&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDNM_URL"></a>
+	<h3>CDNM_URL <span class="smalllinenumber">[line 45]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDNM_URL = &quot;X-CDN-Management-Url&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_ACL_REFERRER"></a>
+	<h3>CDN_ACL_REFERRER <span class="smalllinenumber">[line 43]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_ACL_REFERRER = &quot;X-Referrer-ACL&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_ACL_USER_AGENT"></a>
+	<h3>CDN_ACL_USER_AGENT <span class="smalllinenumber">[line 42]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_ACL_USER_AGENT = &quot;X-User-Agent-ACL&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_ENABLED"></a>
+	<h3>CDN_ENABLED <span class="smalllinenumber">[line 40]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_ENABLED = &quot;X-CDN-Enabled&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_LOG_RETENTION"></a>
+	<h3>CDN_LOG_RETENTION <span class="smalllinenumber">[line 41]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_LOG_RETENTION = &quot;X-Log-Retention&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_TTL"></a>
+	<h3>CDN_TTL <span class="smalllinenumber">[line 44]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_TTL = &quot;X-TTL&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCDN_URI"></a>
+	<h3>CDN_URI <span class="smalllinenumber">[line 39]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CDN_URI = &quot;X-CDN-URI&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCONTAINER_BYTES_USED"></a>
+	<h3>CONTAINER_BYTES_USED <span class="smalllinenumber">[line 37]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CONTAINER_BYTES_USED = &quot;X-Container-Bytes-Used&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineCONTAINER_OBJ_COUNT"></a>
+	<h3>CONTAINER_OBJ_COUNT <span class="smalllinenumber">[line 36]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>CONTAINER_OBJ_COUNT = &quot;X-Container-Object-Count&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineMETADATA_HEADER"></a>
+	<h3>METADATA_HEADER <span class="smalllinenumber">[line 38]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>METADATA_HEADER = &quot;X-Object-Meta-&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="definePHP_CF_VERSION"></a>
+	<h3>PHP_CF_VERSION <span class="smalllinenumber">[line 32]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>PHP_CF_VERSION = &quot;1.7.0&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineSTORAGE_URL"></a>
+	<h3>STORAGE_URL <span class="smalllinenumber">[line 46]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>STORAGE_URL = &quot;X-Storage-Url&quot;</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+  <hr />
+	<a name="defineUSER_AGENT"></a>
+	<h3>USER_AGENT <span class="smalllinenumber">[line 33]</span></h3>
+	<div class="tags">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>USER_AGENT = sprintf(&quot;PHP-CloudFiles/%s&quot;,PHP_CF_VERSION)</code>
+    </td></tr></table>
+    </td></tr></table>
+
+        <br />
+		</div>
+	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
+<br />
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Fri, 26 Mar 2010 12:08:49 -0500 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.3</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
