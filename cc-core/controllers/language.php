@@ -12,8 +12,8 @@ include ('../config/bootstrap.php');
 
 // Return requested string
 if (!empty ($_GET['node'])) {
-    if (!empty ($_GET['replacements'])) {
-        parse_str ($_GET['replacements'], $replacements);
+    if (!empty ($_GET['replacements']) && is_array ($_GET['replacements'])) {
+        $replacements = $_GET['replacements'];
     } else {
         $replacements = array();
     }

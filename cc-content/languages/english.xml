@@ -259,6 +259,11 @@
         <error_tags>@Invalid tags</error_tags>
         <error_category>@Invalid category</error_category>
 
+        <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
+        <error_uploadify_system>@Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue. If you continue to experience problems using this feature please {LINK}contact us{/LINK} for further assistance.</error_uploadify_system>
+        <error_uploadify_extension>@Your video is not of the accepted file format. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_extension>
+        <error_uploadify_empty>@No video was uploaded. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_empty>
+
         <success_register>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_register>
         <success_forgot_login>@We have sent you your login information. Please check your email.</success_forgot_login>
         <success_video_updated>@Video has been updated.</success_video_updated>

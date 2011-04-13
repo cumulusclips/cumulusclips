@@ -76,7 +76,7 @@ $(document).ready(function(){
         }
 
         // Retrieve confirm string
-        GetText (callback, $(this).attr('data-node'), $(this).attr('data-replacements'));
+        GetText (callback, $(this).attr('data-node'), $.parseJSON($(this).attr('data-replacements')));
         return false;
     });
 

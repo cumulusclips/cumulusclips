@@ -35,72 +35,85 @@ $(document).ready(function() {
         'fileExt'       : '*.flv;*.wmv;*.avi;*.ogg;*.mpg;*.mp4;*.mov;*.m4v',
         'onError'       : function(event, queueID, fileObj, errorObj) {
 
-//            console.log(event);
-//            console.log(queueID);
-//            console.log(fileObj);
-//            console.log(errorObj);
-//            console.log(host);
-//            console.log(token);
-//            console.log(theme);
-//            console.log(limit);
+            console.log(event);
+            console.log(queueID);
+            console.log(fileObj);
+            console.log(errorObj);
 
+
+            var node;
+            var replacements;
+            var error = $('#error');
+
+            // Determine reason for failure
             if (errorObj.type == 'File Size') {
-
-                msg = 'Errors were found! Your video exceeded the maximum size limit. Please try again.<br /><br />';
-                msg += '<a href="'+host+'/myaccount/upload-video/" title="Attempt to Upload">Attempt to upload again</a>';
-
+                node = 'error_uploadify_filesize';
+                replacements = {link:host+'/myaccount/upload-video/'};
             } else {
-
-                msg = 'Errors were encountered during the processing of your video, and it cannot be uploaded at ';
-                msg += 'this time. We apologize for this inconvenience. Our support team has been notified and will ';
-                msg += 'investigate into the cause and fix for this issue. If you continue to experience problems using ';
-                msg += 'this feature please <a href="'+host+'/contact/" title="Contact">contact us</a> for further ';
-                msg += 'assistance.';
-
+                node = 'error_uploadify_system';
+                replacements = {link:host+'/contact/'};
             }
 
-            $('#error').show();
-            $('#error').html(msg);
+            // Retrieve and output corresponding error text from language xml
+            var callback = function(data){
+                error.show();
+                error.html(data);
+            }
+            GetText(callback, node, replacements);
 
         },
         'onComplete': function(event, queueID, fileObj, response, data) {
 
-//            console.log(event);
-//            console.log(queueID);
-//            console.log(fileObj);
-//            console.log(response);
-//            console.log(data);
-//            console.log(host);
-//            console.log(token);
-//            console.log(theme);
-//            console.log(limit);
-            
+            var node;
+            var replacements;
+            var callback;
+            var error = $('#error');
+
+            console.log(event);
+            console.log(queueID);
+            console.log(fileObj);
+            console.log(response);
+            console.log(data);
+
+            // Determine result from server validation
             switch (response) {
 
                 case 'extension':
-
-                    msg = 'Errors were found! Your video is not of the accepted file format. Please try again.<br /><br />';
-                    msg += '<a href="'+host+'/myaccount/upload-video/" title="Attempt to Upload">Attempt to upload again</a>';
-                    $('#error').show();
-                    $('#error').html(msg);
+                    
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_extension';
+                    replacements = {link:host+'/myaccount/upload-video/'};
+                    callback = function(data){
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
                     break;
 
 
                 case 'nofile':
 
-                    msg = 'Errors were found! No video was uploaded. Please try again.<br /><br />';
-                    msg += '<a href="'+host+'/myaccount/upload-video/" title="Attempt to Upload">Attempt to upload again</a>';
-                    $('#error').show();
-                    $('#error').html(msg);
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_empty';
+                    replacements = {link:host+'/myaccount/upload-video/'};
+                    callback = function(data){
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
                     break;
 
 
                 case 'filesize':
 
-                    msg = 'Errors were found! Your video exceeded the maximum size limit. Please try again.<br /><br />';
-                    msg += '<a href="'+host+'/myaccount/upload-video/" title="Attempt to Upload">Attempt to upload again</a>';
-                    $('#error').show();
-                    $('#error').html(msg);
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_filesize';
+                    replacements = {link:host+'/myaccount/upload-video/'};
+                    callback = function(data){
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
                     break;
 
 
@@ -112,15 +125,16 @@ $(document).ready(function() {
 
                 default:
 
-                    msg = 'Errors were encountered during the processing of your video, and it cannot be uploaded at ';
-                    msg += 'this time. We apologize for this inconvenience. Our support team has been notified and will ';
-                    msg += 'investigate into the cause and fix for this issue. If you continue to experience problems using ';
-                    msg += 'this feature please <a href="'+host+'/contact/" title="Contact">contact us</a> for further ';
-                    msg += 'assistance.';
-
-                    $('#error').show();
-                    $('#error').html(msg);
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_system';
+                    replacements = {link:host+'/contact/'};
+                    callback = function(data){
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
                     break;
+
 
             }   // END response switch
 
