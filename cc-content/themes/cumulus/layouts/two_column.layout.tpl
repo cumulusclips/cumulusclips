@@ -9,7 +9,7 @@
 <?php View::WriteCSS(); ?>
 
 </head>
-<body>
+<body class="<?=Language::GetCSSName()?>">
 
 <!-- BEGIN WRAPPER -->
 <div id="wrapper">

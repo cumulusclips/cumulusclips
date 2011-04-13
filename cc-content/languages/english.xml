@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language>
     <information>
-        <lang_name>@English</lang_name>
-        <author>@CumulusClips.com</author>
-        <image_prefix>@en_</image_prefix>
+        <lang_name>English</lang_name>
+        <locale>en_US</locale>
+        <css_name>english</css_name>
+        <image_prefix>en_</image_prefix>
+        <author>CumulusClips.com</author>
+        <notes></notes>
     </information>
     <terms>
         <search_text>@Search Videos...</search_text>
