@@ -41,7 +41,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
         View::$vars->name = trim ($_POST['name']);
     } else {
-        View::$vars->Errors['name'] = true;
+        View::$vars->Errors['name'] = Language::GetText('error_name');
     }
 
 
@@ -50,7 +50,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ($string, $_POST['email'])) {
         View::$vars->email = trim ($_POST['email']);
     } else {
-        View::$vars->Errors['email'] = true;
+        View::$vars->Errors['email'] = Language::GetText('error_email');
     }
 
 
@@ -58,16 +58,18 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['message']) && !ctype_space ($_POST['message'])) {
         View::$vars->message = trim ($_POST['message']);
     } else {
-        View::$vars->Errors['message'] = true;
+        View::$vars->Errors['message'] = Language::GetText('error_message');
     }
 
 
     // Validate word verification
     if (!empty ($_POST["recaptcha_response_field"]) && !ctype_space ($_POST["recaptcha_response_field"])) {
         $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-        $captcha = ($resp->is_valid) ? true : false;
+        if (!$resp->is_valid) {
+            View::$vars->Errors['captcha'] = Language::GetText('error_security_incorrect');
+        }
     } else {
-        View::$vars->Errors['captcha'] = true;
+        View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
     }
 
 
@@ -82,10 +84,11 @@ if (isset ($_POST['submitted'])) {
         $Msg .= "Message:\n$message";
 
         @mail ($to, $subject, $Msg, $headers);
-        View::$vars->success = 'Thank you! Your message has been received.';
+        View::$vars->success = Language::GetText('success_contact_sent');
 
     } else {
-        View::$vars->error_msg = 'Errors were found. Please try again.';
+        View::$vars->error_msg = Language::GetText('errors_below');
+        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
     }
 	
 }

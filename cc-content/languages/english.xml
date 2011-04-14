@@ -236,6 +236,7 @@
         <errors_below>@Errors were found. Please correct the errors below and try again.</errors_below>
         <error_login>@Invalid login! Please make sure you typed your username and password correctly and try again.</error_login>
         <error_forgot_login>@No users were found with that email! Please try again.</error_forgot_login>
+        
         <confirm_remove_favorite>@Video will be removed from your favorites. Please confirm this is what you want to do.</confirm_remove_favorite>
         <confirm_delete_video>@Video will be deleted permanently. Please confirm this is what you want to do.</confirm_delete_video>
 
@@ -258,12 +259,15 @@
         <error_description>@Invalid description</error_description>
         <error_tags>@Invalid tags</error_tags>
         <error_category>@Invalid category</error_category>
+        <error_name>@Invalid name</error_name>
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
         <error_uploadify_system>@Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue. If you continue to experience problems using this feature please {LINK}contact us{/LINK} for further assistance.</error_uploadify_system>
         <error_uploadify_extension>@Your video is not of the accepted file format. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_extension>
         <error_uploadify_empty>@No video was uploaded. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_empty>
+        <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
+        <success_contact_sent>@Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
         <success_register>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_register>
         <success_forgot_login>@We have sent you your login information. Please check your email.</success_forgot_login>
         <success_video_updated>@Video has been updated.</success_video_updated>

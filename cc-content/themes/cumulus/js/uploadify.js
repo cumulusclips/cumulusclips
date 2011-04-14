@@ -165,30 +165,34 @@ $(document).ready(function() {
             data: postData,
             success: function(serverResponse, textStatus){
 
+                var loading = $('.loading');
+                var error = $('#error');
+
                 if (serverResponse == 'success') {
                     top.location.href = host+"/myaccount/upload-complete/";
                 } else if (serverResponse == 'invalidurl') {
 
-                    $('.loading').hide();
-
-                    msg = 'The URL you have submitted seems to be invalid. Please make sure you\'re providing is for the video page.';
-                    msg += ' Double check you entered the entire URL and did not leave of any part of the video identifier.';
-
-                    $('#error').show();
-                    $('#error').html(msg);
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_url';
+                    replacements = {link:host+'/contact/'};
+                    callback = function(data){
+                        loading.hide();
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
 
                 } else {
 
-                    $('.loading').hide();
-
-                    msg = 'Errors were encountered during the processing of your video, and it cannot be uploaded at ';
-                    msg += 'this time. We apologize for this inconvenience. Our support team has been notified and will ';
-                    msg += 'investigate into the cause and fix for this issue. If you continue to experience problems using ';
-                    msg += 'this feature please <a href="'+host+'/contact/" title="Contact">contact us</a> for further ';
-                    msg += 'assistance.';
-
-                    $('#error').show();
-                    $('#error').html(msg);
+                    // Retrieve and output corresponding error text from language xml
+                    node = 'error_uploadify_system';
+                    replacements = {link:host+'/contact/'};
+                    callback = function(data){
+                        loading.hide();
+                        error.show();
+                        error.html(data);
+                    }
+                    GetText(callback, node, replacements);
 
                 }
 
