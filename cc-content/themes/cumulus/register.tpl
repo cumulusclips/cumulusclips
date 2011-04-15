@@ -33,7 +33,7 @@
         </div>
 
         <div class="row">
-            <label class="<?=(isset ($Errors['email'])) ? 'errors' : ''?>">*<?=Language::GetText('username')?>:</label>
+            <label class="<?=(isset ($Errors['username'])) ? 'errors' : ''?>">*<?=Language::GetText('username')?>:</label>
             <input name="username" type="text" class="text" id="username" value="<?=(isset ($Errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
             <br /><span id="status"></span>
         </div>
@@ -60,7 +60,6 @@
 
         <div class="row-shift">
             <input type="hidden" name="submitted" value="TRUE" />
-            <input type="submit" name="button" value="Create Account" />
             <a href="" class="button"><span><?=Language::GetText('register_button')?></span></a>
         </div>
 

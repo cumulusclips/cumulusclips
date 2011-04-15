@@ -308,6 +308,7 @@ BODY STRUCTURE STYLES
     background-color: #E6EFC2;
     color: #264409;
     -moz-border-radius:5px;
+    -webkit-border-radius:5px;
     border-radius:5px;
 }
 
@@ -319,6 +320,7 @@ BODY STRUCTURE STYLES
     background-color: #FBE3E4;
     color: #8a1f11;
     -moz-border-radius:5px;
+    -webkit-border-radius:5px;
     border-radius:5px;
 }
 

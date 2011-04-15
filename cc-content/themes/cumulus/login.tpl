@@ -1,6 +1,8 @@
 <h1><?=Language::GetText('login_header')?></h1>
 
-<?=$message?$message:''?>
+<?php if ($message): ?>
+    <div id="<?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 <div class="block" id="login-block">
 
@@ -37,14 +39,14 @@
 </div>
 
 
-<div class="block" id="forgot-block"<?=$forgot_submit || $forgot_outside ? ' style="display:block;"' : ''?>>
+<div class="block" id="forgot-block"<?=($forgot_submit) ? ' style="display:block;"' : ''?>>
 
     <form action="<?=HOST?>/login/" method="post">
     <h2><?=Language::GetText('forgot_header')?></h2>
     <p><?=Language::GetText('forgot_text')?></p>
     
     <div class="row">
-        <label class="<?=($forgot_submit) ? 'errors' : ''?>"><?=Language::GetText('email')?>:</label>
+        <label class="<?=($forgot_submit && $message_type == 'error') ? 'errors' : ''?>"><?=Language::GetText('email')?>:</label>
         <input class="text" type="text" id="email" name="email" />
     </div>
 

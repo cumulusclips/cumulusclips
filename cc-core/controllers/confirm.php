@@ -36,7 +36,7 @@ if (isset ($_GET['token'])) {
     }
 	
 } else {
-    header ('Location: ' . HOST);
+    App::Throw404();
 }
 
 

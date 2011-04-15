@@ -66,7 +66,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST["recaptcha_response_field"]) && !ctype_space ($_POST["recaptcha_response_field"])) {
         $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
         if (!$resp->is_valid) {
-            View::$vars->Errors['captcha'] = Language::GetText('error_security_incorrect');
+            View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
         }
     } else {
         View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
@@ -79,9 +79,9 @@ if (isset ($_POST['submitted'])) {
         $to = MAIN_EMAIL;
         $subject = 'Message received From TechieVideos.com';
         $headers = 'From: Admin - TechieVideos.com <admin@techievideos.com>';
-        $Msg = "Name: $name\n";
-        $Msg .= "E-mail: $email\n\n";
-        $Msg .= "Message:\n$message";
+        $Msg = "Name: " . View::$vars->name . "\n";
+        $Msg .= "E-mail: " . View::$vars->email . "\n\n";
+        $Msg .= "Message:\n" . View::$vars->message;
 
         @mail ($to, $subject, $Msg, $headers);
         View::$vars->success = Language::GetText('success_contact_sent');

@@ -19,15 +19,15 @@ View::$vars->page_title = 'Cumulus - Login to your Account';
 View::$vars->username = NULL;
 View::$vars->password = NULL;
 View::$vars->message = NULL;
+View::$vars->message_type = NULL;
 View::$vars->login_submit = NULL;
 View::$vars->forgot_submit = NULL;
-View::$vars->forgot_outside = NULL;
 
 
 
 // User Requested forgot password
 if (isset ($_GET['action']) && $_GET['action'] == 'forgot') {
-    View::$vars->forgot_outside = TRUE;
+    View::$vars->forgot_submit = TRUE;
 }
 
 
@@ -65,13 +65,14 @@ if (isset ($_POST['submitted_login'])) {
             header ('Location: ' . HOST . '/myaccount/');
 
         } else {
-            View::$vars->message = '<div id="error">Invalid login! Please make sure you typed your username and password correctly and try again.</div>';
+            View::$vars->message = Language::GetText('error_invalid_login');
+            View::$vars->message_type = 'error';
             View::$vars->login_submit = NULL;
         }
 
     } else {
-//    exit();
-        View::$vars->message = '<div id="error">Errors were found! Please try again.</div>';
+        View::$vars->message = Language::GetText('error_general');
+        View::$vars->message_type = 'error';
     }
 	
 }
@@ -98,7 +99,8 @@ if (isset ($_POST['submitted_forgot'])) {
 
             $user = new User ($id);
             $user->ResetPassword();
-            View::$vars->message = '<div id="success">We have sent you your login information. Please check your email.</div>';
+            View::$vars->message = Language::GetText('success_login_sent');
+            View::$vars->message_type = 'success';
             View::$vars->forgot_submit = NULL;
 
             $Msg = array (
@@ -110,11 +112,13 @@ if (isset ($_POST['submitted_forgot'])) {
             $template->Send ($user->email);
 
         } else {
-            View::$vars->message = '<div id="error">No users were found with that email! Please try again.</div>';
+            View::$vars->message = Language::GetText('error_no_users_email');
+            View::$vars->message_type = 'error';
         }
 
     } else {
-        View::$vars->message = '<div id="error">Errors were found! Please try again.</div>';
+        View::$vars->message = Language::GetText('error_email');
+        View::$vars->message_type = 'error';
     }
 	
 }

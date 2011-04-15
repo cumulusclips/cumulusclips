@@ -62,6 +62,16 @@ $(document).ready(function(){
         }
     });
 
+    // Allow submission of forms with Return key
+    $('form input').keydown(function(event){
+        var code = event.keyCode ? event.keyCode : event.which;
+        var parentForm = $(this).closest('form');
+        if (code == 13 && parentForm.length) {
+            parentForm.submit();
+            return false;
+        }
+    });
+
 
 
 

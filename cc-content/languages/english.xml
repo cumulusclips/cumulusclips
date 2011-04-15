@@ -112,6 +112,24 @@
         <results_for>@Search Results for</results_for>
         <no_results>@No results were found.</no_results>
 
+        <!-- Opt-Out Page -->
+        <optout_header>@Email Opt-Out</optout_header>
+        <optout_text>@Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</optout_text>
+
+        <!-- Activate Account Page -->
+        <activate_header>@Activate your Account</activate_header>
+        <activate_text_success>@Thank you! Your account is now active. {LINK}Go to My Account{/LINK}</activate_text_success>
+        <activate_text_error>@Invalid code! Please check you entered the code correctly. Your account may already be active. If you forgot your login, {LINK}click here{/LINK} to retrieve it.</activate_text_error>
+
+        <!-- 404 Page -->
+        <server_404_header>@404 - Page Not Found</server_404_header>
+        <server_404_sub_header>@Oops!</server_404_sub_header>
+        <server_404_text>@The Page you're looking for either doesn't exist or was moved to another location.</server_404_text>
+
+        <!-- System Error Page -->
+        <system_error_header>@System Error</system_error_header>
+        <system_error_text>@We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
+
         <!-- My Account / Home Page -->
         <myaccount_header>@Welcome</myaccount_header>
         <last_login>@Last Login</last_login>
@@ -231,23 +249,26 @@
         <upload_complete_header>@Upload Step 3 - Upload Complete!</upload_complete_header>
         <upload_complete_text>@Your video has been successfully uploaded. Please allow several minutes for processing before it is availble on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
 
+
+
+
         <!-- Form Messages -->
         <error_general>@Errors were found. Please try again.</error_general>
         <errors_below>@Errors were found. Please correct the errors below and try again.</errors_below>
-        <error_login>@Invalid login! Please make sure you typed your username and password correctly and try again.</error_login>
-        <error_forgot_login>@No users were found with that email! Please try again.</error_forgot_login>
+        <error_invalid_login>@Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
+        <error_no_users_email>@No users were found with that email! Please try again.</error_no_users_email>
         
         <confirm_remove_favorite>@Video will be removed from your favorites. Please confirm this is what you want to do.</confirm_remove_favorite>
         <confirm_delete_video>@Video will be deleted permanently. Please confirm this is what you want to do.</confirm_delete_video>
 
-        <error_username>@You must enter a valid username</error_username>
+        <error_username>@Invalid username</error_username>
         <error_username_unavailable>@That username is unavailable</error_username_unavailable>
-        <error_password>@You must enter a valid password</error_password>
+        <error_password>@Invalid password</error_password>
         <error_password_match>@Your passwords don't match</error_password_match>
-        <error_password_confirm>@You must confirm your password</error_password_confirm>
-        <error_security_text>@You must enter the security text</error_security_text>
-        <error_security_incorrect>@You submitted an incorrect security text</error_security_incorrect>
+        <error_password_confirm>@Invalid confirmed password</error_password_confirm>
+        <error_security_text>@Invalid security text</error_security_text>
         <error_email>@You must enter a valid email address</error_email>
+        <error_email_invalid>@Invalid email address</error_email_invalid>
         <error_email_unavailable>@That email address is unavailable</error_email_unavailable>
         <error_recipient>@Invalid recipient username</error_recipient>
         <error_recipient_exist>@No members exist with that username</error_recipient_exist>
@@ -268,8 +289,8 @@
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
         <success_contact_sent>@Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
-        <success_register>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_register>
-        <success_forgot_login>@We have sent you your login information. Please check your email.</success_forgot_login>
+        <success_registered>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>
+        <success_login_sent>@We have sent you your login information. Please check your email.</success_login_sent>
         <success_video_updated>@Video has been updated.</success_video_updated>
         <success_video_deleted>@Video has been deleted.</success_video_deleted>
         <success_favorite_removed>@Video has been removed from your favorites.</success_favorite_removed>

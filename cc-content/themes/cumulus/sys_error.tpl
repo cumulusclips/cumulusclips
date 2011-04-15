@@ -1,4 +1,2 @@
-<h1>System Error</h1>
-<div class="block">
-    We are unable to continue due to a system error. We apologize for any inconvenience.
-</div>
+<h1><?=Language::GetText('system_error_header')?></h1>
+<div class="block"><?=Language::GetText('system_error_text')?></div>

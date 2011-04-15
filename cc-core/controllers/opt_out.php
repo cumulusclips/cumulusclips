@@ -6,23 +6,17 @@
 
 
 // Include required files
-include ($_SERVER['DOCUMENT_ROOT'] . '/config/bootstrap.php');
-App::LoadClass ('Login');
+include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
+View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-$login = new Login ($db);
-$logged_in = $login->LoginCheck();
-$page_title = 'Techie Videos - Email Opt-Out';
+View::$vars->logged_in = User::LoginCheck();
+if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
+View::$vars->page_title = 'Techie Videos - Email Opt-Out';
 
-
-
-// Retrieve user data if logged in
-if ($logged_in) {
-	$user = new User ($logged_in, $db);
-}
 
 
 
@@ -31,9 +25,9 @@ if (isset ($_GET['email'])) {
 
     $email = $db->Escape ($_GET['email']);
     $data = array ('email' => $email);
-    $id = User::Exist ($data, $db);
+    $id = User::Exist ($data);
     if ($id) {
-        $privacy = new Privacy ($id, $db);
+        $privacy = new Privacy ($id);
         $data = array (
             'new_video'         => 'no',
             'new_message'       => 'no',
@@ -43,14 +37,15 @@ if (isset ($_GET['email'])) {
         );
         $privacy->Update ($data);
     } else {
-        Login::Forward ('/');
+        App::Throw404();
     }
 
 } else {
-    Login::Forward ('/');
+    App::Throw404();
 }
 
-$content_file = 'opt_out.tpl';
-include (THEMES . '/layouts/two_column.layout.tpl');
+
+// Output Page
+View::Render ('opt_out.tpl');
 
 ?>
