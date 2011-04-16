@@ -83,8 +83,12 @@
         <website>@Website</website>
         <recent_videos>@Recent Videos</recent_videos>
         <view_all_videos>@View all Videos</view_all_videos>
-        <recent_posts_header>@Recent Posts</recent_posts_header>
+        <recent_posts_header>@Recent Updates</recent_posts_header>
         <no_member_videos>@Member currently has no videos.</no_member_videos>
+
+        <!-- Member Videos Page -->
+        <videos_by>@Videos By</videos_by>
+        <go_to_profile>@Go to Profile</go_to_profile>
 
         <!-- Play Video Page -->
         <like>@Like</like>

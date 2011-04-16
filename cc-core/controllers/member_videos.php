@@ -17,8 +17,8 @@ View::InitView();
 // Establish page variables, objects, arrays, etc
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - ';
-$limit = 9;
+View::$vars->page_title = 'Techie Videos - Videos By: ';
+$records_per_page = 9;
 
 
 
@@ -35,54 +35,26 @@ if (isset ($_GET['username'])) {
 // Verify Member exists
 if ($id) {
     View::$vars->member = new User ($id);
-    View::$vars->page_title .= View::$vars->member->username . "'s";
+    View::$vars->page_title .= View::$vars->member->username;
+    $url = '/members/' . View::$vars->member->username . '/videos';
 } else {
     App::Throw404();
 }
 
 
 
-if (isset ($_GET['action'])) {
-	
-    switch ($_GET['action']) {
-	
-        case 'videos':
-
-            View::$vars->viewing = 'videos';
-            View::$vars->page_title .= ' Videos';
-            $url = '/view-videos/' . View::$vars->member->username;
-            $query = "SELECT video_id FROM videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6";
-            break;
-			
-        case 'favorites':
-		
-            View::$vars->viewing = 'favorites';
-            View::$vars->page_title .= ' Favorite Videos';
-            $url = '/view-favorites/' . View::$vars->member->username;
-            $query = "SELECT favorites.video_id FROM favorites INNER JOIN videos ON favorites.video_id = videos.video_id WHERE favorites.user_id = " . View::$vars->member->user_id . " AND status = 6";
-            break;
-
-        default:
-            App::Throw404();			
-	}
-	
-	
-} else {
-    App::Throw404();
-}
-
-
-
+         
 // Retrieve total count
+$query = "SELECT video_id FROM videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
 // Initialize pagination
-View::$vars->pagination = new Pagination ($url, $total);
+View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
 $start_record = View::$vars->pagination->GetStartRecord();
 
 // Retrieve limited results
-$query .= " LIMIT $start_record, $limit";
+$query .= " LIMIT $start_record, $records_per_page";
 View::$vars->result = $db->Query ($query);
 
 

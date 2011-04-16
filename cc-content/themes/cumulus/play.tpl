@@ -39,6 +39,11 @@
                 <a href="" class="button-small"><span><?=Language::GetText('favorite')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('flag')?></span></a>
             </div>
+
+            <div id="about">
+                <p>Tags: <?=$tags?></p>
+                <p>Description: <?=$video->description?></p>
+            </div>
             
         </div>
         <!-- END ACTIONS -->

@@ -30,7 +30,6 @@
         <?php
         $video = new Video ($row[0]);
         $rating = new Rating ($row[0]);
-        $tags = implode (' ', $video->tags);
         ?>
 
         <div class="block">
