@@ -5,7 +5,7 @@
 ### This script grabs a YouTube video and saves it to the site temp directory
 
 // Include required files
-include ('../../config/bootstrap.php');
+include ('../config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('YouTube');
 
@@ -87,7 +87,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Calling YouTube Downloader...') : 
 
 ### Initiate Converter
 $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
-$converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/controllers/myaccount/grab_downloader.php --video="' . $video->video_id . '" --url="' . urlencode ($url) . '" >> ' .  $cmd_output . ' &';
+$converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/grab.php --video="' . $video->video_id . '" --url="' . urlencode ($url) . '" >> ' .  $cmd_output . ' &';
 system ($converter_cmd);
 
 

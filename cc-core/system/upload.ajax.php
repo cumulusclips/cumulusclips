@@ -5,7 +5,7 @@
 ### This script validates the uploaded video and moves it to the site temp directory
 
 // Include required files
-include ('../../config/bootstrap.php');
+include ('../config/bootstrap.php');
 App::LoadClass ('Video');
 
 
@@ -141,7 +141,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Calling Upload Converter...') : ''
 ### Initiate Converter
 if (!LIVE) exit('success'); // Skip Conversion
 $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
-$converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/controllers/myaccount/upload_converter.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
+$converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
 system ($converter_cmd);
 
 

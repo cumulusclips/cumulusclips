@@ -10,8 +10,7 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
-include (DOC_ROOT . '/includes/recaptchalib.php');
-include (DOC_ROOT . '/includes/username_reserve.php');
+App::LoadClass ('Recaptcha');
 View::InitView();
 
 
@@ -46,7 +45,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate Username
     if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
-        if (!User::Exist (array ('username' => $_POST['username'])) && !in_array ($_POST['username'], $user_reserve)) {
+        if (!User::Exist (array ('username' => $_POST['username']))) {
             $data['username'] = htmlspecialchars (trim ($_POST['username']));
         } else {
             View::$vars->Errors['username'] = Language::GetText('error_username_unavailable');
@@ -126,7 +125,9 @@ if (isset ($_POST['submitted'])) {
 
 
 // Output Page
-View::AddJs ('username_validation.js');
+View::AddMeta ('register:host', HOST);
+View::AddMeta ('register:theme', THEME);
+View::AddJs ('username.js');
 View::Render ('register.tpl');
 
 ?>

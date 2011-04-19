@@ -28,7 +28,7 @@ $(document).ready(function() {
         'fileDataName'  : 'uploadify',
         'scriptData'    : {'token':token},
         'uploader'      : theme+'/flash/uploadify.swf',
-        'script'        : host+'/myaccount/upload-validate/',
+        'script'        : host+'/myaccount/upload/validate/',
         'cancelImg'     : theme+'/images/cancel.png',
         'buttonImg'     : theme+'/images/button-browse.png',
         'fileDesc'      : 'Supported Video Formats: (*.flv) (*.wmv) (*.avi) (*.ogg) (*.mpg) (*.mp4) (*.mov) (*.mv4)',
@@ -161,7 +161,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: host+'/myaccount/grab-validate/',
+            url: host+'/myaccount/grab/validate/',
             data: postData,
             success: function(serverResponse, textStatus){
 

@@ -8,7 +8,7 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-include (DOC_ROOT . '/includes/recaptchalib.php');
+App::LoadClass ('Recaptcha');
 View::InitView();
 
 
