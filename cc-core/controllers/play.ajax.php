@@ -7,13 +7,12 @@
 
 // Include required files
 include ('../config/bootstrap.php');
-App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
 App::LoadClass ('Flag');
 App::LoadClass ('Favorite');
-App::LoadClass ('VideoComment');
+App::LoadClass ('Comment');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
 
@@ -26,7 +25,7 @@ $data = array();
 
 // Verify a video was selected
 if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
-    $video = new Video ($_GET['vid'], $db);
+    $video = new Video ($_GET['vid']);
 } else {
     App::Throw404();
 }
@@ -43,17 +42,12 @@ if (!$video->found || $video->status != 6) {
 // Retrieve user data if logged in
 if ($logged_in) {
     $user = new User ($logged_in);
-    $data = array ('channel' => $video->user_id, 'user_id' => $user->user_id);
+    $data = array ('member' => $video->user_id, 'user_id' => $user->user_id);
     $id = Subscription::Exist ($data);
     $subscribed = ($id) ? $id : FALSE;
 } else {
     $subscribed = FALSE;
 }
-
-
-
-// Assign data to variables
-$channel = new User ($video->user_id);
 
 
 
@@ -115,15 +109,15 @@ if (isset ($_POST['action'])) {
                 $video_comment = htmlspecialchars ($_POST['comments']);
                 
                 // Validate and submit comment
-                if (VideoComment::Validate ($video_comment)) {
+                if (Comment::Validate ($video_comment)) {
                     $data = array ('user_id' => $user->user_id, 'video_id' => $video->video_id, 'comments' => $video_comment, 'status' => 1);
-                    VideoComment::Create ($data, $db);
+                    Comment::Create ($data);
 
                     // Send video owner notifition if opted-in
-                    $privacy = new Privacy ($video->user_id, $db);
+                    $privacy = new Privacy ($video->user_id);
                     if ($privacy->OptCheck ('video_comment')) {
                         $template = new EmailTemplate ('/video_comment.htm');
-                        $template_user = new User ($video->user_id, $db);
+                        $template_user = new User ($video->user_id);
                         $template_data = array (
                             'host'   => HOST,
                             'email'  => $template_user->email,
@@ -148,8 +142,8 @@ if (isset ($_POST['action'])) {
                 
                     while ($row = $db->FetchRow ($result_comments)) {
 
-                        $comment = new VideoComment ($row[0], $db);
-                        $comment_user = new User ($comment->user_id, $db);
+                        $comment = new Comment ($row[0]);
+                        $comment_user = new User ($comment->user_id);
                         $grav_url = "http://www.gravatar.com/avatar/" . md5 (strtolower ($comment_user->email)) . "?default=" . urlencode (HOST . '/images/user_placeholder.gif') . "&size=55";
 
 
@@ -196,8 +190,8 @@ if (isset ($_POST['action'])) {
             
             // Create Favorite record if none exists
             $data = array ('user_id' => $user->user_id, 'video_id' => $video->video_id);
-            if (!Favorite::Exist ($data, $db)) {
-                Favorite::Create ($data, $db);
+            if (!Favorite::Exist ($data)) {
+                Favorite::Create ($data);
                 echo json_encode (array ('result' => 1, 'msg' => 'You have successfully added this video to your favorites!'));
                 exit();
             } else {
@@ -232,8 +226,8 @@ if (isset ($_POST['action'])) {
 			
             // Create Flag if one doesn't exist
             $data = array ('flag_type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
-            if (!Flag::Exist ($data, $db)) {
-                Flag::Create ($data, $db);
+            if (!Flag::Exist ($data)) {
+                Flag::Create ($data);
                 echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this video. We will look into this video immediately.'));
                 exit();
             } else {
@@ -262,7 +256,7 @@ if (isset ($_POST['action'])) {
 
 
             // Check if comment id is valid
-            $comment = new VideoComment ($comment_id, $db);
+            $comment = new Comment ($comment_id);
             if (!$comment->found) {
                 exit();
             } elseif ($comment->user_id == $user->user_id) {
@@ -273,8 +267,8 @@ if (isset ($_POST['action'])) {
 
             // Create Flag if one doesn't exist
             $data = array ('flag_type' => 'video-comment', 'id' => $comment_id, 'user_id' => $user->user_id);
-            if (!Flag::Exist ($data, $db)) {
-                Flag::Create ($data, $db);
+            if (!Flag::Exist ($data)) {
+                Flag::Create ($data);
                 echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this comment. We will look into it immediately.'));
                 exit();
             } else {
@@ -301,7 +295,7 @@ if (isset ($_POST['action'])) {
             }
 
             // Create subscription record if none exists
-            $data = array ('channel' => $video->user_id, 'user_id' => $user->user_id);
+            $data = array ('member' => $video->user_id, 'user_id' => $user->user_id);
             if (!Subscription::Exist ($data)) {
                 $subscribed = Subscription::Create ($data);
                 echo json_encode (array ('result' => 1, 'msg' => 'You have subscribed to ' . $video->username . '!'));

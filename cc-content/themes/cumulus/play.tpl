@@ -51,14 +51,13 @@
 
 
 
-
-        <?php if ($count[0] > 0): ?>
+        <?php if ($comment_count > 0): ?>
 
         <!-- BEGIN COMMENTS -->
         <p class="large"><?=Language::GetText('comments_header')?></p>
 
         <!-- BEGIN View All Comments Link -->
-        <?php if ($count[0] > 5): ?>
+        <?php if ($comment_count > 5): ?>
             <p class="post-header">
                 <a id="view-comments" href="<?=HOST?>/comments/videos/<?=$video->video_id?>/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
                 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$count[0]?> <?=Language::GetText('comments_total')?></strong>
@@ -69,10 +68,10 @@
             
 
         <!-- BEGIN COMMENT BLOCKS -->
-        <?php while ($row = $db->FetchRow ($result_comments)): ?>
+        <?php while ($row = $db->FetchObj ($result_comment_list)): ?>
 
             <?php
-            $comment = new Comment ($row[0]);
+            $comment = new Comment ($row->comment_id);
             $comment_user = new User ($comment->user_id);
             ?>
 
