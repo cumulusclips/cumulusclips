@@ -73,6 +73,22 @@ class View {
 
 
 
+    /**
+     * Repeat output of a block based on query results
+     * @param string $tpl_file Name of the block to be repeated
+     * @param resource $query_results Query results to be parsed
+     * @return mixed The given block is output according to the number query results
+     */
+    static function RepeatingBlock ($tpl_file, $query_results) {
+        extract (get_object_vars (self::$vars));
+        $block = THEME_PATH . '/blocks/' . $tpl_file;
+        while ($row = self::$vars->db->FetchObj ($query_results)) {
+            include ($block);
+        }
+    }
+
+
+
     // Add specified block to sidebar
     static function AddSidebarBlock ($tpl_file) {
         self::$options->blocks[] = $tpl_file;

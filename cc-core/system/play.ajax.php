@@ -129,36 +129,17 @@ if (isset ($_POST['action'])) {
 
 
                     ### Retrieve video comments
-                    $query = "SELECT COUNT(comment_id) FROM video_comments WHERE status = 1 AND video_id = $video->video_id";
-                    $result_count = $db->Query($query);
-                    $count = $db->FetchRow ($result_count);
                     $query = "SELECT comment_id FROM video_comments WHERE video_id = $video->video_id AND status = 1 ORDER BY comment_id DESC LIMIT 0, 5";
                     $result_comments = $db->Query ($query);
-                    $comment_block = '';
+                    
 
-                    if ($count[0] > 5) {
-                        $comment_block .= '<p class="post-header"><a id="view-comments" href="' . HOST . '/comments/videos/' . $video->video_id . '/" title="View All Comments">View All Comments</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong>' . $count[0] . ' Comments total</strong></p>';
-                    }
-                
-                    while ($row = $db->FetchRow ($result_comments)) {
-
-                        $comment = new Comment ($row[0]);
-                        $comment_user = new User ($comment->user_id);
-                        $grav_url = "http://www.gravatar.com/avatar/" . md5 (strtolower ($comment_user->email)) . "?default=" . urlencode (HOST . '/images/user_placeholder.gif') . "&size=55";
-
-
-                        $comment_block .= '<div class="block play-block comment">' .
-                            '<div class="video-comment">' .
-                                '<p class="thumb"><a href="' . HOST . '/channels/' . $comment_user->username . '/" title="' . $comment_user->username . '"><img src="' . $grav_url . '" width="55" height="55" alt="' . $comment_user->username . '" /></a></p>' .
-                                '<p>Posted by: <a href="' . HOST . '/channels/' . $comment_user->username . '/" title="' . $comment_user->username . '">' . $comment_user->username . '</a></p>' .
-                                '<p>Date Posted: ' . $comment->comment_date . '</p>' .
-                                '<p><a href="" id="comment-' . $comment->comment_id . '" class="flag-comment" title="Report Comment Abuse">Report Abuse</a></p>' .
-                                '<br clear="all" />' .
-                            '</div>' .
-                            '<p>' . $comment->comments . '</p>' .
-                        '</div>';
-
-                    }
+                    // Retrieve formatted new comment block
+                    View::InitView();
+                    ob_start();
+                    View::RepeatingBlock('comment.tpl', $result_comments);
+                    $comment_block = ob_get_contents();
+                    ob_end_clean();
+ 
 
                     echo json_encode (array ('result' => 1, 'msg' => 'Your comment has successfully been submitted!', 'other' => $comment_block));
                     exit();
