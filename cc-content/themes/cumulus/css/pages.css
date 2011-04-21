@@ -167,8 +167,8 @@ PLAY PAGE STYLES
 }
 
 p#rating-link {
-    width:120px;
-    margin-left:80px;
+    width:150px;
+    margin-left:30px;
     margin-top:-5px;
     text-align:right;
 }
@@ -184,6 +184,11 @@ a.like {
 a.dislike {
     color:#023e7b;
     background-position:left 3px;
+}
+
+#comments-form textarea.text {
+    width:400px;
+    height:140px;
 }
 
 

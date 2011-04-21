@@ -159,9 +159,9 @@ $('document').ready(function(){
 
 
 
-    $('#video-comments-form').submit(function(){
+    $('#comments-form form').submit(function(){
         var url = video.host+'/play-actions/'+video.id+'/';
-        executeAction(url,$('#video-comments-form').serialize(),'comment');
+        executeAction(url,$('#comments-form form').serialize(),'comment');
         return false;
     });
 
@@ -170,6 +170,8 @@ $('document').ready(function(){
     function executeAction (url, data, action) {
 
         $.post(url,data,function(returnData) {
+
+            console.log(returnData);
 
             // Display message to user
             displayMessage (returnData.result, returnData.msg);
@@ -183,9 +185,8 @@ $('document').ready(function(){
 
                 case 'comment':
                     if (returnData.result == 1) {
-                        $('#comments').empty();
-                        $('#comments').append (returnData.other);
-                        $('#video-comments-form')[0].reset();
+                        $('#comments').prepend (returnData.other);
+                        $('#comments-form form')[0].reset();
                     }
                     break;
 
@@ -213,15 +214,15 @@ $('document').ready(function(){
 
     function displayMessage (result, message) {
 
-        id = (result == 1) ? 'success' : 'errors-found';
+        id = (result == 1) ? 'success' : 'error';
 
-        // Add new message block or update existing block
-        if ($('#success').length == 0 && $('#errors-found').length == 0) {
+        // Add new message block
+        if ($('#success').length == 0 && $('#error').length == 0) {
             block = '<div id="' + id + '">' + message + '</div>';
-            $('#now-playing-header').after(block);
+            $('#comments-form').before(block);
         } else {
             // Update existing message block
-            var existing = ($('#success').length != 0) ? '#success' : '#errors-found';
+            var existing = ($('#success').length != 0) ? '#success' : '#error';
             $(existing).html(message);
             $(existing).attr('id', id);
         }

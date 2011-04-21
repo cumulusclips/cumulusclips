@@ -68,13 +68,22 @@ View::$vars->result_related = $db->Query ($query);
 
 
 
-### Retrieve video comments
-$query = "SELECT COUNT(comment_id) FROM comments WHERE status = 1 AND video_id = " . View::$vars->video->video_id;
-$result_count = $db->Query($query);
-$comment_count = $db->FetchRow ($result_count);
+### Retrieve comment count
+$query = "SELECT COUNT(comment_id) FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved'";
+$result_comment_count = $db->Query ($query);
+$comment_count = $db->FetchRow ($result_comment_count);
 View::$vars->comment_count = $comment_count[0];
-$query = "SELECT comment_id FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 1 ORDER BY comment_id DESC LIMIT 0, 5";
-View::$vars->result_comment_list = $db->Query ($query);
+
+
+
+### Retrieve comments
+$query = "SELECT comment_id FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved' ORDER BY comment_id DESC LIMIT 0, 5";
+$result_comments = $db->Query ($query);
+View::$vars->comment_count = $db->Count ($result_comments);
+View::$vars->comment_list = array();
+while ($row = $db->FetchObj ($result_comments)) {
+    View::$vars->comment_list[] = $row->comment_id;
+}
 
 
 

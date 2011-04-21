@@ -42,6 +42,11 @@ class Comment {
         // Custom Vars
         $this->date_created = date ('m/d/Y', strtotime ($row['date_created']));
         $this->comments = nl2br ($row['comments']);
+        if ($this->user_id != 0) {
+            $user = new User ($this->user_id);
+            $this->name = $user->username;
+            $this->website = HOST . '/members/' . $user->username . '/';
+        }
 
     }
 
@@ -85,8 +90,8 @@ class Comment {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = 'NOW(), ';
 
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";

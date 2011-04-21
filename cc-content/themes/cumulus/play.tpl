@@ -7,14 +7,12 @@
 
         <!-- BEGIN VIDEO -->
         <h1><?php echo Functions::CutOff ($video->title, 70); ?></h1>
-        <div id="now-playing-block">
-            <div id="player">
-                <a
-                    href="<?php echo $config->flv_bucket_url; ?>/<?php echo $video->filename; ?>.flv"
-                    style="display:block;width:600px;height:400px;"
-                    id="video">
-                </a>
-            </div>
+        <div id="player">
+            <a
+                href="<?php echo $config->flv_bucket_url; ?>/<?php echo $video->filename; ?>.flv"
+                style="display:block;width:600px;height:400px;"
+                id="video">
+            </a>
         </div>
         <!-- END VIDEO -->
 
@@ -48,33 +46,6 @@
         </div>
         <!-- END ACTIONS -->
 
-
-
-
-        <?php if ($comment_count > 0): ?>
-
-            <!-- BEGIN COMMENTS -->
-            <p class="large"><?=Language::GetText('comments_header')?></p>
-
-            <!-- BEGIN View All Comments Link -->
-            <?php if ($comment_count > 5): ?>
-                <p class="post-header">
-                    <a id="view-comments" href="<?=HOST?>/comments/videos/<?=$video->video_id?>/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
-                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$count[0]?> <?=Language::GetText('comments_total')?></strong>
-                </p>
-            <?php endif; ?>
-            <!-- END View All Comments Link -->
-
-
-            <!-- BEGIN COMMENT BLOCKS -->
-            <?php View::RepeatingBlock ('comment.tpl', $result_comment_list); ?>
-            <!-- END COMMENT BLOCKS -->
-
-
-        <?php endif; ?>
-
-
-
 <!--
 &lt;object width=&quot;400&quot; height=&quot;300&quot; id=&quot;techievideos-player&quot; name=&quot;techievideos-player&quot; data=&quot;<?=HOST?>/p/&quot; type=&quot;application/x-shockwave-flash&quot;&gt;
 &lt;param name=&quot;movie&quot; value=&quot;<?=HOST?>/p/&quot; /&gt;
@@ -87,32 +58,65 @@
 
 
 
+        <?php if ($comment_count > 0): ?>
+
+            <!-- BEGIN COMMENTS -->
+            <p class="large"><?=Language::GetText('comments_header')?></p>
+
+            <?php if ($comment_count >= 5): ?>
+                <!-- BEGIN View All Comments Link -->
+                <p class="post-header">
+                    <a id="view-comments" href="<?=HOST?>/comments/videos/<?=$video->video_id?>/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$comment_count?> <?=Language::GetText('comments_total')?></strong>
+                </p>
+                <!-- END View All Comments Link -->
+            <?php endif; ?>
+
+
+            <!-- BEGIN COMMENT BLOCKS -->
+            <div id="comments">
+                <?php View::RepeatingBlock ('comment.tpl', $comment_list); ?>
+            </div>
+            <!-- END COMMENT BLOCKS -->
+            
+            <!-- END COMMENTS -->
+        <?php else: ?>
+            <div id="comments"></div>
+        <?php endif; ?>
+
+
+
+
+
         <!-- START COMMENTS FORM -->
         <p class="large"><?=Language::GetText('comments_post_header')?></p>
-        <div class="block">
+        <div id="comments-form" class="block">
             
-            <form action="" method="post" id="video-comments-form">
+            <form action="" method="post">
 
             <div class="row">
-                <input type="text" class="text defaultText" title="<?=Language::GetText('name')?>" value="<?=Language::GetText('name')?>" />
+                <label><?=Language::GetText('name')?></label>
+                <input type="text" class="text" value="" name="name" />
             </div>
 
             <div class="row">
-                <input type="text" class="text defaultText" title="<?=Language::GetText('email')?>" value="<?=Language::GetText('email')?>" />
+                <label><?=Language::GetText('email')?></label>
+                <input type="text" class="text" value="" name="email" />
             </div>
 
             <div class="row">
-                <input type="text" class="text defaultText" title="<?=Language::GetText('website')?> (<?=Language::GetText('optional')?>)" value="<?=Language::GetText('website')?> (<?=Language::GetText('optional')?>)" />
+                <label><?=Language::GetText('website')?> (<?=Language::GetText('optional')?>)</label>
+                <input type="text" class="text" value="" name="website" />
             </div>
 
             <div class="row">
-                <textarea class="text defaultText" rows="4" cols="50" title="<?=Language::GetText('comments')?>" name="comments"><?=Language::GetText('comments')?></textarea>
+                <label><?=Language::GetText('comments')?></label>
+                <textarea class="text" rows="4" cols="50" name="comments"></textarea>
             </div>
 
-            <div class="row_btn">
-                <input type="hidden" value="TRUE" name="submitted" />
+            <div class="row-shift">
                 <input type="hidden" value="comment" name="action" />
-                <input type="submit" value="button" name="submit" />
+                <input type="hidden" value="TRUE" name="submitted" />
                 <a href="" class="button"><span><?=Language::GetText('comments_button')?></span></a>
             </div>
             </form>
