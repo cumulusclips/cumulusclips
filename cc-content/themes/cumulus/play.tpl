@@ -29,6 +29,7 @@
                     <a class="dislike" href="" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
                 </p>
             </div>
+
             <div>
                 <a href="" class="button-small"><span><?=Language::GetText('about')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('subscribe')?></span></a>
@@ -39,20 +40,49 @@
             </div>
 
             <div id="about">
+                <p>
+                    <img src="<?=$member->avatar?>" alt="<?=$member->username?>" />
+                    <a class="big" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a>
+                </p>
+                <p>Date Uploaded: <?=$video->date_created?></p>
                 <p>Tags: <?=$tags?></p>
                 <p>Description: <?=$video->description?></p>
+            </div>
+
+            <div id="embed">
+                <textarea class="text">
+                    &lt;object width=&quot;400&quot; height=&quot;300&quot; id=&quot;cc-player&quot; name=&quot;cc-player&quot; data=&quot;<?=HOST?>/p/&quot; type=&quot;application/x-shockwave-flash&quot;&gt;
+                    &lt;param name=&quot;movie&quot; value=&quot;<?=HOST?>/p/&quot; /&gt;
+                    &lt;param name=&quot;allowfullscreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;
+                    &lt;param name=&quot;flashvars&quot; value=&quot;config=<?=HOST?>/p/c/<?=$video->filename?>/&quot; /&gt;
+                    &lt;/object&gt;
+                </textarea>
+            </div>
+
+            <div id="share">
+                <!-- FACEBOOK BUTTON -->
+                <div class="share-button">
+                    <iframe src="http://www.facebook.com/plugins/like.php?href=<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/&amp;layout=box_count&amp;show_faces=false&amp;width=50&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
+                </div>
+
+                <!-- TWITTER BUTTON -->
+                <div class="share-button">
+                    <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+                </div>
+
+                <!-- DIGG BUTTON -->
+                <div class="share-button">
+                    <script type="text/javascript">(function() {var s = document.createElement('SCRIPT'), s1 = document.getElementsByTagName('SCRIPT')[0];s.type = 'text/javascript';s.async = true;s.src = 'http://widgets.digg.com/buttons.js';s1.parentNode.insertBefore(s, s1);})();</script><a class="DiggThisButton DiggMedium"></a>
+                </div>
+
+                <!-- STUMBLEUPON BUTTON -->
+                <div class="share-button">
+                    <script src="http://www.stumbleupon.com/hostedbadge.php?s=5"></script>
+                </div>
             </div>
             
         </div>
         <!-- END ACTIONS -->
-
-<!--
-&lt;object width=&quot;400&quot; height=&quot;300&quot; id=&quot;techievideos-player&quot; name=&quot;techievideos-player&quot; data=&quot;<?=HOST?>/p/&quot; type=&quot;application/x-shockwave-flash&quot;&gt;
-&lt;param name=&quot;movie&quot; value=&quot;<?=HOST?>/p/&quot; /&gt;
-&lt;param name=&quot;allowfullscreen&quot; value=&quot;true&quot; /&gt;&lt;param name=&quot;allowscriptaccess&quot; value=&quot;always&quot; /&gt;
-&lt;param name=&quot;flashvars&quot; value=&quot;config=<?=HOST?>/p/c/<?=$video->filename?>/&quot; /&gt;
-&lt;/object&gt;
--->
 
 
 
@@ -66,7 +96,7 @@
             <?php if ($comment_count >= 5): ?>
                 <!-- BEGIN View All Comments Link -->
                 <p class="post-header">
-                    <a id="view-comments" href="<?=HOST?>/comments/videos/<?=$video->video_id?>/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    <a id="view-comments" href="<?=HOST?>/videos/<?=$video->video_id?>/comments/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$comment_count?> <?=Language::GetText('comments_total')?></strong>
                 </p>
                 <!-- END View All Comments Link -->
@@ -124,12 +154,14 @@
         </div>
         <!-- END COMMENTS FORM -->
 
-
     </div>
+    <!-- END PLAY LEFT -->
 
 
 
 
+
+    <!-- BEGIN PLAY RIGHT -->
     <div id="play-right">
 
 
@@ -170,4 +202,5 @@
 
 
     </div>
+    <!-- END PLAY RIGHT -->
     <br clear="all" />

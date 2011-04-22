@@ -186,6 +186,17 @@ a.dislike {
     background-position:left 3px;
 }
 
+#about, #embed, #share {
+    display:none;
+}
+
+#share {
+    overflow:hidden;
+}
+.share-button {
+    float:left;
+}
+
 #comments-form textarea.text {
     width:400px;
     height:140px;

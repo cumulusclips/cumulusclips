@@ -14,8 +14,9 @@ RewriteRule ^videos/$ /cc-core/controllers/videos.php [NC]
 RewriteRule ^videos/page/([0-9]+)/$ /cc-core/controllers/videos.php?page=$1 [NC]
 RewriteRule ^videos/(recent|most-viewed|most-discussed)/$ /cc-core/controllers/videos.php?load=$1 [NC]
 RewriteRule ^videos/(recent|most-viewed|most-discussed)/page/([0-9]+)/$ /cc-core/controllers/videos.php?load=$1&page=$2 [NC]
-RewriteRule ^videos/([A-Za-z-]+)/$ /cc-core/controllers/videos.php?category=$1 [NC]
-RewriteRule ^videos/([A-Za-z-]+)/page/([0-9]+)/$ /cc-core/controllers/videos.php?category=$1&page=$2 [NC]
+RewriteRule ^videos/([a-z-]+)/$ /cc-core/controllers/videos.php?category=$1 [NC]
+RewriteRule ^videos/([a-z-]+)/page/([0-9]+)/$ /cc-core/controllers/videos.php?category=$1&page=$2 [NC]
+RewriteRule ^videos/([0-9]+)/comments/$ /cc-core/controllers/view_comments.php?vid=$1 [NC,L]
 RewriteRule ^videos/([0-9]+)/(.*)$ /cc-core/controllers/play.php?vid=$1 [NC,QSA]
 RewriteRule ^members/$ /cc-core/controllers/members.php [NC]
 RewriteRule ^members/page/([0-9]+)/$ /cc-core/controllers/members.php?page=$1 [NC]
@@ -28,8 +29,6 @@ RewriteRule ^login/forgot/$ /cc-core/controllers/login.php?action=forgot [NC]
 RewriteRule ^logout/$ /cc-core/controllers/logout.php [NC]
 RewriteRule ^register/$ /cc-core/controllers/register.php [NC]
 RewriteRule ^confirm/$ /cc-core/controllers/confirm.php [NC,QSA]
-RewriteRule ^comments/(videos|channels)/([0-9]+)(/(flag)/([0-9]+))?/$ /cc-core/controllers/view_comments.php?type=$1&id=$2&flag=$5 [NC]
-RewriteRule ^comments/(videos|channels)/([0-9]+)/page/([0-9]+)/$ /cc-core/controllers/view_comments.php?type=$1&id=$2&page=$3 [NC]
 RewriteRule ^opt-out/$ /cc-core/controllers/opt_out.php [NC,QSA]
 RewriteRule ^contact/$ /cc-core/controllers/contact.php [NC]
 
@@ -40,11 +39,11 @@ RewriteRule ^contact/$ /cc-core/controllers/contact.php [NC]
 RewriteRule ^notify/$ /cc-core/system/notify.php [NC]
 RewriteRule ^language/get/$ /cc-core/system/language.php [NC]
 RewriteRule ^play-actions/([0-9]+)/$ /cc-core/system/play.ajax.php?vid=$1 [NC]
-RewriteRule ^feed(/([A-Za-z0-9]+))?/$ /cc-core/system/feed.php?username=$2 [NC]
+RewriteRule ^feed(/([a-z0-9]+))?/$ /cc-core/system/feed.php?username=$2 [NC]
 RewriteRule ^myaccount/upload/validate/$ /cc-core/system/myaccount/upload.ajax.php [NC]
 RewriteRule ^myaccount/grab/validate/$ /cc-core/system/grab.ajax.php [NC]
 RewriteRule ^username/validate/$ /cc-core/system/username.ajax.php [NC,L]
-
+RewriteRule ^flag/comment/([0-9]+)/$ /cc-core/system/flag.ajax.php?type=comment&id=$1 [NC]
 
 
 
@@ -69,7 +68,7 @@ RewriteRule ^myaccount/inbox(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/i
 RewriteRule ^myaccount/inbox/([0-9]+)/$ /cc-core/controllers/myaccount/inbox.php?delete=$1 [NC]
 RewriteRule ^myaccount/read/([0-9]+)/$ /cc-core/controllers/myaccount/read.php?msg=$1 [NC]
 RewriteRule ^myaccount/message/$ /cc-core/controllers/myaccount/message.php [NC]
-RewriteRule ^myaccount/message/([a-zA-Z0-9]+)/$ /cc-core/controllers/myaccount/message.php?username=$1 [NC]
+RewriteRule ^myaccount/message/([a-z0-9]+)/$ /cc-core/controllers/myaccount/message.php?username=$1 [NC]
 RewriteRule ^myaccount/message/reply/([0-9]+)/$ /cc-core/controllers/myaccount/message.php?msg=$1 [NC]
 
 
@@ -82,7 +81,7 @@ RewriteRule ^p/c/([a-z0-9]+)/$ /cc-content/player/flowplayer.config.php?video=$1
 ### Sitemaps & Feeds
 
 RewriteRule ^mrss/$ /cc-core/controllers/mrss.php [NC]
-RewriteRule ^sitemap-([A-Za-z]+)(-([0-9]+))?\.xml$ /cc-core/controllers/sitemap.php?type=$1&page=$3 [NC]
+RewriteRule ^sitemap-([a-z]+)(-([0-9]+))?\.xml$ /cc-core/controllers/sitemap.php?type=$1&page=$3 [NC]
 RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ /cc-core/controllers/video_sitemap.php?page=$2 [NC]
 
 
