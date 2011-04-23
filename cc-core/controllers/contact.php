@@ -13,9 +13,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('contact');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - Contact Techie Videos';
 View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
 $privatekey = '6LeEaQUAAAAAAICeLh_I2dI0unaUm3JtMq6tdEZm';
 $resp = NULL;

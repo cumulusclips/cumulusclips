@@ -21,10 +21,7 @@ class Language {
     /**
      * Retrieve text from the loaded language xml file
      * @param string $node The name of the language xml node to retrieve
-     * @param array $replace Optional The values of this array will replace any
-     * placeholders/variables in the language string. The key of the array replaces
-     * variables of the same name (not case sen.) with the value from the array. If the
-     * variable is a link, the value from the array is treated as the URL for the href attribute
+     * @param array $replace Optional Replacements for placeholders (See Functions::Replace for more deails)
      * @return string The requested string is returned with replacements made
      * to it or boolean false if requested node is invalid
      */
@@ -37,27 +34,7 @@ class Language {
 
             // Check for text replacements
             if (!empty ($replace)) {
-
-                // Loop through and execute replacements
-                foreach ($replace as $_key => $_value) {
-
-                    // Patterns
-                    $anchor_pattern = "/\{$_key\}(.*?)\{\/$_key\}/i";
-                    $string_pattern = "/\{$_key\}/i";
-
-                    // Replace anchors
-                    if (preg_match ($anchor_pattern, $string, $matches)) {
-                        $anchor = '<a href="' . $_value . '" title="' . $matches[1] . '">' . $matches[1] . '</a>';
-                        $string = preg_replace ($anchor_pattern, $anchor, $string);
-                    }
-
-                    // Replace normal strings
-                    else if (preg_match ($string_pattern, $string, $matches)) {
-                        $string = preg_replace ($string_pattern, $_value, $string);
-                    }
-
-                }   // END replacements
-
+                $string = Functions::Replace ($string, $replace);
             }
 
             return $string;
@@ -96,6 +73,17 @@ class Language {
      */
     static function GetCSSName() {
         return self::$xml->information->css_name;
+    }
+
+
+
+    /**
+     * Retrieve all the meta information for a given page
+     * @param string $page Page whose information to look up
+     * @return object Returns simple xml object representing that page's node
+     */
+    static function GetMeta ($page) {
+        return self::$xml->meta->$page;
     }
 
 }

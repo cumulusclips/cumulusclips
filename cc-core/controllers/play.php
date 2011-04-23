@@ -20,8 +20,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('play');
 View::$vars->logged_in = User::LoginCheck();
-View::$vars->page_title = 'Techie Videos - ';
 View::$vars->tags = NULL;
 
 
@@ -39,7 +39,9 @@ View::$vars->video = new Video ($_GET['vid']);
 View::$vars->member = new User (View::$vars->video->user_id);
 View::$vars->video->Update (array ('views' => View::$vars->video->views+1));
 View::$vars->rating = new Rating (View::$vars->video->video_id);
-View::$vars->page_title .= View::$vars->video->title;
+View::$vars->meta->title = View::$vars->video->title;
+View::$vars->meta->keywords = implode (', ',View::$vars->video->tags);
+View::$vars->meta->description = View::$vars->video->description;
 
 
 

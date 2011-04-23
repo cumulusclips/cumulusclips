@@ -15,9 +15,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('search');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - Search Videos - ';
 $keyword = NULL;
 View::$vars->cleaned = NULL;
 $url = array (HOST . '/search');
@@ -33,7 +33,7 @@ if (isset ($_POST['submitted_search'])) {
 }
 
 $url[] =  '?keyword=' . View::$vars->cleaned;
-View::$vars->page_title .= "'" . View::$vars->cleaned . "'";
+View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('keyword' => View::$vars->cleaned));
 $keyword = $db->Escape (View::$vars->cleaned);
 
 

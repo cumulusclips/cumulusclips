@@ -16,9 +16,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('videos');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - Browse ';
 $cat_exp = '^[A-Za-z0-9-]+$';
 $load = array ('recent', 'most-viewed', 'most-discussed');
 View::$vars->category = null;
@@ -43,7 +43,7 @@ if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
     if ($id) {
         $where .= " AND cat_id = $id";
         View::$vars->category = $cat_undashed;
-        View::$vars->page_title .= View::$vars->category . ' Videos';
+        View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => View::$vars->category));
         $url .= '/' . $cat_dashed;
     }
     $query = "SELECT video_id FROM videos WHERE $where ORDER BY video_id DESC";
@@ -55,21 +55,21 @@ if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
         case 'recent':
 
             $query = "SELECT video_id FROM videos WHERE status = 6 ORDER BY video_id DESC";
-            View::$vars->page_title .= 'Most Recent Tech videos';
+            View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Recent'));
             $url .= '/recent';
             break;
 
         case 'most-viewed':
 
             $query = "SELECT video_id FROM videos WHERE status = 6 ORDER BY views DESC";
-            View::$vars->page_title .= 'Most Viewed Tech videos';
+            View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Most Viewed'));
             $url .= '/most-viewed';
             break;
 
         case 'most-discussed':
 
             $query = "SELECT videos.video_id, COUNT(comment_id) AS 'sum' from videos LEFT JOIN video_comments ON videos.video_id = video_comments.video_id GROUP BY video_id ORDER BY sum DESC";
-            View::$vars->page_title .= 'Most Discussed Tech videos';
+            View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Most Discussed'));
             $url .= '/most-discussed';
             break;
 
@@ -77,7 +77,7 @@ if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
 	
 } else {
     $query = "SELECT video_id FROM videos WHERE status = 6 ORDER BY video_id DESC";
-    View::$vars->page_title .= 'Tech videos';
+    View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'All'));
 }
 
 // Retrieve total count

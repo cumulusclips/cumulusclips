@@ -15,9 +15,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('comments');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = ' - View All Comments';
 $records_per_page = 9;
 
 

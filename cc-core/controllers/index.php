@@ -15,9 +15,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('index');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - Video Training, Video Tutorials, and How-to Videos for Techies';
 
 
 

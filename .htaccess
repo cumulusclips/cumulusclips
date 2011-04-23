@@ -28,7 +28,7 @@ RewriteRule ^login/$ /cc-core/controllers/login.php [NC]
 RewriteRule ^login/forgot/$ /cc-core/controllers/login.php?action=forgot [NC]
 RewriteRule ^logout/$ /cc-core/controllers/logout.php [NC]
 RewriteRule ^register/$ /cc-core/controllers/register.php [NC]
-RewriteRule ^confirm/$ /cc-core/controllers/confirm.php [NC,QSA]
+RewriteRule ^activate/$ /cc-core/controllers/activate.php [NC,QSA]
 RewriteRule ^opt-out/$ /cc-core/controllers/opt_out.php [NC,QSA]
 RewriteRule ^contact/$ /cc-core/controllers/contact.php [NC]
 

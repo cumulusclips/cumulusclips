@@ -14,9 +14,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('members');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Cumulus - Browse Memberss';
 $records_per_page = 12;
 $url = HOST . '/members';
 

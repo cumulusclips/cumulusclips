@@ -12,9 +12,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('sys_error');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - System Error';
 
 
 

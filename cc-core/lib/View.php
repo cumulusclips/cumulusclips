@@ -24,6 +24,17 @@ class View {
 
 
 
+    /**
+     * Load page's meta information into memory for use in templates
+     * @param string $page The name of the page who's information to retrieve
+     * @return void Meta information is loaded into the options var.
+     */
+    static function LoadPage ($page) {
+        self::$vars->meta = Language::GetMeta ($page);
+    }
+
+
+
     // Output HTML Method
     static function Render ($view) {
         self::$options->view = THEME_PATH . '/' . $view;

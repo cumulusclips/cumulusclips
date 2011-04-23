@@ -13,9 +13,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('login');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
-View::$vars->page_title = 'Cumulus - Login to your Account';
 View::$vars->username = NULL;
 View::$vars->password = NULL;
 View::$vars->message = NULL;

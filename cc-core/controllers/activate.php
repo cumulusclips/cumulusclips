@@ -12,9 +12,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('activate');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
-View::$vars->page_title = 'Techie Videos - Activate your Account';
 View::$vars->Error = NULL;
 View::$vars->Success = NULL;
 
@@ -41,6 +41,6 @@ if (isset ($_GET['token'])) {
 
 
 // Output Page
-View::Render ('confirm.tpl');
+View::Render ('activate.tpl');
 
 ?>

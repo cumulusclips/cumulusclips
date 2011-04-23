@@ -15,9 +15,9 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('member_videos');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->page_title = 'Techie Videos - Videos By: ';
 $records_per_page = 9;
 
 
@@ -35,7 +35,7 @@ if (isset ($_GET['username'])) {
 // Verify Member exists
 if ($id) {
     View::$vars->member = new User ($id);
-    View::$vars->page_title .= View::$vars->member->username;
+    View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('member' => View::$vars->member->username));
     $url = '/members/' . View::$vars->member->username . '/videos';
 } else {
     App::Throw404();
