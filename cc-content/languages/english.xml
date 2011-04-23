@@ -323,26 +323,26 @@
         </index>
 
         <videos>
-            <title>Browse {BROWSING} Videos - CumulusClips.com</title>
-            <keywords>Browse Videos, Browse, Videos, Cumulus Clips</keywords>
+            <title>Browse {BROWSING} Videos</title>
+            <keywords>Browse Videos, Browse, Videos</keywords>
             <description>Browse videos on the Cumulus Clips video sharing community</description>
         </videos>
 
         <members>
-            <title>Browse Members - CumulusClips.com</title>
-            <keywords>Browse Members, Browse, Members, Cumulus Clips</keywords>
+            <title>Browse Members</title>
+            <keywords>Browse Members, Browse, Members</keywords>
             <description>Browse registered members in the Cumulus Clips video sharing community</description>
         </members>
 
         <member_videos>
-            <title>Videos By: {MEMBER} - CumulusClips.com</title>
-            <keywords>Member Videos, Videos by member, Member, Videos, Cumulus Clips</keywords>
+            <title>Videos By: {MEMBER}</title>
+            <keywords>Member Videos, Videos by member, Member, Videos</keywords>
             <description>Browse all videos uploaded by this member.</description>
         </member_videos>
 
         <profile>
-            <title>{MEMBER}'s Profile - CumulusClips.com</title>
-            <keywords>Member Profile, Member, Profile, Cumulus Clips</keywords>
+            <title>{MEMBER}'s Profile</title>
+            <keywords>Member Profile, Member, Profile</keywords>
             <description>Member profile for this member.</description>
         </profile>
 
@@ -353,7 +353,7 @@
         </play>
 
         <comments>
-            <title>Comments for: {VIDEO} - CumulusClips.com</title>
+            <title>Comments for: {VIDEO}</title>
             <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
             <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
         </comments>
@@ -377,8 +377,8 @@
         </opt_out>
 
         <search>
-            <title>Search results for: '{KEYWORD}' - CumulusClips.com</title>
-            <keywords>Search Videos, Search, Video, Search Results, Cumulus Clips</keywords>
+            <title>Search results for: '{KEYWORD}'</title>
+            <keywords>Search Videos, Search, Video, Search Results</keywords>
             <description>Search for videos using keywords likely to appear in the title, description, or video tags</description>
         </search>
 
