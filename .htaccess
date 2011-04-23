@@ -16,7 +16,7 @@ RewriteRule ^videos/(recent|most-viewed|most-discussed)/$ /cc-core/controllers/v
 RewriteRule ^videos/(recent|most-viewed|most-discussed)/page/([0-9]+)/$ /cc-core/controllers/videos.php?load=$1&page=$2 [NC]
 RewriteRule ^videos/([a-z-]+)/$ /cc-core/controllers/videos.php?category=$1 [NC]
 RewriteRule ^videos/([a-z-]+)/page/([0-9]+)/$ /cc-core/controllers/videos.php?category=$1&page=$2 [NC]
-RewriteRule ^videos/([0-9]+)/comments/$ /cc-core/controllers/view_comments.php?vid=$1 [NC,L]
+RewriteRule ^videos/([0-9]+)/comments/$ /cc-core/controllers/comments.php?vid=$1 [NC,L]
 RewriteRule ^videos/([0-9]+)/(.*)$ /cc-core/controllers/play.php?vid=$1 [NC,QSA]
 RewriteRule ^members/$ /cc-core/controllers/members.php [NC]
 RewriteRule ^members/page/([0-9]+)/$ /cc-core/controllers/members.php?page=$1 [NC]

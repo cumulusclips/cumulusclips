@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('password_header')?></h1>
+<h1><?=Language::GetText('change_password_header')?></h1>
 
 <?php if ($error_msg): ?>
     <div id="error"><?=$error_msg?></div>
@@ -10,7 +10,7 @@
 
 <div class="block">
 
-    <p class="row-shift"><?=Language::GetText('password_text')?></p>
+    <p class="row-shift"><?=Language::GetText('change_password_text')?></p>
     
     <form action="<?=HOST?>/myaccount/change-password/" method="post">
 
@@ -27,7 +27,7 @@
         <div class="row-shift">
             <input type="hidden" name="submitted" value="TRUE" />
             <input type="submit" name="button" value="Change Password" />
-            <a href="" class="button"><span><?=Language::GetText('password_button')?></span></a>
+            <a href="" class="button"><span><?=Language::GetText('change_password_button')?></span></a>
         </div>
         
     </form>

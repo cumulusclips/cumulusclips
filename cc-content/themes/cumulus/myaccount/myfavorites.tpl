@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('my_favorites_header')?></h1>
+<h1><?=Language::GetText('myfavorites_header')?></h1>
         
 <?php if ($success): ?>
     <div id="success"><?=$success?></div>

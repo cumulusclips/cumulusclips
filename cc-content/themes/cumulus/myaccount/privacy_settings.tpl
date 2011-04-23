@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('privacy_header')?></h1>
+<h1><?=Language::GetText('privacy_settings_header')?></h1>
 
 <?php if ($errors): ?>
     <div id="error"><?=$errors?></div>
@@ -47,7 +47,7 @@
 
         <div class="row">
             <input type="hidden" name="submitted" value="TRUE" />
-            <a href="" class="button"><span><?=Language::GetText('privacy_button')?></span></a>
+            <a href="" class="button"><span><?=Language::GetText('privacy_settings_button')?></span></a>
         </div>
 
     </form>

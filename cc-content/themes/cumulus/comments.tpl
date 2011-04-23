@@ -1,10 +1,10 @@
 
-<h1>View All Comments</h1>
+<h1><?=Language::GetText('comments_header')?></h1>
 
 <div id="message"></div>
 
 <p class="big">
-    Viewing Comments For:
+    <?=Language::GetText('comments_text')?>:
     <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title="<?=$video->title?>"><?=$video->title?></a>
 </p>
 
@@ -16,7 +16,7 @@
     <!-- END videos comments loop -->
     
 <?php else: ?>
-    <div class="block"><strong>No comments have been posted for this video yet!</strong></div>
+    <div class="block"><strong><?=Language::GetText('no_comments')?></strong></div>
 <?php endif; ?>
 
 <?=$pagination->Paginate()?>

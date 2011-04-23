@@ -111,14 +111,19 @@
         <no_suggestions>@No suggestions could be made.</no_suggestions>
         <views>@Views</views>
 
+        <!-- Comments Page -->
+        <comments_header>@View All Comments</comments_header>
+        <comments_for>@Viewing comments for</comments_for>
+        <no_comments>@No comments have been posted for this video yet.</no_comments>
+
         <!-- Search Page -->
         <search_header>@Search Videos</search_header>
         <results_for>@Search Results for</results_for>
         <no_results>@No results were found.</no_results>
 
         <!-- Opt-Out Page -->
-        <optout_header>@Email Opt-Out</optout_header>
-        <optout_text>@Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</optout_text>
+        <opt_out_header>@Email Opt-Out</opt_out_header>
+        <opt_out_text>@Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</opt_out_text>
 
         <!-- Activate Account Page -->
         <activate_header>@Activate your Account</activate_header>
@@ -159,13 +164,13 @@
         <back_to_videos>@Back to videos</back_to_videos>
 
         <!-- My Account / My Videos Page -->
-        <my_videos_header>@My Videos</my_videos_header>
+        <myvideos_header>@My Videos</myvideos_header>
         <no_user_videos>@You haven't uploaded any videos yet.</no_user_videos>
         <edit_video>@Edit Video</edit_video>
         <delete_video>@Delete Video</delete_video>
 
         <!-- My Account / My Favorite Videos Page -->
-        <my_favorites_header>@My Favorite Videos</my_favorites_header>
+        <myfavorites_header>@My Favorite Videos</myfavorites_header>
         <no_favorites>@You haven't added any videos to your favorites yet.</no_favorites>
         <remove_favorite>@Remove from Favorites</remove_favorite>
 
@@ -178,19 +183,19 @@
         <profile_button>@Update Profile</profile_button>
 
         <!-- My Account / Privacy Settings Page -->
-        <privacy_header>@Privacy Settings</privacy_header>
+        <privacy_settings_header>@Privacy Settings</privacy_settings_header>
         <alert_header>@E-mail and Notifications</alert_header>
         <alert_comment>@E-mail me when one of my videos receives a comment</alert_comment>
         <alert_video>@Inform me of new videos by members subscribed to</alert_video>
         <alert_message>@E-mail me when I receive a message</alert_message>
         <alert_newsletter>@Subscribe me to the {SITENAME} newsletter</alert_newsletter>
-        <privacy_button>@Update Privacy</privacy_button>
+        <privacy_settings_button>@Update Privacy</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->
-        <password_header>@Change Password</password_header>
-        <password_text>@Passwords should be 6-10 characters long with upper &amp; lower case letters, numbers, and special characters.</password_text>
+        <change_password_header>@Change Password</change_password_header>
+        <change_password_text>@Passwords should be 6-10 characters long with upper &amp; lower case letters, numbers, and special characters.</change_password_text>
         <new_password>@New Password</new_password>
-        <password_button>@Change Password</password_button>
+        <change_password_button>@Change Password</change_password_button>
 
         <!-- My Account / View My Subscriptions Page -->
         <subscriptions_header>@My Subscriptions</subscriptions_header>
@@ -308,4 +313,187 @@
 
     </terms>
     <custom></custom>
+
+
+    <meta>
+        <index>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </index>
+
+        <videos>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </videos>
+
+        <members>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </members>
+
+        <member_videos>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </member_videos>
+
+        <profile>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </profile>
+
+        <play>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </play>
+
+        <comments>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </comments>
+
+        <contact>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </contact>
+
+        <activate>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </activate>
+
+        <opt_out>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </opt_out>
+
+        <search>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </search>
+
+        <login>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </login>
+
+        <register>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </register>
+
+        <server_404>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </server_404>
+
+        <system_error>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </system_error>
+
+        <myaccount>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </myaccount>
+
+        <upload>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </upload>
+
+        <upload_video>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </upload_video>
+
+        <upload_complete>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </upload_complete>
+
+        <edit_video>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </edit_video>
+
+        <myvideos>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </myvideos>
+
+        <myfavorites>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </myfavorites>
+
+        <update_profile>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </update_profile>
+
+        <privacy_settings>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </privacy_settings>
+
+        <change_password>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </change_password>
+
+        <subscriptions>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </subscriptions>
+
+        <subscribers>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </subscribers>
+
+        <inbox>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </inbox>
+
+        <read>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </read>
+
+        <message>
+            <title></title>
+            <keywords></keywords>
+            <description></description>
+        </message>
+    </meta>
 </language>

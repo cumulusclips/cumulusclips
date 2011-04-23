@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('my_videos_header')?></h1>
+<h1><?=Language::GetText('myvideos_header')?></h1>
         
 <?php if ($success): ?>
     <div id="success"><?=$success?></div>
