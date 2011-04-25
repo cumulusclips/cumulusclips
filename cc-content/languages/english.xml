@@ -318,32 +318,32 @@
     <meta>
         <index>
             <title>@Cumulus - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
+            <description>@Free video sharing cms software that allows you to have your own video sharing website and community</description>
         </index>
 
         <videos>
             <title>@Browse {BROWSING} Videos</title>
-            <keywords>Browse Videos, Browse, Videos</keywords>
-            <description>Browse videos on the Cumulus Clips video sharing community</description>
+            <keywords>@Browse Videos, Browse, Videos</keywords>
+            <description>@Browse videos on the video sharing community</description>
         </videos>
 
         <members>
             <title>@Browse Members</title>
-            <keywords>Browse Members, Browse, Members</keywords>
-            <description>Browse registered members in the Cumulus Clips video sharing community</description>
+            <keywords>@Browse Members, Browse, Members</keywords>
+            <description>@Browse through registered members.</description>
         </members>
 
         <member_videos>
             <title>@Videos By: {MEMBER}</title>
-            <keywords>Member Videos, Videos by member, Member, Videos</keywords>
-            <description>Browse all videos uploaded by this member.</description>
+            <keywords>@Member Videos, Videos by member, Member, Videos</keywords>
+            <description>@Browse all videos uploaded by this member.</description>
         </member_videos>
 
         <profile>
             <title>@{MEMBER}'s Profile</title>
-            <keywords>Member Profile, Member, Profile</keywords>
-            <description>Member profile for this member.</description>
+            <keywords>@Member Profile, Member, Profile</keywords>
+            <description>@Member profile for this member.</description>
         </profile>
 
         <play>
@@ -354,146 +354,146 @@
 
         <comments>
             <title>@View All Comments for: {VIDEO}</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Video Comments, Comments, Video</keywords>
+            <description>@View all comments for this videos.</description>
         </comments>
 
         <contact>
             <title>@Contact Us</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Contact Us, Contact, Send us a message</keywords>
+            <description>@Get in contact with us.</description>
         </contact>
 
         <activate>
             <title>@Activate your Account</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Activate your Account, Account Activation</keywords>
+            <description>@Activate your Accoun.t</description>
         </activate>
 
         <opt_out>
             <title>@Opt-out From All Mailing Lists</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Opt-out, Email, Mailing list</keywords>
+            <description>@Opt-out from all mailing lists.</description>
         </opt_out>
 
         <search>
             <title>@Search results for: '{KEYWORD}'</title>
-            <keywords>Search Videos, Search, Video, Search Results</keywords>
-            <description>Search for videos using keywords likely to appear in the title, description, or video tags</description>
+            <keywords>@Search Videos, Search, Video, Search Results</keywords>
+            <description>@Search for videos using keywords likely to appear in the title, description, or video tags.</description>
         </search>
 
         <login>
             <title>@Login to your Account</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Login, Account</keywords>
+            <description>@Login into your account.</description>
         </login>
 
         <register>
-            <title>@Sign Up For an Account</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <title>@Sign Up for an Account</title>
+            <keywords>@Sing up, Register, Account</keywords>
+            <description>@Sign up for an account.</description>
         </register>
 
         <server_404>
             <title>@Page Not Found</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Page Not Found, 404 Error</keywords>
+            <description>@404 Error Page Not Found.</description>
         </server_404>
 
         <system_error>
             <title>@System Error</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@System Error</keywords>
+            <description>@A System error has occured.</description>
         </system_error>
 
         <myaccount>
             <title>@Welcome</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Welcome</keywords>
+            <description>@Welcome</description>
         </myaccount>
 
         <upload>
             <title>@Upload Step 1 - Video Information</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Upload Video, Step 1, Video Information</keywords>
+            <description>@Upload Step 1 - Video Information.</description>
         </upload>
 
         <upload_video>
             <title>@Upload Step 2 - Upload Video</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Upload Video, Step 2</keywords>
+            <description>@Upload Step 2 - Upload Video.</description>
         </upload_video>
 
         <upload_complete>
             <title>@Upload Step 3 - Upload Complete!</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Upload Video, Step 3, Upload Complete</keywords>
+            <description>@Upload Step 3 - Upload Complete!</description>
         </upload_complete>
 
         <edit_video>
-            <title></title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <title>@Edit Video: </title>
+            <keywords>@Edit Video, Video Information</keywords>
+            <description>@Edit video information.</description>
         </edit_video>
 
         <myvideos>
             <title>@My Videos</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@My Videos, Videos</keywords>
+            <description>@View all videos uploaded by member.</description>
         </myvideos>
 
         <myfavorites>
             <title>@My Favorite Videos</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@My Favorite Videos, Favorite Videos, Favorites</keywords>
+            <description>@View all of member's favorite videos.</description>
         </myfavorites>
 
         <update_profile>
             <title>@Update Profile</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Update profile, profile</keywords>
+            <description>@Update user profile information.</description>
         </update_profile>
 
         <privacy_settings>
             <title>@Privacy Settings</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Privacy Settings, Update Privacy Settings</keywords>
+            <description>@Update privacy settings.</description>
         </privacy_settings>
 
         <change_password>
             <title>@Change Password</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Change Password, Password, Update Password</keywords>
+            <description>@Change account password.</description>
         </change_password>
 
         <subscriptions>
             <title>@My Subscriptions</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Subscriptions, Member Subscriptions</keywords>
+            <description>@View all users member is subscribed to.</description>
         </subscriptions>
 
         <subscribers>
             <title>@My Subscribers</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Subscribers, Subscribing Members</keywords>
+            <description>@View all members that are subscribed to this members.</description>
         </subscribers>
 
         <inbox>
             <title>@Message Inbox</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Message Inbox, Message, Inbox</keywords>
+            <description>@View all messages.</description>
         </inbox>
 
         <read>
             <title>@Read Message</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Read Message, Message</keywords>
+            <description>@Read a message.</description>
         </read>
 
         <message>
             <title>@Send a Message</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <keywords>@Send Message, Message</keywords>
+            <description>@Send another member a message.</description>
         </message>
     </meta>
 </language>
