@@ -224,6 +224,24 @@ MEMBER PROFILE STYLES
     clear:both;
 }
 
+#update-status {
+    margin-bottom:10px;
+}
+
+#update-status .text {
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    width:280px;
+    height:20px;
+    padding:8px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    margin:10px 0px;
+    /*white-space:pre-wrap;
+    word-wrap:break-word;*/
+}
+
 .post {
     padding:5px;
 }

@@ -291,6 +291,7 @@
         <error_category>@Invalid category</error_category>
         <error_name>@Invalid name</error_name>
         <error_comment>@Invalid comment</error_comment>
+        <error_status_update>@Invalid status update</error_status_update>
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
         <error_uploadify_system>@Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue. If you continue to experience problems using this feature please {LINK}contact us{/LINK} for further assistance.</error_uploadify_system>
@@ -298,6 +299,8 @@
         <error_uploadify_empty>@No video was uploaded. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_empty>
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
+
+        <success_status_updated>@Your status update has been posted.</success_status_updated>
         <success_comment_posted>@Your comment has been submitted.</success_comment_posted>
         <success_contact_sent>@Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
         <success_registered>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>

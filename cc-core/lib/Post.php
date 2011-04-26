@@ -80,8 +80,8 @@ class Post {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = 'NOW(), ';
 
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
