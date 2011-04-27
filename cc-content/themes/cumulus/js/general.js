@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    var baseURL = $('[name=baseURL]').attr('content');
+
     // Default text Focus
     $('.defaultText').focus(function(){
 
@@ -89,6 +91,146 @@ $(document).ready(function(){
         GetText (callback, $(this).data('node'), $(this).data('replacements'));
         return false;
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $('.add-favorites').click(function(){
+        var url = baseURL+'/actions/favorite/';
+        var data = {video_id: $(this).attr('data-video')};
+        executeAction (url, data, 'favorite');
+        return false;
+
+        // Callback
+            // Display Message
+    });
+
+
+
+    $('.flag').click(function(){
+        var url = baseURL+'/actions/flag/';
+        var data = {type: $(this).attr('data-flag-type'), id: $(this).attr('data-id')};
+        executeAction (url, data, 'flag');
+        return false;
+
+        // Callback
+            // Display Message
+    });
+
+
+
+    $('.subscribe').click(function(){
+        var url = baseURL+'/actions/subscribe/';
+        var data = {action: $(this).attr('data-action'), member: $(this).attr('data-member')};
+        executeAction (url, data, this.id);
+        return false;
+
+        // Callback
+            // Display Message
+            // Update Button Text and Attributes
+    });
+
+
+
+    $('.rating').click(function(){
+        var url = baseURL+'/actions/rate/';
+        var data = {video_id: $(this).attr('data-video'), rating: $(this).attr('data-rating')};
+        executeAction (url, data, 'rate');
+        return false;
+
+        // Callback
+            // Display Message
+            // Update Rating Count/Text
+
+    });
+
+
+
+    $('.comments-form').submit(function(){
+        var url = baseURL+'/actions/comment/';
+        executeAction (url, $(this).serialize(), 'comment');
+        return false;
+
+        // Callback
+            // Display Message
+            // Append comment
+            // Clear form
+    });
+
+
+
+    $('.status-form').submit(function(){
+        var url = baseURL+'/actions/post/';
+        executeAction (url, $(this).serialize(), 'comment');
+        return false;
+
+        // Callback
+            // Display Message
+            // Append Post
+            // Clear form
+    });
+
+
+
+    function executeAction (url, data, callback) {
+
+        $.ajax({
+            type    : 'POST',
+            data    : data,
+            url     : url,
+            success : callback
+        });
+
+    }
+
+
+
+    function displayMessage (result, message) {
+        var cssClass = (result == 1) ? 'success' : 'error';
+        var existing = ($('.success').length != 0) ? '.success' : '.error';
+        $(existing).removeClass(existing);
+        $(existing).addClass(cssClass);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }); // END jQuery
 
