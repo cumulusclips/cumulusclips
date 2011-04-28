@@ -34,7 +34,7 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
     $id = Subscription::Exist ($data);
     if ($id) {
         Subscription::Delete ($id);
-        View::$vars->success = 'You have successfully unsubscribed from this member!';
+        View::$vars->success = Language::GetText('success_unsubscribed');
     }
 }
 

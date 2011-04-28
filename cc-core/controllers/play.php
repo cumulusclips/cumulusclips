@@ -49,9 +49,9 @@ View::$vars->meta->description = View::$vars->video->description;
 if (View::$vars->logged_in) {
     View::$vars->user = new User (View::$vars->logged_in);
     $data = array ('member' => View::$vars->video->user_id, 'user_id' => View::$vars->user->user_id);
-    $subscribed = (Subscription::Exist ($data)) ? true : false;
+    View::$vars->subscribe_text = (Subscription::Exist ($data)) ? 'unsubscribe' : 'subscribe';
 } else {
-    $subscribed = false;
+    View::$vars->subscribe_text = 'subscribe';
 }
 
 

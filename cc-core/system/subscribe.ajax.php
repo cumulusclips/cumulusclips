@@ -23,13 +23,13 @@ if (empty ($_POST['member']) || !is_numeric ($_POST['member'])) App::Throw404();
 
 // Validate user
 $member = new User ($_POST['member']);
-if (!$member->found || $member->status != 'Active') App::Throw404();
+if (!$member->found || $member->account_status != 'Active') App::Throw404();
 
 
 
 
 ### Handle subscribe/unsubscribe
-switch ($_POST['action']) {
+switch ($_POST['type']) {
 
     ### Handle subscribe user to a member
     case 'subscribe':
@@ -50,10 +50,10 @@ switch ($_POST['action']) {
         $data = array ('member' => $member->user_id, 'user_id' => $user->user_id);
         if (!Subscription::Exist ($data)) {
             $subscribed = Subscription::Create ($data);
-            echo json_encode (array ('result' => 1, 'msg' => 'You have subscribed to ' . $video->username . '!'));
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_subscribed', array ('username' => $member->username))));
             exit();
         } else {
-            echo json_encode (array ('result' => 0, 'msg' => 'You\'re already subscribed to this member!'));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_duplicate')));
             exit();
         }
 
@@ -65,17 +65,18 @@ switch ($_POST['action']) {
 
         // Verify user is logged in
         if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => 'You must be logged in to subscribe to members!'));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_login')));
             exit();
         }
 
         // Delete subscription if one exists
-        if (Subscription::Exist (array ('user_id' => $user->user_id, 'member' => $member->user_id))) {
-            Subscription::Delete ($subscribed);
-            echo json_encode (array ('result' => 1, 'msg' => 'You have unsubscribed from ' . $video->username . '!'));
+        $subscription_id = Subscription::Exist (array ('user_id' => $user->user_id, 'member' => $member->user_id));
+        if ($subscription_id) {
+            Subscription::Delete ($subscription_id);
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed')));
             exit();
         } else {
-            echo json_encode (array ('result' => 0, 'msg' => 'You\'re not subscribed to this member!'));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_not_subscribed')));
             exit();
         }
 

@@ -300,6 +300,8 @@
         <error_favorite_duplicate>@This video is already in your favorites.</error_favorite_duplicate>
         <error_subscribe_login>@You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>@You can't subscribe to yourself.</error_subscribe_own>
+        <error_subscribe_duplicate>@You have already subscribed to this member.</error_subscribe_duplicate>
+        <error_not_subscribed>@You are not subscribed to this member.</error_not_subscribed>
         
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
@@ -309,6 +311,8 @@
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
 
+        <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>
+        <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>
         <success_favorite_added>@Video has been added to your favorites.</success_favorite_added>
         <success_flag>@Thank you for reporting this. We will look into this immediately.</success_flag>
         <success_status_updated>@Your status update has been posted.</success_status_updated>

@@ -113,9 +113,14 @@ $(document).ready(function(){
 
 
 
+  
 
 
 
+
+
+
+    // Attach favorite action to favorite links / buttons
     $('.favorite').click(function(){
         var url = baseURL+'/actions/favorite/';
         var data = {video_id: $(this).attr('data-video')};
@@ -125,6 +130,7 @@ $(document).ready(function(){
 
 
 
+    // Attach flag action to flag links / buttons
     $('.flag').click(function(){
         var url = baseURL+'/actions/flag/';
         var data = {type: $(this).attr('data-type'), id: $(this).attr('data-id')};
@@ -134,19 +140,40 @@ $(document).ready(function(){
 
 
 
+    // Attach Subscribe & Unsubscribe action to both links / buttons
     $('.subscribe').click(function(){
 
         var subscribeType = $(this).attr('data-type');
         var url = baseURL+'/actions/subscribe/';
         var data = {type: subscribeType, member: $(this).attr('data-member')};
-        
-        var callback = function (data, textStatus, jqXHR) {
-            if (data.result == 1 && subscribeType == 'subscribe') {
-                $(this).attr('data-type','unsubscribe');
-                $(this).text(GetText('unsubscribe'));
-            } else if (data.result == 1 && subscribeType == 'unsubscribe') {
-                $(this).attr('data-type','subscribe');
-                $(this).text(GetText('subscribe'));
+        var subscribeButton = $(this);
+        var subscribeText;
+
+        // Determine if is link or button
+        if ($(this).hasClass('button') || $(this).hasClass('button-small')) {
+          subscribeText = $(this).find('span');
+        } else {
+          subscribeText = subscribeButton;
+        }
+
+        // Callback for AJAX call - Update button / link if the action (subscribe / unsubscribe) was successful
+        var callback = function (responseData) {
+            if (responseData.result == 1 && subscribeType == 'subscribe') {
+
+                // Update button & change text - Prepare for Unsubscription
+                subscribeButton.attr('data-type','unsubscribe');
+                GetText(function(buttonText){
+                    subscribeText.text(buttonText);
+                },'unsubscribe');
+
+            } else if (responseData.result == 1 && subscribeType == 'unsubscribe') {
+
+                // Update button & change text - Prepare for Subscription
+                subscribeButton.attr('data-type','subscribe');
+                GetText(function(buttonText){
+                    subscribeText.text(buttonText);
+                },'subscribe');
+
             }
         }
 
@@ -258,6 +285,7 @@ GENERAL FUNCTIONS
 // Retrieve localised string via AJAX
 function GetText(callback, node, replacements) {
     $.ajax({
+        type        : 'POST',
         url         : '/language/get/',
         data        : {node:node, replacements:replacements},
         success     : callback
