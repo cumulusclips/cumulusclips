@@ -7,6 +7,9 @@
 
         <!-- BEGIN VIDEO -->
         <h1><?php echo Functions::CutOff ($video->title, 70); ?></h1>
+
+        <div id="message"></div>
+        
         <div id="player">
             <a
                 href="<?php echo $config->flv_bucket_url; ?>/<?php echo $video->filename; ?>.flv"
@@ -36,7 +39,7 @@
                 <a href="" class="button-small"><span><?=Language::GetText('share')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('embed')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('favorite')?></span></a>
-                <a href="" class="button-small"><span><?=Language::GetText('flag')?></span></a>
+                <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><span><?=Language::GetText('flag')?></span></a>
             </div>
 
             <div id="about">

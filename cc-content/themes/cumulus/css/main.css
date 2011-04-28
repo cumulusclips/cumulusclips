@@ -300,7 +300,11 @@ BODY STRUCTURE STYLES
     display:block;
 }
 
-#success {
+#message {
+    display:none;
+}
+
+#success, .success {
     font-weight:bold;
     padding:15px;
     margin-top:15px;
@@ -312,7 +316,7 @@ BODY STRUCTURE STYLES
     border-radius:5px;
 }
 
-#error {
+#error, .error {
     font-weight:bold;
     padding:15px;
     margin-top:15px;

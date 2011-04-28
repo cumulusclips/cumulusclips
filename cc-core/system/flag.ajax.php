@@ -1,5 +1,8 @@
 <?php
 
+//echo print_r ($_POST,true);
+//exit();
+
 ### Created on March 15, 2009
 ### Created by Miguel A. Hurtado
 ### This script performs all the user actions for a video via AJAX
@@ -21,20 +24,9 @@ $Errors = array();
 $data = array();
 
 
-
-// Verify a video was selected
-if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
-    $video = new Video ($_GET['vid']);
-} else {
-    App::Throw404();
-}
-
-
-
-// Check if video is valid
-if (!$video->found || $video->status != 6) {
-    App::Throw404();
-}
+// Verify valid ID was provided
+if (!isset ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
+if (empty ($_POST['type']))  App::Throw404();
 
 
 
@@ -43,92 +35,85 @@ if (!$video->found || $video->status != 6) {
 /***********************
 Handle page if submitted
 ***********************/
-
-if (isset ($_POST['action'])) {
 	
-    switch ($_POST['action']) {
+switch ($_POST['type']) {
+
+    ### Handle report abuse video
+    case 'video':
+
+        // Verify a valid video was provided
+        $video = new Video ($_POST['id']);
+        if (!$video->found || $video->status != 6)  App::Throw404();
+
+
+        // Check if user is logged in
+        if (!$logged_in) {
+            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_login')));
+            exit();
+        }
+
+
+        // Verify user doesn't flag own content
+        if ($user->user_id == $video->user_id) {
+            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_own')));
+            exit();
+        }
+
+
+        // Create Flag if one doesn't exist
+        $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
+        if (!Flag::Exist ($data)) {
+            Flag::Create ($data);
+            echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_flag')));
+            exit();
+        } else {
+            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_already')));
+            exit();
+        }
 
 
 
-        ### Handle report abuse video
-        case 'flag':
 
-            // Verify flag was given
-            if (!isset ($_POST['flag'])) {
-                exit();
-            }
+    ### Handle report abuse comment
+    case 'comment':
 
-            // Check if user is logged in
-            if (!$logged_in) {
-                echo json_encode (array ('result' => 0, 'msg' => 'You must be logged in to report inappropriate content!'));
-                exit();
-            }
+        // Check if user is logged in
+        if (!$logged_in) {
+            echo json_encode (array ('result' => 0, 'msg' => 'You must be logged in to report inappropriate comments!'));
+            exit();
+        }
 
 
-            // Verify user doesn't flag own content
-            if ($user->user_id == $video->user_id) {
-                echo json_encode (array ('result' => 0, 'msg' => 'You can\'t report your own video!'));
-                exit();
-            }
-
-			
-            // Create Flag if one doesn't exist
-            $data = array ('flag_type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
-            if (!Flag::Exist ($data)) {
-                Flag::Create ($data);
-                echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this video. We will look into this video immediately.'));
-                exit();
-            } else {
-                echo json_encode (array ('result' => 0, 'msg' => 'You have already reported this video! Thank you for your assistance.'));
-                exit();
-            }
-			
+        // Verify comment id was given
+        if (!isset ($_POST['id']) || !is_numeric ($_POST['id'])) {
+            exit();
+        }
+        $comment_id = trim ($_POST['id']);
 
 
-
-        ### Handle report abuse comment
-        case 'flag-comment':
-
-            // Check if user is logged in
-            if (!$logged_in) {
-                echo json_encode (array ('result' => 0, 'msg' => 'You must be logged in to report inappropriate comments!'));
-                exit();
-            }
-
-
-            // Verify comment id was given
-            if (!isset ($_POST['comment']) || !is_numeric ($_POST['comment'])) {
-                exit();
-            }
-            $comment_id = trim ($_POST['comment']);
+        // Check if comment id is valid
+        $comment = new Comment ($comment_id);
+        if (!$comment->found) {
+            exit();
+        } elseif ($comment->user_id == $user->user_id) {
+            echo json_encode (array ('result' => 0, 'msg' => 'You can\'t report your own comments!'));
+            exit();
+        }
 
 
-            // Check if comment id is valid
-            $comment = new Comment ($comment_id);
-            if (!$comment->found) {
-                exit();
-            } elseif ($comment->user_id == $user->user_id) {
-                echo json_encode (array ('result' => 0, 'msg' => 'You can\'t report your own comments!'));
-                exit();
-            }
+        // Create Flag if one doesn't exist
+        $data = array ('flag_type' => 'video-comment', 'id' => $comment_id, 'user_id' => $user->user_id);
+        if (!Flag::Exist ($data)) {
+            Flag::Create ($data);
+            echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this comment. We will look into it immediately.'));
+            exit();
+        } else {
+            echo json_encode (array ('result' => 0, 'msg' => 'You have already reported this comment! Thank you for your assistance.'));
+            exit();
+        }
 
 
-            // Create Flag if one doesn't exist
-            $data = array ('flag_type' => 'video-comment', 'id' => $comment_id, 'user_id' => $user->user_id);
-            if (!Flag::Exist ($data)) {
-                Flag::Create ($data);
-                echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this comment. We will look into it immediately.'));
-                exit();
-            } else {
-                echo json_encode (array ('result' => 0, 'msg' => 'You have already reported this comment! Thank you for your assistance.'));
-                exit();
-            }
 
-	
-			
-        }   // END action switch
-	
-	
-}   // END verify if page was submitted
+    }   // END action switch
 
 ?>

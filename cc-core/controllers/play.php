@@ -90,6 +90,7 @@ while ($row = $db->FetchObj ($result_comments)) {
 
 
 // Output Page
+View::AddMeta('baseURL', HOST);
 View::AddJs('flowplayer.plugin.js');
 View::AddJs('play.js');
 View::SetLayout('full.layout.tpl');

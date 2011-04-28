@@ -130,8 +130,8 @@ $(document).ready(function(){
 
     $('.flag').click(function(){
         var url = baseURL+'/actions/flag/';
-        var data = {type: $(this).attr('data-flag-type'), id: $(this).attr('data-id')};
-        executeAction (url, data, 'flag');
+        var data = {type: $(this).attr('data-type'), id: $(this).attr('data-id')};
+        executeAction (url, data);
         return false;
 
         // Callback
@@ -194,14 +194,19 @@ $(document).ready(function(){
 
 
     function executeAction (url, data, callback) {
-
         $.ajax({
             type    : 'POST',
             data    : data,
+            dataType: 'json',
             url     : url,
-            success : callback
+            success : function(responseData, textStatus, jqXHR){
+//                console.log(responseData);
+                displayMessage (responseData.result, responseData.msg);
+                if (typeof callback != 'undefined') {
+                    callback (responseData, textStatus, jqXHR);
+                }
+            }
         });
-
     }
 
 
@@ -209,8 +214,12 @@ $(document).ready(function(){
     function displayMessage (result, message) {
         var cssClass = (result == 1) ? 'success' : 'error';
         var existing = ($('.success').length != 0) ? '.success' : '.error';
-        $(existing).removeClass(existing);
-        $(existing).addClass(cssClass);
+//        console.log(result);
+//        console.log(message);
+        $('#message').show();
+        $('#message').html(message);
+        $('#message').removeClass(existing);
+        $('#message').addClass(cssClass);
     }
 
 
