@@ -40,11 +40,11 @@ RewriteRule ^notify/$ /cc-core/system/notify.php [NC]
 RewriteRule ^language/get/$ /cc-core/system/language.php [NC]
 RewriteRule ^play-actions/([0-9]+)/$ /cc-core/system/play.ajax.php?vid=$1 [NC]
 RewriteRule ^actions/flag/$ /cc-core/system/flag.ajax.php [NC]
+RewriteRule ^actions/favorite/$ /cc-core/system/favorite.ajax.php [NC]
 RewriteRule ^feed(/([a-z0-9]+))?/$ /cc-core/system/feed.php?username=$2 [NC]
 RewriteRule ^myaccount/upload/validate/$ /cc-core/system/myaccount/upload.ajax.php [NC]
 RewriteRule ^myaccount/grab/validate/$ /cc-core/system/grab.ajax.php [NC]
 RewriteRule ^username/validate/$ /cc-core/system/username.ajax.php [NC,L]
-RewriteRule ^flag/comment/([0-9]+)/$ /cc-core/system/flag.ajax.php?type=comment&id=$1 [NC]
 
 
 

@@ -116,10 +116,10 @@ $(document).ready(function(){
 
 
 
-    $('.add-favorites').click(function(){
+    $('.favorite').click(function(){
         var url = baseURL+'/actions/favorite/';
         var data = {video_id: $(this).attr('data-video')};
-        executeAction (url, data, 'favorite');
+        executeAction (url, data);
         return false;
 
         // Callback
@@ -133,9 +133,6 @@ $(document).ready(function(){
         var data = {type: $(this).attr('data-type'), id: $(this).attr('data-id')};
         executeAction (url, data);
         return false;
-
-        // Callback
-            // Display Message
     });
 
 

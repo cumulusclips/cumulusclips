@@ -19,23 +19,16 @@ App::LoadClass ('Comment');
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
-$subscribed = NULL;
-$Errors = array();
-$data = array();
+
 
 
 // Verify valid ID was provided
-if (!isset ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
+if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
 if (empty ($_POST['type']))  App::Throw404();
 
 
 
-
-
-/***********************
-Handle page if submitted
-***********************/
-	
+### Handle flag according to type of content being flagged
 switch ($_POST['type']) {
 
     ### Handle report abuse video
@@ -48,14 +41,14 @@ switch ($_POST['type']) {
 
         // Check if user is logged in
         if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_login')));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
             exit();
         }
 
 
         // Verify user doesn't flag own content
         if ($user->user_id == $video->user_id) {
-            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_own')));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
             exit();
         }
 
@@ -64,10 +57,10 @@ switch ($_POST['type']) {
         $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
-            echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_flag')));
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
             exit();
         } else {
-            echo json_encode (array ('result' => 0, 'msg' => (string)Language::GetText('error_flag_already')));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
             exit();
         }
 
