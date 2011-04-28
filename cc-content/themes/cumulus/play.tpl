@@ -35,7 +35,7 @@
 
             <div>
                 <a href="" class="button-small"><span><?=Language::GetText('about')?></span></a>
-                <a href="" class="button-small"><span><?=Language::GetText('subscribe')?></span></a>
+                <a href="" class="button-small subscribe" data-type="subscribe" data-member="<?=$video->user_id?>"><span><?=Language::GetText('subscribe')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('share')?></span></a>
                 <a href="" class="button-small"><span><?=Language::GetText('embed')?></span></a>
                 <a href="" class="button-small favorite" data-video="<?=$video->video_id?>"><span><?=Language::GetText('favorite')?></span></a>

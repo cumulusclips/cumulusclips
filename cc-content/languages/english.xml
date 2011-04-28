@@ -298,6 +298,9 @@
         <error_favorite_login>@You must login to add videos to your favorites.</error_favorite_login>
         <error_favorite_own>@You can't add your own video to your favorites.</error_favorite_own>
         <error_favorite_duplicate>@This video is already in your favorites.</error_favorite_duplicate>
+        <error_subscribe_login>@You must login to subscribe to members.</error_subscribe_login>
+        <error_subscribe_own>@You can't subscribe to yourself.</error_subscribe_own>
+        
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
         <error_uploadify_system>@Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue. If you continue to experience problems using this feature please {LINK}contact us{/LINK} for further assistance.</error_uploadify_system>

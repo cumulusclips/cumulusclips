@@ -121,9 +121,6 @@ $(document).ready(function(){
         var data = {video_id: $(this).attr('data-video')};
         executeAction (url, data);
         return false;
-
-        // Callback
-            // Display Message
     });
 
 
@@ -138,14 +135,24 @@ $(document).ready(function(){
 
 
     $('.subscribe').click(function(){
-        var url = baseURL+'/actions/subscribe/';
-        var data = {action: $(this).attr('data-action'), member: $(this).attr('data-member')};
-        executeAction (url, data, this.id);
-        return false;
 
-        // Callback
-            // Display Message
-            // Update Button Text and Attributes
+        var subscribeType = $(this).attr('data-type');
+        var url = baseURL+'/actions/subscribe/';
+        var data = {type: subscribeType, member: $(this).attr('data-member')};
+        
+        var callback = function (data, textStatus, jqXHR) {
+            if (data.result == 1 && subscribeType == 'subscribe') {
+                $(this).attr('data-type','unsubscribe');
+                $(this).text(GetText('unsubscribe'));
+            } else if (data.result == 1 && subscribeType == 'unsubscribe') {
+                $(this).attr('data-type','subscribe');
+                $(this).text(GetText('subscribe'));
+            }
+        }
+
+        executeAction (url, data, callback);
+        return false;
+        
     });
 
 
