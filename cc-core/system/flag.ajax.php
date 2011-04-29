@@ -24,7 +24,7 @@ if ($logged_in) $user = new User ($logged_in);
 
 // Verify valid ID was provided
 if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
-if (empty ($_POST['type']))  App::Throw404();
+if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'comment')))  App::Throw404();
 
 
 
@@ -48,6 +48,42 @@ switch ($_POST['type']) {
 
         // Verify user doesn't flag own content
         if ($user->user_id == $video->user_id) {
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
+            exit();
+        }
+
+
+        // Create Flag if one doesn't exist
+        $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
+        if (!Flag::Exist ($data)) {
+            Flag::Create ($data);
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
+            exit();
+        } else {
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
+            exit();
+        }
+
+
+
+
+    ### Handle report abuse user
+    case 'user':
+
+        // Verify a valid video was provided
+        $member = new User ($_POST['id']);
+        if (!$member->found || $member->status != 'active')  App::Throw404();
+
+
+        // Check if user is logged in
+        if (!$logged_in) {
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
+            exit();
+        }
+
+
+        // Verify user doesn't flag himself
+        if ($user->user_id == $member->user_id) {
             echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
             exit();
         }

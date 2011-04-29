@@ -49,10 +49,9 @@ if ($id) {
 ### Check if user is subscribed
 if (View::$vars->logged_in) {
     $data = array ('user_id' => $user->user_id, 'member' => View::$vars->member->user_id);
-    $sub_id = Subscription::Exist ($data);
-    View::$vars->subscribed = $sub_id ? true : false;
+    View::$vars->subscribe_text = Subscription::Exist ($data) ? 'unsubscribe' : 'subscribe';
 } else {
-    View::$vars->subscribed = false;
+    View::$vars->subscribe_text = 'subscribe';
 }
 
 

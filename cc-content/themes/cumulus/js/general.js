@@ -140,23 +140,16 @@ $(document).ready(function(){
 
 
 
-    // Attach Subscribe & Unsubscribe action to both links / buttons
+    // Attach Subscribe & Unsubscribe action to buttons
     $('.subscribe').click(function(){
 
         var subscribeType = $(this).attr('data-type');
         var url = baseURL+'/actions/subscribe/';
         var data = {type: subscribeType, member: $(this).attr('data-member')};
         var subscribeButton = $(this);
-        var subscribeText;
 
-        // Determine if is link or button
-        if ($(this).hasClass('button') || $(this).hasClass('button-small')) {
-          subscribeText = $(this).find('span');
-        } else {
-          subscribeText = subscribeButton;
-        }
 
-        // Callback for AJAX call - Update button / link if the action (subscribe / unsubscribe) was successful
+        // Callback for AJAX call - Update button if the action (subscribe / unsubscribe) was successful
         var callback = function (responseData) {
             
             // Prepare for Unsubscription
@@ -165,7 +158,7 @@ $(document).ready(function(){
                 // Update button & change text
                 subscribeButton.attr('data-type','unsubscribe');
                 GetText(function(buttonText){
-                    subscribeText.text(buttonText);
+                    subscribeButton.find('span').text(buttonText);
                 },'unsubscribe');
 
             // Prepare for Subscription
@@ -174,7 +167,7 @@ $(document).ready(function(){
                 // Update button & change text
                 subscribeButton.attr('data-type','subscribe');
                 GetText(function(buttonText){
-                    subscribeText.text(buttonText);
+                    subscribeButton.find('span').text(buttonText);
                 },'subscribe');
 
             }

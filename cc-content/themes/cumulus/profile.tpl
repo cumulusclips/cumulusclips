@@ -1,19 +1,17 @@
 <h1><?=$member->username?></h1>
 
+<div id="message"></div>
 
 <div class="block">
  
     <div id="profile-avatar">
         <img src="<?=$member->avatar?>" alt="<?=$member->username?>" />
-        <p>
-            <?php $button = ($subscribed) ? Language::GetText('unsubscribe') : Language::GetText('subscribe'); ?>
-            <a class="button-small" href="<?=HOST?>/members/<?=$member->username?>/?action=<?=$button?>"><span><?=$button?></span></a>
-        </p>
+        <p><a class="button-small subscribe" data-member="<?=$member->user_id?>" data-type="<?=$subscribe_text?>" href=""><span><?=Language::GetText($subscribe_text)?></span></a></p>
     </div>
     <div id="profile-info">
         <p>
             <a href="<?=HOST?>/myaccount/message/<?=$member->username?>/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a>&nbsp;&nbsp;&nbsp;
-            <a href="<?=HOST?>/members/<?=$member->username?>/?action=flag" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
+            <a class="flag" data-type="profile" data-id="<?=$member->user_id?>" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
             <a href="<?=HOST?>/feed/<?=$member->username?>/" title="<?=Language::GetText('member_rss')?>"><?=Language::GetText('member_rss')?></a>
         </p>
         <p><strong><?=Language::GetText('member_since')?>:</strong>&nbsp; <?=$member->date_joined?></p>
