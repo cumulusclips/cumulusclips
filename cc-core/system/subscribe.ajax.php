@@ -76,7 +76,7 @@ switch ($_POST['type']) {
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed')));
             exit();
         } else {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_not_subscribed')));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_noexist')));
             exit();
         }
 

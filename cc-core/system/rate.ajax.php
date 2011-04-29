@@ -1,8 +1,5 @@
 <?php
 
-//echo var_dump ($_REQUEST,true);
-//exit();
-
 ### Created on March 15, 2009
 ### Created by Miguel A. Hurtado
 ### This script performs all the user actions for a video via AJAX

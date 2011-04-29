@@ -123,9 +123,9 @@
 
         <!-- START COMMENTS FORM -->
         <p class="large"><?=Language::GetText('comments_post_header')?></p>
-        <div id="comments-form" class="block">
+        <div class="block">
             
-            <form action="" method="post">
+            <form id="comments-form" action="" method="post">
 
             <div class="row">
                 <label><?=Language::GetText('name')?></label>
@@ -148,8 +148,8 @@
             </div>
 
             <div class="row-shift">
-                <input type="hidden" value="comment" name="action" />
-                <input type="hidden" value="TRUE" name="submitted" />
+                <input type="hidden" name="video_id" value="<?=$video->video_id?>" />
+                <input type="hidden"name="submitted" value="TRUE" />
                 <a href="" class="button"><span><?=Language::GetText('comments_button')?></span></a>
             </div>
             </form>

@@ -17,15 +17,14 @@ App::LoadClass ('EmailTemplate');
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
-$subscribed = NULL;
 $Errors = array();
 $data = array();
 
 
 
 // Verify a video was selected
-if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
-    $video = new Video ($_GET['vid']);
+if (isset ($_POST['video_id']) && is_numeric ($_POST['video_id'])) {
+    $video = new Video ($_POST['video_id']);
 } else {
     App::Throw404();
 }

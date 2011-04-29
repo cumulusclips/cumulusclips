@@ -196,27 +196,27 @@ $(document).ready(function(){
                 $('#rating-text').html(responseData.other);
             }
         }
-
         executeAction (url, data, callback);
         return false;
     });
 
 
 
-    $('.comments-form').submit(function(){
+    // Attach comment action to comment forms
+    $('#comments-form').submit(function(){
         var url = baseURL+'/actions/comment/';
-        executeAction (url, $(this).serialize(), 'comment');
+        var callback = function (responseData) {
+            console.log(responseData);
+            $('#comments').prepend(responseData.other);
+            $('#comments-form')[0].reset();
+        }
+        executeAction (url, $(this).serialize(), callback);
         return false;
-
-        // Callback
-            // Display Message
-            // Append comment
-            // Clear form
     });
 
 
 
-    $('.status-form').submit(function(){
+    $('#status-form').submit(function(){
         var url = baseURL+'/actions/post/';
         executeAction (url, $(this).serialize(), 'comment');
         return false;

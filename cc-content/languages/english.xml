@@ -301,7 +301,7 @@
         <error_subscribe_login>@You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>@You can't subscribe to yourself.</error_subscribe_own>
         <error_subscribe_duplicate>@You have already subscribed to this member.</error_subscribe_duplicate>
-        <error_not_subscribed>@You are not subscribed to this member.</error_not_subscribed>
+        <error_subscribe_noexist>@You are not subscribed to this member.</error_subscribe_noexist>
         <error_rate_own>@You can't rate your own videos.</error_rate_own>
         <error_rate_duplicate>@You have already rated this video.</error_rate_duplicate>
         
