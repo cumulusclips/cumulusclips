@@ -28,9 +28,9 @@ Handle page if submitted
 if (isset ($_POST['submitted'])) {
 
     // Save update if no errors were found
-    if (!empty ($_POST['update']) && !ctype_space ($_POST['update'])) {
+    if (!empty ($_POST['post']) && !ctype_space ($_POST['post'])) {
 
-        $data['update'] = htmlspecialchars (trim ($_POST['update']));
+        $data['post'] = htmlspecialchars (trim ($_POST['post']));
         $data['user_id'] = $user->user_id;
         $post_id = Post::Create ($data);
         $post = new Post ($post_id);
@@ -38,7 +38,7 @@ if (isset ($_POST['submitted'])) {
         // Retrieve new formatted status updated
         View::InitView();
         ob_start();
-        View::RepeatingBlock('comment.tpl', array ($post->post_id));
+        View::RepeatingBlock('post.tpl', array ($post->post_id));
         $status_update = ob_get_contents();
         ob_end_clean();
 

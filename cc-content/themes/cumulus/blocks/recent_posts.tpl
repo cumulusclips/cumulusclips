@@ -12,22 +12,16 @@ $('document').ready(function(){
 <div class="block">
 
     <?php //if ($logged_in): ?>
-        <div id="update-status">
-            <p class="big">Update your Status</p>
-            <textarea name="update" cols="30" rows="1" class="text"></textarea>
-            <a class="button-small" href=""><span>Post Update</span></a>
-        </div>
+        <form id="status-form">
+            <p class="big"><?=Language::GetText('update_status')?></p>
+            <textarea name="post" cols="30" rows="1" class="text"></textarea>
+            <input type="hidden" name="submitted" value="TRUE" />
+            <a class="button-small" href=""><span><?=Language::GetText('post_update_button')?></span></a>
+        </form>
     <?php //endif; ?>
 
-    
-    <?php while ($row = $db->FetchObj ($result_posts)): ?>
-
-        <?php $post = new Post ($row->post_id); ?>
-        <p class="post">
-            <?=$post->post?><br />
-            <strong><?=Functions::TimeSince (strtotime ($post->date_created))?></strong>
-        </p>
-    
-    <?php endwhile; ?>
+    <div id="status-posts">
+        <?php View::RepeatingBlock('post.tpl', $post_list); ?>
+    </div>
 
 </div>

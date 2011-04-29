@@ -78,10 +78,15 @@ View::$vars->member->Update ($data);
 
 ### Retrieve latest status updates
 $query = "SELECT post_id FROM posts WHERE user_id = " . View::$vars->member->user_id . "  ORDER BY post_id DESC LIMIT 0, $post_count";
-View::$vars->result_posts = $db->Query ($query);
+$result_posts = $db->Query ($query);
+View::$vars->post_list = array();
+while ($row = $db->FetchObj ($result_posts)) {
+    View::$vars->post_list[] = $row->post_id;
+}
 
 
 // Output Page
+View::AddMeta ('baseURL', HOST);
 View::AddSidebarBlock ('recent_posts.tpl');
 View::Render ('profile.tpl');
 

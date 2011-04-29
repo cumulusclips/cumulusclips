@@ -56,7 +56,7 @@ $(document).ready(function(){
 
 
     // Attach submit action to buttons
-    $('.button').click(function(){
+    $('.button, .button-small').click(function(){
         var parentForm = $(this).closest('form');
         if (parentForm.length) {
             parentForm.submit();
@@ -216,15 +216,20 @@ $(document).ready(function(){
 
 
 
+    // Attach post status update action to status update forms
     $('#status-form').submit(function(){
         var url = baseURL+'/actions/post/';
-        executeAction (url, $(this).serialize(), 'comment');
+        var callback = function(responseData) {
+            $('#status-posts').prepend(responseData.other);
+            $('#status-form')[0].reset();
+        }
+        executeAction (url, $(this).serialize(), callback);
         return false;
+    });
 
-        // Callback
-            // Display Message
-            // Append Post
-            // Clear form
+    // Make status update text field expand on initial focus
+    $('#status-form .text').focus(function(){
+        $(this).css('height', '80');
     });
 
 

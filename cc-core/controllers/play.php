@@ -81,7 +81,6 @@ View::$vars->comment_count = $comment_count[0];
 ### Retrieve comments
 $query = "SELECT comment_id FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved' ORDER BY comment_id DESC LIMIT 0, 5";
 $result_comments = $db->Query ($query);
-View::$vars->comment_count = $db->Count ($result_comments);
 View::$vars->comment_list = array();
 while ($row = $db->FetchObj ($result_comments)) {
     View::$vars->comment_list[] = $row->comment_id;

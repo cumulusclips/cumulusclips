@@ -84,6 +84,8 @@
         <recent_videos>@Recent Videos</recent_videos>
         <view_all_videos>@View all Videos</view_all_videos>
         <recent_posts_header>@Recent Updates</recent_posts_header>
+        <update_status>@Update your Status</update_status>
+        <post_update_button>@Post Update</post_update_button>
         <no_member_videos>@Member currently has no videos.</no_member_videos>
 
         <!-- Member Videos Page -->

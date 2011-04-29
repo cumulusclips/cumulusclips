@@ -224,11 +224,12 @@ MEMBER PROFILE STYLES
     clear:both;
 }
 
-#update-status {
+#status-form {
+    display:block;
     margin-bottom:10px;
 }
 
-#update-status .text {
+#status-form .text {
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
