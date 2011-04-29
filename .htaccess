@@ -45,6 +45,7 @@ RewriteRule ^username/validate/$ /cc-core/system/username.ajax.php [NC,L]
 RewriteRule ^actions/flag/$ /cc-core/system/flag.ajax.php [NC]
 RewriteRule ^actions/favorite/$ /cc-core/system/favorite.ajax.php [NC]
 RewriteRule ^actions/subscribe/$ /cc-core/system/subscribe.ajax.php [NC]
+RewriteRule ^actions/rate/$ /cc-core/system/rate.ajax.php [NC]
 
 
 

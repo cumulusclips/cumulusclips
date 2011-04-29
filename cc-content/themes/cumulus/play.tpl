@@ -26,10 +26,10 @@
 
             <div id="actions">
                 <p class="large"><?=$video->views?></p>
-                <p id="rating-text"><strong><?=$rating->GetCountText()?></strong></p>
+                <p><span id="rating-text"><?=$rating->GetCountText()?></span></p>
                 <p id="rating-link">
-                    <a class="like" href="" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>
-                    <a class="dislike" href="" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
+                    <a class="like rating" href="" data-video="<?=$video->video_id?>" data-rating="1" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>
+                    <a class="dislike rating" href="" data-video="<?=$video->video_id?>" data-rating="0" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
                 </p>
             </div>
 

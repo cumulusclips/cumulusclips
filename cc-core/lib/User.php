@@ -179,7 +179,7 @@ class User {
         $query = "INSERT INTO users_anonymous (ip, date_created) values ('$ip', NOW())";
         $db->Query ($query);
         $id = $db->LastId()*-1;
-        setcookie('tv_anonymous', $id, time()+3600*24*365*10,'/');
+        setcookie('cc_anonymous', $id, time()+3600*24*365*10,'/');
         return $id;
     }
 
@@ -190,7 +190,7 @@ class User {
      * @return boolean Returns true if user is registered anonymous, false otherwise
      */
     static function IsAnonymous() {
-        if (!empty ($_COOKIE['tv_anonymous']) && is_numeric ($_COOKIE['tv_anonymous']) && $_COOKIE['tv_anonymous'] < 0) {
+        if (!empty ($_COOKIE['cc_anonymous']) && is_numeric ($_COOKIE['cc_anonymous']) && $_COOKIE['cc_anonymous'] < 0) {
             return true;
         } else {
             return false;
@@ -219,7 +219,7 @@ class User {
             $anon_id = $_COOKIE['tv_anonymous'];
             $query = "UPDATE ratings SET user_id = $this->user_id WHERE user_id = $anon_id";
             $this->db->Query ($query);
-            setcookie('tv_anonymous',null,time()-3600*24*365*10,'/');
+            setcookie('cc_anonymous',null,time()-3600*24*365*10,'/');
 
         }
     }

@@ -302,6 +302,8 @@
         <error_subscribe_own>@You can't subscribe to yourself.</error_subscribe_own>
         <error_subscribe_duplicate>@You have already subscribed to this member.</error_subscribe_duplicate>
         <error_not_subscribed>@You are not subscribed to this member.</error_not_subscribed>
+        <error_rate_own>@You can't rate your own videos.</error_rate_own>
+        <error_rate_duplicate>@You have already rated this video.</error_rate_duplicate>
         
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
@@ -311,6 +313,7 @@
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
 
+        <success_rated>@Rating has been submitted.</success_rated>
         <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>
         <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>
         <success_favorite_added>@Video has been added to your favorites.</success_favorite_added>

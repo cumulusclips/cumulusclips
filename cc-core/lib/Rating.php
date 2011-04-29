@@ -20,7 +20,7 @@ class Rating {
         $query = "SELECT rating_id FROM ratings WHERE video_id = $this->video_id AND user_id = $user_id";
         $result = $this->db->Query ($query);
         if ($this->db->Count ($result) == 0) {
-            $rating_num = ($rating == 'Helpful') ? 1 : 0;
+            $rating_num = ($rating == '1') ? 1 : 0;
             $query = "INSERT INTO ratings (video_id, user_id, date_rated, rating) VALUES ($this->video_id, $user_id, NOW(), $rating_num)";
             $this->db->Query ($query);
             $msg = "User: $user_id\nVideo: $this->video_id\nRating: $rating";

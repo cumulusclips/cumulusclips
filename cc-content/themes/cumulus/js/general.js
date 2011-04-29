@@ -158,17 +158,20 @@ $(document).ready(function(){
 
         // Callback for AJAX call - Update button / link if the action (subscribe / unsubscribe) was successful
         var callback = function (responseData) {
+            
+            // Prepare for Unsubscription
             if (responseData.result == 1 && subscribeType == 'subscribe') {
 
-                // Update button & change text - Prepare for Unsubscription
+                // Update button & change text
                 subscribeButton.attr('data-type','unsubscribe');
                 GetText(function(buttonText){
                     subscribeText.text(buttonText);
                 },'unsubscribe');
 
+            // Prepare for Subscription
             } else if (responseData.result == 1 && subscribeType == 'unsubscribe') {
 
-                // Update button & change text - Prepare for Subscription
+                // Update button & change text
                 subscribeButton.attr('data-type','subscribe');
                 GetText(function(buttonText){
                     subscribeText.text(buttonText);
@@ -184,16 +187,18 @@ $(document).ready(function(){
 
 
 
+    // Attach rating action to like & dislike links
     $('.rating').click(function(){
         var url = baseURL+'/actions/rate/';
         var data = {video_id: $(this).attr('data-video'), rating: $(this).attr('data-rating')};
-        executeAction (url, data, 'rate');
+        var callback = function (responseData) {
+            if (responseData.result == 1) {
+                $('#rating-text').html(responseData.other);
+            }
+        }
+
+        executeAction (url, data, callback);
         return false;
-
-        // Callback
-            // Display Message
-            // Update Rating Count/Text
-
     });
 
 
