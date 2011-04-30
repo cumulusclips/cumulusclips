@@ -13,8 +13,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('upload_video');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Upload Video :: Phase 2 - Upload Video File';
 View::$vars->user = new User (View::$vars->logged_in);
 
 

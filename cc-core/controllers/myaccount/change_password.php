@@ -12,8 +12,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('change_password');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Change Account Password';
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->error_msg = NULL;

@@ -15,8 +15,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('message');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Compose a Message';
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->to = NULL;
 View::$vars->subject = NULL;

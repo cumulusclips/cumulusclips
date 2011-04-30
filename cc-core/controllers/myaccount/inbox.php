@@ -14,8 +14,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('inbox');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Message Inbox';
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/inbox';

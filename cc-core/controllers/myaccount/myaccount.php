@@ -13,10 +13,11 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('myaccount');
 View::$vars->logged_in = User::LoginCheck(HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - My Account';
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->new_messages = NULL;
+View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('username' => View::$vars->user->username));
 
 
 

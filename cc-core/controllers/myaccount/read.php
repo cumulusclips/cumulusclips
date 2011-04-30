@@ -13,14 +13,14 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('read');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Read Message';
 View::$vars->user = new User (View::$vars->logged_in);
 
 
 
 ### Verify a message was chosen
-if (!isset ($_GET['msg']) || !is_numeric ($_GET['msg']) || $_GET['msg'] <= 0) {
+if (empty ($_GET['msg']) || !is_numeric ($_GET['msg'])) {
     App::Throw404();
 }
 

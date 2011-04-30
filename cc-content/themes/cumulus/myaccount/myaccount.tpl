@@ -1,5 +1,5 @@
 
-<p class="large"><?=Language::GetText('myaccount_header')?>: <?=$user->username?></p>
+<p class="large"><?=Language::GetText('myaccount_header')?> - <?=$user->username?></p>
 <div class="block">
 
     <p>

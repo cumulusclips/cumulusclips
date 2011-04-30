@@ -444,7 +444,7 @@
         </system_error>
 
         <myaccount>
-            <title>@Welcome</title>
+            <title>@Welcome - {USERNAME}</title>
             <keywords>@Welcome</keywords>
             <description>@Welcome</description>
         </myaccount>
@@ -468,7 +468,7 @@
         </upload_complete>
 
         <edit_video>
-            <title>@Edit Video: </title>
+            <title>@Edit Video</title>
             <keywords>@Edit Video, Video Information</keywords>
             <description>@Edit video information.</description>
         </edit_video>

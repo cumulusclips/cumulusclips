@@ -16,8 +16,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('myfavorites');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - My Favorite Videos';
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/myfavorites';

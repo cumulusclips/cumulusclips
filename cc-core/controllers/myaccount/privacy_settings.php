@@ -13,8 +13,8 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
+View::LoadPage ('privacy_settings');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->page_title = 'Techie Videos - Privacy Settings';
 View::$vars->data = array();
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->privacy = new Privacy (View::$vars->user->user_id);
