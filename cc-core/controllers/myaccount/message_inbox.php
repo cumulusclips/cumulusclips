@@ -14,11 +14,11 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('inbox');
+View::LoadPage ('message_inbox');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
-$url = HOST . '/myaccount/inbox';
+$url = HOST . '/myaccount/message/inbox';
 View::$vars->success = NULL;
 
 
@@ -82,6 +82,6 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-View::Render ('myaccount/inbox.tpl');
+View::Render ('myaccount/message_inbox.tpl');
 
 ?>

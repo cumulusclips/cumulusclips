@@ -22,9 +22,9 @@ DROP TABLE IF EXISTS `categories`;
 
 CREATE TABLE `categories` (
   `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `cat_name` varchar(250) DEFAULT NULL,
+  `cat_name` varchar(250) NOT NULL,
   `cat_description` text,
-  `date_created` date DEFAULT NULL,
+  `date_created` date NOT NULL,
   PRIMARY KEY (`cat_id`),
   UNIQUE KEY `channel_id` (`cat_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
@@ -40,9 +40,9 @@ DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `comment_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT '0',
-  `video_id` bigint(20) DEFAULT NULL,
-  `comments` text,
-  `date_created` datetime DEFAULT NULL,
+  `video_id` bigint(20) NOT NULL,
+  `comments` text NOT NULL,
+  `date_created` datetime NOT NULL,
   `status` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE `comments` (
 
 /*Data for the table `comments` */
 
-insert  into `comments`(`comment_id`,`user_id`,`video_id`,`comments`,`date_created`,`status`,`email`,`name`,`website`,`ip`) values (3,26,260,'Good video! I been neededing to fix my NES for a long time now.\r\n\r\nGood Times!!!','2009-07-23 00:00:00','approved',NULL,NULL,NULL,NULL),(2,26,248,'Nice tutorial, thanks for the help!','2009-07-22 00:00:00','approved',NULL,NULL,NULL,NULL),(4,21,248,'koo vid. I really wish you would\'ved included a doctype though...','2009-07-23 00:00:00','approved',NULL,NULL,NULL,NULL),(6,129,90,'Very well done. You have made it so simple.','2010-02-12 00:00:00','approved',NULL,NULL,NULL,NULL),(7,146,770,'Do you help people with Javascript Injection attacks?','2010-03-19 00:00:00','approved',NULL,NULL,NULL,NULL),(8,152,426,'Nice tut. One of the few out there that actually show you how to properly route wiring through the wall.','2010-04-08 00:00:00','approved',NULL,NULL,NULL,NULL),(9,152,812,'Thanks for the video. I\'ve been looking for how to do this for a while now.','2010-04-08 00:00:00','approved',NULL,NULL,NULL,NULL),(10,161,712,'thanks for your video','2010-04-10 00:00:00','approved',NULL,NULL,NULL,NULL),(11,194,848,'Hi thanks for your great tutorials (:-). I\'m a newbie trying to modify the default twenty ten theme on WP 3.01. I don\'t quite grasp everything just yet but this does clear up some areas. I am looking for tutorials on how to add multiple page layouts on my site? Can you point me in the right direction, please?','2010-08-05 00:00:00','approved',NULL,NULL,NULL,NULL),(12,226,624,'I\'ve learned so much from your vids\r\n  Thank you so very much Rick','2010-09-24 00:00:00','approved',NULL,NULL,NULL,NULL),(13,239,331,'Ur Videos are Awesome keep this on :D\nbut...\n\npls make the sound and the video syncron :D\nThx','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(14,239,332,'Why beak the video up at the mid?...\n\nPls repair that ...\nThanks :D\n\nDo u have a YouTube Channel?..','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(15,240,479,'nice tutorial man, very helpful, congrats','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(16,315,1144,'so with that how can you install linux on the ps3?','2011-01-18 00:00:00','approved',NULL,NULL,NULL,NULL),(17,315,1144,'also can you still ay your games and if so are there any problems playing the games.','2011-01-18 00:00:00','approved',NULL,NULL,NULL,NULL),(18,345,1102,'bonsoir, hello\nit has been 2 years since i have worked with Illustrator and other graphic softwares\nfor now, i am helping teenagers to consider graphic design to stimulate them to go back to school for further trainning â€“ you are very cool and relax â€“ your tutorials are very interesting â€“ thank you very much â€“ it will help me help them ! bye\nmerci beaucoup â€“ thank you very much !\nlÃ©o','2011-02-04 00:00:00','approved',NULL,NULL,NULL,NULL),(19,352,331,'They were awesome until this one, it stops at 1:46 before it finishes. I think the next few do the same.','2011-02-06 00:00:00','approved',NULL,NULL,NULL,NULL),(20,0,NULL,'@Comments',NULL,'approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(21,0,1202,'Let\'s Do it!','2011-04-20 20:15:26','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(22,0,1202,'right','2011-04-20 20:17:42','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(23,0,1202,'@Comments','2011-04-20 20:21:01','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(24,0,1202,'@Comments','2011-04-20 20:25:49','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(25,0,1202,'Drop it!','2011-04-21 11:06:31','approved','damian.torres@mailinator.com','Damian','mailinator.com','10.100.3.223');
+insert  into `comments`(`comment_id`,`user_id`,`video_id`,`comments`,`date_created`,`status`,`email`,`name`,`website`,`ip`) values (3,26,260,'Good video! I been neededing to fix my NES for a long time now.\r\n\r\nGood Times!!!','2009-07-23 00:00:00','approved',NULL,NULL,NULL,NULL),(2,26,248,'Nice tutorial, thanks for the help!','2009-07-22 00:00:00','approved',NULL,NULL,NULL,NULL),(4,21,248,'koo vid. I really wish you would\'ved included a doctype though...','2009-07-23 00:00:00','approved',NULL,NULL,NULL,NULL),(6,129,90,'Very well done. You have made it so simple.','2010-02-12 00:00:00','approved',NULL,NULL,NULL,NULL),(7,146,770,'Do you help people with Javascript Injection attacks?','2010-03-19 00:00:00','approved',NULL,NULL,NULL,NULL),(8,152,426,'Nice tut. One of the few out there that actually show you how to properly route wiring through the wall.','2010-04-08 00:00:00','approved',NULL,NULL,NULL,NULL),(9,152,812,'Thanks for the video. I\'ve been looking for how to do this for a while now.','2010-04-08 00:00:00','approved',NULL,NULL,NULL,NULL),(10,161,712,'thanks for your video','2010-04-10 00:00:00','approved',NULL,NULL,NULL,NULL),(11,194,848,'Hi thanks for your great tutorials (:-). I\'m a newbie trying to modify the default twenty ten theme on WP 3.01. I don\'t quite grasp everything just yet but this does clear up some areas. I am looking for tutorials on how to add multiple page layouts on my site? Can you point me in the right direction, please?','2010-08-05 00:00:00','approved',NULL,NULL,NULL,NULL),(12,226,624,'I\'ve learned so much from your vids\r\n  Thank you so very much Rick','2010-09-24 00:00:00','approved',NULL,NULL,NULL,NULL),(13,239,331,'Ur Videos are Awesome keep this on :D\nbut...\n\npls make the sound and the video syncron :D\nThx','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(14,239,332,'Why beak the video up at the mid?...\n\nPls repair that ...\nThanks :D\n\nDo u have a YouTube Channel?..','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(15,240,479,'nice tutorial man, very helpful, congrats','2010-10-14 00:00:00','approved',NULL,NULL,NULL,NULL),(16,315,1144,'so with that how can you install linux on the ps3?','2011-01-18 00:00:00','approved',NULL,NULL,NULL,NULL),(17,315,1144,'also can you still ay your games and if so are there any problems playing the games.','2011-01-18 00:00:00','approved',NULL,NULL,NULL,NULL),(18,345,1102,'bonsoir, hello\nit has been 2 years since i have worked with Illustrator and other graphic softwares\nfor now, i am helping teenagers to consider graphic design to stimulate them to go back to school for further trainning â€“ you are very cool and relax â€“ your tutorials are very interesting â€“ thank you very much â€“ it will help me help them ! bye\nmerci beaucoup â€“ thank you very much !\nlÃ©o','2011-02-04 00:00:00','approved',NULL,NULL,NULL,NULL),(19,352,331,'They were awesome until this one, it stops at 1:46 before it finishes. I think the next few do the same.','2011-02-06 00:00:00','approved',NULL,NULL,NULL,NULL),(20,0,0,'@Comments','0000-00-00 00:00:00','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(21,0,1202,'Let\'s Do it!','2011-04-20 20:15:26','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(22,0,1202,'right','2011-04-20 20:17:42','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(23,0,1202,'@Comments','2011-04-20 20:21:01','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(24,0,1202,'@Comments','2011-04-20 20:25:49','approved','miguel@mahurtado.com','Miguel',NULL,'192.168.1.100'),(25,0,1202,'Drop it!','2011-04-21 11:06:31','approved','damian.torres@mailinator.com','Damian','mailinator.com','10.100.3.223');
 
 /*Table structure for table `favorites` */
 
@@ -62,8 +62,8 @@ DROP TABLE IF EXISTS `favorites`;
 
 CREATE TABLE `favorites` (
   `fav_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `video_id` bigint(20) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
+  `video_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `date_created` date NOT NULL,
   PRIMARY KEY (`fav_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
@@ -133,9 +133,9 @@ DROP TABLE IF EXISTS `posts`;
 
 CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `post` longtext,
-  `date_created` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `post` longtext NOT NULL,
+  `date_created` datetime NOT NULL,
   PRIMARY KEY (`post_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
@@ -200,9 +200,9 @@ DROP TABLE IF EXISTS `subscriptions`;
 
 CREATE TABLE `subscriptions` (
   `sub_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) DEFAULT NULL,
-  `member` bigint(20) DEFAULT NULL,
-  `date_created` datetime DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `member` bigint(20) NOT NULL,
+  `date_created` datetime NOT NULL,
   PRIMARY KEY (`sub_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 

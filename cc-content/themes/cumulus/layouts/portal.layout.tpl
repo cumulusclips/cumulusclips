@@ -46,8 +46,8 @@
                 <ul>
                     <li><a href="<?php echo HOST; ?>/myaccount/subscriptions/" title="<?=Language::GetText('my_subscriptions')?>"><?=Language::GetText('my_subscriptions')?></a></li>
                     <li><a href="<?php echo HOST; ?>/myaccount/subscribers/" title="<?=Language::GetText('my_subscribers')?>"><?=Language::GetText('my_subscribers')?></a></li>
-                    <li><a href="<?php echo HOST; ?>/myaccount/inbox/" title="<?=Language::GetText('inbox')?>"><?=Language::GetText('inbox')?></a></li>
-                    <li><a href="<?php echo HOST; ?>/myaccount/message/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a></li>
+                    <li><a href="<?php echo HOST; ?>/myaccount/message/inbox/" title="<?=Language::GetText('inbox')?>"><?=Language::GetText('inbox')?></a></li>
+                    <li><a href="<?php echo HOST; ?>/myaccount/message/send/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a></li>
                 </ul>
 
             </div>

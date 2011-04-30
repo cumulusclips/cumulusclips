@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('inbox_header')?></h1>
+<h1><?=Language::GetText('message_inbox_header')?></h1>
 
 <?php if ($success): ?>
     <div id="success"><?=$success?></div>
@@ -9,7 +9,7 @@
 
     <div class="block">
         
-        <form action="<?=HOST?>/myaccount/inbox/" method="post">
+        <form action="<?=HOST?>/myaccount/message/inbox/" method="post">
         <table id="inbox">
             <tr>
                 <td><strong><?=Language::GetText('purge')?></strong></td>
@@ -26,7 +26,7 @@
                 <tr>
                     <td><input type="checkbox" name="delete[]" value="<?=$message->message_id?>" /></td>
                     <td><?=$message->status == 'read' ? Language::GetText('read') : Language::GetText('unread')?></td>
-                    <td><a href="<?=HOST?>/myaccount/read/<?=$message->message_id?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
+                    <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->message_id?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
                     <td><?=$message->username?></td>
                     <td><?=$message->date?></td>
                 </tr>

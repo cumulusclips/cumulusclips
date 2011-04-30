@@ -13,7 +13,7 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('read');
+View::LoadPage ('message_read');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 
@@ -41,6 +41,6 @@ if ($id) {
 
 // Outuput page
 View::SetLayout ('portal.layout.tpl');
-View::Render ('myaccount/read.tpl');
+View::Render ('myaccount/message_read.tpl');
 
 ?>

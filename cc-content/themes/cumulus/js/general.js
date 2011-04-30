@@ -94,32 +94,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
     // Attach favorite action to favorite links / buttons
     $('.favorite').click(function(){
         var url = baseURL+'/actions/favorite/';

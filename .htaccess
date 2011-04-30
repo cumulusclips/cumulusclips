@@ -68,12 +68,12 @@ RewriteRule ^myaccount/change-password/?$ /cc-core/controllers/myaccount/change_
 RewriteRule ^myaccount/subscriptions(/([0-9]+))?/$ /cc-core/controllers/myaccount/subscriptions.php?id=$2 [NC]
 RewriteRule ^myaccount/subscriptions(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/subscriptions.php?page=$2 [NC]
 RewriteRule ^myaccount/subscribers(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/subscribers.php?page=$2 [NC]
-RewriteRule ^myaccount/inbox(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/inbox.php?page=$2 [NC]
-RewriteRule ^myaccount/inbox/([0-9]+)/$ /cc-core/controllers/myaccount/inbox.php?delete=$1 [NC]
-RewriteRule ^myaccount/read/([0-9]+)/$ /cc-core/controllers/myaccount/read.php?msg=$1 [NC]
-RewriteRule ^myaccount/message/$ /cc-core/controllers/myaccount/message.php [NC]
-RewriteRule ^myaccount/message/([a-z0-9]+)/$ /cc-core/controllers/myaccount/message.php?username=$1 [NC]
-RewriteRule ^myaccount/message/reply/([0-9]+)/$ /cc-core/controllers/myaccount/message.php?msg=$1 [NC]
+RewriteRule ^myaccount/message/inbox(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/message_inbox.php?page=$2 [NC]
+RewriteRule ^myaccount/message/inbox/([0-9]+)/$ /cc-core/controllers/myaccount/message_inbox.php?delete=$1 [NC]
+RewriteRule ^myaccount/message/read/([0-9]+)/$ /cc-core/controllers/myaccount/message_read.php?msg=$1 [NC]
+RewriteRule ^myaccount/message/send/$ /cc-core/controllers/myaccount/message_send.php [NC]
+RewriteRule ^myaccount/message/send/([a-z0-9]+)/$ /cc-core/controllers/myaccount/message_send.php?username=$1 [NC]
+RewriteRule ^myaccount/message/reply/([0-9]+)/$ /cc-core/controllers/myaccount/message_send.php?msg=$1 [NC]
 
 
 ### Player

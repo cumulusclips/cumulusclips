@@ -15,7 +15,7 @@ View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('message');
+View::LoadPage ('message_send');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->to = NULL;
@@ -80,15 +80,15 @@ if (isset ($_POST['submitted'])) {
                 View::$vars->to = $recipient->username;
                 $message['recipient'] = $recipient->user_id;
             } else {
-                View::$vars->Errors['recipient'] = Language::GetText('valid_recipient_self');
+                View::$vars->Errors['recipient'] = Language::GetText('error_recipient_self');
             }    
 
         } else {
-            View::$vars->Errors['recipient'] = Language::GetText('valid_recipient_exist');
+            View::$vars->Errors['recipient'] = Language::GetText('error_recipient_exist');
         }
 
     } else {
-        View::$vars->Errors['recipient'] = Language::GetText('valid_recipient');
+        View::$vars->Errors['recipient'] = Language::GetText('error_recipient');
     }
 
 
@@ -98,7 +98,7 @@ if (isset ($_POST['submitted'])) {
         $message['subject'] = htmlspecialchars ($_POST['subject']);
         View::$vars->subject = $message['subject'];
     } else {
-        View::$vars->Errors['subject'] = Language::GetText('valid_subject');
+        View::$vars->Errors['subject'] = Language::GetText('error_subject');
     }
 
 
@@ -108,7 +108,7 @@ if (isset ($_POST['submitted'])) {
         $message['message'] = htmlspecialchars ($_POST['message']);
         View::$vars->msg = $message['message'];
     } else {
-        View::$vars->Errors['message'] = Language::GetText('valid_message');
+        View::$vars->Errors['message'] = Language::GetText('error_message');
     }
 
 
@@ -146,6 +146,6 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-View::Render ('myaccount/message.tpl');
+View::Render ('myaccount/message_send.tpl');
 
 ?>

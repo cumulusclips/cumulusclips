@@ -1,5 +1,5 @@
 
-<h1><?=Language::GetText('message_header')?></h1>
+<h1><?=Language::GetText('message_send_header')?></h1>
 
 <?php if ($success): ?>
     <div id="success"><?=$success?></div>
@@ -10,7 +10,7 @@
 
 <div class="block">
 
-    <form action="<?=HOST?>/myaccount/message/" method="post">
+    <form action="<?=HOST?>/myaccount/message/send/" method="post">
 
         <div class="row">
             <label<?=(isset ($Errors['recipient'])) ? ' class="errors"' : ''?>><?=Language::GetText('to')?>: </label>
@@ -30,7 +30,7 @@
         <div class="row-shift">
             <input type="hidden" name="submitted" value="yes" />
             <input type="submit" name="button" value="Send Message" />
-            <a href="" class="button"><span><?=Language::GetText('message_button')?></span></a>
+            <a href="" class="button"><span><?=Language::GetText('message_send_button')?></span></a>
         </div>
 
     </form>

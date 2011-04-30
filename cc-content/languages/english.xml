@@ -209,7 +209,7 @@
         <no_subscribers>@No one has subscribed to you yet.</no_subscribers>
 
         <!-- My Account / Message Inbox Page -->
-        <inbox_header>@Message Inbox</inbox_header>
+        <message_inbox_header>@Message Inbox</message_inbox_header>
         <purge>@Purge</purge>
         <message_status>@Status</message_status>
         <read>@Read</read>
@@ -221,16 +221,16 @@
         <no_messages>@No messages</no_messages>
 
         <!-- My Account / Read Message Page -->
-        <read_message_header>@Read Message</read_message_header>
+        <message_read_header>@Read Message</message_read_header>
         <return_inbox>@Return to Inbox</return_inbox>
         <reply>@Reply</reply>
         <delete>@Delete</delete>
 
-        <!-- My Account / Write Message Page -->
-        <message_header>@Send a Message</message_header>
+        <!-- My Account / Send Message Page -->
+        <message_send_header>@Send a Message</message_send_header>
         <to>@To</to>
         <members_username>@Member's username</members_username>
-        <message_button>@Send Message</message_button>
+        <message_send_button>@Send Message</message_send_button>
 
         <!-- My Account / Upload - Video Information Page -->
         <upload_header>@Upload Step 1 - Video Information</upload_header>
@@ -515,22 +515,22 @@
             <description>@View all members that are subscribed to this members.</description>
         </subscribers>
 
-        <inbox>
+        <message_inbox>
             <title>@Message Inbox</title>
             <keywords>@Message Inbox, Message, Inbox</keywords>
             <description>@View all messages.</description>
-        </inbox>
+        </message_inbox>
 
-        <read>
+        <message_read>
             <title>@Read Message</title>
             <keywords>@Read Message, Message</keywords>
             <description>@Read a message.</description>
-        </read>
+        </message_read>
 
-        <message>
+        <message_send>
             <title>@Send a Message</title>
             <keywords>@Send Message, Message</keywords>
             <description>@Send another member a message.</description>
-        </message>
+        </message_send>
     </meta>
 </language>
