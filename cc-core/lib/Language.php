@@ -48,6 +48,35 @@ class Language {
 
 
     /**
+     * Retrieve custom text from the loaded language xml file
+     * @param string $node The name of the custom language xml node to retrieve
+     * @param array $replace Optional Replacements for placeholders (See Functions::Replace for more deails)
+     * @return string The requested string is returned with replacements made
+     * to it or boolean false if requested node is invalid
+     */
+    static function GetCustomText ($node, $replace = array()) {
+
+        // Retrieve node text if it exists
+        if (isset (self::$xml->custom->$node)) {
+
+            $string = self::$xml->custom->$node;
+
+            // Check for text replacements
+            if (!empty ($replace)) {
+                $string = Functions::Replace ($string, $replace);
+            }
+
+            return $string;
+
+        } else {
+            return false;
+        }
+
+    }
+
+
+
+    /**
      * Output the formal English language name of the loaded language
      * @return string The language name in the language xml file
      */

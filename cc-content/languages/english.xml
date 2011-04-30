@@ -335,7 +335,21 @@
         <success_message_sent>@Your message has been delivered.</success_message_sent>
 
     </terms>
-    <custom></custom>
+
+    <custom>
+        <most_discussed_videos>@Most Discussed Videos</most_discussed_videos>
+        <highest_rated_videos>@Highest Rated Videos</highest_rated_videos>
+        <faq>@F.A.Q.</faq>
+        <need_help>@Need Help?</need_help>
+        <about>@About</about>
+        <contact>@Contact</contact>
+        <careers>@Careers</careers>
+        <sitemap>@Sitemap</sitemap>
+        <terms>@Terms</terms>
+        <privacy>@Privacy</privacy>
+        <copyright>@Copyright</copyright>
+        <advertising>@Advertising</advertising>
+    </custom>
 
 
     <meta>
