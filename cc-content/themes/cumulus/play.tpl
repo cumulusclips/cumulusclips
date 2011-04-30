@@ -127,20 +127,24 @@
             
             <form id="comments-form" action="" method="post">
 
-            <div class="row">
-                <label><?=Language::GetText('name')?></label>
-                <input type="text" class="text" value="" name="name" />
-            </div>
+            <?php if (!$logged_in): ?>
 
-            <div class="row">
-                <label><?=Language::GetText('email')?></label>
-                <input type="text" class="text" value="" name="email" />
-            </div>
+                <div class="row">
+                    <label><?=Language::GetText('name')?></label>
+                    <input type="text" class="text" value="" name="name" />
+                </div>
 
-            <div class="row">
-                <label><?=Language::GetText('website')?> (<?=Language::GetText('optional')?>)</label>
-                <input type="text" class="text" value="" name="website" />
-            </div>
+                <div class="row">
+                    <label><?=Language::GetText('email')?></label>
+                    <input type="text" class="text" value="" name="email" />
+                </div>
+
+                <div class="row">
+                    <label><?=Language::GetText('website')?> (<?=Language::GetText('optional')?>)</label>
+                    <input type="text" class="text" value="" name="website" />
+                </div>
+
+            <?php endif; ?>
 
             <div class="row">
                 <label><?=Language::GetText('comments')?></label>
