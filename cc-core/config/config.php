@@ -58,4 +58,16 @@ $config->flv_bucket = 'flv';
 $config->mp4_bucket = 'mp4';
 $config->thumb_bucket = 'thumbs';
 
+
+
+
+
+/***************
+TODO's CHECKLIST
+****************/
+
+// TODO Build upload avatar feature
+// TODO Add status update form to my account page
+// TODO Add 'View My Profile' link in my account / top nav
+
 ?>
