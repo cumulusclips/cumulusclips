@@ -30,6 +30,7 @@ if ($db->Count($result) > 0) {
 
 
 // Output Page
+View::AddMeta ('baseURL', HOST);
 View::SetLayout ('portal.layout.tpl');
 View::Render ('myaccount/myaccount.tpl');
 

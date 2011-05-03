@@ -221,12 +221,12 @@ $(document).ready(function(){
 
     function displayMessage (result, message) {
         var cssClass = (result == 1) ? 'success' : 'error';
-        var existing = ($('.success').length != 0) ? '.success' : '.error';
+        var existingClass = ($('#message').hasClass('success')) ? 'success' : 'error';
 //        console.log(result);
 //        console.log(message);
         $('#message').show();
         $('#message').html(message);
-        $('#message').removeClass(existing);
+        $('#message').removeClass(existingClass);
         $('#message').addClass(cssClass);
     }
 

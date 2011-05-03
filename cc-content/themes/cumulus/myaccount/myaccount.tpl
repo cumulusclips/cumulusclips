@@ -1,14 +1,30 @@
 
 <p class="large"><?=Language::GetText('myaccount_header')?> - <?=$user->username?></p>
+
+<div id="message"></div>
+
 <div class="block">
 
-    <p>
-        <img width="100" height="100" src="<?=$user->avatar?>" /><br />
-        <a href="<?php echo HOST; ?>/myaccount/profile/" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
-    </p>
-    <br />
-    <p><strong><?=Language::GetText('member_since')?>:</strong> <?php echo $user->date_joined; ?></p>
-    <p><strong><?=Language::GetText('last_login')?>:</strong> <?php echo $user->last_login; ?></p>
-    <p><strong><?=Language::GetText('profile_views')?>:</strong> <?php echo $user->views; ?></p>
+    <div id="myaccount-left">
+        <p>
+            <img width="100" height="100" src="<?=$user->avatar?>" /><br />
+            <a href="<?=HOST?>/myaccount/profile/" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
+        </p>
+        <br />
+        <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_joined?></p>
+        <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login?></p>
+        <p><strong><?=Language::GetText('profile_views')?>:</strong> <?=$user->views?></p>
+    </div>
+
+
+
+    <form id="status-form">
+        <p class="big"><?=Language::GetText('update_status')?></p>
+        <textarea class="text" name="post"></textarea>
+        <input type="hidden" name="submitted" value="TRUE" />
+        <br /><a class="button-small" href=""><span><?=Language::GetText('post_update_button')?></span></a>
+    </form>
+
+    <div class="clear"></div>
 
 </div>

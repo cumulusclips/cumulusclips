@@ -42,11 +42,11 @@ if (isset ($_POST['submitted'])) {
         $status_update = ob_get_contents();
         ob_end_clean();
 
-        echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_status_updated'), 'other' => $status_update));
+        echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_status_updated'), 'other' => $status_update));
         exit();
 
     } else {
-        echo json_encode (array ('result' => 0, 'msg' => Language::GetText ('errors_status_update')));
+        echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText ('error_status_update')));
         exit();
     }
 

@@ -14,7 +14,7 @@ $('document').ready(function(){
     <?php if ($logged_in && $logged_in == $member->user_id): ?>
         <form id="status-form">
             <p class="big"><?=Language::GetText('update_status')?></p>
-            <textarea name="post" cols="30" rows="1" class="text"></textarea>
+            <textarea name="post" class="text"></textarea>
             <input type="hidden" name="submitted" value="TRUE" />
             <a class="button-small" href=""><span><?=Language::GetText('post_update_button')?></span></a>
         </form>
