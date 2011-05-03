@@ -165,6 +165,21 @@ class User {
         } while (empty ($token_available));
         return $token;
     }
+	
+	
+	
+    /**
+     * Generate a unique random string for a user's picture filename
+     * @param string $extension the extension for the filename
+     * @return string Random filename
+     */
+    static function CreatePictureToken ($extension) {
+        do {
+            $token = Functions::Random(10);
+            if (file_exists (UPLOAD_PATH . '/thumbs/' . $token . ".$extension")) $token_available = true;
+        } while (empty ($token_available));
+        return $token;
+    }
 
 
 

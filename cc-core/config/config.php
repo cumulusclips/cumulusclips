@@ -67,7 +67,6 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build upload avatar feature
-// TODO Add status update form to my account page
 // TODO Add 'View My Profile' link in my account / top nav
 
 ?>
