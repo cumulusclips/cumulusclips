@@ -192,3 +192,37 @@ MY ACCOUNT STYLES
 
 
 
+#update-picture .option {
+    font-weight: bold;
+    margin-bottom:5px;
+}
+
+#update-picture p {
+    margin:15px 0;
+}
+
+#update-picture form {
+    display:block;
+    margin-top:10px;
+    position:relative;
+}
+
+#upload {
+    width:322px;
+    height:38px;
+    position:absolute;
+    z-index:2;
+    -moz-opacity:0;
+    -web-kit-opacity:0;
+    filter:alpha(opacity:0);
+    opacity: 0;
+}
+
+
+
+
+
+
+
+
+

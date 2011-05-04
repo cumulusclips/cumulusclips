@@ -60,8 +60,8 @@ $(document).ready(function(){
         var parentForm = $(this).closest('form');
         if (parentForm.length) {
             parentForm.submit();
-            return false;
         }
+        return false;
     });
 
     // Allow submission of forms with Return key
@@ -244,6 +244,24 @@ $(document).ready(function(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('#browse').click(function(){
+    $('#upload').trigger('click');
+});
 
 
 

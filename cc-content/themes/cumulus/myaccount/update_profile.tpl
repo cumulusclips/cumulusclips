@@ -47,3 +47,32 @@
     </form>
 
 </div>
+
+
+<h1>Update Picture</h1>
+
+<div class="block" id="update-picture">
+
+    <div class="option">
+        <input type="radio" name="source" name="upload" id="option-upload" checked="checked"/>
+        <label for="option-upload">Upload an Image</label>
+    </div>
+
+    <div class="option">
+        <input type="radio" name="source" name="gravatar" id="option-gravatar" />
+        <label for="option-gravatar">Use <a href="http://gravatar.com" title="Gravatar">Gratavar</a></label>
+    </div>
+
+    <p>Select an image (jpeg, gif, png) from your computers hard drive. Max
+    allowed filesize is 30K.</p>
+
+    <input type="text" class="text" name="overlay" id="upload-visible" disabled="disabled" />
+    <a href="" class="button" id="browse"><span>Browse Files</span></a>
+    <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
+        <input type="file" name="upload" id="upload" size="36" onChange="getElementById('upload-visible').value = getElementById('upload').value;" />
+        <a href="" class="button"><span>Upload Picture</span></a>
+    </form>
+
+
+
+</div>
