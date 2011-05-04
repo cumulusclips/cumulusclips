@@ -190,7 +190,10 @@ MY ACCOUNT STYLES
 
 
 
-
+#update-picture {
+    float:left;
+    width:500px;
+}
 
 #update-picture .option {
     font-weight: bold;
@@ -208,19 +211,9 @@ MY ACCOUNT STYLES
 }
 
 #upload {
-    width:322px;
-    height:38px;
     position:absolute;
-    z-index:2;
-    -moz-opacity:0;
-    -web-kit-opacity:0;
-    filter:alpha(opacity:0);
-    opacity: 0;
+    visibility: hidden;
 }
-
-
-
-
 
 
 

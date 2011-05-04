@@ -51,28 +51,36 @@
 
 <h1>Update Picture</h1>
 
-<div class="block" id="update-picture">
+<div class="block">
 
-    <div class="option">
-        <input type="radio" name="source" name="upload" id="option-upload" checked="checked"/>
-        <label for="option-upload">Upload an Image</label>
+    <div style="float: left; margin-right: 30px;">
+        <img width="100" height="100" src="http://www.gravatar.com/avatar/f8b8313de4a9c33a2b44f98db891e915?default=http%3A%2F%2Fcumulus%2Fcc-content%2Fthemes%2Fcumulus%2Fimages%2Fuser_placeholder.gif&amp;size=100">
+        <br />Current Picture
     </div>
 
-    <div class="option">
-        <input type="radio" name="source" name="gravatar" id="option-gravatar" />
-        <label for="option-gravatar">Use <a href="http://gravatar.com" title="Gravatar">Gratavar</a></label>
+    <div id="update-picture">
+        <div class="option">
+            <input type="radio" name="source" name="upload" id="option-upload" checked="checked"/>
+            <label for="option-upload">Upload an Image</label>
+        </div>
+
+        <div class="option">
+            <input type="radio" name="source" name="gravatar" id="option-gravatar" />
+            <label for="option-gravatar">Use <a href="http://gravatar.com" title="Gravatar">Gratavar</a></label>
+        </div>
+
+        <p>Select an image (jpeg, gif, png) from your computers hard drive. Max
+        allowed filesize is 30K.</p>
+
+        <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
+        <a href="" class="button" id="browse-button"><span>Browse Files</span></a>
+
+        <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
+            <input type="file" name="upload" id="upload" />
+            <a href="" class="button"><span>Upload Picture</span></a>
+        </form>
+
     </div>
-
-    <p>Select an image (jpeg, gif, png) from your computers hard drive. Max
-    allowed filesize is 30K.</p>
-
-    <input type="text" class="text" name="overlay" id="upload-visible" disabled="disabled" />
-    <a href="" class="button" id="browse"><span>Browse Files</span></a>
-    <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
-        <input type="file" name="upload" id="upload" size="36" onChange="getElementById('upload-visible').value = getElementById('upload').value;" />
-        <a href="" class="button"><span>Upload Picture</span></a>
-    </form>
-
-
+    <div class="clear"></div>
 
 </div>
