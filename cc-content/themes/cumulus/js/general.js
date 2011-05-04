@@ -254,10 +254,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-
     // Trigger the file browse window
     $('#browse-button').click(function(){
         $('#upload').trigger('click');

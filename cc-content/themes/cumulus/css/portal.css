@@ -189,22 +189,29 @@ MY ACCOUNT STYLES
 
 
 
+#avatar-left {
+    float:left;
+    margin-right:30px;
+    font-weight:bold;
+    text-align:center;
+    line-height:18px;
+}
 
-#update-picture {
+#avatar-left img {
+    display:block;
+    margin-bottom:5px;
+}
+
+#avatar-right {
     float:left;
     width:500px;
 }
 
-#update-picture .option {
-    font-weight: bold;
-    margin-bottom:5px;
+#avatar-right p {
+    margin-bottom:15px;
 }
 
-#update-picture p {
-    margin:15px 0;
-}
-
-#update-picture form {
+#upload-avatar form {
     display:block;
     margin-top:10px;
     position:relative;

@@ -49,38 +49,38 @@
 </div>
 
 
-<h1>Update Picture</h1>
+<h1>Update Avatar</h1>
 
 <div class="block">
 
-    <div style="float: left; margin-right: 30px;">
+    <div id="avatar-left">
         <img width="100" height="100" src="http://www.gravatar.com/avatar/f8b8313de4a9c33a2b44f98db891e915?default=http%3A%2F%2Fcumulus%2Fcc-content%2Fthemes%2Fcumulus%2Fimages%2Fuser_placeholder.gif&amp;size=100">
-        <br />Current Picture
+        Current Avatar<br />
+        <a class="confirm" data-node="email" href="">Reset Avatar</a>
     </div>
 
-    <div id="update-picture">
-        <div class="option">
-            <input type="radio" name="source" name="upload" id="option-upload" checked="checked"/>
-            <label for="option-upload">Upload an Image</label>
-        </div>
+    <div id="avatar-right">
 
-        <div class="option">
-            <input type="radio" name="source" name="gravatar" id="option-gravatar" />
-            <label for="option-gravatar">Use <a href="http://gravatar.com" title="Gravatar">Gratavar</a></label>
-        </div>
+        <p>Your avatar is your profile image and is displayed with your videos,
+        comments, and other content.</p>
+
+        <p>If you upload a new avatar, your current one will be overwritten.</p>
 
         <p>Select an image (jpeg, gif, png) from your computers hard drive. Max
         allowed filesize is 30K.</p>
 
-        <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
-        <a href="" class="button" id="browse-button"><span>Browse Files</span></a>
+        <div id="upload-avatar">
+            <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
+            <a href="" class="button" id="browse-button"><span>Browse Files</span></a>
 
-        <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
-            <input type="file" name="upload" id="upload" />
-            <a href="" class="button"><span>Upload Picture</span></a>
-        </form>
+            <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
+                <input type="file" name="upload" id="upload" />
+                <a href="" class="button"><span>Upload Avatar</span></a>
+            </form>
+        </div>
 
     </div>
+    
     <div class="clear"></div>
 
 </div>
