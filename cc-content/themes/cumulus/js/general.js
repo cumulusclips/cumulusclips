@@ -94,6 +94,21 @@ $(document).ready(function(){
 
 
 
+
+    // Trigger the file browse window
+    $('#browse-button').click(function(){
+        $('#upload').trigger('click');
+        return false;
+    });
+
+    // Add hidden upload filename to styled upload field
+    $('#upload').change(function(){
+        $('#upload-visible').val($('#upload').val());
+    });
+
+
+
+
     // Attach favorite action to favorite links / buttons
     $('.favorite').click(function(){
         var url = baseURL+'/actions/favorite/';
@@ -104,6 +119,7 @@ $(document).ready(function(){
 
 
 
+
     // Attach flag action to flag links / buttons
     $('.flag').click(function(){
         var url = baseURL+'/actions/flag/';
@@ -111,6 +127,7 @@ $(document).ready(function(){
         executeAction (url, data);
         return false;
     });
+
 
 
 
@@ -154,6 +171,7 @@ $(document).ready(function(){
 
 
 
+
     // Attach rating action to like & dislike links
     $('.rating').click(function(){
         var url = baseURL+'/actions/rate/';
@@ -166,6 +184,7 @@ $(document).ready(function(){
         executeAction (url, data, callback);
         return false;
     });
+
 
 
 
@@ -183,6 +202,7 @@ $(document).ready(function(){
 
 
 
+
     // Attach post status update action to status update forms
     $('#status-form').submit(function(){
         var url = baseURL+'/actions/post/';
@@ -194,75 +214,9 @@ $(document).ready(function(){
         return false;
     });
 
-    // Make status update text field expand on initial focus
+    // Make status update field expand on initial focus
     $('#status-form .text').focus(function(){
         $(this).css('height', '80');
-    });
-
-
-
-    function executeAction (url, data, callback) {
-        $.ajax({
-            type    : 'POST',
-            data    : data,
-            dataType: 'json',
-            url     : url,
-            success : function(responseData, textStatus, jqXHR){
-//                console.log(responseData);
-                displayMessage (responseData.result, responseData.msg);
-                if (typeof callback != 'undefined') {
-                    callback (responseData, textStatus, jqXHR);
-                }
-            }
-        });
-    }
-
-
-
-    function displayMessage (result, message) {
-        var cssClass = (result == 1) ? 'success' : 'error';
-        var existingClass = ($('#message').hasClass('success')) ? 'success' : 'error';
-//        console.log(result);
-//        console.log(message);
-        $('#message').show();
-        $('#message').html(message);
-        $('#message').removeClass(existingClass);
-        $('#message').addClass(cssClass);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Trigger the file browse window
-    $('#browse-button').click(function(){
-        $('#upload').trigger('click');
-        return false;
-    });
-
-    // Add hidden upload filename to styled upload field
-    $('#upload').change(function(){
-        $('#upload-visible').val($('#upload').val());
     });
 
 }); // END jQuery
@@ -275,7 +229,14 @@ $(document).ready(function(){
 GENERAL FUNCTIONS
 ****************/
 
-// Retrieve localised string via AJAX
+/**
+ * Retrieve localised string via AJAX
+ * @param function callback Code to be executed once AJAX call to retrieve text is complete
+ * @param string node Name of term node in language file to retrieve
+ * @param json replacements (Optional) List of key/value replacements in JSON format
+ * @return void Requested string, with any replacements made, is passed to callback
+ * for any futher behaviour
+ */
 function GetText(callback, node, replacements) {
     $.ajax({
         type        : 'POST',
@@ -283,4 +244,47 @@ function GetText(callback, node, replacements) {
         data        : {node:node, replacements:replacements},
         success     : callback
     });
+}
+
+
+
+
+/**
+ * Send AJAX request to the action's server handler script
+ * @param string url Location of the action's server handler script
+ * @param json || string data The data to be passed to the server handler script
+ * @param function callback (Optional) Code to be executed once AJAX call to handler script is complete
+ * @return void Message is display according to server response. Any other
+ * follow up behaviour is performed within the callback
+ */
+function executeAction (url, data, callback) {
+    $.ajax({
+        type        : 'POST',
+        data        : data,
+        dataType    : 'json',
+        url         : url,
+        success     : function(responseData, textStatus, jqXHR){
+            displayMessage (responseData.result, responseData.msg);
+            if (typeof callback != 'undefined') callback (responseData, textStatus, jqXHR);
+        }
+    });
+}
+
+
+
+
+/**
+ * Display message sent from the server handler script for page actions
+ * @param boolean result The result of the requested action (1 = Success, 0 = Error)
+ * @param string message The textual message for the result of the requested action
+ * @return void Message block is displayed and styled accordingly with message.
+ * If message block is already visible, then it is updated.
+ */
+function displayMessage (result, message) {
+    var cssClass = (result == 1) ? 'success' : 'error';
+    var existingClass = ($('#message').hasClass('success')) ? 'success' : 'error';
+    $('#message').show();
+    $('#message').html(message);
+    $('#message').removeClass(existingClass);
+    $('#message').addClass(cssClass);
 }

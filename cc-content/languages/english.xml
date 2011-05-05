@@ -144,7 +144,7 @@
         <!-- My Account / Home Page -->
         <myaccount_header>@Welcome</myaccount_header>
         <last_login>@Last Login</last_login>
-        <edit_picture>@Edit Picture</edit_picture>
+        <edit_avatar>@Edit Avatar</edit_avatar>
         <new_messages>@You have new unread messages!</new_messages>
         <account_menu_header>@Account Menu</account_menu_header>
         <manage_media>@Manage Media</manage_media>
@@ -183,6 +183,15 @@
         <last_name>@Last Name</last_name>
         <about_me>@About Me</about_me>
         <profile_button>@Update Profile</profile_button>
+
+        <update_avatar_header>@Update Avatar</update_avatar_header>
+        <update_avatar_text>@Your avatar is your profile image and is displayed with your videos, comments, and other content.</update_avatar_text>
+        <current_avatar>@Current Avatar</current_avatar>
+        <reset_avatar>@Reset Avatar</reset_avatar>
+        <update_avatar_warning>@If you upload a new avatar, your current one will be overwritten.</update_avatar_warning>
+        <update_avatar_req>@Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</update_avatar_req>
+        <browse_files_button>@Browse Files</browse_files_button>
+        <update_avatar_button>@Upload Avatar</update_avatar_button>
 
         <!-- My Account / Privacy Settings Page -->
         <privacy_settings_header>@Privacy Settings</privacy_settings_header>
@@ -271,6 +280,7 @@
         
         <confirm_remove_favorite>@Video will be removed from your favorites. Please confirm this is what you want to do.</confirm_remove_favorite>
         <confirm_delete_video>@Video will be deleted permanently. Please confirm this is what you want to do.</confirm_delete_video>
+        <confirm_reset_avatar>@Your current avatar will be lost permanently. Please confirm this is what you want to do.</confirm_reset_avatar>
 
         <error_username>@Invalid username</error_username>
         <error_username_unavailable>@That username is unavailable</error_username_unavailable>

@@ -49,36 +49,33 @@
 </div>
 
 
-<h1>Update Avatar</h1>
+<a name="update-avatar"></a>
+<h1><?=Language::GetText('update_avatar_header')?></h1>
 
 <div class="block">
 
     <div id="avatar-left">
         <img width="100" height="100" src="http://www.gravatar.com/avatar/f8b8313de4a9c33a2b44f98db891e915?default=http%3A%2F%2Fcumulus%2Fcc-content%2Fthemes%2Fcumulus%2Fimages%2Fuser_placeholder.gif&amp;size=100">
-        Current Avatar<br />
-        <a class="confirm" data-node="email" href="">Reset Avatar</a>
+        <?=Language::GetText('current_avatar')?><br />
+        <a class="confirm" data-node="confirm_reset_avatar" href="" title="<?=Language::GetText('reset_avatar')?>"><?=Language::GetText('reset_avatar')?></a>
     </div>
 
     <div id="avatar-right">
-
-        <p>Your avatar is your profile image and is displayed with your videos,
-        comments, and other content.</p>
-
-        <p>If you upload a new avatar, your current one will be overwritten.</p>
-
-        <p>Select an image (jpeg, gif, png) from your computers hard drive. Max
-        allowed filesize is 30K.</p>
+        <p><?=Language::GetText('update_avatar_text')?></p>
+        <p><?=Language::GetText('update_avatar_warning')?></p>
+        <p><?=Language::GetText('update_avatar_req')?></p>
 
         <div id="upload-avatar">
             <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
-            <a href="" class="button" id="browse-button"><span>Browse Files</span></a>
+            <a href="" class="button" id="browse-button"><span><?=Language::GetText('browse_files_button')?></span></a>
 
-            <form action="<?=HOST?>/myaccount/profile/" method="post"  enctype="multipart/form-data">
+            <form action="<?=HOST?>/myaccount/profile/" method="post" enctype="multipart/form-data">
                 <input type="file" name="upload" id="upload" />
-                <a href="" class="button"><span>Upload Avatar</span></a>
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?=1024*30?>" />
+                <input type="hidden" name="submitted_avatar" value="true" />
+                <a href="" class="button"><span><?=Language::GetText('update_avatar_button')?></span></a>
             </form>
         </div>
-
     </div>
     
     <div class="clear"></div>

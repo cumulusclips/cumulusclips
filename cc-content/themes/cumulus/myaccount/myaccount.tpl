@@ -8,7 +8,7 @@
     <div id="myaccount-left">
         <p>
             <img width="100" height="100" src="<?=$user->avatar?>" /><br />
-            <a href="<?=HOST?>/myaccount/profile/" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
+            <a href="<?=HOST?>/myaccount/profile/#update-avatar" title="<?=Language::GetText('edit_avatar')?>"><?=Language::GetText('edit_avatar')?></a>
         </p>
         <br />
         <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_joined?></p>
