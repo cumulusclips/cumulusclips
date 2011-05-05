@@ -1,11 +1,11 @@
 <?php
 
-class Video {
+class Avatar {
 
     public $found;
     private $db;
-    protected static $table = 'videos';
-    protected static $id_name = 'video_id';
+    protected static $table = 'avatars';
+    protected static $id_name = 'avatar_id';
 
 
 
@@ -32,19 +32,12 @@ class Video {
      * @return void
      */
     private function Get ($id) {
-        $query = 'SELECT videos.*, username FROM ' . self::$table . ' INNER JOIN users on videos.user_id = users.user_id WHERE ' . self::$id_name . "= $id";
+        $query = 'SELECT * FROM ' . self::$table . ' WHERE ' . self::$id_name . "= $id";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchAssoc ($result);
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
-
-        // Video Specific values
-        $this->tags = explode (' ',$this->tags);
-        $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
-        $this->slug = Functions::CreateSlug($this->title);
-        $this->date_created = date ('m/d/Y', strtotime ($this->date_created));
-
     }
 
 
@@ -87,8 +80,8 @@ class Video {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . self::$table;
-        $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $fields = '';
+        $values = '';
 
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
@@ -128,32 +121,14 @@ class Video {
 
 
     /**
-     * Delete a video
-     * @param integer $video_id ID of video to be deleted
-     * @return void Video is deleted from database and all related files and records are also deleted
+     * Delete a record
+     * @param integer $id ID of record to be deleted
+     * @return void Record is deleted from database
      */
-    static function Delete ($video_id) {
-
+    static function Delete ($id) {
         $db = Database::GetInstance();
-        $video = new Video ($video_id);
-
-        // Delete files
-        @unlink(UPLOAD_PATH . '/' . $video->filename . '.flv');
-        @unlink(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
-        @unlink(UPLOAD_PATH . '/mp4/' . $video->filename . '.mp4');
-
-        // Delete related records
-        $query1 = "DELETE FROM comments WHERE video_id = $video_id";
-        $query2 = "DELETE FROM ratings WHERE video_id = $video_id";
-        $query3 = "DELETE FROM favorites WHERE video_id = $video_id";
-        $query4 = "DELETE FROM flagging WHERE flag_type = 'video' and id = $video_id";
-        $query5 = "DELETE FROM videos WHERE video_id = $video_id";
-        $db->Query ($query1);
-        $db->Query ($query2);
-        $db->Query ($query3);
-        $db->Query ($query4);
-        $db->Query ($query5);
-
+        $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $db->Query ($query);
     }
 
 
@@ -169,20 +144,6 @@ class Video {
             if (!self::Exist (array ('filename' => $filename))) $filename_available = true;
         } while (empty ($filename_available));
         return $filename;
-    }
-
-
-
-    // Create a unique random string
-    static function CreateUnique() {
-        $count = true;
-        while ($count) {
-            $code = Random (15);
-            if (!self::Exist (array ('file' => $code))) {
-                    $count = NULL;
-            }
-        }
-        return $code;
     }
 
 }

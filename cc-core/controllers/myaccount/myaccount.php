@@ -8,7 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Picture');
+App::LoadClass ('Avatar');
 View::InitView();
 
 

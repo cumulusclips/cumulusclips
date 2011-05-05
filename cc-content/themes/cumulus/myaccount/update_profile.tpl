@@ -3,8 +3,8 @@
 
 <?php if ($error_msg): ?>
     <div id="error"><?=$error_msg?></div>
-<?php elseif ($success_msg): ?>
-    <div id="success"><?=$success_msg?></div>
+<?php elseif ($success): ?>
+    <div id="success"><?=$success?></div>
 <?php endif; ?>
 
 
@@ -55,7 +55,7 @@
 <div class="block">
 
     <div id="avatar-left">
-        <img width="100" height="100" src="http://www.gravatar.com/avatar/f8b8313de4a9c33a2b44f98db891e915?default=http%3A%2F%2Fcumulus%2Fcc-content%2Fthemes%2Fcumulus%2Fimages%2Fuser_placeholder.gif&amp;size=100">
+        <img width="100" height="100" src="<?=$user->avatar?>">
         <?=Language::GetText('current_avatar')?><br />
         <a class="confirm" data-node="confirm_reset_avatar" href="" title="<?=Language::GetText('reset_avatar')?>"><?=Language::GetText('reset_avatar')?></a>
     </div>

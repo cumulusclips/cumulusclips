@@ -8,6 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
+App::LoadClass ('Avatar');
 View::InitView();
 
 
@@ -17,7 +18,7 @@ View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->error_msg = NULL;
-View::$vars->success_msg = NULL;
+View::$vars->success = NULL;
 $duplicate = NULL;
 
 
@@ -83,7 +84,7 @@ if (isset ($_POST['submitted'])) {
     // Update User if no errors were found
     if (empty (View::$vars->Errors)) {
         View::$vars->user->Update (View::$vars->data);
-        View::$vars->success_msg = Language::GetText('success_profile_updated');
+        View::$vars->success = Language::GetText('success_profile_updated');
     } else {
         View::$vars->error_msg = Language::GetText('errors_below');
         View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
@@ -106,11 +107,11 @@ if (isset ($_POST['submitted'])) {
 
 
 
-/************************
+/*************************
 Handle Upload picture Form
-************************/
+*************************/
 
-if (isset ($_POST['submitted_picture'])) {
+if (isset ($_POST['submitted_avatar'])) {
 
     $Errors = null;
 
@@ -119,61 +120,122 @@ if (isset ($_POST['submitted_picture'])) {
 //    exit();
 
 
-    ### Validate picture
-    if (!empty ($_FILES['picture']['name'])) {
+    ### Validate avatar
+    if (!empty ($_FILES['upload']['name'])) {
 
         // Check for browser upload errors
-        if (!empty ($_FILES['picture']['error'])) {
-            if ($_FILES['picture']['error'] != 4) {
-                $Errors = Language::GetText('error_picture_invalid');
-            } else if ($_FILES['picture']['error'] == 2) {
-                $Errors = Language::GetText('error_picture_filesize');
+        if (!empty ($_FILES['upload']['error'])) {
+            if ($_FILES['upload']['error'] != 4) {
+//                exit('1');
+                $Errors = Language::GetText('error_avatar_invalid');
+            } else if ($_FILES['upload']['error'] == 2) {
+//                exit('2');
+                $Errors = Language::GetText('error_avatar_filesize');
             } else {
-                $Errors = Language::GetText('error_picture_system');
+//                exit('3');
+                $Errors = Language::GetText('error_avatar_system');
             }
         }
 
 
         // Validate mime-type sent by browser
-        if (empty ($Errors) && !preg_match ('/image\/(png|gif|jpeg)/i', $_FILES['picture']['type'])) {
-            $Errors = Language::GetText('error_picture_format');
+        if (empty ($Errors) && !preg_match ('/image\/(png|gif|jpeg)/i', $_FILES['upload']['type'])) {
+//            exit('4');
+            $Errors = Language::GetText('error_avatar_format');
         }
 
         // Validate file extension
-        $extension = Functions::GetExtension ($_FILES['picture']['name']);
+        $extension = Functions::GetExtension ($_FILES['upload']['name']);
         if (empty ($Errors) && !preg_match ('/(gif|png|jpe?g)/i', $extension)) {
-            $Errors = Language::GetText('error_picture_format');
+//            exit('5');
+            $Errors = Language::GetText('error_avatar_format');
         }
 
         // Validate filesize
-        if (empty ($Errors) && (empty ($_FILES['picture']['size']) || filesize ($_FILES['picture']['tmp_name']) > 30000)) {
-            $Errors = Language::GetText('error_picture_filesize');
+        if (empty ($Errors) && (empty ($_FILES['upload']['size']) || filesize ($_FILES['upload']['tmp_name']) > 30000)) {
+//            exit('6');
+            $Errors = Language::GetText('error_avatar_filesize');
         }
 
         // Validate image data
         if (empty ($Errors)) {
-            $handle = fopen ($_FILES['picture']['tmp_name'],'r');
-            $image_data = fread ($handle, filesize ($_FILES['picture']['tmp_name']));
+            $handle = fopen ($_FILES['upload']['tmp_name'],'r');
+            $image_data = fread ($handle, filesize ($_FILES['upload']['tmp_name']));
             if (!@imagecreatefromstring ($image_data)) {
-                $Errors = Language::GetText('error_picture_format');
+//                exit('7');
+                $Errors = Language::GetText('error_avatar_format');
             }
         }
 
 
         // Store uploaded image if no errors were found
         if (empty ($Errors)) {
-            $filename = User::CreatepictureToken ($extension);
-            View::$vars->data['picture'] = $data['slug'] . ".$ext";
-            $target = UPLOAD_PATH . "/thumbs/$filename.$extension";
-            if (!@move_uploaded_file ($_FILES['picture']['tmp_name'], $target)) {
+            $filename = Avatar::CreateFilename ($extension);
+            $target = UPLOAD_PATH . "/avatars/$filename.$extension";
+            $data = array ('filename' => $filename, 'extension' => $extension, 'user_id' => View::$vars->user->user_id);
+//            exit($target);
+            if (@move_uploaded_file ($_FILES['upload']['tmp_name'], $target)) {
 
+
+
+
+
+
+
+
+
+
+
+$ratio = $width/$height;
+
+if ($width > $height) {
+
+    // Check width for dimension overage
+    if ($width > 125) {
+        // Resize width
+        $width = 125;
+        // Resize height based on ratio
+        $height = floor($width/$ratio);
+    }
+
+} else {
+
+    // Check height for dimension overage
+    if ($height > 125) {
+        // Resize height
+        $height = 125;
+        // Resize width based on ratio
+        $width = floor($height*$ratio);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+                Avatar::Create ($data);
+                View::$vars->user = new User (View::$vars->user->user_id);
+                View::$vars->success = Language::GetText('success_avatar_updated');
+            } else {
+                $msg = 'User: ' . View::$vars->user->username . ', attempted to update their avatar but the file could not be created.';
+                App::Alert('Avatar Upload Failed', $msg);
+                View::$vars->error_msg = Language::GetText('error_avatar_system');
             }
         } else {
-            View::$vars->picture_error_msg = $Errors;
+            View::$vars->error_msg = $Errors;
         }
 
     } else {
-        View::$vars->picture_error_msg = Language::GetText('error_picture_invalid');
+//        exit('8');
+        View::$vars->error_msg = Language::GetText('error_avatar_invalid');
     }
 
 }
@@ -181,7 +243,7 @@ if (isset ($_POST['submitted_picture'])) {
 
 /*
 
-# HTACCESS
+# /cc-content/uploads/thumbs/.htaccess
 
 # Prevent known script types from executing
 AddHandler cgi-script .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi

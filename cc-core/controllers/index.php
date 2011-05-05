@@ -10,7 +10,6 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
-App::LoadClass ('Picture');
 View::InitView();
 
 

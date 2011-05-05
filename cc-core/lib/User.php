@@ -40,7 +40,14 @@ class User {
         }
 
         // User specific values
-        $this->avatar = "http://www.gravatar.com/avatar/" . md5 (strtolower ($this->email)) . "?default=" . urlencode (THEME . '/images/user_placeholder.gif') . "&size=100";
+        App::LoadClass('Avatar');
+        $avatar_id = Avatar::Exist (array ('user_id' => $this->user_id));
+        if ($avatar_id) {
+            $avatar = new Avatar ($avatar_id);
+            $this->avatar = HOST . "/cc-content/uploads/avatars/$avatar->filename.$avatar->extension";
+        } else {
+            $this->avatar = THEME . '/images/user_placeholder.gif';
+        }
         $this->date_joined = date ('m/d/Y', strtotime ($this->date_joined));
         $this->last_login = date ('m/d/Y', strtotime ($this->last_login));
         $this->video_count = $this->GetVideoCount();
