@@ -63,6 +63,7 @@ RewriteRule ^myaccount/editvideo/([0-9]+)/$ /cc-core/controllers/myaccount/edit_
 RewriteRule ^myaccount/myfavorites(/page/([0-9]+))?/$ /cc-core/controllers/myaccount/myfavorites.php?page=$2 [NC]
 RewriteRule ^myaccount/myfavorites/([0-9]+)/$ /cc-core/controllers/myaccount/myfavorites.php?vid=$1 [NC]
 RewriteRule ^myaccount/profile/$ /cc-core/controllers/myaccount/update_profile.php [NC]
+RewriteRule ^myaccount/profile/reset/$ /cc-core/controllers/myaccount/update_profile.php?action=reset [NC]
 RewriteRule ^myaccount/privacy-settings/?$ /cc-core/controllers/myaccount/privacy_settings.php [NC]
 RewriteRule ^myaccount/change-password/?$ /cc-core/controllers/myaccount/change_password.php [NC]
 RewriteRule ^myaccount/subscriptions(/([0-9]+))?/$ /cc-core/controllers/myaccount/subscriptions.php?id=$2 [NC]

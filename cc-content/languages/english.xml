@@ -144,7 +144,7 @@
         <!-- My Account / Home Page -->
         <myaccount_header>@Welcome</myaccount_header>
         <last_login>@Last Login</last_login>
-        <edit_avatar>@Edit Avatar</edit_avatar>
+        <edit_picture>@Edit Picture</edit_picture>
         <new_messages>@You have new unread messages!</new_messages>
         <account_menu_header>@Account Menu</account_menu_header>
         <manage_media>@Manage Media</manage_media>
@@ -184,14 +184,14 @@
         <about_me>@About Me</about_me>
         <profile_button>@Update Profile</profile_button>
 
-        <update_avatar_header>@Update Avatar</update_avatar_header>
-        <update_avatar_text>@Your avatar is your profile image and is displayed with your videos, comments, and other content.</update_avatar_text>
-        <current_avatar>@Current Avatar</current_avatar>
-        <reset_avatar>@Reset Avatar</reset_avatar>
-        <update_avatar_warning>@If you upload a new avatar, your current one will be overwritten.</update_avatar_warning>
-        <update_avatar_req>@Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</update_avatar_req>
+        <update_picture_header>@Update Picture</update_picture_header>
+        <update_picture_text>@Your profile image is displayed with your videos, comments, and other content.</update_picture_text>
+        <current_picture>@Current Picture</current_picture>
+        <reset_picture>@Reset Picture</reset_picture>
+        <update_picture_warning>@If you upload a new picture, your current one will be overwritten.</update_picture_warning>
+        <update_picture_req>@Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</update_picture_req>
         <browse_files_button>@Browse Files</browse_files_button>
-        <update_avatar_button>@Upload Avatar</update_avatar_button>
+        <update_picture_button>@Upload Picture</update_picture_button>
 
         <!-- My Account / Privacy Settings Page -->
         <privacy_settings_header>@Privacy Settings</privacy_settings_header>
@@ -280,7 +280,7 @@
         
         <confirm_remove_favorite>@Video will be removed from your favorites. Please confirm this is what you want to do.</confirm_remove_favorite>
         <confirm_delete_video>@Video will be deleted permanently. Please confirm this is what you want to do.</confirm_delete_video>
-        <confirm_reset_avatar>@Your current avatar will be lost permanently. Please confirm this is what you want to do.</confirm_reset_avatar>
+        <confirm_reset_picture>@Your current picture will be lost permanently. Please confirm this is what you want to do.</confirm_reset_picture>
 
         <error_username>@Invalid username</error_username>
         <error_username_unavailable>@That username is unavailable</error_username_unavailable>
@@ -316,10 +316,10 @@
         <error_subscribe_noexist>@You are not subscribed to this member.</error_subscribe_noexist>
         <error_rate_own>@You can't rate your own videos.</error_rate_own>
         <error_rate_duplicate>@You have already rated this video.</error_rate_duplicate>
-        <error_avatar_format>@Your avatar is not an accepted file format.</error_avatar_format>
-        <error_avatar_filesize>@Your avatar exceeded the maximum filesize limit.</error_avatar_filesize>
-        <error_avatar_invalid>@Invalid avatar. Please upload a valid avatar.</error_avatar_invalid>
-        <error_avatar_system>@An error occured during the upload. Please try again.</error_avatar_system>
+        <error_picture_format>@Your picture is not an accepted file format</error_picture_format>
+        <error_picture_filesize>@Your picture exceeded the maximum filesize limit.</error_picture_filesize>
+        <error_picture_invalid>@Invalid picture. Please upload a valid picture.</error_picture_invalid>
+        <error_picture_system>@An error occured during the upload. Please try again.</error_picture_system>
         
 
         <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
@@ -329,7 +329,7 @@
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
 
-        <success_avatar_updated>@Your avatar has been updated.</success_avatar_updated>
+        <success_picture_updated>@Your picture has been updated.</success_picture_updated>
         <success_rated>@Rating has been submitted.</success_rated>
         <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>
         <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>

@@ -189,7 +189,7 @@ MY ACCOUNT STYLES
 
 
 
-#avatar-left {
+#picture-left {
     float:left;
     margin-right:30px;
     font-weight:bold;
@@ -197,21 +197,21 @@ MY ACCOUNT STYLES
     line-height:18px;
 }
 
-#avatar-left img {
+#picture-left img {
     display:block;
     margin-bottom:5px;
 }
 
-#avatar-right {
+#picture-right {
     float:left;
     width:500px;
 }
 
-#avatar-right p {
+#picture-right p {
     margin-bottom:15px;
 }
 
-#upload-avatar form {
+#upload-picture form {
     display:block;
     margin-top:10px;
     position:relative;

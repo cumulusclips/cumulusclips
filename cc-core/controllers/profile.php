@@ -12,7 +12,6 @@ App::LoadClass ('Video');
 App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
 App::LoadClass ('Flag');
-App::LoadClass ('Picture');
 App::LoadClass ('Post');
 View::InitView();
 

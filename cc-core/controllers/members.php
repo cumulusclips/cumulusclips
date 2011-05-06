@@ -9,7 +9,6 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Pagination');
-App::LoadClass ('Picture');
 View::InitView();
 
 

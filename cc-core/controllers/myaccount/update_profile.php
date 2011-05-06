@@ -8,7 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Avatar');
+App::LoadClass ('Picture');
 View::InitView();
 
 
@@ -111,7 +111,7 @@ if (isset ($_POST['submitted'])) {
 Handle Upload picture Form
 *************************/
 
-if (isset ($_POST['submitted_avatar'])) {
+if (isset ($_POST['submitted_picture'])) {
 
     $Errors = null;
 
@@ -120,20 +120,20 @@ if (isset ($_POST['submitted_avatar'])) {
 //    exit();
 
 
-    ### Validate avatar
+    ### Validate picture
     if (!empty ($_FILES['upload']['name'])) {
 
         // Check for browser upload errors
         if (!empty ($_FILES['upload']['error'])) {
             if ($_FILES['upload']['error'] != 4) {
 //                exit('1');
-                $Errors = Language::GetText('error_avatar_invalid');
+                $Errors = Language::GetText('error_picture_invalid');
             } else if ($_FILES['upload']['error'] == 2) {
 //                exit('2');
-                $Errors = Language::GetText('error_avatar_filesize');
+                $Errors = Language::GetText('error_picture_filesize');
             } else {
 //                exit('3');
-                $Errors = Language::GetText('error_avatar_system');
+                $Errors = Language::GetText('error_picture_system');
             }
         }
 
@@ -141,20 +141,20 @@ if (isset ($_POST['submitted_avatar'])) {
         // Validate mime-type sent by browser
         if (empty ($Errors) && !preg_match ('/image\/(png|gif|jpeg)/i', $_FILES['upload']['type'])) {
 //            exit('4');
-            $Errors = Language::GetText('error_avatar_format');
+            $Errors = Language::GetText('error_picture_format');
         }
 
         // Validate file extension
         $extension = Functions::GetExtension ($_FILES['upload']['name']);
         if (empty ($Errors) && !preg_match ('/(gif|png|jpe?g)/i', $extension)) {
 //            exit('5');
-            $Errors = Language::GetText('error_avatar_format');
+            $Errors = Language::GetText('error_picture_format');
         }
 
         // Validate filesize
         if (empty ($Errors) && (empty ($_FILES['upload']['size']) || filesize ($_FILES['upload']['tmp_name']) > 30000)) {
 //            exit('6');
-            $Errors = Language::GetText('error_avatar_filesize');
+            $Errors = Language::GetText('error_picture_filesize');
         }
 
         // Validate image data
@@ -163,79 +163,34 @@ if (isset ($_POST['submitted_avatar'])) {
             $image_data = fread ($handle, filesize ($_FILES['upload']['tmp_name']));
             if (!@imagecreatefromstring ($image_data)) {
 //                exit('7');
-                $Errors = Language::GetText('error_avatar_format');
+                $Errors = Language::GetText('error_picture_format');
             }
         }
 
 
         // Store uploaded image if no errors were found
         if (empty ($Errors)) {
-            $filename = Avatar::CreateFilename ($extension);
-            $target = UPLOAD_PATH . "/avatars/$filename.$extension";
-            $data = array ('filename' => $filename, 'extension' => $extension, 'user_id' => View::$vars->user->user_id);
 //            exit($target);
-            if (@move_uploaded_file ($_FILES['upload']['tmp_name'], $target)) {
 
-
-
-
-
-
-
-
-
-
-
-$ratio = $width/$height;
-
-if ($width > $height) {
-
-    // Check width for dimension overage
-    if ($width > 125) {
-        // Resize width
-        $width = 125;
-        // Resize height based on ratio
-        $height = floor($width/$ratio);
-    }
-
-} else {
-
-    // Check height for dimension overage
-    if ($height > 125) {
-        // Resize height
-        $height = 125;
-        // Resize width based on ratio
-        $width = floor($height*$ratio);
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-                Avatar::Create ($data);
-                View::$vars->user = new User (View::$vars->user->user_id);
-                View::$vars->success = Language::GetText('success_avatar_updated');
-            } else {
-                $msg = 'User: ' . View::$vars->user->username . ', attempted to update their avatar but the file could not be created.';
-                App::Alert('Avatar Upload Failed', $msg);
-                View::$vars->error_msg = Language::GetText('error_avatar_system');
+            // Check for existing picture
+            if (!empty (View::$vars->user->picture)) {
+                Picture::Delete (View::$vars->user->picture);
             }
+
+            // Save Picture
+            $filename = Picture::CreateFilename ($extension);
+            Picture::SavePicture ($_FILES['upload']['tmp_name'], $filename);
+            View::$vars->Update (array ('picture' => $filename));
+
+            View::$vars->success = Language::GetText('success_picture_updated');
+
         } else {
             View::$vars->error_msg = $Errors;
         }
 
     } else {
 //        exit('8');
-        View::$vars->error_msg = Language::GetText('error_avatar_invalid');
+        View::$vars->error_msg = Language::GetText('error_picture_invalid');
     }
 
 }
@@ -261,6 +216,22 @@ allow from env=image
 
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
+    Picture::Delete (View::$vars->user->picture);
+    View::$vars->Update (array ('picture' => ''));
+}
 
 
 

@@ -49,31 +49,31 @@
 </div>
 
 
-<a name="update-avatar"></a>
-<h1><?=Language::GetText('update_avatar_header')?></h1>
+<a name="update-picture"></a>
+<h1><?=Language::GetText('update_picture_header')?></h1>
 
 <div class="block">
 
-    <div id="avatar-left">
+    <div id="picture-left">
         <img width="100" height="100" src="<?=$user->avatar?>">
-        <?=Language::GetText('current_avatar')?><br />
-        <a class="confirm" data-node="confirm_reset_avatar" href="" title="<?=Language::GetText('reset_avatar')?>"><?=Language::GetText('reset_avatar')?></a>
+        <?=Language::GetText('current_picture')?><br />
+        <a class="confirm" data-node="confirm_reset_picture" href="<?=HOST?>/myaccount/profile/reset/" title="<?=Language::GetText('reset_picture')?>"><?=Language::GetText('reset_picture')?></a>
     </div>
 
-    <div id="avatar-right">
-        <p><?=Language::GetText('update_avatar_text')?></p>
-        <p><?=Language::GetText('update_avatar_warning')?></p>
-        <p><?=Language::GetText('update_avatar_req')?></p>
+    <div id="picture-right">
+        <p><?=Language::GetText('update_picture_text')?></p>
+        <p><?=Language::GetText('update_picture_warning')?></p>
+        <p><?=Language::GetText('update_picture_req')?></p>
 
-        <div id="upload-avatar">
+        <div id="upload-picture">
             <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
             <a href="" class="button" id="browse-button"><span><?=Language::GetText('browse_files_button')?></span></a>
 
             <form action="<?=HOST?>/myaccount/profile/" method="post" enctype="multipart/form-data">
                 <input type="file" name="upload" id="upload" />
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?=1024*30?>" />
-                <input type="hidden" name="submitted_avatar" value="true" />
-                <a href="" class="button"><span><?=Language::GetText('update_avatar_button')?></span></a>
+                <input type="hidden" name="submitted_picture" value="true" />
+                <a href="" class="button"><span><?=Language::GetText('update_picture_button')?></span></a>
             </form>
         </div>
     </div>
