@@ -295,9 +295,24 @@ BODY STRUCTURE STYLES
     width:160px;
     float:left;
 }
-.member img {
+
+.picture {
+    border:1px solid #CCC;
+    width:100px;
+    height:100px;
+    margin:0 auto;
+}
+
+.picture a, .picture > span {
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+    width:100px;
+    height:100px;
+}
+
+.picture img {
     border:none;
-    display:block;
 }
 
 #message {

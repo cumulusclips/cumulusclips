@@ -66,7 +66,8 @@ $config->thumb_bucket = 'thumbs';
 TODO's CHECKLIST
 ****************/
 
-// TODO Build upload avatar feature
+// TODO Build plugin system
 // TODO Add 'View My Profile' link in my account / top nav
+// TODO Lockdown upload's directory with .htaccess rules
 
 ?>

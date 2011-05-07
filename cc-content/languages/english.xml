@@ -329,6 +329,7 @@
         <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
 
 
+        <success_picture_reset>@Your picture has been reset.</success_picture_reset>
         <success_picture_updated>@Your picture has been updated.</success_picture_updated>
         <success_rated>@Rating has been submitted.</success_rated>
         <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>

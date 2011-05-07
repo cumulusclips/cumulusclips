@@ -6,10 +6,10 @@
 <div class="block">
 
     <div id="myaccount-left">
-        <p>
-            <img width="100" height="100" src="<?=$user->avatar?>" /><br />
+        <div>
+            <div class="picture"><span><img alt="<?=$user->username?>" src="<?=$user->avatar?>" /></span></div>
             <a href="<?=HOST?>/myaccount/profile/#update-picture" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
-        </p>
+        </div>
         <br />
         <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_joined?></p>
         <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login?></p>

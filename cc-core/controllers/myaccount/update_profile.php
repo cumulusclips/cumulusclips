@@ -115,24 +115,16 @@ if (isset ($_POST['submitted_picture'])) {
 
     $Errors = null;
 
-//    echo '<pre>',print_r ($_POST,true),'</pre>';
-//    echo '<pre>',print_r ($_FILES,true),'</pre>';
-//    exit();
-
-
     ### Validate picture
     if (!empty ($_FILES['upload']['name'])) {
 
         // Check for browser upload errors
         if (!empty ($_FILES['upload']['error'])) {
             if ($_FILES['upload']['error'] != 4) {
-//                exit('1');
                 $Errors = Language::GetText('error_picture_invalid');
             } else if ($_FILES['upload']['error'] == 2) {
-//                exit('2');
                 $Errors = Language::GetText('error_picture_filesize');
             } else {
-//                exit('3');
                 $Errors = Language::GetText('error_picture_system');
             }
         }
@@ -140,20 +132,17 @@ if (isset ($_POST['submitted_picture'])) {
 
         // Validate mime-type sent by browser
         if (empty ($Errors) && !preg_match ('/image\/(png|gif|jpeg)/i', $_FILES['upload']['type'])) {
-//            exit('4');
             $Errors = Language::GetText('error_picture_format');
         }
 
         // Validate file extension
         $extension = Functions::GetExtension ($_FILES['upload']['name']);
         if (empty ($Errors) && !preg_match ('/(gif|png|jpe?g)/i', $extension)) {
-//            exit('5');
             $Errors = Language::GetText('error_picture_format');
         }
 
         // Validate filesize
         if (empty ($Errors) && (empty ($_FILES['upload']['size']) || filesize ($_FILES['upload']['tmp_name']) > 30000)) {
-//            exit('6');
             $Errors = Language::GetText('error_picture_filesize');
         }
 
@@ -162,7 +151,6 @@ if (isset ($_POST['submitted_picture'])) {
             $handle = fopen ($_FILES['upload']['tmp_name'],'r');
             $image_data = fread ($handle, filesize ($_FILES['upload']['tmp_name']));
             if (!@imagecreatefromstring ($image_data)) {
-//                exit('7');
                 $Errors = Language::GetText('error_picture_format');
             }
         }
@@ -170,7 +158,6 @@ if (isset ($_POST['submitted_picture'])) {
 
         // Store uploaded image if no errors were found
         if (empty ($Errors)) {
-//            exit($target);
 
             // Check for existing picture
             if (!empty (View::$vars->user->picture)) {
@@ -178,9 +165,9 @@ if (isset ($_POST['submitted_picture'])) {
             }
 
             // Save Picture
-            $filename = Picture::CreateFilename ($extension);
-            Picture::SavePicture ($_FILES['upload']['tmp_name'], $filename);
-            View::$vars->Update (array ('picture' => $filename));
+            $save_as = Picture::CreateFilename ($extension);
+            Picture::SavePicture ($_FILES['upload']['tmp_name'], $extension, $save_as);
+            View::$vars->user->Update (array ('picture' => $save_as));
 
             View::$vars->success = Language::GetText('success_picture_updated');
 
@@ -189,64 +176,24 @@ if (isset ($_POST['submitted_picture'])) {
         }
 
     } else {
-//        exit('8');
         View::$vars->error_msg = Language::GetText('error_picture_invalid');
     }
 
 }
 
 
-/*
-
-# /cc-content/uploads/thumbs/.htaccess
-
-# Prevent known script types from executing
-AddHandler cgi-script .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
-Options -ExecCGI
-
-
-# Prevent access to any file type other than allowed image types
-SetEnvIf Request_URI "\.gif$" image=gif
-SetEnvIf Request_URI "\.jpe?g$" image=jpg
-SetEnvIf Request_URI "\.png$" image=png
-
-order deny,allow
-deny from all
-allow from env=image
-
-
-*/
 
 
 
-
-
-
-
-
-
-
-
+/**************************
+Handle Reset picture Action
+**************************/
 
 if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
     Picture::Delete (View::$vars->user->picture);
-    View::$vars->Update (array ('picture' => ''));
+    View::$vars->user->Update (array ('picture' => ''));
+    View::$vars->success = Language::GetText('success_picture_reset');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Output page

@@ -184,6 +184,10 @@ MY ACCOUNT STYLES
     margin-right:40px;
 }
 
+#myaccount-left .picture {
+    margin:0 0 5px 0;
+}
+
 
 
 
@@ -197,8 +201,8 @@ MY ACCOUNT STYLES
     line-height:18px;
 }
 
-#picture-left img {
-    display:block;
+#picture-left .picture {
+    margin:0 auto;
     margin-bottom:5px;
 }
 

@@ -55,7 +55,7 @@
 <div class="block">
 
     <div id="picture-left">
-        <img width="100" height="100" src="<?=$user->avatar?>">
+        <p class="picture"><span><img alt="<?=Language::GetText('current_picture')?>" src="<?=$user->avatar?>"></span></p>
         <?=Language::GetText('current_picture')?><br />
         <a class="confirm" data-node="confirm_reset_picture" href="<?=HOST?>/myaccount/profile/reset/" title="<?=Language::GetText('reset_picture')?>"><?=Language::GetText('reset_picture')?></a>
     </div>

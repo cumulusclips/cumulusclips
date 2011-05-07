@@ -103,3 +103,21 @@ RewriteRule ^system-error/$ /cc-core/controllers/sys_error.php
 #    order deny,allow
 #    deny from all
 #</FilesMatch>
+
+
+
+
+
+# Prevent known script types from executing
+#AddHandler cgi-script .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
+#Options -ExecCGI
+
+
+# Prevent access to any file type other than allowed image types
+#SetEnvIf Request_URI "\.gif$" image=gif
+#SetEnvIf Request_URI "\.jpe?g$" image=jpg
+#SetEnvIf Request_URI "\.png$" image=png
+
+#order deny,allow
+#deny from all
+#allow from env=image

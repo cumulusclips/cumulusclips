@@ -5,64 +5,77 @@ class Picture {
     /**
      * Save an uploaded image to a new location
      * @param string $original_file Path to the temporary image
+     * @param string $original_extension Original file extension of temporary image
      * @param string $save_as Filename to save the new image as
      * @return void Temporary image is resampled, resized, and saved in its final location
      */
-    static function SavePicture ($original_file, $save_as) {
+    static function SavePicture ($original_file, $original_extension, $save_as) {
 
-        $extension = Functions::GetExtension ($save_as);
-        $filename = UPLOAD_PATH . '/pictures/' . $save_as;
-        list ($width, $height) = getimagesize ($original_file);
+        $picture_size = 100;
+        $save_as = UPLOAD_PATH . '/pictures/' . $save_as;
+        list ($width_src, $height_src) = getimagesize ($original_file);
 
         // Determine new image dimensions
-        $ratio = $width/$height;
+        $ratio = $width_src / $height_src;
 
-        if ($width > $height) {
 
-            // Check width for dimension overage
-            if ($width > 125) {
-                // Resize width
-                $width = 125;
-                // Resize height based on ratio
-                $height = floor($width/$ratio);
-            }
+        // Check for dimension overage
+        if ($width_src > $height_src && $width_src > $picture_size) {
+            $width_dst = $picture_size;   // Resize width
+            $height_dst = floor ($width_dst / $ratio); // Resize height based on ratio
+
+        } else  if ($width_src < $height_src && $height_src > $picture_size) {
+            $height_dst = $picture_size;  // Resize height
+            $width_dst = floor ($height_dst * $ratio); // Resize width based on ratio
+
+        } else if ($width_src == $height_src && $width_src > $picture_size) {
+            $width_dst = $picture_size;  // Resize width
+            $height_dst = $picture_size;  // Resize height
+
+        } else {
+            $width_dst = $width_src;
+            $height_dst = $height_src;
+        }
+
+
+        // Determin which type of image object to create (and how to process it) based on file extension
+        if (in_array ($original_extension, array ('jpg', 'jpeg'))) {
+
+            // Create image object from original image
+            $image = imagecreatefromjpeg ($original_file);
+
+            // Resize image & Resample (To corrupt any possible injections)
+            $image_dst = imagecreatetruecolor ($width_dst, $height_dst);
+            imagecopyresampled ($image_dst, $image, 0, 0, 0, 0, $width_dst, $height_dst, $width_src, $height_src);
+
+            // Save image to HDD as JPG
+            imagejpeg ($image_dst, $save_as, 100);
 
         } else {
 
-            // Check height for dimension overage
-            if ($height > 125) {
-                // Resize height
-                $height = 125;
-                // Resize width based on ratio
-                $width = floor($height*$ratio);
+            // Create image object from original image
+            if ($original_extension == 'gif') {
+                // GIFs are converted to PNGs
+                $image = imagecreatefromgif ($original_file);
+            } else {
+                $image = imagecreatefrompng ($original_file);
             }
 
-        }
+            // Create empty resized image & turn off transparency
+            $image_dst = imagecreatetruecolor ($width_dst, $height_dst);
+            imagealphablending ($image_dst, false);
+            imagesavealpha ($image_dst, true);
 
-        // Save image
-        switch ($extension) {
+            // Resize image & Resample (To corrupt any possible injections)
+            imagecopyresampled ($image_dst, $image, 0, 0, 0, 0, $width_dst, $height_dst, $width_src, $height_src);
 
-            case 'jpeg':
-            case 'jpg':
-                $image = imagecreatefromjpeg ($original_file);
-                // Resize image
-                imagejpeg ($image, $filename, 100);
-                break;
-
-            case 'png':
-                $image = imagecreatefrompng ($original_file);
-                // Resize image
-                imagepng ($image, $filename, 0);
-                break;
-
-            case 'gif':
-                $image = imagecreatefromgif ($original_file);
-                // Resize image
-                imagegif ($image, $filename);
-                break;
+            // Save image to HDD as PNG
+            imagepng ($image_dst, $save_as);
 
         }
+
     }
+
 
 
 
@@ -72,8 +85,9 @@ class Picture {
      * @return void Picture is deleted from HDD
      */
     static function Delete ($picture) {
-        @unlink (UPLOAD_PATH . '/pictures/' . $filename);
+        @unlink (UPLOAD_PATH . '/pictures/' . $picture);
     }
+
 
 
 
@@ -83,8 +97,9 @@ class Picture {
      * @return string Random picture filename
      */
     static function CreateFilename ($extension) {
+        $extension = $extension == 'gif' ? 'png' : $extension;  // GIFs are converted to PNGs
         do {
-            $filename = Functions::Random(20) . ".$extension";
+            $filename = Functions::Random(20) . '.' . $extension;
             if (!file_exists (UPLOAD_PATH . '/pictures/' . $filename)) $filename_available = true;
         } while (empty ($filename_available));
         return $filename;
