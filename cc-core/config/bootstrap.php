@@ -10,11 +10,13 @@ App::LoadClass ('Settings');
 App::LoadClass ('Functions');
 App::LoadClass ('Language');
 App::LoadClass ('View');
+App::LoadClass ('Plugin');
 
 // Retrieve site settings from DB
 $db = Database::GetInstance();
 Settings::LoadSettings();
 Language::LoadLangPack ('english');
+Plugin::Init();
 
 // Define Theme settings
 define ('THEME', HOST . '/cc-content/themes/' . Settings::Get ('active_theme'));
@@ -24,5 +26,7 @@ define ('THEME_PATH', THEMES_DIR . '/' . Settings::Get ('active_theme'));
 if (!headers_sent() && session_id() == '') {
     session_start();
 }
+
+Plugin::Trigger ('app.start');
 
 ?>

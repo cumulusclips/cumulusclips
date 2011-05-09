@@ -13,6 +13,7 @@ App::LoadClass ('Rating');
 App::LoadClass ('Category');
 App::LoadClass ('Pagination');
 View::InitView();
+Plugin::Trigger ('videos.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -94,6 +95,7 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output Page
+Plugin::Trigger ('videos.pre_render');
 View::Render ('videos.tpl');
 
 ?>

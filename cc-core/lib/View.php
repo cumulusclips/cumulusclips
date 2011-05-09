@@ -20,6 +20,9 @@ class View {
         self::$vars = new stdClass();
         self::$vars->db = $db;
         self::$vars->config = $config;
+
+        Plugin::Trigger ('view.init');
+
     }
 
 
@@ -31,6 +34,7 @@ class View {
      */
     static function LoadPage ($page) {
         self::$vars->meta = Language::GetMeta ($page);
+        Plugin::Trigger ('view.load_page');
     }
 
 
@@ -39,6 +43,7 @@ class View {
     static function Render ($view) {
         self::$options->view = THEME_PATH . '/' . $view;
         extract (get_object_vars (self::$vars));
+        Plugin::Trigger ('view.render');
         include (self::$options->layout);
     }
 
@@ -47,6 +52,7 @@ class View {
     // Set layout to be used by renderer
     static function SetLayout ($layout) {
          self::$options->layout = THEME_PATH . '/layouts/' . $layout;
+         Plugin::Trigger ('view.set_layout');
     }
 
 
@@ -54,6 +60,7 @@ class View {
     // Retrieve Header file Method
     static function Header() {
         extract (get_object_vars (self::$vars));
+        Plugin::Trigger ('view.header');
         include (self::$options->header);
     }
 
@@ -62,6 +69,7 @@ class View {
     // Retrieve Main Body Method
     static function Body() {
         extract (get_object_vars (self::$vars));
+        Plugin::Trigger ('view.body');
         include (self::$options->view);
     }
 
@@ -70,6 +78,7 @@ class View {
     // Retrieve Footer file Method
     static function Footer() {
         extract (get_object_vars (self::$vars));
+        Plugin::Trigger ('view.footer');
         include (self::$options->footer);
     }
 
@@ -79,6 +88,7 @@ class View {
     static function Block ($tpl_file) {
         extract (get_object_vars (self::$vars));
         $block = THEME_PATH . '/blocks/' . $tpl_file;
+        Plugin::Trigger ('view.block');
         include ($block);
     }
 
@@ -91,11 +101,16 @@ class View {
      * @return mixed The given block is output according to the number entries in the list
      */
     static function RepeatingBlock ($tpl_file, $records) {
+
         extract (get_object_vars (self::$vars));
         $block = THEME_PATH . '/blocks/' . $tpl_file;
+        Plugin::Trigger ('view.repeating_block');
+
         foreach ($records as $_id) {
+            Plugin::Trigger ('view.repeating_block_loop');
             include ($block);
         }
+
     }
 
 
@@ -103,13 +118,16 @@ class View {
     // Add specified block to sidebar
     static function AddSidebarBlock ($tpl_file) {
         self::$options->blocks[] = $tpl_file;
+        Plugin::Trigger ('view.add_sidebar_block');
     }
 
 
 
     // Output sidebar blocks
     static function OutputSidebarBlocks() {
+        Plugin::Trigger ('view.output_sidebar_blocks');
         foreach (self::$options->blocks as $_block) {
+            Plugin::Trigger ('view.ouput_sidebar_blocks_loop');
             self::Block($_block);
         }
     }
@@ -124,6 +142,7 @@ class View {
     static function AddCss ($css_name) {
         $css_url = THEME . '/css/' . $css_name;
         self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
+        Plugin::Trigger ('view.add_css');
     }
 
 
@@ -133,8 +152,10 @@ class View {
      * @return mixed CSS link tags are written
      */
     static function WriteCss() {
+        Plugin::Trigger ('view.write_css');
         if (isset (self::$options->css)) {
             foreach (self::$options->css as $_value) {
+                Plugin::Trigger ('view.write_css_loop');
                 echo $_value, "\n";
             }
         }
@@ -150,6 +171,7 @@ class View {
     static function AddJs ($js_name) {
         $js_url = THEME . '/js/' . $js_name;
         self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
+        Plugin::Trigger ('view.add_js');
     }
 
 
@@ -159,8 +181,10 @@ class View {
      * @return mixed JS src tags are written
      */
     static function WriteJs() {
+        Plugin::Trigger ('view.write_js');
         if (isset (self::$options->js)) {
             foreach (self::$options->js as $_value) {
+                Plugin::Trigger ('view.write_js_loop');
                 echo $_value, "\n";
             }
         }
@@ -176,6 +200,7 @@ class View {
      */
     static function AddMeta ($meta_name, $meta_content) {
         self::$options->meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
+        Plugin::Trigger ('view.add_meta');
     }
 
 
@@ -185,8 +210,10 @@ class View {
      * @return mixed Stored META tags are written to browser
      */
     static function WriteMeta() {
+        Plugin::Trigger ('view.write_meta');
         if (isset (self::$options->meta)) {
             foreach (self::$options->meta as $_value) {
+                Plugin::Trigger ('view.write_meta_loop');
                 echo $_value, "\n";
             }
         }

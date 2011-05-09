@@ -7,15 +7,17 @@ PLUGIN CODE
 
 
 
-class Custom {
+class Sample_Plugin {
 
-    public function __construct() {
-        Plugin::Attach ( 'app.start' , array( $this , 'CustomThing' ) );
-        Plugin::Attach ( 'app.start' , array( $this , 'CustomCode' ) );
+    public function Load() {
+        // Syntax: Plugin::Attach ( 'EVENT_NAME' , array( 'PLUGIN_NAME' , 'METHOD_NAME' ) );
+        Plugin::Attach ( 'app.start' , array( 'Sample_Plugin' , 'CustomThing' ) );
+        Plugin::Attach ( 'app.start' , array( 'Sample_Plugin' , 'CustomCode' ) );
     }
 
     static function CustomThing() { echo 'Here';}
     static function CustomCode() { echo 'Again';}
+    static function Info() { /* Info Array */ }
 
 }
 
@@ -57,8 +59,11 @@ class Plugin {
      */
     static function Trigger ( $event_name ) {
 
-        foreach (self::$events[$event_name] as $call_back_method) {
-            call_user_func ($call_back_method);
+        // Call plugin methods if any are attached to event
+        if (isset (self::$events[$event_name])) {
+            foreach (self::$events[$event_name] as $call_back_method) {
+                call_user_func ($call_back_method);
+            }
         }
         
     }
@@ -69,18 +74,18 @@ class Plugin {
      */
     static function Init() {
 
-        // Load all installed plugins
-        foreach (glob($_SERVER['DOCUMENT_ROOT'] . '/test/*') as $plugin) {
+        // Retrieve all active plugins
+        $active_plugins = Settings::Get ('active_plugins');
+        $active_plugins = unserialize ($active_plugins);
 
-            // Determine name of plugin and plugin class
-            $plugin_name = basename ($plugin);
-            $class_name = ucfirst ($plugin_name);
+        // Load all active plugins
+        foreach ($active_plugins as $plugin) {
 
             // Load plugin
-            include ($plugin . '/plugin.php');
+            include (DOC_ROOT . '/cc-content/plugins/' . $plugin . '/plugin.php');
 
-            // Initialize plugin
-            new $class_name;
+            // Load plugin and attach it's code to various hooks
+            $plugin::Load();
 
         }
 
@@ -95,7 +100,7 @@ class Plugin {
     static function Install ($plugin_name) {
 
         // Determine plugin path
-        $plugin = $_SERVER['DOCUMENT_ROOT'] . "/test/$plugin_name.zip";
+        $plugin = DOC_ROOT . '/cc-content/plugins/' . $plugin_name . '.zip';
 
         // Extract plugin
         $za = new ZipArchive();
@@ -117,9 +122,9 @@ class Plugin {
 SYSTEM CODE
 **********/
 
-Plugin::Install ('custom');
-Plugin::Init();
-Plugin::Trigger ('app.start');
-
+//Plugin::Install ('Sample_Plugin');
+//Plugin::Init();
+//Plugin::Trigger ('app.start');
+//
 
 ?>

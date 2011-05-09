@@ -11,6 +11,7 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 View::InitView();
+Plugin::Trigger ('index.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -36,6 +37,7 @@ View::$vars->result_recent = $db->Query ($query);
 View::AddJs ('jcycle.plugin.js');
 View::AddJs ('slideshow.js');
 View::AddSidebarBlock ('home_login.tpl');
+Plugin::Trigger ('index.pre_render');
 View::Render ('index.tpl');
 
 ?>
