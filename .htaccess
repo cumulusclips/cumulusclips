@@ -26,7 +26,7 @@ RewriteRule ^members/([a-z0-9]+)/videos/page/([0-9]+)/$ /cc-core/controllers/mem
 RewriteRule ^search(/page/([0-9]+))?/$ /cc-core/controllers/search.php?page=$2 [NC,QSA]
 RewriteRule ^login/$ /cc-core/controllers/login.php [NC]
 RewriteRule ^login/forgot/$ /cc-core/controllers/login.php?action=forgot [NC]
-RewriteRule ^logout/$ /cc-core/controllers/logout.php [NC]
+RewriteRule ^logout/$ /cc-core/system/logout.php [NC]
 RewriteRule ^register/$ /cc-core/controllers/register.php [NC]
 RewriteRule ^activate/$ /cc-core/controllers/activate.php [NC,QSA]
 RewriteRule ^opt-out/$ /cc-core/controllers/opt_out.php [NC,QSA]
