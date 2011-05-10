@@ -27,9 +27,18 @@ http://www.seomoz.org/learn-seo/meta-description
 
 
 
-[PLUGIN LOCATIONS]
+[PLUGIN HOOK LOCATIONS]
 
 app.start - /cc-core/config/bootstrap.php
+
+
+user.get - /cc-core/lib/User.php
+user.create - /cc-core/lib/User.php
+user.update - /cc-core/lib/User.php
+user.login - /cc-core/lib/User.php
+user.logout - /cc-core/lib/User.php
+user.reset_password - /cc-core/lib/User.php
+user.activate - /cc-core/lib/User.php
 
 
 view.init - /cc-core/lib/View.php

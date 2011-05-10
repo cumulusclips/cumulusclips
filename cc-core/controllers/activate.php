@@ -29,7 +29,7 @@ if (isset ($_GET['token'])) {
     $id = User::Exist ($data);
     if ($id) {
         $user = new User ($id);
-        $user->ActivateUser();
+        $user->Activate();
         View::$vars->Success = true;
         User::Login ($user->username, $user->password);
     } else {

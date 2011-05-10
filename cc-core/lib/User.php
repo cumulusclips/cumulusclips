@@ -44,6 +44,7 @@ class User {
         $this->date_joined = date ('m/d/Y', strtotime ($this->date_joined));
         $this->last_login = date ('m/d/Y', strtotime ($this->last_login));
         $this->video_count = $this->GetVideoCount();
+        Plugin::Trigger ('user.get');
 
     }
 
@@ -90,6 +91,7 @@ class User {
         $fields = '';
         $values = '';
 
+        Plugin::Trigger ('user.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -99,6 +101,7 @@ class User {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('user.create');
         return $db->LastId();
 
     }
@@ -108,10 +111,11 @@ class User {
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
-     * @return void
+     * @return void Record is updated in DB
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('user.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -121,6 +125,7 @@ class User {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('user.update');
         $this->Get ($this->$id_name);
 
     }
@@ -147,8 +152,8 @@ class User {
     public function ResetPassword() {
         $password = Functions::Random (10,true);
         $data = array ('password' => md5 ($password));
+        Plugin::Trigger ('user.reset_password');
         $this->Update ($data);
-        $this->password = $password;
     }
 	
 	
@@ -220,18 +225,19 @@ class User {
      * actions are transfered to the main account, and the anonymous cookie is
      * removed.
      */
-    public function ActivateUser() {
+    public function Activate() {
 
         // Update user status
         $this->Update (array ('account_status' => 'Active'));
         $msg = 'ID: ' . $this->user_id . "\nUsername: " . $this->username;
         @mail (MAIN_EMAIL, 'New Member Registered', $msg, 'From: Admin - TechieVideos.com <admin@techievideos.com>');
-
+        Plugin::Trigger ('user.activate');
+        
         // Convert if anonymous user
         if (self::IsAnonymous()) {
 
             // Update user's anonymous ratings
-            $anon_id = $_COOKIE['tv_anonymous'];
+            $anon_id = $_COOKIE['cc_anonymous'];
             $query = "UPDATE ratings SET user_id = $this->user_id WHERE user_id = $anon_id";
             $this->db->Query ($query);
             setcookie('cc_anonymous',null,time()-3600*24*365*10,'/');
@@ -245,12 +251,13 @@ class User {
      * Login a user
      * @param string $username Username of user to login
      * @param string $password Password of user to login
-     * @return boolean Returns true and logs user in if valid login, returns false otherwise
+     * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     static function Login ($username, $password) {
         $id = self::Exist (array ('username' => $username, 'password' => $password, 'account_status' => 'Active'));
         if ($id) {
             $_SESSION['user_id'] = $id;
+            Plugin::Trigger ('user.login');
             return true;
         } else {
             return false;
@@ -265,6 +272,7 @@ class User {
      */
     static function Logout() {
         unset ($_SESSION['user_id']);
+        Plugin::Trigger ('user.logout');
     }
 
 
