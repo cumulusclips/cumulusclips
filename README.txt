@@ -14,6 +14,18 @@ Make sure the following directories are writeable by PHP and the webserver:
 http://www.seomoz.org/learn-seo/meta-description
 
 
+[VIDEO STATUS CODES]
+
+1 - New
+2 - Pending Upload
+3 - Pending Download
+4 - Pending Conversion
+5 - Processing
+6 - Approved
+7 - Banned
+8 - MIA
+
+
 
 [PLUGIN LOCATIONS]
 
