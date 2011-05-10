@@ -83,11 +83,11 @@ login.pre_render - /cc-core/controllers/login.php
 register.start - /cc-core/controllers/register.php
 register.pre_render - /cc-core/controllers/register.php
 
-server_404.start - /cc-core/controllers/server_404.php
-server_404.pre_render - /cc-core/controllers/server_404.php
+system_404.start - /cc-core/controllers/system_404.php
+system_404.pre_render - /cc-core/controllers/system_404.php
 
-sys_error.start - /cc-core/controllers/sys_error.php
-sys_error.pre_render - /cc-core/controllers/sys_error.php
+system_error.start - /cc-core/controllers/system_error.php
+system_error.pre_render - /cc-core/controllers/system_error.php
 
 
 myaccount.start - /cc-core/controllers/myaccount/myaccount.php

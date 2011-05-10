@@ -133,9 +133,9 @@
         <activate_text_error>@Invalid code! Please check you entered the code correctly. Your account may already be active. If you forgot your login, {LINK}click here{/LINK} to retrieve it.</activate_text_error>
 
         <!-- 404 Page -->
-        <server_404_header>@404 - Page Not Found</server_404_header>
-        <server_404_sub_header>@Oops!</server_404_sub_header>
-        <server_404_text>@The Page you're looking for either doesn't exist or was moved to another location.</server_404_text>
+        <system_404_header>@404 - Page Not Found</system_404_header>
+        <system_404_sub_header>@Oops!</system_404_sub_header>
+        <system_404_text>@The Page you're looking for either doesn't exist or was moved to another location.</system_404_text>
 
         <!-- System Error Page -->
         <system_error_header>@System Error</system_error_header>

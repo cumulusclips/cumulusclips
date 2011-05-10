@@ -9,18 +9,18 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
-Plugin::Trigger ('server_404.start');
+Plugin::Trigger ('system_error.start');
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('server_404');
+View::LoadPage ('system_error');
 View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
+if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
 
 
 
-header ("HTTP/1.0 404 Not Found");
-Plugin::Trigger ('server_404.pre_render');
-View::Render ('404.tpl');
+// Output Page
+Plugin::Trigger ('system_error.pre_render');
+View::Render ('system_error.tpl');
 
 ?>

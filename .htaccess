@@ -94,9 +94,9 @@ RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ /cc-core/controllers/video_sitemap.
 
 Options -Indexes
 DirectoryIndex cc-core/controllers/index.php
-ErrorDocument 404 /cc-core/controllers/404.php
-#ErrorDocument 403 /cc-core/controllers/404.php
-RewriteRule ^system-error/$ /cc-core/controllers/sys_error.php
+ErrorDocument 404 /cc-core/controllers/system_404.php
+#ErrorDocument 403 /cc-core/controllers/system_404.php
+RewriteRule ^system-error/$ /cc-core/controllers/system_error.php
 
 #RewriteRule index.php - [F,L]
 #<FilesMatch "index.php">
