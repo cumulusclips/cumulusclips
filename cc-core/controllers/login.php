@@ -10,6 +10,7 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
 View::InitView();
+Plugin::Trigger ('login.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -125,6 +126,7 @@ if (isset ($_POST['submitted_forgot'])) {
 
 
 // Output Page
+Plugin::Trigger ('login.pre_render');
 View::Render ('login.tpl');
 
 ?>

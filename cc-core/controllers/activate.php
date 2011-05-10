@@ -9,6 +9,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
+Plugin::Trigger ('activate.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -41,6 +42,7 @@ if (isset ($_GET['token'])) {
 
 
 // Output Page
+Plugin::Trigger ('activate.pre_render');
 View::Render ('activate.tpl');
 
 ?>

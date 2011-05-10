@@ -10,6 +10,7 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
 View::InitView();
+Plugin::Trigger ('opt_out.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -46,6 +47,7 @@ if (isset ($_GET['email'])) {
 
 
 // Output Page
+Plugin::Trigger ('opt_out.pre_render');
 View::Render ('opt_out.tpl');
 
 ?>

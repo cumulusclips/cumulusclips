@@ -11,6 +11,7 @@ App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
+Plugin::Trigger ('message_send.start');
 View::InitView();
 
 
@@ -146,6 +147,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('message_send.pre_render');
 View::Render ('myaccount/message_send.tpl');
 
 ?>

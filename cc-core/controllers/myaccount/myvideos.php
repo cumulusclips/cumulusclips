@@ -11,6 +11,7 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
+Plugin::Trigger ('myvideos.start');
 View::InitView();
 
 
@@ -58,6 +59,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('myvideos.pre_render');
 View::Render ('myaccount/myvideos.tpl');
 
 ?>

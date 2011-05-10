@@ -16,6 +16,7 @@ App::LoadClass ('Favorite');
 App::LoadClass ('Comment');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
+Plugin::Trigger ('play.start');
 View::InitView();
 
 
@@ -93,6 +94,7 @@ View::AddMeta('baseURL', HOST);
 View::AddJs('flowplayer.plugin.js');
 View::AddJs('play.js');
 View::SetLayout('full.layout.tpl');
+Plugin::Trigger ('play.pre_render');
 View::Render ('play.tpl');
 
 ?>

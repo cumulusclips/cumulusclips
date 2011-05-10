@@ -13,6 +13,7 @@ App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
 App::LoadClass ('Flag');
 App::LoadClass ('Post');
+Plugin::Trigger ('profile.start');
 View::InitView();
 
 
@@ -86,6 +87,7 @@ while ($row = $db->FetchObj ($result_posts)) {
 // Output Page
 View::AddMeta ('baseURL', HOST);
 View::AddSidebarBlock ('recent_posts.tpl');
+Plugin::Trigger ('profile.pre_render');
 View::Render ('profile.tpl');
 
 ?>

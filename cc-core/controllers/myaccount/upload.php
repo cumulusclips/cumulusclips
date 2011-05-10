@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
+Plugin::Trigger ('upload.start');
 View::InitView();
 
 
@@ -89,6 +90,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('upload.pre_render');
 View::Render ('myaccount/upload.tpl');
 
 ?>

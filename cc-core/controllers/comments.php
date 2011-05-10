@@ -11,6 +11,7 @@ App::LoadClass ('User');
 App::LoadClass ('Comment');
 App::LoadClass ('Pagination');
 App::LoadClass ('Video');
+Plugin::Trigger ('comments.start');
 View::InitView();
 
 
@@ -54,6 +55,7 @@ while ($row = $db->FetchObj ($result)) {
 
 
 // Output page
+Plugin::Trigger ('comments.pre_render');
 View::Render ('view_comments.tpl');
 
 ?>

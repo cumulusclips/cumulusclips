@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
+Plugin::Trigger ('privacy_settings.start');
 View::InitView();
 
 
@@ -74,6 +75,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('privacy_settings.pre_render');
 View::Render ('myaccount/privacy_settings.tpl');
 
 ?>

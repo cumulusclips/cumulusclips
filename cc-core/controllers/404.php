@@ -9,6 +9,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
+Plugin::Trigger ('server_404.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -19,6 +20,7 @@ if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in
 
 
 header ("HTTP/1.0 404 Not Found");
+Plugin::Trigger ('server_404.pre_render');
 View::Render ('404.tpl');
 
 ?>

@@ -12,6 +12,7 @@ App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
 App::LoadClass ('Recaptcha');
 View::InitView();
+Plugin::Trigger ('register.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -128,6 +129,7 @@ if (isset ($_POST['submitted'])) {
 View::AddMeta ('register:host', HOST);
 View::AddMeta ('register:theme', THEME);
 View::AddJs ('username.js');
+Plugin::Trigger ('register.pre_render');
 View::Render ('register.tpl');
 
 ?>

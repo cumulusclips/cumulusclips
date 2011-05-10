@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
+Plugin::Trigger ('message_read.start');
 View::InitView();
 
 
@@ -41,6 +42,7 @@ if ($id) {
 
 // Outuput page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('message_read.pre_render');
 View::Render ('myaccount/message_read.tpl');
 
 ?>

@@ -10,6 +10,7 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Pagination');
+Plugin::Trigger ('message_inbox.start');
 View::InitView();
 
 
@@ -82,6 +83,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('message_inbox.pre_render');
 View::Render ('myaccount/message_inbox.tpl');
 
 ?>

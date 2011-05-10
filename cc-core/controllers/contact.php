@@ -9,6 +9,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Recaptcha');
+Plugin::Trigger ('contact.start');
 View::InitView();
 
 
@@ -95,6 +96,7 @@ if (isset ($_POST['submitted'])) {
 
 
 // Output Page
+Plugin::Trigger ('contact.pre_render');
 View::Render ('contact.tpl');
 
 ?>

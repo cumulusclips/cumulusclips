@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
+Plugin::Trigger ('upload_video.start');
 View::InitView();
 
 
@@ -48,6 +49,7 @@ View::AddJs ('swfobject.js');
 View::AddJs ('uploadify.plugin.js');
 View::AddJs ('uploadify.js');
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('upload_video.pre_render');
 View::Render ('myaccount/upload_video.tpl');
 
 ?>

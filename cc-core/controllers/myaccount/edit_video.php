@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
+Plugin::Trigger ('edit_video.start');
 View::InitView();
 
 
@@ -104,6 +105,7 @@ View::$vars->result_cat = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('edit_video.pre_render');
 View::Render ('myaccount/edit_video.tpl');
 
 ?>

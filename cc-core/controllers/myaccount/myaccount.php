@@ -8,6 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
+Plugin::Trigger ('myaccount.start');
 View::InitView();
 
 
@@ -31,6 +32,7 @@ if ($db->Count($result) > 0) {
 // Output Page
 View::AddMeta ('baseURL', HOST);
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('myaccount.pre_render');
 View::Render ('myaccount/myaccount.tpl');
 
 ?>

@@ -8,6 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
+Plugin::Trigger ('change_password.start');
 View::InitView();
 
 
@@ -70,6 +71,7 @@ if ((isset ($_POST['submitted']))) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('change_password.pre_render');
 View::Render ('myaccount/change_password.tpl');
 
 ?>

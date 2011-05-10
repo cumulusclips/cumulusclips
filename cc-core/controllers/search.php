@@ -12,6 +12,7 @@ App::LoadClass ('Video');
 App::LoadClass ('Rating');
 App::LoadClass ('Pagination');
 View::InitView();
+Plugin::Trigger ('search.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -52,6 +53,7 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output Page
+Plugin::Trigger ('search.pre_render');
 View::Render ('search.tpl');
 
 ?>

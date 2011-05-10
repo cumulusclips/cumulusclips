@@ -19,6 +19,7 @@ http://www.seomoz.org/learn-seo/meta-description
 
 app.start - /cc-core/config/bootstrap.php
 
+
 view.init - /cc-core/lib/View.php
 view.load_page - /cc-core/lib/View.php
 view.render - /cc-core/lib/View.php
@@ -42,9 +43,92 @@ view.add_meta - /cc-core/lib/View.php
 view.write_meta - /cc-core/lib/View.php
 view.write_meta_loop - /cc-core/lib/View.php
 
+
 index.start - /cc-core/controllers/index.php
 index.pre_render - /cc-core/controllers/index.php
 
 videos.start - /cc-core/controllers/videos.php
 videos.pre_render - /cc-core/controllers/videos.php
+
+members.start - /cc-core/controllers/members.php
+members.pre_render - /cc-core/controllers/members.php
+
+member_videos.start - /cc-core/controllers/member_videos.php
+member_videos.pre_render - /cc-core/controllers/member_videos.php
+
+profile.start - /cc-core/controllers/profile.php
+profile.pre_render - /cc-core/controllers/profile.php
+
+play.start - /cc-core/controllers/play.php
+play.pre_render - /cc-core/controllers/play.php
+
+comments.start - /cc-core/controllers/comments.php
+comments.pre_render - /cc-core/controllers/comments.php
+
+contact.start - /cc-core/controllers/contact.php
+contact.pre_render - /cc-core/controllers/contact.php
+
+activate.start - /cc-core/controllers/activate.php
+activate.pre_render - /cc-core/controllers/activate.php
+
+opt_out.start - /cc-core/controllers/opt_out.php
+opt_out.pre_render - /cc-core/controllers/opt_out.php
+
+search.start - /cc-core/controllers/search.php
+search.pre_render - /cc-core/controllers/search.php
+
+login.start - /cc-core/controllers/login.php
+login.pre_render - /cc-core/controllers/login.php
+
+register.start - /cc-core/controllers/register.php
+register.pre_render - /cc-core/controllers/register.php
+
+server_404.start - /cc-core/controllers/server_404.php
+server_404.pre_render - /cc-core/controllers/server_404.php
+
+sys_error.start - /cc-core/controllers/sys_error.php
+sys_error.pre_render - /cc-core/controllers/sys_error.php
+
+
+myaccount.start - /cc-core/controllers/myaccount/myaccount.php
+myaccount.pre_render - /cc-core/controllers/myaccount/myaccount.php
+
+upload.start - /cc-core/controllers/myaccount/upload.php
+upload.pre_render - /cc-core/controllers/myaccount/upload.php
+
+upload_video.start - /cc-core/controllers/myaccount/upload_video.php
+upload_video.pre_render - /cc-core/controllers/myaccount/upload_video.php
+
+upload_complete.start - /cc-core/controllers/myaccount/upload_complete.php
+upload_complete.pre_render - /cc-core/controllers/myaccount/upload_complete.php
+
+edit_video.start - /cc-core/controllers/myaccount/edit_video.php
+edit_video.pre_render - /cc-core/controllers/myaccount/edit_video.php
+
+myvideos.start - /cc-core/controllers/myaccount/myvideos.php
+myvideos.pre_render - /cc-core/controllers/myaccount/myvideos.php
+
+myfavorites.start - /cc-core/controllers/myaccount/myfavorites.php
+myfavorites.pre_render - /cc-core/controllers/myaccount/myfavorites.php
+
+update_profile.start - /cc-core/controllers/myaccount/update_profile.php
+update_profile.pre_render - /cc-core/controllers/myaccount/update_profile.php
+
+privacy_settings.start - /cc-core/controllers/myaccount/privacy_settings.php
+privacy_settings.pre_render - /cc-core/controllers/myaccount/privacy_settings.php
+
+subscriptions.start - /cc-core/controllers/myaccount/subscriptions.php
+subscriptions.pre_render - /cc-core/controllers/myaccount/subscriptions.php
+
+subscribers.start - /cc-core/controllers/myaccount/subscribers.php
+subscribers.pre_render - /cc-core/controllers/myaccount/subscribers.php
+
+message_inbox.start - /cc-core/controllers/myaccount/message_inbox.php
+message_inbox.pre_render - /cc-core/controllers/myaccount/message_inbox.php
+
+message_read.start - /cc-core/controllers/myaccount/message_read.php
+message_read.pre_render - /cc-core/controllers/myaccount/message_read.php
+
+message_send.start - /cc-core/controllers/myaccount/message_send.php
+message_send.pre_render - /cc-core/controllers/myaccount/message_send.php
 

@@ -10,6 +10,7 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Subscription');
 App::LoadClass ('Pagination');
+Plugin::Trigger ('subscribers.start');
 View::InitView();
 
 
@@ -38,6 +39,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('subscribers.pre_render');
 View::Render ('myaccount/subscribers.tpl');
 
 ?>

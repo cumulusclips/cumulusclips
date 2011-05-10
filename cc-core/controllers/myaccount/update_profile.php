@@ -9,6 +9,7 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Picture');
+Plugin::Trigger ('update_profile.start');
 View::InitView();
 
 
@@ -198,6 +199,7 @@ if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('update_profile.pre_render');
 View::Render ('myaccount/update_profile.tpl');
 
 ?>

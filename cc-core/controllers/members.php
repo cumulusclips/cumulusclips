@@ -10,6 +10,7 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Pagination');
 View::InitView();
+Plugin::Trigger ('members.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -37,6 +38,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output Page
 View::SetLayout ('full.layout.tpl');
+Plugin::Trigger ('members.pre_render');
 View::Render ('members.tpl');
 
 ?>

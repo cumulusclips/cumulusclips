@@ -8,6 +8,7 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
+Plugin::Trigger ('upload_complete.start');
 View::InitView();
 
 
@@ -29,6 +30,7 @@ if (isset ($_SESSION['token'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('upload_complete.pre_render');
 View::Render ('myaccount/upload_complete.tpl');
 
 ?>

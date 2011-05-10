@@ -12,6 +12,7 @@ App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
 App::LoadClass ('Favorite');
+Plugin::Trigger ('myfavorites.start');
 View::InitView();
 
 
@@ -59,6 +60,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
+Plugin::Trigger ('myfavorites.pre_render');
 View::Render ('myaccount/myfavorites.tpl');
 
 ?>

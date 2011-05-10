@@ -9,6 +9,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
+Plugin::Trigger ('sys_error.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -19,6 +20,7 @@ if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_i
 
 
 // Output Page
+Plugin::Trigger ('sys_error.pre_render');
 View::Render ('sys_error.tpl');
 
 ?>
