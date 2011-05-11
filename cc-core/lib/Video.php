@@ -140,7 +140,7 @@ class Video {
     static function Delete ($video_id) {
 
         $db = Database::GetInstance();
-        $video = new Video ($video_id);
+        $video = new self ($video_id);
         Plugin::Trigger ('video.delete');
 
         // Delete files

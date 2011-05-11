@@ -142,13 +142,19 @@ class User {
      */
     static function Delete ($id) {
 
+        App::LoadClass ('Privacy');
         App::LoadClass ('Picture');
         $db = Database::GetInstance();
-        $user = new User ($id);
+        $user = new self ($id);
         Plugin::Trigger ('user.delete');
 
         // Delete Picture
         if (!empty ($user->picture)) Picture::Delete ($user->picture);
+
+        // Delete Privacy Record
+        $privacy_id = Privacy::Exist (array ('user_id' => $id));
+        Privacy::Delete ($privacy_id);
+
 
         // Delete related records
         $query1 = "DELETE FROM comments WHERE user_id = $id";

@@ -85,7 +85,8 @@ class Plugin {
             include (DOC_ROOT . '/cc-content/plugins/' . $plugin . '/plugin.php');
 
             // Load plugin and attach it's code to various hooks
-            $plugin::Load();
+            call_user_func (array ($plugin, 'Load'));
+            # $plugin::Load();  // Only works on PHP 5.3+
 
         }
 

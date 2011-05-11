@@ -152,6 +152,22 @@ class Privacy {
         }
     }
 
+
+
+    /**
+     * Retrieve privacy object using user id
+     * @param integer $user_id User id for user being looked up
+     * @return object Returns Privacy object if $user_id was found, boolean false otherwise
+     */
+    static function LoadByUser ($user_id) {
+        $privacy_id = self::Exist (array ('user_id' => $user_id));
+        if ($privacy_id) {
+            return new self ($privacy_id);
+        } else {
+            return false;
+        }
+    }
+
 }
 
 ?>
