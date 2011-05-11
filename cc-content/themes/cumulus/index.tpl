@@ -70,7 +70,7 @@
 <?php while($row = $db->FetchObj ($result_recent)): ?>
 
     <?php $video = new Video ($row->video_id); ?>
-    <?php $rating = new Rating ($video->video_id); ?>
+    <?php $rating = Rating::GetRating ($video->video_id); ?>
 
     <div class="block">
 
@@ -82,8 +82,8 @@
 
         <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title=""><?=$video->title?></a>
         <p><?=$video->description?></p>
-        <span class="like">+<?=$rating->GetLikeCount()?></span>
-        <span class="dislike">-<?=$rating->GetDislikeCount()?></span>
+        <span class="like">+<?=$rating->likes?></span>
+        <span class="dislike">-<?=$rating->dislikes?></span>
         <br clear="all" />
 
     </div>

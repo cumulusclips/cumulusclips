@@ -54,9 +54,8 @@ if ($logged_in && $user->user_id == $video->user_id) {
 
 
 // Submit rating if none exists
-$rating = new Rating ($video->video_id);
-if ($rating->AddVote($user_id, $_POST['rating'])) {
-    echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText ('success_rated'), 'other' => $rating->GetCountText()));
+if (Rating::AddRating ($_POST['rating'], $video->video_id, $user_id)) {
+    echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText ('success_rated'), 'other' => Rating::GetRating ($video->video_id)));
     exit();
 } else {
     echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText ('error_rate_duplicate')));

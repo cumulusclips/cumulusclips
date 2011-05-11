@@ -178,7 +178,18 @@ $(document).ready(function(){
         var data = {video_id: $(this).attr('data-video'), rating: $(this).attr('data-rating')};
         var callback = function (responseData) {
             if (responseData.result == 1) {
-                $('#rating-text').html(responseData.other);
+
+                var like;
+                like.html('span')
+                    .addClass('like')
+                    .text(responseData.other.likes);
+
+                var dislike;
+                dislike.html('span')
+                    .addClass('dislike')
+                    .text(responseData.other.dislikes);
+
+                $('#rating-text').append(like, dislike);
             }
         }
         executeAction (url, data, callback);

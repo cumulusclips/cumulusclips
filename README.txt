@@ -96,6 +96,12 @@ privacy.update - /cc-core/lib/Privacy.php
 privacy.delete - /cc-core/lib/Privacy.php
 
 
+rating.get - /cc-core/lib/Rating.php
+rating.create - /cc-core/lib/Rating.php
+rating.update - /cc-core/lib/Rating.php
+rating.delete - /cc-core/lib/Rating.php
+
+
 picture.before_save - /cc-core/lib/Picture.php
 picture.save - /cc-core/lib/Picture.php
 

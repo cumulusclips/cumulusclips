@@ -25,11 +25,11 @@
 
 <?php if ($db->Count($result) > 0): ?>
 
-    <?php while ($row = $db->FetchRow ($result)): ?>
+    <?php while ($row = $db->FetchObj ($result)): ?>
 
         <?php
-        $video = new Video ($row[0]);
-        $rating = new Rating ($row[0]);
+        $video = new Video ($row->video_id);
+        $rating = Rating::GetRating ($row->video_id);
         ?>
 
         <div class="block">
@@ -42,18 +42,11 @@
 
             <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>" title="<?=$video->title?>"><?=$video->title?></a>
             <p><?=Functions::CutOff ($video->description, 190)?></p>
-            <span class="like">+<?=$rating->GetLikeCount()?></span>
-            <span class="dislike">-<?=$rating->GetDislikeCount()?></span>
+            <span class="like">+<?=$rating->likes?></span>
+            <span class="dislike">-<?=$rating->dislikes?></span>
             <br clear="all" />
 
         </div>
-
-
-<!--
-<?=$config->thumb_bucket_url?>
-<span><strong>Views:</strong>&nbsp;<?=$video->views?></span>
-<span><strong>Uploaded On:</strong>&nbsp;<?=$video->date_uploaded?></span>
--->
 
 
     <?php endwhile; ?>
