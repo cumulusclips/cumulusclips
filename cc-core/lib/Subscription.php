@@ -40,6 +40,7 @@ class Subscription {
         }
         $date = new DateTime ($row['date_created']);
         $this->date_created = $date->format('m/d/Y');
+        Plugin::Trigger ('subscription.get');
     }
 
 
@@ -85,6 +86,7 @@ class Subscription {
         $fields = '';
         $values = '';
 
+        Plugin::Trigger ('subscription.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -94,6 +96,7 @@ class Subscription {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('subscription.create');
         return $db->LastId();
 
     }
@@ -107,6 +110,7 @@ class Subscription {
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('subscription.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -116,6 +120,7 @@ class Subscription {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('subscription.update');
         $this->Get ($this->$id_name);
 
     }
@@ -129,6 +134,7 @@ class Subscription {
      */
     static function Delete ($id) {
         $db = Database::GetInstance();
+        Plugin::Trigger ('subscription.delete');
         $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }

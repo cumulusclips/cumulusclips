@@ -47,6 +47,7 @@ class Comment {
             $this->name = $user->username;
             $this->website = HOST . '/members/' . $user->username . '/';
         }
+        Plugin::Trigger ('comment.get');
 
     }
 
@@ -93,6 +94,7 @@ class Comment {
         $fields = 'date_created, ';
         $values = 'NOW(), ';
 
+        Plugin::Trigger ('comment.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -102,6 +104,7 @@ class Comment {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('comment.create');
         return $db->LastId();
 
     }
@@ -115,6 +118,7 @@ class Comment {
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('comment.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -124,8 +128,23 @@ class Comment {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('comment.update');
         $this->Get ($this->$id_name);
 
+    }
+
+
+
+    /**
+     * Delete a record
+     * @param integer $id ID of record to be deleted
+     * @return void Record is deleted from database
+     */
+    static function Delete ($id) {
+        $db = Database::GetInstance();
+        Plugin::Trigger ('comment.delete');
+        $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $db->Query ($query);
     }
 
 }

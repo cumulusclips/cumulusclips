@@ -8,7 +8,6 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
 App::LoadClass ('Recaptcha');
 View::InitView();
@@ -105,8 +104,7 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->Errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
-        $id = User::Create (View::$vars->data);
-        Privacy::Create ($id);
+        User::Create (View::$vars->data);
         View::$vars->success = Language::GetText('success_registered');
 
         $template = new EmailTemplate ('/new_account.htm');

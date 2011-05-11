@@ -29,7 +29,7 @@ class User {
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
-     * @return void
+     * @return void DB record's fields are loaded into object properties
      */
     private function Get ($id) {
         $query = 'SELECT * FROM ' . self::$table . ' WHERE ' . self::$id_name . "= $id";
@@ -86,6 +86,7 @@ class User {
      */
     static function Create ($data) {
 
+        App::LoadClass ('Privacy');
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . self::$table;
         $fields = '';
@@ -101,6 +102,8 @@ class User {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        
+        Privacy::Create ($db->LastId());
         Plugin::Trigger ('user.create');
         return $db->LastId();
 
@@ -127,6 +130,47 @@ class User {
         $this->db->Query ($query);
         Plugin::Trigger ('user.update');
         $this->Get ($this->$id_name);
+
+    }
+
+
+
+    /**
+     * Delete a record
+     * @param integer $id ID of record to be deleted
+     * @return void Record is deleted from database
+     */
+    static function Delete ($id) {
+
+        App::LoadClass ('Picture');
+        $db = Database::GetInstance();
+        $user = new User ($id);
+        Plugin::Trigger ('user.delete');
+
+        // Delete Picture
+        if (!empty ($user->picture)) Picture::Delete ($user->picture);
+
+        // Delete related records
+        $query1 = "DELETE FROM comments WHERE user_id = $id";
+        $query2 = "DELETE FROM ratings WHERE user_id = $id";
+        $query3 = "DELETE FROM favorites WHERE user_id = $id";
+        $query4 = "DELETE FROM flagging WHERE user_id = $id OR (type = 'user' AND id = $id)";
+        $query5 = "DELETE FROM videos WHERE user_id = $id";
+        $query6 = "DELETE FROM subscriptions WHERE user_id = $id OR member = $id";
+        $query7 = "DELETE FROM posts WHERE user_id = $id";
+        $query8 = "DELETE FROM messages WHERE user_id = $id OR recipient = $id";
+        $query9 = "DELETE FROM privacy WHERE user_id = $id";
+        $query10 = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $db->Query ($query1);
+        $db->Query ($query2);
+        $db->Query ($query3);
+        $db->Query ($query4);
+        $db->Query ($query5);
+        $db->Query ($query6);
+        $db->Query ($query7);
+        $db->Query ($query8);
+        $db->Query ($query9);
+        $db->Query ($query10);
 
     }
 

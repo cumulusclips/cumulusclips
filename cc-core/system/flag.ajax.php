@@ -90,7 +90,7 @@ switch ($_POST['type']) {
 
 
         // Create Flag if one doesn't exist
-        $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
+        $data = array ('type' => 'user', 'id' => $video->video_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));

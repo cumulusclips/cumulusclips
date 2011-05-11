@@ -38,6 +38,7 @@ class Favorite {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+        Plugin::Trigger ('favorite.get');
     }
 
 
@@ -83,6 +84,7 @@ class Favorite {
         $fields = '';
         $values = '';
 
+        Plugin::Trigger ('favorite.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -92,6 +94,7 @@ class Favorite {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('favorite.create');
         return $db->LastId();
 
     }
@@ -105,6 +108,7 @@ class Favorite {
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('favorite.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -114,6 +118,7 @@ class Favorite {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('favorite.update');
         $this->Get ($this->$id_name);
 
     }
@@ -127,6 +132,7 @@ class Favorite {
      */
     static function Delete ($id) {
         $db = Database::GetInstance();
+        Plugin::Trigger ('favorite.delete');
         $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }

@@ -29,7 +29,7 @@ class Video {
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
-     * @return void
+     ** @return void DB record's fields are loaded into object properties
      */
     private function Get ($id) {
         $query = 'SELECT * FROM ' . self::$table . ' WHERE ' . self::$id_name . "= $id";
@@ -101,7 +101,7 @@ class Video {
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
-     * @return void
+     * @return void Record is updated in DB
      */
     public function Update ($data) {
 

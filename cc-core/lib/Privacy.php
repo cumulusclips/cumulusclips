@@ -38,6 +38,7 @@ class Privacy {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+        Plugin::Trigger ('privacy.get');
     }
 
 
@@ -83,6 +84,7 @@ class Privacy {
         $fields = '';
         $values = '';
 
+        Plugin::Trigger ('privacy.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -92,6 +94,7 @@ class Privacy {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('privacy.create');
         return $db->LastId();
 
     }
@@ -105,6 +108,7 @@ class Privacy {
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('privacy.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -114,8 +118,23 @@ class Privacy {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('privacy.update');
         $this->Get ($this->$id_name);
 
+    }
+
+
+
+    /**
+     * Delete a record
+     * @param integer $id ID of record to be deleted
+     * @return void Record is deleted from database
+     */
+    static function Delete ($id) {
+        $db = Database::GetInstance();
+        Plugin::Trigger ('privacy.delete');
+        $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $db->Query ($query);
     }
 
 
@@ -127,9 +146,9 @@ class Privacy {
      */
     public function OptCheck ($message_type) {
         if ($this->$message_type == 'yes') {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 

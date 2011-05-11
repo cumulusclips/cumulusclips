@@ -37,6 +37,7 @@ class Picture {
             $height_dst = $height_src;
         }
 
+        Plugin::Trigger ('picture.before_save');
 
         // Determin which type of image object to create (and how to process it) based on file extension
         if (in_array ($original_extension, array ('jpg', 'jpeg'))) {
@@ -74,6 +75,8 @@ class Picture {
 
         }
 
+        Plugin::Trigger ('picture.save');
+
     }
 
 
@@ -85,6 +88,7 @@ class Picture {
      * @return void Picture is deleted from HDD
      */
     static function Delete ($picture) {
+        Plugin::Trigger ('picture.delete');
         @unlink (UPLOAD_PATH . '/pictures/' . $picture);
     }
 

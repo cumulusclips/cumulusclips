@@ -35,10 +35,69 @@ app.start - /cc-core/config/bootstrap.php
 user.get - /cc-core/lib/User.php
 user.create - /cc-core/lib/User.php
 user.update - /cc-core/lib/User.php
+user.delete - /cc-core/lib/User.php
 user.login - /cc-core/lib/User.php
 user.logout - /cc-core/lib/User.php
 user.reset_password - /cc-core/lib/User.php
 user.activate - /cc-core/lib/User.php
+
+
+video.get - /cc-core/lib/Video.php
+video.create - /cc-core/lib/Video.php
+video.update - /cc-core/lib/Video.php
+video.delete - /cc-core/lib/Video.php
+
+
+comment.get - /cc-core/lib/Comment.php
+comment.create - /cc-core/lib/Comment.php
+comment.update - /cc-core/lib/Comment.php
+comment.delete - /cc-core/lib/Comment.php
+
+
+post.get - /cc-core/lib/Post.php
+post.create - /cc-core/lib/Post.php
+post.update - /cc-core/lib/Post.php
+post.delete - /cc-core/lib/Post.php
+
+
+message.get - /cc-core/lib/Message.php
+message.create - /cc-core/lib/Message.php
+message.update - /cc-core/lib/Message.php
+message.delete - /cc-core/lib/Message.php
+
+
+favorite.get - /cc-core/lib/Favorite.php
+favorite.create - /cc-core/lib/Favorite.php
+favorite.update - /cc-core/lib/Favorite.php
+favorite.delete - /cc-core/lib/Favorite.php
+
+
+flag.get - /cc-core/lib/Flag.php
+flag.create - /cc-core/lib/Flag.php
+flag.update - /cc-core/lib/Flag.php
+flag.delete - /cc-core/lib/Flag.php
+
+
+subscription.get - /cc-core/lib/Subscription.php
+subscription.create - /cc-core/lib/Subscription.php
+subscription.update - /cc-core/lib/Subscription.php
+subscription.delete - /cc-core/lib/Subscription.php
+
+
+category.get - /cc-core/lib/Category.php
+category.create - /cc-core/lib/Category.php
+category.update - /cc-core/lib/Category.php
+category.delete - /cc-core/lib/Category.php
+
+
+privacy.get - /cc-core/lib/Privacy.php
+privacy.create - /cc-core/lib/Privacy.php
+privacy.update - /cc-core/lib/Privacy.php
+privacy.delete - /cc-core/lib/Privacy.php
+
+
+picture.before_save - /cc-core/lib/Picture.php
+picture.save - /cc-core/lib/Picture.php
 
 
 view.init - /cc-core/lib/View.php

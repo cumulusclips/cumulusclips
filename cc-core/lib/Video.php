@@ -29,7 +29,7 @@ class Video {
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
-     * @return void
+     * @return void DB record's fields are loaded into object properties
      */
     private function Get ($id) {
         $query = 'SELECT videos.*, username FROM ' . self::$table . ' INNER JOIN users on videos.user_id = users.user_id WHERE ' . self::$id_name . "= $id";
@@ -44,6 +44,7 @@ class Video {
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
         $this->date_created = date ('m/d/Y', strtotime ($this->date_created));
+        Plugin::Trigger ('video.get');
 
     }
 
@@ -90,6 +91,7 @@ class Video {
         $fields = 'date_created, ';
         $values = 'NOW(), ';
 
+        Plugin::Trigger ('video.before_save');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -99,6 +101,7 @@ class Video {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('video.create');
         return $db->LastId();
 
     }
@@ -108,10 +111,11 @@ class Video {
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
-     * @return void
+     * @return void Record is updated in DB
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('video.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -121,6 +125,7 @@ class Video {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('video.update');
         $this->Get ($this->$id_name);
 
     }
@@ -136,6 +141,7 @@ class Video {
 
         $db = Database::GetInstance();
         $video = new Video ($video_id);
+        Plugin::Trigger ('video.delete');
 
         // Delete files
         @unlink(UPLOAD_PATH . '/' . $video->filename . '.flv');

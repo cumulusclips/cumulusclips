@@ -40,6 +40,7 @@ class Message {
         }
 
         $this->date = date ('m/d/Y', strtotime ($this->date_created));
+        Plugin::Trigger ('message.get');
 
     }
 
@@ -86,6 +87,7 @@ class Message {
         $fields = 'date_created, ';
         $values = 'NOW(), ';
 
+        Plugin::Trigger ('message.before_create');
         foreach ($data as $_key => $_value) {
             $fields .= "$_key, ";
             $values .= "'" . $db->Escape ($_value) . "', ";
@@ -95,6 +97,7 @@ class Message {
         $values = substr ($values, 0, -2);
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
+        Plugin::Trigger ('message.create');
         return $db->LastId();
 
     }
@@ -108,6 +111,7 @@ class Message {
      */
     public function Update ($data) {
 
+        Plugin::Trigger ('message.before_update');
         $query = 'UPDATE ' . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
@@ -117,6 +121,7 @@ class Message {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
+        Plugin::Trigger ('message.update');
         $this->Get ($this->$id_name);
 
     }
@@ -130,6 +135,7 @@ class Message {
      */
     static function Delete ($id) {
         $db = Database::GetInstance();
+        Plugin::Trigger ('message.delete');
         $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
