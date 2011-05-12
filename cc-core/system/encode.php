@@ -322,7 +322,7 @@ $result_alert = $db->Query ($query);
 while ($opt = $db->FetchRow ($result_alert)) {
 
     $subscriber = new User ($opt[0]);
-    $privacy = new Privacy ($opt[0]);
+    $privacy = Privacy::LoadByUser ($opt[0]);
     if ($privacy->OptCheck ('new_video')) {
         $template = new EmailTemplate ('/new_video.htm');
         $template_data = array (

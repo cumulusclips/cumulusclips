@@ -96,7 +96,7 @@ if (isset ($_POST['submitted'])) {
         $comment = new Comment ($comment_id);
 
         // Send video owner notifition if opted-in
-        $privacy = new Privacy ($video->user_id);
+        $privacy = Privacy::LoadByUser ($video->user_id);
         if ($privacy->OptCheck ('video_comment')) {
             $template = new EmailTemplate ('/video_comment.htm');
             $template_user = new User ($video->user_id);

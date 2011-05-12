@@ -39,7 +39,7 @@ if (!isset ($_GET['vid']) || !is_numeric ($_GET['vid']) || !Video::Exist ($data)
 View::$vars->video = new Video ($_GET['vid']);
 View::$vars->member = new User (View::$vars->video->user_id);
 View::$vars->video->Update (array ('views' => View::$vars->video->views+1));
-View::$vars->rating = new Rating (View::$vars->video->video_id);
+View::$vars->rating = Rating::GetRating (View::$vars->video->video_id);
 View::$vars->meta->title = View::$vars->video->title;
 View::$vars->meta->keywords = implode (', ',View::$vars->video->tags);
 View::$vars->meta->description = View::$vars->video->description;

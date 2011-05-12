@@ -28,7 +28,7 @@ if (isset ($_GET['email'])) {
     $data = array ('email' => $email);
     $id = User::Exist ($data);
     if ($id) {
-        $privacy = new Privacy ($id);
+        $privacy = Privacy::LoadByUser ($id);
         $data = array (
             'new_video'         => 'no',
             'new_message'       => 'no',

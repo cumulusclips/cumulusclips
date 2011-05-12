@@ -125,7 +125,7 @@ if (isset ($_POST['submitted'])) {
         View::$vars->msg = NULL;
 
         // Send recipient email notification if opted-in
-        $privacy = new Privacy ($recipient->user_id);
+        $privacy = Privacy::LoadByUser ($recipient->user_id);
         if ($privacy->OptCheck ('new_message')) {
             $template = new EmailTemplate ('/new_message.htm');
             $Msg = array (

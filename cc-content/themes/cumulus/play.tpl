@@ -27,8 +27,8 @@
             <div id="actions">
                 <p class="large"><?=$video->views?></p>
                 <p><span id="rating-text">
-                    <span class="green-text"><?=$rating->likes?> <?=$rating->like_text?>+</span>
-                    <span class="red-text"><?=$rating->dislikes?> <?=$rating->dislike_text?>-</span>
+                    <span class="green-text"><?=$rating->like_text?> (<?=$rating->likes?>+)</span> / 
+                    <span class="red-text"><?=$rating->dislike_text?> (<?=$rating->dislikes?>-)</span>
                 </span></p>
                 <p id="rating-link">
                     <a class="like rating" href="" data-video="<?=$video->video_id?>" data-rating="1" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>

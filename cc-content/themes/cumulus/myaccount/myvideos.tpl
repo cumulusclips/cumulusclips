@@ -11,7 +11,7 @@
 
         <?php
         $video = new Video ($row->video_id);
-        $rating = new Rating ($row->video_id);
+        $rating = Rating::GetRating ($row->video_id);
         ?>
 
         <div class="block video">
@@ -24,8 +24,8 @@
 
             <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>" title="<?=$video->title?>"><?=$video->title?></a>
             <p><?=Functions::CutOff ($video->description, 190)?></p>
-            <span class="like">+<?=$rating->GetLikeCount()?></span>
-            <span class="dislike">-<?=$rating->GetDislikeCount()?></span>
+            <span class="like">+<?=$rating->likes?></span>
+            <span class="dislike">-<?=$rating->dislikes?></span>
             <div class="clear"></div>
             
             <div class="actions">
