@@ -5,7 +5,7 @@
 ### This script contains the site config settings
 
 
-define ('LIVE', true);
+define ('LIVE', false);
 define ('DB_HOST', 'localhost');
 define ('DB_USER', 'root');
 define ('DB_PASS', 'Damian646');

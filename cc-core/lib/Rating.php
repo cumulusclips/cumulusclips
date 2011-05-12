@@ -4,7 +4,7 @@ class Rating {
 
     public $found;
     private $db;
-    protected static $table = 'rating';
+    protected static $table = 'ratings';
     protected static $id_name = 'rating_id';
 
 
@@ -148,7 +148,7 @@ class Rating {
      * has already rated video
      */
     static function AddRating ($rating, $video_id, $user_id) {
-        if (self::Exist (array ('video_id' => $video_id, 'user_id' => $user_id))) {
+        if (!self::Exist (array ('video_id' => $video_id, 'user_id' => $user_id))) {
             $rating = ($rating == '1') ? 1 : 0;
             $data = array ('video_id' => $video_id, 'user_id' => $user_id, 'rating' => $rating);
             self::Create ($data);
