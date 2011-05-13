@@ -6,25 +6,19 @@
 
 
 // Include required files
-include ($_SERVER['DOCUMENT_ROOT'] . '/config/bootstrap.php');
+include ('../config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 
 
 // Establish page variables, objects, arrays, etc
-header ("Content-Type: text/xml");
-$xml = '<?xml version="1.0" encoding="UTF-8"?>';
-$limit = 9000;
+$xml_header = '<?xml version="1.0" encoding="UTF-8"?>';
+$limit = 45000;
 
 
 
 ### Verify if page was provided
-if (!isset ($_GET['page'])) {
-    $db->Close();
-    header ("HTTP/1.0 404 Not Found");
-    header ("Location:" . HOST . '/notfound/');
-    exit();
-}
+if (!isset ($_GET['page'])) App::Throw404();
 
 
 
@@ -33,77 +27,79 @@ $query = "SELECT COUNT(video_id) FROM videos WHERE status = 6";
 $result = $db->Query ($query);
 $row = $db->FetchRow ($result);
 if ($row[0] > $limit) {
-    $iFileCount = ceil ($row[0]/$limit);
+    $file_count = ceil ($row[0]/$limit);
 } else {
-    $iFileCount = 1;
+    $file_count = 1;
 }
 
 
 
 ### Display content based on requested xml type
-if ($_GET['page'] == '') {
+if (empty ($_GET['page'])) {
 
-    $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    // Open sitemap index
+    $xml_root = '<sitemapindex></sitemapindex>';
+    $xml_frame = $xml_header . $xml_root;
+    $xml = new SimpleXMLElement ($xml_frame);
+    $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
-    // List video xml files
-    for ($x = 1; $x <= $iFileCount; $x++) {
-        $xml .= '<sitemap>';
-        $xml .= '<loc>' . HOST . '/video-sitemap-' . $x . '.xml</loc>';
-        $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-        $xml .= '</sitemap>';
+    // Add video xml files
+    for ($x = 1; $x <= $file_count; $x++) {
+        $sitemap = $xml->addChild ('sitemap');
+        $sitemap->addChild ('loc', HOST . '/video-sitemap-' . $x . '.xml');
+        $sitemap->addChild ('lastmod', date ('Y-m-d'));
     }
 
-    $xml .= '</sitemapindex>';
 
-} elseif (is_numeric ($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $iFileCount) {
+} elseif (is_numeric ($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $file_count) {
 
     $page = $_GET['page'];
-    $iStart = ($page*$limit)-$limit;
-    $sAddOn = ($page > 1) ? " LIMIT $iStart, $limit" : " LIMIT $limit";
-
-    $query = "SELECT video_id, cat_name FROM videos INNER JOIN categories ON videos.cat_id = categories.cat_id WHERE status = 6" . $sAddOn;
+    $start = ($page*$limit)-$limit;
+    $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
+    $query = "SELECT video_id, cat_name FROM videos INNER JOIN categories ON videos.cat_id = categories.cat_id WHERE status = 6" . $query_limit;
     $result = $db->Query ($query);
-    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
 
-    while ($row = $db->FetchAssoc ($result)) {
+    // Open video sitemap
+    $namespace = ' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
+    $namespace .= ' xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"';
 
-        $video = new Video ($row['video_id'], $db);
-        $rating = new Rating ($row['video_id'], $db);
+    $xml_root = '<urlset' . $namespace . '></urlset>';
+    $xml_frame = $xml_header . $xml_root;
+    $xml = new SimpleXMLElement ($xml_frame);
 
-        $xml .= '<url>';
-            $xml .= '<loc>' . HOST . '/videos/' . $video->video_id . '/' . $video->dashed . '/</loc>';
-            $xml .= '<video:video>';
-                $xml .= '<video:content_loc>' . $config->flv_bucket_url . '/' . $video->filename . '.flv</video:content_loc>';
-                $xml .= '<video:thumbnail_loc>' . $config->thumb_bucket_url . '/' . $video->filename . '.jpg</video:thumbnail_loc>';
-                $xml .= '<video:title>' . Functions::CutOff ($video->title,90) . '</video:title>';
-                $xml .= '<video:description>' . Functions::CutOff ($video->description,2040) . '</video:description>';
-                $xml .= '<video:rating>' . $rating->GetRating() . '.0</video:rating>';
-                $xml .= '<video:view_count>' . $video->views . '</video:view_count>';
-                $date = new DateTime ($video->date_uploaded);
-                $xml .= '<video:publication_date>' . $date->format('Y-m-d') . '</video:publication_date>';
+    // Add video entries
+    while ($row = $db->FetchObj ($result)) {
 
-                foreach ($video->tags as $value) {
-                    $xml .= '<video:tag>' . $value . '</video:tag>';
-                }
+        $video = new Video ($row->video_id);
+        $url = $xml->addChild ('url');
 
-                $xml .= '<video:category>' . $row['cat_name'] . '</video:category>';
-                $xml .= '<video:family_friendly>yes</video:family_friendly>';
-                $xml .= '<video:duration>' . DurationInSeconds ($video->duration) . '</video:duration>';
-            $xml .= '</video:video>';
-        $xml .= '</url>';
+        $url->addChild ('loc', HOST . '/videos/' . $video->video_id . '/' . $video->slug . '/');
+        $block = $url->addChild ('video:video','','video');
+
+        $block->addChild ('content_loc', $config->flv_bucket_url . '/' . $video->filename);
+        $block->addChild ('thumbnail_loc', $config->thumb_bucket_url . '/' . $video->filename);
+        $block->addChild ('title', Functions::CutOff ($video->title,90));
+        $block->addChild ('description', Functions::CutOff ($video->description,2040));
+        $block->addChild ('rating', Rating::GetFiveScaleRating ($row->video_id));
+        $block->addChild ('view_count', $video->views);
+        $block->addChild ('publication_date', date ('Y-m-d', strtotime ($video->date_created)));
+
+        foreach ($video->tags as $_value) {
+            $block->addChild ('tag', $_value);
+        }
+
+        $block->addChild ('category', $row->cat_name);
+        $block->addChild ('family_friendly', 'yes');
+        $block->addChild ('duration', Functions::DurationInSeconds ($video->duration));
 
     }
 
-    $xml .= '</urlset>';
-
 } else {
-    $db->Close();
-    header ("HTTP/1.0 404 Not Found");
-    header ("Location:" . HOST . '/notfound/');
-    exit();
+    App::Throw404();
 }
 
 // Output XML
-echo $xml;
+header ("Content-type: text/xml");
+echo $xml->asXML();
 
 ?>

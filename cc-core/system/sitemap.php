@@ -6,16 +6,14 @@
 
 
 // Include required files
-include ($_SERVER['DOCUMENT_ROOT'] . '/config/bootstrap.php');
+include ('../config/bootstrap.php');
 App::LoadClass ('Video');
-App::LoadClass ('Login');
 
 
 // Establish page variables, objects, arrays, etc
-header ("Content-Type: text/xml");
-$xml = '<?xml version="1.0" encoding="UTF-8"?>';
-$allowed_types = array ('index', 'main', 'channels', 'videos');
-$type = NULL;
+$xml_header = '<?xml version="1.0" encoding="UTF-8"?>';
+$allowed_types = array ('index', 'main', 'members', 'videos');
+$type = null;
 $limit = 9000;
 
 
@@ -23,41 +21,40 @@ $limit = 9000;
 ### Verify if type was provided
 if (isset ($_GET['type']) && in_array ($_GET['type'], $allowed_types)) {
     $type = $_GET['type'];
+} else {
+    App::Throw404();
 }
 
 
 
 ### Verify if page was provided
-if (!isset ($_GET['page'])) {
-    $db->Close();
-    header ("HTTP/1.0 404 Not Found");
-    header ("Location:" . HOST . '/notfound/');
-    exit();
-}
+if (!isset ($_GET['page'])) App::Throw404();
 
 
 
-### Count number of channel xml files
+### Count number of member xml/sitemap files
 $query = "SELECT COUNT(user_id) FROM users WHERE account_status = 'Active'";
 $result = $db->Query ($query);
 $row = $db->FetchRow($result);
 if ($row[0] > $limit) {
-    $iChannelFileCount = ceil ($row[0]/$limit);
+    $member_file_count = ceil ($row[0]/$limit);
 } else {
-    $iChannelFileCount = 1;
+    $member_file_count = 1;
 }
 
 
 
-### Count number of video xml files
+### Count number of video xml/sitemap files
 $query = "SELECT COUNT(video_id) FROM videos WHERE status = 6";
 $result = $db->Query ($query);
 $row = $db->FetchRow ($result);
 if ($row[0] > $limit) {
-    $iVideoFileCount = ceil ($row[0]/$limit);
+    $video_file_count = ceil ($row[0]/$limit);
 } else {
-    $iVideoFileCount = 1;
+    $video_file_count = 1;
 }
+
+
 
 
 
@@ -66,185 +63,158 @@ switch ($type) {
 
     case 'index':
 
-        if ($_GET['page'] != '') {
-            $db->Close();
-            header ("HTTP/1.0 404 Not Found");
-            header ("Location:" . HOST . '/notfound/');
-            exit();
+        if (!empty ($_GET['page'])) App::Throw404();
+
+        // Open xml sitemap index
+        $xml_root = '<sitemapindex></sitemapindex>';
+        $xml_frame = $xml_header . $xml_root;
+        $xml = new SimpleXMLElement ($xml_frame);
+        $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+        // Add main xml document
+        $sitemap = $xml->addChild ('sitemap');
+        $sitemap->addChild ('loc', HOST . '/sitemap-main.xml');
+        $sitemap->addChild ('lastmod', date ('Y-m-d'));
+
+        // Add member xml documents
+        for ($x = 1; $x <= $member_file_count; $x++) {
+            $loc = ($x == 1) ? HOST . '/sitemap-members.xml' : HOST . '/sitemap-members-' . $x . '.xml';
+            $sitemap = $xml->addChild ('sitemap');
+            $sitemap->addChild ('loc', $loc);
+            $sitemap->addChild ('lastmod', date ('Y-m-d'));
         }
 
-        $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        $xml .= '<sitemap>';
-        $xml .= '<loc>' . HOST . '/sitemap-main.xml</loc>';
-        $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-        $xml .= '</sitemap>';
-
-        // List channel xml files
-        for ($x = 1; $x <= $iChannelFileCount; $x++) {
-            $loc = ($x == 1) ? HOST . '/sitemap-channels.xml' : HOST . '/sitemap-channels-' . $x . '.xml';
-            $xml .= '<sitemap>';
-            $xml .= '<loc>' . $loc . '</loc>';
-            $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-            $xml .= '</sitemap>';
-        }
-
-        // List video xml files
-        for ($x = 1; $x <= $iVideoFileCount; $x++) {
+        // Add video xml documents
+        for ($x = 1; $x <= $video_file_count; $x++) {
             $loc = ($x == 1) ? HOST . '/sitemap-videos.xml' : HOST . '/sitemap-videos-' . $x . '.xml';
-            $xml .= '<sitemap>';
-            $xml .= '<loc>' . $loc . '</loc>';
-            $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-            $xml .= '</sitemap>';
+            $sitemap = $xml->addChild ('sitemap');
+            $sitemap->addChild ('loc', $loc);
+            $sitemap->addChild ('lastmod', date ('Y-m-d'));
         }
-
-        $xml .= '</sitemapindex>';
         break;
+
+
+
 
     case 'main':
 
-        if ($_GET['page'] != '') {
-            $db->Close();
-            header ("HTTP/1.0 404 Not Found");
-            header ("Location:" . HOST . '/notfound/');
-            exit();
-        }
+        if (!empty ($_GET['page'])) App::Throw404();
+        
+        // Open main xml document
+        $xml_root = '<urlset></urlset>';
+        $xml_frame = $xml_header . $xml_root;
+        $xml = new SimpleXMLElement ($xml_frame);
+        $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');     
 
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>weekly</changefreq>';
-              $xml .= '<priority>1.0</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/videos/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>daily</changefreq>';
-              $xml .= '<priority>0.9</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/channels/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>daily</changefreq>';
-              $xml .= '<priority>0.9</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/about/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>monthly</changefreq>';
-              $xml .= '<priority>0.7</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/contact/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>monthly</changefreq>';
-              $xml .= '<priority>0.7</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/terms/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>yearly</changefreq>';
-              $xml .= '<priority>0.5</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/privacy/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>yearly</changefreq>';
-              $xml .= '<priority>0.5</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/copyright/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>yearly</changefreq>';
-              $xml .= '<priority>0.5</priority>';
-           $xml .= '</url>';
-            $xml .= '<url>';
-              $xml .= '<loc>' . HOST . '/advertising/</loc>';
-              $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-              $xml .= '<changefreq>monthly</changefreq>';
-              $xml .= '<priority>0.7</priority>';
-           $xml .= '</url>';
-       $xml .= '</urlset>';
+        // Add site root '/'
+        $url = $xml->addChild ('url');
+        $url->addChild ('loc', HOST . '/');
+        $url->addChild ('lastmod', date ('Y-m-d'));
+        $url->addChild ('changefreq', 'weekly');
+        $url->addChild ('priority', '1.0');
+
+        // Add videos page '/videos/'
+        $url = $xml->addChild ('url');
+        $url->addChild ('loc', HOST . '/videos/');
+        $url->addChild ('lastmod', date ('Y-m-d'));
+        $url->addChild ('changefreq', 'daily');
+        $url->addChild ('priority', '0.9');
+
+        // Add members page '/members/'
+        $url = $xml->addChild ('url');
+        $url->addChild ('loc', HOST . '/members/');
+        $url->addChild ('lastmod', date ('Y-m-d'));
+        $url->addChild ('changefreq', 'daily');
+        $url->addChild ('priority', '0.9');
+
+        // Add contact page '/contact/'
+        $url = $xml->addChild ('url');
+        $url->addChild ('loc', HOST . '/members/');
+        $url->addChild ('lastmod', date ('Y-m-d'));
+        $url->addChild ('changefreq', 'monthly');
+        $url->addChild ('priority', '0.7');
         break;
 
 
-    case 'channels':
+
+
+    case 'members':
 
         // Verify if page number was provided
-        if ($_GET['page'] != '') {  // sitemap-channels-[0-9].xml
-            if (is_numeric ($_GET['page']) && $_GET['page'] > 1 && $_GET['page'] <= $iChannelFileCount) {
+        if ($_GET['page'] != '') {  // sitemap-members-[0-9].xml
+            if (is_numeric ($_GET['page']) && $_GET['page'] >= 1 && $_GET['page'] <= $member_file_count) {
                 $page = trim ($_GET['page']);
             } else {
-                $db->Close();
-                header ("HTTP/1.0 404 Not Found");
-                header ("Location:" . HOST . '/notfound/');
-                exit();
+                App::Throw404();
             }
-        } else {    // sitemap-channels.xml
+        } else {    // sitemap-members.xml
             $page = 1;
         }
-        $iStart = ($page*$limit)-$limit;
-        $sAddOn = ($page > 1) ? " LIMIT $iStart, $limit" : " LIMIT $limit";
-        
-        $query = "SELECT user_id, username FROM users WHERE account_status = 'Active'" . $sAddOn;
+
+        // Retrive members to display on this sitemap
+        $start = ($page*$limit)-$limit;
+        $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
+        $query = "SELECT username FROM users WHERE account_status = 'Active'" . $query_limit;
         $result = $db->Query ($query);
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        while ($row = $db->FetchRow ($result)) {
-            $xml .= '<url>';
-            $xml .= '<loc>' . HOST . '/channels/' . $row[1] . '/</loc>';
-            $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-            $xml .= '<changefreq>weekly</changefreq>';
-            $xml .= '<priority>0.8</priority>';
-            $xml .= '</url>';
+
+        // Open member xml document
+        $xml_root = '<urlset></urlset>';
+        $xml_frame = $xml_header . $xml_root;
+        $xml = new SimpleXMLElement ($xml_frame);
+        $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+        // Add member profile pages
+        while ($row = $db->FetchObj ($result)) {
+            $url = $xml->addChild ('url');
+            $url->addChild ('loc', HOST . '/members/' . $row->username . '/');
+            $url->addChild ('lastmod', date ('Y-m-d'));
+            $url->addChild ('changefreq', 'weekly');
+            $url->addChild ('priority', '0.8');
         }
-        $xml .= '</urlset>';
         break;
+
+
 
 
     case 'videos':
 
         // Verify if page number was provided
         if ($_GET['page'] != '') {  // sitemap-videos-[0-9].xml
-            if (is_numeric ($_GET['page']) && $_GET['page'] > 1 && $_GET['page'] <= $iVideoFileCount) {
+            if (is_numeric ($_GET['page']) && $_GET['page'] > 1 && $_GET['page'] <= $video_file_count) {
                 $page = trim ($_GET['page']);
             } else {
-                $db->Close();
-                header ("HTTP/1.0 404 Not Found");
-                header ("Location:" . HOST . '/notfound/');
-                exit();
+                App::Throw404();
             }
         } else {    // sitemap-videos.xml
             $page = 1;
         }
-        $iStart = ($page*$limit)-$limit;
-        $sAddOn = ($page > 1) ? " LIMIT $iStart, $limit" : " LIMIT $limit";
 
-        $query = "SELECT video_id FROM videos WHERE status = 6" . $sAddOn;
+        // Retrive videos to display on this sitemap
+        $start = ($page*$limit)-$limit;
+        $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
+        $query = "SELECT video_id FROM videos WHERE status = 6" . $query_limit;
         $result = $db->Query ($query);
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        while ($row = $db->FetchRow ($result)) {
-            $video = new Video ($row[0], $db);
-            $xml .= '<url>';
-            $xml .= '<loc>' . HOST . '/videos/' . $video->video_id . '/' . $video->dashed . '/</loc>';
-            $xml .= '<lastmod>' . date ('Y-m-d') . '</lastmod>';
-            $xml .= '<changefreq>weekly</changefreq>';
-            $xml .= '<priority>1.0</priority>';
-            $xml .= '</url>';
+
+        // Open video xml document
+        $xml_root = '<urlset></urlset>';
+        $xml_frame = $xml_header . $xml_root;
+        $xml = new SimpleXMLElement ($xml_frame);
+        $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+        // Add video pages
+        while ($row = $db->FetchObj ($result)) {
+            $video = new Video ($row->video_id);
+            $url = $xml->addChild ('url');
+            $url->addChild ('loc', HOST . '/videos/' . $video->video_id . '/' . $video->dashed . '/');
+            $url->addChild ('lastmod', date ('Y-m-d'));
+            $url->addChild ('changefreq', 'weekly');
+            $url->addChild ('priority', '1.0');
         }
-        $xml .= '</urlset>';
-        break;
-
-
-    default:
-
-        $db->Close();
-        header ("HTTP/1.0 404 Not Found");
-        header ("Location:" . HOST . '/notfound/');
-        exit();
         break;
 
 }
 
-echo $xml;
+header ("Content-type: text/xml");
+echo $xml->asXML();
 
 ?>

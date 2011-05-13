@@ -4,6 +4,7 @@ RewriteEngine on
 ### Add trailing slash
 
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !\.[a-z0-9]{2,4}$
 RewriteCond %{REQUEST_URI} !/$
 RewriteRule (.*)$ /$1/ [R=301,L]
 
@@ -86,8 +87,8 @@ RewriteRule ^p/c/([a-z0-9]+)/$ /cc-content/player/flowplayer.config.php?video=$1
 ### Sitemaps & Feeds
 
 RewriteRule ^mrss/$ /cc-core/controllers/mrss.php [NC]
-RewriteRule ^sitemap-([a-z]+)(-([0-9]+))?\.xml$ /cc-core/controllers/sitemap.php?type=$1&page=$3 [NC]
-RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ /cc-core/controllers/video_sitemap.php?page=$2 [NC]
+RewriteRule ^sitemap-(index|main|members|videos)(-([0-9]+))?\.xml$ /cc-core/system/sitemap.php?type=$1&page=$3 [NC]
+RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ /cc-core/system/video_sitemap.php?page=$2 [NC]
 
 
 ### Management & Security

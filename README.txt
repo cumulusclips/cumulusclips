@@ -223,6 +223,31 @@ message_send.pre_render - /cc-core/controllers/myaccount/message_send.php
 
 [POSSIBLE HOOKS]
 
-Opt out
-contact form
+404
+system error
+opt out
+contact
+pagination
+	load
+	output
 search
+play
+	load video
+	load suggestions
+	load comments
+profile
+	load member
+	load recent videos
+	load recent updates
+
+
+register
+login
+logout
+activate
+flag
+rate
+comment
+post update
+favorite
+subscribe
