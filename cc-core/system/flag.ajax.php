@@ -1,8 +1,5 @@
 <?php
 
-//echo print_r ($_POST,true);
-//exit();
-
 ### Created on March 15, 2009
 ### Created by Miguel A. Hurtado
 ### This script performs all the user actions for a video via AJAX
@@ -14,17 +11,19 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Flag');
 App::LoadClass ('Comment');
+Plugin::Trigger ('flag.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
+Plugin::Trigger ('flag.ajax.login_check');
 
 
 
 // Verify valid ID was provided
 if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
-if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'comment')))  App::Throw404();
+if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'member', 'comment')))  App::Throw404();
 
 
 
@@ -57,6 +56,7 @@ switch ($_POST['type']) {
         $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
+            Plugin::Trigger ('flag.ajax.flag_video');
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
             exit();
         } else {
@@ -93,6 +93,7 @@ switch ($_POST['type']) {
         $data = array ('type' => 'user', 'id' => $video->video_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
+            Plugin::Trigger ('flag.ajax.flag_member');
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
             exit();
         } else {
@@ -131,9 +132,10 @@ switch ($_POST['type']) {
 
 
         // Create Flag if one doesn't exist
-        $data = array ('flag_type' => 'video-comment', 'id' => $comment_id, 'user_id' => $user->user_id);
+        $data = array ('flag_type' => 'comment', 'id' => $comment_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
+            Plugin::Trigger ('flag.ajax.flag_comment');
             echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this comment. We will look into it immediately.'));
             exit();
         } else {

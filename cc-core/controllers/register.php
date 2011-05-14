@@ -11,11 +11,11 @@ App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
 App::LoadClass ('Recaptcha');
 View::InitView();
-Plugin::Trigger ('register.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('register');
+Plugin::Trigger ('register.start');
 View::$vars->logged_in = User::LoginCheck() ? header (HOST . '/myaccount/') : '';
 View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
 $privatekey = '6LeEaQUAAAAAAICeLh_I2dI0unaUm3JtMq6tdEZm';
@@ -104,6 +104,7 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->Errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
+        Plugin::Trigger ('register.before_create');
         User::Create (View::$vars->data);
         View::$vars->success = Language::GetText('success_registered');
 
@@ -114,6 +115,7 @@ if (isset ($_POST['submitted'])) {
         );
         $template->Replace ($Msg);
         $template->Send (View::$vars->data['email']);
+        Plugin::Trigger ('register.create');
 
     } else {
         View::$vars->error_msg = Language::GetText('errors_below');
@@ -127,7 +129,7 @@ if (isset ($_POST['submitted'])) {
 View::AddMeta ('register:host', HOST);
 View::AddMeta ('register:theme', THEME);
 View::AddJs ('username.js');
-Plugin::Trigger ('register.pre_render');
+Plugin::Trigger ('register.before_render');
 View::Render ('register.tpl');
 
 ?>

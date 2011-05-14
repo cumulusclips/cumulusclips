@@ -10,11 +10,13 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Favorite');
+Plugin::Trigger ('favorite.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
+Plugin::Trigger ('favorite.ajax.login_check');
 
 
 
@@ -42,6 +44,7 @@ if ($user->user_id == $video->user_id) {
 $data = array ('user_id' => $user->user_id, 'video_id' => $video->video_id);
 if (!Favorite::Exist ($data)) {
     Favorite::Create ($data);
+    Plugin::Trigger ('favorite.ajax.favorite_video');
     echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_favorite_added')));
     exit();
 } else {

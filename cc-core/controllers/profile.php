@@ -13,12 +13,12 @@ App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
 App::LoadClass ('Flag');
 App::LoadClass ('Post');
-Plugin::Trigger ('profile.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('profile');
+Plugin::Trigger ('profile.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
 $success = NULL;
@@ -30,16 +30,17 @@ $post_count = 5;
 // Verify Member was supplied
 if (isset ($_GET['username'])) {
     $data = array ('username' => $_GET['username'], 'account_status' => 'Active');
-    $id = User::Exist ($data);
+    $user_id = User::Exist ($data);
 } else {
     App::Throw404();
 }
 
 
 // Verify Member exists
-if ($id) {
-    View::$vars->member = new User ($id);
+if ($user_id) {
+    View::$vars->member = new User ($user_id);
     View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('member' => View::$vars->member->username));
+    Plugin::Trigger ('profile.load_member');
 } else {
     App::Throw404();
 }
@@ -65,6 +66,7 @@ View::$vars->sub_count = $db->FetchRow ($result);
 
 ### Retrieve video list
 $query = "SELECT video_id FROM videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6 LIMIT 3";
+Plugin::Trigger ('profile.load_recent_videos');
 View::$vars->result_videos = $db->Query ($query);
 
 
@@ -77,6 +79,7 @@ View::$vars->member->Update ($data);
 
 ### Retrieve latest status updates
 $query = "SELECT post_id FROM posts WHERE user_id = " . View::$vars->member->user_id . "  ORDER BY post_id DESC LIMIT 0, $post_count";
+Plugin::Trigger ('profile.load_posts');
 $result_posts = $db->Query ($query);
 View::$vars->post_list = array();
 while ($row = $db->FetchObj ($result_posts)) {
@@ -87,7 +90,7 @@ while ($row = $db->FetchObj ($result_posts)) {
 // Output Page
 View::AddMeta ('baseURL', HOST);
 View::AddSidebarBlock ('recent_posts.tpl');
-Plugin::Trigger ('profile.pre_render');
+Plugin::Trigger ('profile.before_render');
 View::Render ('profile.tpl');
 
 ?>

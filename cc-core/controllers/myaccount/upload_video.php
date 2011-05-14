@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-Plugin::Trigger ('upload_video.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('upload_video');
+Plugin::Trigger ('upload_video.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 
@@ -49,7 +49,7 @@ View::AddJs ('swfobject.js');
 View::AddJs ('uploadify.plugin.js');
 View::AddJs ('uploadify.js');
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('upload_video.pre_render');
+Plugin::Trigger ('upload_video.before_render');
 View::Render ('myaccount/upload_video.tpl');
 
 ?>

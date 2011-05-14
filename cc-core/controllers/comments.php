@@ -11,12 +11,12 @@ App::LoadClass ('User');
 App::LoadClass ('Comment');
 App::LoadClass ('Pagination');
 App::LoadClass ('Video');
-Plugin::Trigger ('comments.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('comments');
+Plugin::Trigger ('comments.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
@@ -55,7 +55,7 @@ while ($row = $db->FetchObj ($result)) {
 
 
 // Output page
-Plugin::Trigger ('comments.pre_render');
+Plugin::Trigger ('comments.before_render');
 View::Render ('view_comments.tpl');
 
 ?>

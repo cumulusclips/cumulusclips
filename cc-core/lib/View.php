@@ -33,6 +33,7 @@ class View {
      * @return void Meta information is loaded into the options var.
      */
     static function LoadPage ($page) {
+        self::$options->page = $page;
         self::$vars->meta = Language::GetMeta ($page);
         Plugin::Trigger ('view.load_page');
     }

@@ -10,11 +10,11 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Pagination');
 View::InitView();
-Plugin::Trigger ('members.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('members');
+Plugin::Trigger ('members.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 12;
@@ -38,7 +38,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output Page
 View::SetLayout ('full.layout.tpl');
-Plugin::Trigger ('members.pre_render');
+Plugin::Trigger ('members.before_render');
 View::Render ('members.tpl');
 
 ?>

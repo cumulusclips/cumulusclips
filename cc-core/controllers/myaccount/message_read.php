@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
-Plugin::Trigger ('message_read.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('message_read');
+Plugin::Trigger ('message_read.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 
@@ -30,9 +30,9 @@ if (empty ($_GET['msg']) || !is_numeric ($_GET['msg'])) {
 ### Retrieve message information
 $message_id = trim ($_GET['msg']);
 $data = array ('recipient' => View::$vars->user->user_id, 'message_id' => $message_id);
-$id = Message::Exist ($data);
-if ($id) {
-    View::$vars->message = new Message ($id);
+$message_id = Message::Exist ($data);
+if ($message_id) {
+    View::$vars->message = new Message ($message_id);
     $data = array ('status' => 'read');
     View::$vars->message->Update ($data);
 } else {
@@ -42,7 +42,7 @@ if ($id) {
 
 // Outuput page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('message_read.pre_render');
+Plugin::Trigger ('message_read.before_render');
 View::Render ('myaccount/message_read.tpl');
 
 ?>

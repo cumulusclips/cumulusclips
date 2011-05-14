@@ -11,12 +11,12 @@ App::LoadClass ('User');
 App::LoadClass ('Rating');
 App::LoadClass ('Pagination');
 App::LoadClass ('Video');
-Plugin::Trigger ('member_videos.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('member_videos');
+Plugin::Trigger ('member_videos.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
@@ -60,7 +60,7 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output Page
-Plugin::Trigger ('member_videos.pre_render');
+Plugin::Trigger ('member_videos.before_render');
 View::Render ('member_videos.tpl');
 
 ?>

@@ -69,5 +69,6 @@ TODO's CHECKLIST
 // TODO Build plugin system
 // TODO Add 'View My Profile' link in my account / top nav
 // TODO Lockdown upload's directory with .htaccess rules
+// TODO Add table prefix to queries
 
 ?>

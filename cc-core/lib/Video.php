@@ -125,8 +125,8 @@ class Video {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
-        Plugin::Trigger ('video.update');
         $this->Get ($this->$id_name);
+        Plugin::Trigger ('video.update');
 
     }
     

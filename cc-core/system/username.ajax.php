@@ -8,12 +8,13 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
+Plugin::Trigger ('username.ajax.start');
 
 
 
 ### Check if username is in use
 if (!empty ($_POST['username']) && !ctype_space ($_POST['username']) && strlen ($_POST['username'] >= 4)) {
-    sleep (1);	// Just to show off the loading animation
+    sleep (1);
     if (User::Exist (array ('username' => $_POST['username']))) {
         echo 'FALSE';
     } else {

@@ -11,12 +11,12 @@ App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
-Plugin::Trigger ('message_send.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('message_send');
+Plugin::Trigger ('message_send.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->to = NULL;
@@ -46,14 +46,13 @@ if (isset ($_GET['username'])) {
 
     $message_id = trim ($_GET['msg']);
     $data = array ('message_id' => $message_id, 'recipient' => View::$vars->user->user_id);
-    $id = Message::Exist ($data);
-    if ($id) {
-
-        $original_message = new Message ($id);
+    $message_id = Message::Exist ($data);
+    if ($message_id) {
+        $original_message = new Message ($message_id);
         View::$vars->to = $original_message->username;
         View::$vars->subject = "Re: $original_message->subject";
         View::$vars->msg = "\n\n\n> " . View::$vars->to . " wrote: \n\n $original_message->message";
-
+        Plugin::Trigger ('message_send.load_original_message');
     }
 
 }
@@ -118,8 +117,8 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->Errors)) {
 
         $message['user_id'] = View::$vars->user->user_id;
+        Plugin::Trigger ('message_send.before_send_message');
         Message::Create ($message);
-        View::$vars->success = Language::GetText('success_message_sent');
         View::$vars->to = NULL;
         View::$vars->subject = NULL;
         View::$vars->msg = NULL;
@@ -136,6 +135,8 @@ if (isset ($_POST['submitted'])) {
             $template->Replace ($Msg);
             $template->Send ($recipient->email);
         }
+        View::$vars->success = Language::GetText('success_message_sent');
+        Plugin::Trigger ('message_send.send_message');
 
     } else {
         View::$vars->error_msg = Language::GetText('errors_below');
@@ -147,7 +148,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('message_send.pre_render');
+Plugin::Trigger ('message_send.before_render');
 View::Render ('myaccount/message_send.tpl');
 
 ?>

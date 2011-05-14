@@ -9,11 +9,11 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
-Plugin::Trigger ('activate.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('activate');
+Plugin::Trigger ('activate.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
 View::$vars->Error = NULL;
@@ -30,10 +30,11 @@ if (isset ($_GET['token'])) {
     if ($id) {
         $user = new User ($id);
         $user->Activate();
-        View::$vars->Success = true;
+        View::$vars->success = Language::GetText('activate_text_success', array ('link' => HOST . '/myaccount/'));
         User::Login ($user->username, $user->password);
+        Plugin::Trigger ('activate.activate');
     } else {
-        View::$vars->Error =true;
+        View::$vars->error_msg = Language::GetText('activate_text_error', array ('link' => HOST . '/login/forgot/'));
     }
 	
 } else {
@@ -42,7 +43,7 @@ if (isset ($_GET['token'])) {
 
 
 // Output Page
-Plugin::Trigger ('activate.pre_render');
+Plugin::Trigger ('activate.before_render');
 View::Render ('activate.tpl');
 
 ?>

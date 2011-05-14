@@ -8,12 +8,12 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-Plugin::Trigger ('upload_complete.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('upload_complete');
+Plugin::Trigger ('upload_complete.start');
 View::$vars->logged_in = User::LoginCheck (HOST  . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 
@@ -30,7 +30,7 @@ if (isset ($_SESSION['token'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('upload_complete.pre_render');
+Plugin::Trigger ('upload_complete.before_render');
 View::Render ('myaccount/upload_complete.tpl');
 
 ?>

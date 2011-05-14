@@ -9,6 +9,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Post');
+Plugin::Trigger ('post.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -32,6 +33,7 @@ if (isset ($_POST['submitted'])) {
 
         $data['post'] = htmlspecialchars (trim ($_POST['post']));
         $data['user_id'] = $user->user_id;
+        Plugin::Trigger ('post.ajax.before_post_update');
         $post_id = Post::Create ($data);
         $post = new Post ($post_id);
 
@@ -42,6 +44,7 @@ if (isset ($_POST['submitted'])) {
         $status_update = ob_get_contents();
         ob_end_clean();
 
+        Plugin::Trigger ('post.ajax.post_update');
         echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_status_updated'), 'other' => $status_update));
         exit();
 

@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-Plugin::Trigger ('upload.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('upload');
+Plugin::Trigger ('upload.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->categories = NULL;
@@ -77,8 +77,10 @@ if (isset ($_POST['submitted'])) {
         View::$vars->data['user_id'] = View::$vars->user->user_id;
         View::$vars->data['filename'] = Video::CreateFilename();
         View::$vars->data['status'] = 1;
+        Plugin::Trigger ('upload.before_create_video');
         $id = Video::Create (View::$vars->data);
         $_SESSION['token'] = md5 ($id . SECRET_KEY);
+        Plugin::Trigger ('upload.create_video');
         header ('Location: ' . HOST . '/myaccount/upload-video/');
         exit();
     } else {
@@ -90,7 +92,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('upload.pre_render');
+Plugin::Trigger ('upload.before_render');
 View::Render ('myaccount/upload.tpl');
 
 ?>

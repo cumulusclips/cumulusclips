@@ -118,8 +118,8 @@ class Rating {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
-        Plugin::Trigger ('rating.update');
         $this->Get ($this->$id_name);
+        Plugin::Trigger ('rating.update');
 
     }
 

@@ -10,11 +10,13 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
+Plugin::Trigger ('rate.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
+Plugin::Trigger ('rate.ajax.login_check');
 
 
 
@@ -55,9 +57,11 @@ if ($logged_in && $user->user_id == $video->user_id) {
 
 // Submit rating if none exists
 if (Rating::AddRating ($_POST['rating'], $video->video_id, $user_id)) {
+    Plugin::Trigger ('rate.ajax.rate_video');
     echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText ('success_rated'), 'other' => Rating::GetRating ($video->video_id)));
     exit();
 } else {
+    Plugin::Trigger ('rate.ajax.rate_video_duplicate');
     echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText ('error_rate_duplicate')));
     exit();
 }

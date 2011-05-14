@@ -10,15 +10,15 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Pagination');
-Plugin::Trigger ('message_inbox.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('message_inbox');
+Plugin::Trigger ('message_inbox.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
-$records_per_page = 9;
+$records_per_page = 20;
 $url = HOST . '/myaccount/message/inbox';
 View::$vars->success = NULL;
 
@@ -38,12 +38,14 @@ if (isset ($_POST['submitted'])) {
 
         foreach($_POST['delete'] as $value){
             $data = array ('recipient' => View::$vars->user->user_id, 'message_id' => $value);
-            $id = Message::Exist ($data);
-            if ($id) {
-                Message::Delete ($id);
+            $message_id = Message::Exist ($data);
+            if ($message_id) {
+                Message::Delete ($message_id);
+                Plugin::Trigger ('message_inbox.purge_single_message');
             }
         }
         View::$vars->success = Language::GetText('success_messages_purged');
+        Plugin::Trigger ('messsage_inbox.purge_all_messages');
 
     }
 
@@ -51,10 +53,11 @@ if (isset ($_POST['submitted'])) {
 } elseif (isset ($_GET['delete']) && is_numeric ($_GET['delete']) && $_GET['delete'] > 0) {
 
     $data = array ('recipient' => View::$vars->user->user_id, 'message_id' => $_GET['delete']);
-    $id = Message::Exist ($data);
-    if ($id) {
-        Message::Delete ($id);
+    $message_id = Message::Exist ($data);
+    if ($message_id) {
+        Message::Delete ($message_id);
         View::$vars->success = Language::GetText('success_messages_purged');
+        Plugin::Trigger ('message_inbox.delete_message');
     }
 
 }
@@ -83,7 +86,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('message_inbox.pre_render');
+Plugin::Trigger ('message_inbox.before_render');
 View::Render ('myaccount/message_inbox.tpl');
 
 ?>

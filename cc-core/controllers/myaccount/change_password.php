@@ -8,12 +8,12 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-Plugin::Trigger ('change_password.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('change_password');
+Plugin::Trigger ('change_password.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
@@ -56,6 +56,7 @@ if ((isset ($_POST['submitted']))) {
             $data = array ('password' => $password);
             View::$vars->user->Update ($data);
             View::$vars->success = Language::GetText('success_password_updated');
+            Plugin::Trigger ('change_password.change_password');
         } else {
             View::$vars->Errors['match'] = TRUE;
             View::$vars->error_msg = Language::GetText('error_password_match');
@@ -71,7 +72,7 @@ if ((isset ($_POST['submitted']))) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('change_password.pre_render');
+Plugin::Trigger ('change_password.before_render');
 View::Render ('myaccount/change_password.tpl');
 
 ?>

@@ -8,12 +8,12 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-Plugin::Trigger ('myaccount.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('myaccount');
+Plugin::Trigger ('myaccount.start');
 View::$vars->logged_in = User::LoginCheck(HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->new_messages = NULL;
@@ -32,7 +32,7 @@ if ($db->Count($result) > 0) {
 // Output Page
 View::AddMeta ('baseURL', HOST);
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('myaccount.pre_render');
+Plugin::Trigger ('myaccount.before_render');
 View::Render ('myaccount/myaccount.tpl');
 
 ?>

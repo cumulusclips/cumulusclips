@@ -12,12 +12,12 @@ App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
 App::LoadClass ('Favorite');
-Plugin::Trigger ('myfavorites.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('myfavorites');
+Plugin::Trigger ('myfavorites.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
@@ -39,6 +39,7 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid']) && $_GET['vid'] != 0) {
     if ($id) {
         Favorite::Delete ($id);
         View::$vars->success = Language::GetText('success_favorite_removed');
+        Plugin::Trigger ('myfavorites.remove_favorite');
     }
 
 }
@@ -60,7 +61,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('myfavorites.pre_render');
+Plugin::Trigger ('myfavorites.before_render');
 View::Render ('myaccount/myfavorites.tpl');
 
 ?>

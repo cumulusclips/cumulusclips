@@ -9,18 +9,18 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
-Plugin::Trigger ('system_error.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('system_error');
+Plugin::Trigger ('system_error.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
 
 
 
 // Output Page
-Plugin::Trigger ('system_error.pre_render');
+Plugin::Trigger ('system_error.before_render');
 View::Render ('system_error.tpl');
 
 ?>

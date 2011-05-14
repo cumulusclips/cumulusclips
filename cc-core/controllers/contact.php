@@ -9,12 +9,12 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Recaptcha');
-Plugin::Trigger ('contact.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('contact');
+Plugin::Trigger ('contact.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
@@ -78,12 +78,13 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->Errors)) {
 
         $to = MAIN_EMAIL;
-        $subject = 'Message received From TechieVideos.com';
+        $subject = 'Message received From {SITENAME}';
         $headers = 'From: Admin - TechieVideos.com <admin@techievideos.com>';
         $Msg = "Name: " . View::$vars->name . "\n";
         $Msg .= "E-mail: " . View::$vars->email . "\n\n";
         $Msg .= "Message:\n" . View::$vars->message;
 
+        Plugin::Trigger ('contact.send');
         @mail ($to, $subject, $Msg, $headers);
         View::$vars->success = Language::GetText('success_contact_sent');
 
@@ -96,7 +97,7 @@ if (isset ($_POST['submitted'])) {
 
 
 // Output Page
-Plugin::Trigger ('contact.pre_render');
+Plugin::Trigger ('contact.before_render');
 View::Render ('contact.tpl');
 
 ?>

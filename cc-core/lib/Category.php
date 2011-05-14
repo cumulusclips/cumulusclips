@@ -118,8 +118,8 @@ class Category {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
-        Plugin::Trigger ('category.update');
         $this->Get ($this->$id_name);
+        Plugin::Trigger ('category.update');
 
     }
 

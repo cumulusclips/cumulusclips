@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
-Plugin::Trigger ('privacy_settings.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('privacy_settings');
+Plugin::Trigger ('privacy_settings.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->data = array();
 View::$vars->user = new User (View::$vars->logged_in);
@@ -67,6 +67,7 @@ if (isset ($_POST['submitted'])) {
     if (!View::$vars->errors) {
         View::$vars->privacy->Update (View::$vars->data);
         View::$vars->success = Language::GetText('success_privacy_updated');
+        Plugin::Trigger ('privacy_settings.update_privacy');
     } else {
         View::$vars->errors = Language::GetText('error_general');
     }
@@ -75,7 +76,7 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('privacy_settings.pre_render');
+Plugin::Trigger ('privacy_settings.before_render');
 View::Render ('myaccount/privacy_settings.tpl');
 
 ?>

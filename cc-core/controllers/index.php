@@ -11,11 +11,11 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 View::InitView();
-Plugin::Trigger ('index.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('index');
+Plugin::Trigger ('index.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
 
@@ -37,7 +37,7 @@ View::$vars->result_recent = $db->Query ($query);
 View::AddJs ('jcycle.plugin.js');
 View::AddJs ('slideshow.js');
 View::AddSidebarBlock ('home_login.tpl');
-Plugin::Trigger ('index.pre_render');
+Plugin::Trigger ('index.before_render');
 View::Render ('index.tpl');
 
 ?>

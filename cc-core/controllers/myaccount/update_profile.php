@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Picture');
-Plugin::Trigger ('update_profile.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('update_profile');
+Plugin::Trigger ('update_profile.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
@@ -84,8 +84,9 @@ if (isset ($_POST['submitted'])) {
 
     // Update User if no errors were found
     if (empty (View::$vars->Errors)) {
-        View::$vars->user->Update (View::$vars->data);
         View::$vars->success = Language::GetText('success_profile_updated');
+        View::$vars->user->Update (View::$vars->data);
+        Plugin::Trigger ('update_profile.update_profile');
     } else {
         View::$vars->error_msg = Language::GetText('errors_below');
         View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
@@ -94,15 +95,6 @@ if (isset ($_POST['submitted'])) {
 
 
 } // END Handle Profile form
-
-
-
-
-
-
-
-
-
 
 
 
@@ -169,8 +161,8 @@ if (isset ($_POST['submitted_picture'])) {
             $save_as = Picture::CreateFilename ($extension);
             Picture::SavePicture ($_FILES['upload']['tmp_name'], $extension, $save_as);
             View::$vars->user->Update (array ('picture' => $save_as));
-
             View::$vars->success = Language::GetText('success_picture_updated');
+            Plugin::Trigger ('update_profile.update_picture');
 
         } else {
             View::$vars->error_msg = $Errors;
@@ -194,12 +186,13 @@ if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
     Picture::Delete (View::$vars->user->picture);
     View::$vars->user->Update (array ('picture' => ''));
     View::$vars->success = Language::GetText('success_picture_reset');
+    Plugin::Trigger ('update_profile.picture_reset');
 }
 
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('update_profile.pre_render');
+Plugin::Trigger ('update_profile.before_render');
 View::Render ('myaccount/update_profile.tpl');
 
 ?>

@@ -9,11 +9,13 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Subscription');
+Plugin::Trigger ('subscribe.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
+Plugin::Trigger ('subscribe.ajax.login_check');
 
 
 // Verify passed values
@@ -50,6 +52,7 @@ switch ($_POST['type']) {
         $data = array ('member' => $member->user_id, 'user_id' => $user->user_id);
         if (!Subscription::Exist ($data)) {
             $subscribed = Subscription::Create ($data);
+            Plugin::Trigger ('subscribe.ajax.subscribe');
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_subscribed', array ('username' => $member->username))));
             exit();
         } else {
@@ -73,6 +76,7 @@ switch ($_POST['type']) {
         $subscription_id = Subscription::Exist (array ('user_id' => $user->user_id, 'member' => $member->user_id));
         if ($subscription_id) {
             Subscription::Delete ($subscription_id);
+            Plugin::Trigger ('subscribe.ajax.unsubscribe');
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed')));
             exit();
         } else {

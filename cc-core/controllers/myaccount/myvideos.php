@@ -11,12 +11,12 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
-Plugin::Trigger ('myvideos.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('myvideos');
+Plugin::Trigger ('myvideos.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
@@ -34,10 +34,11 @@ Handle Form if submitted
 if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
 
     $data = array ('user_id' => View::$vars->user->user_id, 'video_id' => $_GET['vid']);
-    $id = Video::Exist ($data);
-    if ($id) {
-        Video::Delete ($id);
+    $video_id = Video::Exist ($data);
+    if ($video_id) {
+        Video::Delete ($video_id);
         View::$vars->success = Language::GetText('success_video_deleted');
+        Plugin::Trigger ('myvideos.delete_video');
     }
 
 }
@@ -59,7 +60,7 @@ View::$vars->result = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('myvideos.pre_render');
+Plugin::Trigger ('myvideos.before_render');
 View::Render ('myaccount/myvideos.tpl');
 
 ?>

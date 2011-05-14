@@ -9,12 +9,12 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-Plugin::Trigger ('edit_video.start');
 View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('edit_video');
+Plugin::Trigger ('edit_video.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
@@ -88,6 +88,7 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->Errors)) {
         View::$vars->video->Update (View::$vars->data);
         View::$vars->success = Language::GetText('success_video_updated');
+        Plugin::Trigger ('edit_video.edit');
     } else {
         View::$vars->error_msg = Language::GetText('errors_below');
         View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
@@ -105,7 +106,7 @@ View::$vars->result_cat = $db->Query ($query);
 
 // Output page
 View::SetLayout ('portal.layout.tpl');
-Plugin::Trigger ('edit_video.pre_render');
+Plugin::Trigger ('edit_video.before_render');
 View::Render ('myaccount/edit_video.tpl');
 
 ?>

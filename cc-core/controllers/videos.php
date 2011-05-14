@@ -13,11 +13,11 @@ App::LoadClass ('Rating');
 App::LoadClass ('Category');
 App::LoadClass ('Pagination');
 View::InitView();
-Plugin::Trigger ('videos.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('videos');
+Plugin::Trigger ('videos.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $cat_exp = '^[A-Za-z0-9-]+$';
@@ -95,7 +95,7 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output Page
-Plugin::Trigger ('videos.pre_render');
+Plugin::Trigger ('videos.before_render');
 View::Render ('videos.tpl');
 
 ?>

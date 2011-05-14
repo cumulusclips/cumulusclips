@@ -10,11 +10,11 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
 View::InitView();
-Plugin::Trigger ('login.start');
 
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('login');
+Plugin::Trigger ('login.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
 View::$vars->username = NULL;
@@ -62,7 +62,9 @@ if (isset ($_POST['submitted_login'])) {
             if (isset ($_POST['remember']) && $_POST['remember'] == 'TRUE') {
                 setcookie ('username',View::$vars->username,time()+60*60*24*9999,'/','',0);
                 setcookie ('password',View::$vars->password,time()+60*60*24*9999,'/','',0);
+                Plugin::Trigger ('login.remember_me');
             }
+            Plugin::Trigger ('login.login');
             header ('Location: ' . HOST . '/myaccount/');
 
         } else {
@@ -95,10 +97,10 @@ if (isset ($_POST['submitted_forgot'])) {
     if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ($string,$_POST['email'])) {
 
         $data = array ('email' => $_POST['email']);
-        $id = User::Exist ($data);
-        if ($id) {
+        $user_id = User::Exist ($data);
+        if ($user_id) {
 
-            $user = new User ($id);
+            $user = new User ($user_id);
             $user->ResetPassword();
             View::$vars->message = Language::GetText('success_login_sent');
             View::$vars->message_type = 'success';
@@ -111,6 +113,7 @@ if (isset ($_POST['submitted_forgot'])) {
             $template = new EmailTemplate ('/forgot_password.htm');
             $template->Replace ($Msg);
             $template->Send ($user->email);
+            Plugin::Trigger ('login.password_reset');
 
         } else {
             View::$vars->message = Language::GetText('error_no_users_email');
@@ -126,7 +129,7 @@ if (isset ($_POST['submitted_forgot'])) {
 
 
 // Output Page
-Plugin::Trigger ('login.pre_render');
+Plugin::Trigger ('login.before_render');
 View::Render ('login.tpl');
 
 ?>

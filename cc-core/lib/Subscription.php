@@ -120,8 +120,8 @@ class Subscription {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
-        Plugin::Trigger ('subscription.update');
         $this->Get ($this->$id_name);
+        Plugin::Trigger ('subscription.update');
 
     }
 

@@ -128,8 +128,8 @@ class Comment {
         $id_name = self::$id_name;
         $query .= " WHERE $id_name = " . $this->$id_name;
         $this->db->Query ($query);
-        Plugin::Trigger ('comment.update');
         $this->Get ($this->$id_name);
+        Plugin::Trigger ('comment.update');
 
     }
 

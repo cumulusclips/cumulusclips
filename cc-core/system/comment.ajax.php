@@ -12,11 +12,13 @@ App::LoadClass ('Video');
 App::LoadClass ('Comment');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
+Plugin::Trigger ('comment.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
 $logged_in = User::LoginCheck();
 if ($logged_in) $user = new User ($logged_in);
+Plugin::Trigger ('comment.ajax.login_check');
 $Errors = array();
 $data = array();
 
@@ -92,6 +94,7 @@ if (isset ($_POST['submitted'])) {
 
         $data['video_id'] = $video->video_id;
         $data['status'] = 'approved';
+        Plugin::Trigger ('comment.ajax.before_post_comment');
         $comment_id = Comment::Create ($data);
         $comment = new Comment ($comment_id);
 
@@ -117,6 +120,7 @@ if (isset ($_POST['submitted'])) {
         $comment_block = ob_get_contents();
         ob_end_clean();
 
+        Plugin::Trigger ('comment.ajax.post_comment');
         echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_comment_posted'), 'other' => $comment_block));
         exit();
 
