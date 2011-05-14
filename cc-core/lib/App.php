@@ -10,7 +10,7 @@ class App {
         session_write_close();
         header ('HTTP/1.0 404 Not Found');
         $curl = curl_init();
-        curl_setopt ($curl, CURLOPT_URL, HOST . '/404.php');
+        curl_setopt ($curl, CURLOPT_URL, HOST . '/cc-core/controllers/server_404.php');
         curl_setopt ($curl, CURLOPT_COOKIE, 'PHPSESSID=' . session_id());
         curl_setopt ($curl, CURLOPT_TIMEOUT, 5);
         curl_setopt ($curl, CURLOPT_FOLLOWLOCATION, true);
