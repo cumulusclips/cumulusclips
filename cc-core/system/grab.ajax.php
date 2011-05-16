@@ -8,6 +8,7 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('YouTube');
+Plugin::Trigger ('grab.ajax.start');
 
 
 // Establish page variables, objects, arrays, etc
@@ -30,6 +31,7 @@ if (isset ($_POST['token'])) {
         $row = $db->FetchObj ($result);
         $video = new Video ($row->video_id);
         $filename = UPLOAD_PATH . '/temp/' . $video->filename . '.flv';
+        Plugin::Trigger ('grab.ajax.load_video');
     } else {
         header ('Location: ' . HOST . '/myaccount/upload/');
         exit();
@@ -53,7 +55,8 @@ if (!empty ($_POST['url']) && !ctype_space ($_POST['url'])) {
 
         // Retrieve video
         $url = trim ($_POST['url']);
-        $youtube = new YouTubeGrabber ($url);
+        $youtube = new YouTube ($url);
+        Plugin::Trigger ('grab.ajax.before_validate_video');
         if (!$youtube->ValidateUrl()) {
             echo 'invalidurl';
             exit();
@@ -77,6 +80,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Updating Video Information...') : 
 
 ### Update video info & execute downloading
 $data = array ('original_extension' => $youtube->GetBestQualityFormat(), 'status' => 3);
+Plugin::Trigger ('grab.ajax.before_update_video');
 $video->Update ($data);
 
 
@@ -88,7 +92,9 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Calling YouTube Downloader...') : 
 ### Initiate Converter
 $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
 $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/grab.php --video="' . $video->video_id . '" --url="' . urlencode ($url) . '" >> ' .  $cmd_output . ' &';
+Plugin::Trigger ('grab.ajax.before_grab');
 system ($converter_cmd);
+Plugin::Trigger ('grab.ajax.grab');
 
 
 

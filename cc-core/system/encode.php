@@ -13,11 +13,13 @@ App::LoadClass ('Video');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
+Plugin::Trigger ('encode.start');
 
 
 // Establish page variables, objects, arrays, etc
 preg_match ('/--video=(.*)$/i', $argv[1], $arg_matches);
 $video_id = $arg_matches[1];
+Plugin::Trigger ('encode.parse');
 
 
 
@@ -61,13 +63,13 @@ if (!$video->found) {
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Establishing variables...') : null;
 
 ### Retrieve video information
-$video = new Video ($video_id);
 $video->Update (array ('status' => 5));
 $debug_log = LOG . '/' . $video->filename . '.log';
 $raw_video = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->original_extension;
 $flv = UPLOAD_PATH . '/flv/' . $video->filename . '.flv';
 $mp4 = UPLOAD_PATH . '/mp4/' . $video->filename . '.mp4';
 $thumb = UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg';
+Plugin::Trigger ('encode.load_video');
 
 
 
@@ -117,6 +119,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\nPreparing for: FLV Encoding...")
 
 ### Encode raw video to FLV and MP4 for mobile site
 $flv_command = "$config->ffmpeg -i $raw_video -s 640x480 -ab 128k -b 1600k -f flv $flv >> $debug_log 2>&1";
+Plugin::Trigger ('encode.before_flv_encode');
 
 // Debug Log
 $log_msg = "==================================================================\n";
@@ -128,6 +131,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'FLV Encoding Command: ' . $flv_com
 App::Log ($debug_log, $log_msg);
 
 system ($flv_command);  // Execute FLV Encoding Command
+Plugin::Trigger ('encode.flv_encode');
 
 
 
@@ -161,6 +165,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\nPreparing for MP4 (Mobile) Encod
 
 ### Encode raw video to FLV and MP4 for mobile site
 $mp4_command = "$config->ffmpeg -i $raw_video -s 480x320 -f mp4 $mp4 >> $debug_log 2>&1";
+Plugin::Trigger ('encode.before_mp4_encode');
 
 // Debug Log
 $log_msg = "\n\n\n\n==================================================================\n";
@@ -172,6 +177,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'MP4 Encoding Command: ' . $mp4_com
 App::Log ($debug_log, $log_msg);
 
 system ($mp4_command);  // Execute MP4 Encoding Command
+Plugin::Trigger ('encode.mp4_encode');
 
 
 
@@ -206,6 +212,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\nRetrieving video duration...") :
 
 ### Retrieve duration of new flv file.
 $duration_cmd = "$config->ffmpeg -i $flv 2>&1 | grep Duration:";
+Plugin::Trigger ('encode.before_get_duration');
 exec ($duration_cmd, $duration_results);
 
 // Debug Log
@@ -228,6 +235,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "Duration in Seconds: $sec") : null
 $sec2 = $sec / 2;
 $sec2 = round ($sec2);
 $thumb_position = Functions::FormatSeconds ($sec2);
+Plugin::Trigger ('encode.get_duration');
 
 // Debug Log
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "Thumb Position: $thumb_position") : null;
@@ -251,6 +259,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\nPreparing to create video thumbn
 
 ### Create video thumbnail image
 $thumb_command = "$config->ffmpeg -i $flv -ss $thumb_position -t 00:00:01 -s 120x90 -r 1 -f mjpeg $thumb >> $debug_log 2>&1";
+Plugin::Trigger ('encode.before_create_thumbnail');
 
 // Debug Log
 $log_msg = "\n\n\n\n==================================================================\n";
@@ -262,6 +271,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "Thumbnail Creation Command: " . $t
 App::Log ($debug_log, $log_msg);
 
 system ($thumb_command);    // Execute Thumb Creation Command
+Plugin::Trigger ('encode.create_thumbnail');
 
 
 
@@ -297,7 +307,9 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\nUpdating video status...") : nul
 ### Update database with new video status information
 $data['duration'] = $duration[0];
 $data['status'] = 6;
+Plugin::Trigger ('encode.before_update');
 $video->Update ($data);
+Plugin::Trigger ('encode.update');
 
 
 
@@ -338,6 +350,7 @@ while ($opt = $db->FetchRow ($result_alert)) {
     }
 
 }
+Plugin::Trigger ('encode.notify_subscribers');
 
 
 
@@ -376,5 +389,6 @@ if (DEBUG_CONVERSION) {
         App::Alert ('Error During Video Encoding', $msg);
     }
 }
+Plugin::Trigger ('encode.complete');
 
 ?>

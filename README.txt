@@ -55,6 +55,14 @@ http://www.seomoz.org/learn-seo/meta-description
 
 [PLUGIN HOOK LOCATIONS]
 
+NOTES:
+- Before Updates occur right before query
+- Updates occur after update query at last possible location
+- Deletes / Removals occur after delete at last possible location
+- Before Additons occur right before query
+- Additions occur after create at last possible location
+
+
 ### AJAX & SYSTEM FILES
 
 app.start - /cc-core/config/bootstrap.php
@@ -95,6 +103,50 @@ subscribe.ajax.start - /cc-core/system/subscribe.ajax.php
 subscribe.ajax.login_check - /cc-core/system/subscribe.ajax.php
 subscribe.ajax.subscribe - /cc-core/system/subscribe.ajax.php
 subscribe.ajax.unsubscribe - /cc-core/system/subscribe.ajax.php
+
+
+upload.ajax.start - /cc-core/system/upload.ajax.php
+upload.ajax.load_video - /cc-core/system/upload.ajax.php
+upload.ajax.before_update_video_extension - /cc-core/system/upload.ajax.php
+upload.ajax.before_move_video - /cc-core/system/upload.ajax.php
+upload.ajax.before_change_permissions - /cc-core/system/upload.ajax.php
+upload.ajax.before_update_video_status - /cc-core/system/upload.ajax.php
+upload.ajax.before_encode - /cc-core/system/upload.ajax.php
+upload.ajax.encode - /cc-core/system/upload.ajax.php
+
+
+grab.ajax.start - /cc-core/system/grab.ajax.php
+grab.ajax.load_video - /cc-core/system/grab.ajax.php
+grab.ajax.before_validate_video - /cc-core/system/grab.ajax.php
+grab.ajax.before_update_video - /cc-core/system/grab.ajax.php
+grab.ajax.before_grab - /cc-core/system/grab.ajax.php
+grab.ajax.grab - /cc-core/system/grab.ajax.php
+
+
+grab.start - /cc-core/system/grab.php
+grab.parse - /cc-core/system/grab.php
+grab.load_video - /cc-core/system/grab.php
+grab.before_download - /cc-core/system/grab.php
+grab.download - /cc-core/system/grab.php
+grab.before_encode - /cc-core/system/grab.php
+grab.encode - /cc-core/system/grab.php
+
+
+encode.start - /cc-core/system/encode.php
+encode.parse - /cc-core/system/encode.php
+encode.load_video - /cc-core/system/encode.php
+encode.before_flv_encode - /cc-core/system/encode.php
+encode.flv_encode - /cc-core/system/encode.php
+encode.before_mp4_encode - /cc-core/system/encode.php
+encode.mp4_encode - /cc-core/system/encode.php
+encode.before_get_duration - /cc-core/system/encode.php
+encode.get_duration - /cc-core/system/encode.php
+encode.before_create_thumbnail - /cc-core/system/encode.php
+encode.create_thumbnail - /cc-core/system/encode.php
+encode.before_update - /cc-core/system/encode.php
+encode.update - /cc-core/system/encode.php
+encode.notify_subscribers - /cc-core/system/encode.php
+encode.complete - /cc-core/system/encode.php
 
 
 ### CLASS LIBRARY
@@ -357,31 +409,3 @@ message_send.before_render - /cc-core/controllers/myaccount/message_send.php
 message_send.load_original_message - /cc-core/controllers/myaccount/message_send.php
 message_send.before_send_message - /cc-core/controllers/myaccount/message_send.php
 message_send.send_message - /cc-core/controllers/myaccount/message_send.php
-
-
-
-
-
-[POSSIBLE HOOKS]
-
-NOTES:
-- Before Updates occur right before query
-- Updates occur after update query at last possible location
-- Deletes / Removals occur after delete at last possible location
-- Before Additons occur right before query
-- Additions occur after create at last possible location
-
-
-upload video
-    after upload
-    validate video
-    move to temp
-grab video
-    verify video
-    before download
-    after download
-encoding
-    before encode
-    after encode
-    before move
-    after move

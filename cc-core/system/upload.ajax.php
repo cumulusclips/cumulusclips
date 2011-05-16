@@ -7,6 +7,7 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('Video');
+Plugin::Trigger ('upload.ajax.start');
 
 
 // Debug Log
@@ -24,6 +25,7 @@ if (isset ($_POST['token'])) {
     if ($db->Count ($result) == 1) {
         $row = $db->FetchObj ($result);
         $video = new Video ($row->video_id);
+        Plugin::Trigger ('upload.ajax.load_video');
     } else {
         header ('Location: ' . HOST . '/myaccount/upload/');
         exit();
@@ -81,6 +83,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Validating video extension...') : 
 $extension = Functions::GetExtension ($_FILES['uploadify']['name']);
 if (in_array ($extension, $config->accepted_video_extensions)) {
     $data = array ('original_extension' => $extension);
+    Plugin::Trigger ('upload.ajax.before_update_video_extension');
     $video->Update ($data);
 } else {
     App::Alert ('Error During Processing', 'Invalid video extension. The id of the video is: ' . $video->video_id);
@@ -96,6 +99,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Moving video to temp directory...'
 
 ### Move video to site temp directory
 $target = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $extension;
+Plugin::Trigger ('upload.ajax.before_move_video');
 if (!@move_uploaded_file ($_FILES['uploadify']['tmp_name'], $target)) {
     App::Alert ('Error During Processing', 'The raw video file transfer failed. The id of the video is: ' . $video->video_id);
     echo 'error';
@@ -122,7 +126,9 @@ if (!file_exists ($target)) {
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Updating raw video file permissions...') : null;
 
 ### Change permissions on raw video file
-if (!chmod ($target, 0755)) {
+$permissions = 0755;
+Plugin::Trigger ('upload.ajax.before_change_permissions');
+if (!chmod ($target, $permissions)) {
     App::Alert ('Error During Processing', 'Could not change the permissions on the raw video file. The id of the video is: ' . $video->video_id);
     echo 'error';
     exit();
@@ -130,7 +136,9 @@ if (!chmod ($target, 0755)) {
 
 
 ### Update upload stutus & execute processing
-$video->Update (array ('status' => 4));
+$data = array ('status' => 4);
+Plugin::Trigger ('upload.ajax.before_update_video_status');
+$video->Update ($data);
 
 
 
@@ -141,8 +149,10 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Calling Upload Converter...') : ''
 ### Initiate Converter
 if (!LIVE) exit('success'); // Skip Conversion
 $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
+Plugin::Trigger ('upload.ajax.before_encode');
 $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
 system ($converter_cmd);
+Plugin::Trigger ('upload.ajax.encode');
 
 
 

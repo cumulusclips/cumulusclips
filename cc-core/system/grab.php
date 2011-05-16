@@ -12,6 +12,7 @@ include (dirname (dirname (dirname ( __FILE__ ))) . '/config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('YouTube');
 App::LoadClass ('Encoding');
+Plugin::Trigger ('grab.start');
 
 
 
@@ -20,6 +21,7 @@ preg_match ('/--video=(.*)$/i', $argv[1], $arg1_matches);
 preg_match ('/--url=(.*)$/i', $argv[2], $arg2_matches);
 $video_id = $arg1_matches[1];
 $youtube_url = urldecode($arg2_matches[1]);
+Plugin::Trigger ('grab.parse');
 
 
 
@@ -33,6 +35,7 @@ if (DEBUG_CONVERSION) {
 
 ### Validate proccessing video
 $video = new Video ($video_id);
+Plugin::Trigger ('grab.load_video');
 if (!$video->found) {
     $msg = "An invalid video was passed to the video downloader.";
     App::Alert ('Error During  YouTube Grab', $msg);
@@ -61,7 +64,6 @@ if ($video->status != 3) {
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Establishing variables...') : null;
 
 ### Retrieve video information
-$video = new Video ($video_id);
 $raw_video = UPLOAD_PATH . '/temp/' . $video->filename;
 
 
@@ -71,8 +73,10 @@ $raw_video = UPLOAD_PATH . '/temp/' . $video->filename;
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Downloading video...') : null;
 
 ### Download video from YouTube
-$youtube = new YouTubeGrabber ($youtube_url);
+$youtube = new YouTube ($youtube_url);
+Plugin::Trigger ('grab.before_download');
 $grab_results = $youtube->DownloadVideo ($raw_video);
+Plugin::Trigger ('grab.download');
 
 
 
@@ -90,7 +94,9 @@ if ($grab_results) {
     if (!LIVE) exit();  // Skip Transcoding
     $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
     $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/controllers/myaccount/upload_converter.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
+    Plugin::Trigger ('grab.before_encode');
     system ($converter_cmd);
+    Plugin::Trigger ('grab.encode');
 
 
 

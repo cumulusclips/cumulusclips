@@ -1,17 +1,6 @@
 <?php
 
-// Construct Method - Feed YouTube video page url
-// ValidateUrl Method - Is provided video valid and public?
-// GetBestQualityUrl Method - Retrieve highest quality video URL
-// GetBestQualityFormat Method - Retrieve highest quality video format
-// DownloadVideo Method - Download highest quality video
-// ListVideoUrls Method - Retrieve list of all available video URLs
-// ListVideoFormats Method - Retrieve list of all available video formats
-
-
-
-
-class YouTubeGrabber {
+class YouTube {
 
     // Object Properties
     private $video_page_url;
@@ -22,7 +11,6 @@ class YouTubeGrabber {
 
     // Constructor Method
     public function __construct ($video_page_url) {
-        // http://www.youtube.com/watch?v=PXsu4WaLHb8
         $this->video_page_url = $video_page_url;
         $this->video_page = $this->GetVideoPage();
         $this->video_locations = $this->GetVideoLocations();
@@ -30,13 +18,16 @@ class YouTubeGrabber {
 
 
 
-    // Get HTML Source code for provided YouTube video page URL
+    /**
+     * Get HTML source for provided YouTube video page URL
+     * @return string Returns the HTML for the video's play page
+     */
     private function GetVideoPage() {
 
         $ch = curl_init();
         curl_setopt ($ch, CURLOPT_URL, $this->video_page_url);
         curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
         $page = curl_exec ($ch);
         curl_close ($ch);
         return $page;
@@ -45,7 +36,10 @@ class YouTubeGrabber {
 
 
 
-   // Get video URL from YouTube video page HTML source code
+    /**
+     * Get video URLs from YouTube video page HTML source
+     * @return string Returns combined URL locations for videos of different formats
+     */
     private function GetVideoLocations() {
 
         // Video requires age verification
@@ -64,20 +58,20 @@ class YouTubeGrabber {
 
 
 
-    #################################################
-    /*            PUBLIC FUNCTIONS                 */
-    #################################################
-
-
-
-    // Validate provided video url
+    /**
+     * Validate video URLs were retrieved successfully
+     * @return boolean Returns true if valid video URLs were obtained, false otherwise
+     */
     public function ValidateUrl() {
-        return ($this->video_locations) ? TRUE : FALSE;
+        return ($this->video_locations) ? true : false;
     }
 
 
 
-    // Get highest quality video from the fmt_url_path
+    /**
+     * Get highest quality video from the various video formats
+     * @return string Returns URL to the best quality version of the current video
+     */
     public function GetBestQualityUrl() {
 
         $fmt_url_path = urldecode (str_replace ('%2C', ',', urldecode ($this->video_locations)));
@@ -88,7 +82,11 @@ class YouTubeGrabber {
 
 
 
-    // Get highest quality video format from the fmt_url_path
+    /**
+     * Get highest quality video format from the various video formats
+     * @return string Returns the extension (flv || mp4) to the best quality
+     * version of the current video
+     */
     public function GetBestQualityFormat() {
 
         $fmt_url_path = urldecode (str_replace ('%2C', ',', urldecode ($this->video_locations)));
@@ -108,7 +106,11 @@ class YouTubeGrabber {
     
  
 
-    // Download and Save the specified video
+    /**
+     * Download and save the current YouTube video
+     * @param string $save_as_filename System path to save dowloaded video to
+     * @return boolean Returns true if download was successful, false if download failed
+     */
     public function DownloadVideo ($save_as_filename) {
 
         $video_url = $this->GetBestQualityUrl();
@@ -120,16 +122,16 @@ class YouTubeGrabber {
 
         curl_setopt ($ch, CURLOPT_URL, $video_url);
         curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt ($ch, CURLOPT_FILE, $fp);
         curl_exec ($ch);
         curl_close ($ch);
         fclose ($fp);
 
         if (file_exists ($filename) && filesize($filename) > 0) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
 
     }
