@@ -1,3 +1,3 @@
-<h1>Techie Videos Admin</h1>
+<h1>Dashboard</h1>
 
-<div class="block"></div>
+<div></div>

@@ -12,9 +12,10 @@ class Pagination {
     private $end = null;
     public $page;
 
-    public function  __construct ($url, $total, $records_per_page) {
+    public function  __construct ($url, $total, $records_per_page, $seo_friendly_url = true) {
         global $config;
         $this->url = is_array ($url) ? $url[0] : $url;
+        $this->seo_friendly_url = $seo_friendly_url ? true : false;
         $this->query_string = is_array ($url) ? $url[1] : null;
         $this->total = $total;
         $this->records_per_page = $records_per_page;
@@ -96,7 +97,7 @@ class Pagination {
         // Display pages
         $links = '';
         for ($x = $start_range; $x <= $end_range; $x++) {
-            $links .= $this->page == $x ? '<li><strong>' . $x . '</strong></li>' : '<li><a href="' . $this->url . '/page/' . $x . '/' . $this->query_string . '">' . $x . '</a></li>';
+            $links .= $this->page == $x ? '<li><strong>' . $x . '</strong></li>' : '<li><a href="' . $this->BuildURL($x) . '">' . $x . '</a></li>';
         }
         return $links;
 
@@ -104,19 +105,23 @@ class Pagination {
 
     // Retrieve Previous link
     private function GetPrevious() {
-        return ($this->page != 1) ? '<li><a href="' . $this->url . '/page/' . ($this->page-1) . '/' . $this->query_string . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
+        return ($this->page != 1) ? '<li><a href="' . $this->BuildURL($this->page-1) . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
+//        return ($this->page != 1) ? '<li><a href="' . $this->url . '/page/' . ($this->page-1) . '/' . $this->query_string . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
     }
 
     // Retrieve Next link
     private function GetNext() {
-        return ($this->page != $this->page_count) ? '<li><a href="' . $this->url . '/page/' . ($this->page+1) . '/' . $this->query_string . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
+        return ($this->page != $this->page_count) ? '<li><a href="' . $this->BuildURL($this->page+1) . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
+//        return ($this->page != $this->page_count) ? '<li><a href="' . $this->url . '/page/' . ($this->page+1) . '/' . $this->query_string . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
     }
 
     // Retrieve First two series links
     private function GetFirst() {
         if (!$this->base) {
-            $first = '<li><a href="' . $this->url . '/page/1/' . $this->query_string . '">1</a></li>';
-            $first .= '<li><a href="' . $this->url . '/page/2/' . $this->query_string . '">2</a></li>';
+            $first = '<li><a href="' . $this->BuildURL(1) . '">1</a></li>';
+            $first .= '<li><a href="' . $this->BuildURL(2) . '">2</a></li>';
+//            $first = '<li><a href="' . $this->url . '/page/1/' . $this->query_string . '">1</a></li>';
+//            $first .= '<li><a href="' . $this->url . '/page/2/' . $this->query_string . '">2</a></li>';
             $first .= '<li>...</li>';
             return $first;
         } else {
@@ -128,8 +133,10 @@ class Pagination {
     private function GetLast() {
         if (!$this->end) {
             $last = '<li>...</li>';
-            $last .= '<li><a href="' . $this->url . '/page/' . ($this->page_count-1) . '/' . $this->query_string . '">' . ($this->page_count-1) . '</a></li>';
-            $last .= '<li><a href="' . $this->url . '/page/' . $this->page_count . '/' . $this->query_string . '">' . $this->page_count . '</a></li>';
+            $last .= '<li><a href="' . $this->BuildURL($this->page_count-1) . '">' . ($this->page_count-1) . '</a></li>';
+            $last .= '<li><a href="' . $this->BuildURL($this->page_count) . '">' . $this->page_count . '</a></li>';
+//            $last .= '<li><a href="' . $this->url . '/page/' . ($this->page_count-1) . '/' . $this->query_string . '">' . ($this->page_count-1) . '</a></li>';
+//            $last .= '<li><a href="' . $this->url . '/page/' . $this->page_count . '/' . $this->query_string . '">' . $this->page_count . '</a></li>';
             return $last;
         } else {
             return '';
@@ -139,6 +146,17 @@ class Pagination {
     // Retrieve Starting record
     public function GetStartRecord() {
         return ($this->page - 1) * $this->records_per_page;
+    }
+
+
+
+    public function BuildURL ($page = null) {
+        $page = (isset ($page)) ? $page : $this->GetPage();
+        if ($this->seo_friendly_url) {
+            return $this->url . '/page/' . $page . '/' . $this->query_string;
+        } else {
+            return $this->url . '?page=' . $page . $this->query_string;
+        }
     }
 
 }

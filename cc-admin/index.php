@@ -1,31 +1,24 @@
 <?php
 
-### Created on January 29, 2010
+### Created on February 28, 2009
 ### Created by Miguel A. Hurtado
-### This script displays the admin homepage
+### This script displays the site homepage
 
 
 // Include required files
-include ($_SERVER['DOCUMENT_ROOT'] . '/config/bootstrap.php');
-include (DOC_ROOT . '/includes/functions.php');
-App::LoadClass ('DBConnection.php');
-App::LoadClass ('KillApp.php');
-App::LoadClass ('Login.php');
-App::LoadClass ('User.php');
+include ('../cc-core/config/admin.bootstrap.php');
+App::LoadClass ('User');
 
 
 // Establish page variables, objects, arrays, etc
-session_start();
-$KillApp = new KillApp;
-$db = new DBConnection ($KillApp);
-$login = new Login ($db);
-$logged_in = $login->LoginCheck();
-if ($logged_in != 22) Throw404(); // Only allow TechieVideos user
-$user = new User ($logged_in, $db);
-$page_title = 'Admin Techie Videos';
-$content_file = 'admin/index.tpl';
+Plugin::Trigger ('admin.index.start');
+$logged_in = User::LoginCheck();
+if ($logged_in) $user = new User ($logged_in);
+$page_title = 'Admin Panel';
+$content = 'index.tpl';
 
 
-include (THEMES . '/layouts/admin.layout.tpl');
+// Output Page
+include (THEME_PATH . '/admin.layout.tpl');
 
 ?>
