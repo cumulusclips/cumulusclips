@@ -22,7 +22,7 @@ View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('
 
 
 // Check for unread messages
-$query = "SELECT message_id FROM messages WHERE recipient = " . View::$vars->user->user_id . " AND status = 'unread'";
+$query = "SELECT message_id FROM " . DB_PREFIX . "messages WHERE recipient = " . View::$vars->user->user_id . " AND status = 'unread'";
 $result = $db->Query ($query);
 if ($db->Count($result) > 0) {
     View::$vars->new_messages = '&nbsp;&nbsp;<strong>*(new messages)</strong>';

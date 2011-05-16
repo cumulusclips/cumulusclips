@@ -26,7 +26,7 @@ unset ($_SESSION['token']);
 
 
 ### Retrieve categories for drop down
-$query = "SELECT cat_id, cat_name FROM categories";
+$query = "SELECT cat_id, cat_name FROM " . DB_PREFIX . "categories";
 View::$vars->result_cat = $db->Query ($query);
 
 

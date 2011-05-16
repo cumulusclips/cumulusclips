@@ -71,7 +71,7 @@ Prepare page to run
 ******************/
 
 // Retrieve total count
-$query = "SELECT message_id FROM messages WHERE recipient = " . View::$vars->user->user_id;
+$query = "SELECT message_id FROM " . DB_PREFIX . "messages WHERE recipient = " . View::$vars->user->user_id;
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

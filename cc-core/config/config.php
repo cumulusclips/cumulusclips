@@ -10,6 +10,7 @@ define ('DB_HOST', 'localhost');
 define ('DB_USER', 'root');
 define ('DB_PASS', 'Damian646');
 define ('DB_NAME', 'cumulus');
+define ('DB_PREFIX', '');
 define ('SECRET_KEY', 'highly secretive key');
 define ('HOST', 'http://cumulus');
 define ('DOC_ROOT', dirname (dirname ( dirname ( __FILE__ ))));
@@ -66,9 +67,8 @@ $config->thumb_bucket = 'thumbs';
 TODO's CHECKLIST
 ****************/
 
-// TODO Build plugin system
+// TODO Build admin panel
 // TODO Add 'View My Profile' link in my account / top nav
 // TODO Lockdown upload's directory with .htaccess rules
-// TODO Add table prefix to queries
 
 ?>

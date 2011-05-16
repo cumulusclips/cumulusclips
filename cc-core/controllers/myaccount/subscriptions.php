@@ -49,7 +49,7 @@ Prepare page to run
 ******************/
 
 // Retrieve total count
-$query = "SELECT sub_id FROM subscriptions WHERE user_id = " . View::$vars->user->user_id;
+$query = "SELECT sub_id FROM " . DB_PREFIX . "subscriptions WHERE user_id = " . View::$vars->user->user_id;
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

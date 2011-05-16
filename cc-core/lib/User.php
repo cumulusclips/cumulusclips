@@ -32,7 +32,7 @@ class User {
      * @return void DB record's fields are loaded into object properties
      */
     private function Get ($id) {
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE ' . self::$id_name . "= $id";
+        $query = 'SELECT * FROM ' . DB_PREFIX . self::$table . ' WHERE ' . self::$id_name . "= $id";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchAssoc ($result);
         foreach ($row as $key => $value) {
@@ -58,7 +58,7 @@ class User {
     static function Exist ($data) {
 
         $db = Database::GetInstance();
-        $query = 'SELECT ' . self::$id_name . ' FROM ' . self::$table . ' WHERE';
+        $query = 'SELECT ' . self::$id_name . ' FROM ' . DB_PREFIX . self::$table . ' WHERE';
 
         foreach ($data as $key => $value) {
             $value = $db->Escape ($value);
@@ -88,7 +88,7 @@ class User {
 
         App::LoadClass ('Privacy');
         $db = Database::GetInstance();
-        $query = 'INSERT INTO ' . self::$table;
+        $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = '';
         $values = '';
 
@@ -119,7 +119,7 @@ class User {
     public function Update ($data) {
 
         Plugin::Trigger ('user.before_update');
-        $query = 'UPDATE ' . self::$table . " SET";
+        $query = 'UPDATE ' . DB_PREFIX . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
         }
@@ -157,16 +157,16 @@ class User {
 
 
         // Delete related records
-        $query1 = "DELETE FROM comments WHERE user_id = $id";
-        $query2 = "DELETE FROM ratings WHERE user_id = $id";
-        $query3 = "DELETE FROM favorites WHERE user_id = $id";
-        $query4 = "DELETE FROM flagging WHERE user_id = $id OR (type = 'user' AND id = $id)";
-        $query5 = "DELETE FROM videos WHERE user_id = $id";
-        $query6 = "DELETE FROM subscriptions WHERE user_id = $id OR member = $id";
-        $query7 = "DELETE FROM posts WHERE user_id = $id";
-        $query8 = "DELETE FROM messages WHERE user_id = $id OR recipient = $id";
-        $query9 = "DELETE FROM privacy WHERE user_id = $id";
-        $query10 = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE user_id = $id";
+        $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE user_id = $id";
+        $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
+        $query4 = "DELETE FROM " . DB_PREFIX . "flagging WHERE user_id = $id OR (type = 'user' AND id = $id)";
+        $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE user_id = $id";
+        $query6 = "DELETE FROM " . DB_PREFIX . "subscriptions WHERE user_id = $id OR member = $id";
+        $query7 = "DELETE FROM " . DB_PREFIX . "posts WHERE user_id = $id";
+        $query8 = "DELETE FROM " . DB_PREFIX . "messages WHERE user_id = $id OR recipient = $id";
+        $query9 = "DELETE FROM " . DB_PREFIX . "privacy WHERE user_id = $id";
+        $query10 = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query1);
         $db->Query ($query2);
         $db->Query ($query3);
@@ -187,7 +187,7 @@ class User {
      * @return integer Returns the number of approved videos uploaded by the user
      */
     private function GetVideoCount() {
-        $query = "SELECT COUNT(video_id) FROM videos WHERE user_id = $this->user_id AND status = 6";
+        $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $this->user_id AND status = 6";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchRow ($result);
         return $row[0];
@@ -246,7 +246,7 @@ class User {
     static function CreateAnonymous() {
         $db = Database::GetInstance();
         $ip = $_SERVER['REMOTE_ADDR'];
-        $query = "INSERT INTO users_anonymous (ip, date_created) values ('$ip', NOW())";
+        $query = "INSERT INTO " . DB_PREFIX . "users_anonymous (ip, date_created) values ('$ip', NOW())";
         $db->Query ($query);
         $id = $db->LastId()*-1;
         setcookie('cc_anonymous', $id, time()+3600*24*365*10,'/');
@@ -288,7 +288,7 @@ class User {
 
             // Update user's anonymous ratings
             $anon_id = $_COOKIE['cc_anonymous'];
-            $query = "UPDATE ratings SET user_id = $this->user_id WHERE user_id = $anon_id";
+            $query = "UPDATE " . DB_PREFIX . "ratings SET user_id = $this->user_id WHERE user_id = $anon_id";
             $this->db->Query ($query);
             setcookie('cc_anonymous',null,time()-3600*24*365*10,'/');
 

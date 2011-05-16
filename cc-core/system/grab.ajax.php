@@ -25,7 +25,7 @@ DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Validating passed video...') : nul
 if (isset ($_POST['token'])) {
 
     $token = $db->Escape ($_POST['token']);
-    $query = "SELECT video_id FROM videos WHERE MD5(CONCAT(video_id,'" . SECRET_KEY . "')) = '$token' AND status = 2";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MD5(CONCAT(video_id,'" . SECRET_KEY . "')) = '$token' AND status = 2";
     $result = $db->Query ($query);
     if ($db->Count ($result) == 1) {
         $row = $db->FetchObj ($result);

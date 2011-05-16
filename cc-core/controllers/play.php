@@ -67,14 +67,14 @@ if (View::$vars->logged_in) {
 
 ### Retrieve related videos
 $search_terms = $db->Escape (View::$vars->video->title) . ' ' . $db->Escape (implode (' ', View::$vars->video->tags));
-$query = "SELECT video_id FROM videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 6 LIMIT 9";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 6 LIMIT 9";
 Plugin::Trigger ('play.load_suggestions');
 View::$vars->result_related = $db->Query ($query);
 
 
 
 ### Retrieve comment count
-$query = "SELECT COUNT(comment_id) FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved'";
+$query = "SELECT COUNT(comment_id) FROM " . DB_PREFIX . "comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved'";
 Plugin::Trigger ('play.comment_count');
 $result_comment_count = $db->Query ($query);
 $comment_count = $db->FetchRow ($result_comment_count);
@@ -83,7 +83,7 @@ View::$vars->comment_count = $comment_count[0];
 
 
 ### Retrieve comments
-$query = "SELECT comment_id FROM comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved' ORDER BY comment_id DESC LIMIT 0, 5";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE video_id = " . View::$vars->video->video_id . " AND status = 'approved' ORDER BY comment_id DESC LIMIT 0, 5";
 Plugin::Trigger ('play.load_comments');
 $result_comments = $db->Query ($query);
 View::$vars->comment_list = array();

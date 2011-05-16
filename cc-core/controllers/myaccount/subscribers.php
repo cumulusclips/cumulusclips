@@ -24,7 +24,7 @@ $url = HOST . '/myaccount/subscribers';
 
 
 // Retrieve total count
-$query = "SELECT user_id FROM subscriptions WHERE member = " . View::$vars->user->user_id;
+$query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->user->user_id;
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

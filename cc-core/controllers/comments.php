@@ -31,11 +31,12 @@ if (empty ($_GET['vid']) || !is_numeric ($_GET['vid']) || !Video::Exist (array (
 
 // Retrieve Video
 View::$vars->video = new Video ($_GET['vid']);
+View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('video' => View::$vars->video->title));
 $url = '/videos/' . View::$vars->video->video_id . '/comments';
 
 
 // Retrieve comments count
-$query = "SELECT comment_id FROM comments WHERE video_id = " . View::$vars->video->video_id . " ORDER BY comment_id DESC";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE video_id = " . View::$vars->video->video_id . " ORDER BY comment_id DESC";
 $result_count = $db->Query ($query);
 View::$vars->total_comments = $db->Count ($result_count);
 
@@ -56,6 +57,6 @@ while ($row = $db->FetchObj ($result)) {
 
 // Output page
 Plugin::Trigger ('comments.before_render');
-View::Render ('view_comments.tpl');
+View::Render ('comments.tpl');
 
 ?>

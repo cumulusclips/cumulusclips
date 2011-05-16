@@ -26,7 +26,7 @@ $page_title = 'Browse Users - Admin Techie Videos';
 $content_file = 'admin/users.tpl';
 
 
-$query = "SELECT * FROM users";
+$query = "SELECT * FROM " . DB_PREFIX . "users";
 $result = $db->Query ($query);
 
 

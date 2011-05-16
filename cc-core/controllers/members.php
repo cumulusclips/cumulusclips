@@ -23,7 +23,7 @@ $url = HOST . '/members';
 
 
 // Retrieve total count
-$query = "SELECT user_id FROM users WHERE account_status = 'Active'";
+$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = 'Active'";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

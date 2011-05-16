@@ -329,7 +329,7 @@ Plugin::Trigger ('encode.update');
 DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Notifying users of new video...') : null;
 
 ### Send subscribers notification if opted-in
-$query = "SELECT user_id FROM subscriptions WHERE member = $video->user_id";
+$query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $video->user_id";
 $result_alert = $db->Query ($query);
 while ($opt = $db->FetchRow ($result_alert)) {
 

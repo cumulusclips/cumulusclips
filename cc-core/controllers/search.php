@@ -39,7 +39,7 @@ $keyword = $db->Escape (View::$vars->cleaned);
 
 
 // Retrieve total count
-$query = "SELECT video_id FROM videos WHERE status = 6 AND MATCH(title, tags, description) AGAINST('$keyword')";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 AND MATCH(title, tags, description) AGAINST('$keyword')";
 Plugin::Trigger ('search.search_count');
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);

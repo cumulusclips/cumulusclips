@@ -24,7 +24,7 @@ if (!isset ($_GET['page'])) App::Throw404();
 
 
 ### Count number of video xml files
-$query = "SELECT COUNT(video_id) FROM videos WHERE status = 6";
+$query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 6";
 $result = $db->Query ($query);
 $row = $db->FetchRow ($result);
 if ($row[0] > $limit) {
@@ -58,7 +58,7 @@ if (empty ($_GET['page'])) {
     $page = $_GET['page'];
     $start = ($page*$limit)-$limit;
     $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
-    $query = "SELECT video_id, cat_name FROM videos INNER JOIN categories ON videos.cat_id = categories.cat_id WHERE status = 6" . $query_limit;
+    $query = "SELECT video_id, cat_name FROM " . DB_PREFIX . "videos INNER JOIN " . DB_PREFIX . "categories ON " . DB_PREFIX . "videos.cat_id = " . DB_PREFIX . "categories.cat_id WHERE status = 6" . $query_limit;
     $result = $db->Query ($query);
 
     // Open video sitemap

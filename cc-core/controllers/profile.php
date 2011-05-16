@@ -58,14 +58,14 @@ if (View::$vars->logged_in) {
 
 
 ### Count subscription
-$query = "SELECT COUNT(sub_id) FROM subscriptions WHERE member = " . View::$vars->member->user_id;
+$query = "SELECT COUNT(sub_id) FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->member->user_id;
 $result = $db->Query ($query);
 View::$vars->sub_count = $db->FetchRow ($result);
 
 
 
 ### Retrieve video list
-$query = "SELECT video_id FROM videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6 LIMIT 3";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6 LIMIT 3";
 Plugin::Trigger ('profile.load_recent_videos');
 View::$vars->result_videos = $db->Query ($query);
 
@@ -78,7 +78,7 @@ View::$vars->member->Update ($data);
 
 
 ### Retrieve latest status updates
-$query = "SELECT post_id FROM posts WHERE user_id = " . View::$vars->member->user_id . "  ORDER BY post_id DESC LIMIT 0, $post_count";
+$query = "SELECT post_id FROM " . DB_PREFIX . "posts WHERE user_id = " . View::$vars->member->user_id . "  ORDER BY post_id DESC LIMIT 0, $post_count";
 Plugin::Trigger ('profile.load_posts');
 $result_posts = $db->Query ($query);
 View::$vars->post_list = array();

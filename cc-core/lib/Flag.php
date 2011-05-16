@@ -32,7 +32,7 @@ class Flag {
      * @return void
      */
     private function Get ($id) {
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE ' . self::$id_name . "= $id";
+        $query = 'SELECT * FROM ' . DB_PREFIX . self::$table . ' WHERE ' . self::$id_name . "= $id";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchAssoc ($result);
         foreach ($row as $key => $value) {
@@ -51,7 +51,7 @@ class Flag {
     static function Exist ($data) {
 
         $db = Database::GetInstance();
-        $query = 'SELECT ' . self::$id_name . ' FROM ' . self::$table . ' WHERE';
+        $query = 'SELECT ' . self::$id_name . ' FROM ' . DB_PREFIX . self::$table . ' WHERE';
 
         foreach ($data as $key => $value) {
             $value = $db->Escape ($value);
@@ -80,7 +80,7 @@ class Flag {
     static function Create ($data) {
 
         $db = Database::GetInstance();
-        $query = 'INSERT INTO ' . self::$table;
+        $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
         $values = 'NOW(), ';
 
@@ -109,7 +109,7 @@ class Flag {
     public function Update ($data) {
 
         Plugin::Trigger ('flag.before_update');
-        $query = 'UPDATE ' . self::$table . " SET";
+        $query = 'UPDATE ' . DB_PREFIX . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
         }
@@ -133,7 +133,7 @@ class Flag {
     static function Delete ($id) {
         $db = Database::GetInstance();
         Plugin::Trigger ('flag.delete');
-        $query = "DELETE FROM " . self::$table . " WHERE " . self::$id_name . " = $id";
+        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
 

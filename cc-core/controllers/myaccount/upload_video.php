@@ -22,7 +22,7 @@ View::$vars->user = new User (View::$vars->logged_in);
 
 ### Verify user entered video information
 if (isset ($_SESSION['token'])) {
-    $query = "SELECT video_id FROM videos WHERE MD5(CONCAT(video_id,'" . SECRET_KEY . "')) = '" . $db->Escape ($_SESSION['token']) . "' AND status IN (1, 2)";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MD5(CONCAT(video_id,'" . SECRET_KEY . "')) = '" . $db->Escape ($_SESSION['token']) . "' AND status IN (1, 2)";
     $result = $db->Query ($query);
     if ($db->Count ($result) == 1) {
         $row = $db->FetchObj ($result);

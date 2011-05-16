@@ -15,7 +15,7 @@ class Settings {
 
         // Retrieve all settings from DB and store in object
         $db = Database::GetInstance();
-        $query = "SELECT * FROM " . self::$table;
+        $query = "SELECT * FROM " . DB_PREFIX . self::$table;
         $result = $db->Query ($query);
         while ($row = $db->FetchObj ($result)) {
             $field = $row->name;

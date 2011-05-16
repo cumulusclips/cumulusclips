@@ -32,7 +32,7 @@ class Video {
      * @return void DB record's fields are loaded into object properties
      */
     private function Get ($id) {
-        $query = 'SELECT videos.*, username FROM ' . self::$table . ' INNER JOIN users on videos.user_id = users.user_id WHERE ' . self::$id_name . "= $id";
+        $query = "SELECT " . DB_PREFIX . self::$table . ".*, username FROM " . DB_PREFIX . self::$table . " INNER JOIN " . DB_PREFIX . "users on " . DB_PREFIX . self::$table . ".user_id = " . DB_PREFIX . "users.user_id WHERE " . self::$id_name . "= $id";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchAssoc ($result);
         foreach ($row as $key => $value) {
@@ -58,7 +58,7 @@ class Video {
     static function Exist ($data) {
 
         $db = Database::GetInstance();
-        $query = 'SELECT ' . self::$id_name . ' FROM ' . self::$table . ' WHERE';
+        $query = 'SELECT ' . self::$id_name . ' FROM ' . DB_PREFIX . self::$table . ' WHERE';
 
         foreach ($data as $key => $value) {
             $value = $db->Escape ($value);
@@ -87,7 +87,7 @@ class Video {
     static function Create ($data) {
 
         $db = Database::GetInstance();
-        $query = 'INSERT INTO ' . self::$table;
+        $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
         $values = 'NOW(), ';
 
@@ -116,7 +116,7 @@ class Video {
     public function Update ($data) {
 
         Plugin::Trigger ('video.before_update');
-        $query = 'UPDATE ' . self::$table . " SET";
+        $query = 'UPDATE ' . DB_PREFIX . self::$table . " SET";
         foreach ($data as $_key => $_value) {
             $query .= " $_key = '" . $this->db->Escape ($_value) . "',";
         }
@@ -149,11 +149,11 @@ class Video {
         @unlink(UPLOAD_PATH . '/mp4/' . $video->filename . '.mp4');
 
         // Delete related records
-        $query1 = "DELETE FROM comments WHERE video_id = $video_id";
-        $query2 = "DELETE FROM ratings WHERE video_id = $video_id";
-        $query3 = "DELETE FROM favorites WHERE video_id = $video_id";
-        $query4 = "DELETE FROM flagging WHERE flag_type = 'video' and id = $video_id";
-        $query5 = "DELETE FROM videos WHERE video_id = $video_id";
+        $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE video_id = $video_id";
+        $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE video_id = $video_id";
+        $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE video_id = $video_id";
+        $query4 = "DELETE FROM " . DB_PREFIX . "flagging WHERE flag_type = 'video' and id = $video_id";
+        $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE video_id = $video_id";
         $db->Query ($query1);
         $db->Query ($query2);
         $db->Query ($query3);

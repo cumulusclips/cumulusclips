@@ -22,14 +22,14 @@ if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
 
 
 // Retrieve Featured Video
-$query = "SELECT video_id FROM videos WHERE featured = 1";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE featured = 1";
 $result = $db->Query ($query);
 $row = $db->FetchObj ($result);
 View::$vars->featured = new Video ($row->video_id);
 
 
 // Retrieve Recent Videos
-$query = "SELECT video_id FROM videos WHERE status = 6 ORDER BY video_id DESC LIMIT 3";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 ORDER BY video_id DESC LIMIT 3";
 View::$vars->result_recent = $db->Query ($query);
 
 

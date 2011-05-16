@@ -4,7 +4,7 @@
 <div id="message"></div>
 
 <p class="big">
-    <?=Language::GetText('comments_text')?>:
+    <?=Language::GetText('comments_for')?>:
     <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title="<?=$video->title?>"><?=$video->title?></a>
 </p>
 

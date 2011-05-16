@@ -46,7 +46,7 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid']) && $_GET['vid'] != 0) {
 
 
 // Retrieve total count
-$query = "SELECT video_id FROM favorites WHERE user_id = " . View::$vars->user->user_id;
+$query = "SELECT video_id FROM " . DB_PREFIX . "favorites WHERE user_id = " . View::$vars->user->user_id;
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
