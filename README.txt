@@ -409,3 +409,50 @@ message_send.before_render - /cc-core/controllers/myaccount/message_send.php
 message_send.load_original_message - /cc-core/controllers/myaccount/message_send.php
 message_send.before_send_message - /cc-core/controllers/myaccount/message_send.php
 message_send.send_message - /cc-core/controllers/myaccount/message_send.php
+
+
+
+
+
+[ADMIN PANEL FEATURES]
+
+Browse / Search Users
+	Approved
+	Pending
+	Banned
+	SPAM
+Edit User
+Delete User
+
+
+Browse / Search Videos
+	Approved
+	Processing
+	Banned
+Edit Video
+Delete Video
+
+
+Browse / Search Comments
+	Approved
+	Pending
+	Banned
+	SPAM
+Delete Comment
+Spam Comment
+
+
+Flagged Users
+Flagged Videos
+Flagged Comments
+
+
+Browse / Search Pages
+Add Page
+Edit Page
+Delete Page
+
+Themes
+Plugins
+Settings
+Pages
