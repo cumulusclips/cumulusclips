@@ -13,57 +13,79 @@ App::LoadClass ('Pagination');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.members.start');
-$logged_in = User::LoginCheck();
-if ($logged_in) $admin = new User ($logged_in);
+$logged_in = User::LoginCheck(HOST . '/login/');
+$admin = new User ($logged_in);
 $page_title = 'Browse ';
 $content = 'members.tpl';
 $records_per_page = 20;
-$url = array (ADMIN . '/members.php');
+$url = ADMIN . '/members.php';
+$query_string = array();
 
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'Active';
 
-switch ($status) {
 
-    case 'Pending':
-        break;
-    case 'Banned':
-        break;
-    default:
-        $status = 'Active';
-        $page_title .= 'Active Members';
-        break;
+// Handle Search Member Form
+if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
 
+    $like = $db->Escape (trim ($_POST['username']));
+    $query_string['username'] = $like;
+    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
+    $page_title = 'Search Members';
+    $header = 'Search';
+
+} else if (!empty ($_GET['username'])) {
+
+    $like = $db->Escape (trim ($_GET['username']));
+    $query_string['username'] = $like;
+    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
+    $page_title = 'Search Members';
+    $header = 'Search Members';
+
+} else {
+
+    $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
+    switch ($status) {
+
+        case 'pending':
+            $query_string['status'] = 'pending';
+            $header = 'Browse Pending';
+            $page_title = 'Browse Pending';
+            break;
+        case 'banned':
+            $query_string['status'] = 'banned';
+            $header = 'Browse Banned';
+            $page_title = 'Browse Banned';
+            break;
+        default:
+            $status = 'active';
+            $header = 'Browse Active';
+            $page_title .= 'Active Members';
+            break;
+
+    }
+    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = '$status'";
 
 }
 
 
+
+
+
+
+
+
 // Delete member
-if (!empty ($_GET['action']) && $_GET['action'] = 'delete') {
+if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate user id
-    if (is_numeric ($_GET['id']) && User::Exist(array ('user_id' => $_GET['id']))) {
-        User::Delete($_GET['id']);
+    if (User::Exist(array ('user_id' => $_GET['delete']))) {
+//        User::Delete($_GET['id']);
+        exit('Delete '.$_GET['delete']);
     }
 
 }
 
 
 
-// General Member Query
-$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = '$status'";
-
-
-
-// Handle Search Member Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
-    $like = $db->Escape (trim ($_POST['username']));
-    $url[] = "&username=$like";
-    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-} else if (!empty ($_GET['username'])) {
-    $like = $db->Escape (trim ($_POST['username']));
-    $url[] = "&username=$like";
-    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-}
 
 
 
@@ -72,6 +94,7 @@ $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
 // Initialize pagination
+$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
 $pagination = new Pagination ($url, $total, $records_per_page, false);
 $start_record = $pagination->GetStartRecord();
 

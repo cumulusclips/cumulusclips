@@ -14,9 +14,10 @@ class Pagination {
 
     public function  __construct ($url, $total, $records_per_page, $seo_friendly_url = true) {
         global $config;
-        $this->url = is_array ($url) ? $url[0] : $url;
+        $this->url = self::StoreURL($url);
+//        $this->url = is_array ($url) ? $url[0] : $url;
+//        $this->query_string = is_array ($url) && isset ($url[1]) ? $url[1] : null;
         $this->seo_friendly_url = $seo_friendly_url ? true : false;
-        $this->query_string = is_array ($url) ? $url[1] : null;
         $this->total = $total;
         $this->records_per_page = $records_per_page;
         $this->page_limit = 9;
@@ -150,14 +151,90 @@ class Pagination {
 
 
 
-    public function BuildURL ($page = null) {
-        $page = (isset ($page)) ? $page : $this->GetPage();
+//    public function BuildURL ($page = null) {
+//        $page = (isset ($page)) ? $page : $this->GetPage();
+//        if ($this->seo_friendly_url) {
+//            return $this->url . '/page/' . $page . '/' . $this->query_string;
+//        } else {
+//            return $this->url . '?page=' . $page . $this->query_string;
+//        }
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+private function BuildURL ($page = null, $additional_query = null) {
+
+    $url = $this->url;
+
+    // Append page number if needed
+    if (!empty ($page) && $page > 1) {
         if ($this->seo_friendly_url) {
-            return $this->url . '/page/' . $page . '/' . $this->query_string;
+            $url['path'] .= '/page/' . $page;
+            exit();
         } else {
-            return $this->url . '?page=' . $page . $this->query_string;
+            if (isset ($url['query'])) {
+                $url['query'] .= '&page=' . $page;
+            } else {
+                $url['query'] = 'page=' . $page;
+            }
         }
     }
+    
+
+    // Append additional query string if provided
+    if ($additional_query) {
+        if (isset ($url['query'])) {
+            $url['query'] .= '&' . $additional_query;
+        } else {
+            $url['query'] = $additional_query;
+        }
+    }
+
+
+    // Build url string from parts
+    $string = $url['scheme'] . '://';
+    $string .= $url['host'];
+    $string .= $url['path'] . ($this->seo_friendly_url ? '/' : '');
+    $string .= isset ($url['query']) ?  '?' . $url['query'] : '';
+    return $string;
+
+}
+
+public function GetURL ($additional_query) {
+    return $this->BuildURL ($this->GetPage(), $additional_query);
+}
+
+static function StoreURL ($url) {
+    $url = parse_url ($url);
+    $url['path'] = substr ($url['path'], -1) == '/' ? substr($url['path'],0,-1) : $url['path'];
+    return $url;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

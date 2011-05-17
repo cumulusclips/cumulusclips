@@ -456,3 +456,23 @@ Themes
 Plugins
 Settings
 Pages
+
+
+
+
+
+http://themeforest.net/item/facile-admin/full_screen_preview/141010
+http://themeforest.net/item/adminica-the-professional-admin-template/full_screen_preview/160638
+
+
+JQ Plugins
+http://fancybox.net/
+http://lab.mattvarone.com/projects/jquery/totop/
+http://onehackoranother.com/projects/jquery/tipsy/
+http://www.datatables.net/
+
+Buttons, Icons & PSDs
+http://www.tricycle.ie/adminica/js/jqueryFileTree/images/spinner.gif
+http://www.sketchdock.com/freebies/36-web-buttons-collection.html
+http://365psd.com/day/2-37/
+http://365psd.com/day/147/

@@ -14,9 +14,9 @@
 
     <div id="sidebar">
 
-        <h3>Users</h3>
+        <h3>Members</h3>
         <ul>
-            <li><a href="<?php echo HOST; ?>/admin/users/" title="Browse Users">Browse Users</a></li>
+            <li><a href="<?=ADMIN?>/members.php" title="Browse Members">Browse Members</a></li>
         </ul>
 
     </div>
