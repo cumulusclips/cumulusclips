@@ -13,13 +13,14 @@ App::LoadClass ('Pagination');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.members.start');
-$logged_in = User::LoginCheck(HOST . '/login/');
-$admin = new User ($logged_in);
-$page_title = 'Browse ';
+//$logged_in = User::LoginCheck(HOST . '/login/');
+//$admin = new User ($logged_in);
+$page_title = 'Member Management';
 $content = 'members.tpl';
 $records_per_page = 20;
 $url = ADMIN . '/members.php';
 $query_string = array();
+$message = null;
 
 
 
@@ -29,7 +30,6 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
     $like = $db->Escape (trim ($_POST['username']));
     $query_string['username'] = $like;
     $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-    $page_title = 'Search Members';
     $header = 'Search';
 
 } else if (!empty ($_GET['username'])) {
@@ -37,7 +37,6 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
     $like = $db->Escape (trim ($_GET['username']));
     $query_string['username'] = $like;
     $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-    $page_title = 'Search Members';
     $header = 'Search Members';
 
 } else {
@@ -48,17 +47,14 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
         case 'pending':
             $query_string['status'] = 'pending';
             $header = 'Browse Pending';
-            $page_title = 'Browse Pending';
             break;
         case 'banned':
             $query_string['status'] = 'banned';
             $header = 'Browse Banned';
-            $page_title = 'Browse Banned';
             break;
         default:
             $status = 'active';
             $header = 'Browse Active';
-            $page_title .= 'Active Members';
             break;
 
     }
@@ -79,7 +75,8 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     // Validate user id
     if (User::Exist(array ('user_id' => $_GET['delete']))) {
 //        User::Delete($_GET['id']);
-        exit('Delete '.$_GET['delete']);
+        $message = 'Member has been deleted';
+        $message_type = 'success';
     }
 
 }

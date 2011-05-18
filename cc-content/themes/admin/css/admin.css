@@ -1,0 +1,23 @@
+p {padding:5px 0;}
+
+#header {
+    height:100px;
+}
+
+#sidebar {
+    float:left;
+    width:300px;
+}
+
+#container {
+    width:100%;
+}
+
+#main {
+    margin-left:325px;
+}
+
+#footer {
+    height:100px;
+    clear:both;
+}

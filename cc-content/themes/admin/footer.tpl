@@ -1,0 +1,1 @@
+<div id="footer">Version 1.0 (Latest)</div>

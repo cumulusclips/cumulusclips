@@ -21,7 +21,7 @@ View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $keyword = NULL;
 View::$vars->cleaned = NULL;
-$url = array (HOST . '/search');
+$url = HOST . '/search';
 $records_per_page = 9;
 
 
@@ -33,7 +33,7 @@ if (isset ($_POST['submitted_search'])) {
     View::$vars->cleaned = htmlspecialchars ($_GET['keyword']);
 }
 
-$url[] =  '?keyword=' . View::$vars->cleaned;
+$url .=  '?keyword=' . View::$vars->cleaned;
 View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('keyword' => View::$vars->cleaned));
 $keyword = $db->Escape (View::$vars->cleaned);
 

@@ -1,4 +1,9 @@
-<h1><?=$header?> Members:</h1>
+<?php if ($message): ?>
+<div id="<?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
+
+
+<h1>Member Management</h1>
 
 <select id="member-status-select" name="status" onChange="window.location='<?=ADMIN?>/members.php?status='+this.value;">
     <option <?=(isset($status) && $status == 'active') ? 'selected="selected"' : ''?>value="active">Active</option>

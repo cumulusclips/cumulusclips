@@ -151,90 +151,73 @@ class Pagination {
 
 
 
-//    public function BuildURL ($page = null) {
-//        $page = (isset ($page)) ? $page : $this->GetPage();
-//        if ($this->seo_friendly_url) {
-//            return $this->url . '/page/' . $page . '/' . $this->query_string;
-//        } else {
-//            return $this->url . '?page=' . $page . $this->query_string;
-//        }
-//    }
+    /**
+     * Return a paginated URL based on current URL with page and additional query parameters
+     * @param integer $page OPTIONAL Page to add to the URL
+     * @param string $additional_query OPTIONAL Additional query to add to the URL
+     * @return string Returns paginated URL with page and query string
+     */
+    private function BuildURL ($page = null, $additional_query = null) {
 
+        $url = $this->url;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-private function BuildURL ($page = null, $additional_query = null) {
-
-    $url = $this->url;
-
-    // Append page number if needed
-    if (!empty ($page) && $page > 1) {
-        if ($this->seo_friendly_url) {
-            $url['path'] .= '/page/' . $page;
-            exit();
-        } else {
-            if (isset ($url['query'])) {
-                $url['query'] .= '&page=' . $page;
+        // Append page number if needed
+        if (!empty ($page) && $page > 1) {
+            if ($this->seo_friendly_url) {
+                $url['path'] .= '/page/' . $page;
+                exit();
             } else {
-                $url['query'] = 'page=' . $page;
+                if (isset ($url['query'])) {
+                    $url['query'] .= '&page=' . $page;
+                } else {
+                    $url['query'] = 'page=' . $page;
+                }
             }
         }
-    }
-    
 
-    // Append additional query string if provided
-    if ($additional_query) {
-        if (isset ($url['query'])) {
-            $url['query'] .= '&' . $additional_query;
-        } else {
-            $url['query'] = $additional_query;
+
+        // Append additional query string if provided
+        if ($additional_query) {
+            if (isset ($url['query'])) {
+                $url['query'] .= '&' . $additional_query;
+            } else {
+                $url['query'] = $additional_query;
+            }
         }
+
+
+        // Build url string from parts
+        $string = $url['scheme'] . '://';
+        $string .= $url['host'];
+        $string .= $url['path'] . ($this->seo_friendly_url ? '/' : '');
+        $string .= isset ($url['query']) ?  '?' . $url['query'] : '';
+        return $string;
+
     }
 
 
-    // Build url string from parts
-    $string = $url['scheme'] . '://';
-    $string .= $url['host'];
-    $string .= $url['path'] . ($this->seo_friendly_url ? '/' : '');
-    $string .= isset ($url['query']) ?  '?' . $url['query'] : '';
-    return $string;
 
-}
-
-public function GetURL ($additional_query) {
-    return $this->BuildURL ($this->GetPage(), $additional_query);
-}
-
-static function StoreURL ($url) {
-    $url = parse_url ($url);
-    $url['path'] = substr ($url['path'], -1) == '/' ? substr($url['path'],0,-1) : $url['path'];
-    return $url;
-}
+    /**
+     * Retrieve the current paginated URL
+     * @param string $addtional_query OPTIONAL Append additional query string to URL
+     * @return string Returns current paginated URL with query appended (if any)
+     */
+    public function GetURL ($additional_query = null) {
+        return $this->BuildURL ($this->GetPage(), $additional_query);
+    }
 
 
 
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Break a URL string into pieces based on its components (i.e. path, query, host)
+     * @param string $url The URL to breakdown
+     * @return array Returns array of URL components
+     */
+    static function StoreURL ($url) {
+        $url = parse_url ($url);
+        $url['path'] = dirname ($url['path']) . '/' . basename ($url['path']);
+        return $url;
+    }
 
 }
 
