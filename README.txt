@@ -416,46 +416,80 @@ message_send.send_message - /cc-core/controllers/myaccount/message_send.php
 
 [ADMIN PANEL FEATURES]
 
-Browse / Search Users
-	Approved
-	Pending
-	Banned
-	SPAM
-Edit User
-Delete User
+Videos
+    Approved Videos
+        Edit
+        Delete
+    Pending Videos
+        Approve
+        Edit
+        Delete
+    Processing Videos
+        Edit
+        Delete
+    Banned Videos
+        Unban
+        Edit
+        Delete
 
 
-Browse / Search Videos
-	Approved
-	Processing
-	Banned
-Edit Video
-Delete Video
+
+Members
+    Approved Members
+        Edit
+        Delete
+    Pending Members
+        Edit
+        Delete
+    Banned Members
+        Unban
+        Edit
+        Delete
 
 
-Browse / Search Comments
-	Approved
-	Pending
-	Banned
-	SPAM
-Delete Comment
-Spam Comment
+
+Comments
+    Approved Comments
+        Edit
+        Delete
+    Pending Comments
+        Approve
+        Edit
+        Delete
+    Banned Comments
+        Unban
+        Edit
+        Delete
+    SPAM Comments
+        Edit
+        Delete
 
 
-Flagged Users
-Flagged Videos
-Flagged Comments
+
+Flags
+    Flagged Videos
+        Approve
+        Dismiss
+    Flagged Member
+        Approve
+        Dismiss
+    Flagged Comments
+        Approve
+        Dismiss
 
 
-Browse / Search Pages
-Add Page
-Edit Page
-Delete Page
+
+Pages
+    Browse / Search Pages
+        Edit Page
+        Delete Page
+    Add Page
+
+
 
 Themes
 Plugins
 Settings
-Pages
 
 
 

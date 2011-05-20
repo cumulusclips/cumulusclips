@@ -15,50 +15,55 @@ App::LoadClass ('Pagination');
 Plugin::Trigger ('admin.members.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$page_title = 'Member Management';
 $content = 'members.tpl';
 $records_per_page = 20;
 $url = ADMIN . '/members.php';
 $query_string = array();
 $message = null;
+$sub_header = null;
+
+
+
+
+
+$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
+switch ($status) {
+
+    case 'pending':
+        $query_string['status'] = 'pending';
+        $header = 'Pending Members';
+        $page_title = 'Pending Members';
+        break;
+    case 'banned':
+        $query_string['status'] = 'banned';
+        $header = 'Banned Members';
+        $page_title = 'Banned Members';
+        break;
+    default:
+        $status = 'active';
+        $header = 'Active Members';
+        $page_title = 'Active Members';
+        break;
+
+}
+$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = '$status'";
 
 
 
 // Handle Search Member Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['username'])) {
+if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
-    $like = $db->Escape (trim ($_POST['username']));
-    $query_string['username'] = $like;
-    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-    $header = 'Search';
+    $like = $db->Escape (trim ($_POST['search']));
+    $query_string['search'] = $like;
+    $query .= " AND username LIKE '%$like%'";
+    $sub_header = "Search Results for: <em>$like</em>";
 
-} else if (!empty ($_GET['username'])) {
+} else if (!empty ($_GET['search'])) {
 
-    $like = $db->Escape (trim ($_GET['username']));
-    $query_string['username'] = $like;
-    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE username LIKE '%$like%'";
-    $header = 'Search Members';
-
-} else {
-
-    $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
-    switch ($status) {
-
-        case 'pending':
-            $query_string['status'] = 'pending';
-            $header = 'Browse Pending';
-            break;
-        case 'banned':
-            $query_string['status'] = 'banned';
-            $header = 'Browse Banned';
-            break;
-        default:
-            $status = 'active';
-            $header = 'Browse Active';
-            break;
-
-    }
-    $query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = '$status'";
+    $like = $db->Escape (trim ($_GET['search']));
+    $query_string['search'] = $like;
+    $query .= " AND username LIKE '%$like%'";
+    $sub_header = "Search Results for: <em>$like</em>";
 
 }
 
