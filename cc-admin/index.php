@@ -12,8 +12,8 @@ App::LoadClass ('User');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.index.start');
-$logged_in = User::LoginCheck(HOST . '/login/');
-$admin = new User ($logged_in);
+//$logged_in = User::LoginCheck(HOST . '/login/');
+//$admin = new User ($logged_in);
 $page_title = 'Admin Panel';
 $content = 'index.tpl';
 
