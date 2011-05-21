@@ -44,13 +44,7 @@ body {
 #sidebar {
     float:left;
     width:200px;
-    margin-left:15px;
-    padding:10px;
-    background-color:#FFF;
-    border:3px solid #CCC;
-    border-radius:10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    margin:0 0 0 15px;
 }
 
 #sidebar h3 {
@@ -72,12 +66,6 @@ body {
 #main {
     margin-left:270px;
     margin-right:25px;
-    background-color:#FFF;
-    border:3px solid #CCC;
-    border-radius:10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    padding:10px;
 }
 
 #footer-spacer {
@@ -110,7 +98,14 @@ body {
 }
 
 
-a {
+
+
+
+/**********
+LINK STYLES
+**********/
+
+a, a.big, a.large, a.huge {
     color:#023e7b;
     text-decoration:none;
     font-weight:bold;
@@ -128,6 +123,101 @@ a:hover {
     color:#FFF;
 }
 
+.record-actions a {
+    display:inline-block;
+    margin-right:15px;
+    font-size:10px;
+}
+
+.delete { color:#A00; }
+
+
+
+
+
+/**********
+FONT STYLES
+**********/
+
 p {
     padding:5px 0;
+}
+
+
+h1, h2, h3, .big, .large, .huge {
+    font-weight:bold;
+    color:#333;
+}
+
+h1, .huge { font-size:20px; }
+h2, .large { font-size:16px; }
+h3, .big { font-size:14px; }
+
+
+
+
+
+/**********
+MISC STYLES
+**********/
+
+.block {
+    margin-top:15px;
+    background-color:#FFF;
+    border:3px solid #CCC;
+    border-radius:10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    padding:10px;
+}
+
+#pagination {
+    margin-top:15px;
+    text-align:right;
+}
+
+#pagination li {
+    display:inline;
+    padding-left:10px;
+    font-size:14px;
+}
+
+
+
+
+
+/********************
+RECORD LISTING STYLES
+********************/
+
+.list {
+    border-collapse:collapse;
+    width:100%;
+}
+
+.list td {
+    padding:0px 10px 25px;
+    width:20%;
+}
+
+.list .video-title {
+    width:40%;
+}
+
+.record-actions {
+    margin-top:7px;
+}
+
+.list .category {
+/*    width:25%;*/
+}
+
+.list-headers {
+    padding:20px 13px 0;
+    margin-bottom:-10px;
+    margin-top:15px;
+    border-top:3px solid #CCC;
+}
+.list-headers td {
+    padding-bottom:0;
 }

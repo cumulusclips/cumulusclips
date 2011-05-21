@@ -48,6 +48,7 @@ http://www.seomoz.org/learn-seo/meta-description
 6 - Approved
 7 - Banned
 8 - MIA
+9 - Pending Approval
 
 
 

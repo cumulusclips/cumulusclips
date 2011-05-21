@@ -1,6 +1,6 @@
 <?php
 
-class Video {
+class Template {
 
     public $found;
     private $db;

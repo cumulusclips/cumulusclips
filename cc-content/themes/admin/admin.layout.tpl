@@ -22,7 +22,7 @@ $('document').ready(function(){
 
     <?php include (THEME_PATH . '/header.tpl'); ?>
 
-    <div id="sidebar">
+    <div id="sidebar" class="block">
 
         <div class="panel">
             <h3>Dashboard</h3>
@@ -35,10 +35,10 @@ $('document').ready(function(){
         <div class="panel">
             <h3>Videos</h3>
             <div>
-                <p><a href="<?=ADMIN?>">Approved Videos</a></p>
-                <p><a href="<?=ADMIN?>">Pending Videos</a></p>
-                <p><a href="<?=ADMIN?>">Processing Videos</a></p>
-                <p><a href="<?=ADMIN?>">Banned Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=6">Approved Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=9">Pending Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=5">Processing Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=7">Banned Videos</a></p>
             </div>
         </div>
 
