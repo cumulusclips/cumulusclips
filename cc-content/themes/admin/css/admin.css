@@ -184,6 +184,34 @@ MISC STYLES
     font-size:14px;
 }
 
+.success {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    border:solid 3px #C6D880;
+    background-color: #E6EFC2;
+    color: #264409;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+
+.error {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    border:solid 3px #FBC2C4;
+    background-color: #FBE3E4;
+    color: #8a1f11;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+
+.errors {
+    color:#C00;
+}
+
 
 
 
@@ -192,34 +220,9 @@ MISC STYLES
 RECORD LISTING STYLES
 ********************/
 
-.list {
-    border-collapse:collapse;
-    width:100%;
-}
-
-.list td {
-    padding:0px 10px 25px;
-    width:30%;
-}
-
-
-
-.record-actions {
-    margin-top:7px;
-}
-
-.list-headers {
-    margin:20px 13px -10px;
-}
-.list-headers td {
-    padding-bottom:0;
-}
-
 #browse-header {
     margin-top:15px;
-    border-bottom:3px solid #CCC;
     overflow:hidden;
-    padding-bottom:15px;
 }
 
 #browse-header .search {
@@ -228,6 +231,41 @@ RECORD LISTING STYLES
 
 #browse-header .jump {
     float:left;
+}
+
+#browse-header select, #browse-header input[type="text"] {
+    border:1px solid #CCC;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    padding:5px;
+}
+#browse-header select {
+    padding-right:10px;
+}
+
+.list {
+    padding:0;
+}
+
+.list table {
+    width:100%;
+}
+
+.list td {
+    padding:20px 10px;
+    width:30%;
+}
+
+.list .odd td {
+    background-color:#ebebeb;
+}
+
+.record-actions {
+    margin-top:7px;
 }
 
 

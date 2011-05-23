@@ -1,13 +1,13 @@
 <div id="browse-videos">
 
-    <?php if ($message): ?>
-    <div id="<?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
-
-
     <h1><?=$header?></h1>
     <?php if ($sub_header): ?>
     <h3><?=$sub_header?></h3>
+    <?php endif; ?>
+
+
+    <?php if ($message): ?>
+    <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -30,37 +30,38 @@
             </form>
         </div>
     </div>
-
-    <div class="list-headers">
-        <table class="list">
-            <tr>
-                <td class="video-title large">Title</td>
-                <td class="category large">Category</td>
-                <td class="large">Member</td>
-                <td class="large">Upload Date</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="block">
-        <table class="list">
+    
+    <div class="block list">
+        <table>
+            <thead>
+                <tr>
+                    <td class="video-title large">Title</td>
+                    <td class="category large">Category</td>
+                    <td class="large">Member</td>
+                    <td class="large">Upload Date</td>
+                </tr>
+            </thead>
             <tbody>
-        <?php while ($row = $db->FetchObj ($result)): ?>
-            <?php $video = new Video ($row->video_id); ?>
-            <tr>
-                <td class="video-title">
-                    <a href="" class="large"><?=$video->title?></a><br />
-                    <div class="record-actions">
-                        <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
-                        <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
-                        <a class="delete" href="<?=$pagination->GetURL('delete='.$video->video_id)?>">Delete</a>
-                    </div>
-                </td>
-                <td class="category"><?=$categories[$video->cat_id]?></td>
-                <td><?=$video->username?></td>
-                <td><?=$video->date_created?></td>
-            </tr>
-        <?php endwhile; ?>
+            <?php while ($row = $db->FetchObj ($result)): ?>
+
+                <?php $odd = empty ($odd) ? true : false; ?>
+                <?php $video = new Video ($row->video_id); ?>
+
+                <tr class="<?=$odd ? 'odd' : ''?>">
+                    <td class="video-title">
+                        <a href="" class="large"><?=$video->title?></a><br />
+                        <div class="record-actions">
+                            <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
+                            <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
+                            <a class="delete" href="<?=$pagination->GetURL('delete='.$video->video_id)?>">Delete</a>
+                        </div>
+                    </td>
+                    <td class="category"><?=$categories[$video->cat_id]?></td>
+                    <td><?=$video->username?></td>
+                    <td><?=$video->date_created?></td>
+                </tr>
+                
+            <?php endwhile; ?>
             </tbody>
         </table>
     </div>

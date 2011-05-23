@@ -24,8 +24,21 @@ $sub_header = null;
 
 
 
+// Delete member
+if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
+
+    // Validate user id
+    if (User::Exist(array ('user_id' => $_GET['delete']))) {
+//        User::Delete($_GET['id']);
+        $message = 'Member has been deleted';
+        $message_type = 'success';
+    }
+
+}
 
 
+
+// Determin which type (account status) of members to display
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
 switch ($status) {
 
@@ -66,28 +79,6 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
     $sub_header = "Search Results for: <em>$like</em>";
 
 }
-
-
-
-
-
-
-
-
-// Delete member
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
-
-    // Validate user id
-    if (User::Exist(array ('user_id' => $_GET['delete']))) {
-//        User::Delete($_GET['id']);
-        $message = 'Member has been deleted';
-        $message_type = 'success';
-    }
-
-}
-
-
-
 
 
 
