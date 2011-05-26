@@ -283,3 +283,78 @@ BROWSE VIDEO STYLES
 #browse-videos .list .video-title {
     width:40%;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/********************
+FORM & MESSAGE STYLES
+********************/
+
+.row {
+    overflow:hidden;
+    margin-bottom:15px;
+}
+
+.row-shift {
+    margin-left:115px;
+    margin-bottom:15px;
+}
+
+.row label {
+    float:left;
+    text-align:right;
+    margin-right:15px;
+    width:100px;
+    font-weight:bold;
+}
+
+.text {
+    border:1px solid #CCC;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    padding:5px;
+    width:300px;
+}
+
+textarea.text {
+    width:auto;
+    height:auto;
+}
+
+.dropdown {
+    border:1px solid #CCC;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    padding:5px;
+}
+
+.button {
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    background: url("../images/button-background.png") repeat-x right center;
+    border:none;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 10px;
+    height:28px;
+    line-height:28px;
+}
