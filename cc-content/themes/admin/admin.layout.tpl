@@ -12,8 +12,9 @@
 <script type="text/javascript">
 $('document').ready(function(){
     $("#sidebar h3").click(function(){
-        $(this).next().slideToggle();
+        $(this).next().slideToggle('fast');
     });
+    $('.list tr').hover(function(){$(this).find('.record-actions').toggleClass('invisible');});
 });
 </script>
 </head>
@@ -24,7 +25,7 @@ $('document').ready(function(){
 
     <div id="sidebar" class="block">
 
-        <div class="panel">
+        <div class="panel dashboard">
             <h3>Dashboard</h3>
             <div>
                 <p><a href="<?=ADMIN?>/">Dashboard</a></p>
@@ -32,7 +33,7 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel videos">
             <h3>Videos</h3>
             <div>
                 <p><a href="<?=ADMIN?>/videos.php?status=6">Approved Videos</a></p>
@@ -42,7 +43,7 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel members">
             <h3>Members</h3>
             <div>
                 <p><a href="<?=ADMIN?>/members.php?status=active">Active Members</a></p>
@@ -51,7 +52,7 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel comments">
             <h3>Comments</h3>
             <div>
                 <p><a href="<?=ADMIN?>">Approved Comments</a></p>
@@ -61,7 +62,7 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel flags">
             <h3>Flags</h3>
             <div>
                 <p><a href="<?=ADMIN?>">Flagged Videos</a></p>
@@ -70,7 +71,7 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel pages">
             <h3>Pages</h3>
             <div>
                 <p><a href="<?=ADMIN?>">Add Page</a></p>
@@ -78,19 +79,29 @@ $('document').ready(function(){
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel appearance">
             <h3>Appearance</h3>
-            <div></div>
+            <div>
+                <p><a href="<?=ADMIN?>">Themes</a></p>
+                <p><a href="<?=ADMIN?>">Languages</a></p>
+                <p><a href="<?=ADMIN?>">Banners</a></p>
+            </div>
         </div>
 
-        <div class="panel">
+        <div class="panel plugins">
             <h3>Plugins</h3>
-            <div></div>
+            <div>
+                <p><a href="<?=ADMIN?>">Installed Plugins</a></p>
+                <p><a href="<?=ADMIN?>">Add Plugins</a></p>
+            </div>
         </div>
 
-        <div class="panel">
+        <div class="panel settings">
             <h3>Settings</h3>
-            <div></div>
+            <div>
+                <p><a href="<?=ADMIN?>">General</a></p>
+                <p><a href="<?=ADMIN?>">Alerts</a></p>
+            </div>
         </div>
 
     </div>

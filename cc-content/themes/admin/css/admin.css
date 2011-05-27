@@ -48,7 +48,39 @@ body {
 }
 
 #sidebar h3 {
+    background:url(../images/icon-sprite.png) no-repeat 0 0;
+    padding-left:30px;
     cursor:pointer;
+    height:20px;
+    line-height:20px;
+}
+
+#sidebar .dashboard h3 {
+    background-position:0 0;
+}
+#sidebar .videos h3 {
+    background-position:0 -27px;
+}
+#sidebar .members h3 {
+    background-position:0 -55px;
+}
+#sidebar .comments h3 {
+    background-position:0 -85px;
+}
+#sidebar .flags h3 {
+    background-position:0 -117px;
+}
+#sidebar .pages h3 {
+    background-position:0 -147px;
+}
+#sidebar .appearance h3 {
+    background-position:0 -174px;
+}
+#sidebar .plugins h3 {
+    background-position:0 -202px;
+}
+#sidebar .settings h3 {
+    background-position:0 -231px;
 }
 
 #sidebar .panel {
@@ -212,6 +244,10 @@ MISC STYLES
     color:#C00;
 }
 
+.invisible {
+    visibility:hidden;
+}
+
 
 
 
@@ -352,9 +388,9 @@ textarea.text {
     background: url("../images/button-background.png") repeat-x right center;
     border:none;
     color: #FFF;
-    font-size: 14px;
-    font-weight: bold;
-    padding-right: 10px;
+    padding: 0 10px 3px;
+    *padding:0;
     height:28px;
-    line-height:28px;
+    font:bold 14px/28px arial,helvetica,sans-serif;
+    cursor:pointer;
 }

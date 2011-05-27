@@ -56,7 +56,6 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
         $data['title'] = htmlspecialchars (trim ($_POST['title']));
@@ -94,7 +93,7 @@ if (isset ($_POST['submitted'])) {
         $video->Update ($data);
         $message = 'Video has been updated.';
         $message_type = 'success';
-        Plugin::Trigger ('edit_video.edit');
+        Plugin::Trigger ('admin.video_edit.update_video');
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $Errors);

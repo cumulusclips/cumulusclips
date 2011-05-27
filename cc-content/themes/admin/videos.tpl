@@ -26,7 +26,7 @@
             <form method="POST" action="<?=ADMIN?>/videos.php?status=<?=$status?>">
                 <input type="hidden" name="search_submitted" value="true" />
                 <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" value="Search" />
+                <input type="submit" name="submit" class="button" value="Search" />
             </form>
         </div>
     </div>
@@ -50,7 +50,7 @@
                 <tr class="<?=$odd ? 'odd' : ''?>">
                     <td class="video-title">
                         <a href="" class="large"><?=$video->title?></a><br />
-                        <div class="record-actions">
+                        <div class="record-actions invisible">
                             <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
                             <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
                             <a class="delete" href="<?=$pagination->GetURL('delete='.$video->video_id)?>">Delete</a>

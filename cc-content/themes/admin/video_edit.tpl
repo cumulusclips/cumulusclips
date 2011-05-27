@@ -9,7 +9,7 @@
 
     <div class="block">
 
-        <form action="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>/" method="post">
+        <form action="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>" method="post">
 
             <div class="row<?=(isset ($Errors['title'])) ? ' errors' : ''?>">
                 <label>Title:</label>
@@ -38,7 +38,7 @@
 
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Update" />
+                <input type="submit" class="button" value="Update Video" />
             </div>
         </form>
 
