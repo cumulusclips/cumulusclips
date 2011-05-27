@@ -1,4 +1,4 @@
-<div id="browse-members">
+<div id="members">
 
     <h1><?=$header?></h1>
     <?php if ($sub_header): ?>
@@ -54,9 +54,9 @@
                 <tr class="<?=$odd ? 'odd' : ''?>">
                     <td>
                         <a href="" class="large"><?=$user->username?></a>
-                        <div class="record-actions">
+                        <div class="record-actions invisible">
                             <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>">Edit</a>
+                            <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
                             <a class="delete" href="<?=$pagination->GetURL('delete='.$user->user_id)?>">Delete</a>
                         </div>
                     </td>

@@ -15,8 +15,6 @@ class Pagination {
     public function  __construct ($url, $total, $records_per_page, $seo_friendly_url = true) {
         global $config;
         $this->url = self::StoreURL($url);
-//        $this->url = is_array ($url) ? $url[0] : $url;
-//        $this->query_string = is_array ($url) && isset ($url[1]) ? $url[1] : null;
         $this->seo_friendly_url = $seo_friendly_url ? true : false;
         $this->total = $total;
         $this->records_per_page = $records_per_page;
@@ -107,13 +105,11 @@ class Pagination {
     // Retrieve Previous link
     private function GetPrevious() {
         return ($this->page != 1) ? '<li><a href="' . $this->BuildURL($this->page-1) . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
-//        return ($this->page != 1) ? '<li><a href="' . $this->url . '/page/' . ($this->page-1) . '/' . $this->query_string . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
     }
 
     // Retrieve Next link
     private function GetNext() {
         return ($this->page != $this->page_count) ? '<li><a href="' . $this->BuildURL($this->page+1) . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
-//        return ($this->page != $this->page_count) ? '<li><a href="' . $this->url . '/page/' . ($this->page+1) . '/' . $this->query_string . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
     }
 
     // Retrieve First two series links
@@ -121,8 +117,6 @@ class Pagination {
         if (!$this->base) {
             $first = '<li><a href="' . $this->BuildURL(1) . '">1</a></li>';
             $first .= '<li><a href="' . $this->BuildURL(2) . '">2</a></li>';
-//            $first = '<li><a href="' . $this->url . '/page/1/' . $this->query_string . '">1</a></li>';
-//            $first .= '<li><a href="' . $this->url . '/page/2/' . $this->query_string . '">2</a></li>';
             $first .= '<li>...</li>';
             return $first;
         } else {
@@ -136,8 +130,6 @@ class Pagination {
             $last = '<li>...</li>';
             $last .= '<li><a href="' . $this->BuildURL($this->page_count-1) . '">' . ($this->page_count-1) . '</a></li>';
             $last .= '<li><a href="' . $this->BuildURL($this->page_count) . '">' . $this->page_count . '</a></li>';
-//            $last .= '<li><a href="' . $this->url . '/page/' . ($this->page_count-1) . '/' . $this->query_string . '">' . ($this->page_count-1) . '</a></li>';
-//            $last .= '<li><a href="' . $this->url . '/page/' . $this->page_count . '/' . $this->query_string . '">' . $this->page_count . '</a></li>';
             return $last;
         } else {
             return '';

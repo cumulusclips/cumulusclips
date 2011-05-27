@@ -225,6 +225,19 @@ class Functions {
 
     }
 
+
+
+    static function IsPanelOpen ($panel) {
+        if (!empty ($_COOKIE['cc_admin_settings'])) {
+            parse_str ($_COOKIE['cc_admin_settings'], $settings);
+            if (!empty ($settings[$panel]) && $settings[$panel] == 'open') {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
 }
 
 ?>

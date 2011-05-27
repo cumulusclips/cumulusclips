@@ -90,6 +90,9 @@ body {
 #sidebar .panel div {
     display:none;
 }
+#sidebar .open div {
+    display:block;
+}
 
 #container {
     width:100%;

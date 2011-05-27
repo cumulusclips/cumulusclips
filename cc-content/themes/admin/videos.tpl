@@ -1,4 +1,4 @@
-<div id="browse-videos">
+<div id="videos">
 
     <h1><?=$header?></h1>
     <?php if ($sub_header): ?>

@@ -90,6 +90,7 @@ $total = $db->Count ($result_count);
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
 $pagination = new Pagination ($url, $total, $records_per_page, false);
 $start_record = $pagination->GetStartRecord();
+$_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
