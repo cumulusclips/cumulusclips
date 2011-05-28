@@ -9,7 +9,7 @@
     
     <div class="block">
 
-        <p><a href="<?=$list_page?>">Go back to members list</a></p>
+        <p><a href="<?=$list_page?>">Go back to members</a></p>
 
         <form action="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" method="post">
 

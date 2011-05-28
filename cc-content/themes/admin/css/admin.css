@@ -1,10 +1,10 @@
 html, body {
     height:100%;
+    background-color:#ebebeb;
 }
 
 body {
-    background-color:#ebebeb;
-    background-image:url(../images/background.png);
+    background:url(../images/background.png) no-repeat;
     font-family:arial, helvetica, sans-serif;
     font-size:12px;
     color:#666;
@@ -47,55 +47,9 @@ body {
     margin:0 0 0 15px;
 }
 
-#sidebar h3 {
-    background:url(../images/icon-sprite.png) no-repeat 0 0;
-    padding-left:30px;
-    cursor:pointer;
-    height:20px;
-    line-height:20px;
-}
-
-#sidebar .dashboard h3 {
-    background-position:0 0;
-}
-#sidebar .videos h3 {
-    background-position:0 -27px;
-}
-#sidebar .members h3 {
-    background-position:0 -55px;
-}
-#sidebar .comments h3 {
-    background-position:0 -85px;
-}
-#sidebar .flags h3 {
-    background-position:0 -117px;
-}
-#sidebar .pages h3 {
-    background-position:0 -147px;
-}
-#sidebar .appearance h3 {
-    background-position:0 -174px;
-}
-#sidebar .plugins h3 {
-    background-position:0 -202px;
-}
-#sidebar .settings h3 {
-    background-position:0 -231px;
-}
-
-#sidebar .panel {
-    margin:15px;
-}
-
-#sidebar .panel div {
-    display:none;
-}
-#sidebar .open div {
-    display:block;
-}
-
 #container {
     width:100%;
+    *width:auto;
 }
 
 #main {
@@ -130,6 +84,75 @@ body {
     color:#FFF;
     line-height:61px;
     margin-right:25px;
+}
+
+
+
+
+
+/*************
+SIDEBAR STYLES
+*************/
+
+#sidebar h3 {
+    background:url(../images/icon-sprite.png) no-repeat 0 0;
+    font-size:12px;
+    padding-left:30px;
+    cursor:pointer;
+    height:20px;
+    line-height:20px;
+    user-select:none;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+}
+
+#sidebar .dashboard {
+    background-position:0 0;
+}
+#sidebar .videos {
+    background-position:0 -27px;
+}
+#sidebar .members {
+    background-position:0 -55px;
+}
+#sidebar .comments {
+    background-position:0 -85px;
+}
+#sidebar .flags {
+    background-position:0 -117px;
+}
+#sidebar .pages {
+    background-position:0 -147px;
+}
+#sidebar .appearance {
+    background-position:0 -174px;
+}
+#sidebar .plugins {
+    background-position:0 -202px;
+}
+#sidebar .settings {
+    background-position:0 -231px;
+}
+
+#sidebar h3 span {
+    background:url(../images/icon-sprite.png) no-repeat 125px -259px;
+    display:block;
+}
+#sidebar .down-icon h3 span {
+    background-position: 125px -287px;
+}
+
+#sidebar .panel {
+    margin:15px 0 15px 10px;
+}
+
+#sidebar .panel div {
+    display:none;
+    margin-left:2px;
+    line-height:15px;
+}
+#sidebar .open-panel div {
+    display:block;
 }
 
 
@@ -311,17 +334,37 @@ RECORD LISTING STYLES
 
 
 
-/******************
-BROWSE VIDEO STYLES
-******************/
+/***********
+VIDEO STYLES
+***********/
 
-#browse-videos .list td {
+#videos .list td {
     width:20%;
 }
 
-#browse-videos .list .video-title {
+#videos .list .video-title {
     width:40%;
 }
+
+#video-edit form {
+    margin-top:15px;
+}
+
+
+
+
+
+/************
+MEMBER STYLES
+************/
+
+#member-edit form {
+    margin-top:15px;
+}
+
+
+
+
 
 
 

@@ -25,7 +25,7 @@
             <form method="POST" action="<?=ADMIN?>/members.php?status=<?=$status?>">
                 <input type="hidden" name="search_submitted" value="true" />
                 <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" value="Search" />
+                <input type="submit" name="submit" class="button" value="Search" />
             </form>
         </div>
     </div>

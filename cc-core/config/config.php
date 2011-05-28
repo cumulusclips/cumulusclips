@@ -68,9 +68,7 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build admin panel
-//    TODO Add return to list link on edit page
 //    TODO Build edit member
-//    TODO Make sidebar remember open/close status
 //    TODO Add confirm delete dialog (member/video)
 //    TODO Add Unban/Ban logic & link (member/video)
 //    TODO Add activate/approve link & logic (member/video)

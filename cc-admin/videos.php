@@ -9,6 +9,8 @@
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
+App::LoadClass ('Privacy');
+App::LoadClass ('EmailTemplate');
 App::LoadClass ('Pagination');
 
 
@@ -35,7 +37,7 @@ while ($row = $db->FetchObj ($result)) {
 
 
 
-// Handle "Delete" video if requested
+### Handle "Delete" video if requested
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate video id
@@ -48,6 +50,78 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
+### Handle "Unban" video if requested
+else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['unban']))) {
+        $video = new Video ($_GET['unban']);
+        $video->Update (array ('status' => 6));
+        $message = 'Video has been unbanned and is now available';
+        $message_type = 'success';
+    }
+
+}
+
+
+### Handle "Ban" video if requested
+else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['ban']))) {
+        $video = new Video ($_GET['ban']);
+        $video->Update (array ('status' => 7));
+        $message = 'Video has been banned';
+        $message_type = 'success';
+    }
+
+}
+
+
+### Handle "Approve" video if requested
+else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['approve']))) {
+        
+        // Update video
+        $video = new Video ($_GET['approve']);
+        $video->Update (array ('status' => 6));
+        
+        
+        // Send subscribers notification if opted-in
+        $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $video->user_id";
+        $result_alert = $db->Query ($query);
+        while ($opt = $db->FetchRow ($result_alert)) {
+
+            $subscriber = new User ($opt[0]);
+            $privacy = Privacy::LoadByUser ($opt[0]);
+            if ($privacy->OptCheck ('new_video')) {
+                $template = new EmailTemplate ('/new_video.htm');
+                $template_data = array (
+                    'host'      => HOST,
+                    'email'  => $subscriber->email,
+                    'channel'   => $user->username,
+                    'title'     => $video->title,
+                    'video_id'  => $video->video_id,
+                    'dashed'    => $video->slug
+                );
+                $template->Replace($template_data);
+                $template->Send ($subscriber->email);
+            }
+
+        } 
+        
+        
+        // Display message
+        $message = 'Video has been approved and is now available';
+        $message_type = 'success';
+    }
+
+}
+
+
+
 
 // Determine which type (status) of video to display
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 6;
@@ -57,11 +131,6 @@ switch ($status) {
         $query_string['status'] = 9;
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
-        break;
-    case 5:
-        $query_string['status'] = 5;
-        $header = 'Processing Videos';
-        $page_title = 'Processing Videos';
         break;
     case 7:
         $query_string['status'] = 7;

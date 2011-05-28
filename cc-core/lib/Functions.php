@@ -227,15 +227,19 @@ class Functions {
 
 
 
+    /**
+     * Check admin settings cookie to see if sidebar panel is open
+     * @param string $panel The panel to be checked if openned or not
+     * @return boolean Returns true if panel is open, false otherwise
+     */
     static function IsPanelOpen ($panel) {
         if (!empty ($_COOKIE['cc_admin_settings'])) {
             parse_str ($_COOKIE['cc_admin_settings'], $settings);
-            if (!empty ($settings[$panel]) && $settings[$panel] == 'open') {
+            if (!empty ($settings[$panel]) && $settings[$panel] == '1') {
                 return true;
-            } else {
-                return false;
             }
         }
+        return false;
     }
 
 }

@@ -16,7 +16,6 @@
             Jump To:
             <select id="video-status-select" name="status" onChange="window.location='<?=ADMIN?>/videos.php?status='+this.value;">
                 <option <?=(isset($status) && $status == 1) ? 'selected="selected"' : ''?>value="1">Approved</option>
-                <option <?=(isset($status) && $status == 5) ? 'selected="selected"' : ''?>value="5">Processing</option>
                 <option <?=(isset($status) && $status == 9) ? 'selected="selected"' : ''?>value="9">Pending</option>
                 <option <?=(isset($status) && $status == 7) ? 'selected="selected"' : ''?>value="7">Banned</option>
             </select>
@@ -53,6 +52,13 @@
                         <div class="record-actions invisible">
                             <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
                             <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
+                            <?php if ($status == 6): ?>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
+                            <?php elseif ($status == 9): ?>
+                                <a href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
+                            <?php elseif ($status == 7): ?>
+                                <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
+                            <?php endif; ?>
                             <a class="delete" href="<?=$pagination->GetURL('delete='.$video->video_id)?>">Delete</a>
                         </div>
                     </td>
