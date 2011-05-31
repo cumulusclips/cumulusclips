@@ -33,7 +33,7 @@ if (!isset ($_GET['page'])) App::Throw404();
 
 
 ### Count number of member xml/sitemap files
-$query = "SELECT COUNT(user_id) FROM " . DB_PREFIX . "users WHERE account_status = 'Active'";
+$query = "SELECT COUNT(user_id) FROM " . DB_PREFIX . "users WHERE status = 'Active'";
 $result = $db->Query ($query);
 $row = $db->FetchRow($result);
 if ($row[0] > $limit) {
@@ -154,7 +154,7 @@ switch ($type) {
         // Retrive members to display on this sitemap
         $start = ($page*$limit)-$limit;
         $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
-        $query = "SELECT username FROM " . DB_PREFIX . "users WHERE account_status = 'Active'" . $query_limit;
+        $query = "SELECT username FROM " . DB_PREFIX . "users WHERE status = 'Active'" . $query_limit;
         $result = $db->Query ($query);
 
         // Open member xml document

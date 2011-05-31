@@ -25,7 +25,7 @@ if (empty ($_POST['member']) || !is_numeric ($_POST['member'])) App::Throw404();
 
 // Validate user
 $member = new User ($_POST['member']);
-if (!$member->found || $member->account_status != 'Active') App::Throw404();
+if (!$member->found || $member->status != 'Active') App::Throw404();
 
 
 

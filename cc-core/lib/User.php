@@ -41,7 +41,7 @@ class User {
 
         // User specific values
         $this->avatar = (empty ($this->picture)) ? THEME . '/images/user_placeholder.gif' : HOST . "/cc-content/uploads/pictures/$this->picture";
-        $this->date_joined = date ('m/d/Y', strtotime ($this->date_joined));
+        $this->date_created = date ('m/d/Y', strtotime ($this->date_created));
         $this->last_login = date ('m/d/Y', strtotime ($this->last_login));
         $this->video_count = $this->GetVideoCount();
         Plugin::Trigger ('user.get');
@@ -160,7 +160,7 @@ class User {
         $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE user_id = $id";
         $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE user_id = $id";
         $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
-        $query4 = "DELETE FROM " . DB_PREFIX . "flagging WHERE user_id = $id OR (type = 'user' AND id = $id)";
+        $query4 = "DELETE FROM " . DB_PREFIX . "flags WHERE user_id = $id OR (type = 'user' AND id = $id)";
         $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE user_id = $id";
         $query6 = "DELETE FROM " . DB_PREFIX . "subscriptions WHERE user_id = $id OR member = $id";
         $query7 = "DELETE FROM " . DB_PREFIX . "posts WHERE user_id = $id";
@@ -278,7 +278,7 @@ class User {
     public function Activate() {
 
         // Update user status
-        $this->Update (array ('account_status' => 'Active'));
+        $this->Update (array ('status' => 'Active'));
         $msg = 'ID: ' . $this->user_id . "\nUsername: " . $this->username;
         @mail (MAIN_EMAIL, 'New Member Registered', $msg, 'From: Admin - TechieVideos.com <admin@techievideos.com>');
         Plugin::Trigger ('user.activate');
@@ -304,7 +304,7 @@ class User {
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     static function Login ($username, $password) {
-        $id = self::Exist (array ('username' => $username, 'password' => $password, 'account_status' => 'Active'));
+        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'Active'));
         if ($id) {
             $_SESSION['user_id'] = $id;
             Plugin::Trigger ('user.login');

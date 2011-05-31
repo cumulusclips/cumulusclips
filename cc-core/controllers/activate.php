@@ -25,7 +25,7 @@ View::$vars->Success = NULL;
 if (isset ($_GET['token'])) {
 	
     $token = $_GET['token'];
-    $data = array ('confirm_code' => $token, 'account_status' => 'Pending Confirm');
+    $data = array ('confirm_code' => $token, 'status' => 'Pending');
     $id = User::Exist ($data);
     if ($id) {
         $user = new User ($id);

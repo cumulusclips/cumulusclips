@@ -11,7 +11,7 @@
             <a href="<?=HOST?>/myaccount/profile/#update-picture" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
         </div>
         <br />
-        <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_joined?></p>
+        <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_created?></p>
         <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong> <?=$user->views?></p>
     </div>

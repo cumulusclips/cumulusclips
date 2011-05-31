@@ -152,7 +152,7 @@ class Video {
         $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE video_id = $video_id";
         $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE video_id = $video_id";
         $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE video_id = $video_id";
-        $query4 = "DELETE FROM " . DB_PREFIX . "flagging WHERE flag_type = 'video' and id = $video_id";
+        $query4 = "DELETE FROM " . DB_PREFIX . "flags WHERE type = 'video' and id = $video_id";
         $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE video_id = $video_id";
         $db->Query ($query1);
         $db->Query ($query2);

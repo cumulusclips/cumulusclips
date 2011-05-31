@@ -46,7 +46,6 @@
                 <p><a href="<?=ADMIN?>">Approved Comments</a></p>
                 <p><a href="<?=ADMIN?>">Pending Comments</a></p>
                 <p><a href="<?=ADMIN?>">Banned Comments</a></p>
-                <p><a href="<?=ADMIN?>">SPAM Comments</a></p>
             </div>
         </div>
 

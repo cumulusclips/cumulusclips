@@ -14,7 +14,7 @@
             <a class="flag" data-type="profile" data-id="<?=$member->user_id?>" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
             <a href="<?=HOST?>/feed/<?=$member->username?>/" title="<?=Language::GetText('member_rss')?>"><?=Language::GetText('member_rss')?></a>
         </p>
-        <p><strong><?=Language::GetText('member_since')?>:</strong>&nbsp; <?=$member->date_joined?></p>
+        <p><strong><?=Language::GetText('member_since')?>:</strong>&nbsp; <?=$member->date_created?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong>&nbsp; <?=$member->views?></p>
         <p><strong><?=Language::GetText('subscribers')?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></p>
         <p><strong><?=Language::GetText('website')?>:</strong>&nbsp; <?php echo ($member->website == '')?'':'<a href="' . $member->website . '" target="_blank" rel="nofollow">' . Functions::CutOff ($member->website, 30) . '</a>'; ?></p>

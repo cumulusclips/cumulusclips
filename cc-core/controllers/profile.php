@@ -29,7 +29,7 @@ $post_count = 5;
 
 // Verify Member was supplied
 if (isset ($_GET['username'])) {
-    $data = array ('username' => $_GET['username'], 'account_status' => 'Active');
+    $data = array ('username' => $_GET['username'], 'status' => 'Active');
     $user_id = User::Exist ($data);
 } else {
     App::Throw404();

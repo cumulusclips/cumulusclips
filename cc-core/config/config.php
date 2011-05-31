@@ -68,10 +68,10 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build admin panel
-//    TODO Build edit member
 //    TODO Add confirm delete dialog (member/video)
-//    TODO Add Unban/Ban logic & link (member/video)
-//    TODO Add activate/approve link & logic (member/video)
+//    TODO Create browse comments
+//    TODO Add approve, ban, unban comment logic
+//    TODO Build edit comments
 
 
 // TODO Add 'View My Profile' link in my account / top nav

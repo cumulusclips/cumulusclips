@@ -7,7 +7,7 @@
 
     
     <?php if ($message): ?>
-    <div id="<?=$message_type?>"><?=$message?></div>
+    <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -30,45 +30,54 @@
         </div>
     </div>
 
+    <?php if ($total > 0): ?>
 
-    <div class="list-headers">
-        <table class="list">
-        </table>
-    </div>
+        <div class="block list">
+            <table>
+                <thead>
+                    <tr>
+                        <td class="large">Member</td>
+                        <td class="large">Email</td>
+                        <td class="large">Date Joined</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php while ($row = $db->FetchObj ($result)): ?>
 
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="large">Member</td>
-                    <td class="large">Email</td>
-                    <td class="large">Date Joined</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php while ($row = $db->FetchObj ($result)): ?>
+                    <?php $odd = empty ($odd) ? true : false; ?>
+                    <?php $user = new User ($row->user_id); ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-                <?php $user = new User ($row->user_id); ?>
+                    <tr class="<?=$odd ? 'odd' : ''?>">
+                        <td>
+                            <a href="" class="large"><?=$user->username?></a>
+                            <div class="record-actions invisible">
+                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+                                <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
+                                
+                                <?php if ($status == 'active'): ?>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$user->user_id)?>">Ban</a>
+                                <?php elseif ($status == 'pending'): ?>
+                                    <a href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
+                                <?php elseif ($status == 'banned'): ?>
+                                    <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
+                                <?php endif; ?>
 
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td>
-                        <a href="" class="large"><?=$user->username?></a>
-                        <div class="record-actions invisible">
-                            <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                            <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
-                            <a class="delete" href="<?=$pagination->GetURL('delete='.$user->user_id)?>">Delete</a>
-                        </div>
-                    </td>
-                    <td><?=$user->email?></td>
-                    <td><?=$user->date_joined?></td>
-                </tr>
-                
-            <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
+                                <a class="delete" href="<?=$pagination->GetURL('delete='.$user->user_id)?>">Delete</a>
+                            </div>
+                        </td>
+                        <td><?=$user->email?></td>
+                        <td><?=$user->date_created?></td>
+                    </tr>
 
-    <?=$pagination->paginate()?>
+                <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?=$pagination->paginate()?>
+
+    <?php else: ?>
+        <div class="block"><strong>No members found</strong></div>
+    <?php endif; ?>
 
 </div>

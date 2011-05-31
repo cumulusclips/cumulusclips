@@ -24,12 +24,12 @@ $sub_header = null;
 
 
 
-// Delete member
+### Handle "Delete" member
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate user id
-    if (User::Exist(array ('user_id' => $_GET['delete']))) {
-//        User::Delete($_GET['id']);
+    if (User::Exist (array ('user_id' => $_GET['delete']))) {
+        User::Delete ($_GET['delete']);
         $message = 'Member has been deleted';
         $message_type = 'success';
     }
@@ -37,8 +37,50 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
+### Handle "Activate" member
+else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 
-// Determin which type (account status) of members to display
+    // Validate user id
+    $user = new User ($_GET['activate']);
+    if ($user->found) {
+        $user->Activate();
+        $message = 'Member has been activated';
+        $message_type = 'success';
+    }
+
+}
+
+
+### Handle "Unban" member
+else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
+
+    // Validate user id
+    $user = new User ($_GET['unban']);
+    if ($user->found) {
+        $user->Update (array ('status' => 'Active'));
+        $message = 'Member has been unbanned';
+        $message_type = 'success';
+    }
+
+}
+
+
+### Handle "Ban" member
+else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+
+    // Validate user id
+    $user = new User ($_GET['ban']);
+    if ($user->found) {
+        $user->Update (array ('status' => 'Banned'));
+        $message = 'Member has been banned';
+        $message_type = 'success';
+    }
+
+}
+
+
+
+// Determine which type (account status) of members to display
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
 switch ($status) {
 
@@ -59,7 +101,7 @@ switch ($status) {
         break;
 
 }
-$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE account_status = '$status'";
+$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE status = '$status'";
 
 
 

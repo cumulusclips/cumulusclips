@@ -42,7 +42,7 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['delete']))) {
-//        Video::Delete($_GET['id']);
+        Video::Delete($_GET['delete']);
         $message = 'Video has been deleted';
         $message_type = 'success';
     }
@@ -57,7 +57,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
         $video = new Video ($_GET['unban']);
         $video->Update (array ('status' => 6));
-        $message = 'Video has been unbanned and is now available';
+        $message = 'Video has been unbanned';
         $message_type = 'success';
     }
 
