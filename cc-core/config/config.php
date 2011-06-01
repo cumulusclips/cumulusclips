@@ -68,7 +68,6 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build admin panel
-//    TODO Add confirm delete dialog (member/video)
 //    TODO Create browse comments
 //    TODO Add approve, ban, unban comment logic
 //    TODO Build edit comments

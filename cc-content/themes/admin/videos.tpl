@@ -29,49 +29,57 @@
             </form>
         </div>
     </div>
+
+    <?php if ($total > 0): ?>
     
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="video-title large">Title</td>
-                    <td class="category large">Category</td>
-                    <td class="large">Member</td>
-                    <td class="large">Upload Date</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php while ($row = $db->FetchObj ($result)): ?>
+        <div class="block list">
+            <table>
+                <thead>
+                    <tr>
+                        <td class="video-title large">Title</td>
+                        <td class="category large">Category</td>
+                        <td class="large">Member</td>
+                        <td class="large">Upload Date</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php while ($row = $db->FetchObj ($result)): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-                <?php $video = new Video ($row->video_id); ?>
+                    <?php $odd = empty ($odd) ? true : false; ?>
+                    <?php $video = new Video ($row->video_id); ?>
 
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td class="video-title">
-                        <a href="" class="large"><?=$video->title?></a><br />
-                        <div class="record-actions invisible">
-                            <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
-                            <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
-                            <?php if ($status == 6): ?>
-                                <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
-                            <?php elseif ($status == 9): ?>
-                                <a href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
-                            <?php elseif ($status == 7): ?>
-                                <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
-                            <?php endif; ?>
-                            <a class="delete" href="<?=$pagination->GetURL('delete='.$video->video_id)?>">Delete</a>
-                        </div>
-                    </td>
-                    <td class="category"><?=$categories[$video->cat_id]?></td>
-                    <td><?=$video->username?></td>
-                    <td><?=$video->date_created?></td>
-                </tr>
-                
-            <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
+                    <tr class="<?=$odd ? 'odd' : ''?>">
+                        <td class="video-title">
+                            <a href="" class="large"><?=$video->title?></a><br />
+                            <div class="record-actions invisible">
+                                <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
+                                <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
 
-    <?=$pagination->paginate()?>
+                                <?php if ($status == 6): ?>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
+                                <?php elseif ($status == 9): ?>
+                                    <a href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
+                                <?php elseif ($status == 7): ?>
+                                    <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
+                                <?php endif; ?>
+
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You are about to delete this video, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                            </div>
+                        </td>
+                        <td class="category"><?=$categories[$video->cat_id]?></td>
+                        <td><?=$video->username?></td>
+                        <td><?=$video->date_created?></td>
+                    </tr>
+
+                <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?=$pagination->paginate()?>
+    
+    <?php else: ?>
+        <div class="block"><strong>No videos found</strong></div>
+    <?php endif; ?>
 
 </div>

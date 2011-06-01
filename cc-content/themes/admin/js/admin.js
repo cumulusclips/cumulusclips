@@ -18,6 +18,15 @@ $('document').ready(function(){
     
     // Attach record hover events
     $('.list tr').hover(function(){$(this).find('.record-actions').toggleClass('invisible');});
+    
+    
+    // Attach confirm popup to confirm action links
+    $('.confirm').click(function() {
+        var location = $(this).attr('href')
+        var agree = confirm ($(this).data('confirm'));
+        if (agree) window.location = location;
+        return false;
+    });
 
 });
 

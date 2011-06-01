@@ -62,7 +62,7 @@
                                     <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete" href="<?=$pagination->GetURL('delete='.$user->user_id)?>">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->user_id)?>" data-confirm="You are about to delete this member and their content, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>
                         <td><?=$user->email?></td>
