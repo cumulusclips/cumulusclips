@@ -42,10 +42,12 @@ class Comment {
         // Custom Vars
         $this->date_created = date ('m/d/Y', strtotime ($row['date_created']));
         $this->comments = nl2br ($row['comments']);
+        $this->avatar = THEME . '/images/user_placeholder.gif';
         if ($this->user_id != 0) {
             $user = new User ($this->user_id);
             $this->name = $user->username;
             $this->website = HOST . '/members/' . $user->username . '/';
+            $this->avatar = $user->avatar;
         }
         Plugin::Trigger ('comment.get');
 
