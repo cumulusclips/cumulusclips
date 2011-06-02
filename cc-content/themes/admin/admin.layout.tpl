@@ -43,9 +43,9 @@
         <div class="panel<?=(Functions::IsPanelOpen('comments'))?' open-panel down-icon':''?>">
             <h3 class="comments"><span>Comments</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>">Approved Comments</a></p>
-                <p><a href="<?=ADMIN?>">Pending Comments</a></p>
-                <p><a href="<?=ADMIN?>">Banned Comments</a></p>
+                <p><a href="<?=ADMIN?>/comments.php?status=approved">Approved Comments</a></p>
+                <p><a href="<?=ADMIN?>/comments.php?status=pending">Pending Comments</a></p>
+                <p><a href="<?=ADMIN?>/comments.php?status=banned">Banned Comments</a></p>
             </div>
         </div>
 
