@@ -374,9 +374,16 @@ COMMENT STYLES
     width:20%;
 }
 
-#comments td.comments-text {
+#comments .list .comments-text {
     width:40%;
 }
+
+#comments .list .poster {
+    width:150px;
+    word-wrap:break-word;
+}
+
+
 
 
 

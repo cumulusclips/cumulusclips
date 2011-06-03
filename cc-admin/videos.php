@@ -131,20 +131,23 @@ switch ($status) {
         $query_string['status'] = 9;
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
+        $where = 9;
         break;
     case 7:
         $query_string['status'] = 7;
         $header = 'Banned Videos';
         $page_title = 'Banned Videos';
+        $where = '7, 10';
         break;
     default:
         $status = 6;
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
+        $where = 6;
         break;
 
 }
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = $status";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status IN ($where)";
 
 
 

@@ -68,9 +68,11 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build admin panel
-//    TODO Create browse comments
 //    TODO Add approve, ban, unban comment logic
 //    TODO Build edit comments
+//    TODO Remove flag records during manual ban (video)
+//    TODO Remove flag records during manual ban (members)
+//    TODO Remove flag records during manual ban (comments)
 
 
 // TODO Add 'View My Profile' link in my account / top nav

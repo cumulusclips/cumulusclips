@@ -26,6 +26,7 @@ class Flag {
 
 
 
+
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
@@ -40,6 +41,7 @@ class Flag {
         }
         Plugin::Trigger ('flag.get');
     }
+
 
 
 
@@ -72,6 +74,7 @@ class Flag {
 
 
 
+
     /**
      * Create a new record using the given criteria
      * @param array $data Key/Value pairs to use as data for new record i.e. array (field_name => value)
@@ -101,6 +104,7 @@ class Flag {
 
 
 
+
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
@@ -125,6 +129,7 @@ class Flag {
 
 
 
+
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -135,6 +140,110 @@ class Flag {
         Plugin::Trigger ('flag.delete');
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
+    }
+
+
+
+
+    /**
+     * Perform flag related action on a record
+     * @param integer $id The id of the record being updated
+     * @param string $type Type of record being updated. Possible values are: video, user, comment
+     * @param string $decision The action to be performed on the record. Possible values are: ban, unban, decline
+     * @return void Record and related content are updated
+     */
+    static function FlagDecision ($id, $type, $decision) {
+
+        $db = Database::GetInstance();
+        // Determine what ban action was taken on record
+        switch ($decision) {
+
+            ### Content is being banned
+            case 'ban':
+
+                switch ($type) {
+
+                    // Set video to 'Banned'
+                    case 'video':
+                        $query = "UPDATE " . DB_PREFIX . "videos SET status = 7 WHERE video_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                    // Perform user 'Ban' operations
+                    case 'user':
+
+                        // Set videos to 'Banned Chain'
+                        $query = "UPDATE " . DB_PREFIX . "videos SET status = 10 WHERE user_id = $id";
+                        $db->Query ($query);
+
+                        // Set comments to 'Banned Chain'
+                        $query = "UPDATE " . DB_PREFIX . "comments SET status = 'banned_chain' WHERE user_id = $id";
+                        $db->Query ($query);
+
+                        // Set user to 'Banned'
+                        $query = "UPDATE " . DB_PREFIX . "users SET status = 'banned' WHERE user_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                    // Set comment to 'Banned'
+                    case 'comment':
+                        $query = "UPDATE " . DB_PREFIX . "comments SET status = 'banned' WHERE comment_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                }
+
+                // Update flag requests
+                $query = "UPDATE flags SET status = 'approved' WHERE type = '$type' AND id = $id";
+                $db->Query ($query);
+                break;
+
+
+            ### Ban decision is being reversed
+            case 'unban':
+
+                switch ($type) {
+
+                    // Restore video to 'Approved'
+                    case 'video':
+                        $query = "UPDATE " . DB_PREFIX . "videos SET status = 6 WHERE video_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                    // Perform user unban operations
+                    case 'user':
+
+                        // Restore videos to 'Approved'
+                        $query = "UPDATE " . DB_PREFIX . "videos SET status = 6 WHERE status = 10 AND user_id = $id";
+                        $db->Query ($query);
+
+                        // Restore comments to 'Approved'
+                        $query = "UPDATE " . DB_PREFIX . "comments SET status = 'approved' WHERE user_id = $id";
+                        $db->Query ($query);
+
+                        // Restore user to 'Approved'
+                        $query = "UPDATE " . DB_PREFIX . "users SET status = 'active' WHERE user_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                    // Restore comment to 'Approved'
+                    case 'comment':
+                        $query = "UPDATE " . DB_PREFIX . "comments SET status = 'approved' WHERE comment_id = $id";
+                        $db->Query ($query);
+                        break;
+
+                }
+
+
+            ### Ban request is declined
+            case 'decline':
+                // Update flag requests
+                $query = "UPDATE flags SET status = 'declined' WHERE type = '$type' AND id = $id";
+                $db->Query ($query);
+                break;
+
+        }   // END decision switch
+
     }
 
 }

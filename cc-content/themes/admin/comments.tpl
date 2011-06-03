@@ -51,8 +51,8 @@
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <img src="<?=$comment->avatar?>" height="80" width="80" /><br />
-                            <?=($comment->user_id==0)?Functions::CutOff($comment->email,30):'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?>
+                            <img src="<?=$comment->avatar?>" height="80" width="80" />
+                            <p class="poster"><?=($comment->user_id==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
                         </td>
                         <td class="comments-text">
                             <?=Functions::CutOff ($comment->comments, 150)?>

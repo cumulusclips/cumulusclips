@@ -30,9 +30,9 @@ $sub_header = null;
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate id
-    if (User::Exist (array ('user_id' => $_GET['delete']))) {
-        User::Delete ($_GET['delete']);
-        $message = 'Member has been deleted';
+    if (Comment::Exist (array ('comment_id' => $_GET['delete']))) {
+        Comment::Delete ($_GET['delete']);
+        $message = 'Comment has been deleted';
         $message_type = 'success';
     }
 
@@ -43,10 +43,10 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 
     // Validate id
-    $user = new User ($_GET['activate']);
-    if ($user->found) {
-        $user->Activate();
-        $message = 'Member has been activated';
+    $comment = new Comment ($_GET['approve']);
+    if ($comment->found) {
+        $comment->Update (array ('status' => 'approved'));
+        $message = 'Comment has been approved';
         $message_type = 'success';
     }
 
@@ -57,10 +57,10 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
     // Validate id
-    $user = new User ($_GET['unban']);
-    if ($user->found) {
-        $user->Update (array ('status' => 'Active'));
-        $message = 'Member has been unbanned';
+    $comment = new Comment ($_GET['unban']);
+    if ($comment->found) {
+        $comment->Update (array ('status' => 'approved'));
+        $message = 'Comment has been unbanned';
         $message_type = 'success';
     }
 
@@ -71,10 +71,10 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate id
-    $user = new User ($_GET['ban']);
-    if ($user->found) {
-        $user->Update (array ('status' => 'Banned'));
-        $message = 'Member has been banned';
+    $comment = new Comment ($_GET['ban']);
+    if ($comment->found) {
+        $comment->Update (array ('status' => 'banned'));
+        $message = 'Comment has been banned';
         $message_type = 'success';
     }
 
@@ -91,20 +91,23 @@ switch ($status) {
         $query_string['status'] = 'pending';
         $header = 'Pending Comments';
         $page_title = 'Pending Comments';
+        $where = "'pending'";
         break;
     case 'banned':
         $query_string['status'] = 'banned';
         $header = 'Banned Comments';
         $page_title = 'Banned Comments';
+        $where = "'banned', 'banned_chain'";
         break;
     default:
         $status = 'approved';
         $header = 'Approved Comments';
         $page_title = 'Approved Comments';
+        $where = "'approved'";
         break;
 
 }
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status'";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status IN ($where)";
 
 
 
