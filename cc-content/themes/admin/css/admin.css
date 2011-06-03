@@ -318,6 +318,7 @@ RECORD LISTING STYLES
 
 .list td {
     padding:20px 10px;
+    vertical-align:top;
     width:30%;
 }
 
@@ -365,12 +366,17 @@ MEMBER STYLES
 
 
 
+/*************
+COMMENT STYLES
+*************/
 
+#comments .list td {
+    width:20%;
+}
 
-
-
-
-
+#comments td.comments-text {
+    width:40%;
+}
 
 
 

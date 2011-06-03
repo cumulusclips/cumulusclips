@@ -36,8 +36,9 @@
             <table>
                 <thead>
                     <tr>
+                        <td class="large">Poster</td>
                         <td class="large">Comments</td>
-                        <td class="large">Email</td>
+                        <td class="large">Video</td>
                         <td class="large">Date Posted</td>
                     </tr>
                 </thead>
@@ -46,13 +47,16 @@
 
                     <?php $odd = empty ($odd) ? true : false; ?>
                     <?php $comment = new Comment ($row->comment_id); ?>
+                    <?php $video = new Video ($comment->video_id); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
-                        <td><?=$comment->comments?></td>
                         <td>
-                            <a href="" class="large"><?=$comment->user_id?></a>
+                            <img src="<?=$comment->avatar?>" height="80" width="80" /><br />
+                            <?=($comment->user_id==0)?Functions::CutOff($comment->email,30):'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?>
+                        </td>
+                        <td class="comments-text">
+                            <?=Functions::CutOff ($comment->comments, 150)?>
                             <div class="record-actions invisible">
-                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
                                 <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
                                 
                                 <?php if ($status == 'approved'): ?>
@@ -66,6 +70,7 @@
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->comment_id)?>" data-confirm="You are about to delete this comment, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>
+                        <td><a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/"><?=$video->title?></a></td>
                         <td><?=$comment->date_created?></td>
                     </tr>
 
@@ -77,7 +82,7 @@
         <?=$pagination->paginate()?>
 
     <?php else: ?>
-        <div class="block"><strong>No members found</strong></div>
+        <div class="block"><strong>No comments found</strong></div>
     <?php endif; ?>
 
 </div>
