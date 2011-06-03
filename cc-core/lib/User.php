@@ -26,6 +26,7 @@ class User {
 
 
 
+
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
@@ -47,6 +48,7 @@ class User {
         Plugin::Trigger ('user.get');
 
     }
+
 
 
 
@@ -76,6 +78,7 @@ class User {
         }
 
     }
+
 
 
 
@@ -111,6 +114,7 @@ class User {
 
 
 
+
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
@@ -132,6 +136,7 @@ class User {
         Plugin::Trigger ('user.update');
 
     }
+
 
 
 
@@ -182,6 +187,7 @@ class User {
 
 
 
+
     /**
      * Get video count Method
      * @return integer Returns the number of approved videos uploaded by the user
@@ -194,7 +200,8 @@ class User {
     }
     
     
-    
+
+
     /**
      * Generate a new password for user
      * @return void User's password is reset and updated in DB
@@ -207,7 +214,8 @@ class User {
     }
 	
 	
-	
+
+
     /**
      * Generate a unique random string for a user account activation token
      * @return string Random user account activation token
@@ -223,42 +231,11 @@ class User {
 
 
 
-    /**
-     * Create an anonymous user
-     * @param string $ip_address IP Address of anonymous user
-     * @return int user id of new anonymous user
-     */
-    static function CreateAnonymous() {
-        $db = Database::GetInstance();
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $query = "INSERT INTO " . DB_PREFIX . "users_anonymous (ip, date_created) values ('$ip', NOW())";
-        $db->Query ($query);
-        $id = $db->LastId()*-1;
-        setcookie('cc_anonymous', $id, time()+3600*24*365*10,'/');
-        return $id;
-    }
-
-
-
-    /**
-     * Determine whether user is registered as anonymous user
-     * @return boolean Returns true if user is registered anonymous, false otherwise
-     */
-    static function IsAnonymous() {
-        if (!empty ($_COOKIE['cc_anonymous']) && is_numeric ($_COOKIE['cc_anonymous']) && $_COOKIE['cc_anonymous'] < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
 
     /**
      * Activate registered user's account
-     * @return void User is activated, if user was anonymous his anonymous
-     * actions are transfered to the main account, and the anonymous cookie is
-     * removed.
+     * @return void User is activated, if user had anonymous comments they're
+     * transfered to the main account
      */
     public function Activate() {
 
@@ -268,20 +245,15 @@ class User {
         @mail (MAIN_EMAIL, 'New Member Registered', $msg, 'From: Admin - TechieVideos.com <admin@techievideos.com>');
         Plugin::Trigger ('user.activate');
         
-        // Convert if anonymous user
-        if (self::IsAnonymous()) {
+        // Update user's anonymous comments IF/APP
+        $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
+        $this->db->Query ($query);
 
-            // Update user's anonymous ratings
-            $anon_id = $_COOKIE['cc_anonymous'];
-            $query = "UPDATE " . DB_PREFIX . "ratings SET user_id = $this->user_id WHERE user_id = $anon_id";
-            $this->db->Query ($query);
-            setcookie('cc_anonymous',null,time()-3600*24*365*10,'/');
-
-        }
     }
     
     
-    
+
+
     /**
      * Login a user
      * @param string $username Username of user to login
@@ -301,6 +273,7 @@ class User {
 
 
 
+
     /**
      *  Log a user out of website
      * @return void
@@ -309,6 +282,7 @@ class User {
         unset ($_SESSION['user_id']);
         Plugin::Trigger ('user.logout');
     }
+
 
 
 

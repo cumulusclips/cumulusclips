@@ -26,6 +26,7 @@ class Comment {
 
 
 
+
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
@@ -42,16 +43,19 @@ class Comment {
         // Custom Vars
         $this->date_created = date ('m/d/Y', strtotime ($row['date_created']));
         $this->comments = nl2br ($row['comments']);
-        $this->avatar = THEME . '/images/user_placeholder.gif';
         if ($this->user_id != 0) {
             $user = new User ($this->user_id);
             $this->name = $user->username;
+            $this->email = $user->email;
             $this->website = HOST . '/members/' . $user->username . '/';
             $this->avatar = $user->avatar;
+        } else {
+            $this->avatar = THEME . '/images/user_placeholder.gif';
         }
         Plugin::Trigger ('comment.get');
 
     }
+
 
 
 
@@ -84,6 +88,7 @@ class Comment {
 
 
 
+
     /**
      * Create a new record using the given criteria
      * @param array $data Key/Value pairs to use as data for new record i.e. array (field_name => value)
@@ -113,6 +118,7 @@ class Comment {
 
 
 
+
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
@@ -134,6 +140,7 @@ class Comment {
         Plugin::Trigger ('comment.update');
 
     }
+
 
 
 

@@ -40,11 +40,10 @@ if (!isset ($_POST['rating']) || !in_array ($_POST['rating'], array ('1','0'))) 
 }
 
 
-// Check user is logged in
+// Verify user is logged in
 if (!$logged_in) {
-    $user_id = User::IsAnonymous() ? $_COOKIE['cc_anonymous'] : User::CreateAnonymous();
-} else {
-    $user_id = $user->user_id;
+    echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_rate_login')));
+    exit();
 }
 
 
