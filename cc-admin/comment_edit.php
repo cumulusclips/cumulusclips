@@ -8,6 +8,7 @@
 // Include required files
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
+App::LoadClass ('Video');
 App::LoadClass ('Comment');
 
 
@@ -36,8 +37,10 @@ if (!empty ($_SESSION['list_page'])) {
 if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
 
     ### Retrieve record information
-    $user = new Comment ($_GET['id']);
-    if (!$user->found) {
+    $comment = new Comment ($_GET['id']);
+    if ($comment->found) {
+        $video = new Video ($comment->video_id);
+    } else {
         header ('Location: ' . ADMIN . '/comments.php');
         exit();
     }
@@ -57,38 +60,53 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-    // Validate Name
-    if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
-        $data['name'] = htmlspecialchars ($_POST['name']);
+
+    // Validate user fields if anonymous
+    if ($comment->user_id == 0) {
+
+        // Validate Name
+        if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
+            $data['name'] = htmlspecialchars ($_POST['name']);
+        } else {
+            $Errors['name'] = Language::GetText('error_name');
+        }
+
+
+
+        // Validate Email
+        if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
+            $data['email'] = $_POST['email'];
+        } else {
+            $Errors['email'] = Language::GetText('error_email');
+        }
+
+
+
+        // Validate Website
+        if (!empty ($comment->website) && $_POST['website'] == '') {
+            $data['website'] = '';
+        } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
+            $data['website'] = htmlspecialchars ($_POST['website']);
+        }
+
+    }
+
+
+
+    // Validate status
+    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+        $data['status'] = htmlspecialchars (trim ($_POST['status']));
     } else {
-        $Errors['name'] = Language::GetText('error_name');
+        $Errors['status'] = 'Invalid status';
     }
 
 
 
     // Validate comments
     if (!empty ($_POST['comments']) && !ctype_space ($_POST['comments'])) {
-        $data['comments'] = htmlspecialchars ( trim ($_POST['comments']));
+        $data['comments'] = htmlspecialchars (trim ($_POST['comments']));
     } else {
         $Errors['comments'] = Language::GetText('error_comment');
-    }
-
-
-
-    // Validate Email
-    if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
-        $data['email'] = $_POST['email'];
-    } else {
-        $Errors['email'] = Language::GetText('error_email');
-    }
-
-
-
-    // Validate Website
-    if (!empty ($comment->website) && $_POST['website'] == '') {
-        $data['website'] = '';
-    } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
-        $data['website'] = htmlspecialchars ($_POST['website']);
     }
 
 

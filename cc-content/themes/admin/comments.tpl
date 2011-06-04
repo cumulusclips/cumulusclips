@@ -62,7 +62,7 @@
                                 <?php if ($status == 'approved'): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->comment_id)?>">Ban</a>
                                 <?php elseif ($status == 'pending'): ?>
-                                    <a href="<?=$pagination->GetURL('activate='.$comment->comment_id)?>">Activate</a>
+                                    <a href="<?=$pagination->GetURL('approve='.$comment->comment_id)?>">Approve</a>
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$comment->comment_id)?>">Unban</a>
                                 <?php endif; ?>

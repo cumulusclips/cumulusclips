@@ -55,6 +55,7 @@ if (isset ($_POST['submitted'])) {
 
         $data['user_id'] = 0;
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 
         // Validate name
         if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {

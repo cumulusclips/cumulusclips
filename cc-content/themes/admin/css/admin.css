@@ -187,7 +187,6 @@ a:hover {
     font-size:10px;
 }
 
-.delete { color:#A00; }
 
 
 
@@ -209,6 +208,12 @@ h1, h2, h3, .big, .large, .huge {
 h1, .huge { font-size:20px; }
 h2, .large { font-size:16px; }
 h3, .big { font-size:14px; }
+
+.errors, .delete { color:#C00; }
+
+.approve { color:green; }
+
+.pending { color:orange; }
 
 
 
@@ -265,13 +270,19 @@ MISC STYLES
     border-radius:5px;
 }
 
-.errors {
-    color:#C00;
+.notice {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    background-color: #FFF6BF;
+    border:solid 3px #FFD324;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    color: #514721;
 }
 
-.invisible {
-    visibility:hidden;
-}
+.invisible { visibility:hidden; }
 
 
 
@@ -381,6 +392,10 @@ COMMENT STYLES
 #comments .list .poster {
     width:150px;
     word-wrap:break-word;
+}
+
+#comment-edit form {
+    margin-top:15px;
 }
 
 

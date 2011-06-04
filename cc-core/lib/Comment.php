@@ -42,7 +42,7 @@ class Comment {
 
         // Custom Vars
         $this->date_created = date ('m/d/Y', strtotime ($row['date_created']));
-        $this->comments = nl2br ($row['comments']);
+        $this->comments_display = nl2br ($row['comments']);
         if ($this->user_id != 0) {
             $user = new User ($this->user_id);
             $this->name = $user->username;
