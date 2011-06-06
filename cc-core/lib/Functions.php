@@ -16,6 +16,7 @@ class Functions {
 
 
 
+
     /**
      * Extract the file extension of the given file
      * @param string $filename Filename to examine extension for
@@ -27,6 +28,7 @@ class Functions {
         $filename_sections = explode ('.', $filename);
         return array_pop ($filename_sections);
     }
+
 
 
 
@@ -62,6 +64,7 @@ class Functions {
 
 
 
+
     /**
      * Format seconds into hr:min:sec
      * @param integer $seconds
@@ -74,6 +77,7 @@ class Functions {
         $secs = str_pad ($seconds%60, 2, 0, STR_PAD_LEFT);
         return $hours . ':' . $minutes . ':' . $secs;
     }
+
 
 
 
@@ -111,7 +115,8 @@ class Functions {
     }
     
     
-    
+
+
     /**
      * Truncate a string at desired length
      * @param string $string String to be truncated
@@ -132,9 +137,10 @@ class Functions {
 
 
 
+
     /**
      * Determine elapsed time string for given timestamp
-     * @param int Timestamp to check elapsed time for
+     * @param integer $time_to_check Timestamp to check elapsed time for
      * @return string Amount of time passed since given timestamp. If elapsed
      * time is greater than 24 hours, then just return the date is returned
      */
@@ -189,14 +195,14 @@ class Functions {
 
 
 
+
     /**
      * Search and replace placeholders with strings
-     * @param string $node The string to perform replacements on
+     * @param string $string The string to perform replacements on
      * @param array $replace The values of this array will replace any
      * placeholders/variables in the string. The key of the array replaces
      * variables of the same name (not case sen.) with the value from the array. If the
      * variable is a link, the value from the array is treated as the URL for the href attribute
-
      * @return string The given string is returned with replacements made to it
      */
     static function Replace ($string, $replace) {
@@ -227,6 +233,7 @@ class Functions {
 
 
 
+
     /**
      * Check admin settings cookie to see if sidebar panel is open
      * @param string $panel The panel to be checked if openned or not
@@ -240,6 +247,45 @@ class Functions {
             }
         }
         return false;
+    }
+
+
+
+
+    /**
+     * Change the status of a user and their content
+     * @param string $status The new status being assigned to the user
+     * @return void Record and it's related records are updated to the new status
+     */
+    public function ChangeUserRecords ($status) {
+
+        switch ($status) {
+            case 'banned':
+            case 'pending':
+
+                // Set user's videos to 'User Not Available'
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
+                $this->db->Query ($query);
+
+                // Set user's comments to 'User Not Available'
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
+                $this->db->Query ($query);
+
+
+            case 'approved':
+
+                // Restore user's videos IF/APP
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
+                $this->db->Query ($query);
+
+                // Restore user's comments IF/APP
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
+                $this->db->Query ($query);
+
+        }
+
+        $this->Update (array ('status' => $status));
+
     }
 
 }

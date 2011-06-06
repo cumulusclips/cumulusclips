@@ -95,6 +95,14 @@ if (isset ($_POST['submitted'])) {
 
     // Validate status
     if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+
+//switch ($action) {
+//    case 'pending':
+//        Functions::AdminStatusChange($id, $type, $action);
+//        break;
+//}
+
+
         $data['status'] = htmlspecialchars (trim ($_POST['status']));
     } else {
         $Errors['status'] = 'Invalid status';

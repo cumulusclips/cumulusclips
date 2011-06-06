@@ -46,6 +46,7 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     $comment = new Comment ($_GET['approve']);
     if ($comment->found) {
         $comment->Update (array ('status' => 'approved'));
+        $comment->Release();
         $message = 'Comment has been approved';
         $message_type = 'success';
     }
@@ -60,6 +61,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     $comment = new Comment ($_GET['unban']);
     if ($comment->found) {
         $comment->Update (array ('status' => 'approved'));
+        $comment->Release();
         $message = 'Comment has been unbanned';
         $message_type = 'success';
     }
@@ -74,6 +76,7 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
     $comment = new Comment ($_GET['ban']);
     if ($comment->found) {
         $comment->Update (array ('status' => 'banned'));
+        Flag::FlagDecision ($comment->comment_id, 'comment', true);
         $message = 'Comment has been banned';
         $message_type = 'success';
     }
