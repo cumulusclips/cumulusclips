@@ -8,6 +8,7 @@
 // Include required files
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
+App::LoadClass ('Flag');
 App::LoadClass ('Pagination');
 
 
@@ -16,7 +17,7 @@ Plugin::Trigger ('admin.members.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
 $content = 'members.tpl';
-$records_per_page = 20;
+$records_per_page = 9;
 $url = ADMIN . '/members.php';
 $query_string = array();
 $message = null;
@@ -27,7 +28,7 @@ $sub_header = null;
 ### Handle "Delete" member
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
-    // Validate user id
+    // Validate id
     if (User::Exist (array ('user_id' => $_GET['delete']))) {
         User::Delete ($_GET['delete']);
         $message = 'Member has been deleted';
@@ -40,10 +41,12 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 ### Handle "Activate" member
 else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 
-    // Validate user id
+    // Validate id
     $user = new User ($_GET['activate']);
     if ($user->found) {
-        $user->Activate();
+        $user->Update (array ('status' => 'active'));
+        $user->UpdateContentStatus ('active');
+        $user->Approve (true);
         $message = 'Member has been activated';
         $message_type = 'success';
     }
@@ -54,10 +57,12 @@ else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 ### Handle "Unban" member
 else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
-    // Validate user id
+    // Validate id
     $user = new User ($_GET['unban']);
     if ($user->found) {
-        $user->Update (array ('status' => 'Active'));
+        $user->Update (array ('status' => 'active'));
+        $user->UpdateContentStatus ('active');
+        $user->Approve (true);
         $message = 'Member has been unbanned';
         $message_type = 'success';
     }
@@ -68,10 +73,12 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 ### Handle "Ban" member
 else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
-    // Validate user id
+    // Validate id
     $user = new User ($_GET['ban']);
     if ($user->found) {
-        $user->Update (array ('status' => 'Banned'));
+        $user->Update (array ('status' => 'banned'));
+        $user->UpdateContentStatus ('banned');
+        Flag::FlagDecision($user->user_id, 'user', true);
         $message = 'Member has been banned';
         $message_type = 'success';
     }
@@ -80,10 +87,16 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
 
 
-// Determine which type (account status) of members to display
+
+### Determine which type (account status) of members to display
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
 switch ($status) {
 
+    case 'new':
+        $query_string['status'] = 'new';
+        $header = 'New Members';
+        $page_title = 'New Members';
+        break;
     case 'pending':
         $query_string['status'] = 'pending';
         $header = 'Pending Members';

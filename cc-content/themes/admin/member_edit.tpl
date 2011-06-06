@@ -38,6 +38,16 @@
                 <textarea class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
             </div>
 
+            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+                <label>Status:</label>
+                <select name="status" class="dropdown">
+                    <option value="approved"<?=($user->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="new"<?=($user->status == 'new')?' selected="selected"':''?>>New</option>
+                    <option value="pending"<?=($user->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=($user->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                </select>
+            </div>
+
             <div class="row-shift">
                 <input type="hidden" value="yes" name="submitted" />
                 <input type="button" class="button" value="<?=Language::GetText('profile_button')?>" />

@@ -249,45 +249,6 @@ class Functions {
         return false;
     }
 
-
-
-
-    /**
-     * Change the status of a user and their content
-     * @param string $status The new status being assigned to the user
-     * @return void Record and it's related records are updated to the new status
-     */
-    public function ChangeUserRecords ($status) {
-
-        switch ($status) {
-            case 'banned':
-            case 'pending':
-
-                // Set user's videos to 'User Not Available'
-                $query = "UPDATE " . DB_PREFIX . "videos SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
-                $this->db->Query ($query);
-
-                // Set user's comments to 'User Not Available'
-                $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
-                $this->db->Query ($query);
-
-
-            case 'approved':
-
-                // Restore user's videos IF/APP
-                $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
-                $this->db->Query ($query);
-
-                // Restore user's comments IF/APP
-                $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
-                $this->db->Query ($query);
-
-        }
-
-        $this->Update (array ('status' => $status));
-
-    }
-
 }
 
 ?>

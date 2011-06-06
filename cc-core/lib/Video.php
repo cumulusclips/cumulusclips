@@ -8,7 +8,6 @@ class Video {
     protected static $id_name = 'video_id';
 
 
-
     /**
      * Instantiate object
      * @param integer $id ID of record to be instantiated
@@ -23,6 +22,7 @@ class Video {
             $this->found = false;
         }
     }
+
 
 
 
@@ -47,6 +47,7 @@ class Video {
         Plugin::Trigger ('video.get');
 
     }
+
 
 
 
@@ -79,6 +80,7 @@ class Video {
 
 
 
+
     /**
      * Create a new record using the given criteria
      * @param array $data Key/Value pairs to use as data for new record i.e. array (field_name => value)
@@ -108,6 +110,7 @@ class Video {
 
 
 
+
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
@@ -131,7 +134,8 @@ class Video {
     }
     
     
-    
+
+
     /**
      * Delete a video
      * @param integer $video_id ID of video to be deleted
@@ -164,6 +168,7 @@ class Video {
 
 
 
+
     /**
      * Generate a unique random string for a video filename
      * @return string Random video filename
@@ -175,6 +180,64 @@ class Video {
             if (!self::Exist (array ('filename' => $filename))) $filename_available = true;
         } while (empty ($filename_available));
         return $filename;
+    }
+
+
+
+
+    /**
+     * Make a video visible to the public and notify subscribers of new video
+     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @return void If allowed, video is approved and subscribers are notified
+     * otherwise video is marked as pending approval
+     */
+    public function Approve ($admin = false) {
+
+        App::LoadClass ('User');
+        App::LoadClass ('Privacy');
+        App::LoadClass ('EmailTemplate');
+
+        // Determine if video is allowed to be approved
+        if ($admin || Settings::Get ('auto_approve_videos') == 'true') {
+
+            $data = array ('status' => 'approved');
+
+            // Execute approval actions if they haven't been executed before
+            if ($this->released == 0) {
+
+                $data['released'] = 1;
+
+                ### Send subscribers notification if opted-in
+                $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $this->user_id";
+                $result = $this->db->Query ($query);
+                while ($opt = $this->db->FetchObj ($result)) {
+
+                    $subscriber = new User ($opt->user_id);
+                    $privacy = Privacy::LoadByUser ($opt->user_id);
+                    if ($privacy->OptCheck ('new_video')) {
+                        $template = new EmailTemplate ('/new_video.htm');
+                        $template_data = array (
+                            'host'      => HOST,
+                            'email'     => $subscriber->email,
+                            'channel'   => $this->username,
+                            'title'     => $this->title,
+                            'video_id'  => $this->video_id,
+                            'dashed'    => $this->slug
+                        );
+                        $template->Replace ($template_data);
+                        $template->Send ($subscriber->email);
+                    }
+
+                }
+                
+            }
+            
+            $this->Update ($data);
+
+        } else {
+            $this->Update (array ('status' => 'pending approval'));
+        }
+
     }
 
 }

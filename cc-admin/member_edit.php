@@ -108,8 +108,47 @@ if (isset ($_POST['submitted'])) {
 
 
 
+    // Validate status
+    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+        $data['status'] = htmlspecialchars (trim ($_POST['status']));
+    } else {
+        $Errors['status'] = 'Invalid status';
+    }
+
+
+
     // Update User if no errors were found
     if (empty ($Errors)) {
+
+        // Perform addional actions based on status change
+        if ($data['status'] != $user->status) {
+
+            switch ($data['status']) {
+
+                // Handle "Approve" action
+                case 'active':
+                    $user->UpdateContentStatus ('active');
+                    $user->Approve (true);
+                    break;
+
+
+                // Handle "Ban" action
+                case 'banned':
+                    $user->UpdateContentStatus ('banned');
+                    Flag::FlagDecision ($user->user_id, 'user', true);
+                    break;
+
+
+                // Handle "Pending" or "New" action
+                case 'new':
+                case 'pending':
+                    $user->UpdateContentStatus ($data['status']);
+                    break;
+
+            }
+
+        }
+
         $message = Language::GetText('success_profile_updated');
         $message_type = 'success';
         $user->Update ($data);

@@ -9,8 +9,7 @@
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-App::LoadClass ('Privacy');
-App::LoadClass ('EmailTemplate');
+App::LoadClass ('Flag');
 App::LoadClass ('Pagination');
 
 
@@ -50,13 +49,26 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
+### Handle "Approve" video if requested
+else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['approve']))) {
+        $video = new Video ($_GET['approve']);
+        $video->Approve (true);
+        $message = 'Video has been approved and is now available';
+        $message_type = 'success';
+    }
+
+}
+
+
 ### Handle "Unban" video if requested
 else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
-        $video = new Video ($_GET['unban']);
-        $video->Update (array ('status' => 6));
+        $video->Approve (true);
         $message = 'Video has been unbanned';
         $message_type = 'success';
     }
@@ -70,7 +82,8 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['ban']))) {
         $video = new Video ($_GET['ban']);
-        $video->Update (array ('status' => 7));
+        $video->Update (array ('status' => 'banned'));
+        Flag::FlagDecision ($video->video_id, 'video', true);
         $message = 'Video has been banned';
         $message_type = 'success';
     }
@@ -78,76 +91,30 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 }
 
 
-### Handle "Approve" video if requested
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
-
-    // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['approve']))) {
-        
-        // Update video
-        $video = new Video ($_GET['approve']);
-        $video->Update (array ('status' => 6));
-        
-        
-        // Send subscribers notification if opted-in
-        $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $video->user_id";
-        $result_alert = $db->Query ($query);
-        while ($opt = $db->FetchRow ($result_alert)) {
-
-            $subscriber = new User ($opt[0]);
-            $privacy = Privacy::LoadByUser ($opt[0]);
-            if ($privacy->OptCheck ('new_video')) {
-                $template = new EmailTemplate ('/new_video.htm');
-                $template_data = array (
-                    'host'      => HOST,
-                    'email'  => $subscriber->email,
-                    'channel'   => $user->username,
-                    'title'     => $video->title,
-                    'video_id'  => $video->video_id,
-                    'dashed'    => $video->slug
-                );
-                $template->Replace($template_data);
-                $template->Send ($subscriber->email);
-            }
-
-        } 
-        
-        
-        // Display message
-        $message = 'Video has been approved and is now available';
-        $message_type = 'success';
-    }
-
-}
 
 
-
-
-// Determine which type (status) of video to display
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 6;
+### Determine which type (status) of video to display
+$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
 
-    case 9:
-        $query_string['status'] = 9;
+    case 'pending approval':
+        $query_string['status'] = 'pending approval';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
-        $where = 9;
         break;
-    case 7:
-        $query_string['status'] = 7;
+    case 'banned':
+        $query_string['status'] = 'banned';
         $header = 'Banned Videos';
         $page_title = 'Banned Videos';
-        $where = '7, 10';
         break;
     default:
-        $status = 6;
+        $status = 'approved';
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
-        $where = 6;
         break;
 
 }
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status IN ($where)";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = '$status'";
 
 
 

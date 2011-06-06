@@ -10,6 +10,7 @@ include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Comment');
 App::LoadClass ('Video');
+App::LoadClass ('Flag');
 App::LoadClass ('Pagination');
 
 
@@ -94,23 +95,20 @@ switch ($status) {
         $query_string['status'] = 'pending';
         $header = 'Pending Comments';
         $page_title = 'Pending Comments';
-        $where = "'pending'";
         break;
     case 'banned':
         $query_string['status'] = 'banned';
         $header = 'Banned Comments';
         $page_title = 'Banned Comments';
-        $where = "'banned', 'banned_chain'";
         break;
     default:
         $status = 'approved';
         $header = 'Approved Comments';
         $page_title = 'Approved Comments';
-        $where = "'approved'";
         break;
 
 }
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status IN ($where)";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status'";
 
 
 

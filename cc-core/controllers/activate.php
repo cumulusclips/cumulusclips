@@ -29,7 +29,7 @@ if (isset ($_GET['token'])) {
     $id = User::Exist ($data);
     if ($id) {
         $user = new User ($id);
-        $user->Activate();
+        $user->Approve();
         View::$vars->success = Language::GetText('activate_text_success', array ('link' => HOST . '/myaccount/'));
         User::Login ($user->username, $user->password);
         Plugin::Trigger ('activate.activate');

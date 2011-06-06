@@ -16,6 +16,7 @@
             Jump To:
             <select id="member-status-select" name="status" onChange="window.location='<?=ADMIN?>/members.php?status='+this.value;">
                 <option <?=(isset($status) && $status == 'active') ? 'selected="selected"' : ''?>value="active">Active</option>
+                <option <?=(isset($status) && $status == 'new') ? 'selected="selected"' : ''?>value="new">New</option>
                 <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
                 <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
             </select>

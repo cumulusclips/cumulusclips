@@ -95,14 +95,6 @@ if (isset ($_POST['submitted'])) {
 
     // Validate status
     if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-
-//switch ($action) {
-//    case 'pending':
-//        Functions::AdminStatusChange($id, $type, $action);
-//        break;
-//}
-
-
         $data['status'] = htmlspecialchars (trim ($_POST['status']));
     } else {
         $Errors['status'] = 'Invalid status';
@@ -121,10 +113,27 @@ if (isset ($_POST['submitted'])) {
 
     // Update record if no errors were found
     if (empty ($Errors)) {
+
+        // Perform addional actions based on status change
+        if ($data['status'] != $comment->status) {
+
+            // Handle "Approve" action
+            if ($data['status'] == 'approved') {
+                $comment->Approve (true);
+            }
+
+            // Handle "Ban" action
+            else if ($data['status'] == 'banned') {
+                Flag::FlagDecision ($comment->comment_id, 'comment', true);
+            }
+
+        }
+
         $message = 'Comment has been updated';
         $message_type = 'success';
         $comment->Update ($data);
         Plugin::Trigger ('admin.member_edit.update_member');
+
     } else {
         $message = Language::GetText('errors_below');
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $Errors);

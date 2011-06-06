@@ -8,7 +8,6 @@ class User {
     protected static $id_name = 'user_id';
 
 
-
     /**
      * Instantiate object
      * @param integer $id ID of record to be instantiated
@@ -304,6 +303,67 @@ class User {
                 return false;
             }
         }
+    }
+
+
+
+
+    /**
+     * Change the status of a user's content
+     * @param string $status The new status being assigned to the user's content
+     * @return void User's related records are updated to the new status
+     */
+    public function UpdateContentStatus ($status) {
+
+        switch ($status) {
+            case 'new':
+            case 'banned':
+            case 'pending':
+
+                // Set user's videos to 'User Not Available'
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
+                $this->db->Query ($query);
+
+                // Set user's comments to 'User Not Available'
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
+                $this->db->Query ($query);
+
+
+            case 'approved':
+
+                // Restore user's videos IF/APP
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
+                $this->db->Query ($query);
+
+                // Restore user's comments IF/APP
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
+                $this->db->Query ($query);
+
+        }
+
+    }
+
+
+
+
+    /**
+     * Make a user visible to the public
+     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @return void If allowed, user is approved otherwise user is marked as pending approval
+     */
+    public function Approve ($admin = false) {
+
+        // Determine if video is allowed to be approved
+        if ($admin || Settings::Get ('auto_approve_users') == 'true') {
+
+            $data = array ('status' => 'active');
+            if ($this->released == 0) $data['released'] = 1;
+            $this->Update ($data);
+
+        } else {
+            $this->Update (array ('status' => 'pending'));
+        }
+
     }
 
 }

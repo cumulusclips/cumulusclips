@@ -99,21 +99,6 @@ if (isset ($_POST['submitted'])) {
         $comment_id = Comment::Create ($data);
         $comment = new Comment ($comment_id);
 
-        // Send video owner notifition if opted-in
-        $privacy = Privacy::LoadByUser ($video->user_id);
-        if ($privacy->OptCheck ('video_comment')) {
-            $template = new EmailTemplate ('/video_comment.htm');
-            $template_user = new User ($video->user_id);
-            $template_data = array (
-                'host'   => HOST,
-                'email'  => $template_user->email,
-                'title'  => $video->title
-            );
-            $template->Replace ($template_data);
-            $template->Send ($template_user->email);
-        }
-
-
         // Retrieve formatted new comment block
         View::InitView();
         ob_start();

@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.54-1ubuntu4 : Database - cumulus
+MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
 *********************************************************************
 */
 
@@ -171,11 +171,11 @@ CREATE TABLE `settings` (
   `name` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `settings` */
 
-insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}');
+insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(3,'auto_approve_users','true'),(4,'auto_approve_videos','true'),(5,'auto_approve_comments','true');
 
 /*Table structure for table `subscriptions` */
 

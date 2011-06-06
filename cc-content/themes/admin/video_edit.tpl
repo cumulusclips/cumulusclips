@@ -37,6 +37,15 @@
                 </select>
             </div>
 
+            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+                <label>Status:</label>
+                <select name="status" class="dropdown">
+                    <option value="approved"<?=($video->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="pending"<?=($video->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=($video->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                </select>
+            </div>
+
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input type="submit" class="button" value="<?=Language::GetText('update_video_button')?>" />

@@ -8,7 +8,6 @@ class Comment {
     protected static $id_name = 'comment_id';
 
 
-
     /**
      * Instantiate object
      * @param integer $id ID of record to be instantiated
@@ -154,6 +153,57 @@ class Comment {
         Plugin::Trigger ('comment.delete');
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
+    }
+
+
+
+
+    /**
+     * Make a comment visible to the public and notify video owner of comment
+     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @return void If allowed, comment is approved and owner is notified
+     * otherwise comment is marked as pending approval
+     */
+    public function Approve ($admin = false) {
+
+        App::LoadClass ('User');
+        App::LoadClass ('Video');
+        App::LoadClass ('Privacy');
+        App::LoadClass ('EmailTemplate');
+
+        // Determine if video is allowed to be approved
+        if ($admin || Settings::Get ('auto_approve_comments') == 'true') {
+
+            $data = array ('status' => 'approved');
+
+            // Execute approval actions if they haven't been executed before
+            if ($this->released == 0) {
+
+                $data['released'] = 1;
+
+                ### Send video owner new comment notifition, if opted-in
+                $privacy = Privacy::LoadByUser ($this->user_id);
+                if ($privacy->OptCheck ('video_comment')) {
+                    $video = new Video ($this->video_id);
+                    $video_user = new User ($video->user_id);
+                    $template = new EmailTemplate ('/video_comment.htm');
+                    $template_data = array (
+                        'host'   => HOST,
+                        'email'  => $video_user->email,
+                        'title'  => $video->title
+                    );
+                    $template->Replace ($template_data);
+                    $template->Send ($video_user->email);
+                }
+
+            }
+
+            $this->Update ($data);
+
+        } else {
+            $this->Update (array ('status' => 'pending'));
+        }
+
     }
 
 }

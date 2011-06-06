@@ -99,8 +99,32 @@ if (isset ($_POST['submitted'])) {
     }
 
 
+    // Validate status
+    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+        $data['status'] = htmlspecialchars (trim ($_POST['status']));
+    } else {
+        $Errors['status'] = 'Invalid status';
+    }
+
+
     // Update video if no errors were made
     if (empty ($Errors)) {
+
+        // Perform addional actions based on status change
+        if ($data['status'] != $video->status) {
+
+            // Handle "Approve" action
+            if ($data['status'] == 'approved') {
+                $video->Approve (true);
+            }
+
+            // Handle "Ban" action
+            else if ($data['status'] == 'banned') {
+                Flag::FlagDecision ($video->video_id, 'video', true);
+            }
+
+        }
+
         $video->Update ($data);
         $message = Language::GetText('success_video_updated');
         $message_type = 'success';
