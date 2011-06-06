@@ -243,10 +243,7 @@ class User {
         $msg = 'ID: ' . $this->user_id . "\nUsername: " . $this->username;
         @mail (MAIN_EMAIL, 'New Member Registered', $msg, 'From: Admin - TechieVideos.com <admin@techievideos.com>');
         Plugin::Trigger ('user.activate');
-        
-        // Update user's anonymous comments IF/APP
-        $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
-        $this->db->Query ($query);
+       
 
     }
     
@@ -327,9 +324,9 @@ class User {
                 // Set user's comments to 'User Not Available'
                 $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
                 $this->db->Query ($query);
+                break;
 
-
-            case 'approved':
+            case 'active':
 
                 // Restore user's videos IF/APP
                 $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
@@ -338,6 +335,7 @@ class User {
                 // Restore user's comments IF/APP
                 $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
                 $this->db->Query ($query);
+                break;
 
         }
 
@@ -357,7 +355,15 @@ class User {
         if ($admin || Settings::Get ('auto_approve_users') == 'true') {
 
             $data = array ('status' => 'active');
-            if ($this->released == 0) $data['released'] = 1;
+            if ($this->released == 0) {
+
+                $data['released'] = 1;
+
+                ### Update user's anonymous comments IF/APP
+                $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
+                $this->db->Query ($query);
+
+            }
             $this->Update ($data);
 
         } else {

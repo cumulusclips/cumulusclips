@@ -13,6 +13,15 @@
 
         <form action="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>" method="post">
 
+            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+                <label>Status:</label>
+                <select name="status" class="dropdown">
+                    <option value="approved"<?=($video->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="pending"<?=($video->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=($video->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                </select>
+            </div>
+
             <div class="row<?=(isset ($Errors['title'])) ? ' errors' : ''?>">
                 <label><?=Language::GetText('title')?>:</label>
                 <input class="text" type="text" name="title" value="<?=(!empty ($Errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
@@ -20,7 +29,7 @@
 
             <div class="row<?=(isset ($Errors['description'])) ? ' errors' : ''?>">
                 <label><?=Language::GetText('description')?>:</label>
-                <textarea class="text" name="description"><?=(!empty ($Errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
+                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($Errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
             </div>
 
             <div class="row<?=(isset ($Errors['tags'])) ? ' errors' : ''?>">
@@ -34,15 +43,6 @@
                 <?php foreach ($categories as $cat_id => $cat_name): ?>
                     <option value="<?=$cat_id?>"<?=(isset ($data['cat_id']) && $data['cat_id'] == $cat_id) || (!isset ($data['cat_id']) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
                 <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
-                <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=($video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=($video->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=($video->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>
 

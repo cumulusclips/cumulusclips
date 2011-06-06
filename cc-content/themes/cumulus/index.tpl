@@ -67,27 +67,31 @@
 
 <div class="huge"><?=Language::GetText('home_header')?></div>
 
-<?php while($row = $db->FetchObj ($result_recent)): ?>
+<?php if ($db->Count ($result_recent) > 0): ?>
 
-    <?php $video = new Video ($row->video_id); ?>
-    <?php $rating = Rating::GetRating ($video->video_id); ?>
+    <?php while($row = $db->FetchObj ($result_recent)): ?>
 
-    <div class="block">
+        <?php $video = new Video ($row->video_id); ?>
+        <?php $rating = Rating::GetRating ($video->video_id); ?>
 
-        <a class="thumb" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title="">
-            <span class="duration"><?=$video->duration?></span>
-            <span class="play-icon"></span>
-            <img src="<?=$config->thumb_bucket_url?>/<?=$video->filename?>.jpg" alt="" />
-        </a>
+        <div class="block">
 
-        <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title=""><?=$video->title?></a>
-        <p><?=$video->description?></p>
-        <span class="like">+<?=$rating->likes?></span>
-        <span class="dislike">-<?=$rating->dislikes?></span>
-        <br clear="all" />
+            <a class="thumb" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title="">
+                <span class="duration"><?=$video->duration?></span>
+                <span class="play-icon"></span>
+                <img src="<?=$config->thumb_bucket_url?>/<?=$video->filename?>.jpg" alt="" />
+            </a>
 
-    </div>
+            <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title=""><?=$video->title?></a>
+            <p><?=$video->description?></p>
+            <span class="like">+<?=$rating->likes?></span>
+            <span class="dislike">-<?=$rating->dislikes?></span>
+            <br clear="all" />
 
-<?php endwhile; ?>
+        </div>
 
+    <?php endwhile; ?>
 
+<?php else: ?>
+    <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
+<?php endif; ?>

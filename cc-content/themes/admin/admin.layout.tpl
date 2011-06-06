@@ -32,9 +32,10 @@
         </div>
 
         <div class="panel<?=(Functions::IsPanelOpen('members'))?' open-panel down-icon':''?>">
-            <h3 unselectable="on" class="members"><span>Members</span></h3>
+            <h3 class="members"><span>Members</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/members.php?status=active">Active Members</a></p>
+                <p><a href="<?=ADMIN?>/members.php?status=new">New Members</a></p>
                 <p><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></p>
                 <p><a href="<?=ADMIN?>/members.php?status=banned">Banned Members</a></p>
             </div>

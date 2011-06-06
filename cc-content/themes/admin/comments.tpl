@@ -55,7 +55,7 @@
                             <p class="poster"><?=($comment->user_id==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
                         </td>
                         <td class="comments-text">
-                            <?=Functions::CutOff ($comment->comments, 150)?>
+                            <?=Functions::CutOff ($comment->comments_display, 150)?>
                             <div class="record-actions invisible">
                                 <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
                                 

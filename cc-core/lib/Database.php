@@ -35,7 +35,7 @@ class Database {
 
         // Log query if requested
         if (LOG_QUERIES) {
-            Logger (QUERY_LOG, 'Date: ' . date ('m/d/Y h:i:sA') . "\t\t Query: $query");
+            App::Log (QUERY_LOG, 'Date: ' . date ('m/d/Y h:i:sA') . "\t\t Query: $query");
         }
 
         $result = mysql_query ($query);

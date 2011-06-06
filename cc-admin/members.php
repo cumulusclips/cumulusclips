@@ -44,7 +44,6 @@ else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
     // Validate id
     $user = new User ($_GET['activate']);
     if ($user->found) {
-        $user->Update (array ('status' => 'active'));
         $user->UpdateContentStatus ('active');
         $user->Approve (true);
         $message = 'Member has been activated';
@@ -60,7 +59,6 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     // Validate id
     $user = new User ($_GET['unban']);
     if ($user->found) {
-        $user->Update (array ('status' => 'active'));
         $user->UpdateContentStatus ('active');
         $user->Approve (true);
         $message = 'Member has been unbanned';

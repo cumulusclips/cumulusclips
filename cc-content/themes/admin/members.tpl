@@ -57,8 +57,8 @@
                                 
                                 <?php if ($status == 'active'): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$user->user_id)?>">Ban</a>
-                                <?php elseif ($status == 'pending'): ?>
-                                    <a href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
+                                <?php elseif (in_array ($status, array ('new', 'pending'))): ?>
+                                    <a class="approve" href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
                                 <?php endif; ?>

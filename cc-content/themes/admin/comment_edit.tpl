@@ -13,6 +13,15 @@
 
         <form action="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>" method="post">
 
+            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+                <label>Status:</label>
+                <select name="status" class="dropdown">
+                    <option value="approved"<?=($comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="pending"<?=($comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=($comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                </select>
+            </div>
+
             <?php if ($comment->user_id == 0): ?>
 
                 <div class="row<?=(isset ($Errors['name'])) ? ' errors' : ''?>">
@@ -49,18 +58,9 @@
                 <a href="<?=HOST?>/videos/<?=$comment->video_id?>/<?=$video->slug?>/"><?=$video->title?></a>
             </div>
 
-            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
-                <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=($comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=($comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=($comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
-            </div>
-
             <div class="row<?=(isset ($Errors['comment'])) ? ' errors' : ''?>">
                 <label><?=Language::GetText('comments')?>:</label>
-                <textarea rows="7" cols="55" class="text" name="comments"><?=(isset ($data['comments'])) ? $data['comments'] : $comment->comments?></textarea>
+                <textarea rows="7" cols="50" class="text" name="comments"><?=(isset ($data['comments'])) ? $data['comments'] : $comment->comments?></textarea>
             </div>
 
             <div class="row-shift">

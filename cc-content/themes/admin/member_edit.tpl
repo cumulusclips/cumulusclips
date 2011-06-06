@@ -3,7 +3,7 @@
     <h1>Update Member</h1>
     
     <?php if ($message): ?>
-    <div id="<?=$message_type?>"><?=$message?></div>
+    <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
     
@@ -12,6 +12,21 @@
         <p><a href="<?=$list_page?>">Go back to members</a></p>
 
         <form action="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" method="post">
+
+            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+                <label>Status:</label>
+                <select name="status" class="dropdown">
+                    <option value="approved"<?=($user->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="new"<?=($user->status == 'new')?' selected="selected"':''?>>New</option>
+                    <option value="pending"<?=($user->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=($user->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label><?=Language::GetText('username')?>:</label>
+                <p><a href="<?=HOST?>/members/<?=$user->username?>/"><?=$user->username?></a></p>
+            </div>
 
             <div class="row<?=(isset ($Errors['first_name'])) ? ' errors' : ''?>">
                 <label><?=Language::GetText('first_name')?>:</label>
@@ -35,22 +50,12 @@
 
             <div class="row<?=(isset ($Errors['about_me'])) ? ' errors' : ''?>">
                 <label><?=Language::GetText('about_me')?>:</label>
-                <textarea class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
-            </div>
-
-            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
-                <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=($user->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="new"<?=($user->status == 'new')?' selected="selected"':''?>>New</option>
-                    <option value="pending"<?=($user->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=($user->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
+                <textarea rows="7" cols="50" class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
             </div>
 
             <div class="row-shift">
                 <input type="hidden" value="yes" name="submitted" />
-                <input type="button" class="button" value="<?=Language::GetText('profile_button')?>" />
+                <input type="submit" class="button" value="Update Member" />
             </div>
 
         </form>

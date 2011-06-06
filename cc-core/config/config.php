@@ -22,7 +22,7 @@ define ('THEMES_DIR', DOC_ROOT . '/cc-content/themes');
 define ('SITE_EMAIL', 'admin@techievideos.com');
 define ('MAIN_EMAIL', 'miguel@mahurtado.com');
 define ('LOG', DOC_ROOT . '/cc-core/logs');
-define ('LOG_QUERIES', FALSE);
+define ('LOG_QUERIES', false);
 define ('DEBUG_CONVERSION', false);
 define ('CONVERSION_LOG', LOG . '/converter.log');
 define ('QUERY_LOG', LOG . '/query.log');
@@ -73,6 +73,8 @@ TODO's CHECKLIST
 //    TODO Remove flag records during manual ban (video)
 //    TODO Remove flag records during manual ban (members)
 //    TODO Remove flag records during manual ban (comments)
+//    TODO Feature video option
+//    TODO Make Make Delete methods recursive instead of direct DB queries
 
 
 // TODO Add 'View My Profile' link in my account / top nav
