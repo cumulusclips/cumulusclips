@@ -57,7 +57,7 @@ class EmailTemplate {
 
     // Send Email Template Method
     public function Send ($to) {
-        @mail($to, $this->GetBlock('Subject'), $this->GetBlock('Message'), $this->headers);
+//        @mail($to, $this->GetBlock('Subject'), $this->GetBlock('Message'), $this->headers);
     }
 
 }

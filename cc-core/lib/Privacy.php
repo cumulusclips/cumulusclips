@@ -8,7 +8,6 @@ class Privacy {
     protected static $id_name = 'privacy_id';
 
 
-
     /**
      * Instantiate object
      * @param integer $id ID of record to be instantiated
@@ -26,6 +25,7 @@ class Privacy {
 
 
 
+
     /**
      * Extract values from database and set them to object properties
      * @param integer $id ID of record to be instantiated
@@ -40,6 +40,7 @@ class Privacy {
         }
         Plugin::Trigger ('privacy.get');
     }
+
 
 
 
@@ -72,6 +73,7 @@ class Privacy {
 
 
 
+
     /**
      * Create a new record using the given criteria
      * @param array $data Key/Value pairs to use as data for new record i.e. array (field_name => value)
@@ -101,6 +103,7 @@ class Privacy {
 
 
 
+
     /**
      * Update current record using the given data
      * @param array $data Key/Value pairs of data to be updated i.e. array (field_name => value)
@@ -125,6 +128,7 @@ class Privacy {
 
 
 
+
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -136,6 +140,7 @@ class Privacy {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
+
 
 
 
@@ -151,6 +156,7 @@ class Privacy {
             return false;
         }
     }
+
 
 
 

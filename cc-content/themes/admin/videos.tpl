@@ -50,7 +50,7 @@
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td class="video-title">
-                            <a href="" class="large"><?=$video->title?></a><br />
+                            <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a><br />
                             <div class="record-actions invisible">
                                 <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
                                 <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>

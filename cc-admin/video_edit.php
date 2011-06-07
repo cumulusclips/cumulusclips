@@ -9,6 +9,7 @@
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
+App::LoadClass ('Flag');
 
 
 // Establish page variables, objects, arrays, etc

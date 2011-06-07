@@ -143,6 +143,11 @@ class Video {
      */
     static function Delete ($video_id) {
 
+        App::LoadClass ('Rating');
+        App::LoadClass ('Flag');
+        App::LoadClass ('Favorite');
+        App::LoadClass ('Comment');
+
         $db = Database::GetInstance();
         $video = new self ($video_id);
         Plugin::Trigger ('video.delete');
@@ -152,17 +157,30 @@ class Video {
         @unlink(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
         @unlink(UPLOAD_PATH . '/mp4/' . $video->filename . '.mp4');
 
-        // Delete related records
-        $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE video_id = $video_id";
-        $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE video_id = $video_id";
-        $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE video_id = $video_id";
-        $query4 = "DELETE FROM " . DB_PREFIX . "flags WHERE type = 'video' and id = $video_id";
-        $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE video_id = $video_id";
-        $db->Query ($query1);
-        $db->Query ($query2);
-        $db->Query ($query3);
-        $db->Query ($query4);
-        $db->Query ($query5);
+
+        // Delete Comments
+        $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE video_id = $video_id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Comment::Delete ($row->comment_id);
+
+        // Delete Ratings
+        $query = "SELECT rating_id FROM " . DB_PREFIX . "ratings WHERE video_id = $video_id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Rating::Delete ($row->rating_id);
+
+        // Delete Favorites
+        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE video_id = $video_id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
+
+        // Delete Flags
+        $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE id = $video_id AND type = 'video'";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Flag::Delete ($row->flag_id);
+
+        // Delete Video
+        $query = "DELETE FROM " . DB_PREFIX . "videos WHERE video_id = $video_id";
+        $db->Query ($query);
 
     }
 

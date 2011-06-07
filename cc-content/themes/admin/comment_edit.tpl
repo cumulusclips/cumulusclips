@@ -16,16 +16,16 @@
             <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
-                    <option value="approved"<?=($comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=($comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=($comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                    <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>
 
             <?php if ($comment->user_id == 0): ?>
 
                 <div class="row<?=(isset ($Errors['name'])) ? ' errors' : ''?>">
-                    <label><?=Language::GetText('name')?>:</label>
+                    <label>*<?=Language::GetText('name')?>:</label>
                     <input class="text" type="text" name="name" value="<?=(isset ($data['name'])) ? $data['name'] : $comment->name?>" />
                 </div>
 

@@ -148,6 +148,15 @@ class User {
 
         App::LoadClass ('Privacy');
         App::LoadClass ('Picture');
+        App::LoadClass ('Video');
+        App::LoadClass ('Subscription');
+        App::LoadClass ('Rating');
+        App::LoadClass ('Flag');
+        App::LoadClass ('Favorite');
+        App::LoadClass ('Comment');
+        App::LoadClass ('Post');
+        App::LoadClass ('Message');
+
         $db = Database::GetInstance();
         $user = new self ($id);
         Plugin::Trigger ('user.delete');
@@ -160,27 +169,55 @@ class User {
         Privacy::Delete ($privacy_id);
 
 
-        // Delete related records
-        $query1 = "DELETE FROM " . DB_PREFIX . "comments WHERE user_id = $id";
-        $query2 = "DELETE FROM " . DB_PREFIX . "ratings WHERE user_id = $id";
-        $query3 = "DELETE FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
-        $query4 = "DELETE FROM " . DB_PREFIX . "flags WHERE user_id = $id OR (type = 'user' AND id = $id)";
-        $query5 = "DELETE FROM " . DB_PREFIX . "videos WHERE user_id = $id";
-        $query6 = "DELETE FROM " . DB_PREFIX . "subscriptions WHERE user_id = $id OR member = $id";
-        $query7 = "DELETE FROM " . DB_PREFIX . "posts WHERE user_id = $id";
-        $query8 = "DELETE FROM " . DB_PREFIX . "messages WHERE user_id = $id OR recipient = $id";
-        $query9 = "DELETE FROM " . DB_PREFIX . "privacy WHERE user_id = $id";
-        $query10 = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query1);
-        $db->Query ($query2);
-        $db->Query ($query3);
-        $db->Query ($query4);
-        $db->Query ($query5);
-        $db->Query ($query6);
-        $db->Query ($query7);
-        $db->Query ($query8);
-        $db->Query ($query9);
-        $db->Query ($query10);
+
+        // Delete Comments
+        $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Comment::Delete ($row->comment_id);
+
+        // Delete Ratings
+        $query = "SELECT rating_id FROM " . DB_PREFIX . "ratings WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Rating::Delete ($row->rating_id);
+
+        // Delete Favorites
+        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
+
+        // Delete Flags
+        $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE id = $id AND type = 'user'";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Flag::Delete ($row->flag_id);
+
+        // Delete Subscriptions
+        $query = "SELECT sub_id FROM " . DB_PREFIX . "subscriptions WHERE user_id = $id OR member = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Subscription::Delete ($row->sub_id);
+
+        // Delete Posts
+        $query = "SELECT post_id FROM " . DB_PREFIX . "posts WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Post::Delete ($row->post_id);
+
+        // Delete Messages
+        $query = "SELECT message_id FROM " . DB_PREFIX . "messages WHERE user_id = $id OR recipient = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Message::Delete ($row->message_id);
+
+        // Delete Videos
+        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Video::Delete ($row->video_id);
+
+        // Delete Privacy
+        $query = "SELECT privacy_id FROM " . DB_PREFIX . "privacy WHERE user_id = $id";
+        $result = $db->Query ($query);
+        while ($row = $db->FetchObj ($result)) Privacy::Delete ($row->privacy_id);
+
+        // Delete User
+        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
+        $db->Query ($query);
 
     }
 

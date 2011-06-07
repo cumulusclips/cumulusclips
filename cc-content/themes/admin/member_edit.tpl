@@ -16,10 +16,10 @@
             <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
-                    <option value="approved"<?=($user->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="new"<?=($user->status == 'new')?' selected="selected"':''?>>New</option>
-                    <option value="pending"<?=($user->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=($user->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                    <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $user->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="new"<?=(isset ($data['status']) && $data['status'] == 'new') || (!isset ($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
+                    <option value="pending"<?=(isset ($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>
 

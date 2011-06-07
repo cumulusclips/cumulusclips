@@ -50,7 +50,7 @@
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <a href="" class="large"><?=$user->username?></a>
+                            <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
                             <div class="record-actions invisible">
                                 <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
                                 <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
