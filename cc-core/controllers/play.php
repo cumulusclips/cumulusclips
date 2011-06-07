@@ -28,7 +28,7 @@ View::$vars->tags = NULL;
 
 
 // Validate requested video
-$data = array ('video_id' => $_GET['vid'], 'status' => 6);
+$data = array ('video_id' => $_GET['vid'], 'status' => 'approved');
 if (!isset ($_GET['vid']) || !is_numeric ($_GET['vid']) || !Video::Exist ($data)) {
     App::Throw404();
 }
@@ -67,7 +67,7 @@ if (View::$vars->logged_in) {
 
 ### Retrieve related videos
 $search_terms = $db->Escape (View::$vars->video->title) . ' ' . $db->Escape (implode (' ', View::$vars->video->tags));
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 6 LIMIT 9";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 'approved' LIMIT 9";
 Plugin::Trigger ('play.load_suggestions');
 View::$vars->result_related = $db->Query ($query);
 

@@ -90,7 +90,7 @@ switch ($_POST['type']) {
 
 
         // Create Flag if one doesn't exist
-        $data = array ('type' => 'user', 'id' => $video->video_id, 'user_id' => $user->user_id);
+        $data = array ('type' => 'user', 'id' => $member->user_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
             Plugin::Trigger ('flag.ajax.flag_member');
@@ -107,43 +107,36 @@ switch ($_POST['type']) {
     ### Handle report abuse comment
     case 'comment':
 
+        // Verify a valid comment was provided
+        $comment = new Comment ($_POST['id']);
+        if (!$comment->found || $comment->status != 'approved')  App::Throw404();
+
+
         // Check if user is logged in
         if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => 'You must be logged in to report inappropriate comments!'));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
             exit();
         }
 
 
-        // Verify comment id was given
-        if (!isset ($_POST['id']) || !is_numeric ($_POST['id'])) {
-            exit();
-        }
-        $comment_id = trim ($_POST['id']);
-
-
-        // Check if comment id is valid
-        $comment = new Comment ($comment_id);
-        if (!$comment->found) {
-            exit();
-        } elseif ($comment->user_id == $user->user_id) {
-            echo json_encode (array ('result' => 0, 'msg' => 'You can\'t report your own comments!'));
+        // Verify user doesn't flag thier comment
+        if ($user->user_id == $comment->user_id) {
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
             exit();
         }
 
 
         // Create Flag if one doesn't exist
-        $data = array ('flag_type' => 'comment', 'id' => $comment_id, 'user_id' => $user->user_id);
+        $data = array ('type' => 'comment', 'id' => $comment->comment_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
-            Plugin::Trigger ('flag.ajax.flag_comment');
-            echo json_encode (array ('result' => 1, 'msg' => 'Thank you for reporting this comment. We will look into it immediately.'));
+            Plugin::Trigger ('flag.ajax.flag_member');
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
             exit();
         } else {
-            echo json_encode (array ('result' => 0, 'msg' => 'You have already reported this comment! Thank you for your assistance.'));
+            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
             exit();
         }
-
-
 
     }   // END action switch
 

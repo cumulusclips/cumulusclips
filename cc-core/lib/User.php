@@ -294,7 +294,7 @@ class User {
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     static function Login ($username, $password) {
-        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'Active'));
+        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'approved'));
         if ($id) {
             $_SESSION['user_id'] = $id;
             Plugin::Trigger ('user.login');

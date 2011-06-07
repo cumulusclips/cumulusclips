@@ -68,6 +68,7 @@ TODO's CHECKLIST
 ****************/
 
 // TODO Build admin panel
+//    TODO Fix flag comment AJAX
 //    TODO Remove flag records during manual ban (video)
 //    TODO Remove flag records during manual ban (members)
 //    TODO Remove flag records during manual ban (comments)
