@@ -130,7 +130,7 @@ switch ($_POST['type']) {
         $data = array ('type' => 'comment', 'id' => $comment->comment_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
-            Plugin::Trigger ('flag.ajax.flag_member');
+            Plugin::Trigger ('flag.ajax.flag_comment');
             echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
             exit();
         } else {

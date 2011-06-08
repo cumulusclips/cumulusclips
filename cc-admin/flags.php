@@ -8,6 +8,8 @@
 // Include required files
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
+App::LoadClass ('Video');
+App::LoadClass ('Comment');
 App::LoadClass ('Flag');
 App::LoadClass ('Pagination');
 
@@ -17,7 +19,7 @@ Plugin::Trigger ('admin.members.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
 $records_per_page = 9;
-$url = ADMIN . '/members.php';
+$url = ADMIN . '/flags.php';
 $query_string = array();
 $message = null;
 $sub_header = null;
@@ -68,7 +70,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
 
 ### Handle "Ban" member
-else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
 
     // Validate id
     $user = new User ($_GET['ban']);
@@ -86,32 +88,30 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
 
 ### Determine which type (account status) of members to display
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
-switch ($status) {
+$type = (!empty ($_GET['type'])) ? $_GET['type'] : '';
+switch ($type) {
 
-    case 'new':
-        $query_string['status'] = 'new';
-        $header = 'New Members';
-        $page_title = 'New Members';
+    case 'member':
+        $query_string['type'] = 'member';
+        $header = 'Flagged Members';
+        $page_title = 'Flagged Members';
         break;
-    case 'pending':
-        $query_string['status'] = 'pending';
-        $header = 'Pending Members';
-        $page_title = 'Pending Members';
+    case 'video':
+        $query_string['type'] = 'video';
+        $header = 'Flagged Videos';
+        $page_title = 'Flagged Videos';
         break;
-    case 'banned':
-        $query_string['status'] = 'banned';
-        $header = 'Banned Members';
-        $page_title = 'Banned Members';
+    case 'comment':
+        $query_string['type'] = 'comment';
+        $header = 'Flagged Comments';
+        $page_title = 'Flagged Comments';
         break;
     default:
-        $status = 'active';
-        $header = 'Active Members';
-        $page_title = 'Active Members';
+        App::Throw404();
         break;
 
 }
-$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE status = '$status'";
+$query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE type = '$type'";
 
 
 
@@ -154,7 +154,7 @@ include ('header.php');
 
 ?>
 
-<div id="members">
+<div id="flags">
 
     <h1><?=$header?></h1>
     <?php if ($sub_header): ?>
@@ -170,11 +170,10 @@ include ('header.php');
     <div id="browse-header">
         <div class="jump">
             Jump To:
-            <select id="member-status-select" name="status" onChange="window.location='<?=ADMIN?>/members.php?status='+this.value;">
-                <option <?=(isset($status) && $status == 'active') ? 'selected="selected"' : ''?>value="active">Active</option>
-                <option <?=(isset($status) && $status == 'new') ? 'selected="selected"' : ''?>value="new">New</option>
-                <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
-                <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
+            <select id="flag-type-select" name="type" onChange="window.location='<?=ADMIN?>/flags.php?type='+this.value;">
+                <option <?=($type == 'video') ? 'selected="selected"' : ''?>value="video">Videos</option>
+                <option <?=($type == 'member') ? 'selected="selected"' : ''?>value="member">Members</option>
+                <option <?=($type == 'comment') ? 'selected="selected"' : ''?>value="comment">Comments</option>
             </select>
         </div>
 
@@ -193,37 +192,51 @@ include ('header.php');
             <table>
                 <thead>
                     <tr>
-                        <td class="large">Member</td>
-                        <td class="large">Email</td>
-                        <td class="large">Date Joined</td>
+                        <td class="large">Content</td>
+                        <td class="large">Flagged By</td>
+                        <td class="large">Date Flagged</td>
                     </tr>
                 </thead>
                 <tbody>
                 <?php while ($row = $db->FetchObj ($result)): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $user = new User ($row->user_id); ?>
+                    <?php $flag = new Flag ($row->flag_id); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
-                            <div class="record-actions invisible">
-                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                                <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
 
-                                <?php if ($status == 'active'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$user->user_id)?>">Ban</a>
-                                <?php elseif (in_array ($status, array ('new', 'pending'))): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
-                                <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
-                                <?php endif; ?>
+                            <?php if ($type == 'member'): ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->user_id)?>" data-confirm="You are about to delete this member and their content, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                                <?php $user = new User ($flag->id); ?>
+                                <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
+                                <div class="record-actions invisible">
+                                    <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+                                    <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
+
+                            <?php elseif ($type == 'video'): ?>
+
+                                <?php $video = new Video ($flag->id); ?>
+                                <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->title?>" class="large"><?=$video->title?></a>
+                                <div class="record-actions invisible">
+                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->title?>/">Watch Video</a>
+                                    <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
+
+                            <?php elseif ($type == 'comment'): ?>
+
+                                <?php $comment = new Comment ($flag->id); ?>
+                                <?=$comment->comments_display?>
+                                <div class="record-actions invisible">
+                                    <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
+
+                            <?php endif; ?>
+
+                                <a href="<?=$pagination->GetURL('dismiss='.$flag->id)?>">Dismiss Flag</a>
+                                <a class="delete" href="<?=$pagination->GetURL('approve='.$flag->id)?>">Ban</a>
                             </div>
                         </td>
-                        <td><?=$user->email?></td>
-                        <td><?=$user->date_created?></td>
+                        <td><?=$flag->user_id?></td>
+                        <td><?=$flag->date_created?></td>
                     </tr>
 
                 <?php endwhile; ?>
@@ -234,7 +247,7 @@ include ('header.php');
         <?=$pagination->paginate()?>
 
     <?php else: ?>
-        <div class="block"><strong>No members found</strong></div>
+        <div class="block"><strong>No flags found</strong></div>
     <?php endif; ?>
 
 </div>

@@ -59,9 +59,9 @@
         <div class="panel<?=(Functions::IsPanelOpen('flags'))?' open-panel down-icon':''?>">
             <h3 class="flags"><span>Flags</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>">Flagged Videos</a></p>
-                <p><a href="<?=ADMIN?>">Flagged Members</a></p>
-                <p><a href="<?=ADMIN?>">Flagged Comments</a></p>
+                <p><a href="<?=ADMIN?>/flags.php?type=video">Flagged Videos</a></p>
+                <p><a href="<?=ADMIN?>/flags.php?type=member">Flagged Members</a></p>
+                <p><a href="<?=ADMIN?>/flags.php?type=comment">Flagged Comments</a></p>
             </div>
         </div>
 

@@ -20,6 +20,8 @@ Plugin::Init();
 
 // Define Theme settings
 define ('ADMIN', HOST . '/cc-admin');
+define ('THEME', ADMIN);
+define ('THEME_PATH', DOC_ROOT . '/cc-admin');
 
 // Pre-Output Work
 if (!headers_sent()) {

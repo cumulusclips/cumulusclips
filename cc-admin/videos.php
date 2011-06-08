@@ -17,7 +17,6 @@ App::LoadClass ('Pagination');
 Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$content = 'videos.tpl';
 $records_per_page = 9;
 $url = ADMIN . '/videos.php';
 $query_string = array();

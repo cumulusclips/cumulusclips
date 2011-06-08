@@ -18,7 +18,6 @@ App::LoadClass ('Pagination');
 Plugin::Trigger ('admin.members.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$content = 'comments.tpl';
 $records_per_page = 9;
 $url = ADMIN . '/comments.php';
 $query_string = array();
