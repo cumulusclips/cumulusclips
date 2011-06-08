@@ -13,8 +13,8 @@
     </div>
 </div>
 
-<script type="text/javascript" src="<?=THEME?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?=THEME?>/js/cookie.plugin.js"></script>
-<script type="text/javascript" src="<?=THEME?>/js/admin.js"></script>
+<script type="text/javascript" src="<?=ADMIN?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=ADMIN?>/js/cookie.plugin.js"></script>
+<script type="text/javascript" src="<?=ADMIN?>/js/admin.js"></script>
 </body>
 </html>

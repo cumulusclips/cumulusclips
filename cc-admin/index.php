@@ -18,7 +18,13 @@ $page_title = 'Admin Panel';
 $content = 'index.tpl';
 
 
-// Output Page
-include (THEME_PATH . '/admin.layout.tpl');
+// Output Header
+include ('header.php');
 
 ?>
+
+<h1>Dashboard</h1>
+
+<div></div>
+
+<?php include ('footer.php'); ?>

@@ -10,7 +10,13 @@
 <body>
 <div id="wrapper">
 
-    <?php include (THEME_PATH . '/header.tpl'); ?>
+    <div id="header">
+        <a id="logo" href="<?=ADMIN?>/" title="CumulusClips Admin Panel">CumulusClips Admin Panel</a>
+        <div id="header-menu">
+            <a href="<?=HOST?>/" title="View Site">View Site</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="<?=HOST?>/logout/" title="Logout">Logout</a>
+        </div>
+    </div>
 
     <div id="sidebar" class="block">
 
@@ -104,7 +110,13 @@
 
 </div>
 
-<?php include (THEME_PATH . '/footer.tpl'); ?>
+<div id="footer">
+    <div id="footer-left">CumulusClips</div>
+    <div id="footer-right">
+        Version 1.0 (Latest) &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="" title="Documentation">Documentation</a>
+    </div>
+</div>
 
 <script type="text/javascript" src="<?=THEME?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=THEME?>/js/cookie.plugin.js"></script>

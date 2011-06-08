@@ -4,8 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?=$page_title?></title>
 <link rel="shortcut icon" href="<?=HOST?>/favicon.ico" type="image/x-icon" />
-<link href="<?=THEME?>/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="<?=THEME?>/css/admin.css" rel="stylesheet" type="text/css" />
+<link href="<?=ADMIN?>/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="<?=ADMIN?>/css/admin.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="wrapper">
