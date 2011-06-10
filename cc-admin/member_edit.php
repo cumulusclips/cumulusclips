@@ -179,14 +179,14 @@ include ('header.php');
 
     <div class="block">
 
-        <p><a href="<?=$list_page?>">Go back to members</a></p>
+        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
         <form action="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" method="post">
 
             <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
-                    <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $user->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="active"<?=(isset ($data['status']) && $data['status'] == 'active') || (!isset ($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
                     <option value="new"<?=(isset ($data['status']) && $data['status'] == 'new') || (!isset ($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
                     <option value="pending"<?=(isset ($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
                     <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>

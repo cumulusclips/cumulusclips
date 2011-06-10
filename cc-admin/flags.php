@@ -26,69 +26,66 @@ $sub_header = null;
 
 
 
-### Handle "Delete" member
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
+// Verify content type was provided
+if (empty ($_GET['type']) || !in_array ($_GET['type'], array ('video', 'member', 'comment'))) App::Throw404();
+$type = $_GET['type'];
 
-    // Validate id
-    if (User::Exist (array ('user_id' => $_GET['delete']))) {
-        User::Delete ($_GET['delete']);
-        $message = 'Member has been deleted';
-        $message_type = 'success';
+
+
+
+### Handle "Ban" record
+if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+
+    switch ($type) {
+
+        case 'video':
+            $video = new Video ($_GET['ban']);
+            if ($video->found) {
+                Flag::FlagDecision ($video->video_id, $type, true);
+                $video->Update (array ('status' => 'banned'));
+                $message = 'Video has been banned';
+                $message_type = 'success';
+            }
+            break;
+
+        case 'user':
+            $user = new User ($_GET['ban']);
+            if ($user->found) {
+                Flag::FlagDecision ($user->user_id, $type, true);
+                $user->UpdateContentStatus ('banned');
+                $user->Update (array ('status' => 'banned'));
+                $message = 'Member has been banned';
+                $message_type = 'success';
+            }
+            break;
+
+        case 'comment':
+            $comment = new Comment ($_GET['ban']);
+            if ($comment->found) {
+                Flag::FlagDecision ($comment->comment_id, $type, true);
+                $comment->Update (array ('status' => 'banned'));
+                $message = 'Comment has been banned';
+                $message_type = 'success';
+            }
+            break;
+
     }
 
 }
 
 
-### Handle "Activate" member
-else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 
-    // Validate id
-    $user = new User ($_GET['activate']);
-    if ($user->found) {
-        $user->UpdateContentStatus ('active');
-        $user->Approve (true);
-        $message = 'Member has been activated';
-        $message_type = 'success';
-    }
-
-}
-
-
-### Handle "Unban" member
-else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
-
-    // Validate id
-    $user = new User ($_GET['unban']);
-    if ($user->found) {
-        $user->UpdateContentStatus ('active');
-        $user->Approve (true);
-        $message = 'Member has been unbanned';
-        $message_type = 'success';
-    }
-
-}
-
-
-### Handle "Ban" member
+### Handle "Dismiss" flags
 else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
-
-    // Validate id
-    $user = new User ($_GET['ban']);
-    if ($user->found) {
-        $user->Update (array ('status' => 'banned'));
-        $user->UpdateContentStatus ('banned');
-        Flag::FlagDecision($user->user_id, 'user', true);
-        $message = 'Member has been banned';
-        $message_type = 'success';
-    }
-
+    Flag::FlagDecision ($_GET['dismiss'], $type, false);
+    $message = 'Flags has been dismissed';
+    $message_type = 'success';
 }
 
 
 
 
 ### Determine which type (account status) of members to display
-$type = (!empty ($_GET['type'])) ? $_GET['type'] : '';
 switch ($type) {
 
     case 'member':
@@ -106,12 +103,9 @@ switch ($type) {
         $header = 'Flagged Comments';
         $page_title = 'Flagged Comments';
         break;
-    default:
-        App::Throw404();
-        break;
 
 }
-$query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE type = '$type'";
+$query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE status = 'pending' AND type = '$type'";
 
 
 
@@ -157,10 +151,6 @@ include ('header.php');
 <div id="flags">
 
     <h1><?=$header?></h1>
-    <?php if ($sub_header): ?>
-    <h3><?=$sub_header?></h3>
-    <?php endif; ?>
-
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
@@ -177,13 +167,6 @@ include ('header.php');
             </select>
         </div>
 
-        <div class="search">
-            <form method="POST" action="<?=ADMIN?>/members.php?status=<?=$status?>">
-                <input type="hidden" name="search_submitted" value="true" />
-                <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" class="button" value="Search" />
-            </form>
-        </div>
     </div>
 
     <?php if ($total > 0): ?>
@@ -202,6 +185,7 @@ include ('header.php');
 
                     <?php $odd = empty ($odd) ? true : false; ?>
                     <?php $flag = new Flag ($row->flag_id); ?>
+                    <?php $user = new User ($flag->user_id); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
@@ -225,6 +209,8 @@ include ('header.php');
                             <?php elseif ($type == 'comment'): ?>
 
                                 <?php $comment = new Comment ($flag->id); ?>
+                                <?php $video = new Video ($comment->video_id); ?>
+
                                 <?=$comment->comments_display?>
                                 <div class="record-actions invisible">
                                     <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
@@ -232,11 +218,11 @@ include ('header.php');
                             <?php endif; ?>
 
                                 <a href="<?=$pagination->GetURL('dismiss='.$flag->id)?>">Dismiss Flag</a>
-                                <a class="delete" href="<?=$pagination->GetURL('approve='.$flag->id)?>">Ban</a>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->id)?>">Ban</a>
                             </div>
                         </td>
-                        <td><?=$flag->user_id?></td>
-                        <td><?=$flag->date_created?></td>
+                        <td><?=$user->username?></td>
+                        <td><?=date('m/d/Y',strtotime ($flag->date_created))?></td>
                     </tr>
 
                 <?php endwhile; ?>

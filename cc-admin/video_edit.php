@@ -155,7 +155,7 @@ include ('header.php');
 
     <div class="block">
 
-        <p><a href="<?=$list_page?>"><?=Language::GetText('back_to_videos')?></a></p>
+        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
         <form action="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>" method="post">
 

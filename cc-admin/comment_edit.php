@@ -160,7 +160,7 @@ include ('header.php');
 
     <div class="block">
 
-        <p><a href="<?=$list_page?>">Go back to comments</a></p>
+        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
         <form action="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>" method="post">
 
