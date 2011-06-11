@@ -135,6 +135,7 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 
 // Retrieve total count
+$query .= " ORDER BY user_id DESC";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

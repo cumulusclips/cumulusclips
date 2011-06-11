@@ -105,7 +105,7 @@ switch ($status) {
         break;
 
 }
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status'";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status' ORDER BY comment_id DESC";
 
 
 
@@ -214,7 +214,7 @@ include ('header.php');
                                 <?php if ($status == 'approved'): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->comment_id)?>">Ban</a>
                                 <?php elseif ($status == 'pending'): ?>
-                                    <a href="<?=$pagination->GetURL('approve='.$comment->comment_id)?>">Approve</a>
+                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$comment->comment_id)?>">Approve</a>
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$comment->comment_id)?>">Unban</a>
                                 <?php endif; ?>

@@ -67,18 +67,7 @@ $config->thumb_bucket = 'thumbs';
 TODO's CHECKLIST
 ****************/
 
-// TODO Fix comment formatting
-// TODO Fix comment flagging
-// TODO Fix member flagging
-// TODO Fix video flagging
-
 // TODO Build admin panel
-//    TODO Build browse flags
-//    TODO Test approve/dismiss flags
-//    TODO Test change status for videos
-//    TODO Test change status for members
-//    TODO Test change status for comments
-//    TODO Make Delete methods recursive instead of direct DB queries
 //    TODO Feature video option
 
 

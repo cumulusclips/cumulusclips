@@ -31,9 +31,9 @@
         <div class="panel<?=(Functions::IsPanelOpen('videos'))?' open-panel down-icon':''?>">
             <h3 class="videos"><span>Videos</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>/videos.php?status=6">Approved Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=9">Pending Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=7">Banned Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=approved">Approved Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=pending approval">Pending Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=banned">Banned Videos</a></p>
             </div>
         </div>
 

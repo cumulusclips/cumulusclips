@@ -34,7 +34,7 @@ if (isset ($_POST['video_id']) && is_numeric ($_POST['video_id'])) {
 
 
 // Check if video is valid
-if (!$video->found || $video->status != 6) {
+if (!$video->found || $video->status != 'approved') {
     App::Throw404();
 }
 

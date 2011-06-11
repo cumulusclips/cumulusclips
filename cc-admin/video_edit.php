@@ -163,7 +163,7 @@ include ('header.php');
                 <label>Status:</label>
                 <select name="status" class="dropdown">
                     <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=(isset ($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $video->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="pending approval"<?=(isset ($data['status']) && $data['status'] == 'pending approval') || (!isset ($data['status']) && $video->status == 'pending approval')?' selected="selected"':''?>>Pending</option>
                     <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>

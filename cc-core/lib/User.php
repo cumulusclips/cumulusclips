@@ -229,7 +229,7 @@ class User {
      * @return integer Returns the number of approved videos uploaded by the user
      */
     private function GetVideoCount() {
-        $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $this->user_id AND status = 6";
+        $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $this->user_id AND status = 'approved'";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchRow ($result);
         return $row[0];
@@ -294,7 +294,7 @@ class User {
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     static function Login ($username, $password) {
-        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'approved'));
+        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'active'));
         if ($id) {
             $_SESSION['user_id'] = $id;
             Plugin::Trigger ('user.login');

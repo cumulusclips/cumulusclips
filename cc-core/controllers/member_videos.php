@@ -46,7 +46,7 @@ if ($id) {
 
          
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 'approved'";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

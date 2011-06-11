@@ -20,7 +20,6 @@ View::LoadPage ('videos');
 Plugin::Trigger ('videos.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-$cat_exp = '^[A-Za-z0-9-]+$';
 $load = array ('recent', 'most-viewed', 'most-discussed');
 View::$vars->category = null;
 $records_per_page = 9;
@@ -35,9 +34,9 @@ View::$vars->result_cats = $db->Query ($query);
 
 
 // Retrieve videos
-if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
+if (isset ($_GET['category']) && preg_match ('/a-z0-9+/i', $_GET['category'])) {
 
-    $where = "status = 6";
+    $where = "status = 'approved'";
     $cat_dashed = $_GET['category'];
     $cat_undashed = str_replace ('-',' ', $cat_dashed);
     $id = Category::Exist (array ('cat_name' => $cat_undashed), $db);
@@ -55,21 +54,21 @@ if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
 
         case 'recent':
 
-            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 ORDER BY video_id DESC";
+            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC";
             View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Recent'));
             $url .= '/recent';
             break;
 
         case 'most-viewed':
 
-            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 ORDER BY views DESC";
+            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY views DESC";
             View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Most Viewed'));
             $url .= '/most-viewed';
             break;
 
         case 'most-discussed':
 
-            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "video_comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "video_comments.video_id GROUP BY video_id ORDER BY sum DESC";
+            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "comments.video_id WHERE video.status = 'approved' GROUP BY video_id ORDER BY sum DESC";
             View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'Most Discussed'));
             $url .= '/most-discussed';
             break;
@@ -77,7 +76,7 @@ if (isset ($_GET['category']) && eregi ($cat_exp, $_GET['category'])) {
     }
 	
 } else {
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 ORDER BY video_id DESC";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC";
     View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('browsing' => 'All'));
 }
 

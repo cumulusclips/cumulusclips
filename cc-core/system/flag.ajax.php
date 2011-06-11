@@ -35,7 +35,7 @@ switch ($_POST['type']) {
 
         // Verify a valid video was provided
         $video = new Video ($_POST['id']);
-        if (!$video->found || $video->status != 6)  App::Throw404();
+        if (!$video->found || $video->status != 'approved')  App::Throw404();
 
 
         // Check if user is logged in
@@ -68,7 +68,7 @@ switch ($_POST['type']) {
 
 
     ### Handle report abuse user
-    case 'user':
+    case 'member':
 
         // Verify a valid video was provided
         $member = new User ($_POST['id']);
@@ -90,7 +90,7 @@ switch ($_POST['type']) {
 
 
         // Create Flag if one doesn't exist
-        $data = array ('type' => 'user', 'id' => $member->user_id, 'user_id' => $user->user_id);
+        $data = array ('type' => 'member', 'id' => $member->user_id, 'user_id' => $user->user_id);
         if (!Flag::Exist ($data)) {
             Flag::Create ($data);
             Plugin::Trigger ('flag.ajax.flag_member');

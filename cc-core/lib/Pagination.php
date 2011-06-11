@@ -3,7 +3,6 @@
 class Pagination {
 
     private $url;
-    private $query_string;
     private $total;
     private $records_per_page;
     private $page_count;
@@ -12,10 +11,22 @@ class Pagination {
     private $end = null;
     public $page;
 
+
+    /**
+     * Instantiate pagination object
+     * @global object $config System config settings object
+     * @param string $url The URL for the current page which will be paginated
+     * @param integer $total Total number of records
+     * @param integer $records_per_page Number of records to display per page
+     * @param boolean $seo_friendly_url [optional] Whether to make page parameter
+     * SEO friendly. Default true produces this type of URL: http://cumulusclips.org/path/page/1/,
+     * boolean false produces this type of URL: http://cumulusclips.org/path/?page=1
+     * @return void Pagination object is created
+     */
     public function  __construct ($url, $total, $records_per_page, $seo_friendly_url = true) {
         global $config;
         $this->url = self::StoreURL($url);
-        $this->seo_friendly_url = $seo_friendly_url ? true : false;
+        $this->seo_friendly_url = $seo_friendly_url;
         $this->total = $total;
         $this->records_per_page = $records_per_page;
         $this->page_limit = 9;
@@ -23,6 +34,7 @@ class Pagination {
         $this->page = $this->GetPage();
         Plugin::Trigger ('pagination.start');
     }
+
 
 
 
@@ -43,6 +55,7 @@ class Pagination {
 
 
 
+
     /**
      * Retrieve the current page in the pagination
      * @return integer Returns the current pagination page
@@ -51,6 +64,9 @@ class Pagination {
         $page = isset ($_GET['page']) && is_numeric ($_GET['page']) && $_GET['page'] > 1  ? $_GET['page'] : 1;
         return ($page > $this->page_count) ? 1 : $page;
     }
+
+
+
 
     // Retrieve start and end pages for range
     private function GetRange() {
@@ -61,6 +77,9 @@ class Pagination {
             return array ($this->page-$half, $this->page+$half);
         }
     }
+
+
+
 
     private function GetLinks() {
 
@@ -102,15 +121,24 @@ class Pagination {
 
     }
 
+
+
+
     // Retrieve Previous link
     private function GetPrevious() {
         return ($this->page != 1) ? '<li><a href="' . $this->BuildURL($this->page-1) . '">&laquo;' . Language::GetText('previous') . '</a></li>' : '';
     }
 
+
+
+
     // Retrieve Next link
     private function GetNext() {
         return ($this->page != $this->page_count) ? '<li><a href="' . $this->BuildURL($this->page+1) . '">' . Language::GetText('next') . '&raquo;</a></li>' : '';
     }
+
+
+
 
     // Retrieve First two series links
     private function GetFirst() {
@@ -124,6 +152,9 @@ class Pagination {
         }
     }
 
+
+
+
     // Retrieve Last two series links
     private function GetLast() {
         if (!$this->end) {
@@ -136,6 +167,9 @@ class Pagination {
         }
     }
 
+
+
+
     // Retrieve Starting record
     public function GetStartRecord() {
         return ($this->page - 1) * $this->records_per_page;
@@ -143,10 +177,11 @@ class Pagination {
 
 
 
+
     /**
      * Return a paginated URL based on current URL with page and additional query parameters
-     * @param integer $page OPTIONAL Page to add to the URL
-     * @param string $additional_query OPTIONAL Additional query to add to the URL
+     * @param integer $page [optional] Page to add to the URL
+     * @param string $additional_query [optional] Additional query to add to the URL
      * @return string Returns paginated URL with page and query string
      */
     private function BuildURL ($page = null, $additional_query = null) {
@@ -157,7 +192,6 @@ class Pagination {
         if (!empty ($page) && $page > 1) {
             if ($this->seo_friendly_url) {
                 $url['path'] .= '/page/' . $page;
-                exit();
             } else {
                 if (isset ($url['query'])) {
                     $url['query'] .= '&page=' . $page;
@@ -189,14 +223,16 @@ class Pagination {
 
 
 
+
     /**
      * Retrieve the current paginated URL
-     * @param string $addtional_query OPTIONAL Append additional query string to URL
+     * @param string $addtional_query [optional] Append additional query string to URL
      * @return string Returns current paginated URL with query appended (if any)
      */
     public function GetURL ($additional_query = null) {
         return $this->BuildURL ($this->GetPage(), $additional_query);
     }
+
 
 
 

@@ -67,6 +67,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
+        $video = new Video ($_GET['unban']);
         $video->Approve (true);
         $message = 'Video has been unbanned';
         $message_type = 'success';
@@ -137,6 +138,7 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 
 // Retrieve total count
+$query .= " ORDER BY video_id DESC";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

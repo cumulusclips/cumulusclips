@@ -48,7 +48,7 @@ if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
             }
             break;
 
-        case 'user':
+        case 'member':
             $user = new User ($_GET['ban']);
             if ($user->found) {
                 Flag::FlagDecision ($user->user_id, $type, true);

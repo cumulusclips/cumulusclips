@@ -22,6 +22,7 @@ if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in
 $keyword = NULL;
 View::$vars->cleaned = NULL;
 $url = HOST . '/search';
+$query_string = array();
 $records_per_page = 9;
 
 
@@ -33,18 +34,19 @@ if (isset ($_POST['submitted_search'])) {
     View::$vars->cleaned = htmlspecialchars ($_GET['keyword']);
 }
 
-$url .=  '?keyword=' . View::$vars->cleaned;
+$query_string['keyword'] = View::$vars->cleaned;
 View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('keyword' => View::$vars->cleaned));
 $keyword = $db->Escape (View::$vars->cleaned);
 
 
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 6 AND MATCH(title, tags, description) AGAINST('$keyword')";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST('$keyword')";
 Plugin::Trigger ('search.search_count');
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
 // Initialize pagination
+$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
 View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
 $start_record = View::$vars->pagination->GetStartRecord();
 

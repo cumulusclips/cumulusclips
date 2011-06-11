@@ -65,7 +65,7 @@ View::$vars->sub_count = $db->FetchRow ($result);
 
 
 ### Retrieve video list
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 6 LIMIT 3";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 'approved' LIMIT 3";
 Plugin::Trigger ('profile.load_recent_videos');
 View::$vars->result_videos = $db->Query ($query);
 
