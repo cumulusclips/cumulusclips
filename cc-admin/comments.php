@@ -105,7 +105,7 @@ switch ($status) {
         break;
 
 }
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status' ORDER BY comment_id DESC";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status'";
 
 
 
@@ -131,6 +131,7 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 
 // Retrieve total count
+$query .= " ORDER BY comment_id DESC";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
@@ -166,7 +167,7 @@ include ('header.php');
     <div id="browse-header">
         <div class="jump">
             Jump To:
-            <select id="comment-status-select" name="status" onChange="window.location='<?=ADMIN?>/comments.php?status='+this.value;">
+            <select name="status" data-jump="<?=ADMIN?>/comments.php">
                 <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
                 <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
                 <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>

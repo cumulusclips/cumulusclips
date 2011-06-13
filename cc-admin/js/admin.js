@@ -6,6 +6,7 @@ $('document').ready(function(){
     $("#sidebar h3").disableSelection();    // Disable selection (<= IE8 fix)
 
 
+
     // Attach sidebar click events
     $("#sidebar h3").click(function(){
         var name = $(this).attr('class');
@@ -15,17 +16,32 @@ $('document').ready(function(){
         updateSettings(name, updatedSetting);
     });
 
-    
+
+
     // Attach record hover events
     $('.list tr').hover(function(){$(this).find('.record-actions').toggleClass('invisible');});
     
-    
+
+
     // Attach confirm popup to confirm action links
     $('.confirm').click(function() {
         var location = $(this).attr('href')
         var agree = confirm ($(this).data('confirm'));
         if (agree) window.location = location;
         return false;
+    });
+
+
+
+    // Attach change event to status dropdown
+    $('select[name="status"]').change(function(){
+        var jumpLoc = $(this).data('jump');
+        var alternateLoc = $(this).find('option:selected').data('url');
+        if (typeof alternateLoc == 'undefined') {
+            window.location = jumpLoc+'?status='+$(this).val();
+        } else {
+            window.location = alternateLoc;
+        }
     });
 
 });

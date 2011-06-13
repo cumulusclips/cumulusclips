@@ -48,6 +48,34 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
+### Handle "Feature" video if requested
+else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['feature'], 'featured' => 0))) {
+        $video = new Video ($_GET['feature']);
+        $video->Update (array ('featured' => 1));
+        $message = 'Video has been featured';
+        $message_type = 'success';
+    }
+
+}
+
+
+### Handle "Un-Feature" video if requested
+else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
+
+    // Validate video id
+    if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
+        $video = new Video ($_GET['unfeature']);
+        $video->Update (array ('featured' => 0));
+        $message = 'Video has been unfeatured';
+        $message_type = 'success';
+    }
+
+}
+
+
 ### Handle "Approve" video if requested
 else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 
@@ -94,27 +122,36 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
 
 ### Determine which type (status) of video to display
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE";
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
 
-    case 'pending approval':
+    case 'pending':
+        $query .= " status = 'pending approval'";
         $query_string['status'] = 'pending approval';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
         break;
     case 'banned':
+        $query .= " status = 'banned'";
         $query_string['status'] = 'banned';
         $header = 'Banned Videos';
         $page_title = 'Banned Videos';
         break;
+    case 'featured':
+        $query .= " status = 'approved' AND featured = 1";
+        $query_string['status'] = 'featured';
+        $header = 'Featured Videos';
+        $page_title = 'Featured Videos';
+        break;
     default:
+        $query .= " status = 'approved'";
         $status = 'approved';
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
         break;
 
 }
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = '$status'";
 
 
 
@@ -174,9 +211,10 @@ include ('header.php');
     <div id="browse-header">
         <div class="jump">
             Jump To:
-            <select id="video-status-select" name="status" onChange="window.location='<?=ADMIN?>/videos.php?status='+this.value;">
+            <select name="status" data-jump="<?=ADMIN?>/videos.php">
                 <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
-                <option <?=(isset($status) && $status == 'pending approval') ? 'selected="selected"' : ''?>value="pending approval">Pending</option>
+                <option <?=(isset($status) && $status == 'featured') ? 'selected="selected"' : ''?>value="featured">Featured</option>
+                <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
                 <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
             </select>
         </div>
@@ -216,8 +254,17 @@ include ('header.php');
                                 <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
+
+                                    <?php if ($video->featured == 1): ?>
+                                        <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
+                                    <?php else: ?>
+                                        <a href="<?=$pagination->GetURL('feature='.$video->video_id)?>">Make Featured</a>
+                                    <?php endif; ?>
+
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
-                                <?php elseif ($status == 'pending approval'): ?>
+                                <?php elseif ($status == 'featured'): ?>
+                                        <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
+                                <?php elseif ($status == 'pending'): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>

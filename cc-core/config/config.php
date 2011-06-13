@@ -41,23 +41,12 @@ $config->php = '/usr/bin/php';
 $config->ffmpeg = '/usr/bin/ffmpeg';
 $config->pagination_page_limit = 9;
 $config->accepted_video_extensions = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov','m4v');
-
-
-// Video transcoding settings
-define ('ENCODING_FTP', 'ftp://username:password@192.168.1.123');
-$config->en_user = '2317';
-$config->en_key = '87d893bb7a4854985e7653e36fdc6e44';
-$config->rs_user = 'mahurtado66';
-$config->rs_key = 'd8b78c654d1e6eb572e7b0d41d2d9ce8';
 //$config->flv_bucket_url = 'http://cumulus/cc-content/uploads/flv';
 //$config->mp4_bucket_url = 'http://cumulus/cc-content/uploads/mp4';
 //$config->thumb_bucket_url = 'http://cumulus/cc-content/uploads/thumbs';
 $config->flv_bucket_url = 'http://c1495122.cdn.cloudfiles.rackspacecloud.com';
 $config->mp4_bucket_url = 'http://c1488222.cdn.cloudfiles.rackspacecloud.com';
 $config->thumb_bucket_url = 'http://c1495132.cdn.cloudfiles.rackspacecloud.com';
-$config->flv_bucket = 'flv';
-$config->mp4_bucket = 'mp4';
-$config->thumb_bucket = 'thumbs';
 
 
 
@@ -65,13 +54,10 @@ $config->thumb_bucket = 'thumbs';
 
 /***************
 TODO's CHECKLIST
-****************/
+***************/
 
 // TODO Build admin panel
-//    TODO Create featured video page
-//    TODO Add 'Make Featured Vidoe' link to browse videos
-//    TODO 'Featured Video' slide on homepage
-//    TODO Add 'Featured Video' menu item
+//    TODO Test 'Make Featured' & 'Un-Feature' links to browse videos
 //    TODO Create 'Add Page' page
 //    TODO Create 'Edit Page' page
 //    TODO Create 'Browse Pages' page

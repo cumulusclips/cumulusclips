@@ -171,7 +171,7 @@ include ('header.php');
     <div id="browse-header">
         <div class="jump">
             Jump To:
-            <select id="member-status-select" name="status" onChange="window.location='<?=ADMIN?>/members.php?status='+this.value;">
+            <select name="status" data-jump="<?=ADMIN?>/members.php">
                 <option <?=(isset($status) && $status == 'active') ? 'selected="selected"' : ''?>value="active">Active</option>
                 <option <?=(isset($status) && $status == 'new') ? 'selected="selected"' : ''?>value="new">New</option>
                 <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
