@@ -206,6 +206,12 @@ rating.update - /cc-core/lib/Rating.php
 rating.delete - /cc-core/lib/Rating.php
 
 
+page.get - /cc-core/lib/Page.php
+page.create - /cc-core/lib/Page.php
+page.update - /cc-core/lib/Page.php
+page.delete - /cc-core/lib/Page.php
+
+
 picture.before_save - /cc-core/lib/Picture.php
 picture.save - /cc-core/lib/Picture.php
 
@@ -307,6 +313,10 @@ register.start - /cc-core/controllers/register.php
 register.before_render - /cc-core/controllers/register.php
 register.before_create - /cc-core/controllers/register.php
 register.create - /cc-core/controllers/register.php
+
+
+page.start - /cc-core/system/page.php
+page.before_render - /cc-core/system/page.php
 
 
 system_404.start - /cc-core/controllers/system_404.php

@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.54-1ubuntu4 : Database - cumulus
+MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
 *********************************************************************
 */
 
@@ -110,6 +110,22 @@ CREATE TABLE `messages` (
 /*Data for the table `messages` */
 
 insert  into `messages`(`message_id`,`user_id`,`recipient`,`subject`,`message`,`status`,`date_created`) values (1,99,63,'Hello','Hi. I\'ve been watching your javascript videos (Very Good Info)\r\nI can\'t quite make out your website address when you give it out on the video. I\'d like to visit your site. Could you give me the web address? Thanks....and thanks for the great tutorials on javascript.\r\nCC','unread','2009-12-16 00:00:00'),(2,174,100,'Can\'t locate part 2 of subversion training','Hi there,\r\n\r\nCould you please send me the link for part2 of subversion training?\r\n\r\nMuch appreciated\r\n\r\nIrfan','read','2010-05-26 00:00:00'),(3,100,174,'Re: Can\'t locate part 2 of subversion training','hello,\r\n\r\nsorry about that, some of my videos were deleted, not sure why. i let u know when put them back. i thnk if u subscribe to my channel u\'ll get an email when i upload them\r\n\r\ncheers\r\n\r\n&gt; Irfan wrote: \r\n\r\nHi there,\r\n\r\nCould you please send me the link for part2 of subversion training?\r\n\r\nMuch appreciated\r\n\r\nIrfan','read','2010-05-26 00:00:00'),(4,174,100,'Re: Re: Can\'t locate part 2 of subversion training','Thanks for the reply mate. I have already subscribed to TuxTraining, I would appreciate if you please upload them sooner. Your videos were very helpful. I am currently trying to learn Subversion, TRAC, MoinMoin Wiki and KnowledgeTree as they are currently running in my environment. I would appreciate if you could let me know if there are any helpful videos avilable for those as well.\r\n\r\nMany thanks\r\n\r\nIrfan\r\n\r\n    \r\n\r\n&gt; TuxTraining wrote: \r\n\r\nhello,\r\n\r\nsorry about that, some of my videos were deleted, not sure why. i let u know when put them back. i thnk if u subscribe to my channel u\'ll get an email when i upload them\r\n\r\ncheers\r\n\r\n&gt; Irfan wrote: \r\n\r\nHi there,\r\n\r\nCould you please send me the link for part2 of subversion training?\r\n\r\nMuch appreciated\r\n\r\nIrfan','read','2010-05-27 00:00:00'),(5,212,20,'Hey','I just watched your tutorial on moving an object with the mouse.  Where can I get that as code?','read','2010-09-07 00:00:00'),(6,212,20,'Hey','I just watched your tutorial on moving an object with the mouse.  Where can I get that as code?','read','2010-09-07 00:00:00'),(7,216,27,'Windows 2008 Server','Do you have other training videos you can share on the subject?  Thank you.\r\n\r\n-Roger','unread','2010-09-09 00:00:00'),(8,20,212,'Re: Hey','I didn\'t create the videos I post here, I get them from YouTube or this website - http://www.planetphotoshop.com\r\n\r\nAll the best\r\n\r\n&gt; grycer wrote: \r\n\r\nI just watched your tutorial on moving an object with the mouse.  Where can I get that as code?','unread','2010-10-02 00:00:00'),(9,239,63,'Ur JavaScrit Tuts','Hey why are some Videos of u so fast? and break in the mid?...\r\nI loved it to watch them but now i only understand a little bit of whtat u sait D:\r\n\r\nPls repair this...\r\nThx :D','unread','2010-10-14 00:00:00'),(10,239,63,'I found u','Ok,\r\nin my last message i sayed that ur vids a cool but some of them are buged now i found ur youtube channel and ur webide.\r\nAnd everything is clear^^\r\n\r\nUr Tuts are Awesome &lt;3\r\n:D','unread','2010-10-15 00:00:00'),(14,22,18,'What\'s up','Testing','read','2011-04-07 07:01:18');
+
+/*Table structure for table `pages` */
+
+DROP TABLE IF EXISTS `pages`;
+
+CREATE TABLE `pages` (
+  `page_id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+  `content` longtext NOT NULL,
+  `slug` text NOT NULL,
+  `layout` varchar(255) DEFAULT NULL,
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`page_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `pages` */
 
 /*Table structure for table `posts` */
 
