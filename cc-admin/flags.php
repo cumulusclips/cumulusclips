@@ -27,8 +27,7 @@ $sub_header = null;
 
 
 // Verify content type was provided
-if (empty ($_GET['type']) || !in_array ($_GET['type'], array ('video', 'member', 'comment'))) App::Throw404();
-$type = $_GET['type'];
+$type = (empty ($_GET['type']) || !in_array ($_GET['type'], array ('video', 'member', 'comment'))) ? $_GET['type'] : 'video';
 
 
 

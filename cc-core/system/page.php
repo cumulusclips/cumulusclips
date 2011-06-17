@@ -17,15 +17,20 @@ View::LoadPage ('page');
 Plugin::Trigger ('page.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
-
+$page_id = null;
 
 
 
 ### Parse the URI request
 $request = preg_replace ('/^\/?(.*?)\/?$/', '$1', $_SERVER['REQUEST_URI']);
-if (P)
-echo $request;
-exit();
+$page_id = Page::Exist (array ('slug' => $request));
+if ($page_id) {
+    View::$vars->page = new Page ($page_id);
+} else {
+    echo '404';
+    exit();
+//    App::Throw404();
+}
 
 
 // Output Page
