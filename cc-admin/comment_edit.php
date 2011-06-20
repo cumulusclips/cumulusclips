@@ -162,7 +162,7 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form action="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>" method="post">
+        <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>" method="post">
 
             <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>

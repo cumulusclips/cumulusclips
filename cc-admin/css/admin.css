@@ -305,6 +305,11 @@ RECORD LISTING STYLES
     float:left;
 }
 
+#browse-header .add {
+    float:left;
+    margin-left:25px;
+}
+
 #browse-header select, #browse-header input[type="text"] {
     border:1px solid #CCC;
     border-radius:5px;
@@ -466,4 +471,8 @@ textarea.text {
     height:28px;
     font:bold 14px/28px arial,helvetica,sans-serif;
     cursor:pointer;
+}
+
+a.button {
+    padding:0 10px;
 }

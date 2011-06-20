@@ -19,7 +19,6 @@ Plugin::Trigger ('admin.videos.start');
 $records_per_page = 9;
 $url = ADMIN . '/pages.php';
 $query_string = array();
-$categories = array();
 $message = null;
 $sub_header = null;
 
@@ -38,43 +37,28 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
+### Handle "Draft" record if requested
+else if (!empty ($_GET['draft']) && is_numeric ($_GET['draft'])) {
 
-### Handle "Feature" video if requested
-else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
-
-    // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['feature'], 'featured' => 0))) {
-        $video = new Video ($_GET['feature']);
-        $video->Update (array ('featured' => 1));
-        $message = 'Video has been featured';
+    // Validate id
+    if (Page::Exist (array ('page_id' => $_GET['draft']))) {
+        $page = new Page ($_GET['draft']);
+        $page->Update (array ('status' => 'draft'));
+        $message = 'Page has been set to draft';
         $message_type = 'success';
     }
 
 }
 
 
-### Handle "Un-Feature" video if requested
-else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
+### Handle "Publish" record if requested
+else if (!empty ($_GET['publish']) && is_numeric ($_GET['publish'])) {
 
-    // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
-        $video = new Video ($_GET['unfeature']);
-        $video->Update (array ('featured' => 0));
-        $message = 'Video has been unfeatured';
-        $message_type = 'success';
-    }
-
-}
-
-
-### Handle "Approve" video if requested
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
-
-    // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['approve']))) {
-        $video = new Video ($_GET['approve']);
-        $video->Approve (true);
-        $message = 'Video has been approved and is now available';
+    // Validate id
+    if (Page::Exist (array ('page_id' => $_GET['publish']))) {
+        $page = new Page ($_GET['publish']);
+        $page->Update (array ('status' => 'published'));
+        $message = 'Page has been published';
         $message_type = 'success';
     }
 
@@ -86,7 +70,7 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 
 
 ### Determine which type (status) of pages to display
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'live';
+$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'published';
 switch ($status) {
 
     case 'draft':
@@ -95,9 +79,9 @@ switch ($status) {
         $page_title = 'Draft Pages';
         break;
     default:
-        $status = 'live';
-        $header = 'Live Pages';
-        $page_title = 'Live Pages';
+        $status = 'published';
+        $header = 'Published Pages';
+        $page_title = 'Published Pages';
         break;
 
 }
@@ -163,10 +147,12 @@ include ('header.php');
         <div class="jump">
             Jump To:
             <select name="status" data-jump="<?=ADMIN?>/pages.php">
-                <option <?=(isset($status) && $status == 'live') ? 'selected="selected"' : ''?>value="live">Live</option>
+                <option <?=(isset($status) && $status == 'published') ? 'selected="selected"' : ''?>value="published">Published</option>
                 <option <?=(isset($status) && $status == 'draft') ? 'selected="selected"' : ''?>value="draft">Draft</option>
             </select>
         </div>
+
+        <a class="button add" href="<?=ADMIN?>/pages_add.php">Add New</a>
 
         <div class="search">
             <form method="POST" action="<?=ADMIN?>/pages.php?status=<?=$status?>">
@@ -197,10 +183,10 @@ include ('header.php');
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <a href="<?=ADMIN?>/page_edit.php?id=<?=$page->page_id?>" class="large"><?=$page->title?></a><br />
+                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>" class="large"><?=$page->title?></a><br />
                             <div class="record-actions invisible">
                                 <a href="<?=HOST?>/<?=$page->slug?>/">Preview</a>
-                                <a href="<?=ADMIN?>/page_edit.php?id=<?=$page->page_id?>">Edit</a>
+                                <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">Edit</a>
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->page_id)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>

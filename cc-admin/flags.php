@@ -192,18 +192,18 @@ include ('header.php');
                             <?php if ($type == 'member'): ?>
 
                                 <?php $user = new User ($flag->id); ?>
-                                <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
+                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
                                 <div class="record-actions invisible">
                                     <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                                    <a href="<?=ADMIN?>/member_edit.php?id=<?=$user->user_id?>">Edit</a>
+                                    <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>">Edit</a>
 
                             <?php elseif ($type == 'video'): ?>
 
                                 <?php $video = new Video ($flag->id); ?>
-                                <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->title?>" class="large"><?=$video->title?></a>
+                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->title?>" class="large"><?=$video->title?></a>
                                 <div class="record-actions invisible">
                                     <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->title?>/">Watch Video</a>
-                                    <a href="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>">Edit</a>
+                                    <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
 
                             <?php elseif ($type == 'comment'): ?>
 
@@ -212,7 +212,7 @@ include ('header.php');
 
                                 <?=$comment->comments_display?>
                                 <div class="record-actions invisible">
-                                    <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
+                                    <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>">Edit</a>
 
                             <?php endif; ?>
 

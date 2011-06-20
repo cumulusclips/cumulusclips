@@ -6,10 +6,9 @@
 
 
 // Include required files
-include ('../config/bootstrap.php');
+include_once ( dirname ( dirname ( __FILE__ )) . '/config/bootstrap.php');
 App::LoadClass ('User');
 View::InitView();
-
 
 // Establish page variables, objects, arrays, etc
 View::LoadPage ('system_404');

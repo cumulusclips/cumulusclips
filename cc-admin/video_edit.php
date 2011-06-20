@@ -16,7 +16,6 @@ App::LoadClass ('Flag');
 Plugin::Trigger ('admin.video_edit.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$content = 'video_edit.tpl';
 $page_title = 'Edit Video';
 $categories = array();
 $data = array();
@@ -157,7 +156,7 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form action="<?=ADMIN?>/video_edit.php?id=<?=$video->video_id?>" method="post">
+        <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" method="post">
 
             <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>

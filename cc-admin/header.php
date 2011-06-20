@@ -70,7 +70,7 @@
             <h3 class="pages"><span>Pages</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/pages.php">Browse Pages</a></p>
-                <p><a href="<?=ADMIN?>">Add Page</a></p>
+                <p><a href="<?=ADMIN?>/pages_add.php">Add Page</a></p>
             </div>
         </div>
 

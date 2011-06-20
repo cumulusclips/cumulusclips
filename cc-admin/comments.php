@@ -210,7 +210,7 @@ include ('header.php');
                         <td class="comments-text">
                             <?=Functions::CutOff ($comment->comments_display, 150)?>
                             <div class="record-actions invisible">
-                                <a href="<?=ADMIN?>/comment_edit.php?id=<?=$comment->comment_id?>">Edit</a>
+                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->comment_id)?>">Ban</a>
