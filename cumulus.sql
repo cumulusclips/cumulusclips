@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
+MySQL - 5.1.54-1ubuntu4 : Database - cumulus
 *********************************************************************
 */
 
@@ -122,6 +122,7 @@ CREATE TABLE `pages` (
   `slug` text NOT NULL,
   `layout` varchar(255) DEFAULT NULL,
   `date_created` datetime NOT NULL,
+  `status` varchar(255) NOT NULL,
   PRIMARY KEY (`page_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
