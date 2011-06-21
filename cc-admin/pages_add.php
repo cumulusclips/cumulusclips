@@ -6,7 +6,7 @@
 
 
 // Include required files
-include ('../cc-core/config/admin.bootstrap.php');
+include_once (dirname ( dirname ( __FILE__ ) ) . '/cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Page');
 
@@ -15,16 +15,61 @@ App::LoadClass ('Page');
 Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$url = ADMIN . '/pages.php';
-$query_string = array();
+$data = array();
+$errors = array();
 $message = null;
-$sub_header = null;
+$header = 'Add New Page';
+$page_title = 'Add New Page';
 
 
 
 
 
+/***********************
+HANDLE FORM IF SUBMITTED
+***********************/
 
+if (isset ($_POST['submitted'])) {
+
+    // Validate status
+    if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
+        $data['status'] = $_POST['title'];
+    } else {
+        $errors['status'] = "You didn't provide a valid page status";
+    }
+
+
+    // Validate page title
+    if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
+        $data['title'] = htmlspecialchars (trim ($_POST['title']));
+        $data['slug'] = Functions::CreateSlug (trim ($_POST['title']));
+    } else {
+        $errors['title'] = "You didn't enter a valid page title";
+    }
+
+
+    // Validate page content
+    if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
+        $data['content'] = trim ($_POST['content']);
+    } else {
+        $data['content'] = '';
+    }
+
+
+    // Create page if no errors were found
+    if (empty ($errors)) {
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['layout'] = 'default';
+        $page_id = Page::Create ($data);
+        $message = 'Page has been created';
+        $message_type = 'success';
+    } else {
+        $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
+        $message .= implode ('<br />- ', $errors);
+        $message_type = 'error';
+    }
+
+}
 
 
 // Output Header
@@ -35,43 +80,44 @@ include ('header.php');
 <div id="pages-add">
 
     <h1><?=$header?></h1>
-    <?php if ($sub_header): ?>
-    <h3><?=$sub_header?></h3>
-    <?php endif; ?>
-
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
-    <div id="browse-header">
-
-        <div class="jump">
-            Jump To:
-            <select name="status" data-jump="<?=ADMIN?>/pages.php">
-                <option <?=(isset($status) && $status == 'published') ? 'selected="selected"' : ''?>value="published">Published</option>
-                <option <?=(isset($status) && $status == 'draft') ? 'selected="selected"' : ''?>value="draft">Draft</option>
-            </select>
-        </div>
-
-        <a class="button add">Add New</a>
-
-        <div class="search">
-            <form method="POST" action="<?=ADMIN?>/pages.php?status=<?=$status?>">
-                <input type="hidden" name="search_submitted" value="true" />
-                <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" class="button" value="Search" />
-            </form>
-        </div>
-
-    </div>
-
-
-
     <div class="block">
-        <input type="text" name="title" />
-        <textarea></textarea>
+        <form method="post" action="<?=ADMIN?>/pages_add.php">
+
+            <div class="row <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
+                <label>Title:</label>
+                <input class="text" type="text" name="title" />
+            </div>
+
+            <div class="row">
+                <label>URL:</label>
+                <?=HOST?>/&nbsp;<input class="text" type="text" name="slug" />&nbsp;/
+            </div>
+
+            <div class="row">
+                <label>Content:</label>
+                <textarea class="text" name="content" rows="5" cols="50"></textarea>
+            </div>
+
+            <div class="row">
+                <label>Status:</label>
+                <select class="dropdown" name="status">
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                </select>
+            </div>
+
+            <div class="row-shift">
+                <input type="hidden" name="submitted" value="TRUE" />
+                <input type="submit" class="button" value="Add Page" />
+            </div>
+            
+        </form>
     </div>
 
 </div>
