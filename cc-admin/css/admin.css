@@ -284,6 +284,8 @@ MISC STYLES
 
 .invisible { visibility:hidden; }
 
+.options { display:inline; }
+
 
 
 
@@ -407,6 +409,27 @@ COMMENT STYLES
 
 
 
+/*
+PAGE STYLES
+**/
+
+#page-slug { line-height:26px; }
+
+#page-slug input { margin:0 5px; }
+
+#edit-slug, #view-slug { display:none; }
+
+#page-slug a { margin-left:10px; }
+
+
+
+
+
+
+
+
+
+
 
 
 /********************
@@ -476,3 +499,5 @@ textarea.text {
 a.button {
     padding:0 10px;
 }
+
+

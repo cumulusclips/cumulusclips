@@ -1,5 +1,7 @@
 // Global vars
 var settings = retrieveSettings();
+var customSlug = false;
+var baseURL = $('meta[name="baseURL"]').attr('content');
 
 $('document').ready(function(){
 
@@ -42,6 +44,96 @@ $('document').ready(function(){
         } else {
             window.location = alternateLoc;
         }
+    });
+
+
+
+    $('#page-title').change(function(){
+
+        if (customSlug) return false;
+
+        if ($.trim($(this).val()) == '') {
+            $('#view-slug').hide();
+            $('#empty-slug').show();
+            $('#page-slug input[name="slug"]').val('');
+            return false;
+        }
+
+        $.ajax({
+            url         : baseURL + '/cc-admin/pages_slug.php',
+            type        : 'POST',
+            data        : {page_id:0,action:'title',title:$(this).val()},
+            dataType    : 'json',
+            success     : function(data, textStatus, jqXHR){
+                $('#empty-slug').hide();
+                $('#view-slug').show();
+                $('#page-slug span').text(data.msg);
+                $('#page-slug input[name="slug"]').val(data.msg);
+            }
+        });
+        
+    });
+    
+    $('#page-slug .done').click(function(){
+
+        var editField = $('#page-slug input[name="edit-slug"]');
+        $('#edit-slug').hide();
+
+        if ($.trim(editField.val()) == '') {
+            $('#empty-slug').show();
+            $('#page-slug input[name="slug"]').val('');
+            return false;
+        }
+
+        $.ajax({
+            url         : baseURL + '/cc-admin/pages_slug.php',
+            type        : 'POST',
+            data        : {page_id:0,action:'slug',slug:editField.val()},
+            dataType    : 'json',
+            success     : function(data, textStatus, jqXHR){
+                customSlug = true;
+                $('#view-slug').show();
+                $('#page-slug span').text(data.msg);
+                $('#page-slug input[name="slug"]').val(data.msg);
+            }
+        });
+        return false;
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $('#page-slug .edit').click(function(){
+        $('#empty-slug').hide();
+        $('#view-slug').hide();
+        $('#edit-slug').css('display','inline');
+        $('#edit-slug input').focus().val($('#page-slug input[name="slug"]').val());
+        return false;
+    });
+
+
+    $('#page-slug .cancel').click(function(){
+        $('#edit-slug').hide();
+        if ($('#page-slug input[name="slug"]').val() == '') {
+            $('#empty-slug').show();
+        } else {
+            $('#view-slug').css('display','inline');
+        }
+        return false;
     });
 
 });

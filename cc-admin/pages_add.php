@@ -20,6 +20,7 @@ $errors = array();
 $message = null;
 $header = 'Add New Page';
 $page_title = 'Add New Page';
+$page = null;
 
 
 
@@ -91,22 +92,42 @@ include ('header.php');
 
             <div class="row <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
                 <label>Title:</label>
-                <input class="text" type="text" name="title" />
+                <input tabindex="1" id="page-title" class="text" type="text" name="title" />
             </div>
 
-            <div class="row">
-                <label>URL:</label>
-                <?=HOST?>/&nbsp;<input class="text" type="text" name="slug" />&nbsp;/
+            <div id="page-slug" class="row">
+                
+                <label>*URL:</label>
+                <input type="hidden" name="slug" />
+                
+                <div id="empty-slug">
+                    Not Set
+                    <div class="options"><a href="" class="edit">Edit</a></div>
+                </div>
+                
+                <div id="view-slug">
+                    <?=HOST?>/<span></span>/
+                    <div class="options"><a href="" class="edit">Edit</a></div>
+                </div>
+                
+                <div id="edit-slug">
+                    <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
+                    <div class="options">
+                        <a href="" class="done">Done</a>
+                        <a href="" class="cancel">Cancel</a>
+                    </div>
+                </div>
+
             </div>
 
             <div class="row">
                 <label>Content:</label>
-                <textarea class="text" name="content" rows="5" cols="50"></textarea>
+                <textarea tabindex="2" class="text" name="content" rows="5" cols="50"></textarea>
             </div>
 
             <div class="row">
-                <label>Status:</label>
-                <select class="dropdown" name="status">
+                <label>*Status:</label>
+                <select tabindex="3" class="dropdown" name="status">
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
                 </select>
@@ -114,7 +135,7 @@ include ('header.php');
 
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Add Page" />
+                <input tabindex="4" type="submit" class="button" value="Add Page" />
             </div>
             
         </form>

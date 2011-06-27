@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="baseURL" content="<?=HOST?>" />
 <title><?=$page_title?></title>
 <link rel="shortcut icon" href="<?=HOST?>/favicon.ico" type="image/x-icon" />
 <link href="<?=ADMIN?>/css/reset.css" rel="stylesheet" type="text/css" />
