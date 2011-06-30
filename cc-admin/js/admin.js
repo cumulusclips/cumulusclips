@@ -9,7 +9,8 @@ $('document').ready(function(){
 
 
 
-    // Attach sidebar click events
+
+    // Toggle expand/collapse of sidebar sub-menus
     $("#sidebar h3").click(function(){
         var name = $(this).attr('class');
         $(this).parent().toggleClass('down-icon');
@@ -20,12 +21,14 @@ $('document').ready(function(){
 
 
 
-    // Attach record hover events
+
+    // Display record actions when hovering over record
     $('.list tr').hover(function(){$(this).find('.record-actions').toggleClass('invisible');});
     
 
 
-    // Attach confirm popup to confirm action links
+
+    // Trigger confirmation popup for confirm action links
     $('.confirm').click(function() {
         var location = $(this).attr('href')
         var agree = confirm ($(this).data('confirm'));
@@ -35,7 +38,8 @@ $('document').ready(function(){
 
 
 
-    // Attach change event to status dropdown
+
+    // Redirect user to requested location when status dropdown is updated
     $('select[name="status"]').change(function(){
         var jumpLoc = $(this).data('jump');
         var alternateLoc = $(this).find('option:selected').data('url');
@@ -48,24 +52,38 @@ $('document').ready(function(){
 
 
 
+
+    // Generate and update slug as page title changes
     $('#page-title').change(function(){
 
-        if (customSlug) return false;
+        if (customSlug) return false;   // URL has been modified directly
 
-        if ($.trim($(this).val()) == '') {
-            $('#view-slug').hide();
-            $('#empty-slug').show();
-            $('#page-slug input[name="slug"]').val('');
-            return false;
+        // Callback to execute in case of empty page title or slug
+        var emptyCallback = function() {
+                $('#view-slug').hide();
+                $('#edit-slug').hide();
+                $('#empty-slug').show();
+                $('#page-slug input[name="slug"]').val('');
+                return false;
         }
 
+        // Page title is empty
+        if ($.trim($(this).val()) == '') return emptyCallback();
+
+        // Submit page title for AJAX validation
         $.ajax({
             url         : baseURL + '/cc-admin/pages_slug.php',
             type        : 'POST',
             data        : {page_id:0,action:'title',title:$(this).val()},
             dataType    : 'json',
             success     : function(data, textStatus, jqXHR){
+
+                // Returned slug is empty
+                if ($.trim(data.msg) == '') return emptyCallback();
+
+                // Return slug is valid, update URL & fields
                 $('#empty-slug').hide();
+                $('#edit-slug').hide();
                 $('#view-slug').show();
                 $('#page-slug span').text(data.msg);
                 $('#page-slug input[name="slug"]').val(data.msg);
@@ -73,24 +91,38 @@ $('document').ready(function(){
         });
         
     });
-    
+
+
+
+
+    // Validate custom page slug when done editing
     $('#page-slug .done').click(function(){
 
-        var editField = $('#page-slug input[name="edit-slug"]');
         $('#edit-slug').hide();
+        var editField = $('#page-slug input[name="edit-slug"]');
 
-        if ($.trim(editField.val()) == '') {
+        // Callback to execute in case of empty slug
+        var emptyCallback = function() {
             $('#empty-slug').show();
             $('#page-slug input[name="slug"]').val('');
             return false;
         }
 
+        // Custom slug is empty
+        if ($.trim(editField.val()) == '') return emptyCallback();
+
+        // Submit custom slug for AJAX validation
         $.ajax({
             url         : baseURL + '/cc-admin/pages_slug.php',
             type        : 'POST',
             data        : {page_id:0,action:'slug',slug:editField.val()},
             dataType    : 'json',
             success     : function(data, textStatus, jqXHR){
+
+                // Returned slug is empty
+                if ($.trim(data.msg) == '') return emptyCallback();
+
+                // Return slug is valid, update URL & fields
                 customSlug = true;
                 $('#view-slug').show();
                 $('#page-slug span').text(data.msg);
@@ -104,34 +136,25 @@ $('document').ready(function(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Display edit page slug field
     $('#page-slug .edit').click(function(){
         $('#empty-slug').hide();
         $('#view-slug').hide();
-        $('#edit-slug').css('display','inline');
+        $('#edit-slug').show();
         $('#edit-slug input').focus().val($('#page-slug input[name="slug"]').val());
         return false;
     });
 
 
+
+
+    // Hide edit slug field & display proper view of slug
     $('#page-slug .cancel').click(function(){
         $('#edit-slug').hide();
         if ($('#page-slug input[name="slug"]').val() == '') {
             $('#empty-slug').show();
         } else {
-            $('#view-slug').css('display','inline');
+            $('#view-slug').show();
         }
         return false;
     });
