@@ -40,7 +40,7 @@ $('document').ready(function(){
 
 
     // Redirect user to requested location when status dropdown is updated
-    $('select[name="status"]').change(function(){
+    $('.jump select').change(function(){
         var jumpLoc = $(this).data('jump');
         var alternateLoc = $(this).find('option:selected').data('url');
         if (typeof alternateLoc == 'undefined') {

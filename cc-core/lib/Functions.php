@@ -254,14 +254,12 @@ class Functions {
 
     /**
      * Output loaded JS files to browser for the admin panel
+     * @param array $admin_js List of JS file to be printed
      * @return mixed All JS file entries are printed with javascript tags
      */
-    static function AdminOutputJS() {
-        global $js;
-        if (isset ($js)) {
-            foreach ($js as $file) {
-                echo '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
-            }
+    static function AdminOutputJS ($admin_js) {
+        foreach ($admin_js as $file) {
+            echo '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
         }
     }
 

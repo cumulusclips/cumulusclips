@@ -14,9 +14,20 @@ $('document').ready(function(){
         theme_advanced_toolbar_location : "top",
         theme_advanced_toolbar_align : "left",
         theme_advanced_statusbar_location : "bottom",
-        theme_advanced_resizing : true,
-        height:"300"
+        height : "300",
+        init_instance_callback : "skipToolbar"
 
     });
 
 });
+
+
+
+
+/**
+ * Allow tabbing directly to content by skipping the toolbar
+ * @return void mce toolbar is skipped during tabs
+ */
+function skipToolbar() {
+    $('.mceToolbar *').attr('tabindex',-1);
+}

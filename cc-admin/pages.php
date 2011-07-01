@@ -190,7 +190,7 @@ include ('header.php');
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->page_id)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>
-                        <td><?=($page->status == 'live') ? 'Live' : 'Draft'?></td>
+                        <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
                         <td><?=$page->date_created?></td>
                     </tr>
 

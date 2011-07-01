@@ -356,17 +356,11 @@ RECORD LISTING STYLES
 VIDEO STYLES
 ***********/
 
-#videos .list td {
-    width:20%;
-}
+#videos .list td { width:20%; }
 
-#videos .list .video-title {
-    width:40%;
-}
+#videos .list .video-title { width:40%; }
 
-#video-edit form {
-    margin-top:15px;
-}
+#video-edit form { margin-top:15px; }
 
 
 
@@ -376,9 +370,7 @@ VIDEO STYLES
 MEMBER STYLES
 ************/
 
-#member-edit form {
-    margin-top:15px;
-}
+#member-edit form { margin-top:15px; }
 
 
 
@@ -388,45 +380,36 @@ MEMBER STYLES
 COMMENT STYLES
 *************/
 
-#comments .list td {
-    width:20%;
-}
+#comments .list td { width:20%; }
 
-#comments .list .comments-text {
-    width:40%;
-}
+#comments .list .comments-text { width:40%; }
 
 #comments .list .poster {
     width:150px;
     word-wrap:break-word;
 }
 
-#comment-edit form {
-    margin-top:15px;
-}
+#comment-edit form { margin-top:15px; }
 
 
 
 
 
-/*
+/**********
 PAGE STYLES
-**/
+**********/
 
 #page-slug { line-height:26px; }
 
 #page-slug input { margin:0 5px; }
 
-#edit-slug, #view-slug { display:none; }
+#pages-add #edit-slug, #pages-add #view-slug { display:none; }
+
+#pages-edit #edit-slug, #pages-edit #empty-slug { display:none; }
 
 #page-slug a { margin-left:10px; }
 
-
-
-
-
-
-
+#pages-add form, #pages-edit form { margin-top:15px; }
 
 
 

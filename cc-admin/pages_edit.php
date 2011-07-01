@@ -18,8 +18,7 @@ Plugin::Trigger ('admin.videos.start');
 $data = array();
 $errors = array();
 $message = null;
-$page_title = 'Add New Page';
-$page = null;
+$page_title = 'Edit Page';
 $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
@@ -31,6 +30,16 @@ if (!empty ($_SESSION['list_page'])) {
     $list_page = $_SESSION['list_page'];
 } else {
     $list_page = ADMIN . '/pages.php';
+}
+
+
+
+// Validate & load requested record
+if (!empty ($_GET['id']) && is_numeric ($_GET['id'])) {
+    $page = new Page ($_GET['id']);
+    if (!$page->found) header ("Location: " . ADMIN . '/pages.php');
+} else {
+    header ("Location: " . ADMIN . '/pages.php');
 }
 
 
@@ -62,7 +71,7 @@ if (isset ($_POST['submitted'])) {
     // Validate page slug
     if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
-        if (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug))) {
+        if ($slug == $page->slug || (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug)))) {
             $data['slug'] = $slug;
         } else {
             $errors['slug'] = "URL is not available";
@@ -80,12 +89,10 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Create page if no errors were found
+    // Update record if no errors were found
     if (empty ($errors)) {
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['layout'] = 'default';
-        $page_id = Page::Create ($data);
-        $message = 'Page has been created';
+        $page->Update ($data);
+        $message = 'Page has been updated';
         $message_type = 'success';
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
@@ -101,9 +108,9 @@ include ('header.php');
 
 ?>
 
-<div id="pages-add">
+<div id="pages-edit">
 
-    <h1>Add New Page</h1>
+    <h1>Edit Page</h1>
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
@@ -114,17 +121,17 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form method="post" action="<?=ADMIN?>/pages_add.php">
+        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">
 
             <div class="row <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
                 <label>*Title:</label>
-                <input id="page-title" class="text" type="text" name="title" />
+                <input class="text" type="text" name="title" value="<?=$page->title?>" />
             </div>
 
             <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
                 
                 <label>*URL:</label>
-                <input type="hidden" name="slug" />
+                <input type="hidden" name="slug" value="<?=$page->slug?>" />
                 
                 <div id="empty-slug">
                     Not Set
@@ -132,7 +139,7 @@ include ('header.php');
                 </div>
                 
                 <div id="view-slug">
-                    <?=HOST?>/<span></span>/
+                    <?=HOST?>/<span><?=$page->slug?></span>/
                     <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
                 </div>
                 
@@ -148,20 +155,20 @@ include ('header.php');
 
             <div class="row">
                 <label>Content:</label>
-                <textarea class="text tinymce" name="content" rows="7" cols="50"></textarea>
+                <textarea class="text tinymce" name="content" rows="7" cols="50"><?=$page->content?></textarea>
             </div>
 
             <div class="row">
                 <label>*Status:</label>
                 <select class="dropdown" name="status">
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
+                    <option <?=($page->status=='published')?'selected="selected"':''?> value="published">Published</option>
+                    <option <?=($page->status=='draft')?'selected="selected"':''?> value="draft">Draft</option>
                 </select>
             </div>
 
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />
-                <input tabindex="4" type="submit" class="button" value="Add Page" />
+                <input tabindex="4" type="submit" class="button" value="Edit Page" />
             </div>
             
         </form>
