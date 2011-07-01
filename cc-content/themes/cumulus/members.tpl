@@ -1,3 +1,6 @@
+<?php View::SetLayout ('full'); ?>
+<?php View::Header(); ?>
+
 <h1><?=Language::GetText('members_header')?></h1>
 
 <?php if ($db->Count ($result) > 0): ?>
@@ -30,3 +33,5 @@
 
 <br clear="all" />
 <?=$pagination->Paginate()?>
+
+<?php View::Footer(); ?>

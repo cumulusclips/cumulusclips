@@ -8,57 +8,75 @@ class View {
 
 
 
-    // Constructor Method
-    static function  InitView() {
+
+    /**
+     * Initialize view and set template & layout properties
+     * @global object $db Instance of database object
+     * @global object $config Site configuration settings
+     * @param string $page [optional] Page whose information to load
+     * @return void View is initialized
+     */
+    static function  InitView ($page = null) {
         global $db, $config;
         self::$options = new stdClass();
-        self::$options->layout = THEME_PATH . '/layouts/two_column.layout.tpl';
-        self::$options->header = THEME_PATH . '/blocks/header.tpl';
-        self::$options->footer = THEME_PATH . '/blocks/footer.tpl';
+        self::$options->layout = 'split';
+        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . 'top.tpl';
+        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . 'bottom.tpl';
         self::$options->blocks = array();
 
         self::$vars = new stdClass();
         self::$vars->db = $db;
         self::$vars->config = $config;
 
+        // Load page's meta information into memory for use in templates
+        if ($page) {
+            self::$options->page = $page;
+            self::$vars->meta = Language::GetMeta ($page);
+        }
+
         Plugin::Trigger ('view.init');
 
     }
+    
 
 
 
     /**
-     * Load page's meta information into memory for use in templates
-     * @param string $page The name of the page who's information to retrieve
-     * @return void Meta information is loaded into the options var.
+     * Output the requested page to the browser
+     * @param string $view The view file to be output
+     * @return mixed Page is output to browser
      */
-    static function LoadPage ($page) {
-        self::$options->page = $page;
-        self::$vars->meta = Language::GetMeta ($page);
-        Plugin::Trigger ('view.load_page');
-    }
-
-
-
-    // Output HTML Method
     static function Render ($view) {
         self::$options->view = THEME_PATH . '/' . $view;
         extract (get_object_vars (self::$vars));
         Plugin::Trigger ('view.render');
-        include (self::$options->layout);
+        include (self::$options->view);
     }
 
 
 
-    // Set layout to be used by renderer
+
+    /**
+     * Switch the layout to be used
+     * @param string $layout The new layout to switch to
+     * @return void Layout is updated and new templates are used
+     */
     static function SetLayout ($layout) {
-         self::$options->layout = THEME_PATH . '/layouts/' . $layout;
-         Plugin::Trigger ('view.set_layout');
+        self::$options->layout = $layout;
+        $header = THEME_PATH . "/layouts/header.$layout.tpl";
+        $footer = THEME_PATH . "/layouts/footer.$layout.tpl";
+        if (file_exists ($header)) self::$options->header = $header;
+        if (file_exists ($header)) self::$options->footer = $footer;
+        Plugin::Trigger ('view.set_layout');
     }
 
 
 
-    // Retrieve Header file Method
+
+    /**
+     * Output the layout header to the browser
+     * @return mixed Header is output to browser
+     */
     static function Header() {
         extract (get_object_vars (self::$vars));
         Plugin::Trigger ('view.header');
@@ -67,16 +85,11 @@ class View {
 
 
 
-    // Retrieve Main Body Method
-    static function Body() {
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.body');
-        include (self::$options->view);
-    }
 
-
-
-    // Retrieve Footer file Method
+    /**
+     * Output the layout footer to the browser
+     * @return mixed Footer is output to browser
+     */
     static function Footer() {
         extract (get_object_vars (self::$vars));
         Plugin::Trigger ('view.footer');
@@ -85,13 +98,19 @@ class View {
 
 
 
-    // Retrieve Custom Block file Method
+
+    /**
+     * Output a custom block to the browser
+     * @param string $tpl_file Name of the block to be output
+     * @return mixed Block is output to browser
+     */
     static function Block ($tpl_file) {
         extract (get_object_vars (self::$vars));
         $block = THEME_PATH . '/blocks/' . $tpl_file;
         Plugin::Trigger ('view.block');
         include ($block);
     }
+
 
 
 
@@ -116,7 +135,12 @@ class View {
 
 
 
-    // Add specified block to sidebar
+
+    /**
+     * Add specified block to sidebar queue for later output
+     * @param string $tpl_file The block to be loaded into the sidebar queue
+     * @return void Block is queued for later output
+     */
     static function AddSidebarBlock ($tpl_file) {
         self::$options->blocks[] = $tpl_file;
         Plugin::Trigger ('view.add_sidebar_block');
@@ -124,7 +148,11 @@ class View {
 
 
 
-    // Output sidebar blocks
+
+    /**
+     * Output queued sidebar blocks to the browser
+     * @return mixed Sidebar blocks are output
+     */
     static function OutputSidebarBlocks() {
         Plugin::Trigger ('view.output_sidebar_blocks');
         foreach (self::$options->blocks as $_block) {
@@ -132,6 +160,7 @@ class View {
             self::Block($_block);
         }
     }
+
 
 
 
@@ -145,6 +174,7 @@ class View {
         self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
         Plugin::Trigger ('view.add_css');
     }
+
 
 
 
@@ -164,6 +194,7 @@ class View {
 
 
 
+
     /**
      * Add Add JS file to the document
      * @param string $js_name Filename of the JS file to be attached
@@ -174,6 +205,7 @@ class View {
         self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
         Plugin::Trigger ('view.add_js');
     }
+
 
 
 
@@ -193,6 +225,7 @@ class View {
 
 
 
+
     /**
      * Add META tag to the document head
      * @param string $meta_name Name attribute to be assigned to the META tag
@@ -203,6 +236,7 @@ class View {
         self::$options->meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
         Plugin::Trigger ('view.add_meta');
     }
+
 
 
 

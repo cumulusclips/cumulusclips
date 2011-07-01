@@ -221,12 +221,10 @@ pagination.paginate - /cc-core/lib/Pagination.php
 
 
 view.init - /cc-core/lib/View.php
-view.load_page - /cc-core/lib/View.php
 view.render - /cc-core/lib/View.php
 view.set_layout - /cc-core/lib/View.php
 view.header - /cc-core/lib/View.php
 view.footer - /cc-core/lib/View.php
-view.body - /cc-core/lib/View.php
 view.block - /cc-core/lib/View.php
 view.repeating_block - /cc-core/lib/View.php
 view.repeating_block_loop - /cc-core/lib/View.php
