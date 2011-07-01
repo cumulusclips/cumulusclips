@@ -20,8 +20,8 @@ class View {
         global $db, $config;
         self::$options = new stdClass();
         self::$options->layout = 'split';
-        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . 'top.tpl';
-        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . 'bottom.tpl';
+        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . 'header.tpl';
+        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . 'footer.tpl';
         self::$options->blocks = array();
 
         self::$vars = new stdClass();
@@ -63,8 +63,8 @@ class View {
      */
     static function SetLayout ($layout) {
         self::$options->layout = $layout;
-        $header = THEME_PATH . "/layouts/header.$layout.tpl";
-        $footer = THEME_PATH . "/layouts/footer.$layout.tpl";
+        $header = THEME_PATH . "/layouts/$layout.header.tpl";
+        $footer = THEME_PATH . "/layouts/$layout.footer.tpl";
         if (file_exists ($header)) self::$options->header = $header;
         if (file_exists ($header)) self::$options->footer = $footer;
         Plugin::Trigger ('view.set_layout');
