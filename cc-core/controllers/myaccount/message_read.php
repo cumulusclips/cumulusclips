@@ -9,11 +9,10 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('message_read');
+View::InitView ('message_read');
 Plugin::Trigger ('message_read.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -41,7 +40,6 @@ if ($message_id) {
 
 
 // Outuput page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('message_read.before_render');
 View::Render ('myaccount/message_read.tpl');
 

@@ -8,10 +8,9 @@
 // Include required files
 include_once ( dirname ( dirname ( __FILE__ )) . '/config/bootstrap.php');
 App::LoadClass ('User');
-View::InitView();
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('system_404');
+View::InitView ('system_404');
 Plugin::Trigger ('system_404.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);

@@ -1,3 +1,13 @@
+<?php
+
+View::AddMeta('baseURL', HOST);
+View::AddJs('flowplayer.plugin.js');
+View::AddJs('play.js');
+View::SetLayout('full');
+View::Header();
+
+?>
+
 <script type="text/javascript">
     var video = {id:<?=$video->video_id?>,host:'<?=HOST?>',slug:'<?=$video->slug?>'};
 </script>
@@ -214,3 +224,5 @@
     </div>
     <!-- END PLAY RIGHT -->
     <br clear="all" />
+
+<?php View::Footer(); ?>

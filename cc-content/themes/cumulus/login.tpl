@@ -1,3 +1,5 @@
+<?php View::Header(); ?>
+
 <h1><?=Language::GetText('login_header')?></h1>
 
 <?php if ($message): ?>
@@ -58,3 +60,5 @@
     </form>
 
 </div>
+
+<?php View::Footer(); ?>

@@ -10,11 +10,10 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Pagination');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('message_inbox');
+View::InitView ('message_inbox');
 Plugin::Trigger ('message_inbox.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -85,7 +84,6 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('message_inbox.before_render');
 View::Render ('myaccount/message_inbox.tpl');
 

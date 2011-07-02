@@ -9,12 +9,11 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
-View::InitView();
-Plugin::Trigger ('opt_out.start');
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('opt_out');
+View::InitView ('opt_out');
+Plugin::Trigger ('opt_out.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 

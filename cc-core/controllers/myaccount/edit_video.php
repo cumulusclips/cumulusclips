@@ -9,11 +9,10 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('edit_video');
+View::InitView ('edit_video');
 Plugin::Trigger ('edit_video.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -105,7 +104,6 @@ View::$vars->result_cat = $db->Query ($query);
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('edit_video.before_render');
 View::Render ('myaccount/edit_video.tpl');
 

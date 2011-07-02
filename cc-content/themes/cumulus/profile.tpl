@@ -1,3 +1,11 @@
+<?php
+
+View::AddMeta ('baseURL', HOST);
+View::AddSidebarBlock ('recent_posts.tpl');
+View::Header();
+
+?>
+
 <h1><?=$member->username?></h1>
 
 <div id="message"></div>
@@ -61,4 +69,4 @@
 <?php endif; ?>
 <!-- END Recent Videos -->
 
-
+<?php View::Footer(); ?>

@@ -20,8 +20,8 @@ class View {
         global $db, $config;
         self::$options = new stdClass();
         self::$options->layout = 'default';
-        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . 'header.tpl';
-        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . 'footer.tpl';
+        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . '.header.tpl';
+        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . '.footer.tpl';
         self::$options->blocks = array();
 
         self::$vars = new stdClass();
@@ -150,13 +150,13 @@ class View {
 
 
     /**
-     * Output queued sidebar blocks to the browser
+     * Write queued sidebar blocks to the browser
      * @return mixed Sidebar blocks are output
      */
-    static function OutputSidebarBlocks() {
-        Plugin::Trigger ('view.output_sidebar_blocks');
+    static function WriteSidebarBlocks() {
+        Plugin::Trigger ('view.write_sidebar_blocks');
         foreach (self::$options->blocks as $_block) {
-            Plugin::Trigger ('view.ouput_sidebar_blocks_loop');
+            Plugin::Trigger ('view.write_sidebar_blocks_loop');
             self::Block($_block);
         }
     }
@@ -179,7 +179,7 @@ class View {
 
 
     /**
-     * Write the Additional CSS tags to the browser
+     * Write the additional CSS tags to the browser
      * @return mixed CSS link tags are written
      */
     static function WriteCss() {
@@ -196,7 +196,7 @@ class View {
 
 
     /**
-     * Add Add JS file to the document
+     * Add JS file to the document
      * @param string $js_name Filename of the JS file to be attached
      * @return void JS file is stored to be written in document
      */

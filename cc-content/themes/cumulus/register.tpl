@@ -1,4 +1,12 @@
-<link href="<?=THEME?>/css/username_validation.css" rel="stylesheet" type="text/css" />
+<?php
+
+View::AddMeta ('register:host', HOST);
+View::AddMeta ('register:theme', THEME);
+View::AddJs ('username.js');
+View::AddCss ('username_validation.css');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('register_header')?></h1>
 
@@ -66,3 +74,5 @@
     </form>
 
 </div>
+
+<?php View::Footer(); ?>

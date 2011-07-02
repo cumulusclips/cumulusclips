@@ -11,15 +11,15 @@ App::LoadClass ('User');
 App::LoadClass ('Rating');
 App::LoadClass ('Pagination');
 App::LoadClass ('Video');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('member_videos');
+View::InitView ('member_videos');
 Plugin::Trigger ('member_videos.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
+$url = HOST . '/members';
 
 
 
@@ -37,7 +37,7 @@ if (isset ($_GET['username'])) {
 if ($id) {
     View::$vars->member = new User ($id);
     View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('member' => View::$vars->member->username));
-    $url = '/members/' . View::$vars->member->username . '/videos';
+    $url .= '/' . View::$vars->member->username . '/videos';
 } else {
     App::Throw404();
 }

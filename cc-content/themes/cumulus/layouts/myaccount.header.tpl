@@ -52,7 +52,7 @@
 
             </div>
 
-            <?php View::OutputSidebarBlocks(); ?>
+            <?php View::WriteSidebarBlocks(); ?>
 
         </div>
         <!-- END SIDEBAR -->

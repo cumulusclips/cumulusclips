@@ -1,3 +1,5 @@
+<?php View::Header(); ?>
+
 <h1><?=Language::GetText('contact_header')?></h1>
 
 <?php if ($error_msg): ?>
@@ -42,3 +44,5 @@
     </form>
 
 </div>
+
+<?php View::Footer(); ?>

@@ -13,11 +13,10 @@ App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
 App::LoadClass ('Flag');
 App::LoadClass ('Post');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('profile');
+View::InitView ('profile');
 Plugin::Trigger ('profile.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
@@ -88,8 +87,6 @@ while ($row = $db->FetchObj ($result_posts)) {
 
 
 // Output Page
-View::AddMeta ('baseURL', HOST);
-View::AddSidebarBlock ('recent_posts.tpl');
 Plugin::Trigger ('profile.before_render');
 View::Render ('profile.tpl');
 

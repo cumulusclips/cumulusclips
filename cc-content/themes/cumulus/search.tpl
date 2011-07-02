@@ -1,4 +1,7 @@
+<?php View::Header(); ?>
+
 <h1><?=Language::GetText('search_header')?></h1>
+
 <p class="post-header"><strong><?=Language::GetText('results_for')?>: '<?php echo $cleaned; ?>'</strong></p>
 
 <?php if ($db->Count($result) > 0): ?>
@@ -29,11 +32,12 @@
 
     <?php endwhile; ?>
 
+    <?=$pagination->Paginate()?>
+
 <?php else: ?>
     <div class="block">
         <strong><?=Language::GetText('no_results')?></strong>
     </div>
 <?php endif; ?>
 
-
-<?=$pagination->Paginate()?>
+<?php View::Footer(); ?>

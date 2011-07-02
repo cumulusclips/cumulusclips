@@ -1,3 +1,17 @@
+<?php
+
+View::AddMeta ('uploadify:host', HOST);
+View::AddMeta ('uploadify:token', $_SESSION['token']);
+View::AddMeta ('uploadify:theme', THEME);
+View::AddMeta ('uploadify:limit', VIDEO_SIZE_LIMIT);
+View::AddCss ('uploadify.css');
+View::AddJs ('swfobject.js');
+View::AddJs ('uploadify.plugin.js');
+View::AddJs ('uploadify.js');
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('upload_video_header')?></h1>
 
@@ -51,3 +65,5 @@
     <!-- END Grab video from YouTube -->
 
 </div>
+
+<?php View::Footer(); ?>

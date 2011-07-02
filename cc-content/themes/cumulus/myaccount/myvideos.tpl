@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('myvideos_header')?></h1>
         
@@ -47,3 +53,5 @@
         <strong><?=Language::GetText('no_user_videos')?></strong></a>
     </div>
 <?php endif; ?>
+
+<?php View::Footer(); ?>

@@ -11,11 +11,10 @@ App::LoadClass ('User');
 App::LoadClass ('Comment');
 App::LoadClass ('Pagination');
 App::LoadClass ('Video');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('comments');
+View::InitView ('comments');
 Plugin::Trigger ('comments.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);

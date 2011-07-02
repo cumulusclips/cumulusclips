@@ -12,11 +12,10 @@ App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
 App::LoadClass ('Favorite');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('myfavorites');
+View::InitView ('myfavorites');
 Plugin::Trigger ('myfavorites.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -60,7 +59,6 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('myfavorites.before_render');
 View::Render ('myaccount/myfavorites.tpl');
 

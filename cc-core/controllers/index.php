@@ -10,11 +10,10 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('index');
+View::InitView ('index');
 Plugin::Trigger ('index.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
@@ -34,9 +33,6 @@ View::$vars->result_recent = $db->Query ($query);
 
 
 // Output Page
-View::AddJs ('jcycle.plugin.js');
-View::AddJs ('slideshow.js');
-View::AddSidebarBlock ('home_login.tpl');
 Plugin::Trigger ('index.before_render');
 View::Render ('index.tpl');
 

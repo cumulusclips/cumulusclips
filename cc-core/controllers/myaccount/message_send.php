@@ -11,11 +11,10 @@ App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Privacy');
 App::LoadClass ('EmailTemplate');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('message_send');
+View::InitView ('message_send');
 Plugin::Trigger ('message_send.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -147,7 +146,6 @@ if (isset ($_POST['submitted'])) {
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('message_send.before_render');
 View::Render ('myaccount/message_send.tpl');
 

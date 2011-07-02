@@ -8,11 +8,10 @@
 // Include required files
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('change_password');
+View::InitView ('change_password');
 Plugin::Trigger ('change_password.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -71,7 +70,6 @@ if ((isset ($_POST['submitted']))) {
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('change_password.before_render');
 View::Render ('myaccount/change_password.tpl');
 

@@ -1,3 +1,12 @@
+<?php
+
+View::AddJs ('jcycle.plugin.js');
+View::AddJs ('slideshow.js');
+View::AddSidebarBlock ('home_login.tpl');
+View::Header();
+
+?>
+
 <!-- BEGIN SLIDESHOW CONTAINER -->
 <div id="slideshow-container">
 
@@ -95,3 +104,5 @@
 <?php else: ?>
     <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
 <?php endif; ?>
+
+<?php View::Footer(); ?>

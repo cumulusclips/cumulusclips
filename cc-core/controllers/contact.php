@@ -9,11 +9,10 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Recaptcha');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('contact');
+View::InitView ('contact');
 Plugin::Trigger ('contact.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);

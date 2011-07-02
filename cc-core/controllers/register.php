@@ -10,11 +10,10 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
 App::LoadClass ('Recaptcha');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('register');
+View::InitView ('register');
 Plugin::Trigger ('register.start');
 View::$vars->logged_in = User::LoginCheck() ? header (HOST . '/myaccount/') : '';
 View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
@@ -126,9 +125,6 @@ if (isset ($_POST['submitted'])) {
 
 
 // Output Page
-View::AddMeta ('register:host', HOST);
-View::AddMeta ('register:theme', THEME);
-View::AddJs ('username.js');
 Plugin::Trigger ('register.before_render');
 View::Render ('register.tpl');
 

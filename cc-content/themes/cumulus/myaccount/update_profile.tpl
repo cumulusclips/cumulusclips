@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('profile_header')?></h1>
 
@@ -81,3 +87,5 @@
     <div class="clear"></div>
 
 </div>
+
+<?php View::Footer(); ?>

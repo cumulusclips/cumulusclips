@@ -9,11 +9,10 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('privacy_settings');
+View::InitView ('privacy_settings');
 Plugin::Trigger ('privacy_settings.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->data = array();
@@ -74,8 +73,8 @@ if (isset ($_POST['submitted'])) {
 
 }
 
+
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('privacy_settings.before_render');
 View::Render ('myaccount/privacy_settings.tpl');
 

@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('subscriptions_header')?></h1>
 
@@ -37,3 +43,5 @@
     </div>
 
 <?php endif; ?>
+
+<?php View::Footer(); ?>

@@ -10,11 +10,10 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Subscription');
 App::LoadClass ('Pagination');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('subscribers');
+View::InitView ('subscribers');
 Plugin::Trigger ('subscribers.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -38,7 +37,6 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('subscribers.before_render');
 View::Render ('myaccount/subscribers.tpl');
 

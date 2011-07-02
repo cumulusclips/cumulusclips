@@ -11,11 +11,10 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 App::LoadClass ('Pagination');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('search');
+View::InitView ('search');
 Plugin::Trigger ('search.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);

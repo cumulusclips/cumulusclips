@@ -1,3 +1,10 @@
+<?php
+
+View::AddMeta ('baseURL', HOST);
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <p class="large"><?=Language::GetText('myaccount_header')?> - <?=$user->username?></p>
 
@@ -28,3 +35,5 @@
     <div class="clear"></div>
 
 </div>
+
+<?php View::Footer(); ?>

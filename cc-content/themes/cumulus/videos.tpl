@@ -1,3 +1,4 @@
+<?php View::Header(); ?>
 
 <!--
 <h1>Video Categories</h1>
@@ -48,14 +49,12 @@
 
         </div>
 
-
     <?php endwhile; ?>
+
+    <?=$pagination->Paginate()?>
 
 <?php else: ?>
     <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
 <?php endif; ?>
 
-<br clear="all" />
-<?=$pagination->Paginate()?>
-
-    
+<?php View::Footer(); ?>

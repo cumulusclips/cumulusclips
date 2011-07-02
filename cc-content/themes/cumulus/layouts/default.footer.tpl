@@ -6,7 +6,7 @@
         <!-- BEGIN SIDEBAR -->
         <div id="sidebar">
             <?php View::Block ('ad300.tpl'); ?>
-            <?php View::OutputSidebarBlocks(); ?>
+            <?php View::WriteSidebarBlocks(); ?>
         </div>
         <!-- END SIDEBAR -->
 

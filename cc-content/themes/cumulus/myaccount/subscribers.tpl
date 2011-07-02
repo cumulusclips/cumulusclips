@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('subscribers_header')?></h1>
 
@@ -25,3 +31,5 @@
         <strong><?=Language::GetText('no_subscribers')?></strong>
     </div>
 <?php endif; ?>
+
+<?php View::Footer(); ?>

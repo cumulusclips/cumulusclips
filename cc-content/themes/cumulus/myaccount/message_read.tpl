@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('message_read_header')?></h1>
 <div class="block" id="message-display">
@@ -11,3 +17,5 @@
     <a class="button" href="<?=HOST?>/myaccount/message/inbox/<?=$message->message_id?>/"><span><?=Language::GetText('delete')?></span></a>
 
 </div>
+
+<?php View::Footer(); ?>

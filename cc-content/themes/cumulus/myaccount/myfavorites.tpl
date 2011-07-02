@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('myfavorites_header')?></h1>
         
@@ -45,3 +51,4 @@
     </div>
 <?php endif; ?>
 
+<?php View::Footer(); ?>

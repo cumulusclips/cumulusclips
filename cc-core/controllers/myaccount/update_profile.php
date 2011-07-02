@@ -9,11 +9,10 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Picture');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('update_profile');
+View::InitView ('update_profile');
 Plugin::Trigger ('update_profile.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -191,7 +190,6 @@ if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('update_profile.before_render');
 View::Render ('myaccount/update_profile.tpl');
 

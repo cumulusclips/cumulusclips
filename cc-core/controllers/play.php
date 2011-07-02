@@ -11,16 +11,11 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 App::LoadClass ('Subscription');
-App::LoadClass ('Flag');
-App::LoadClass ('Favorite');
 App::LoadClass ('Comment');
-App::LoadClass ('Privacy');
-App::LoadClass ('EmailTemplate');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('play');
+View::InitView ('play');
 Plugin::Trigger ('play.start');
 View::$vars->logged_in = User::LoginCheck();
 View::$vars->tags = NULL;
@@ -92,12 +87,7 @@ while ($row = $db->FetchObj ($result_comments)) {
 }
 
 
-
 // Output Page
-View::AddMeta('baseURL', HOST);
-View::AddJs('flowplayer.plugin.js');
-View::AddJs('play.js');
-View::SetLayout('full.layout.tpl');
 Plugin::Trigger ('play.before_render');
 View::Render ('play.tpl');
 

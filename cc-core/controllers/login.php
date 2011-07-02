@@ -9,11 +9,10 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('login');
+View::InitView ('login');
 Plugin::Trigger ('login.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');

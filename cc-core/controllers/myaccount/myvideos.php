@@ -11,11 +11,10 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Pagination');
 App::LoadClass ('Rating');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('myvideos');
+View::InitView ('myvideos');
 Plugin::Trigger ('myvideos.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -59,7 +58,6 @@ View::$vars->result = $db->Query ($query);
 
 
 // Output page
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('myvideos.before_render');
 View::Render ('myaccount/myvideos.tpl');
 

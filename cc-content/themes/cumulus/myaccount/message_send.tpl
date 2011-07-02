@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('message_send_header')?></h1>
 
@@ -37,3 +43,4 @@
 
 </div>
 
+<?php View::Footer(); ?>

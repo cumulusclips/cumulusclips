@@ -8,11 +8,10 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('activate');
+View::InitView ('activate');
 Plugin::Trigger ('activate.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');

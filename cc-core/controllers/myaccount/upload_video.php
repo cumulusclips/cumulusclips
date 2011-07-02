@@ -9,11 +9,10 @@
 include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-View::InitView();
 
 
 // Establish page variables, objects, arrays, etc
-View::LoadPage ('upload_video');
+View::InitView ('upload_video');
 Plugin::Trigger ('upload_video.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
@@ -40,15 +39,6 @@ if (isset ($_SESSION['token'])) {
 
 
 // Output page
-View::AddMeta ('uploadify:host', HOST);
-View::AddMeta ('uploadify:token', $_SESSION['token']);
-View::AddMeta ('uploadify:theme', THEME);
-View::AddMeta ('uploadify:limit', VIDEO_SIZE_LIMIT);
-View::AddCss ('uploadify.css');
-View::AddJs ('swfobject.js');
-View::AddJs ('uploadify.plugin.js');
-View::AddJs ('uploadify.js');
-View::SetLayout ('portal.layout.tpl');
 Plugin::Trigger ('upload_video.before_render');
 View::Render ('myaccount/upload_video.tpl');
 

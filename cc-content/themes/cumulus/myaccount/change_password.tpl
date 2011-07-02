@@ -1,3 +1,9 @@
+<?php
+
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
 
 <h1><?=Language::GetText('change_password_header')?></h1>
 
@@ -33,4 +39,5 @@
     </form>
 
 </div>
-    
+
+<?php View::Footer(); ?>
