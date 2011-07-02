@@ -19,7 +19,7 @@ class View {
     static function  InitView ($page = null) {
         global $db, $config;
         self::$options = new stdClass();
-        self::$options->layout = 'split';
+        self::$options->layout = 'default';
         self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . 'header.tpl';
         self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . 'footer.tpl';
         self::$options->blocks = array();
