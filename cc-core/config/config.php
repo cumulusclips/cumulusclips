@@ -57,11 +57,8 @@ TODO's CHECKLIST
 ***************/
 
 // TODO Build admin panel
-//    TODO Test 'Make Featured' & 'Un-Feature' links to browse videos
-//    TODO Create 'Add Page' page
-//    TODO Create 'Edit Page' page
-//    TODO Create 'Browse Pages' page
-//    TODO Create custom page controller & .htaccess rules
+    // TODO Browse Themes
+    // TODO Install theme
 
 
 // TODO Add 'View My Profile' link in my account / top nav

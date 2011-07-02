@@ -37,6 +37,7 @@ RewriteRule ^contact/$ /cc-core/controllers/contact.php [NC,L]
 
 
 ### System Pages
+RewriteRule ^page/$ /cc-core/system/page.php [NC,L]
 RewriteRule ^notify/$ /cc-core/system/notify.php [NC,L]
 RewriteRule ^language/get/$ /cc-core/system/language.php [NC,L]
 RewriteRule ^feed(/([a-z0-9]+))?/$ /cc-core/system/feed.php?username=$2 [NC,L]
@@ -102,7 +103,7 @@ RewriteRule ^system-error/$ /cc-core/controllers/system_error.php [NC,L]
 
 
 
-### Catch-All for pages
+### Catch-All for custom pages
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

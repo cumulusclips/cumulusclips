@@ -35,6 +35,13 @@ if (!empty ($_SESSION['list_page'])) {
 
 
 
+// Retrieve list of available layouts
+foreach (glob (THEME_PATH . '/layouts/*.header.tpl') as $filename) {
+    $layouts[] = basename ($filename, '.header.tpl');
+}
+
+
+
 
 
 /***********************
@@ -42,6 +49,14 @@ HANDLE FORM IF SUBMITTED
 ***********************/
 
 if (isset ($_POST['submitted'])) {
+
+    // Validate layout
+    if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
+        $data['layout'] = $_POST['layout'];
+    } else {
+        $errors['layout'] = "You didn't provide a valid layout";
+    }
+
 
     // Validate status
     if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
@@ -51,7 +66,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page title
+    // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
         $data['title'] = htmlspecialchars (trim ($_POST['title']));
     } else {
@@ -59,7 +74,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page slug
+    // Validate slug
     if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
         if (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug))) {
@@ -72,7 +87,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page content
+    // Validate content
     if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
         $data['content'] = trim ($_POST['content']);
     } else {
@@ -83,7 +98,6 @@ if (isset ($_POST['submitted'])) {
     // Create page if no errors were found
     if (empty ($errors)) {
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['layout'] = 'default';
         $page_id = Page::Create ($data);
         $message = 'Page has been created';
         $message_type = 'success';
@@ -156,6 +170,15 @@ include ('header.php');
                 <select class="dropdown" name="status">
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <label>*Layout:</label>
+                <select class="dropdown" name="layout">
+                    <?php foreach ($layouts as $layout): ?>
+                        <option value="<?=$layout?>"><?=$layout?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 

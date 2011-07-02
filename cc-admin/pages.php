@@ -37,35 +37,6 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 }
 
 
-### Handle "Draft" record if requested
-else if (!empty ($_GET['draft']) && is_numeric ($_GET['draft'])) {
-
-    // Validate id
-    if (Page::Exist (array ('page_id' => $_GET['draft']))) {
-        $page = new Page ($_GET['draft']);
-        $page->Update (array ('status' => 'draft'));
-        $message = 'Page has been set to draft';
-        $message_type = 'success';
-    }
-
-}
-
-
-### Handle "Publish" record if requested
-else if (!empty ($_GET['publish']) && is_numeric ($_GET['publish'])) {
-
-    // Validate id
-    if (Page::Exist (array ('page_id' => $_GET['publish']))) {
-        $page = new Page ($_GET['publish']);
-        $page->Update (array ('status' => 'published'));
-        $message = 'Page has been published';
-        $message_type = 'success';
-    }
-
-}
-
-
-
 
 
 
@@ -185,13 +156,13 @@ include ('header.php');
                         <td>
                             <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>" class="large"><?=$page->title?></a><br />
                             <div class="record-actions invisible">
-                                <a href="<?=HOST?>/<?=$page->slug?>/">Preview</a>
+                                <a href="<?=HOST?>/page/?preview=<?=$page->page_id?>" target="_ccsite">Preview</a>
                                 <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">Edit</a>
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->page_id)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>
                         <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                        <td><?=$page->date_created?></td>
+                        <td><?=$page->date_created_formatted?></td>
                     </tr>
 
                 <?php endwhile; ?>

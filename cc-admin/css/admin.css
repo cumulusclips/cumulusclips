@@ -411,6 +411,11 @@ PAGE STYLES
 
 #pages-add form, #pages-edit form { margin-top:15px; }
 
+#pages-edit .preview {
+    float:left;
+    margin-right:15px;
+}
+
 
 
 

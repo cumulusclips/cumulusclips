@@ -325,6 +325,10 @@ system_error.start - /cc-core/controllers/system_error.php
 system_error.before_render - /cc-core/controllers/system_error.php
 
 
+page.start - /cc-core/system/page.php
+page.before_render - /cc-core/system/page.php
+
+
 ### MYACCOUNT CONTROLLERS
 
 myaccount.start - /cc-core/controllers/myaccount/myaccount.php

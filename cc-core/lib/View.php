@@ -3,7 +3,7 @@
 class View {
     
     // Object Properties
-    private static $options;
+    public static $options;
     public static $vars;
 
 
@@ -245,7 +245,12 @@ class View {
      * @return mixed Stored META tags are written to browser
      */
     static function WriteMeta() {
+        
         Plugin::Trigger ('view.write_meta');
+        self::AddMeta ('generator', 'CumulusClips');
+        if (!empty (self::$vars->meta->keywords)) self::AddMeta ('keywords', self::$vars->meta->keywords);
+        if (!empty (self::$vars->meta->description)) self::AddMeta ('description', self::$vars->meta->description);
+        
         if (isset (self::$options->meta)) {
             foreach (self::$options->meta as $_value) {
                 Plugin::Trigger ('view.write_meta_loop');

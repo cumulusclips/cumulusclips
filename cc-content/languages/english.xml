@@ -448,11 +448,11 @@
             <description>@Sign up for an account.</description>
         </register>
 
-        <server_404>
+        <system_404>
             <title>@Page Not Found</title>
             <keywords>@Page Not Found, 404 Error</keywords>
             <description>@404 Error Page Not Found.</description>
-        </server_404>
+        </system_404>
 
         <system_error>
             <title>@System Error</title>

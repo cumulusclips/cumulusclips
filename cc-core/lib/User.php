@@ -41,7 +41,7 @@ class User {
 
         // User specific values
         $this->avatar = (empty ($this->picture)) ? THEME . '/images/user_placeholder.gif' : HOST . "/cc-content/uploads/pictures/$this->picture";
-        $this->date_created = date ('m/d/Y', strtotime ($this->date_created));
+        $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
         $this->last_login = date ('m/d/Y', strtotime ($this->last_login));
         $this->video_count = $this->GetVideoCount();
         Plugin::Trigger ('user.get');

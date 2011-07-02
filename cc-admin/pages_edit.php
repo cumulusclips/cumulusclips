@@ -19,6 +19,7 @@ $data = array();
 $errors = array();
 $message = null;
 $page_title = 'Edit Page';
+$layouts = array();
 $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
@@ -44,6 +45,13 @@ if (!empty ($_GET['id']) && is_numeric ($_GET['id'])) {
 
 
 
+// Retrieve list of available layouts
+foreach (glob (THEME_PATH . '/layouts/*.header.tpl') as $filename) {
+    $layouts[] = basename ($filename, '.header.tpl');
+}
+
+
+
 
 
 /***********************
@@ -51,6 +59,14 @@ HANDLE FORM IF SUBMITTED
 ***********************/
 
 if (isset ($_POST['submitted'])) {
+
+    // Validate layout
+    if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
+        $data['layout'] = $_POST['layout'];
+    } else {
+        $errors['layout'] = "You didn't provide a valid layout";
+    }
+
 
     // Validate status
     if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
@@ -60,7 +76,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page title
+    // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
         $data['title'] = htmlspecialchars (trim ($_POST['title']));
     } else {
@@ -68,7 +84,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page slug
+    // Validate slug
     if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
         if ($slug == $page->slug || (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug)))) {
@@ -81,7 +97,7 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate page content
+    // Validate content
     if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
         $data['content'] = trim ($_POST['content']);
     } else {
@@ -166,9 +182,19 @@ include ('header.php');
                 </select>
             </div>
 
+            <div class="row">
+                <label>*Layout:</label>
+                <select class="dropdown" name="layout">
+                    <?php foreach ($layouts as $layout): ?>
+                        <option <?=($page->layout==$layout)?'selected="selected"':''?> value="<?=$layout?>"><?=$layout?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />
-                <input tabindex="4" type="submit" class="button" value="Edit Page" />
+                <a href="<?=HOST?>/page/?preview=<?=$page->page_id?>" class="button preview" target="_ccsite">Preview</a>
+                <input type="submit" class="button" value="Update Page" />
             </div>
             
         </form>

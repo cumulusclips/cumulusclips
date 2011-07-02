@@ -112,7 +112,7 @@ class Language {
      * @return object Returns simple xml object representing that page's node
      */
     static function GetMeta ($page) {
-        return self::$xml->meta->$page;
+        return (empty (self::$xml->meta->$page)) ? new stdClass() : self::$xml->meta->$page;
     }
 
 }

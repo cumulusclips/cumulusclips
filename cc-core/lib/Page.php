@@ -22,6 +22,7 @@ class Page {
         'search',
         'actions',
         'feed',
+        'page',
         'video-sitemap',
         'sitemap-videos',
         'sitemap-members',
@@ -63,6 +64,9 @@ class Page {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+
+        $this->date_created_formatted = date ('m/d/Y',strtotime ($this->date_created));
+
         Plugin::Trigger ('page.get');
     }
 

@@ -43,7 +43,7 @@ class Video {
         $this->tags = explode (' ',$this->tags);
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
-        $this->date_created = date ('m/d/Y', strtotime ($this->date_created));
+        $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
         Plugin::Trigger ('video.get');
 
     }
