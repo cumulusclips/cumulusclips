@@ -35,6 +35,22 @@ class Settings {
         return self::$settings->$setting_name;
     }
 
+
+
+
+    /**
+     * Update the value of site setting
+     * @param string $setting_name Name of the setting to be updated
+     * @param mixed $value Value to be assigned to the setting
+     * @return void Setting is updated in DB and object as well
+     */
+    public static function Set ($setting_name, $value) {
+        $db = Database::GetInstance();
+        $query = "UPDATE settings SET value = '$value' WHERE name = '$setting_name'";
+        $db->Query ($query);
+        self::$settings->$setting_name = $value;
+    }
+
 }
 
 ?>

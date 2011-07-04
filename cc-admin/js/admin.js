@@ -159,6 +159,16 @@ $('document').ready(function(){
         return false;
     });
 
+
+
+
+    // Initialize fancybox lightbox
+//    $('.fancybox').fancybox({
+//        'transitionIn'	: 'elastic',
+//        'transitionOut'	: 'elastic',
+//        'speedIn'       : 250
+//    });
+
 });
 
 

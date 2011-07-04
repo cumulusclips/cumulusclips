@@ -2,6 +2,5 @@
 <theme>
     <author>Miguel A. Hurtado</author>
     <name>Cumulus</name>
-    <preview_small>cumulus_small.jpg</preview_small>
-    <preview_large>cumulus_large.jpg</preview_large>
+    <description>The default theme for CumulusClips</description>
 </theme>

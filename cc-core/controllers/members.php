@@ -1,5 +1,7 @@
 <?php
 
+if (!empty ($_GET['preview'])) exit($_GET['preview']);
+
 ### Created on March 5, 2009
 ### Created by Miguel A. Hurtado
 ### This script allows users to browse through channels

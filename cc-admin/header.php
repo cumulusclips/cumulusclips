@@ -78,7 +78,7 @@
         <div class="panel<?=(Functions::IsPanelOpen('appearance'))?' open-panel down-icon':''?>">
             <h3 class="appearance"><span>Appearance</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>">Themes</a></p>
+                <p><a href="<?=ADMIN?>/themes.php">Themes</a></p>
                 <p><a href="<?=ADMIN?>">Languages</a></p>
                 <p><a href="<?=ADMIN?>">Banners</a></p>
             </div>

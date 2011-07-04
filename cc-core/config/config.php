@@ -58,7 +58,9 @@ TODO's CHECKLIST
 
 // TODO Build admin panel
     // TODO Browse Themes
-    // TODO Install theme
+    // TODO Activate theme
+    // TODO Delete theme
+    // TODO Preview theme
 
 
 // TODO Add 'View My Profile' link in my account / top nav

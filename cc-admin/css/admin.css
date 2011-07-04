@@ -420,6 +420,28 @@ PAGE STYLES
 
 
 
+/***********
+THEME STYLES
+***********/
+
+#themes { overflow:hidden; }
+
+.theme {
+    float:left;
+    width:40%;
+    margin-right:25px;
+    overflow:hidden;
+}
+
+.screenshot {
+    float:left;
+    margin-right:25px;
+}
+
+
+
+
+
 /********************
 FORM & MESSAGE STYLES
 ********************/
