@@ -1,0 +1,261 @@
+/**************
+HOMEPAGE STYLES
+**************/
+
+#slideshow-container {
+    position:relative;
+}
+
+#slideshow {
+    width:580px;
+    height:355px;
+    background-color:#000;
+}
+
+#slideshow > div {
+    height:355px;
+    position:absolute;
+    display:none;
+}
+
+#slideshow div:first-child {
+    display:block;
+}
+
+#slideshow .slide-text {
+    background-image:url(../images/slideshow-hover-background.png);
+    display:none;
+    width:560px;
+    height:100px;
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    color:#FFF;
+    font-size:14px;
+    padding:10px;
+}
+
+#slide-count {
+    text-align:center;
+    padding:10px 0px;
+    height:14px;
+}
+#slide-count a {
+    background:url(../images/slideshow-sprite.png) no-repeat -60px -21px;
+    display:inline-block;
+    width:14px;
+    height:14px;
+    margin:0px 3px;
+    text-indent:14px;
+    overflow:hidden;
+}
+#slide-count .activeSlide {
+    background-position:-40px -21px;
+}
+
+#slideshow-container .next, #slideshow-container .previous {
+    background-image:url(../images/slideshow-sprite.png);
+    background-repeat:no-repeat;
+    position:absolute;
+    top:165px;
+    display:block;
+    width:21px;
+    height:30px;
+    z-index:101;
+}
+#slideshow-container .previous {
+    background-position:-28px -48px;
+    left:10px;
+}
+#slideshow-container .next {
+    right:10px;
+    background-position:-63px -48px;
+}
+
+#home-login {
+    margin-top:60px;
+    padding:15px;
+    position:relative;
+    border:3px solid #023e7b;
+    background-color:#FFF;
+}
+#home-login .tl,
+#home-login .tr,
+#home-login .bl,
+#home-login .br
+{display:none;
+    background-image:url(../images/home-login-sprite.gif);
+}
+
+#tab {
+    background-image:url(../images/home-login-tab.png);
+    padding-left:28px;
+    width:177px;
+    height:52px;
+    position:absolute;
+    top:-43px;
+    left:-3px;
+    z-index:1;
+    color:#FFF;
+    font-size:20px;
+    font-weight:bold;
+    line-height:43px;
+}
+
+#home-login p {
+    margin-bottom:7px;
+}
+
+#home-login .text {
+    width:260px;
+}
+
+
+
+
+
+/****************
+LOGIN PAGE STYLES
+****************/
+
+#forgot-block {
+    display: none;
+}
+
+#forgot-block p {
+    margin-bottom:10px;
+}
+
+#login-block p {
+    margin-top:5px;
+}
+
+
+
+
+
+/***************
+PLAY PAGE STYLES
+***************/
+
+#play-left {
+    float:left;
+    width:600px;
+}
+
+#play-right {
+    float:right;
+    width:330px;
+}
+
+.other-video {
+    margin-bottom:25px;
+    overflow:hidden;
+    width:100%;
+}
+
+#actions {
+    overflow:hidden;
+    margin-top:-5px;
+    margin-bottom:10px;
+    padding-top:5px;
+}
+
+#actions p {
+    float:left;
+    width:180px;
+}
+
+p#rating-link {
+    width:150px;
+    margin-left:30px;
+    margin-top:-5px;
+    text-align:right;
+}
+
+a.like, a.dislike {
+    padding-left:19px;
+    padding-right:0;
+}
+a.like {
+    color:#023e7b;
+    background-position:left center;
+}
+a.dislike {
+    color:#023e7b;
+    background-position:left 3px;
+}
+
+#about, #embed, #share {
+    display:none;
+}
+
+#share {
+    overflow:hidden;
+}
+.share-button {
+    float:left;
+}
+
+#comments-form textarea.text {
+    width:400px;
+    height:140px;
+}
+
+
+
+
+
+/********************
+MEMBER PROFILE STYLES
+********************/
+
+#profile-avatar {
+    float:left;
+    margin-right:20px;
+}
+
+#profile-info {
+    float:left;
+}
+
+#profile-description {
+    padding-top:10px;
+    clear:both;
+}
+
+.post {
+    padding:5px;
+}
+
+.post strong {
+    font-size:10px;
+}
+
+
+
+
+
+/******************
+CONTACT PAGE STYLES
+******************/
+
+#contact-list {
+    list-style:none;
+}
+#contact-list li {
+    padding:3px 0;
+}
+
+#contact-form {
+    margin-top:30px;
+}
+
+#contact-form textarea {
+    width:380px;
+    height:140px;
+}
+
+
+
+

@@ -263,6 +263,27 @@ class Functions {
         }
     }
 
+
+
+
+    /**
+     * Determine which theme should be used
+     * @return string Theme to be used
+     */
+    static function CurrentTheme() {
+
+        $system_theme = Settings::Get ('active_theme');
+        $theme = $system_theme;
+
+        // Preview theme was provided
+        if (!empty ($_GET['preview_theme']) && file_exists (THEMES_DIR . '/' . $_GET['preview_theme'] . '/theme.xml')) {
+            if (Settings::Get('active_theme') != $_GET['preview_theme']) $theme = $_GET['preview_theme'];
+        }
+
+        define ('PREVIEW_THEME', ($system_theme != $theme) ? $theme : null);
+        return $theme;
+    }
+    
 }
 
 ?>

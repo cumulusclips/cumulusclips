@@ -19,6 +19,7 @@ $message = null;
 $page_title = 'Themes';
 $header = 'Themes';
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
+$admin_js[] = ADMIN . '/js/fancybox.js';
 
 
 ### Handle "Delete" theme if requested
@@ -103,7 +104,7 @@ include ('header.php');
                     <strong>Active Theme</strong>
                 <?php else: ?>
                     <a href="<?=ADMIN?>/themes.php?activate=<?=$theme?>">Activate</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview=<?=$theme?>" class="iframe">Preview</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme?>" class="iframe">Preview</a>
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme?>">Delete</a>
                 <?php endif; ?>
             </p>

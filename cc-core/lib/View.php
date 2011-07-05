@@ -215,7 +215,13 @@ class View {
      */
     static function WriteJs() {
 
-	$js_preview_code = "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview=theme';";
+        // Add theme preview JS
+	if (PREVIEW_THEME) {
+            $js_theme_preview = '<script type="text/javascript">';
+            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . PREVIEW_THEME . "';";
+            $js_theme_preview .= '</script>';
+            self::$options->js[] = $js_theme_preview;
+        }
 
         Plugin::Trigger ('view.write_js');
         if (isset (self::$options->js)) {

@@ -18,9 +18,12 @@ Settings::LoadSettings();
 Language::LoadLangPack ('english');
 Plugin::Init();
 
+
 // Define Theme settings
-define ('THEME', HOST . '/cc-content/themes/' . Settings::Get ('active_theme'));
-define ('THEME_PATH', THEMES_DIR . '/' . Settings::Get ('active_theme'));
+$theme = Functions::CurrentTheme();
+define ('THEME', HOST . '/cc-content/themes/' . $theme);
+define ('THEME_PATH', THEMES_DIR . '/' . $theme);
+
 
 // Start session
 if (!headers_sent() && session_id() == '') {
