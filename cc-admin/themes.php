@@ -18,6 +18,7 @@ Plugin::Trigger ('admin.videos.start');
 $message = null;
 $page_title = 'Themes';
 $header = 'Themes';
+$admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
 
 
 ### Handle "Delete" theme if requested
@@ -71,16 +72,16 @@ include ('header.php');
     <?php endif; ?>
 
 
-    <?php foreach (glob (THEMES_DIR . '/*') as $theme): ?>
+    <?php foreach (glob (THEMES_DIR . '/*') as $theme_path): ?>
     
         <div class="block theme">
             <?php
-            $id = basename ($theme);
-            $theme_url = HOST . '/cc-content/themes/' . $id;
-            $xml = simplexml_load_file ($theme . '/theme.xml');
+            $theme = basename ($theme_path);
+            $theme_url = HOST . '/cc-content/themes/' . $theme;
+            $xml = simplexml_load_file ($theme_path . '/theme.xml');
             ?>
             
-            <?php if (file_exists ($theme . '/screenshot.png')): ?>
+            <?php if (file_exists ($theme_path . '/screenshot.png')): ?>
                 <div class="screenshot"><img width="200" src="<?=$theme_url?>/screenshot.png" /></div>
             <?php endif; ?>
 
@@ -98,14 +99,13 @@ include ('header.php');
 
 
             <p>
-                <?php if ($id == Settings::Get ('active_theme')): ?>
+                <?php if ($theme == Settings::Get ('active_theme')): ?>
                     <strong>Active Theme</strong>
                 <?php else: ?>
-                        <a href="<?=ADMIN?>/themes.php?activate=<?=$id?>">Activate</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<a href="<?=ADMIN?>/themes.php?delete=<?=$id?>">Delete</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<a href="<?=ADMIN?>/themes.php?activate=<?=$id?>">Preview</a>
+                    <a href="<?=ADMIN?>/themes.php?activate=<?=$theme?>">Activate</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview=<?=$theme?>" class="iframe">Preview</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme?>">Delete</a>
                 <?php endif; ?>
-
             </p>
 
         </div>

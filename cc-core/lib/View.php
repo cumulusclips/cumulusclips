@@ -214,6 +214,9 @@ class View {
      * @return mixed JS src tags are written
      */
     static function WriteJs() {
+
+	$js_preview_code = "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview=theme';";
+
         Plugin::Trigger ('view.write_js');
         if (isset (self::$options->js)) {
             foreach (self::$options->js as $_value) {
