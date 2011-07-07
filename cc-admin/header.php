@@ -25,7 +25,7 @@
             <h3 class="dashboard"><span>Dashboard</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/">Dashboard</a></p>
-                <p><a href="<?=ADMIN?>">Updates</a></p>
+                <p><a href="<?=ADMIN?>/updates.php">Updates</a></p>
             </div>
         </div>
 
