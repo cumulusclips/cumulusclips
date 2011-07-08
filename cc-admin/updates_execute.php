@@ -1,5 +1,5 @@
 <?php
-
+sleep(30);
 ### Created on February 28, 2009
 ### Created by Miguel A. Hurtado
 ### This script displays the site homepage
@@ -15,9 +15,7 @@ App::LoadClass ('Filesystem');
 Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$message = null;
-$page_title = 'Updates';
-$header = 'Updates';
+$page_title = 'Update Complete!';
 
 
 ### Handle "Delete" theme if requested
@@ -87,19 +85,15 @@ include ('header.php');
 
 ?>
 
-<div id="updates">
+<div id="updates-complete">
 
-    <h1><?=$header?></h1>
-
-    <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+    <h1>Update Complete!</h1>
 
     <div class="block">
-        <p>An updated version of CumulusClips is available!</p>
-        <p><a href="<?=ADMIN?>/updates_begin.php">Click here</a> to update to version 2.1 automatically.</p>
+        <p>You are now running the latest version of CumulusClips. Don't forget
+        to re-enable all your plugins.</p>
     </div>
-
+    
 </div>
 
 <?php include ('footer.php'); ?>

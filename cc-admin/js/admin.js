@@ -159,6 +159,33 @@ $('document').ready(function(){
         return false;
     });
 
+
+    $('.begin-update').click(function(){
+        $('#begin-update').hide();
+        document.title = $('#update-in-progress h1').text();
+        $('#update-in-progress').show();
+        var lastStatus;
+
+        setInterval(function(){
+            $.ajax({
+                url: baseURL+'/.updates/status',
+                type:'GET',
+                error:function(jqXHR, textStatus, errorThrown){
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                },
+                success:function(data, textStatus, jqXHR){
+                    if (data != lastStatus) {
+//                        lastStatus = data;
+                        $('#update-in-progress .status').append('<p>'+data+'</p>');
+                    }
+                }
+            });
+        }, 3000);
+//        return false;
+    });
+
 });
 
 
@@ -197,6 +224,6 @@ function updateSettings(name, value){
 $.fn.disableSelection = function() {
     $(this).attr('unselectable', 'on')
    .each(function() {
-       this.onselectstart = function() { return false; };
+       this.onselectstart = function() {return false;};
     });
 };

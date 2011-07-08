@@ -187,6 +187,10 @@ a:hover {
     font-size:10px;
 }
 
+a.button {
+    padding:0 10px;
+    display:inline-block;
+}
 
 
 
@@ -444,6 +448,26 @@ THEME STYLES
 
 
 
+/************
+UPDATE STYLES
+************/
+
+#update-in-progress {
+    display:none;
+}
+
+#update-in-progress .working {
+    background:url(../images/loading.gif) no-repeat 0 0;
+    padding:0 0 0 20px;
+    line-height:16px;
+    margin:10px 0;
+    font-weight:bold;
+}
+
+
+
+
+
 /********************
 FORM & MESSAGE STYLES
 ********************/
@@ -508,8 +532,6 @@ textarea.text {
     cursor:pointer;
 }
 
-a.button {
-    padding:0 10px;
-}
+
 
 
