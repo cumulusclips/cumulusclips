@@ -1,5 +1,5 @@
 <?php
-sleep(30);
+sleep(10);
 ### Created on February 28, 2009
 ### Created by Miguel A. Hurtado
 ### This script displays the site homepage

@@ -434,7 +434,7 @@ THEME STYLES
 
 .theme {
     float:left;
-    width:40%;
+    width:43%;
     margin-right:25px;
     overflow:hidden;
 }
@@ -463,6 +463,16 @@ UPDATE STYLES
     margin:10px 0;
     font-weight:bold;
 }
+
+#updates ol {
+    list-style:decimal;
+    margin:10px 0;
+    padding-left:50px;
+}
+
+#updates li { padding:5px 0; }
+
+#updates .button { margin-right:15px; }
 
 
 

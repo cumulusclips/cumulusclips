@@ -161,29 +161,34 @@ $('document').ready(function(){
 
 
     $('.begin-update').click(function(){
+
         $('#begin-update').hide();
         document.title = $('#update-in-progress h1').text();
         $('#update-in-progress').show();
         var lastStatus;
 
-        setInterval(function(){
-            $.ajax({
-                url: baseURL+'/.updates/status',
-                type:'GET',
-                error:function(jqXHR, textStatus, errorThrown){
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                },
-                success:function(data, textStatus, jqXHR){
-                    if (data != lastStatus) {
-//                        lastStatus = data;
-                        $('#update-in-progress .status').append('<p>'+data+'</p>');
+//        $(window).bind('beforeunload',function(){
+            setInterval(function(){
+                console.log('here');
+                $.ajax({
+                    async:false,
+                    url: baseURL+'/.updates/status',
+                    type:'GET',
+                    error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    },
+                    success:function(data, textStatus, jqXHR){
+                        if (data != lastStatus) {
+//                            lastStatus = data;
+                            $('#update-in-progress .status').append('<p>'+data+'</p>');
+                        }
                     }
-                }
-            });
-        }, 3000);
-//        return false;
+                });
+            }, 3000);
+//        });
+
     });
 
 });

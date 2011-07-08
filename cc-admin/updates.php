@@ -17,7 +17,6 @@ Plugin::Trigger ('admin.videos.start');
 //$admin = new User ($logged_in);
 $message = null;
 $page_title = 'Updates';
-$header = 'Updates';
 
 
 ### Handle "Delete" theme if requested
@@ -89,15 +88,32 @@ include ('header.php');
 
 <div id="updates">
 
-    <h1><?=$header?></h1>
+    <h1>Update CumulusClips</h1>
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
     <div class="block">
-        <p>An updated version of CumulusClips is available!</p>
-        <p><a href="<?=ADMIN?>/updates_begin.php">Click here</a> to update to version 2.1 automatically.</p>
+        <p>An updated version of CumulusClips (version 2.1) is available!</p>
+        <p>Steps you can take:</p>
+        <ol>
+            <li>
+                <strong>Update Automatically</strong> - CumulusClips will perform the update on
+                it's own. You can just sit back and relax while it completes.
+                <em>(Recommended)</em>
+            </li>
+            <li>
+                <strong>Update Manually</strong> - Download version 2.1 from our
+                website. Then manually extract and overwrite the files.
+                This is usually done to recover from failed updates.
+                <p>For detailed instructions on how to update manually you can reference our <a href="">documentation</a>.</p>
+            </li>
+        </ol>
+        <p>
+            <a class="button" href="<?=ADMIN?>/updates_begin.php">Update Automatically</a>
+            <a class="button" href="http://cumulusclips.org/download/">Update Manually</a>
+        </p>
     </div>
 
 </div>
