@@ -51,9 +51,17 @@ class App {
      * @return void sends an alert email to site admin
      */
     static function Alert ($subject, $body) {
-        $from = 'From: Admin - TechieVideos.com <' . SITE_EMAIL . '>';
+        $from = 'From: CumulusClips <' . SITE_EMAIL . '>';
         @mail (MAIN_EMAIL, $subject, $body, $from);
     }
+
+
+
+
+    static function MaintCheck() {
+        if (file_exists (DOC_ROOT . '/.updates')) exit('<!DOCTYPE html><html><head><title>Maintenance</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Maintenance</h1><div class="block"><p>We are currently undergoing scheduled maintenance. Please try back later.</p><p>Sorry for the inconvenience.</p></div></div></body></html>');
+    }
+
 }
 
 ?>

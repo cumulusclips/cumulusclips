@@ -1,5 +1,5 @@
 <?php
-sleep(10);
+
 ### Created on February 28, 2009
 ### Created by Miguel A. Hurtado
 ### This script displays the site homepage
@@ -16,34 +16,12 @@ Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
 $page_title = 'Update Complete!';
+$tmp = DOC_ROOT . '/.updates';
+$log = $tmp . '/status';
 
 
-### Handle "Delete" theme if requested
-if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
-
-    // Validate theme
-    if (file_exists (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml')) {
-
-        $xml = simplexml_load_file (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml');
-        if (Settings::Get('active_theme') != $_GET['delete']) {
-            // DELETE THEME CODE
-            $message = $xml->name . ' theme has been deleted';
-            $message_type = 'success';
-        } else {
-            $message = 'Active theme cannot be deleted. Activate another theme and then try again';
-            $message_type = 'error';
-        }
-
-    }
-
-}
 
 
-//$xml = simplexml_load_file (DOC_ROOT . '/updates.xml');
-//Filesystem::Open();
-//Filesystem::CreateDir (DOC_ROOT . '/.updates');
-//Filesystem::SetPermissions (DOC_ROOT . '/.updates', 0777);
-//echo '<pre>', print_r (glob(DOC_ROOT . '/*'),true), '</pre>';
 
 ### Check for updates
 // Phone home and poll for updates - cURL vs AJAX ?
@@ -51,33 +29,127 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
     // Updates avail. - Provide new version num & URL to update.xml
 
 
-### Begin updates
-// Load update.xml
-// De-activate plugins
-// De-activate themes
+//Initializing update...
+//Downloading files...
+//Applying changes...
+//Clean up...
+//Update Complete!
 
 
-### Download updates
-// Create hidden temp dir (FTP)
-// Loop through modifications
-    // Save temp files locally with md5 hash as names (FTP)
-// Loop through additions
-    // Save temp files locally with md5 hash as names (FTP)
 
 
-### Apply updates
-// Loop through additions
-    // Save temp files in new locations (FTP)
-// Loop through modifications
-    // Overwrite old files with new content from temp. (FTP)
-// Loop through removals
-    // Delete files (FTP)
+
+/*****************
+INITIALIZE UPDATES
+*****************/
+
+### Create hidden temp dir
+Filesystem::Open();
+if (!Filesystem::CreateDir ($tmp)) exit('Error 1');
+if (!Filesystem::Create ($log)) exit ('Error 2');
+
+// Update log
+if (!Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n")) exit ('Error 3');
 
 
-### Clean up
-// Delete hidden temp dir
-// Activate themes
-// Activate plugins
+### De-activate plugins
+### De-activate themes
+
+
+### Load update.xml
+$update_location = 'http://cumulusclips.org/updates/update.xml';
+$xml = simplexml_load_file ($update_location);
+
+
+
+
+
+/*************
+DOWNLOAD FILES
+*************/
+
+// Update log
+if (!Filesystem::Write ($log, "<p>Downloading files&hellip;</p>\n")) exit ('Error 4');
+
+
+### Download modified files
+foreach ($xml->modified->file as $file) {
+    $local_file = $tmp . '/' . md5 ($file);
+    $content = file_get_contents ($file);
+    if (!Filesystem::Create ($local_file)) exit ('Error 5');
+    if (!Filesystem::Write ($local_file, $content)) exit ('Error 6');
+}
+
+
+### Download new files
+foreach ($xml->added->file as $file) {
+    $local_file = $tmp . '/' . md5 ($file);
+    $content = file_get_contents ($file);
+    if (!Filesystem::Create ($local_file)) exit ('Error 7');
+    if (!Filesystem::Write ($local_file, $content)) exit ('Error 8');
+}
+
+
+### Download database changes
+$local_file = $tmp . '/' . md5 ($xml->database) . '.php';
+$content = file_get_contents ($xml->database);
+if (!Filesystem::Create ($local_file)) exit ('Error 9');
+if (!Filesystem::Write ($local_file, $content)) exit ('Error 10');
+
+
+
+
+
+/************
+APPLY CHANGES
+************/
+
+// Update log
+if (!Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n")) exit ('Error 11');
+
+
+### Save temp. modifcations to perm. locations
+foreach ($xml->modified->file as $file) {
+    $local_file = $tmp . '/' . md5 ($file);
+    $file = str_replace ('http://cumulusclips.org/updates', DOC_ROOT, $file);
+    if (!Filesystem::Copy ($local_file, $file)) exit ('Error 12');
+}
+
+
+### Save temp. additions to perm. locations
+foreach ($xml->added->file as $file) {
+    $local_file = $tmp . '/' . md5 ($file);
+    $file = str_replace ('http://cumulusclips.org/updates', DOC_ROOT, $file);
+    if (!Filesystem::Copy ($local_file, $file)) exit ('Error 13');
+}
+
+
+### Delete Deprecated files
+
+
+### Execute DB change queries
+$db_change_file = $tmp. '/' . md5 ($xml->database) . '.php';
+include ($db_change_file);
+
+
+
+
+
+/*******
+CLEAN UP
+*******/
+
+// Update log
+if (!Filesystem::Write ($log, "<p>Clean up&hellip;</p>\n")) exit ('Error 12');
+
+### Delete temp. dir.
+if (!Filesystem::Delete ($tmp)) exit('Error 13');
+
+
+### Activate themes
+### Activate plugins
+Filesystem::Close();
+
 
 
 // Output Header
@@ -91,7 +163,7 @@ include ('header.php');
 
     <div class="block">
         <p>You are now running the latest version of CumulusClips. Don't forget
-        to re-enable all your plugins.</p>
+        to re-enable all your plugins and themes.</p>
     </div>
     
 </div>

@@ -160,38 +160,32 @@ $('document').ready(function(){
     });
 
 
+
+
+    // Display update in progress message & status
     $('.begin-update').click(function(){
 
         $('#begin-update').hide();
         document.title = $('#update-in-progress h1').text();
         $('#update-in-progress').show();
-        var lastStatus;
 
-//        $(window).bind('beforeunload',function(){
-            setInterval(function(){
-                console.log('here');
-                $.ajax({
-                    async:false,
-                    url: baseURL+'/.updates/status',
-                    type:'GET',
-                    error:function(jqXHR, textStatus, errorThrown){
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    },
-                    success:function(data, textStatus, jqXHR){
-                        if (data != lastStatus) {
-//                            lastStatus = data;
-                            $('#update-in-progress .status').append('<p>'+data+'</p>');
-                        }
-                    }
-                });
-            }, 3000);
-//        });
+        // Poll server to check update status
+        setInterval(function(){
+            $.ajax({
+                cache       : false,
+                async       : false,
+                url         : baseURL+'/.updates/status',
+                type        : 'GET',
+                success     : function(data, textStatus, jqXHR){
+                    $('#update-in-progress .status').html(data);
+                }
+            });
+        }, 3000);
 
     });
 
 });
+
 
 
 
@@ -212,6 +206,7 @@ function retrieveSettings(){
 
 
 
+
 /**
  * Update the value of a global admin setting
  * @param string name The name of the setting to be updated
@@ -222,6 +217,7 @@ function updateSettings(name, value){
     settings[name] = value;
     $.cookie('cc_admin_settings',$.param(settings));
 }
+
 
 
 

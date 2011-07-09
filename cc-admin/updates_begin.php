@@ -41,47 +41,6 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 }
 
 
-//$xml = simplexml_load_file (DOC_ROOT . '/updates.xml');
-//Filesystem::Open();
-//Filesystem::CreateDir (DOC_ROOT . '/.updates');
-//Filesystem::SetPermissions (DOC_ROOT . '/.updates', 0777);
-//echo '<pre>', print_r (glob(DOC_ROOT . '/*'),true), '</pre>';
-
-### Check for updates
-// Phone home and poll for updates - cURL vs AJAX ?
-    // No updates
-    // Updates avail. - Provide new version num & URL to update.xml
-
-
-### Begin updates
-// Load update.xml
-// De-activate plugins
-// De-activate themes
-
-
-### Download updates
-// Create hidden temp dir (FTP)
-// Loop through modifications
-    // Save temp files locally with md5 hash as names (FTP)
-// Loop through additions
-    // Save temp files locally with md5 hash as names (FTP)
-
-
-### Apply updates
-// Loop through additions
-    // Save temp files in new locations (FTP)
-// Loop through modifications
-    // Overwrite old files with new content from temp. (FTP)
-// Loop through removals
-    // Delete files (FTP)
-
-
-### Clean up
-// Delete hidden temp dir
-// Activate themes
-// Activate plugins
-
-
 // Output Header
 include ('header.php');
 
@@ -115,9 +74,7 @@ include ('header.php');
         <p>This page may <em>seem</em> unresponsive however it is working in the
         background, we promise.</p>
 
-        <p class="working">Working&hellip;</p>
-
-        <p class="status"></p>
+        <div class="status"><p>Initializing update&hellip;</p></div>
     </div>
 
 </div>

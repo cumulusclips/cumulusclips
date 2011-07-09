@@ -5,6 +5,7 @@ include ('config.php');
 
 // Load Main Classes
 if (!class_exists('App')) include (LIB . '/App.php');
+App::MaintCheck();
 App::LoadClass ('Database');
 App::LoadClass ('Settings');
 App::LoadClass ('Functions');
