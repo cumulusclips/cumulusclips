@@ -16,24 +16,18 @@ Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
 $page_title = 'Update Complete!';
+$update_location = UPDATE_URL . '/latest';
 $tmp = DOC_ROOT . '/.updates';
 $log = $tmp . '/status';
 
 
-
-
-
-### Check for updates
-// Phone home and poll for updates - cURL vs AJAX ?
-    // No updates
-    // Updates avail. - Provide new version num & URL to update.xml
-
-
-//Initializing update...
-//Downloading files...
-//Applying changes...
-//Clean up...
-//Update Complete!
+// Verify updates are available and user confirmed to begin update
+$update = Functions::UpdateCheck();
+if (isset ($_GET['update'], $_SESSION['begin_update']) && $update && $_SESSION['begin_update'] <= time()-300) {
+    unset ($_SESSION['begin_update']);
+} else {
+    header ("Location: " . ADMIN . '/updates.php');
+}
 
 
 
@@ -57,8 +51,7 @@ if (!Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n")) exit ('Er
 
 
 ### Load update.xml
-$update_location = 'http://cumulusclips.org/updates/update.xml';
-$xml = simplexml_load_file ($update_location);
+$xml = simplexml_load_file ($update_location . '/update.xml');
 
 
 
@@ -111,7 +104,7 @@ if (!Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n")) exit ('Error
 ### Save temp. modifcations to perm. locations
 foreach ($xml->modified->file as $file) {
     $local_file = $tmp . '/' . md5 ($file);
-    $file = str_replace ('http://cumulusclips.org/updates', DOC_ROOT, $file);
+    $file = str_replace ($update_location, DOC_ROOT, $file);
     if (!Filesystem::Copy ($local_file, $file)) exit ('Error 12');
 }
 
@@ -119,12 +112,16 @@ foreach ($xml->modified->file as $file) {
 ### Save temp. additions to perm. locations
 foreach ($xml->added->file as $file) {
     $local_file = $tmp . '/' . md5 ($file);
-    $file = str_replace ('http://cumulusclips.org/updates', DOC_ROOT, $file);
+    $file = str_replace ($update_location, DOC_ROOT, $file);
     if (!Filesystem::Copy ($local_file, $file)) exit ('Error 13');
 }
 
 
 ### Delete Deprecated files
+foreach ($xml->removed->file as $file) {
+    $local_file = DOC_ROOT . $file;
+    if (!Filesystem::Delete ($local_file)) exit ('Error 14');
+}
 
 
 ### Execute DB change queries

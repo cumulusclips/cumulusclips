@@ -83,6 +83,9 @@ class Filesystem {
 
     static function Create ($filename) {
 
+        // Create folder structure if non-existant
+        if (!file_exists (dirname ($filename))) self::CreateDir (dirname ($filename));
+
         // If file exists, throw error
         if (file_exists ($filename)) return false;
         
@@ -102,6 +105,9 @@ class Filesystem {
 
 
     static function CreateDir ($dirname) {
+
+        // Create folder structure if non-existant
+        if (!file_exists (dirname ($dirname))) self::CreateDir (dirname ($dirname));
 
         // If dir exists, throw error
         if (file_exists ($dirname)) return false;
@@ -147,9 +153,12 @@ class Filesystem {
 
     static function Copy ($filename, $new_filename) {
 
+        // Create folder structure if non-existant
+        if (!file_exists (dirname ($new_filename))) self::CreateDir (dirname ($new_filename));
+
         // Perform action directly if able, use FTP otherwise
         if (self::$writeable) {
-            return @copy ($filename, $new_filename);
+            $result = @copy ($filename, $new_filename);
         } else {
 
             // Load original content
@@ -160,7 +169,7 @@ class Filesystem {
             fseek ($stream, 0);
             $result = @ftp_fput (self::$ftp_stream, $new_filename, $stream, FTP_BINARY);
             fclose ($stream);
-            return $result;
+            return ($result) ? self::SetPermissions ($new_filename, 0644) : false;
         }
     }
 

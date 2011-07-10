@@ -20,24 +20,13 @@ $page_title = 'Begin Update';
 $header = 'Begin Update';
 
 
-### Handle "Delete" theme if requested
-if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
-    // Validate theme
-    if (file_exists (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml')) {
-
-        $xml = simplexml_load_file (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml');
-        if (Settings::Get('active_theme') != $_GET['delete']) {
-            // DELETE THEME CODE
-            $message = $xml->name . ' theme has been deleted';
-            $message_type = 'success';
-        } else {
-            $message = 'Active theme cannot be deleted. Activate another theme and then try again';
-            $message_type = 'error';
-        }
-
-    }
-
+// Check for update
+$update = Functions::UpdateCheck();
+if ($update) {
+    $_SESSION['begin_update'] = time();
+} else {
+    header ("Location: " . ADMIN . '/updates.php');
 }
 
 
@@ -57,7 +46,7 @@ include ('header.php');
         <p>Be sure to backup you database and any changes made to your system
         before you begin the update.</p>
 
-        <p><a class="button begin-update" href="<?=ADMIN?>/updates_execute.php">Begin Update</a></p>
+        <p><a class="button begin-update" href="<?=ADMIN?>/updates_execute.php?update">Begin Update</a></p>
     </div>
     
 </div>

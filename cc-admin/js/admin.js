@@ -165,6 +165,7 @@ $('document').ready(function(){
     // Display update in progress message & status
     $('.begin-update').click(function(){
 
+        // Display message
         $('#begin-update').hide();
         document.title = $('#update-in-progress h1').text();
         $('#update-in-progress').show();

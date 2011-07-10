@@ -283,6 +283,19 @@ class Functions {
         define ('PREVIEW_THEME', ($system_theme != $theme) ? $theme : null);
         return $theme;
     }
+
+
+
+
+    /**
+     * Check central update server to see if updates are available
+     * @return object|boolean Returns update object if its available, false otherwise
+     */
+    static function UpdateCheck() {
+        $update = file_get_contents (UPDATE_URL . '/');
+        $json = json_decode ($update);
+        return (!empty ($update) && !empty ($json) && $json->available) ? $json : false;
+    }
     
 }
 
