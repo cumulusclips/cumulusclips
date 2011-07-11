@@ -30,6 +30,7 @@ define ('DB_ERR_LOG', LOG . '/db_errors.log');
 define ('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
 define ('EMAIL_PATH', DOC_ROOT . '/cc-content/emails');
 define ('UPDATE_URL', 'http://update.cumulusclips.org');
+define ('CURRENT_VERSION', 100);    // Version 1.0.0
 define ('VIDEO_SIZE_LIMIT', 102000000);
 ini_set ('max_execution_time', 3600);
 

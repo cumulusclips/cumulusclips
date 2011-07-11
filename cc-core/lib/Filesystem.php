@@ -1,7 +1,7 @@
 <?php
 
 class Filesystem {
-    
+
     static private $writeable;
     static private $ftp_stream;
     static private $ftp_host;
@@ -29,7 +29,7 @@ class Filesystem {
 
             // Login with username and password
             return @ftp_login (self::$ftp_stream, self::$ftp_username, self::$ftp_password);
-            
+
         }
     }
 
@@ -45,35 +45,17 @@ class Filesystem {
 
     static function Delete ($filename) {
 
-        // Perform action with native PHP methods
-        if (self::$writeable) {
-
-            // Recursively delete file/dir.
-            if (is_dir ($filename)) {
-                $base = dirname ($filename);
-                foreach (scandir ($filename) as $file) {
-                    if (in_array ($file, array ('.', '..'))) continue;
-                    self::Delete ($base . '/' . $file);
-                }
-                return rmdir ($filename);
-            } else {
-                return unlink ($filename);
+        // Recursively delete file/dir.
+        if (is_dir ($filename)) {
+            $base = dirname ($filename);
+            // Retrieve directory contents, excluding . & ..
+            $contents = array_diff (scandir ($filename), array ('.', '..'));
+            foreach ($contents as $file) {
+                self::Delete ($base . '/' . $file);
             }
-
-        // Perform action via FTP
+            return (self::$writeable) ? rmdir ($filename) : ftp_rmdir (self::$ftp_stream, $filename);
         } else {
-
-            // Recursively delete file/dir.
-            if (is_dir ($filename)) {
-                foreach (ftp_nlist (self::$ftp_stream, "-a $filename") as $file) {
-                    if (in_array (basename ($file), array ('.', '..'))) continue;
-                    self::Delete ($file);
-                }
-                return ftp_rmdir (self::$ftp_stream, $filename);
-            } else {
-                return ftp_delete (self::$ftp_stream, $filename);
-            }
-
+            return (self::$writeable) ? unlink ($filename) : ftp_delete (self::$ftp_stream, $filename);
         }
 
     }
@@ -86,9 +68,6 @@ class Filesystem {
         // Create folder structure if non-existant
         if (!file_exists (dirname ($filename))) self::CreateDir (dirname ($filename));
 
-        // If file exists, throw error
-        if (file_exists ($filename)) return false;
-        
         // Perform action directly if able, use FTP otherwise
         if (self::$writeable) {
             $result = @file_put_contents ($filename, '');
@@ -109,14 +88,14 @@ class Filesystem {
         // Create folder structure if non-existant
         if (!file_exists (dirname ($dirname))) self::CreateDir (dirname ($dirname));
 
-        // If dir exists, throw error
-        if (file_exists ($dirname)) return false;
+        // If dir exists, just update permissions
+        if (file_exists ($dirname)) return self::SetPermissions ($dirname, 0755);
 
         // Perform action directly if able, use FTP otherwise
         if (self::$writeable) {
-            $result = @mkdir ($dirname);
+            $result = mkdir ($dirname);
         } else {
-            $result = @ftp_mkdir (self::$ftp_stream, $dirname);
+            $result = ftp_mkdir (self::$ftp_stream, $dirname);
         }
         return ($result) ? self::SetPermissions ($dirname, 0755) : false;
 
@@ -146,6 +125,7 @@ class Filesystem {
             fclose ($stream);
             return $result;
         }
+
     }
 
 
@@ -158,7 +138,7 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::$writeable) {
-            $result = @copy ($filename, $new_filename);
+            $result = copy ($filename, $new_filename);
         } else {
 
             // Load original content
@@ -167,10 +147,44 @@ class Filesystem {
 
             // Overwrite new location
             fseek ($stream, 0);
-            $result = @ftp_fput (self::$ftp_stream, $new_filename, $stream, FTP_BINARY);
+            $result = ftp_fput (self::$ftp_stream, $new_filename, $stream, FTP_BINARY);
             fclose ($stream);
             return ($result) ? self::SetPermissions ($new_filename, 0644) : false;
         }
+    }
+
+
+
+
+    static function CopyDir ($src_dirname, $dst_dirname) {
+
+        // Retrieve directory contents, minus . & ..
+        $contents = array_diff (scandir ($src_dirname), array ('.', '..'));
+
+        // Simply create dir if src dir is empty
+        if (empty ($contents)) {
+            if (!self::CreateDir ($dst_dirname)) return false;
+        }
+
+        // Check & copy directory contents
+        foreach ($contents as $child_item) {
+
+            // Generate new src & dest locations
+            $new_src_dirname = $src_dirname . '/' . $child_item;
+            $new_dst_dirname = $dst_dirname . '/' . $child_item;
+
+            if (is_dir ($new_src_dirname)) {
+                // Copy directory recursively
+                if (!self::CopyDir ($new_src_dirname, $new_dst_dirname)) return false;
+            } else {
+                // Copy file
+                if (!self::Copy ($new_src_dirname, $new_dst_dirname)) return false;
+            }
+
+        }
+
+        return true;
+
     }
 
 
@@ -200,6 +214,16 @@ class Filesystem {
             return ftp_rename (self::$ftp_stream, $old_filename, $new_filename);
         }
 
+    }
+
+
+
+
+    static function Extract ($zipfile, $extract_to = null) {
+        $zip = new ZipArchive();
+        if (!$zip->open ($zipfile)) return false;
+        $extract_to = ($extract_to) ? $extract_to : dirname ($zipfile);
+        return $zip->extractTo ($extract_to);
     }
 
 }
