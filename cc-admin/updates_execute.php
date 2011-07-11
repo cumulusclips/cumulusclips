@@ -50,9 +50,6 @@ if (!Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n")) exit ('Er
 ### De-activate themes
 
 
-### Load update.xml
-
-
 
 
 
@@ -110,14 +107,13 @@ if (!Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n")) exit ('Error
 
 ### Applying changes
 if (!Filesystem::CopyDir ($tmp . '/cumulus', DOC_ROOT)) exit ('Error 11');
-exit('Done');
 
 
 ### Perform patch file modifications
 if ($patch_file) {
 
-    reset ($perform_updates);
-    foreach ($perform_updates as $version) {
+    reset ($perform_update);
+    foreach ($perform_update as $version) {
 
         ### Execute DB modifications queries
         $db_update_queries = call_user_func ('db_update_' . $version);

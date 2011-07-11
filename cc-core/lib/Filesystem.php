@@ -45,17 +45,21 @@ class Filesystem {
 
     static function Delete ($filename) {
 
-        // Recursively delete file/dir.
+        // If file - delete, if dir. delete recursively
         if (is_dir ($filename)) {
-            $base = dirname ($filename);
+
+            // Strip trailing slash
+            $filename = rtrim ($filename,'/');
+
             // Retrieve directory contents, excluding . & ..
             $contents = array_diff (scandir ($filename), array ('.', '..'));
             foreach ($contents as $file) {
-                self::Delete ($base . '/' . $file);
+                self::Delete ($filename . '/' . $file); // Delete contents
             }
-            return (self::$writeable) ? rmdir ($filename) : ftp_rmdir (self::$ftp_stream, $filename);
+            return (is_writeable ($filename)) ? rmdir ($filename) : ftp_rmdir (self::$ftp_stream, $filename);
+
         } else {
-            return (self::$writeable) ? unlink ($filename) : ftp_delete (self::$ftp_stream, $filename);
+            return (is_writeable ($filename)) ? unlink ($filename) : ftp_delete (self::$ftp_stream, $filename);
         }
 
     }
@@ -70,10 +74,10 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::$writeable) {
-            $result = @file_put_contents ($filename, '');
+            $result = file_put_contents ($filename, '');
         } else {
             $stream = tmpfile();
-            $result = @ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
+            $result = ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
             fclose ($stream);
         }
         return ($result) ? self::SetPermissions ($filename, 0644) : false;
@@ -92,7 +96,7 @@ class Filesystem {
         if (file_exists ($dirname)) return self::SetPermissions ($dirname, 0755);
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
+        if (is_writeable (dirname ($dirname))) {
             $result = mkdir ($dirname);
         } else {
             $result = ftp_mkdir (self::$ftp_stream, $dirname);
@@ -107,21 +111,21 @@ class Filesystem {
     static function Write ($filename, $content) {
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
-            $current_content = @file_get_contents ($filename, $content);
-            return @file_put_contents ($filename, $current_content . $content);
+        if (is_writeable ($filename)) {
+            $current_content = file_get_contents ($filename, $content);
+            return file_put_contents ($filename, $current_content . $content);
         } else {
 
             // Load existing content
             $stream = tmpfile();
-            @ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY);
+            ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY);
 
             // Append new content
             fwrite ($stream, $content);
             fseek ($stream, 0);
 
             // Save back to file
-            $result = @ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
+            $result = ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
             fclose ($stream);
             return $result;
         }
@@ -143,7 +147,7 @@ class Filesystem {
 
             // Load original content
             $stream = tmpfile();
-            @ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY);
+            ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY);
 
             // Overwrite new location
             fseek ($stream, 0);
@@ -193,12 +197,12 @@ class Filesystem {
     static function SetPermissions ($filename, $permissions) {
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
-            return @chmod ($filename, $permissions);
-        } else {
-            $result = @ftp_chmod (self::$ftp_stream, $permissions, $filename);
+//        if (is_writeable ($filename)) {
+//            return chmod ($filename, $permissions);
+//        } else {
+            $result = ftp_chmod (self::$ftp_stream, $permissions, $filename);
             return ($result !== false) ? true : false;
-        }
+//        }
 
     }
 
@@ -208,7 +212,7 @@ class Filesystem {
     static function Rename ($old_filename, $new_filename) {
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
+        if (is_writeable ($old_filename) && ((file_exists ($new_filename) && is_writable ($new_filename)) || is_writeable (dirname ($new_filename)))) {
             return rename ($old_filename, $new_filename);
         } else {
             return ftp_rename (self::$ftp_stream, $old_filename, $new_filename);
