@@ -72,7 +72,7 @@ if (md5_file ($zip_file) != '9de16ab2a9ee4baa91ae6e353304249f') exit ("Error - C
 
 
 ### Download patch file
-$patch_file_content = file_get_contents ($update_location . '/patch.php?version=' . CURRENT_VERSION);
+$patch_file_content = file_get_contents (UPDATE_URL . '/patch.php?version=' . CURRENT_VERSION);
 $patch_file = null;
 if (!empty ($patch_file_content)) {
     $patch_file = $tmp . '/patch_file.php';
@@ -92,7 +92,7 @@ UNPACK FILES
 if (!Filesystem::Write ($log, "<p>Unpacking files&hellip;</p>\n")) exit ('Error 3');
 
 ### Extracting files
-if (!Filesystem::Extract ($local_file)) exit ('Error unpacking files - Unable to extract zip archive');
+if (!Filesystem::Extract ($zip_file)) exit ('Error unpacking files - Unable to extract zip archive');
 
 ### Load patch file into memory
 if ($patch_file) include_once ($patch_file);
