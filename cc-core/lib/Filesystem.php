@@ -2,21 +2,38 @@
 
 class Filesystem {
 
-    static private $writeable;
+    static public $native;
     static private $ftp_stream;
     static private $ftp_host;
     static private $ftp_username;
     static private $ftp_password;
 
 
+    /**
+     * Notes:
+     * If $native is true:
+     *      a) Webserver owns and runs codebase
+     *      b) Use native for everything
+     *      c) FTP is not involved at all
+     *
+     * If $native is false:
+     *      a) FTP user owns codebase
+     *      b) Use FTP for everything
+     *      c) Use native for any file not owned by FTP and writeable by Webserver
 
-
+     *          Explanation: The mode is FTP, thus all files should be owned by FTP.
+     *          If a file is not owned by FTP, it's assumed to be owned by Webserver
+     *          and it [Webserver] should have write access. If not owned by Webserver
+     *          then failure is imminent because neither Webserver nor FTP would have
+     *          sufficient permissions to perform ALL filesystem operations anyway.
+     *
+     */
     static function Open() {
 
-        self::$writeable = (is_writable (DOC_ROOT)) ? true : false;
+        self::$native = (is_writable (DOC_ROOT) && getmyuid() == fileowner (DOC_ROOT)) ? true : false;
 
         // Login to server via FTP if PHP doesn't have write access
-        if (!self::$writeable) {
+        if (!self::$native) {
 
             // Set FTP login settings
             self::$ftp_host = Settings::Get ('ftp_host');
@@ -31,13 +48,14 @@ class Filesystem {
             return @ftp_login (self::$ftp_stream, self::$ftp_username, self::$ftp_password);
 
         }
+
     }
 
 
 
 
     static function Close() {
-        ftp_close (self::$ftp_stream);
+        if (!self::$native) ftp_close (self::$ftp_stream);
     }
 
 
@@ -56,10 +74,10 @@ class Filesystem {
             foreach ($contents as $file) {
                 self::Delete ($filename . '/' . $file); // Delete contents
             }
-            return (is_writeable ($filename)) ? rmdir ($filename) : ftp_rmdir (self::$ftp_stream, $filename);
+            return (self::CanUseNative ($filename)) ? rmdir ($filename) : ftp_rmdir (self::$ftp_stream, $filename);
 
         } else {
-            return (is_writeable ($filename)) ? unlink ($filename) : ftp_delete (self::$ftp_stream, $filename);
+            return (self::CanUseNative ($filename)) ? unlink ($filename) : ftp_delete (self::$ftp_stream, $filename);
         }
 
     }
@@ -73,8 +91,8 @@ class Filesystem {
         if (!file_exists (dirname ($filename))) self::CreateDir (dirname ($filename));
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
-            $result = file_put_contents ($filename, '');
+        if (self::$native) {
+            $result = file_put_contents ($filename, '') === false ? false : true;
         } else {
             $stream = tmpfile();
             $result = ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
@@ -96,7 +114,7 @@ class Filesystem {
         if (file_exists ($dirname)) return self::SetPermissions ($dirname, 0755);
 
         // Perform action directly if able, use FTP otherwise
-        if (is_writeable (dirname ($dirname))) {
+        if (self::$native) {
             $result = mkdir ($dirname);
         } else {
             $result = ftp_mkdir (self::$ftp_stream, $dirname);
@@ -111,7 +129,7 @@ class Filesystem {
     static function Write ($filename, $content) {
 
         // Perform action directly if able, use FTP otherwise
-        if (is_writeable ($filename)) {
+        if (self::$native) {
             $current_content = file_get_contents ($filename, $content);
             return file_put_contents ($filename, $current_content . $content);
         } else {
@@ -141,7 +159,7 @@ class Filesystem {
         if (!file_exists (dirname ($new_filename))) self::CreateDir (dirname ($new_filename));
 
         // Perform action directly if able, use FTP otherwise
-        if (self::$writeable) {
+        if (self::$native) {
             $result = copy ($filename, $new_filename);
         } else {
 
@@ -197,12 +215,12 @@ class Filesystem {
     static function SetPermissions ($filename, $permissions) {
 
         // Perform action directly if able, use FTP otherwise
-//        if (is_writeable ($filename)) {
-//            return chmod ($filename, $permissions);
-//        } else {
+        if (self::CanUseNative ($filename)) {
+            return chmod ($filename, $permissions);
+        } else {
             $result = ftp_chmod (self::$ftp_stream, $permissions, $filename);
             return ($result !== false) ? true : false;
-//        }
+        }
 
     }
 
@@ -212,7 +230,7 @@ class Filesystem {
     static function Rename ($old_filename, $new_filename) {
 
         // Perform action directly if able, use FTP otherwise
-        if (is_writeable ($old_filename) && ((file_exists ($new_filename) && is_writable ($new_filename)) || is_writeable (dirname ($new_filename)))) {
+        if (self::$native) {
             return rename ($old_filename, $new_filename);
         } else {
             return ftp_rename (self::$ftp_stream, $old_filename, $new_filename);
@@ -228,6 +246,13 @@ class Filesystem {
         if (!$zip->open ($zipfile)) return false;
         $extract_to = ($extract_to) ? $extract_to : dirname ($zipfile);
         return $zip->extractTo ($extract_to);
+    }
+
+
+
+
+    static function CanUseNative ($filename) {
+        return (self::$native || (is_writable($filename) && fileowner ($filename) != fileowner (DOC_ROOT)));
     }
 
 }
