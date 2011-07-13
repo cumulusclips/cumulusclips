@@ -19,6 +19,7 @@ $page_title = 'Update Complete!';
 $update_location = UPDATE_URL . '/latest';
 $tmp = DOC_ROOT . '/.updates';
 $log = $tmp . '/status';
+$error = null;
 
 
 // Verify updates are available and user confirmed to begin update
@@ -30,122 +31,131 @@ $log = $tmp . '/status';
 //}
 
 
+try {
+
+    /*****************
+    INITIALIZE UPDATES
+    *****************/
+
+    ### Create hidden temp dir
+    Filesystem::Open();
+    Filesystem::CreateDir ($tmp);
+    Filesystem::SetPermissions($tmp, 0777);
+
+    // Update log
+    Filesystem::Create ($log);
+    Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n");
 
 
-
-/*****************
-INITIALIZE UPDATES
-*****************/
-
-### Create hidden temp dir
-Filesystem::Open();
-if (!Filesystem::CreateDir ($tmp)) exit('Error initializing - Unable to create temp. directory');
-if (!Filesystem::SetPermissions($tmp, 0777)) exit('Error initializing - Unable to set persmissions on temp directory');
-if (!Filesystem::Create ($log)) exit ('Error initializing - Unable to create log file');
-// Update log
-if (!Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n")) exit ('Error 1');
-
-
-### De-activate plugins
-### De-activate themes
-
-
-
-
-
-/***************
-DOWNLOAD PACKAGE
-***************/
-
-// Update log
-if (!Filesystem::Write ($log, "<p>Downloading package&hellip;</p>\n")) exit ('Error 2');
-
-### Download archive
-$zip_content = file_get_contents ($update_location . '/update.zip');
-$zip_file = $tmp . '/update.zip';
-if (!Filesystem::Create ($zip_file)) exit ('Error downloading files - Unable to create archive');
-if (!Filesystem::Write ($zip_file, $zip_content)) exit ('Error downloading files - Unable to save archive');
-if (md5_file ($zip_file) != '9de16ab2a9ee4baa91ae6e353304249f') exit ("Error - Checksums don't match");
-
-
-### Download patch file
-$patch_file_content = file_get_contents (UPDATE_URL . '/patch.php?version=' . CURRENT_VERSION);
-$patch_file = null;
-if (!empty ($patch_file_content)) {
-    $patch_file = $tmp . '/patch_file.php';
-    if (!Filesystem::Create ($patch_file)) exit ('Error download files - Unable to create patch file');
-    if (!Filesystem::Write ($patch_file, $patch_file_content)) exit ('Error downloading files - Unable to save patch file');
-}
+    ### De-activate plugins
+    ### De-activate themes
 
 
 
 
 
-/***********
-UNPACK FILES
-***********/
-
-// Update log
-if (!Filesystem::Write ($log, "<p>Unpacking files&hellip;</p>\n")) exit ('Error 3');
-
-### Extracting files
-if (!Filesystem::Extract ($zip_file)) exit ('Error unpacking files - Unable to extract zip archive');
-
-### Load patch file into memory
-if ($patch_file) include_once ($patch_file);
 
 
 
 
+    /***************
+    DOWNLOAD PACKAGE
+    ***************/
 
-/************
-APPLY CHANGES
-************/
+    // Update log
+    Filesystem::Write ($log, "<p>Downloading package&hellip;</p>\n");
 
-// Update log
-if (!Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n")) exit ('Error 10');
-
-### Applying changes
-if (!Filesystem::CopyDir ($tmp . '/cumulus', DOC_ROOT)) exit ('Error 11');
-
-
-### Perform patch file modifications
-if ($patch_file) {
-
-    reset ($perform_update);
-    foreach ($perform_update as $version) {
-
-        ### Execute DB modifications queries
-        $db_update_queries = call_user_func ('db_update_' . $version);
-        foreach ($db_update_queries as $query) $db->Query ($query);
+    ### Download archive
+    $zip_content = file_get_contents ($update_location . '/update.zip');
+    $zip_file = $tmp . '/update.zip';
+    Filesystem::Create ($zip_file);
+    Filesystem::Write ($zip_file, $zip_content);
+    if (md5_file ($zip_file) != '9de16ab2a9ee4baa91ae6e353304249f') throw new Exception ("Error - Checksums don't match");
 
 
-        ### Delete files marked for removal
-        $remove_files = call_user_func ('remove_files_' . $version);
-        foreach ($remove_files as $file) if (!Filesystem::Delete (DOC_ROOT . $file)) exit ('Error 14');
+    ### Download patch file
+    $patch_file_content = file_get_contents (UPDATE_URL . '/patch.php?version=' . CURRENT_VERSION);
+    $patch_file = null;
+    if (!empty ($patch_file_content)) {
+        $patch_file = $tmp . '/patch_file.php';
+        Filesystem::Create ($patch_file);
+        Filesystem::Write ($patch_file, $patch_file_content);
+    }
+
+
+
+
+
+    /***********
+    UNPACK FILES
+    ***********/
+
+    // Update log
+    Filesystem::Write ($log, "<p>Unpacking files&hellip;</p>\n");
+
+    ### Extracting files
+    Filesystem::Extract ($zip_file);
+
+    ### Load patch file into memory
+    if ($patch_file) include_once ($patch_file);
+
+
+
+
+
+    /************
+    APPLY CHANGES
+    ************/
+
+    // Update log
+    Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n");
+
+    ### Applying changes
+    Filesystem::CopyDir ($tmp . '/cumulus', DOC_ROOT);
+
+
+    ### Perform patch file modifications
+    if ($patch_file) {
+
+        reset ($perform_update);
+        foreach ($perform_update as $version) {
+
+            ### Execute DB modifications queries
+            $db_update_queries = call_user_func ('db_update_' . $version);
+            foreach ($db_update_queries as $query) $db->Query ($query);
+
+
+            ### Delete files marked for removal
+            $remove_files = call_user_func ('remove_files_' . $version);
+            foreach ($remove_files as $file) Filesystem::Delete (DOC_ROOT . $file);
+
+        }
 
     }
 
+
+
+
+
+    /*******
+    CLEAN UP
+    *******/
+
+    // Update log
+    Filesystem::Write ($log, "<p>Clean up&hellip;</p>\n");
+
+    ### Delete temp. dir.
+    Filesystem::Delete ($tmp);
+
+
+    ### Activate themes
+    ### Activate plugins
+    Filesystem::Close();
+
+} catch (Exception $e) {
+    $error = $e->getMessage();
+    $page_title = 'Error During Update';
 }
-
-
-
-
-
-/*******
-CLEAN UP
-*******/
-
-// Update log
-if (!Filesystem::Write ($log, "<p>Clean up&hellip;</p>\n")) exit ('Error 12');
-
-### Delete temp. dir.
-if (!Filesystem::Delete ($tmp)) exit('Error 13');
-
-
-### Activate themes
-### Activate plugins
-Filesystem::Close();
 
 
 
@@ -156,12 +166,20 @@ include ('header.php');
 
 <div id="updates-complete">
 
-    <h1>Update Complete!</h1>
+    <?php if (!$error): ?>
 
-    <div class="block">
-        <p>You are now running the latest version of CumulusClips. Don't forget
-        to re-enable all your plugins and themes.</p>
-    </div>
+        <h1>Update Complete!</h1>
+        <div class="block">
+            <p>You are now running the latest version of CumulusClips. Don't forget
+            to re-enable all your plugins and themes.</p>
+        </div>
+
+    <?php else: ?>
+
+        <h1>Error During Update</h1>
+        <div class="block"><?=$error?></div>
+
+    <?php endif; ?>
 
 </div>
 
