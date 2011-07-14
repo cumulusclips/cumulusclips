@@ -30,7 +30,26 @@ class Filesystem {
      */
     static function Open() {
 
+        // Check if native PHP methods should be used - Test 1
         self::$native = (is_writable (DOC_ROOT) && getmyuid() == fileowner (DOC_ROOT)) ? true : false;
+
+        // Check if native PHP methods should be used - Test 2
+        if (self::$native) {
+
+            // Create temporary file
+            $native_check_file = DOC_ROOT . '/native-check' . time();
+            $handle = fopen ($native_check_file, 'w');
+            fwrite ($handle, 'Native Check');
+
+            // Check if webserver/PHP has filesystem access
+            self::$native = (fileowner ($native_check_file) == getmyuid()) ? true : false;
+
+            // Remove temporary file
+            fclose ($handle);
+            unlink ($native_check_file);
+            
+        }
+
 
         // Login to server via FTP if PHP doesn't have write access
         if (!self::$native) {
