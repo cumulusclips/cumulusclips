@@ -292,6 +292,8 @@ MISC STYLES
 
 .options { display:inline; }
 
+#updates-available { margin-bottom: 15px; }
+
 
 
 
@@ -452,11 +454,11 @@ THEME STYLES
 UPDATE STYLES
 ************/
 
-#update-in-progress {
+#updates-in-progress {
     display:none;
 }
 
-#update-in-progress .working {
+#updates-in-progress .working {
     background:url(../images/loading.gif) no-repeat 0 0;
     padding:0 0 0 20px;
     line-height:16px;

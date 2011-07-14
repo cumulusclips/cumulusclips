@@ -288,13 +288,32 @@ class Functions {
 
 
     /**
-     * Check central update server to see if updates are available
+     * Convert the given system version into a integer from a formatted string
+     * @param string $version Formatted string of a system version
+     * @return integer Returns three digit numerical version of the system version
+     */
+    static function NumerizeVersion ($version) {
+        return (int) str_pad (str_replace ('.', '', $version), 3, '0');
+    }
+
+
+
+
+    /**
+     * "Phone home" to check if updates are available
      * @return object|boolean Returns update object if its available, false otherwise
      */
     static function UpdateCheck() {
-        $update = file_get_contents (UPDATE_URL . '/');
+        
+        $version = self::NumerizeVersion (CURRENT_VERSION);
+        $client = urlencode ($_SERVER['REMOTE_ADDR']);
+        $system = urlencode ($_SERVER['SERVER_ADDR']);
+        
+        $update_url = UPDATE_URL . "/?version=$version&client=$client&system=$system";
+        $update = @file_get_contents ($update_url);
         $json = json_decode ($update);
-        return (!empty ($update) && !empty ($json) && $json->available) ? $json : false;
+        return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;
+        
     }
     
 }

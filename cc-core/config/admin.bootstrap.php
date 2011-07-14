@@ -25,4 +25,11 @@ if (!headers_sent()) {
     
 }
 
+
+// Check for updates (once per session)
+if (!isset ($_SESSION['updates_available'])) {
+    $updates_available = Functions::UpdateCheck();
+    $_SESSION['updates_available'] = ($updates_available) ? serialize ($updates_available) : false;
+}
+
 ?>

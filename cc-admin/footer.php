@@ -8,8 +8,12 @@
 <div id="footer">
     <div id="footer-left">CumulusClips</div>
     <div id="footer-right">
-        Version 1.0 (Latest) &nbsp;&nbsp;|&nbsp;&nbsp;
-        <a href="" title="Documentation">Documentation</a>
+        <?php if (!empty ($_SESSION['updates_available']) && !isset ($dont_show_update_prompt)): ?>
+            *New version (<?=$updates_available->version?>) available - <a href="<?=ADMIN?>/updates.php">Update Now</a>
+        <?php else: ?>
+            Version <?=CURRENT_VERSION?> (Latest) 
+        <?php endif; ?>
+        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" title="Documentation">Documentation</a>
     </div>
 </div>
 

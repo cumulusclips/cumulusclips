@@ -16,19 +16,18 @@ Plugin::Trigger ('admin.videos.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
 $page_title = 'Update Complete!';
-$update_location = UPDATE_URL . '/latest';
 $tmp = DOC_ROOT . '/.updates';
 $log = $tmp . '/status';
 $error = null;
 
 
 // Verify updates are available and user confirmed to begin update
-//$update = Functions::UpdateCheck();
-//if (isset ($_GET['update'], $_SESSION['begin_update']) && $update && $_SESSION['begin_update'] <= time()-300) {
-//    unset ($_SESSION['begin_update']);
-//} else {
-//    header ("Location: " . ADMIN . '/updates.php');
-//}
+$update = Functions::UpdateCheck();
+if (!isset ($_GET['update']) || !$update) {
+    header ("Location: " . ADMIN . '/updates.php');
+}
+
+
 
 
 try {
@@ -54,10 +53,6 @@ try {
 
 
 
-
-
-
-
     /***************
     DOWNLOAD PACKAGE
     ***************/
@@ -66,15 +61,15 @@ try {
     Filesystem::Write ($log, "<p>Downloading package&hellip;</p>\n");
 
     ### Download archive
-    $zip_content = file_get_contents ($update_location . '/update.zip');
+    $zip_content = file_get_contents ($update->location);
     $zip_file = $tmp . '/update.zip';
     Filesystem::Create ($zip_file);
     Filesystem::Write ($zip_file, $zip_content);
-    if (md5_file ($zip_file) != '9de16ab2a9ee4baa91ae6e353304249f') throw new Exception ("Error - Checksums don't match");
+    if (md5_file ($zip_file) != $update->checksum) throw new Exception ("Error - Checksums don't match");
 
 
     ### Download patch file
-    $patch_file_content = file_get_contents (UPDATE_URL . '/patch.php?version=' . CURRENT_VERSION);
+    $patch_file_content = file_get_contents (UPDATE_URL . '/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
     $patch_file = null;
     if (!empty ($patch_file_content)) {
         $patch_file = $tmp . '/patch_file.php';
@@ -160,6 +155,7 @@ try {
 
 
 // Output Header
+$dont_show_update_prompt = true;
 include ('header.php');
 
 ?>

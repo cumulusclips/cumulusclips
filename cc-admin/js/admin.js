@@ -166,9 +166,9 @@ $('document').ready(function(){
     $('.begin-update').click(function(){
 
         // Display message
-        $('#begin-update').hide();
-        document.title = $('#update-in-progress h1').text();
-        $('#update-in-progress').show();
+        $('#updates-begin').hide();
+        document.title = $('#updates-in-progress h1').text();
+        $('#updates-in-progress').show();
 
         // Poll server to check update status
         setInterval(function(){
@@ -178,7 +178,7 @@ $('document').ready(function(){
                 url         : baseURL+'/.updates/status',
                 type        : 'GET',
                 success     : function(data, textStatus, jqXHR){
-                    $('#update-in-progress .status').html(data);
+                    $('#updates-in-progress .status').html(data);
                 }
             });
         }, 3000);

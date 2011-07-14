@@ -104,3 +104,13 @@
 
     <div id="container">
         <div id="main">
+
+            <?php if (!empty ($_SESSION['updates_available']) && !isset ($dont_show_update_prompt)): ?>
+
+                <?php $updates_available = unserialize($_SESSION['updates_available']); ?>
+                <div id="updates-available" class="notice">
+                    An updated version of CumulusClips (version <?=$updates_available->version?>)
+                    is available! Please <a href="<?=ADMIN?>/updates.php">update now</a>.
+                </div>
+
+            <?php endif; ?>

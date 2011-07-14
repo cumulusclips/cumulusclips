@@ -20,22 +20,20 @@ $page_title = 'Begin Update';
 $header = 'Begin Update';
 
 
-
 // Check for update
 $update = Functions::UpdateCheck();
-if ($update) {
-    $_SESSION['begin_update'] = time();
-} else {
+if (!$update) {
     header ("Location: " . ADMIN . '/updates.php');
 }
 
 
 // Output Header
+$dont_show_update_prompt = true;
 include ('header.php');
 
 ?>
 
-<div id="begin-update">
+<div id="updates-begin">
 
     <h1>Begin Update</h1>
 
@@ -46,12 +44,12 @@ include ('header.php');
         <p>Be sure to backup you database and any changes made to your system
         before you begin the update.</p>
 
-        <p><a class="button begin-update" href="<?=ADMIN?>/updates_execute.php?update">Begin Update</a></p>
+        <p><a class="button begin-update" href="<?=ADMIN?>/updates_execute.php?update=<?=time()?>">Click to Begin Update</a></p>
     </div>
     
 </div>
 
-<div id="update-in-progress">
+<div id="updates-in-progress">
 
     <h1>Update in Progress&hellip;</h1>
 
