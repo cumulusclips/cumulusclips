@@ -26,7 +26,7 @@ if (!empty ($_GET['preview']) && is_numeric ($_GET['preview'])) {
 
 // Parse the URI request
 } else {
-    $request = preg_replace ('/^\/?(.*?)\/?$/', '$1', $_SERVER['REQUEST_URI']);
+    $request = preg_replace ('/^\/?(.*?)\/?$/', '$1', basename ($_SERVER['REQUEST_URI']));
     $page_id = Page::Exist (array ('slug' => $request, 'status' => 'published'));
 }
 
