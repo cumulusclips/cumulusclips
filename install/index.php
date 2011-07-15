@@ -18,9 +18,8 @@
         <p>Welcome</p>
         <p>Requirements</p>
         <p class="pale">Write Access</p>
-        <p>FTP Details</p>
-        <p>Site Information</p>
-        <p>Database Details</p>
+        <p>Site Details</p>
+        <p>Database Setup</p>
         <p>Install Complete</p>
     </div>
 
