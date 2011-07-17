@@ -1,5 +1,3 @@
-// Global vars
-
 $('document').ready(function(){
 
     $('.more-info').tipsy({
