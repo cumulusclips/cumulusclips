@@ -332,9 +332,7 @@ CREATE_VIDEOS_TABLE;
 
 
 
-$queries = array (
-    $_CREATE_DATABASE,
-    $_USE_DATABASE,
+$install_queries = array (
     $_DROP_CATEGORIES_TABLE,
     $_CREATE_CATEGORIES_TABLE,
     $_DROP_COMMENTS_TABLE,

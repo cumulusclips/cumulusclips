@@ -1,67 +1,131 @@
 <?php
 
+// Send user to appropriate step
+if (!in_array ('ftp', $settings->completed)) {
+    header ("Location: " . HOST . '/install/?ftp');
+    exit();
+} else if (in_array ('database', $settings->completed)) {
+    header ("Location: " . HOST . '/install/?site-details');
+    exit();
+}
+
+
+// Establish needed vars.
+$page_title = 'CumulusClips - Database Setup';
+$errors = array();
+$error_msg = null;
+
+
+// Handle form if submitted
 if (isset ($_POST['submitted'])) {
 
-    // Validate Database host
-    if (!empty ($_POST['db_host']) && !ctype_space ()) {
-        $settings->db_host = mysql_real_escape_string (trim ($_POST['db_host']));
+    // Validate hostname
+    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname'])) {
+        $hostname = trim ($_POST['hostname']);
     } else {
-        $errors[] = "A valid database host is needed";
+        $errors['hostname'] = "A valid hostname is needed";
     }
 
 
-    // Validate Database user
-    if (!empty ($_POST['db_user']) && !ctype_space ()) {
-        $settings->db_user = mysql_real_escape_string (trim ($_POST['db_user']));
+    // Validate name
+    if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
+        $name = trim ($_POST['name']);
     } else {
-        $errors[] = "A valid database username is needed";
+        $errors['name'] = "A valid database name is needed";
     }
 
 
-    // Validate Database password
-    if (!empty ($_POST['db_pass']) && !ctype_space ()) {
-        $settings->db_pass = mysql_real_escape_string (trim ($_POST['db_pass']));
+    // Validate username
+    if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
+        $username = trim ($_POST['username']);
     } else {
-        $errors[] = "A valid database password is needed";
+        $errors['username'] = "A valid username is needed";
+    }
+
+
+    // Validate password
+    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
+        $password = trim ($_POST['password']);
+    } else {
+        $errors['password'] = "A valid password is needed";
+    }
+
+
+    // Validate prefix
+    if (!empty ($_POST['prefix']) && !ctype_space ($_POST['prefix'])) {
+        $prefix = trim ($_POST['prefix']);
+    } else {
+        $prefix = '';
     }
     
 
     // Execute queries if no form errors were found
     if (empty ($errors)) {
 
-        include ('queries.php');
+        // Include required files
+        include_once (INSTALL . '/includes/queries.php');
+        include_once (INSTALL . '/includes/Filesystem.php');
 
         try {
 
             // Connect to user's database server
-            $dbc = mysql_connect ($settings->db_host, $settings->db_user, $settings->db_pass);
-            if (!$dbc) throw new Exception('connect');
+            $dbc = @mysql_connect ($hostname, $username, $password);
+            if (!$dbc) throw new Exception ("Unable to connect to the database server with the credentials you provided. Please verify they're correct and try again.");
+
 
             // Select user's database for operation
-            $select = mysql_select_db($settings->db_name, $dbc);
-            if (!$select) throw new Exception ('connect');
+            $select = mysql_select_db ($name, $dbc);
+            if (!$select) throw new Exception ("Unable to use database you specified. Please verify the name is correct and that you have access to it.");
+
 
             // Perform install queries
             foreach ($install_queries as $query) {
-                $query = mysql_real_escape_string (str_replace ('{DB_PREFIX}', $settings->db_prefix, $query));
+                $query = str_replace ('{DB_PREFIX}', $prefix, str_replace ("\n", '', ($query)));
                 $result = mysql_query ($query);
-                if (!$result) throw new Exception ('Unable to execture query');
+                if (!$result) throw new Exception ("Unable to execute queries. Please verify you have write access to the database.");
             }
 
+
+            // Open temp config file and replace placeholders with actual values
+            $config_file = INSTALL . '/includes/config.php.txt';
+            $config_content = @file_get_contents ($config_file);
+            $config_content = preg_replace ('/{DB_HOST}/i', $hostname, $config_content);
+            $config_content = preg_replace ('/{DB_NAME}/i', $name, $config_content);
+            $config_content = preg_replace ('/{DB_USER}/i', $username, $config_content);
+            $config_content = preg_replace ('/{DB_PASS}/i', $password, $config_content);
+            $config_content = preg_replace ('/{DB_PREFIX}/i', $prefix, $config_content);
+
+
+            // Save database settings to config file in permanent location
+            $perm_config_file = DOC_ROOT . '/cc-core/config/config.php.txt';
+            Filesystem::Open();
+            Filesystem::Create ($perm_config_file);
+            Filesystem::Write ($perm_config_file, $config_content);
+            Filesystem::Close();
+
+
+            // Store information & redirect user
+            $settings->db_hostname = $hostname;
+            $settings->db_name = $name;
+            $settings->db_username = $username;
+            $settings->db_passowrd = $password;
+            $settings->db_prefix = $prefix;
+            $settings->completed[] = 'database';
+            $_SESSION['settings'] = serialize ($settings);
+            header ("Location: " . HOST . '/install/?site-details');
+            exit();
+
         } catch (Exception $e) {
-            if ($e->getMessage() == 'connect') {
-                $error_msg = 'We were unable to connect to you database. Please verify you provided the login information';
-            }
+            $error_msg = $e->getMessage();
         }
 
     } else {
-        $error_msg = '<p>The following errors were found, please correct them and try again:<br /><br />- ';
-        $error_msg .= implode ('<br />- ', $errors);
+        $error_msg = '<p>Errors were found. Please correct them and try again.<br /><br /> - ';
+        $error_msg .= implode ('<br / >- ', $errors);
     }
-
-
 
 }
 
+include_once (INSTALL . '/views/database.tpl');
 
 ?>

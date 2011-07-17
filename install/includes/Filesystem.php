@@ -10,25 +10,7 @@ class Filesystem {
     static private $ftp_protocol;
 
 
-    /**
-     * Notes:
-     * If $native is true:
-     *      a) Webserver owns and runs codebase
-     *      b) Use native for everything
-     *      c) FTP is not involved at all
-     *
-     * If $native is false:
-     *      a) FTP user owns codebase
-     *      b) Use FTP for everything
-     *      c) Use native for any file not owned by FTP and writeable by Webserver
 
-     *          Explanation: The mode is FTP, thus all files should be owned by FTP.
-     *          If a file is not owned by FTP, it's assumed to be owned by Webserver
-     *          and it [Webserver] should have write access. If not owned by Webserver
-     *          then failure is imminent because neither Webserver nor FTP would have
-     *          sufficient permissions to perform ALL filesystem operations anyway.
-     *
-     */
     static function Open() {
 
         // Check if native PHP methods should be used - Test 1
@@ -40,14 +22,14 @@ class Filesystem {
             // Create temporary file
             $native_check_file = DOC_ROOT . '/native-check' . time();
             $handle = @fopen ($native_check_file, 'w');
-            fwrite ($handle, 'Native Check');
+            @fwrite ($handle, 'Native Check');
 
             // Check if webserver/PHP has filesystem access
             self::$native = (fileowner ($native_check_file) == getmyuid()) ? true : false;
 
             // Remove temporary file
-            fclose ($handle);
-            unlink ($native_check_file);
+            @fclose ($handle);
+            @unlink ($native_check_file);
             
         }
 
@@ -56,24 +38,25 @@ class Filesystem {
         if (!self::$native) {
 
             // Set FTP login settings
-            self::$ftp_host = Settings::Get ('ftp_host');
-            self::$ftp_username = Settings::Get ('ftp_username');
-            self::$ftp_password = Settings::Get ('ftp_password');
-            self::$ftp_protocol = Settings::Get ('ftp_protocol');
-
+            global $settings;
+            self::$ftp_host = $settings->ftp_hostname;
+            self::$ftp_username = $settings->ftp_username;
+            self::$ftp_password = $settings->ftp_password;
+            self::$ftp_protocol = $settings->ftp_protocol;
 
             // Connect to FTP host
             if (self::$ftp_protocol == 'ftp') {
                 self::$ftp_stream = @ftp_connect (self::$ftp_host);
             } else {
-                if (!function_exists ('ftp_ssl_connect')) throw new Exception ("Your host doesn't support FTP over SSL connections.");
+                if (!function_exists('ftp_ssl_connect')) throw new Exception ("Your host doesn't support FTP over SSL connections.");
                 self::$ftp_stream = @ftp_ssl_connect (self::$ftp_host);
             }
             if (!self::$ftp_stream) throw new Exception ("Unable to connect to FTP host (" . self::$ftp_host . ")");
 
 
+
             // Login with username and password
-            if (!ftp_login (self::$ftp_stream, self::$ftp_username, self::$ftp_password)) {
+            if (!@ftp_login (self::$ftp_stream, self::$ftp_username, self::$ftp_password)) {
                 throw new Exception ("Unable to login to FTP server (Username: '" . self::$ftp_username . "', Password: '" . self::$ftp_password. "')");
             }
 
@@ -87,7 +70,7 @@ class Filesystem {
 
 
     static function Close() {
-        if (!self::$native) ftp_close (self::$ftp_stream);
+        if (!self::$native) @ftp_close (self::$ftp_stream);
     }
 
 
@@ -109,18 +92,18 @@ class Filesystem {
 
             // Delete directory
             if (self::CanUseNative ($filename)) {
-                if (!rmdir ($filename)) throw new Exception ("Unable to delete directory ($filename)");
+                if (!@rmdir ($filename)) throw new Exception ("Unable to delete directory ($filename)");
             } else {
-                if (!ftp_rmdir (self::$ftp_stream, $filename)) throw new Exception ("Unable to delete directory via FTP ($filename)");
+                if (!@ftp_rmdir (self::$ftp_stream, $filename)) throw new Exception ("Unable to delete directory via FTP ($filename)");
             }
 
         } else {
 
             // Delete file
             if (self::CanUseNative ($filename)) {
-                if (!unlink ($filename)) throw new Exception ("Unable to delete file ($filename)");
+                if (!@unlink ($filename)) throw new Exception ("Unable to delete file ($filename)");
             } else {
-                if (!ftp_delete (self::$ftp_stream, $filename)) throw new Exception ("Unable to delete file via FTP ($filename)");
+                if (!@ftp_delete (self::$ftp_stream, $filename)) throw new Exception ("Unable to delete file via FTP ($filename)");
             }
 
         }
@@ -139,11 +122,11 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::$native) {
-            if (file_put_contents ($filename, '') === false) throw new Exception ("Unable to create file ($filename)");
+            if (@file_put_contents ($filename, '') === false) throw new Exception ("Unable to create file ($filename)");
         } else {
 
             $stream = tmpfile();
-            if (!ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY)) {
+            if (!@ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY)) {
                 throw new Exception ("Unable to create file via FTP ($filename)");
             }
             fclose ($stream);
@@ -168,9 +151,9 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::$native) {
-            if (!mkdir ($dirname)) throw new Exception ("Unable to create directory ($dirname)");
+            if (!@mkdir ($dirname)) throw new Exception ("Unable to create directory ($dirname)");
         } else {
-            if (!ftp_mkdir (self::$ftp_stream, $dirname)) throw new Exception ("Unable to create directory via FTP ($dirname)");
+            if (!@ftp_mkdir (self::$ftp_stream, $dirname)) throw new Exception ("Unable to create directory via FTP ($dirname)");
         }
 
         self::SetPermissions ($dirname, 0755);
@@ -186,8 +169,8 @@ class Filesystem {
         // Perform action directly if able, use FTP otherwise
         if (self::$native) {
 
-            $current_content = file_get_contents ($filename, $content);
-            if (file_put_contents ($filename, $current_content . $content) === false) {
+            $current_content = @file_get_contents ($filename, $content);
+            if (@file_put_contents ($filename, $current_content . $content) === false) {
                 throw new Exception ("Unable to write content to file ($filename)");
             }
 
@@ -195,7 +178,7 @@ class Filesystem {
 
             // Load existing content
             $stream = tmpfile();
-            if (!ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY)) {
+            if (!@ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY)) {
                 throw new Exception ("Unable to open file for reading/writing via FTP ($filename)");
             }
 
@@ -204,7 +187,7 @@ class Filesystem {
             fseek ($stream, 0);
 
             // Save back to file
-            $result = ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
+            $result = @ftp_fput (self::$ftp_stream, $filename, $stream, FTP_BINARY);
             if (!$result) {
                 throw new Exception ("Unable to write content to file via FTP ($filename)");
             }
@@ -226,18 +209,18 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::$native) {
-            if (!copy ($filename, $new_filename)) throw new Exception ("Unable to copy file ($filename to $new_filename)");
+            if (!@copy ($filename, $new_filename)) throw new Exception ("Unable to copy file ($filename to $new_filename)");
         } else {
 
             // Load original content
             $stream = tmpfile();
-            if (!ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY)) {
+            if (!@ftp_fget (self::$ftp_stream, $stream, $filename, FTP_BINARY)) {
                 throw new Exception ("Unable to open file for reading/copying via FTP ($filename)");
             }
 
             // Overwrite new location
             fseek ($stream, 0);
-            if (!ftp_fput (self::$ftp_stream, $new_filename, $stream, FTP_BINARY)) {
+            if (!@ftp_fput (self::$ftp_stream, $new_filename, $stream, FTP_BINARY)) {
                 throw new Exception ("Unable to copy file via FTP ($filename to $new_filename)");
             }
             fclose ($stream);
@@ -288,49 +271,14 @@ class Filesystem {
 
         // Perform action directly if able, use FTP otherwise
         if (self::CanUseNative ($filename)) {
-            if (!chmod ($filename, $permissions)) {
+            if (!@chmod ($filename, $permissions)) {
                 throw new Exception ("Unable to set permissions ($permissions on $filename)");
             }
         } else {
-            if (ftp_chmod (self::$ftp_stream, $permissions, $filename) === false) {
+            if (@ftp_chmod (self::$ftp_stream, $permissions, $filename) === false) {
                 throw new Exception ("Unable to set permissions via FTP ($permissions on $filename)");
             }
         }
-        return true;
-
-    }
-
-
-
-
-    static function Rename ($old_filename, $new_filename) {
-
-        // Perform action directly if able, use FTP otherwise
-        if (self::$native) {
-            if (!rename ($old_filename, $new_filename)) {
-                throw new Exception ("Unable to rename file ($old_filename to $new_filename)");
-            }
-        } else {
-            if (!ftp_rename (self::$ftp_stream, $old_filename, $new_filename)) {
-                throw new Exception ("Unable to rename file via FTP ($old_filename to $new_filename)");
-            }
-        }
-        return true;
-
-    }
-
-
-
-
-    static function Extract ($zipfile, $extract_to = null) {
-
-        // Open zip file
-        $zip = new ZipArchive();
-        if (!$zip->open ($zipfile)) throw new Exception ("Unable to open zip file ($zipfile)");
-
-        // Extract contents to given location or same dir. if not specified
-        $extract_to = ($extract_to) ? $extract_to : dirname ($zipfile);
-        if (!$zip->extractTo ($extract_to)) throw new Exception ("Unable to extract zip file ($zipfile to $extract_to)");
         return true;
 
     }

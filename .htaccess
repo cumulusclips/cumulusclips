@@ -95,8 +95,7 @@ RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ cc-core/system/video_sitemap.php?pa
 ### Management & Security
 
 Options -Indexes
-DirectoryIndex cc-core/controllers/index.php
-ErrorDocument 404 cumulus/cc-core/controllers/system_404.php
+ErrorDocument 404 cc-core/controllers/system_404.php
 #ErrorDocument 403 cc-core/controllers/system_404.php
 RewriteRule ^system-error/$ cc-core/controllers/system_error.php [NC,L]
 

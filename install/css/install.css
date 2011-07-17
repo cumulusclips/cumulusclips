@@ -25,6 +25,11 @@ body {
     margin-bottom:15px;
 }
 
+#sub-header {
+    width:960px;
+    margin:0 auto;
+}
+
 #logo {
     background-image:url(../images/install-logo.png);
     display:block;
@@ -48,8 +53,8 @@ body {
 }
 
 #container {
-    width:100%;
-    *width:auto;
+    width:960px;
+    margin:0 auto;
 }
 
 #main {
@@ -67,6 +72,11 @@ body {
     background-repeat:repeat-x;
     margin-top:25px;
     height:61px;
+}
+
+#sub-footer {
+    width:960px;
+    margin:0 auto;
 }
 
 #footer-left {
@@ -96,10 +106,30 @@ SIDEBAR STYLES
 
 #sidebar p {
     padding:10px 0 10px 30px;
-    background:url('../images/accept.png') no-repeat 4px 9px;
+    color:#BBB;
 }
 
-.pale { color:#AAA; }
+#welcome .welcome,
+#requirements .requirements,
+#ftp .ftp,
+#site-details .site-details,
+#database .database,
+#complete .complete
+{
+    font-weight:bold;
+    color:#666;
+}
+
+.welcome-done #sidebar .welcome,
+.requirements-done #sidebar .requirements,
+.ftp-done #sidebar .ftp,
+.database-done #sidebar .database,
+.site-details-done #sidebar .site-details
+{
+    background:url('../images/accept.png') no-repeat 4px 9px;
+    color:#060;
+}
+
 
 
 
@@ -149,7 +179,10 @@ FONT STYLES
 
 strong { font-weight:bold; }
 
-p { padding:5px 0; }
+p {
+    padding:5px 0;
+    line-height:15px;
+}
 
 h1, h2, h3, .big, .large, .huge {
     font-weight:bold;
@@ -264,6 +297,14 @@ FORM & MESSAGE STYLES
     font-weight:bold;
 }
 
+#protocol label {
+    float:none;
+    text-align:left;
+    margin-right:25px;
+    margin-left:5px;
+    width:auto;
+}
+
 .text {
     border:1px solid #CCC;
     border-radius:5px;
@@ -308,4 +349,32 @@ textarea.text {
 
 
 
+
+#requirements table {
+    margin-top:10px;
+    margin-bottom:25px;
+}
+
+#requirements td {
+    border-collapse:collapse;
+    border:1px solid #CCC;
+    vertical-align:middle;
+    padding:3px 5px;
+    line-height:16px;
+}
+
+#requirements .server-setting {
+    width:150px;
+}
+
+.more-info-content {
+    display:none;
+}
+
+.tip { font-size:12px;line-height:16px;}
+
+.why {
+    background:url('../images/help.png') no-repeat 0 -1px;
+    padding-left:19px;
+}
 
