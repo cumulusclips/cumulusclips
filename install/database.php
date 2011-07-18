@@ -20,7 +20,8 @@ $error_msg = null;
 if (isset ($_POST['submitted'])) {
 
     // Validate hostname
-    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname'])) {
+    $pattern = '/^[a-z0-9][a-z0-9\.\-]*$/i';
+    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname']) && preg_match ($pattern, $_POST['hostname'])) {
         $hostname = trim ($_POST['hostname']);
     } else {
         $errors['hostname'] = "A valid hostname is needed";
@@ -108,7 +109,7 @@ if (isset ($_POST['submitted'])) {
             $settings->db_hostname = $hostname;
             $settings->db_name = $name;
             $settings->db_username = $username;
-            $settings->db_passowrd = $password;
+            $settings->db_passoword = $password;
             $settings->db_prefix = $prefix;
             $settings->completed[] = 'database';
             $_SESSION['settings'] = serialize ($settings);

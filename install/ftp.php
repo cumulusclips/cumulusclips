@@ -42,7 +42,7 @@ if ($native) {
 if ($native) {
     $settings->ftp_hostname = 'localhost';
     $settings->ftp_username = '';
-    $settings->ftp_passowrd = '';
+    $settings->ftp_password = '';
     $settings->ftp_protocol = 'ftp';
     $settings->completed[] = 'ftp';
     $_SESSION['settings'] = serialize ($settings);
@@ -55,7 +55,8 @@ if ($native) {
 if (isset ($_POST['submitted'])) {
 
     // Validate hostname
-    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname'])) {
+    $pattern = '/^[a-z0-9][a-z0-9\.\-]*$/i';
+    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname']) && preg_match ($patern, $_POST['hostname'])) {
         $hostname = trim ($_POST['hostname']);
     } else {
         $errors['hostname'] = 'A valid hostname is needed';

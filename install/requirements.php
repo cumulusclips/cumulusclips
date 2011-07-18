@@ -124,6 +124,7 @@ if (!$uploads) $errors = true;
 // Continue to next step if no errors
 if (!$errors) {
     $settings->completed[] = 'requirements';
+    $settings->uploads_enabled = $ffmpeg;
     $_SESSION['settings'] = serialize ($settings);
     $continue = true;
     if (!$warnings) {
