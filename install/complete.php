@@ -34,18 +34,6 @@ $query .= "('$settings->admin_username', '" . md5 ($settings->admin_password) . 
 $result = mysql_query ($query);
 
 
-
-// Delete install files/dir
-include_once (INSTALL . '/includes/Filesystem.php');
-try {
-    Filesystem::Open();
-    Filesystem::Delete (INSTALL);
-    Filesystem::Close();
-} catch (Exception $e) {
-    $error_msg = 'Unable to delete the install directory.';
-}
-
-
 // Output page
 include_once (INSTALL . '/views/complete.tpl');
 
