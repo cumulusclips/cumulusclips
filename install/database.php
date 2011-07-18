@@ -109,7 +109,7 @@ if (isset ($_POST['submitted'])) {
             $settings->db_hostname = $hostname;
             $settings->db_name = $name;
             $settings->db_username = $username;
-            $settings->db_passoword = $password;
+            $settings->db_password = $password;
             $settings->db_prefix = $prefix;
             $settings->completed[] = 'database';
             $_SESSION['settings'] = serialize ($settings);
