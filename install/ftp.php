@@ -56,7 +56,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate hostname
     $pattern = '/^[a-z0-9][a-z0-9\.\-]*$/i';
-    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname']) && preg_match ($patern, $_POST['hostname'])) {
+    if (!empty ($_POST['hostname']) && !ctype_space ($_POST['hostname']) && preg_match ($pattern, $_POST['hostname'])) {
         $hostname = trim ($_POST['hostname']);
     } else {
         $errors['hostname'] = 'A valid hostname is needed';
