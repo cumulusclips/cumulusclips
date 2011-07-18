@@ -194,7 +194,7 @@ CREATE TABLE `settings` (
 
 /*Data for the table `settings` */
 
-insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(3,'auto_approve_users','true'),(4,'auto_approve_videos','true'),(5,'auto_approve_comments','true'),(6,'ftp_host','localhost'),(7,'ftp_username','miguel'),(8,'ftp_password','Damian646'),(9,'ftp_protocol','ftp');
+insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(3,'auto_approve_users','true'),(4,'auto_approve_videos','true'),(5,'auto_approve_comments','true'),(6,'ftp_hostname','localhost'),(7,'ftp_username','miguel'),(8,'ftp_password','Damian646'),(9,'ftp_protocol','ftp');
 
 /*Table structure for table `subscriptions` */
 
@@ -211,6 +211,23 @@ CREATE TABLE `subscriptions` (
 /*Data for the table `subscriptions` */
 
 insert  into `subscriptions`(`sub_id`,`user_id`,`member`,`date_created`) values (1,56,52,'2009-07-27 00:00:00'),(2,67,32,'2009-08-24 00:00:00'),(3,69,29,'2009-08-30 00:00:00'),(4,70,29,'2009-09-01 00:00:00'),(5,85,64,'2009-10-12 00:00:00'),(6,89,27,'2009-11-03 00:00:00'),(8,99,63,'2009-12-16 00:00:00'),(9,106,105,'2010-01-04 00:00:00'),(10,114,64,'2010-01-17 00:00:00'),(11,125,97,'2010-02-07 00:00:00'),(12,125,32,'2010-02-07 00:00:00'),(13,125,64,'2010-02-07 00:00:00'),(14,125,110,'2010-02-07 00:00:00'),(15,125,105,'2010-02-07 00:00:00'),(16,125,20,'2010-02-07 00:00:00'),(17,125,31,'2010-02-07 00:00:00'),(18,125,100,'2010-02-07 00:00:00'),(19,125,27,'2010-02-07 00:00:00'),(20,125,34,'2010-02-07 00:00:00'),(21,125,98,'2010-02-07 00:00:00'),(22,125,26,'2010-02-07 00:00:00'),(23,125,63,'2010-02-07 00:00:00'),(24,125,95,'2010-02-07 00:00:00'),(25,125,36,'2010-02-07 00:00:00'),(26,125,29,'2010-02-07 00:00:00'),(27,125,33,'2010-02-07 00:00:00'),(28,125,35,'2010-02-07 00:00:00'),(29,125,30,'2010-02-07 00:00:00'),(30,126,19,'2010-02-09 00:00:00'),(31,150,63,'2010-03-25 00:00:00'),(33,152,28,'2010-04-08 00:00:00'),(34,152,20,'2010-04-08 00:00:00'),(35,152,26,'2010-04-08 00:00:00'),(36,152,34,'2010-04-08 00:00:00'),(37,152,64,'2010-04-08 00:00:00'),(38,152,97,'2010-04-08 00:00:00'),(39,21,141,'2010-04-09 00:00:00'),(40,21,20,'2010-04-09 00:00:00'),(41,21,26,'2010-04-09 00:00:00'),(42,21,25,'2010-04-09 00:00:00'),(43,21,108,'2010-04-09 00:00:00'),(44,164,152,'2010-04-20 00:00:00'),(45,164,34,'2010-04-20 00:00:00'),(46,174,100,'2010-05-26 00:00:00'),(47,176,97,'2010-06-16 00:00:00'),(48,194,29,'2010-08-05 00:00:00'),(49,194,95,'2010-08-05 00:00:00'),(50,216,27,'2010-09-09 00:00:00'),(51,226,105,'2010-09-24 00:00:00'),(52,228,100,'2010-09-29 00:00:00'),(53,229,141,'2010-09-29 00:00:00'),(55,239,63,'2010-10-13 00:00:00'),(57,271,246,'2010-12-15 00:00:00'),(58,304,246,'2011-01-12 00:00:00'),(59,349,274,'2011-02-06 00:00:00'),(60,352,63,'2011-02-06 00:00:00'),(82,20,105,'2011-03-10 05:27:18'),(81,20,29,'2011-03-10 05:27:18'),(80,20,95,'2011-03-10 05:27:18'),(79,20,100,'2011-03-10 05:27:18'),(78,20,246,'2011-03-10 05:27:18'),(75,20,63,'2011-03-10 05:27:18'),(77,20,141,'2011-03-10 05:27:18'),(76,20,274,'2011-03-10 05:27:18'),(99,18,246,'2011-03-10 05:27:18'),(95,18,105,'2011-03-10 05:27:18'),(94,18,63,'2011-03-10 05:27:18'),(91,18,100,'2011-03-10 05:27:18'),(98,18,100,'2011-03-10 05:27:18'),(96,18,29,'2011-03-10 05:27:18'),(101,18,274,'2011-03-10 05:27:18');
+
+/*Table structure for table `updates` */
+
+DROP TABLE IF EXISTS `updates`;
+
+CREATE TABLE `updates` (
+  `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(250) NOT NULL,
+  `cat_description` text,
+  `date_created` date NOT NULL,
+  PRIMARY KEY (`cat_id`),
+  UNIQUE KEY `channel_id` (`cat_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+/*Data for the table `updates` */
+
+insert  into `updates`(`cat_id`,`cat_name`,`cat_description`,`date_created`) values (28,'Programming',NULL,'2010-09-06'),(12,'Windows','Everything about all Windows operating systems','2009-03-08'),(14,'Computer Hardware','RAM, Motherboards, Hard Drives, CPU & Proccessors','2009-06-08'),(15,'Web Design','PHP, JSP, C#, ASP, AJAX, PERL, ColdFusion, VB.NET, JavaScript','2009-06-08'),(18,'Software and CMS','PhotoShop, Final Cut, GIMP, Excel, Flash, Access, Illustrator, DreamWeaver, Word, and other software','2011-01-08'),(20,'Electronics','Car stereos, home theaters, Blu-Rays, Xbox, PS3, LCD/Plasma','2011-03-08'),(24,'Apple','OS X, Aqua, Finder, Mac Pro, iLife Apps, and other Apple related videos','2011-03-08'),(23,'Linux','Linux operating system and components','2011-03-08'),(25,'Graphic Design and Animation','Graphic Design and production, 3D animation, stopmotion, cartoon animation','2011-03-08'),(26,'Video and Audio','Video production, sound mixing, audio production and other related screencast and tutorials','0000-00-00');
 
 /*Table structure for table `users` */
 

@@ -44,7 +44,7 @@ include ('header.php');
     <p>Your login for the main site and the admin panel are one in the same. To
     enter the admin panel simply login and click on 'Admin'.</p>
 
-    <p>Thank you for choosing CumulusClips to power your video sharing platform.</p>
+    <p>Thank you for choosing CumulusClips as your video sharing platform.</p>
     <p><a href="" class="button">View My Site</a></p>
 </div>
 <?php endif; ?>
