@@ -123,8 +123,7 @@ SIDEBAR STYLES
 .requirements-done #sidebar .requirements,
 .ftp-done #sidebar .ftp,
 .database-done #sidebar .database,
-.site-details-done #sidebar .site-details,
-.site-details-done #sidebar .complete
+.site-details-done #sidebar .site-details
 {
     background:url('../images/accept.png') no-repeat 4px 9px;
     color:#060;

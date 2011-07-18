@@ -34,7 +34,9 @@ $query .= "('$settings->admin_username', '" . md5 ($settings->admin_password) . 
 $result = mysql_query ($query);
 
 
-// Output page
-include_once (INSTALL . '/views/complete.tpl');
+// Log user into admin panel
+$id = mysql_insert_id();
+$_SESSION['user_id'] = $id;
+header ("Location: " . $settings->base_url . '/cc-admin/?first_run');
 
 ?>
