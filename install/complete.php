@@ -10,6 +10,7 @@ if (!in_array ('site-details', $settings->completed)) {
 // Establish needed vars.
 $page_title = 'CumulusClips - Complete';
 unset ($_SESSION['settings']);
+$error_msg = null;
 
 
 ### Save provided information to the database
@@ -36,9 +37,13 @@ $result = mysql_query ($query);
 
 // Delete install files/dir
 include_once (INSTALL . '/includes/Filesystem.php');
-Filesystem::Open();
-Filesystem::Delete (INSTALL);
-Filesystem::Close();
+try {
+    Filesystem::Open();
+    Filesystem::Delete (INSTALL);
+    Filesystem::Close();
+} catch (Exception $e) {
+    $error_msg = 'Unable to delete the install directory.';
+}
 
 
 // Output page

@@ -69,7 +69,7 @@ if (isset ($_POST['submitted'])) {
         $settings->base_url = $url;
         $settings->sitename = $sitename;
         $settings->admin_username = $username;
-        $settings->admin_passowrd = $password;
+        $settings->admin_password = $password;
         $settings->admin_email = $email;
         $settings->completed[] = 'site-details';
         $_SESSION['settings'] = serialize ($settings);
