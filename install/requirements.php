@@ -51,26 +51,26 @@ if (empty ($which_results)) {
 
 
 // Check if FFMPEG is installed (using which)
-@exec ('which ffmpeg', $which_results);
-if (empty ($which_results)) {
+@exec ('which ffmpeg', $which_results_ffmpeg);
+if (empty ($which_results_ffmpeg)) {
     
     // Check if FFMPEG is installed (using whereis)
-    @exec ('whereis ffmpeg', $whereis_results);
-    $whereis_results = preg_replace ('/^ffmpeg:\s?/','', $whereis_results[0]);
-    if (empty ($whereis_results)) {
+    @exec ('whereis ffmpeg', $whereis_results_ffmpeg);
+    $whereis_results_ffmpeg = preg_replace ('/^ffmpeg:\s?/','', $whereis_results_ffmpeg[0]);
+    if (empty ($whereis_results_ffmpeg)) {
         $settings->ffmpeg = '';
         $ffmpeg = false;
         $settings->uploads_enabled = false;
         $warnings = true;
     } else {
-        $path = explode (' ', $whereis_results[0]);
-        $settings->ffmpeg = $path[0];
+        $path_ffmpeg = explode (' ', $whereis_results_ffmpeg[0]);
+        $settings->ffmpeg = $path_ffmpeg[0];
         $settings->uploads_enabled = true;
         $ffmpeg = true;
     }
     
 } else {
-    $settings->ffmpeg = $which_results[0];
+    $settings->ffmpeg = $which_results_ffmpeg[0];
     $settings->uploads_enabled = true;
     $ffmpeg = true;
 }

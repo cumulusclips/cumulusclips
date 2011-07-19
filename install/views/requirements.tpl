@@ -45,7 +45,7 @@
                             <td>
                                 <img src="images/<?php echo ($ffmpeg) ? 'tick.png' : 'flag_yellow.png'; ?>" />
                                 <?php if (!$ffmpeg): ?>
-                                FFMPEG was not found. Video uploads has been disabled. <a href="#" class="more-info" data-content="ffmpeg" title="More Info">More Info</a>
+                                FFMPEG was not found. Video uploads have been disabled. <a href="#" class="more-info" data-content="ffmpeg" title="More Info">More Info</a>
                                 <?php endif; ?>
                             </td>
                         </tr>
