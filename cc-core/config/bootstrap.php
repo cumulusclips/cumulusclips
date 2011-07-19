@@ -1,6 +1,6 @@
 <?php
 
-// Define system paths and settings
+// Define system paths and vars
 define ('DOC_ROOT', dirname (dirname ( dirname ( __FILE__ ))));
 define ('LIB', DOC_ROOT . '/cc-core/lib');
 define ('THEMES_DIR', DOC_ROOT . '/cc-content/themes');

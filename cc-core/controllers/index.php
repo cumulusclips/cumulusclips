@@ -22,9 +22,7 @@ if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
 
 // Retrieve Featured Video
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1";
-$result = $db->Query ($query);
-$row = $db->FetchObj ($result);
-View::$vars->featured = new Video ($row->video_id);
+$result_featured = $db->Query ($query);
 
 
 // Retrieve Recent Videos

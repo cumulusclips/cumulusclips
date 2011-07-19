@@ -45,7 +45,7 @@ include ('header.php');
     enter the admin panel simply login and click on 'Admin'.</p>
 
     <p>Thank you for choosing CumulusClips as your video sharing platform.</p>
-    <p><a href="" class="button">View My Site</a></p>
+    <p><a href="<?=HOST?>/" class="button">View My Site</a></p>
 </div>
 <?php endif; ?>
 

@@ -35,21 +35,43 @@ if (count ($version) > 1){
 }
 
 
+// Retrieve php path
+@exec ('which php', $which_results);
+if (empty ($which_results)) {
+
+    // Find PHP path using whereis
+    @exec ('whereis php', $whereis_results);
+    $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
+    $path = explode (' ', $whereis_results[0]);
+    $settings->php = $path[0];
+
+} else {
+    $settings->php = $which_results[0];
+}
+
+
 // Check if FFMPEG is installed (using which)
 @exec ('which ffmpeg', $which_results);
-if (empty ($which_results) || empty ($which_results[0])) {
+if (empty ($which_results)) {
     
     // Check if FFMPEG is installed (using whereis)
     @exec ('whereis ffmpeg', $whereis_results);
-    $whereis_results = preg_replace ('/^ffmpeg:/','', $whereis_results[0]);
+    $whereis_results = preg_replace ('/^ffmpeg:\s?/','', $whereis_results[0]);
     if (empty ($whereis_results)) {
+        $settings->ffmpeg = '';
         $ffmpeg = false;
+        $settings->uploads_enabled = false;
         $warnings = true;
     } else {
+        $path = explode (' ', $whereis_results[0]);
+        $settings->ffmpeg = $path[0];
+        $settings->uploads_enabled = true;
         $ffmpeg = true;
     }
     
 } else {
+    $settings->ffmpeg = $which_results[0];
+    $settings->uploads_enabled = true;
     $ffmpeg = true;
 }
 
@@ -124,9 +146,6 @@ if (!$uploads) $errors = true;
 // Continue to next step if no errors
 if (!$errors) {
     $settings->completed[] = 'requirements';
-    $settings->uploads_enabled = $ffmpeg;
-    $settings->php = '/usr/bin/php';
-    $settings->ffmpeg = '/usr/bin/ffmpeg';
     $_SESSION['settings'] = serialize ($settings);
     $continue = true;
     if (!$warnings) {

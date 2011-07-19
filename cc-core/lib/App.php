@@ -72,7 +72,7 @@ class App {
             header ("Location: $HOST/install/");
             exit();
         } else if ((!file_exists (DOC_ROOT . '/cc-core/config/config.php') || file_exists (DOC_ROOT . '/install')) && !isset ($_GET['first_run'])) {
-            exit('<!DOCTYPE html><html><head><title>Incomplete Install</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Incomplete Install</h1><div class="block"><p>We are currently undergoing scheduled maintenance. Please try back later.</p><p>Sorry for the inconvenience.</p></div></div></body></html>');
+//            exit('<!DOCTYPE html><html><head><title>Incomplete Install</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Incomplete Install</h1><div class="block"><p>It appears the install process did not complete properly. Please re-run the installer and ensure so see it through to the end.</p></div></div></body></html>');
         }
         
     }
