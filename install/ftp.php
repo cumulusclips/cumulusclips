@@ -43,7 +43,7 @@ if ($native) {
     $settings->ftp_hostname = '';
     $settings->ftp_username = '';
     $settings->ftp_password = '';
-    $settings->ftp_ssl = 'false';
+    $settings->ftp_ssl = false;
     $settings->completed[] = 'ftp';
     $_SESSION['settings'] = serialize ($settings);
     header ("Location: " . HOST . '/install/?database');
