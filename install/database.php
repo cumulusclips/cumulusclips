@@ -88,17 +88,25 @@ if (isset ($_POST['submitted'])) {
 
 
             // Open temp config file and replace placeholders with actual values
-            $config_file = INSTALL . '/includes/config.php.txt';
+            $config_file = INSTALL . '/includes/config.default.php';
             $config_content = @file_get_contents ($config_file);
+            
+            // DB Values
             $config_content = preg_replace ('/{DB_HOST}/i', $hostname, $config_content);
             $config_content = preg_replace ('/{DB_NAME}/i', $name, $config_content);
             $config_content = preg_replace ('/{DB_USER}/i', $username, $config_content);
             $config_content = preg_replace ('/{DB_PASS}/i', $password, $config_content);
             $config_content = preg_replace ('/{DB_PREFIX}/i', $prefix, $config_content);
+            
+            // FTP Values
+            $config_content = preg_replace ('/{FTP_HOST}/i', $settings->ftp_hostname, $config_content);
+            $config_content = preg_replace ('/{FTP_USER}/i', $settings->ftp_username, $config_content);
+            $config_content = preg_replace ('/{FTP_PASS}/i', $settings->ftp_password, $config_content);
+            $config_content = preg_replace ('/{FTP_SSL}/i', ($settings->ftp_ssl) ? 'true' : 'false', $config_content);
 
 
             // Save database settings to config file in permanent location
-            $perm_config_file = DOC_ROOT . '/cc-core/config/config.php.txt';
+            $perm_config_file = DOC_ROOT . '/cc-core/config/config.php';
             Filesystem::Open();
             Filesystem::Create ($perm_config_file);
             Filesystem::Write ($perm_config_file, $config_content);

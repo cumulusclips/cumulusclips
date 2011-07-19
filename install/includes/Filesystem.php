@@ -7,7 +7,7 @@ class Filesystem {
     static private $ftp_hostname;
     static private $ftp_username;
     static private $ftp_password;
-    static private $ftp_protocol;
+    static private $ftp_ssl;
 
 
 
@@ -42,14 +42,14 @@ class Filesystem {
             self::$ftp_hostname = $settings->ftp_hostname;
             self::$ftp_username = $settings->ftp_username;
             self::$ftp_password = $settings->ftp_password;
-            self::$ftp_protocol = $settings->ftp_protocol;
+            self::$ftp_ssl = $settings->ftp_ssl;
 
             // Connect to FTP host
-            if (self::$ftp_protocol == 'ftp') {
-                self::$ftp_stream = @ftp_connect (self::$ftp_hostname);
-            } else {
+            if (self::$ftp_ssl) {
                 if (!function_exists('ftp_ssl_connect')) throw new Exception ("Your host doesn't support FTP over SSL connections.");
                 self::$ftp_stream = @ftp_ssl_connect (self::$ftp_hostname);
+            } else {
+                self::$ftp_stream = @ftp_connect (self::$ftp_hostname);
             }
             if (!self::$ftp_stream) throw new Exception ("Unable to connect to FTP host (" . self::$ftp_hostname . ")");
 

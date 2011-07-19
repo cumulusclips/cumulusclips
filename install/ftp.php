@@ -40,10 +40,10 @@ if ($native) {
 
 // Redirect user if FTP access isn't needed
 if ($native) {
-    $settings->ftp_hostname = 'localhost';
+    $settings->ftp_hostname = '';
     $settings->ftp_username = '';
     $settings->ftp_password = '';
-    $settings->ftp_protocol = 'ftp';
+    $settings->ftp_ssl = 'false';
     $settings->completed[] = 'ftp';
     $_SESSION['settings'] = serialize ($settings);
     header ("Location: " . HOST . '/install/?database');
@@ -79,11 +79,11 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate protocol
-    if (isset ($_POST['protocol']) && in_array ($_POST['protocol'], array ('ftp', 'ftps'))) {
-        $protocol = $_POST['protocol'];
+    // Validate connection method
+    if (isset ($_POST['method']) && in_array ($_POST['method'], array ('ftp', 'ftps'))) {
+        $method = $_POST['method'];
     } else {
-        $errors['protocol'] = 'A valid protocol is needed';
+        $errors['method'] = 'A valid connection method is needed';
     }
 
 
@@ -96,7 +96,7 @@ if (isset ($_POST['submitted'])) {
         try {
 
             // Connect to FTP server
-            if ($protocol == 'ftp') {
+            if ($method == 'ftp') {
                 $stream = @ftp_connect ($hostname);
             } else {
                 if (!function_exists('ftp_ssl_connect')) throw new Exception ("Your host doesn't support FTP over SSL connections.");
@@ -128,7 +128,7 @@ if (isset ($_POST['submitted'])) {
             $settings->ftp_hostname = $hostname;
             $settings->ftp_username = $username;
             $settings->ftp_password = $password;
-            $settings->ftp_protocol = $protocol;
+            $settings->ftp_ssl = ($method == 'ftps') ? true : false;
             $settings->completed[] = 'ftp';
             $_SESSION['settings'] = serialize ($settings);
             header ("Location: " . HOST . '/install/?database');

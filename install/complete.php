@@ -19,13 +19,13 @@ mysql_select_db ($settings->db_name, $dbc);
 
 // Save settings
 $query = "INSERT INTO " . $settings->db_prefix . "settings (name, value) VALUES";
-$query .= " ('ftp_hostname', '$settings->ftp_hostname'),";
-$query .= " ('ftp_username', '$settings->ftp_username'),";
-$query .= " ('ftp_password', '$settings->ftp_password'),";
-$query .= " ('ftp_protocol', '$settings->ftp_protocol'),";
 $query .= " ('base_url', '$settings->base_url'),";
+$query .= " ('secret_key', '" . md5(time()) . "'),";
 $query .= " ('sitename', '" . mysql_real_escape_string ($settings->sitename) . "'),";
-$query .= " ('uploads_enabled', '$settings->uploads_enabled')";
+$query .= " ('admin_email', '$settings->admin_email'),";
+$query .= " ('uploads_enabled', '$settings->uploads_enabled'),";
+$query .= " ('ffmpeg', '$settings->ffmpeg'),";
+$query .= " ('php', '$settings->php')";
 $result = mysql_query ($query);
 
 // Save admin user

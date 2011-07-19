@@ -236,6 +236,26 @@ CREATE TABLE `{DB_PREFIX}settings` (
 
 CREATE_SETTINGS_TABLE;
 
+$_POPULATE_SETTINGS_TABLE = <<<POPULATE_SETTINGS_TABLE
+
+INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
+('active_theme','cumulus'),
+('default_language', 'english'),
+('active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),
+('auto_approve_users',1),
+('auto_approve_videos',1),
+('auto_approve_comments',1),
+('debug_conversion',0),
+('live','true'),
+('video_size_limit','102000000'),
+('accepted_video_formats','a:8:{i:0;s:3:\"flv\";i:1;s:3:\"wmv\";i:2;s:3:\"avi\";i:3;s:3:\"ogg\";i:4;s:3:\"mpg\";i:5;s:3:\"mp4\";i:6;s:3:\"mov\";i:7;s:3:\"m4v\";}'),
+('pagination_page_limit','9'),
+('flv_bucket_url','http://c1495122.cdn.cloudfiles.rackspacecloud.com'),
+('mp4_bucket_url','http://c1488222.cdn.cloudfiles.rackspacecloud.com'),
+('thumb_bucket_url','http://c1495132.cdn.cloudfiles.rackspacecloud.com')
+
+POPULATE_SETTINGS_TABLE;
+
 
 
 
@@ -353,6 +373,7 @@ $install_queries = array (
     $_CREATE_RATINGS_TABLE,
     $_DROP_SETTINGS_TABLE,
     $_CREATE_SETTINGS_TABLE,
+    $_POPULATE_SETTINGS_TABLE,
     $_DROP_SUBSCRIPTIONS_TABLE,
     $_CREATE_SUBSCRIPTIONS_TABLE,
     $_DROP_USERS_TABLE,

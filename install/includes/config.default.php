@@ -8,10 +8,9 @@ define ('DB_NAME', '{DB_NAME}');
 define ('DB_PREFIX', '{DB_PREFIX}');
 
 // FTP Credentials
-define ('FS_METHOD', '{FS_METHOD}');
 define ('FTP_HOST', '{FTP_HOST}');
 define ('FTP_USER', '{FTP_USER}');
 define ('FTP_PASS', '{FTP_PASS}');
-define ('FTP_SSL', '{FTP_SSL}');
+define ('FTP_SSL', {FTP_SSL});
 
 ?>

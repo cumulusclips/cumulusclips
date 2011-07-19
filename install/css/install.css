@@ -261,7 +261,7 @@ FORM & MESSAGE STYLES
 }
 
 .row-shift {
-    margin-left:115px;
+    margin-left:140px;
     margin-bottom:15px;
     line-height:15px;
 }
@@ -270,11 +270,11 @@ FORM & MESSAGE STYLES
     float:left;
     text-align:right;
     margin-right:15px;
-    width:100px;
+    width:125px;
     font-weight:bold;
 }
 
-#protocol label {
+#connection-method label {
     float:none;
     text-align:left;
     margin-right:25px;

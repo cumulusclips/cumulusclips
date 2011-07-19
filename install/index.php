@@ -5,8 +5,9 @@
 // Retrieve base URL
 $PROTOCOL = (!empty ($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 $HOSTNAME = $_SERVER['SERVER_NAME'];
-$PATH = rtrim (dirname (preg_replace ('/\?' . $_SERVER['QUERY_STRING'] . '/', '', $_SERVER['REQUEST_URI'])), '/');
-$HOST = $PROTOCOL . $HOSTNAME . $PATH;
+$PORT = ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT']);
+$PATH = rtrim (dirname (preg_replace ('/\?.*/', '', $_SERVER['REQUEST_URI'])), '/');
+$HOST = $PROTOCOL . $HOSTNAME . $PORT . $PATH;
 
 
 // Establish vars

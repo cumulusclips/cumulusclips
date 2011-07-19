@@ -125,6 +125,8 @@ if (!$uploads) $errors = true;
 if (!$errors) {
     $settings->completed[] = 'requirements';
     $settings->uploads_enabled = $ffmpeg;
+    $settings->php = '/usr/bin/php';
+    $settings->ffmpeg = '/usr/bin/ffmpeg';
     $_SESSION['settings'] = serialize ($settings);
     $continue = true;
     if (!$warnings) {

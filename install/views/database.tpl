@@ -18,16 +18,16 @@
                 <form method="post" action="<?php echo HOST; ?>/install/?database">
                 <div class="row-shift">An asterisk (*) denotes required field</div>
 
-                <div class="row <?php echo (isset ($errors['hostname'])) ? 'errors' : ''; ?>"><label>*Hostname:</label><input type="text" class="text" name="hostname" value="<?php echo (isset ($hostname)) ? $hostname : 'localhost'; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['hostname'])) ? 'errors' : ''; ?>"><label>*Database Host:</label><input type="text" class="text" name="hostname" value="<?php echo (isset ($hostname)) ? $hostname : 'localhost'; ?>" /></div>
                 <div class="row-shift">The hostname of your database server. If you're not sure just use localhost.</div>
 
                 <div class="row <?php echo (isset ($errors['name'])) ? 'errors' : ''; ?>"><label>*Database Name:</label><input type="text" class="text" name="name" value="<?php echo (isset ($name)) ? $name : ''; ?>" /></div>
                 <div class="row-shift">Name of your database.</div>
 
-                <div class="row <?php echo (isset ($errors['username'])) ? 'errors' : ''; ?>"><label>*Username:</label><input type="text" class="text" name="username" value="<?php echo (isset ($username)) ? $username : ''; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['username'])) ? 'errors' : ''; ?>"><label>*Database User:</label><input type="text" class="text" name="username" value="<?php echo (isset ($username)) ? $username : ''; ?>" /></div>
                 <div class="row-shift">Username you use to connect to your database.</div>
 
-                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>*Password:</label><input type="text" class="text" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>*Database Password:</label><input type="text" class="text" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
                 <div class="row-shift">Password you use to connect to your database.</div>
 
                 <div class="row <?php echo (isset ($errors['prefix'])) ? 'errors' : ''; ?>"><label>Table Prefix:</label><input type="text" class="text" name="prefix" value="<?php echo (isset ($prefix)) ? $prefix : ''; ?>" /></div>
