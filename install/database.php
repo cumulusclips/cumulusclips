@@ -1,7 +1,10 @@
 <?php
 
 // Send user to appropriate step
-if (!in_array ('ftp', $settings->completed)) {
+if (!isset ($settings->completed)) {
+    header ("Location: " . HOST . '/install/');
+    exit();
+} else if (!in_array ('ftp', $settings->completed)) {
     header ("Location: " . HOST . '/install/?ftp');
     exit();
 } else if (in_array ('database', $settings->completed)) {
@@ -75,14 +78,14 @@ if (isset ($_POST['submitted'])) {
 
 
             // Select user's database for operation
-            $select = mysql_select_db ($name, $dbc);
+            $select = @mysql_select_db ($name, $dbc);
             if (!$select) throw new Exception ("Unable to use database you specified. Please verify the name is correct and that you have access to it.");
 
 
             // Perform install queries
             foreach ($install_queries as $query) {
                 $query = str_replace ('{DB_PREFIX}', $prefix, str_replace ("\n", '', ($query)));
-                $result = mysql_query ($query);
+                $result = @mysql_query ($query);
                 if (!$result) throw new Exception ("Unable to execute queries. Please verify you have write access to the database.");
             }
 

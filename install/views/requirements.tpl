@@ -34,9 +34,14 @@
                         <tr>
                             <td class="server-setting">PHP 5.2+</td>
                             <td>
-                                <img src="images/<?php echo ($version) ? 'tick.png' : 'cross.png'; ?>" />
                                 <?php if (!$version): ?>
-                                CumulusClips requires at least PHP 5.2 to run. (Current version <?php echo $current_version; ?>)
+                                    <img src="images/cross.png" />
+                                    CumulusClips requires at least PHP 5.2 to run. (Current version <?php echo $current_version; ?>)
+                                <?php elseif (!$php_path): ?>
+                                    <img src="images/flag_yellow.png" />
+                                    PHP path was not found. Video uploads have been disabled. <a href="#" class="more-info" data-content="php" title="More Info">More Info</a>
+                                <?php else: ?>
+                                    <img src="images/tick.png" />
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -209,6 +214,13 @@
                         You will not be able to upload videos without this.
                         You can add this later in the admin panel, or also use a
                         plugin or other service instead.</span>
+                    </div>
+
+                    <div class="more-info-content" id="php">
+                        <span class="tip">PHP path is used to convert uploaded
+                        videos if you're not using a plugin or service to do so.
+                        You can find out what the path is to PHP from your web
+                        host, and add it later in the admin panel.</span>
                     </div>
 
 

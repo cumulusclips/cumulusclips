@@ -1,7 +1,7 @@
 <?php
 
 // Send user to appropriate step
-if (!in_array ('welcome', $settings->completed)) {
+if (!isset ($settings->completed) || !in_array ('welcome', $settings->completed)) {
     header ("Location: " . HOST . '/install/');
     exit();
 } else if (in_array ('requirements', $settings->completed)) {
@@ -15,6 +15,7 @@ $page_title = 'CumulusClips - Requirements';
 $errors = null;
 $warnings = null;
 $continue = null;
+
 
 
 // Check PHP version
@@ -35,6 +36,8 @@ if (count ($version) > 1){
 }
 
 
+
+
 // Retrieve php path
 @exec ('which php', $which_results);
 if (empty ($which_results)) {
@@ -42,12 +45,23 @@ if (empty ($which_results)) {
     // Find PHP path using whereis
     @exec ('whereis php', $whereis_results);
     $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
-    $path = explode (' ', $whereis_results[0]);
-    $settings->php = $path[0];
+    if (!empty ($whereis_results)) {
+        $path = explode (' ', $whereis_results[0]);
+        $settings->php = $path[0];
+        $php_path = true;
+    } else {
+        $settings->php = '';
+        $warnings = true;
+        $php_path = false;
+        $disable_uploads = true;
+    }
 
 } else {
     $settings->php = $which_results[0];
+    $php_path = true;
 }
+
+
 
 
 // Check if FFMPEG is installed (using which)
@@ -60,20 +74,19 @@ if (empty ($which_results_ffmpeg)) {
     if (empty ($whereis_results_ffmpeg)) {
         $settings->ffmpeg = '';
         $ffmpeg = false;
-        $settings->uploads_enabled = false;
+        $disable_uploads = true;
         $warnings = true;
     } else {
         $path_ffmpeg = explode (' ', $whereis_results_ffmpeg[0]);
         $settings->ffmpeg = $path_ffmpeg[0];
-        $settings->uploads_enabled = true;
         $ffmpeg = true;
     }
     
 } else {
     $settings->ffmpeg = $which_results_ffmpeg[0];
-    $settings->uploads_enabled = true;
     $ffmpeg = true;
 }
+
 
 
 
@@ -145,6 +158,7 @@ if (!$uploads) $errors = true;
 
 // Continue to next step if no errors
 if (!$errors) {
+    $settings->uploads_enabled = (isset ($disable_uploads)) ? false : true;
     $settings->completed[] = 'requirements';
     $_SESSION['settings'] = serialize ($settings);
     $continue = true;

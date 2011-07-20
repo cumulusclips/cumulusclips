@@ -1,7 +1,10 @@
 <?php
 
 // Send user to appropriate step
-if (!in_array ('database', $settings->completed)) {
+if (!isset ($settings->completed)) {
+    header ("Location: " . HOST . '/install/');
+    exit();
+} else if (!in_array ('database', $settings->completed)) {
     header ("Location: " . HOST . '/install/?database');
     exit();
 } else if (in_array ('site-details', $settings->completed)) {

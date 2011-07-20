@@ -1,7 +1,10 @@
 <?php
 
 // Send user to appropriate step
-if (!in_array ('requirements', $settings->completed)) {
+if (!isset ($settings->completed)) {
+    header ("Location: " . HOST . '/install/');
+    exit();
+} else if (!in_array ('requirements', $settings->completed)) {
     header ("Location: " . HOST . '/install/?requirements');
     exit();
 } else if (in_array ('ftp', $settings->completed)) {
