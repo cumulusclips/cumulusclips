@@ -31,7 +31,7 @@
                     Only letters &amp; numbers, special characters are not allowed.
                 </div>
 
-                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>Admin Password:</label><input type="text" class="text" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>Admin Password:</label><input type="password" class="text mask" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
                 <div class="row-shift">Password for your admin account.</div>
 
                 <div class="row <?php echo (isset ($errors['email'])) ? 'errors' : ''; ?>"><label>Admin E-mail:</label><input type="text" class="text" name="email" value="<?php echo (isset ($email)) ? $email : ''; ?>" /></div>

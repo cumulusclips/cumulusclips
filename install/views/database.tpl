@@ -27,7 +27,7 @@
                 <div class="row <?php echo (isset ($errors['username'])) ? 'errors' : ''; ?>"><label>*Database User:</label><input type="text" class="text" name="username" value="<?php echo (isset ($username)) ? $username : ''; ?>" /></div>
                 <div class="row-shift">Username you use to connect to your database.</div>
 
-                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>*Database Password:</label><input type="text" class="text" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>*Database Password:</label><input type="password" class="text mask" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
                 <div class="row-shift">Password you use to connect to your database.</div>
 
                 <div class="row <?php echo (isset ($errors['prefix'])) ? 'errors' : ''; ?>"><label>Table Prefix:</label><input type="text" class="text" name="prefix" value="<?php echo (isset ($prefix)) ? $prefix : ''; ?>" /></div>

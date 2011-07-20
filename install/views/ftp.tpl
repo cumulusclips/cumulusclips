@@ -24,7 +24,7 @@
                 <div class="row <?php echo (isset ($errors['username'])) ? 'errors' : ''; ?>"><label>FTP Username:</label><input type="text" class="text" name="username" value="<?php echo (isset ($username)) ? $username : ''; ?>" /></div>
                 <div class="row-shift">FTP username you use to upload files to your website.</div>
 
-                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>FTP Password:</label><input type="text" class="text" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
+                <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>FTP Password:</label><input type="password" class="text mask" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
                 <div class="row-shift">Password you use to upload files to your website.</div>
 
                 <div class="row <?php echo (isset ($errors['method'])) ? 'errors' : ''; ?>">
