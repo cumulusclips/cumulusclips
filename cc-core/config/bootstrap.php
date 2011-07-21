@@ -44,6 +44,7 @@ Settings::LoadSettings();
 
 // General Site Settings from DB
 define ('HOST', Settings::Get ('base_url'));
+define ('MOBILE_HOST', Settings::Get ('base_url') . '/m');
 define ('SECRET_KEY', Settings::Get ('secret_key'));
 define ('ADMIN_EMAIL', Settings::Get ('admin_email'));
 
@@ -75,5 +76,9 @@ if (!headers_sent() && session_id() == '') {
 // Initialize plugin system
 Plugin::Init();
 Plugin::Trigger ('app.start');
+
+
+// Check for mobile devices
+App::MobileCheck();
 
 ?>

@@ -37,6 +37,7 @@ RewriteRule ^contact/$ cc-core/controllers/contact.php [NC,L]
 
 
 ### System Pages
+
 RewriteRule ^page/$ cc-core/system/page.php [NC,L]
 RewriteRule ^notify/$ cc-core/system/notify.php [NC,L]
 RewriteRule ^language/get/$ cc-core/system/language.php [NC,L]
@@ -50,6 +51,7 @@ RewriteRule ^actions/subscribe/$ cc-core/system/subscribe.ajax.php [NC,L]
 RewriteRule ^actions/rate/$ cc-core/system/rate.ajax.php [NC,L]
 RewriteRule ^actions/comment/$ cc-core/system/comment.ajax.php [NC,L]
 RewriteRule ^actions/post/$ cc-core/system/post.ajax.php [NC,L]
+
 
 
 
@@ -77,6 +79,18 @@ RewriteRule ^myaccount/message/read/([0-9]+)/$ cc-core/controllers/myaccount/mes
 RewriteRule ^myaccount/message/send/$ cc-core/controllers/myaccount/message_send.php [NC,L]
 RewriteRule ^myaccount/message/send/([a-z0-9]+)/$ cc-core/controllers/myaccount/message_send.php?username=$1 [NC,QSA,L]
 RewriteRule ^myaccount/message/reply/([0-9]+)/$ cc-core/controllers/myaccount/message_send.php?msg=$1 [NC,QSA,L]
+
+
+
+
+### Mobile Site
+
+RewriteRule ^m/$ cc-core/controllers/mobile/index.php?mobile [NC,L]
+RewriteRule ^m/v/$ cc-core/controllers/mobile/videos.php?mobile [NC,L]
+RewriteRule ^m/v/([0-9]+)/$ cc-core/controllers/mobile/play.php?mobile&vid=$1 [NC,L]
+RewriteRule ^m/s/$ cc-core/controllers/mobile/search.php?mobile [NC,L]
+
+
 
 
 ### Player
@@ -107,7 +121,6 @@ RewriteRule ^system-error/$ cc-core/controllers/system_error.php [NC,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) cc-core/system/page.php [L]
-
 
 
 

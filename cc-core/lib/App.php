@@ -84,6 +84,33 @@ class App {
         if (file_exists (DOC_ROOT . '/.updates')) exit('<!DOCTYPE html><html><head><title>Maintenance</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Maintenance</h1><div class="block"><p>We are currently undergoing scheduled maintenance. Please try back later.</p><p>Sorry for the inconvenience.</p></div></div></body></html>');
     }
 
+
+
+
+    static function MobileCheck() {
+
+        // Verify if user opted-out from Mobile site
+        if (isset ($_GET['nomobile'])) {
+            setcookie('nomobile', md5('nomobile'), time()+3600*24*3);
+            header ("Location: " . HOST . '/');
+            exit();
+        }
+
+        // Check for mobile headers
+        $accept = '/vnd\.wap/i';
+        $agent = '/ip(ad|hone|od)|android|blackberry|opera\s?mini|sybian|palm|webos|mobile|phone|wap/i';
+        if (preg_match ($accept, $_SERVER['HTTP_ACCEPT']) || preg_match ($agent, $_SERVER['HTTP_USER_AGENT'])) {
+
+            // Verify user isn't already viewing mobile or has opted out from it
+            if (!isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile'])) {
+                header ("Location: " . MOBILE_HOST);
+                exit();
+            }
+
+        }
+
+    }
+
 }
 
 ?>
