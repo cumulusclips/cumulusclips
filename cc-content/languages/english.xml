@@ -10,10 +10,12 @@
     </information>
     <terms>
         <search_text>@Search Videos...</search_text>
+        <search>@Search</search>
         <login>@Login</login>
         <register>@Sign Up Free</register>
         <logout>@Logout</logout>
         <myaccount>@My Account</myaccount>
+        <home>@Home</home>
         <videos>@Videos</videos>
         <members>@Members</members>
         <upload>@Upload</upload>
@@ -22,8 +24,11 @@
         <yes>@Yes</yes>
         <no>@No</no>
         <quick_links>@Quick Links</quick_links>
+        <standard_site>@Standard Site</standard_site>
+        <duration>@Duration</duration>
 
         <!-- Home Page -->
+        <featured_video_header>@Featured Video</featured_video_header>
         <home_header>@Fresh Out The Oven!</home_header>
         <advertisement>@Advertisement</advertisement>
         <account_login>@Account Login</account_login>
@@ -549,5 +554,20 @@
             <keywords>@Send Message, Message</keywords>
             <description>@Send another member a message.</description>
         </message_send>
+
+
+        <mobile_index>
+            <title>@{SITENAME} Mobile</title>
+        </mobile_index>
+
+        <mobile_videos>
+            <title>@Browse Videos</title>
+        </mobile_videos>
+
+        <mobile_search>
+            <title>@Search results for: '{KEYWORD}'</title>
+        </mobile_search>
+
+        <mobile_play><title></title></mobile_play>
     </meta>
 </language>

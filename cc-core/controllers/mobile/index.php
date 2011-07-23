@@ -11,22 +11,31 @@ App::LoadClass ('Video');
 
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('index');
-Plugin::Trigger ('index.start');
+View::InitView ('mobile_index');
+Plugin::Trigger ('mobile_index.start');
+
+
+// Retrieve updated page title
+$sitename = Settings::Get ('sitename');
+View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('sitename' => $sitename));
 
 
 // Retrieve Featured Video
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1";
+View::$vars->featured_video = array();
 $result_featured = $db->Query ($query);
+while ($video = $db->FetchObj ($result_featured)) View::$vars->featured_video[] = $video->video_id;
 
 
 // Retrieve Recent Videos
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT 3";
-View::$vars->result_recent = $db->Query ($query);
+View::$vars->recent_videos = array();
+$result_recent = $db->Query ($query);
+while ($video = $db->FetchObj ($result_recent)) View::$vars->recent_videos[] = $video->video_id;
 
 
 // Output Page
 Plugin::Trigger ('mobile_index.before_render');
-View::Render ('mobile/index.tpl');
+View::Render ('index.tpl');
 
 ?>

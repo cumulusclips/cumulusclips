@@ -51,6 +51,7 @@ RewriteRule ^actions/subscribe/$ cc-core/system/subscribe.ajax.php [NC,L]
 RewriteRule ^actions/rate/$ cc-core/system/rate.ajax.php [NC,L]
 RewriteRule ^actions/comment/$ cc-core/system/comment.ajax.php [NC,L]
 RewriteRule ^actions/post/$ cc-core/system/post.ajax.php [NC,L]
+RewriteRule ^actions/mobile\-(videos|search)/$ cc-core/system/mobile_$1.ajax.php?mobile [NC,L]
 
 
 

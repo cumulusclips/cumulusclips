@@ -272,7 +272,8 @@ class Functions {
      */
     static function CurrentTheme() {
 
-        $system_theme = Settings::Get ('active_theme');
+//        $system_theme = Settings::Get ('active_theme');
+        $system_theme = 'mobile';
         $theme = $system_theme;
 
         // Preview theme was provided
