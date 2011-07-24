@@ -5,7 +5,7 @@
     <h1>Browse Videos</h1>
     <?php if (!empty ($count)): ?>
 
-        <div class="video-list rounded">
+        <div class="list">
             <?php View::RepeatingBlock('video.tpl', $videos); ?>
 
             <?php if ($count > 20): ?>

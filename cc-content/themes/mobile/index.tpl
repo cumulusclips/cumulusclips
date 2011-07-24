@@ -6,7 +6,7 @@
     <h1><?=Language::GetText('featured_video_header')?></h1>
     <?php if (!empty ($featured_video)): ?>
 
-        <div id="featured-video" class="rounded">
+        <div id="featured-video" class="list">
             <?php View::RepeatingBlock ('video.tpl', $featured_video); ?>
         </div>
 
@@ -21,7 +21,7 @@
     <h1><?=Language::GetText('recent_videos')?></h1>
     <?php if (!empty ($recent_videos)): ?>
 
-        <div class="video-list rounded">
+        <div class="list">
             <?php View::RepeatingBlock ('video.tpl', $recent_videos); ?>
         </div>
 

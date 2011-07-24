@@ -6,53 +6,58 @@
 
 
 // Include required files
-include ($_SERVER['DOCUMENT_ROOT'] . '/__Restricted/__Config.php');
-include (MAIN_ROOT . '/includes/functions.php');
-include (LIB . '/DBConnection.php');
-include (LIB . '/KillApp.php');
-include (LIB . '/Video.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
+App::LoadClass ('Video');
 
 
-// Establish page variables, objects, arrays, etc
-session_start();
-$KillApp = new KillApp;
-$db = new DBConnection ($KillApp);
+if (!isset ($_POST['submitted']) || $_POST['submitted'] != 'true') App::Throw404();
+if (empty ($_POST['keyword']) || ctype_space ($_POST['keyword'])) App::Throw404();
 
-//echo '<pre>',print_r ($_POST,true),'</pre>';
-//exit();
 
-if (!isset ($_POST['submitted']) || $_POST['submitted'] != 'true') {
-    exit();
-}
-
-if (!empty ($_POST['start']) && is_numeric($_POST['start']) && $_POST['start'] > 0) {
+// Validate starting record
+if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
     $start = $_POST['start'];
 } else {
-    exit();
+    $start = 0;
 }
 
-if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
-    $keyword = trim ($_POST['keyword']);
-    $query = "SELECT video_id FROM videos WHERE status = 6 AND MATCH(title, tags, description) AGAINST('$keyword') LIMIT $start, $config->max_list";
-    $result = $db->query ($query);
+
+// Validate output format
+if (!empty ($_POST['format']) && in_array ($_POST['format'], array ('json', 'html'))) {
+
+    if ($_POST['format'] == 'html' && !empty ($_POST['block'])) {
+        $format = 'html';
+        $block = $_POST['block'];
+    } else {
+        $format = 'json';
+    }
+
 } else {
-    exit();
+    $format = 'json';
 }
+
+
+// Retrieve video list
+$keyword = $db->Escape (trim ($_POST['keyword']));
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST('$keyword') LIMIT $start, 20";
+$videos = array();
+$result = $db->Query ($query);
+while ($video = $db->FetchObj ($result)) $videos[] = $video->video_id;
+
+
+// Output video list in requested format
+if ($format == 'html') {
+
+    View::InitView();
+    ob_start();
+    View::RepeatingBlock ($block, $videos);
+    $output = ob_get_contents();
+    ob_end_clean();
+
+} else {
+    $output = json_encode ($videos);
+}
+
+echo $output;
 
 ?>
-
-<?php if ($db->Count ($result) > 0): ?>
-
-    <?php while ($row = $db->FetchRow ($result)): ?>
-
-        <?php $video = new Video ($row[0], $db); ?>
-        <div onclick="window.location = '/v/<?=$video->video_id?>/';" class="video">
-            <img class="thumb" src="<?=$config->thumb_bucket_url?>/<?=$video->filename?>.jpg" height="56" width="75" />
-            <p class="title"><?=$video->title?></p>
-            <strong>Duration:</strong><?=$video->duration?>
-            <div class="clear"></div>
-        </div>
-
-    <?php endwhile; ?>
-
-<?php endif; ?>

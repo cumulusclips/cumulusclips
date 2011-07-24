@@ -44,11 +44,7 @@ body {
     color:#FFF;
 }
 
-#nav a.back {
-    background-color:#33CCFF;
-}
-
-.rounded, .block {
+.list, .block {
     margin-top:5px;
     background-color:#FFFFFF;
     border:solid 1px #CCCCCC;
@@ -72,10 +68,10 @@ body {
 GENERAL STYLES
 *************/
 
-.video-list div:last-child {
+.list div:last-child {
     border-bottom:none;
 }
-.video-list .video {
+.list .video {
     border-bottom:solid 1px #CCCCCC;
 }
 
@@ -147,34 +143,6 @@ Home page styles
 /*********************
 Play Video Page Styles
 *********************/
-
-#play .rounded {
-    padding:10px;
-}
-
-#play a {
-    display:block;
-    width:100%;
-    height:200px;
-    position:relative;
-    margin-bottom:10px;
-}
-
-#play a span {
-    height:49px;
-    width:76px;
-    background:url(../images/play-button.png) no-repeat 0px 0px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    margin-left:-38px;
-    margin-top:-25px;
-}
-
-#play img {
-    width:100%;
-    height:100%;
-}
 
 #play h1 {
     margin-bottom:10px;

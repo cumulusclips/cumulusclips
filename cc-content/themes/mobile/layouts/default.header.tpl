@@ -21,7 +21,7 @@
     
     <div id="nav">
         <?php if (View::$options->page == 'mobile_play'): ?>
-            <div><a href="" class="back">Back</a></div>
+            <div><a href="" class="back"><?=Language::GetText('back')?></a></div>
         <?php else: ?>
             <div><a href="<?=MOBILE_HOST?>/"><?=Language::GetText('home')?></a></div>
             <div><a href="<?=MOBILE_HOST?>/v/"><?=Language::GetText('videos')?></a></div>

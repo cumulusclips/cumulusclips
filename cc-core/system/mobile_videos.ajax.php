@@ -22,7 +22,7 @@ if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
 
 
 // Validate output format
-if (!empty ($_POST['format']) && in_array ($_POST['format'],array ('json', 'html'))) {
+if (!empty ($_POST['format']) && in_array ($_POST['format'], array ('json', 'html'))) {
 
     if ($_POST['format'] == 'html' && !empty ($_POST['block'])) {
         $format = 'html';

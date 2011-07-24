@@ -2,12 +2,7 @@ var baseURL = $('[name=baseURL]').attr('content');
 
 $('document').ready(function(){
 
-    $('.video').click(function(){
-        window.location = $(this).find('a').attr('href');
-    });
-
-
-
+    // Retrieve more videos and append before load more button
     $('#load-more').click(function(){
 
         var loadLocation = baseURL+'/actions/mobile-'+$('#loadLocation').val()+'/';
@@ -32,6 +27,8 @@ $('document').ready(function(){
 
 
 
+
+    // Play back back button
     $('.back').click(function(){
         history.go(-1);
         return false;
@@ -39,17 +36,15 @@ $('document').ready(function(){
 
 
 
+
+    // Setup search field default text
     $('#search-field').blur(function(){
         if ($(this).val() == '') $(this).val($(this).attr('title'));
     });
 
-
-
     $('#search-field').focus(function(){
         if ($(this).val() == $(this).attr('title')) $(this).val('');
     });
-
-
 
     $('#search-field').blur();
 

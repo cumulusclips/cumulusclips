@@ -10,12 +10,10 @@
     </information>
     <terms>
         <search_text>@Search Videos...</search_text>
-        <search>@Search</search>
         <login>@Login</login>
         <register>@Sign Up Free</register>
         <logout>@Logout</logout>
         <myaccount>@My Account</myaccount>
-        <home>@Home</home>
         <videos>@Videos</videos>
         <members>@Members</members>
         <upload>@Upload</upload>
@@ -24,11 +22,20 @@
         <yes>@Yes</yes>
         <no>@No</no>
         <quick_links>@Quick Links</quick_links>
-        <standard_site>@Standard Site</standard_site>
+
+        <!-- Mobile -->
+        <home>@Home</home>
+        <back>@Back</back>
         <duration>@Duration</duration>
+        <load_more>@Load 20 More</load_more>
+        <loading>@Loading</loading>
+        <featured_video_header>@Featured Video</featured_video_header>
+        <search>@Search</search>
+        <standard_site>@Standard Site</standard_site>
+        <search_body>@When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
+        <device_not_supported>@Your device is not supported for video playback.</device_not_supported>
 
         <!-- Home Page -->
-        <featured_video_header>@Featured Video</featured_video_header>
         <home_header>@Fresh Out The Oven!</home_header>
         <advertisement>@Advertisement</advertisement>
         <account_login>@Account Login</account_login>
@@ -555,7 +562,6 @@
             <description>@Send another member a message.</description>
         </message_send>
 
-
         <mobile_index>
             <title>@{SITENAME} Mobile</title>
         </mobile_index>
@@ -565,7 +571,7 @@
         </mobile_videos>
 
         <mobile_search>
-            <title>@Search results for: '{KEYWORD}'</title>
+            <title>@Search Videos</title>
         </mobile_search>
 
         <mobile_play><title></title></mobile_play>
