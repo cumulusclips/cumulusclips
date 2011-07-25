@@ -15,8 +15,8 @@ body {
 
 #header {
     background-color:#003;
-    height:38px;
-    padding:10px;
+    height:24px;
+    padding:15px 10px;
 }
 
 #nav {
@@ -54,7 +54,7 @@ body {
 .block { padding:10px; }
 
 #footer {
-    padding:0px 5px 0px 5px;
+    padding:0px 5px;
     text-align:right;
     margin-top:3px;
     font-size:10px;
@@ -71,6 +71,7 @@ GENERAL STYLES
 .list div:last-child {
     border-bottom:none;
 }
+
 .list .video {
     border-bottom:solid 1px #CCCCCC;
 }
@@ -190,16 +191,20 @@ SEARCH PAGE STYLES
 
 /* MISC Styles */
 
+p { padding:5px 0; }
+
 img {
     border:none;
 }
 
 h1 {
+    font-weight:bold;
     font-size:16px;
     color:#333;
 }
 
 strong {
+    font-weight:bold;
     color:#333;
 }
 

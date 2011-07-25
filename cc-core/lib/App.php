@@ -91,9 +91,7 @@ class App {
 
         // Verify if user opted-out from Mobile site
         if (isset ($_GET['nomobile'])) {
-            setcookie('nomobile', md5('nomobile'), time()+3600*24*3);
-            header ("Location: " . HOST . '/');
-            exit();
+            setcookie ('nomobile', md5('nomobile'), time()+3600*24*3);
         }
 
         // Check for mobile headers
@@ -102,13 +100,37 @@ class App {
         if (preg_match ($accept, $_SERVER['HTTP_ACCEPT']) || preg_match ($agent, $_SERVER['HTTP_USER_AGENT'])) {
 
             // Verify user isn't already viewing mobile or has opted out from it
-            if (!isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile'])) {
+            if (!isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
                 header ("Location: " . MOBILE_HOST);
                 exit();
+            } else if (isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
+                define ('MOBILE', true);
             }
 
         }
 
+    }
+
+
+
+
+    /**
+     * Determine which theme should be used
+     * @return string Theme to be used
+     */
+    static function CurrentTheme() {
+
+        $system_theme = Settings::Get ('active_theme');
+        if (isset ($_GET['mobile'])) $system_theme = Settings::Get ('active_mobile_theme');
+        $theme = $system_theme;
+
+        // Preview theme was provided
+        if (!empty ($_GET['preview_theme']) && file_exists (THEMES_DIR . '/' . $_GET['preview_theme'] . '/theme.xml')) {
+            if (Settings::Get('active_theme') != $_GET['preview_theme']) $theme = $_GET['preview_theme'];
+        }
+
+        define ('PREVIEW_THEME', ($system_theme != $theme) ? $theme : null);
+        return $theme;
     }
 
 }

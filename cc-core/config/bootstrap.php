@@ -22,6 +22,7 @@ ini_set ('max_execution_time', 3600);
 if (!class_exists ('App')) include (LIB . '/App.php');
 App::InstallCheck();
 App::MaintCheck();
+App::MobileCheck();
 
 
 // Load DB & FTP credentials
@@ -76,9 +77,5 @@ if (!headers_sent() && session_id() == '') {
 // Initialize plugin system
 Plugin::Init();
 Plugin::Trigger ('app.start');
-
-
-// Check for mobile devices
-App::MobileCheck();
 
 ?>

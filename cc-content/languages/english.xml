@@ -24,6 +24,7 @@
         <quick_links>@Quick Links</quick_links>
 
         <!-- Mobile -->
+        <mobile_heading>@{SITENAME} Mobile</mobile_heading>
         <home>@Home</home>
         <back>@Back</back>
         <duration>@Duration</duration>
@@ -412,12 +413,6 @@
             <description>@Member profile for this member.</description>
         </profile>
 
-        <play>
-            <title></title>
-            <keywords></keywords>
-            <description></description>
-        </play>
-
         <comments>
             <title>@View All Comments for: {VIDEO}</title>
             <keywords>@Video Comments, Comments, Video</keywords>
@@ -562,9 +557,6 @@
             <description>@Send another member a message.</description>
         </message_send>
 
-        <mobile_index>
-            <title>@{SITENAME} Mobile</title>
-        </mobile_index>
 
         <mobile_videos>
             <title>@Browse Videos</title>
@@ -574,6 +566,5 @@
             <title>@Search Videos</title>
         </mobile_search>
 
-        <mobile_play><title></title></mobile_play>
     </meta>
 </language>

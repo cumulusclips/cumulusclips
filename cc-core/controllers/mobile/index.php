@@ -17,7 +17,7 @@ Plugin::Trigger ('mobile_index.start');
 
 // Retrieve updated page title
 $sitename = Settings::Get ('sitename');
-View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('sitename' => $sitename));
+View::$vars->meta->title = Language::GetText ('mobile_heading', array ('sitename' => Settings::Get('sitename')));
 
 
 // Retrieve Featured Video

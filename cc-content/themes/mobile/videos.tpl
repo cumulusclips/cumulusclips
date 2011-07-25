@@ -2,7 +2,7 @@
 
 <div id="videos">
     
-    <h1>Browse Videos</h1>
+    <h1><?=Language::GetText('videos_header')?></h1>
     <?php if (!empty ($count)): ?>
 
         <div class="list">

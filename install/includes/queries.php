@@ -240,6 +240,7 @@ $_POPULATE_SETTINGS_TABLE = <<<POPULATE_SETTINGS_TABLE
 
 INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_theme','cumulus'),
+('active_mobile_theme','mobile'),
 ('default_language', 'english'),
 ('active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),
 ('auto_approve_users','1'),
