@@ -68,7 +68,7 @@ if (isset ($_POST['submitted'])) {
 
         // Include required files
         include_once (INSTALL . '/includes/queries.php');
-        include_once (INSTALL . '/includes/Filesystem.php');
+        include_once (INSTALL . '/includes/FilesystemInstaller.php');
 
         try {
 
@@ -111,10 +111,10 @@ if (isset ($_POST['submitted'])) {
 
             // Save database settings to config file in permanent location
             $perm_config_file = DOC_ROOT . '/cc-core/config/config.php';
-            Filesystem::Open();
-            Filesystem::Create ($perm_config_file);
-            Filesystem::Write ($perm_config_file, $config_content);
-            Filesystem::Close();
+            FilesystemInstaller::Open();
+            FilesystemInstaller::Create ($perm_config_file);
+            FilesystemInstaller::Write ($perm_config_file, $config_content);
+            FilesystemInstaller::Close();
 
 
             // Store information & redirect user
