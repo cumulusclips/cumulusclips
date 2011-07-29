@@ -26,7 +26,7 @@ $admin_js[] = ADMIN . '/js/fancybox.js';
 if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
     // Validate theme
-    if (file_exists (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml')) {
+    if (Functions::ValidTheme ($_GET['delete'])) {
 
         $xml = simplexml_load_file (THEMES_DIR . '/' . $_GET['delete'] . '/theme.xml');
         if (Settings::Get('active_theme') != $_GET['delete']) {
@@ -47,7 +47,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
 
     // Validate theme
-    if (file_exists (THEMES_DIR . '/' . $_GET['activate'] . '/theme.xml')) {
+    if (Functions::ValidTheme ($_GET['activate'])) {
         $xml = simplexml_load_file (THEMES_DIR . '/' . $_GET['activate'] . '/theme.xml');
         Settings::Set ('active_theme', $_GET['activate']);
         $message = $xml->name . ' is now the active theme';

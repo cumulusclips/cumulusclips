@@ -22,11 +22,10 @@ ini_set ('max_execution_time', 3600);
 if (!class_exists ('App')) include (LIB . '/App.php');
 App::InstallCheck();
 App::MaintCheck();
-App::MobileCheck();
 
 
 // Load DB & FTP credentials
-include ('config.php');
+include_once ('config.php');
 
 
 // Load Main Classes
@@ -63,7 +62,7 @@ Language::LoadLangPack (Settings::Get ('default_language'));
 
 
 // Define Theme settings
-$theme = Functions::CurrentTheme();
+$theme = App::CurrentTheme();
 define ('THEME', HOST . '/cc-content/themes/' . $theme);
 define ('THEME_PATH', THEMES_DIR . '/' . $theme);
 
@@ -77,5 +76,9 @@ if (!headers_sent() && session_id() == '') {
 // Initialize plugin system
 Plugin::Init();
 Plugin::Trigger ('app.start');
+
+
+// Check for mobile devices
+App::MobileCheck();
 
 ?>

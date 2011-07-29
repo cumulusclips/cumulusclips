@@ -61,6 +61,11 @@ class App {
 
 
 
+    /**
+     * Check if system is fully installed. If they are viewing "/" and system is
+     * not installed they are forwared to the installer. If system is not "fully"
+     * installed they are given a "Incomplete Install" message
+     */
     static function InstallCheck() {
 
         if (!file_exists (DOC_ROOT . '/cc-core/config/config.php') && file_exists (DOC_ROOT . '/install')) {
@@ -80,6 +85,10 @@ class App {
 
 
 
+    /**
+     * Check if a system update is in progress and display a "Maintenance" message
+     * to any user attempting to access the site
+     */
     static function MaintCheck() {
         if (file_exists (DOC_ROOT . '/.updates')) exit('<!DOCTYPE html><html><head><title>Maintenance</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Maintenance</h1><div class="block"><p>We are currently undergoing scheduled maintenance. Please try back later.</p><p>Sorry for the inconvenience.</p></div></div></body></html>');
     }
@@ -87,6 +96,12 @@ class App {
 
 
 
+    /**
+     * Check for mobile devices or mobile site opt-out. If a mobile device is
+     * detected via it's user agent header they will be sent to the mobile version
+     * of the site unless they're already viewing the mobile site or have opted
+     * out from it.
+     */
     static function MobileCheck() {
 
         // Verify if user opted-out from Mobile site
@@ -94,19 +109,20 @@ class App {
             setcookie ('nomobile', md5('nomobile'), time()+3600*24*3);
         }
 
-        // Check for mobile headers
-        $accept = '/vnd\.wap/i';
-        $agent = '/ip(ad|hone|od)|android|blackberry|opera\s?mini|sybian|palm|webos|mobile|phone|wap/i';
-        if (preg_match ($accept, $_SERVER['HTTP_ACCEPT']) || preg_match ($agent, $_SERVER['HTTP_USER_AGENT'])) {
+        // Check for mobile devices and if has opted out from mobile site
+        $agent = '/ip(ad|hone|od)|android/i';
+        if (preg_match ($agent, $_SERVER['HTTP_USER_AGENT']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
 
-            // Verify user isn't already viewing mobile or has opted out from it
-            if (!isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
-                header ("Location: " . MOBILE_HOST);
+            // Verify user isn't already viewing mobile site
+            if (!isset ($_GET['mobile'])) {
+                header ("Location: " . MOBILE_HOST . "/");
                 exit();
-            } else if (isset ($_GET['mobile']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
+            } else {
                 define ('MOBILE', true);
             }
 
+        } else {
+            define ('MOBILE', false);
         }
 
     }
@@ -120,17 +136,24 @@ class App {
      */
     static function CurrentTheme() {
 
-        $system_theme = Settings::Get ('active_theme');
-        if (isset ($_GET['mobile'])) $system_theme = Settings::Get ('active_mobile_theme');
-        $theme = $system_theme;
+        $preview_theme = false;
 
-        // Preview theme was provided
-        if (!empty ($_GET['preview_theme']) && file_exists (THEMES_DIR . '/' . $_GET['preview_theme'] . '/theme.xml')) {
-            if (Settings::Get('active_theme') != $_GET['preview_theme']) $theme = $_GET['preview_theme'];
+        // Determine active theme
+        if (isset ($_GET['mobile'])) {
+            $active_theme = Settings::Get ('active_mobile_theme');
+        } else {
+            $active_theme = Settings::Get ('active_theme');
         }
 
-        define ('PREVIEW_THEME', ($system_theme != $theme) ? $theme : null);
-        return $theme;
+        // Check if 'Preview' theme was provided
+        if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
+            $active_theme = $_GET['preview_theme'];
+            $preview_theme = true;
+        }
+
+        define ('PREVIEW_THEME', $preview_theme);
+        return $active_theme;
+        
     }
 
 }

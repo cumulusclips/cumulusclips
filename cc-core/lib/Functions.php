@@ -294,6 +294,22 @@ class Functions {
         return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;
         
     }
+
+
+
+
+    /**
+     * Validate a given theme name
+     * @param string $theme_name The name of the theme to validate
+     * @return boolean Returns true if theme is valid false otherwise
+     */
+    static function ValidTheme ($theme_name) {
+        if (!empty ($theme_name) && file_exists (THEMES_DIR . "/$theme_name/theme.xml")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 }
 
