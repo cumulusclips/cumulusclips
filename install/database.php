@@ -105,6 +105,7 @@ if (isset ($_POST['submitted'])) {
             $config_content = preg_replace ('/{FTP_HOST}/i', $settings->ftp_hostname, $config_content);
             $config_content = preg_replace ('/{FTP_USER}/i', $settings->ftp_username, $config_content);
             $config_content = preg_replace ('/{FTP_PASS}/i', $settings->ftp_password, $config_content);
+            $config_content = preg_replace ('/{FTP_PATH}/i', $settings->ftp_path, $config_content);
             $config_content = preg_replace ('/{FTP_SSL}/i', ($settings->ftp_ssl) ? 'true' : 'false', $config_content);
 
 

@@ -46,6 +46,7 @@ if ($native) {
     $settings->ftp_hostname = '';
     $settings->ftp_username = '';
     $settings->ftp_password = '';
+    $settings->ftp_path = '';
     $settings->ftp_ssl = false;
     $settings->completed[] = 'ftp';
     $_SESSION['settings'] = serialize ($settings);
@@ -79,6 +80,14 @@ if (isset ($_POST['submitted'])) {
         $password = trim ($_POST['password']);
     } else {
         $errors['password'] = 'A valid password is needed';
+    }
+
+
+    // Validate path
+    if (!empty ($_POST['path']) && !ctype_space ($_POST['path'])) {
+        $path = rtrim ($_POST['path'], '/');
+    } else {
+        $errors['path'] = 'A valid path is needed';
     }
 
 
@@ -119,8 +128,8 @@ if (isset ($_POST['submitted'])) {
 
 
             // Create test file
-            $test_file = DOC_ROOT . '/ftp-test' . time();
-            if (!@ftp_chdir ($stream, DOC_ROOT)) throw new Exception ("We were unable to navigate to the CumulusClips root directory. Please verify your account has access.");
+            $test_file = $path . '/ftp-test' . time();
+            if (!@ftp_chdir ($stream, $path)) throw new Exception ("We were unable to navigate to the CumulusClips directory. Please verify your ftp path is correct and your account has access.");
             if (!@ftp_fput ($stream, $test_file, $handle, FTP_BINARY)) throw new Exception ("We were unable create a test file. Please verify your account has write access.");
             if (!@ftp_delete ($stream, $test_file)) throw new Exception ("We were unable delete our test file. Please verify your account has the ability to delete files.");
             @ftp_close ($stream);
@@ -131,6 +140,7 @@ if (isset ($_POST['submitted'])) {
             $settings->ftp_hostname = $hostname;
             $settings->ftp_username = $username;
             $settings->ftp_password = $password;
+            $settings->ftp_path = $path;
             $settings->ftp_ssl = ($method == 'ftps') ? true : false;
             $settings->completed[] = 'ftp';
             $_SESSION['settings'] = serialize ($settings);

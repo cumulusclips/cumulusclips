@@ -27,6 +27,9 @@
                 <div class="row <?php echo (isset ($errors['password'])) ? 'errors' : ''; ?>"><label>FTP Password:</label><input type="password" class="text mask" name="password" value="<?php echo (isset ($password)) ? $password : ''; ?>" /></div>
                 <div class="row-shift">Password you use to upload files to your website.</div>
 
+                <div class="row <?php echo (isset ($errors['path'])) ? 'errors' : ''; ?>"><label>FTP Path:</label><input type="path" class="text" name="path" value="<?php echo (isset ($path)) ? $path : '/'; ?>" /></div>
+                <div class="row-shift">The full path to your CumulusClips directory during FTP.</div>
+
                 <div class="row <?php echo (isset ($errors['method'])) ? 'errors' : ''; ?>">
                     <label>Connection Method:</label>
                     <div id="connection-method">
