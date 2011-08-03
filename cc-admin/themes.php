@@ -35,6 +35,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete']) && Functions::Val
         try {
             Filesystem::Open();
             Filesystem::Delete ($theme_path);
+            Filesystem::Close();
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'error';

@@ -11,6 +11,7 @@ define ('DB_PREFIX', '');
 define ('FTP_HOST', 'localhost');
 define ('FTP_USER', 'miguel');
 define ('FTP_PASS', 'Damian646');
+define ('FTP_PATH', '/var/www/cumulus');
 define ('FTP_SSL', false);
 
 ?>
