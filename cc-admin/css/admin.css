@@ -434,11 +434,15 @@ THEME STYLES
 
 #themes { overflow:hidden; }
 
+#themes h1 { clear:both; }
+
 .theme {
     float:left;
+    min-width:400px;
     width:43%;
     margin-right:25px;
     overflow:hidden;
+    margin-bottom:15px;
 }
 
 .screenshot {

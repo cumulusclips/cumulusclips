@@ -2,5 +2,6 @@
 <theme>
     <author>Miguel A. Hurtado</author>
     <name>Cumulus Mobile</name>
+    <mobile>true</mobile>
     <description>The default mobile theme for CumulusClips</description>
 </theme>
