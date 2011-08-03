@@ -23,6 +23,19 @@
         <no>無</no>
         <quick_links>快速鏈接</quick_links>
 
+        <!-- Mobile -->
+        <mobile_heading>{SITENAME}移動</mobile_heading>
+        <home>首頁</home>
+        <back>返回</back>
+        <duration>時間</duration>
+        <load_more>裝載20多</load_more>
+        <loading>載入中</loading>
+        <featured_video_header>精選視頻</featured_video_header>
+        <search>搜索</search>
+        <standard_site>標準網站</standard_site>
+        <search_body>在搜索時，使用關鍵字有可能被包括在視頻的標題，它的描述或作為其標記。對於更多的使用效果短，那麼具體的關鍵字。</search_body>
+        <device_not_supported>您的設備是不支持視頻播放。</device_not_supported>
+
         <!-- Home Page -->
         <home_header>剛從烤箱!</home_header>
         <advertisement>廣告</advertisement>
@@ -34,84 +47,84 @@
         <login_button>登錄</login_button>
 
         <!-- Login Page -->
-        <login_header>@Login to your Account</login_header>
-        <remember_me>@Remember me</remember_me>
-        <forgot_text>@Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
-        <email>@E-mail</email>
-        <forgot_header>@Forgot your Login</forgot_header>
-        <forgot_button>@Forgot Login</forgot_button>
+        <login_header>登錄到您的帳戶</login_header>
+        <remember_me>記住我</remember_me>
+        <forgot_text>請輸入您的電子郵件地址與我們記錄在案，下面。我們將重設密碼並發送您的新登錄。</forgot_text>
+        <email>電子郵件</email>
+        <forgot_header>忘記登錄</forgot_header>
+        <forgot_button>忘記登錄</forgot_button>
 
         <!-- Register Page -->
-        <register_header>@Register with</register_header>
-        <join_today>@Join {SITENAME} Today!</join_today>
-        <register_text>@As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to channels, and much more!</register_text>
-        <asterisk>@An asterisk (*) denotes required field.</asterisk>
-        <username_req>@Username can only contain alphanumeric (A-Z, a-z, 0-9) characters, no spaces or special characters. Your unique url will be derived as:</username_req>
-        <confirm_password>@Confirm Password</confirm_password>
-        <are_you_human>@Are you Human?</are_you_human>
-        <agree_terms>@I agree to the {LINK}Terms of Use{/LINK}</agree_terms>
-        <register_button>@Create Account</register_button>
+        <register_header>註冊</register_header>
+        <join_today>加入{SITENAME}今天！</join_today>
+        <register_text>作為會員，您就可以上傳視頻，發表評論，速度和共享視頻，訂閱渠道，以及更多！</register_text>
+        <asterisk>星號（*）表示必填字段。</asterisk>
+        <username_req>用戶名只能包含字母數字（包括AZ，az，0-9）字符，不能有空格或特殊字符。您將獲得唯一的網址為：</username_req>
+        <confirm_password>確認密碼</confirm_password>
+        <are_you_human>你是人類？</are_you_human>
+        <agree_terms>我同意{LINK}使用條款{/ LINK}</agree_terms>
+        <register_button>建立帳戶</register_button>
 
         <!-- Contact Page -->
-        <contact_header>@Contact Us</contact_header>
-        <contact_text>@Fill out and submit the form below and I'll get back to you as soon as I can. I'll really try to get back to everyone, but sometimes it's hard and I can't guarantee it.</contact_text>
-        <name>@Name</name>
-        <message>@Message</message>
-        <contact_us>@Contact Us</contact_us>
-        <contact_button>@Contact Us</contact_button>
+        <contact_header>聯繫我們</contact_header>
+        <contact_text>填寫並提交下面的表格，我會盡快給您，只要我可以。我真的試圖讓每個人都回，但有時很難，我不能保證。</contact_text>
+        <name>名稱</name>
+        <message>消息</message>
+        <contact_us>聯繫我們</contact_us>
+        <contact_button>聯繫我們</contact_button>
 
         <!-- Browse Videos Page -->
-        <videos_header>@Browse Videos</videos_header>
-        <viewing>@Viewing</viewing>
-        <no_videos>@No videos added yet.</no_videos>
-        <by>@By</by>
+        <videos_header>瀏覽視頻</videos_header>
+        <viewing>查看</viewing>
+        <no_videos>尚未添加視頻。</no_videos>
+        <by>通過</by>
 
         <!-- Browse Members Page -->
-        <members_header>@Browse Members</members_header>
-        <no_members>@No registered members yet.</no_members>
-        <member_since>@Member Since</member_since>
-        <videos_uploaded>@Videos Uploaded</videos_uploaded>
+        <members_header>瀏覽會員</members_header>
+        <no_members>還沒有註冊會員。</no_members>
+        <member_since>會員自</member_since>
+        <videos_uploaded>視頻上傳</videos_uploaded>
 
         <!-- Member Profile Page -->
-        <subscribe>@Subscribe</subscribe>
-        <unsubscribe>@Unsubscribe</unsubscribe>
-        <send_message>@Send Message</send_message>
-        <report_abuse>@Report Abuse</report_abuse>
-        <member_rss>@Member's RSS Feed</member_rss>
-        <profile_views>@Profile Views</profile_views>
-        <subscribers>@Subscribers</subscribers>
-        <website>@Website</website>
-        <recent_videos>@Recent Videos</recent_videos>
-        <view_all_videos>@View all Videos</view_all_videos>
-        <recent_posts_header>@Recent Updates</recent_posts_header>
-        <update_status>@Update your Status</update_status>
-        <post_update_button>@Post Update</post_update_button>
-        <no_member_videos>@Member currently has no videos.</no_member_videos>
+        <subscribe>訂閱</subscribe>
+        <unsubscribe>取消訂閱</unsubscribe>
+        <send_message>送信</send_message>
+        <report_abuse>舉報</report_abuse>
+        <member_rss>會員的RSS提要</member_rss>
+        <profile_views>資料查看</profile_views>
+        <subscribers>訂閱</subscribers>
+        <website>網站</website>
+        <recent_videos>最新視頻</recent_videos>
+        <view_all_videos>查看所有視頻</view_all_videos>
+        <recent_posts_header>最近更新</recent_posts_header>
+        <update_status>更新您的狀態</update_status>
+        <post_update_button>發布更新</post_update_button>
+        <no_member_videos>會員目前沒有影片。</no_member_videos>
 
         <!-- Member Videos Page -->
-        <videos_by>@Videos By</videos_by>
-        <go_to_profile>@Go to Profile</go_to_profile>
+        <videos_by>的影片</videos_by>
+        <go_to_profile>轉到簡介</go_to_profile>
 
         <!-- Play Video Page -->
-        <like>@Like</like>
-        <dislike>@Dislike</dislike>
-        <about>@About</about>
-        <share>@Share</share>
-        <embed>@Embed</embed>
-        <favorite>@Favorite</favorite>
-        <flag>@Flag</flag>
-        <comments_header>@Video Comments</comments_header>
-        <view_all_comments>@View All Comments</view_all_comments>
-        <comments_total>@Comments total</comments_total>
-        <posted>@Posted By</posted>
-        <date_posted>@Date Posted</date_posted>
-        <comments_post_header>@Post a Comment</comments_post_header>
-        <optional>@Optional</optional>
-        <comments>@Comments</comments>
-        <comments_button>@Comment</comments_button>
-        <suggestions_header>@Suggestions</suggestions_header>
-        <no_suggestions>@No suggestions could be made.</no_suggestions>
-        <views>@Views</views>
+        <like>像</like>
+        <dislike>反感</dislike>
+        <about>關於</about>
+        <share>股份</share>
+        <embed>嵌入</embed>
+        <favorite>收藏</favorite>
+        <flag>標誌</flag>
+        <comments_header>視頻評論</comments_header>
+        <view_all_comments>查看全部評論</view_all_comments>
+        <comments_total>評論共</comments_total>
+        <posted>發表於</posted>
+        <date_posted>發布日期</date_posted>
+        <comments_post_header>發表評論</comments_post_header>
+        <optional>可選</optional>
+        <comments>評論</comments>
+        <comments_button>評論</comments_button>
+        <suggestions_header>建議</suggestions_header>
+        <no_suggestions>任何建議都可以提出。</no_suggestions>
+        <views>點擊</views>
 
         <!-- Comments Page -->
         <comments_header>@View All Comments</comments_header>
@@ -400,12 +413,6 @@
             <description>@Member profile for this member.</description>
         </profile>
 
-        <play>
-            <title></title>
-            <keywords></keywords>
-            <description></description>
-        </play>
-
         <comments>
             <title>@View All Comments for: {VIDEO}</title>
             <keywords>@Video Comments, Comments, Video</keywords>
@@ -549,5 +556,15 @@
             <keywords>@Send Message, Message</keywords>
             <description>@Send another member a message.</description>
         </message_send>
+
+
+        <mobile_videos>
+            <title>@Browse Videos</title>
+        </mobile_videos>
+
+        <mobile_search>
+            <title>@Search Videos</title>
+        </mobile_search>
+
     </meta>
 </language>
