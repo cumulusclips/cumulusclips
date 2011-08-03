@@ -29,7 +29,7 @@ View::Header();
     <div id="upload-video">
 
         <p class="large"><?=Language::GetText('select_hdd_header')?></p>
-        <p><?=Language::GetText('select_hdd_text', array ('link' => HOST . '/terms/', 'link2' => HOST . '/copyright/'))?></p>
+        <p><?=Language::GetText('select_hdd_text', array ('sitename' => Settings::Get ('sitename')))?></p>
         <p class="big"><?=Language::GetText('filesize_limit')?>: 100MB<br />
         <?=Language::GetText('accepted_formats')?>: *.flv, *.wmv, *.avi, *.ogg, *.mpg, *.mp4, *.mov, *.m4v</p>
 

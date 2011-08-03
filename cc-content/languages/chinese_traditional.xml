@@ -28,7 +28,7 @@
         <home>首頁</home>
         <back>返回</back>
         <duration>時間</duration>
-        <load_more>裝載20多</load_more>
+        <load_more>負載 20 更多</load_more>
         <loading>載入中</loading>
         <featured_video_header>精選視頻</featured_video_header>
         <search>搜索</search>
@@ -127,160 +127,160 @@
         <views>點擊</views>
 
         <!-- Comments Page -->
-        <comments_header>@View All Comments</comments_header>
-        <comments_for>@Viewing comments for</comments_for>
-        <no_comments>@No comments have been posted for this video yet.</no_comments>
+        <comments_header>查看全部評論</comments_header>
+        <comments_for>查看評論意見</comments_for>
+        <no_comments>沒有評論已張貼此影片的呢。</no_comments>
 
         <!-- Search Page -->
-        <search_header>@Search Videos</search_header>
-        <results_for>@Search Results for</results_for>
-        <no_results>@No results were found.</no_results>
+        <search_header>搜索視頻</search_header>
+        <results_for>搜索結果</results_for>
+        <no_results>沒有找到任何結果。</no_results>
 
         <!-- Opt-Out Page -->
-        <opt_out_header>@Email Opt-Out</opt_out_header>
-        <opt_out_text>@Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</opt_out_text>
+        <opt_out_header>電子郵件選擇退出</opt_out_header>
+        <opt_out_text>您的電子郵件地址已被成功地從所有郵件列表。如果您想修改您的電子郵件偏好，你可以這樣做通過訪問{LINK}隱私設置{/LINK}部分您的帳戶。</opt_out_text>
 
         <!-- Activate Account Page -->
-        <activate_header>@Activate your Account</activate_header>
-        <activate_text_success>@Thank you! Your account is now active. {LINK}Go to My Account{/LINK}</activate_text_success>
-        <activate_text_error>@Invalid code! Please check you entered the code correctly. Your account may already be active. If you forgot your login, {LINK}click here{/LINK} to retrieve it.</activate_text_error>
+        <activate_header>激活您的帳戶</activate_header>
+        <activate_text_success>謝謝！您的帳戶現在活躍。 {LINK}轉到我的帳戶{/LINK}</activate_text_success>
+        <activate_text_error>無效的代碼！請檢查您輸入的代碼正確。您的帳號可能已經被激活。如果您忘記了登錄， {LINK}點擊這裡{/LINK} 找回它。</activate_text_error>
 
         <!-- 404 Page -->
-        <system_404_header>@404 - Page Not Found</system_404_header>
-        <system_404_sub_header>@Oops!</system_404_sub_header>
-        <system_404_text>@The Page you're looking for either doesn't exist or was moved to another location.</system_404_text>
+        <system_404_header>404 - 找不到網頁</system_404_header>
+        <system_404_sub_header>哎呀！</system_404_sub_header>
+        <system_404_text>該網頁您正在尋找不存在或已移動到另一個位置。</system_404_text>
 
         <!-- System Error Page -->
-        <system_error_header>@System Error</system_error_header>
-        <system_error_text>@We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
+        <system_error_header>系統錯誤</system_error_header>
+        <system_error_text>我們無法繼續由於系統錯誤。對於任何不便，我們深表歉意。</system_error_text>
 
         <!-- My Account / Home Page -->
-        <myaccount_header>@Welcome</myaccount_header>
-        <last_login>@Last Login</last_login>
-        <edit_picture>@Edit Picture</edit_picture>
-        <new_messages>@You have new unread messages!</new_messages>
-        <account_menu_header>@Account Menu</account_menu_header>
-        <manage_media>@Manage Media</manage_media>
-        <upload_video>@Upload a Video</upload_video>
-        <my_videos>@My Videos</my_videos>
-        <my_favorite_videos>@My Favorite Videos</my_favorite_videos>
-        <account_settings>@Account Settings</account_settings>
-        <update_profile>@Update Member Profile</update_profile>
-        <privacy_settings>@Privacy Settings</privacy_settings>
-        <change_password>@Change Password</change_password>
-        <community>@Community</community>
-        <my_subscriptions>@My Subscriptions</my_subscriptions>
-        <my_subscribers>@View My Subscribers</my_subscribers>
-        <inbox>@Inbox</inbox>
+        <myaccount_header>歡迎</myaccount_header>
+        <last_login>最後登錄</last_login>
+        <edit_picture>編輯圖片</edit_picture>
+        <new_messages>您有新的未讀消息！</new_messages>
+        <account_menu_header>帳戶菜單</account_menu_header>
+        <manage_media>管理媒體</manage_media>
+        <upload_video>上傳視頻</upload_video>
+        <my_videos>我的視頻</my_videos>
+        <my_favorite_videos>我最喜愛的影片</my_favorite_videos>
+        <account_settings>帳戶設置</account_settings>
+        <update_profile>更新個人資料</update_profile>
+        <privacy_settings>隱私設置</privacy_settings>
+        <change_password>更改密碼</change_password>
+        <community>社區</community>
+        <my_subscriptions>我的訂閱</my_subscriptions>
+        <my_subscribers>查看我的訂閱</my_subscribers>
+        <inbox>收件箱</inbox>
 
         <!-- My Account / Update Video Page -->
-        <update_video_header>@Edit Video</update_video_header>
-        <update_video_button>@Update Video</update_video_button>
-        <back_to_videos>@Back to videos</back_to_videos>
+        <update_video_header>編輯視頻</update_video_header>
+        <update_video_button>更新視頻</update_video_button>
+        <back_to_videos>返回視頻</back_to_videos>
 
         <!-- My Account / My Videos Page -->
-        <myvideos_header>@My Videos</myvideos_header>
-        <no_user_videos>@You haven't uploaded any videos yet.</no_user_videos>
-        <edit_video>@Edit Video</edit_video>
-        <delete_video>@Delete Video</delete_video>
+        <myvideos_header>我的視頻</myvideos_header>
+        <no_user_videos>你還沒有上傳任何視頻。</no_user_videos>
+        <edit_video>編輯視頻</edit_video>
+        <delete_video>刪除視頻</delete_video>
 
         <!-- My Account / My Favorite Videos Page -->
-        <myfavorites_header>@My Favorite Videos</myfavorites_header>
-        <no_favorites>@You haven't added any videos to your favorites yet.</no_favorites>
-        <remove_favorite>@Remove from Favorites</remove_favorite>
+        <myfavorites_header>我最喜愛的影片</myfavorites_header>
+        <no_favorites>您還沒有添加任何視頻到你的收藏呢。</no_favorites>
+        <remove_favorite>從收藏夾刪除</remove_favorite>
 
         <!-- My Account / Edit Profile Page -->
-        <profile_header>@Update Profile</profile_header>
-        <personal_header>@Edit Personal Information</personal_header>
-        <first_name>@First Name</first_name>
-        <last_name>@Last Name</last_name>
-        <about_me>@About Me</about_me>
-        <profile_button>@Update Profile</profile_button>
+        <profile_header>更新個人資料</profile_header>
+        <personal_header>編輯個人信息</personal_header>
+        <first_name>首名</first_name>
+        <last_name>最後名稱</last_name>
+        <about_me>關於我</about_me>
+        <profile_button>更新個人資料</profile_button>
 
-        <update_picture_header>@Update Picture</update_picture_header>
-        <update_picture_text>@Your profile image is displayed with your videos, comments, and other content.</update_picture_text>
-        <current_picture>@Current Picture</current_picture>
-        <reset_picture>@Reset Picture</reset_picture>
-        <update_picture_warning>@If you upload a new picture, your current one will be overwritten.</update_picture_warning>
-        <update_picture_req>@Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</update_picture_req>
-        <browse_files_button>@Browse Files</browse_files_button>
-        <update_picture_button>@Upload Picture</update_picture_button>
+        <update_picture_header>更新圖片</update_picture_header>
+        <update_picture_text>您的個人資料顯示影像與您的視頻，評論等內容。</update_picture_text>
+        <current_picture>當前圖片</current_picture>
+        <reset_picture>重設圖片</reset_picture>
+        <update_picture_warning>如果你上傳新圖片，您目前的人會被覆蓋。</update_picture_warning>
+        <update_picture_req>選擇一個圖像（JPEG，GIF，PNG）從您的計算機硬盤驅動器。最大允許的文件大小是30K。</update_picture_req>
+        <browse_files_button>瀏覽文件</browse_files_button>
+        <update_picture_button>上傳圖片</update_picture_button>
 
         <!-- My Account / Privacy Settings Page -->
-        <privacy_settings_header>@Privacy Settings</privacy_settings_header>
-        <alert_header>@E-mail and Notifications</alert_header>
-        <alert_comment>@E-mail me when one of my videos receives a comment</alert_comment>
-        <alert_video>@Inform me of new videos by members subscribed to</alert_video>
-        <alert_message>@E-mail me when I receive a message</alert_message>
-        <alert_newsletter>@Subscribe me to the {SITENAME} newsletter</alert_newsletter>
-        <privacy_settings_button>@Update Privacy</privacy_settings_button>
+        <privacy_settings_header>隱私設置</privacy_settings_header>
+        <alert_header>電子郵件和通知</alert_header>
+        <alert_comment>推薦我當我的一個視頻收到評論</alert_comment>
+        <alert_video>通知我的新影片委員訂閱</alert_video>
+        <alert_message>電郵我，當我收到一條消息</alert_message>
+        <alert_newsletter>訂閱我的{SITENAME}簡訊</alert_newsletter>
+        <privacy_settings_button>更新隱私</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->
-        <change_password_header>@Change Password</change_password_header>
-        <change_password_text>@Passwords should be 6-10 characters long with upper &amp; lower case letters, numbers, and special characters.</change_password_text>
-        <new_password>@New Password</new_password>
-        <change_password_button>@Change Password</change_password_button>
+        <change_password_header>更改密碼</change_password_header>
+        <change_password_text>密碼應該是6-10個字符長的上下大小寫字母，數字和特殊字符。</change_password_text>
+        <new_password>新密碼</new_password>
+        <change_password_button>更改密碼</change_password_button>
 
         <!-- My Account / View My Subscriptions Page -->
-        <subscriptions_header>@My Subscriptions</subscriptions_header>
-        <confirm_subscription>You are about to unsubscribe from this member. Please confirm this is what you intended to do</confirm_subscription>
-        <no_subscriptions>@You haven't subscribed to any members yet.</no_subscriptions>
+        <subscriptions_header>我的訂閱</subscriptions_header>
+        <confirm_subscription>您將要取消訂閱此成員。請證實這就是你打算這樣做。</confirm_subscription>
+        <no_subscriptions>您沒有訂閱任何成員呢。</no_subscriptions>
 
         <!-- My Account / View My Subscribers Page -->
-        <subscribers_header>@My Subscribers</subscribers_header>
-        <no_subscribers>@No one has subscribed to you yet.</no_subscribers>
+        <subscribers_header>我的訂閱者</subscribers_header>
+        <no_subscribers>沒有人訂閱了你呢。</no_subscribers>
 
         <!-- My Account / Message Inbox Page -->
-        <message_inbox_header>@Message Inbox</message_inbox_header>
-        <purge>@Purge</purge>
-        <message_status>@Status</message_status>
-        <read>@Read</read>
-        <unread>@Unread</unread>
-        <subject>@Subject</subject>
-        <sender>@Sender</sender>
-        <date>@Date</date>
-        <purge_button>@Purge Messages</purge_button>
-        <no_messages>@No messages</no_messages>
+        <message_inbox_header>消息收件箱</message_inbox_header>
+        <purge>清除</purge>
+        <message_status>狀態</message_status>
+        <read>閱讀</read>
+        <unread>未讀</unread>
+        <subject>主題</subject>
+        <sender>寄件人</sender>
+        <date>日期</date>
+        <purge_button>清除消息</purge_button>
+        <no_messages>沒有郵件</no_messages>
 
         <!-- My Account / Read Message Page -->
-        <message_read_header>@Read Message</message_read_header>
-        <return_inbox>@Return to Inbox</return_inbox>
-        <reply>@Reply</reply>
-        <delete>@Delete</delete>
+        <message_read_header>查看留言</message_read_header>
+        <return_inbox>返回到收件箱</return_inbox>
+        <reply>回复</reply>
+        <delete>刪除</delete>
 
         <!-- My Account / Send Message Page -->
-        <message_send_header>@Send a Message</message_send_header>
-        <to>@To</to>
-        <members_username>@Member's username</members_username>
-        <message_send_button>@Send Message</message_send_button>
+        <message_send_header>發送留言</message_send_header>
+        <to>要</to>
+        <members_username>會員用戶名</members_username>
+        <message_send_button>送信</message_send_button>
 
         <!-- My Account / Upload - Video Information Page -->
-        <upload_header>@Upload Step 1 - Video Information</upload_header>
-        <title>@Title</title>
-        <description>@Description</description>
-        <tags>@Tags</tags>
-        <comma_delimited>@Comma Delimited</comma_delimited>
-        <category>@Category</category>
-        <submit_button>@Submit</submit_button>
+        <upload_header>上傳第1步 - 視頻信息</upload_header>
+        <title>標題</title>
+        <description>說明</description>
+        <tags>標籤</tags>
+        <comma_delimited>逗號分隔</comma_delimited>
+        <category>分類</category>
+        <submit_button>提交</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->
-        <upload_video_header>@Upload Step 2 - Upload Video</upload_video_header>
-        <select_hdd>@Select a video from your computer's hard drive</select_hdd>
-        <select_hdd_header>@Select a video from your computer's hard drive</select_hdd_header>
-        <select_hdd_text>@Please make sure your files do not violate any copyrights and are in accordance with our site's {LINK}Terms of Use{/LINK}, and our {LINK2}Copyright Policy{/LINK2}. {SITENAME} reserves the right to remove any content at any time, for any reason(s).</select_hdd_text>
-        <filesize_limit>@Filesize limit is</filesize_limit>
-        <accepted_formats>@Accepted file types</accepted_formats>
-        <begin_upload_button>@Begin Upload</begin_upload_button>
-        <grab_youtube>@Grab a video from YouTube</grab_youtube>
-        <grab_youtube_header>@Grab a video from YouTube</grab_youtube_header>
-        <grab_youtube_text>@Input the URL to the video's page. The video you're grabbing must be public. Please make sure the video does not violate any copyrights and is in accordance with our site's {LINK}Terms of Use{/LINK}, and our {LINK2}Copyright Policy{/LINK2}. {SITENAME} reserves the right to remove any content at any time, for any reason(s).</grab_youtube_text>
-        <video_url>@Video URL</video_url>
-        <retrieving_video>@Retrieving video</retrieving_video>
-        <grab_button>@Grab Video</grab_button>
+        <upload_video_header>上傳第2步 - 上傳視頻</upload_video_header>
+        <select_hdd>選擇一個視頻從您的計算機硬盤驅動器</select_hdd>
+        <select_hdd_header>選擇一個視頻從您的計算機硬盤驅動器</select_hdd_header>
+        <select_hdd_text>請確保視頻沒有違反任何版權。{SITENAME}有權刪除任何內容在任何時間，任何理由。</select_hdd_text>
+        <filesize_limit>文件大小限制</filesize_limit>
+        <accepted_formats>接受的文件類型</accepted_formats>
+        <begin_upload_button>開始上傳</begin_upload_button>
+        <grab_youtube>抓斗從 YouTube視頻</grab_youtube>
+        <grab_youtube_header>抓斗從 YouTube視頻</grab_youtube_header>
+        <grab_youtube_text>輸入網址的視頻頁面。你抓的視頻必須是公開的。請確保視頻沒有違反任何版權。{SITENAME}有權刪除任何內容在任何時間，任何理由。
+        <video_url>視頻網址</video_url>
+        <retrieving_video>檢索視頻</retrieving_video>
+        <grab_button>抓取視頻</grab_button>
 
         <!-- My Account / Upload - Complete Page -->
-        <upload_complete_header>@Upload Step 3 - Upload Complete!</upload_complete_header>
-        <upload_complete_text>@Your video has been successfully uploaded. Please allow several minutes for processing before it is availble on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
+        <upload_complete_header>上傳第3步 - 上傳完成！</upload_complete_header>
+        <upload_complete_text>您的視頻已上傳成功。請允許幾分鐘進行處理之前，可在SITENAME和SITENAME移動。</upload_complete_text>
 
 
 

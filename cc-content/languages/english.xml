@@ -267,13 +267,13 @@
         <upload_video_header>@Upload Step 2 - Upload Video</upload_video_header>
         <select_hdd>@Select a video from your computer's hard drive</select_hdd>
         <select_hdd_header>@Select a video from your computer's hard drive</select_hdd_header>
-        <select_hdd_text>@Please make sure your files do not violate any copyrights and are in accordance with our site's {LINK}Terms of Use{/LINK}, and our {LINK2}Copyright Policy{/LINK2}. {SITENAME} reserves the right to remove any content at any time, for any reason(s).</select_hdd_text>
+        <select_hdd_text>@Please make sure the video does not violate any copyrights. {SITENAME} reserves the right to remove any content at any time, for any reasons.</select_hdd_text>
         <filesize_limit>@Filesize limit is</filesize_limit>
         <accepted_formats>@Accepted file types</accepted_formats>
         <begin_upload_button>@Begin Upload</begin_upload_button>
         <grab_youtube>@Grab a video from YouTube</grab_youtube>
         <grab_youtube_header>@Grab a video from YouTube</grab_youtube_header>
-        <grab_youtube_text>@Input the URL to the video's page. The video you're grabbing must be public. Please make sure the video does not violate any copyrights and is in accordance with our site's {LINK}Terms of Use{/LINK}, and our {LINK2}Copyright Policy{/LINK2}. {SITENAME} reserves the right to remove any content at any time, for any reason(s).</grab_youtube_text>
+        <grab_youtube_text>@Input the URL to the video's page. The video you're grabbing must be public. Please make sure the video does not violate any copyrights. {SITENAME} reserves the right to remove any content at any time, for any reasons.</grab_youtube_text>
         <video_url>@Video URL</video_url>
         <retrieving_video>@Retrieving video</retrieving_video>
         <grab_button>@Grab Video</grab_button>
