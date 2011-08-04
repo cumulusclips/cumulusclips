@@ -242,6 +242,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_theme','cumulus'),
 ('active_mobile_theme','mobile'),
 ('default_language', 'english'),
+('active_languages', 'a:2:{i:0;s:7:"english";i:1;s:19:"chinese_traditional";}'),
 ('active_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),
 ('auto_approve_users','1'),
 ('auto_approve_videos','1'),

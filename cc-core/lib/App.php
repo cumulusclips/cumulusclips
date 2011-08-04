@@ -148,12 +148,35 @@ class App {
         // Check if 'Preview' theme was provided
         if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
             $active_theme = $_GET['preview_theme'];
-            $preview_theme = true;
+            $preview_theme = $_GET['preview_theme'];
         }
 
         define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
         
+    }
+
+
+
+
+    /**
+     * Determine which language should be used
+     * @return string Language to be used
+     */
+    static function CurrentLang() {
+
+        $preview_lang = false;
+        $default_lang = Settings::Get ('default_language');
+
+        // Check if 'Preview' language was provided
+        if (isset ($_GET['preview_lang']) && file_exists (DOC_ROOT . '/cc-content/languages/' . $_GET['preview_lang'] . '.xml')) {
+            $default_lang = $_GET['preview_lang'];
+            $preview_lang = $_GET['preview_lang'];
+        }
+
+        define ('PREVIEW_LANG', $preview_lang);
+        return $default_lang;
+
     }
 
 }

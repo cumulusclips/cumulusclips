@@ -8,7 +8,6 @@
 // Include required files
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Pagination');
 App::LoadClass ('Filesystem');
 
 

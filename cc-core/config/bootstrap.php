@@ -58,7 +58,7 @@ $config->thumb_bucket_url = Settings::Get ('thumb_bucket_url');
 
 
 // Load language
-Language::LoadLangPack (Settings::Get ('default_language'));
+Language::LoadLangPack (App::CurrentLang());
 
 
 // Define Theme settings

@@ -6,6 +6,7 @@
         <css_name>english</css_name>
         <image_prefix>en_</image_prefix>
         <author>CumulusClips.com</author>
+        <sample>The quick brown fox jumps over the lazy dog</sample>
         <notes></notes>
     </information>
     <terms>
@@ -267,13 +268,13 @@
         <upload_video_header>@Upload Step 2 - Upload Video</upload_video_header>
         <select_hdd>@Select a video from your computer's hard drive</select_hdd>
         <select_hdd_header>@Select a video from your computer's hard drive</select_hdd_header>
-        <select_hdd_text>@Please make sure the video does not violate any copyrights. {SITENAME} reserves the right to remove any content at any time, for any reasons.</select_hdd_text>
+        <select_hdd_text>@Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</select_hdd_text>
         <filesize_limit>@Filesize limit is</filesize_limit>
         <accepted_formats>@Accepted file types</accepted_formats>
         <begin_upload_button>@Begin Upload</begin_upload_button>
         <grab_youtube>@Grab a video from YouTube</grab_youtube>
         <grab_youtube_header>@Grab a video from YouTube</grab_youtube_header>
-        <grab_youtube_text>@Input the URL to the video's page. The video you're grabbing must be public. Please make sure the video does not violate any copyrights. {SITENAME} reserves the right to remove any content at any time, for any reasons.</grab_youtube_text>
+        <grab_youtube_text>@Enter the URL of the videos page. The video must be public. Please make sure the video does not violate any copyrights. We reserve the right to remove any video, at any time, for any reason.</grab_youtube_text>
         <video_url>@Video URL</video_url>
         <retrieving_video>@Retrieving video</retrieving_video>
         <grab_button>@Grab Video</grab_button>

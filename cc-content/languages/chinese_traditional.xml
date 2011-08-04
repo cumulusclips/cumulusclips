@@ -3,9 +3,10 @@
     <information>
         <lang_name>Chinese (Traditional)</lang_name>
         <locale>zh_TW</locale>
-        <css_name>chineses_tdl</css_name>
-        <image_prefix>cht_</image_prefix>
+        <css_name>chinese_tdl</css_name>
+        <image_prefix>zht_</image_prefix>
         <author>CumulusClips.com</author>
+        <sample>敏捷的棕色狐狸躍過那隻懶狗</sample>
         <notes></notes>
     </information>
     <terms>
@@ -267,13 +268,13 @@
         <upload_video_header>上傳第2步 - 上傳視頻</upload_video_header>
         <select_hdd>選擇一個視頻從您的計算機硬盤驅動器</select_hdd>
         <select_hdd_header>選擇一個視頻從您的計算機硬盤驅動器</select_hdd_header>
-        <select_hdd_text>請確保視頻沒有違反任何版權。{SITENAME}有權刪除任何內容在任何時間，任何理由。</select_hdd_text>
+        <select_hdd_text>請確保視頻沒有違反任何版權。 我們有權刪除任何視頻在任何時間，任何理由。</select_hdd_text>
         <filesize_limit>文件大小限制</filesize_limit>
         <accepted_formats>接受的文件類型</accepted_formats>
         <begin_upload_button>開始上傳</begin_upload_button>
         <grab_youtube>抓斗從 YouTube視頻</grab_youtube>
         <grab_youtube_header>抓斗從 YouTube視頻</grab_youtube_header>
-        <grab_youtube_text>輸入網址的視頻頁面。你抓的視頻必須是公開的。請確保視頻沒有違反任何版權。{SITENAME}有權刪除任何內容在任何時間，任何理由。
+        <grab_youtube_text>輸入網址的視頻頁面。 視頻必須是公開的。 請確保視頻沒有違反任何版權。 我們有權刪除任何視頻在任何時間，任何理由。</grab_youtube_text>
         <video_url>視頻網址</video_url>
         <retrieving_video>檢索視頻</retrieving_video>
         <grab_button>抓取視頻</grab_button>

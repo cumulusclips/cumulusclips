@@ -14,7 +14,6 @@ class Pagination {
 
     /**
      * Instantiate pagination object
-     * @global object $config System config settings object
      * @param string $url The URL for the current page which will be paginated
      * @param integer $total Total number of records
      * @param integer $records_per_page Number of records to display per page
@@ -24,8 +23,7 @@ class Pagination {
      * @return void Pagination object is created
      */
     public function  __construct ($url, $total, $records_per_page, $seo_friendly_url = true) {
-        global $config;
-        $this->url = self::StoreURL($url);
+        $this->url = parse_url ($url);
         $this->seo_friendly_url = $seo_friendly_url;
         $this->total = $total;
         $this->records_per_page = $records_per_page;
@@ -231,20 +229,6 @@ class Pagination {
      */
     public function GetURL ($additional_query = null) {
         return $this->BuildURL ($this->GetPage(), $additional_query);
-    }
-
-
-
-
-    /**
-     * Break a URL string into pieces based on its components (i.e. path, query, host)
-     * @param string $url The URL to breakdown
-     * @return array Returns array of URL components
-     */
-    static function StoreURL ($url) {
-        $url = parse_url ($url);
-        $url['path'] = dirname ($url['path']) . '/' . basename ($url['path']);
-        return $url;
     }
 
 }

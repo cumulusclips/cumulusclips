@@ -310,6 +310,35 @@ class Functions {
             return false;
         }
     }
+
+
+
+
+    /**
+     * Append query string parameters to a URL
+     * @param string $url The original URL
+     * @param array $query Query string parameters in Key/Value pairs
+     * @return string Returns the URL with the query string appended to it
+     */
+    static function AppendQueryString ($url, $query) {
+
+        // Break URL into parts
+        $parts = parse_url ($url);
+
+        // Append/Add query string
+        $new_query = ((isset ($parts['query'])) ? '&' : '?') .  http_build_query ($query);
+
+        // Append query string before #frament if any
+        if (isset ($parts['fragment'])) {
+            $split = explode ('#', $url);
+            $url = $split[0] . $new_query . '#' . $split[1];
+        } else {
+            $url .= $new_query;
+        }
+
+        return $url;
+
+    }
     
 }
 

@@ -331,6 +331,8 @@ class User {
             return $_SESSION['user_id'];
         }  else {
             if ($redirect_location) {
+                if (PREVIEW_LANG) $redirect_location = Functions::AppendQueryString ($redirect_location, array ('preview_lang' => PREVIEW_LANG));
+                if (PREVIEW_THEME) $redirect_location = Functions::AppendQueryString ($redirect_location, array ('preview_theme' => PREVIEW_THEME));
                 header ("Location: $redirect_location");
                 exit();
             } else {

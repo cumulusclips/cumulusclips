@@ -224,6 +224,14 @@ class View {
             self::$options->js[] = $js_theme_preview;
         }
 
+        // Add language preview JS
+	if (PREVIEW_LANG) {
+            $js_lang_preview = '<script type="text/javascript">';
+            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
+            $js_lang_preview .= '</script>';
+            self::$options->js[] = $js_lang_preview;
+        }
+
         Plugin::Trigger ('view.write_js');
         if (isset (self::$options->js)) {
             foreach (self::$options->js as $_value) {
