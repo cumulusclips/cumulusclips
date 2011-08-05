@@ -7,7 +7,12 @@ class HelloWorld {
     }
 
     static function SayHelloWorld() { echo '<h1>Hello World!</h1>'; }
-    static function Info() { /* Info Array */ }
+    static function Info() {
+        return array(
+            'plugin_name'   => 'Hello World',
+            'author'        => 'CumulusClips.org'
+        );
+    }
 
 }
 

@@ -48,59 +48,59 @@
         <login_button>Login</login_button>
 
         <!-- Login Page -->
-        <login_header>@Login to your Account</login_header>
-        <remember_me>@Remember me</remember_me>
-        <forgot_text>@Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
-        <email>@E-mail</email>
-        <forgot_header>@Forgot your Login</forgot_header>
-        <forgot_button>@Forgot Login</forgot_button>
+        <login_header>Accede a tu cuenta</login_header>
+        <remember_me>Recuérdame</remember_me>
+        <forgot_text>Por favor ingrese su dirección de correo electrónico en nuestros archivos, a continuación. Vamos a restablecer su contraseña y le enviaremos su nombre de usuario nuevo.</forgot_text>
+        <email>Email</email>
+        <forgot_header>¿Olvidaste tu usuario?</forgot_header>
+        <forgot_button>Olvidaste tu acceso</forgot_button>
 
         <!-- Register Page -->
-        <register_header>@Register with</register_header>
-        <join_today>@Join {SITENAME} Today!</join_today>
-        <register_text>@As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to channels, and much more!</register_text>
-        <asterisk>@An asterisk (*) denotes required field.</asterisk>
-        <username_req>@Username can only contain alphanumeric (A-Z, a-z, 0-9) characters, no spaces or special characters. Your unique url will be derived as:</username_req>
-        <confirm_password>@Confirm Password</confirm_password>
-        <are_you_human>@Are you Human?</are_you_human>
-        <agree_terms>@I agree to the {LINK}Terms of Use{/LINK}</agree_terms>
-        <register_button>@Create Account</register_button>
+        <register_header>Regístrese con</register_header>
+        <join_today>Únase a {SITENAME} hoy!</join_today>
+        <register_text>Como miembro, usted será capaz de subir videos, publicar comentarios, votar y compartir videos, suscribirse a los canales, y mucho más!</register_text>
+        <asterisk>Un asterisco (*) campos obligatorios.</asterisk>
+        <username_req>Nombre de usuario sólo puede contener alfanuméricos (AZ, az, 0-9) caracteres, sin espacios ni caracteres especiales. Su dirección única se obtendrá como:</username_req>
+        <confirm_password>Confirme su contraseña</confirm_password>
+        <are_you_human>¿Es usted humano?</are_you_human>
+        <agree_terms>Estoy de acuerdo con los {LINK}Términos de uso{/LINK}</agree_terms>
+        <register_button>Crear una cuenta</register_button>
 
         <!-- Contact Page -->
-        <contact_header>@Contact Us</contact_header>
-        <contact_text>@Fill out and submit the form below and I'll get back to you as soon as I can. I'll really try to get back to everyone, but sometimes it's hard and I can't guarantee it.</contact_text>
-        <name>@Name</name>
-        <message>@Message</message>
-        <contact_us>@Contact Us</contact_us>
-        <contact_button>@Contact Us</contact_button>
+        <contact_header>Contacte con nosotros</contact_header>
+        <contact_text>Llenar y enviar el siguiente formulario y me pondré en contacto con usted lo antes que pueda. Realmente va a tratar de volver a todo el mundo, pero a veces es duro y no lo puedo garantizar.</contact_text>
+        <name>Nombre</name>
+        <message>Mensaje</message>
+        <contact_us>Contacte con nosotros</contact_us>
+        <contact_button>Contacte con nosotros</contact_button>
 
         <!-- Browse Videos Page -->
-        <videos_header>@Browse Videos</videos_header>
-        <viewing>@Viewing</viewing>
-        <no_videos>@No videos added yet.</no_videos>
-        <by>@By</by>
+        <videos_header>Explorar Videos</videos_header>
+        <viewing>Viendo</viewing>
+        <no_videos>No hay videos añadidos.</no_videos>
+        <by>Por</by>
 
         <!-- Browse Members Page -->
-        <members_header>@Browse Members</members_header>
-        <no_members>@No registered members yet.</no_members>
-        <member_since>@Member Since</member_since>
-        <videos_uploaded>@Videos Uploaded</videos_uploaded>
+        <members_header>Explorar Miembros</members_header>
+        <no_members>No hay usuarios registrados todavía.</no_members>
+        <member_since>Miembro desde</member_since>
+        <videos_uploaded>Videos subidos</videos_uploaded>
 
         <!-- Member Profile Page -->
-        <subscribe>@Subscribe</subscribe>
-        <unsubscribe>@Unsubscribe</unsubscribe>
-        <send_message>@Send Message</send_message>
-        <report_abuse>@Report Abuse</report_abuse>
-        <member_rss>@Member's RSS Feed</member_rss>
-        <profile_views>@Profile Views</profile_views>
-        <subscribers>@Subscribers</subscribers>
-        <website>@Website</website>
-        <recent_videos>@Recent Videos</recent_videos>
-        <view_all_videos>@View all Videos</view_all_videos>
-        <recent_posts_header>@Recent Updates</recent_posts_header>
-        <update_status>@Update your Status</update_status>
-        <post_update_button>@Post Update</post_update_button>
-        <no_member_videos>@Member currently has no videos.</no_member_videos>
+        <subscribe>Suscribir</subscribe>
+        <unsubscribe>Darse de baja</unsubscribe>
+        <send_message>Enviar mensaje</send_message>
+        <report_abuse>Reporte abuso</report_abuse>
+        <member_rss>RSS Feed de Miembro</member_rss>
+        <profile_views>Vistas del Perfil</profile_views>
+        <subscribers>Suscriptores</subscribers>
+        <website>Sitio web</website>
+        <recent_videos>Videos Recientes</recent_videos>
+        <view_all_videos>Ver todos los Videos</view_all_videos>
+        <recent_posts_header>Actualizaciones recientes</recent_posts_header>
+        <update_status>Actualiza tu estado</update_status>
+        <post_update_button>Realizar la actualización</post_update_button>
+        <no_member_videos>Miembro no tiene vídeos.</no_member_videos>
 
         <!-- Member Videos Page -->
         <videos_by>@Videos By</videos_by>

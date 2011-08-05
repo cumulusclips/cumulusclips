@@ -82,7 +82,7 @@ class Plugin {
         foreach ($active_plugins as $plugin) {
 
             // Load plugin
-            include (DOC_ROOT . '/cc-content/plugins/' . $plugin . '/plugin.php');
+            include_once (DOC_ROOT . '/cc-content/plugins/' . $plugin . '/plugin.php');
 
             // Load plugin and attach it's code to various hooks
             call_user_func (array ($plugin, 'Load'));
