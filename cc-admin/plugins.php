@@ -18,42 +18,31 @@ Plugin::Trigger ('admin.videos.start');
 $message = null;
 $page_title = 'Plugins';
 $plugin_list = array();
-$active_plugins = unserialize (Settings::Get ('active_plugins'));
-
-
-### Remove any orphaned plugins
-//foreach ($active_plugins as $key => $plugin) {
-//    $lang_file = DOC_ROOT . '/cc-content/languages/' . $language . '.xml';
-//    if (!file_exists ($lang_file)) {
-//        unset ($active_languages[$key]);
-//    }
-//}
-//Settings::Set ('active_languages', serialize ($active_languages));
-//reset ($active_languages);
+$active_plugins = Plugin::GetActivePlugins();
 
 
 
 
-### Handle "Delete" theme if requested
+### Handle "Delete" plugin if requested
 if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['delete'] . '.xml';
-    if (file_exists ($language_file) && $_GET['delete'] != Settings::Get ('default_language')) {
+    if (Plugin::ValidPlugin ($_GET['delete'])) {
 
-        // Deactivate language if applicable
-        $key = array_search ($_GET['delete'], $active_languages);
+        // Uninstall plugin if applicable
+        $key = array_search ($_GET['delete'], $active_plugins);
         if ($key !== false) {
-            unset ($active_languages[$key]);
-            Settings::Set ('active_languages', serialize ($active_languages));
+            unset ($active_plugins[$key]);
+            Settings::Set ('active_plugins', serialize ($active_plugins));
+            if (method_exists ($_GET['delete'], 'Uninstall')) call_user_func (array ($_GET['delete'], 'Uninstall'));
         }
         
-        // Delete language file
-        $xml = simplexml_load_file ($language_file);
-        $message = $xml->information->lang_name . ' language has been deleted';
+        // Delete plugin files
+        $plugin_info = Plugin::GetPluginInfo ($_GET['delete']);
+        $message = $plugin_info->plugin_name . ' plugin has been deleted';
         $message_type = 'success';
         try {
             Filesystem::Open();
-            Filesystem::Delete ($language_file);
+            Filesystem::Delete (DOC_ROOT . '/cc-content/plugins/' . $_GET['delete']);
             Filesystem::Close();
         } catch (Exception $e) {
             $message = $e->getMessage();
@@ -65,48 +54,44 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 }
 
 
-### Handle "Activate" language if requested
+
+
+### Handle "Activate" plugin if requested
 else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
 
-    // Validate theme
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['activate'] . '.xml';
-    if (file_exists ($language_file)) {
-        $xml = simplexml_load_file ($language_file);
-        $active_languages[] = $_GET['activate'];
-        Settings::Set ('active_languages', serialize ($active_languages));
-        $message = $xml->information->lang_name . ' has been activated.';
+    // Validate plugin
+    if (Plugin::ValidPlugin ($_GET['activate'])) {
+        if (method_exists ($_GET['activate'], 'Install')) call_user_func (array ($_GET['activate'], 'Install'));
+        $active_plugins[] = $_GET['activate'];
+        Settings::Set ('active_plugins', serialize ($active_plugins));
+
+        // Output message
+        $plugin_info = Plugin::GetPluginInfo ($_GET['activate']);
+        $message = $plugin_info->plugin_name . ' has been activated.';
         $message_type = 'success';
     }
 
 }
 
 
-### Handle "Deactivate" language if requested
+
+
+### Handle "Deactivate" plugin if requested
 else if (!empty ($_GET['deactivate']) && !ctype_space ($_GET['deactivate'])) {
 
-    // Validate theme
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['deactivate'] . '.xml';
-    $key = array_search ($_GET['deactivate'], $active_languages);
-    if ($key !== false) {
-        $xml = simplexml_load_file ($language_file);
-        unset ($active_languages[$key]);
-        Settings::Set ('active_languages', serialize ($active_languages));
-        $message = $xml->information->lang_name . ' has been deactivated.';
-        $message_type = 'success';
-    }
+//    echo Plugin::ValidPlugin ($_GET['deactivate']) ? 'yes' : 'no';
+//    exit();
 
-}
+    // Uninstall plugin if applicable
+    $key = array_search ($_GET['deactivate'], $active_plugins);
+    if ($key !== false && Plugin::ValidPlugin ($_GET['deactivate'])) {
+        unset ($active_plugins[$key]);
+        Settings::Set ('active_plugins', serialize ($active_plugins));
+        if (method_exists ($_GET['deactivate'], 'Uninstall')) call_user_func (array ($_GET['deactivate'], 'Uninstall'));
 
-
-### Handle "Set Default" language if requested
-else if (!empty ($_GET['default']) && !ctype_space ($_GET['default'])) {
-
-    // Validate language
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['default'] . '.xml';
-    if (in_array ($_GET['default'], $active_languages) && file_exists ($language_file)) {
-        $xml = simplexml_load_file ($language_file);
-        Settings::Set ('default_language', $_GET['default']);
-        $message = $xml->information->lang_name . ' is now the default language.';
+        // Output message
+        $plugin_info = Plugin::GetPluginInfo ($_GET['deactivate']);
+        $message = $plugin_info->plugin_name . ' has been deactivated.';
         $message_type = 'success';
     }
 
@@ -115,18 +100,21 @@ else if (!empty ($_GET['default']) && !ctype_space ($_GET['default'])) {
 
 
 
-// Retrieve languages
+// Retrieve plugins
 foreach (glob (DOC_ROOT . '/cc-content/plugins/*') as $plugin_path) {
 
-
-    include_once ($plugin_path . '/plugin.php');
+    // Load plugin and retrieve it's info
     $plugin_name = basename ($plugin_path);
-    $info = call_user_func (array ($plugin_name, 'Info'));
+    include_once ("$plugin_path/$plugin_name.php");
+
+    // Store info for output
     $plugin = new stdClass();
-    $plugin->filename = $info['plugin_name'];
+    $plugin->filename = $plugin_name;
+    $plugin->info = Plugin::GetPluginInfo ($plugin_name);
     $plugin->active = (in_array ($plugin->filename, $active_plugins)) ? true : false;
-    $plugin->info = $info;
+    $plugin->settings = (method_exists ($plugin_name, 'settings')) ? true : false;
     $plugin_list[] = $plugin;
+    
 }
 
 
@@ -149,20 +137,30 @@ include ('header.php');
         <div class="block">
 
             <p>
-                <strong><?=$plugin->info['plugin_name']?></strong>
-                <?php if (!empty ($plugin->info['author'])): ?>
-                    by: <?=$plugin->info['author']?>
+                <strong><?=$plugin->info->plugin_name?></strong>
+                <?php if (!empty ($plugin->info->author)): ?>
+                    by: <?=$plugin->info->author?>
                 <?php endif; ?>
             </p>
 
-            <?php if (!empty ($plugin->info['notes'])): ?>
-                <p><?=$plugin->info['notes']?></p>
+
+            <?php if (!empty ($plugin->info->version)): ?>
+            <p><strong>Version:</strong> <?=$plugin->info->version?></p>
+            <?php endif; ?>
+
+
+            <?php if (!empty ($plugin->info->notes)): ?>
+                <p><?=$plugin->info->notes?></p>
             <?php endif; ?>
 
 
             <p>
+                <?php if ($plugin->active && $plugin->settings): ?>
+                    <a href="<?=ADMIN?>/settings_plugin.php?plugin=<?=$plugin->filename?>">Settings</a>
+                <?php endif; ?>
+
                 <?php if ($plugin->active): ?>
-                    <a href="<?=ADMIN?>/plugins.php?deactivate=<?=$plugin->filename?>">Deactivate</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?deactivate=<?=$plugin->filename?>">Deactivate</a>
                 <?php else: ?>
                     <a href="<?=ADMIN?>/plugins.php?activate=<?=$plugin->filename?>">Activate</a>
                 <?php endif; ?>

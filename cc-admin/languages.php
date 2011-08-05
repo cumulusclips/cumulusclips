@@ -20,23 +20,12 @@ $page_title = 'Languages';
 $lang_list = array();
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
 $admin_js[] = ADMIN . '/js/fancybox.js';
-$active_languages = unserialize (Settings::Get ('active_languages'));
-
-
-### Remove any orphaned languages
-foreach ($active_languages as $key => $language) {
-    $lang_file = DOC_ROOT . '/cc-content/languages/' . $language . '.xml';
-    if (!file_exists ($lang_file)) {
-        unset ($active_languages[$key]);
-    }
-}
-Settings::Set ('active_languages', serialize ($active_languages));
-reset ($active_languages);
+$active_languages = Language::GetActiveLanguages();
 
 
 
 
-### Handle "Delete" theme if requested
+### Handle "Delete" language if requested
 if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
     $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['delete'] . '.xml';

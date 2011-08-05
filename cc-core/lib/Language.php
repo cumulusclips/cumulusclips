@@ -115,6 +115,31 @@ class Language {
         return (empty (self::$xml->meta->$page)) ? new stdClass() : self::$xml->meta->$page;
     }
 
+
+
+
+    /**
+     * Retrieve a list of valid active languages
+     * @return array Returns a list of active languages, any orphaned languages are deactivated
+     */
+    static function GetActiveLanguages() {
+
+        $active = Settings::Get ('active_languages');
+        $active = unserialize ($active);
+
+        foreach ($active as $key => $language) {
+            $language_file = DOC_ROOT . '/cc-content/languages/' . $language . '.xml';
+            if (!file_exists ($language_file)) {
+                unset ($active[$key]);
+            }
+        }
+
+        reset ($active);
+        Settings::Set ('active_languages', serialize ($active));
+        return $active;
+
+    }
+
 }
 
 ?>

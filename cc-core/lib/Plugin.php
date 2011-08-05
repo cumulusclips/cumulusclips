@@ -5,19 +5,77 @@
 PLUGIN CODE
 **********/
 
+class SamplePlugin {
+
+    /**
+     * Attach plugin methods to hooks throughout the codebase. Method is called
+     * when the plugin system is initialized (cc-core/config/bootstrap.php).
+     *
+     * It is recommended you put all your attachment calls here for the sake of
+     * keeping your sanity. It is possible to attach to hooks later on
+     * within your plugin methods, but at the very least attach your
+     * Init/Bootstrap method at this point.
+     *
+     * @example Plugin::Attach ( 'EVENT_NAME' , array( __CLASS__ , 'METHOD_NAME' ) );
+     */
+    public function Load() {}
 
 
-class Sample_Plugin {
 
-    public function Load() {
-        // Syntax: Plugin::Attach ( 'EVENT_NAME' , array( 'PLUGIN_NAME' , 'METHOD_NAME' ) );
-        Plugin::Attach ( 'app.start' , array( 'Sample_Plugin' , 'CustomThing' ) );
-        Plugin::Attach ( 'app.start' , array( 'Sample_Plugin' , 'CustomCode' ) );
-    }
 
-    static function CustomThing() { echo 'Here';}
-    static function CustomCode() { echo 'Again';}
-    static function Info() { /* Info Array */ }
+    /**
+     * Provide information about the plugin
+     * @return array Returns an array with information about the plugin.
+     * @example return array ('plugin_name' => 'Test Plugin', 'author' => 'CumulusClips.org');
+     *      Required items are:
+     *          plugin_name - Formal name for the plugin
+     *      Optional items are:
+     *          author - Person or organization who created plugin
+     *          version - Version number of the plugin in 3 place format e.g: 5.1.7
+     *          notes - Notes about or description of the plugin to the end user
+     *          site - URL where more documentation / information about the plugin can be obtained
+     *          Any other custom information can be added for internal use
+     */
+    static function Info() {}
+
+
+
+
+    /**
+     * Output settings page for the plugin if applicable
+     * @return string Returns the HTML for the settings page of the plugin, If
+     * is ommited then no settings page is displayed
+     * 
+     * NOTE: This method is called after headers are sent, you will not be able
+     * to modify header information with this method
+     */
+    static function Settings() {}
+
+
+
+
+    /**
+     * Perform additional actions required for plugin installation. This method
+     * is called when a plugin is activated. This is where you would execute for
+     * example any create any database tables or write files, etc.
+     *
+     * This method is not required and can be ommited. It will only execute if
+     * exists during plugin activation.
+     */
+    static function Install() {}
+
+
+
+
+    /**
+     * Revert any additional actions made by the plugin during it's installation.
+     * This method is called when a plugin is deactivated or deleted. This is
+     * where you would for example remove any database tables or delete files, etc.
+     *
+     * This method is not required and can be ommited. It will only execute if
+     * exists during plugin deactivation or plugin removal.
+     */
+    static function Uninstall() {}
 
 }
 
@@ -53,6 +111,8 @@ class Plugin {
     }
 
 
+
+
     /**
      * Execute methods (code) attached to specified event
      * @param string $event_name Event for which attached events are fired
@@ -69,20 +129,21 @@ class Plugin {
     }
 
 
+
+
     /**
      * Instantiate all plugins and attach their methods to the listener
      */
     static function Init() {
 
         // Retrieve all active plugins
-        $active_plugins = Settings::Get ('active_plugins');
-        $active_plugins = unserialize ($active_plugins);
+        $active_plugins = self::GetActivePlugins();
 
         // Load all active plugins
         foreach ($active_plugins as $plugin) {
 
             // Load plugin
-            include_once (DOC_ROOT . '/cc-content/plugins/' . $plugin . '/plugin.php');
+            include_once (DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php");
 
             // Load plugin and attach it's code to various hooks
             call_user_func (array ($plugin, 'Load'));
@@ -91,6 +152,8 @@ class Plugin {
         }
 
     }
+
+
 
 
     /**
@@ -113,19 +176,77 @@ class Plugin {
 
     }
 
+
+
+
+    /**
+     * Retrieve a list of valid active plugins
+     * @return array Returns a list of active plugins, any orphaned plugins are deactivated
+     */
+    static function GetActivePlugins() {
+
+        $active = Settings::Get ('active_plugins');
+        $active = unserialize ($active);
+
+        foreach ($active as $key => $plugin) {
+            $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
+            if (!file_exists ($plugin_file)) {
+                unset ($active[$key]);
+            }
+        }
+        
+        reset ($active);
+        Settings::Set ('active_plugins', serialize ($active));
+        return $active;
+
+    }
+
+
+
+
+    /**
+     * Retrieve plugin information
+     * @param string $plugin Name of the plugin whose information to retrieve
+     * @return object Innstance of stdClass object is returned is developers
+     * information
+     */
+    static function GetPluginInfo ($plugin) {
+        return (object) call_user_func (array ($plugin, 'Info'));
+    }
+
+
+
+
+    /**
+     * Check if a give plugin a valid
+     * @param string $plugin Name of the plugin to validate
+     * @param boolean $load_plugin_file [optional] Whether to perform a deep
+     * validity check, if true the plugin is loaded into memory
+     * @return boolean Returns true if the plugin is valid, false otherwise
+     */
+    static function ValidPlugin ($plugin, $load_plugin_file = true) {
+
+        // Check plugin file exists
+        $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
+        if (!file_exists ($plugin_file)) return false;
+
+        // Perform deeper validity check
+        if ($load_plugin_file) {
+
+            // Load plugin and check it's info method outputs required data
+            include_once ($plugin_file);
+            if (method_exists ($plugin, 'Info')) {
+                $info = (object) call_user_func (array ($plugin, 'Info'));
+                return (!empty ($info->plugin_name)) ? true : false;
+            } else {
+                return false;
+            }
+
+        } else {
+            return true;
+        }
+    }
+
 }
-
-
-
-
-
-/**********
-SYSTEM CODE
-**********/
-
-//Plugin::Install ('Sample_Plugin');
-//Plugin::Init();
-//Plugin::Trigger ('app.start');
-//
 
 ?>
