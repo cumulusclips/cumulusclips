@@ -56,11 +56,11 @@ class SamplePlugin {
 
     /**
      * Perform additional actions required for plugin installation. This method
-     * is called when a plugin is activated. This is where you would execute for
-     * example any create any database tables or write files, etc.
+     * is called when a plugin is enabled for the first time. This is where you
+     * would execute for example any create any database tables or write files, etc.
      *
      * This method is not required and can be ommited. It will only execute if
-     * exists during plugin activation.
+     * exists during plugin enablement.
      */
     static function Install() {}
 
@@ -69,11 +69,11 @@ class SamplePlugin {
 
     /**
      * Revert any additional actions made by the plugin during it's installation.
-     * This method is called when a plugin is deactivated or deleted. This is
-     * where you would for example remove any database tables or delete files, etc.
+     * This method is called when a plugin is deleted. This is where you would
+     * for example remove any database tables or delete files, etc.
      *
      * This method is not required and can be ommited. It will only execute if
-     * exists during plugin deactivation or plugin removal.
+     * exists during plugin deletion.
      */
     static function Uninstall() {}
 
@@ -137,7 +137,7 @@ class Plugin {
     static function Init() {
 
         // Retrieve all active plugins
-        $active_plugins = self::GetActivePlugins();
+        $active_plugins = self::GetEnabledPlugins();
 
         // Load all active plugins
         foreach ($active_plugins as $plugin) {
@@ -157,47 +157,24 @@ class Plugin {
 
 
     /**
-     * Install a plugin from an archive zip file
-     * @param string $plugin_name Name of plugin to be installed
-     * @return void Plugin is made available for use and archive is deleted
+     * Retrieve a list of valid enabled plugins
+     * @return array Returns a list of enabled plugins, any orphaned plugins are disabled
      */
-    static function Install ($plugin_name) {
+    static function GetEnabledPlugins() {
 
-        // Determine plugin path
-        $plugin = DOC_ROOT . '/cc-content/plugins/' . $plugin_name . '.zip';
+        $enabled = Settings::Get ('enabled_plugins');
+        $enabled = unserialize ($enabled);
 
-        // Extract plugin
-        $za = new ZipArchive();
-        $za->open($plugin);
-        $za->extractTo (dirname ($plugin));
-
-        // Remove uneeded zip
-        unlink($plugin);
-
-    }
-
-
-
-
-    /**
-     * Retrieve a list of valid active plugins
-     * @return array Returns a list of active plugins, any orphaned plugins are deactivated
-     */
-    static function GetActivePlugins() {
-
-        $active = Settings::Get ('active_plugins');
-        $active = unserialize ($active);
-
-        foreach ($active as $key => $plugin) {
+        foreach ($enabled as $key => $plugin) {
             $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
             if (!file_exists ($plugin_file)) {
-                unset ($active[$key]);
+                unset ($enabled[$key]);
             }
         }
         
-        reset ($active);
-        Settings::Set ('active_plugins', serialize ($active));
-        return $active;
+        reset ($enabled);
+        Settings::Set ('enabled_plugins', serialize ($enabled));
+        return $enabled;
 
     }
 

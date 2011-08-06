@@ -18,7 +18,8 @@ Plugin::Trigger ('admin.videos.start');
 $message = null;
 $page_title = 'Plugins';
 $plugin_list = array();
-$active_plugins = Plugin::GetActivePlugins();
+$installed_plugins = unserialize (Settings::Get ('installed_plugins'));
+$enabled_plugins = Plugin::GetEnabledPlugins();
 
 
 
@@ -28,14 +29,21 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
     if (Plugin::ValidPlugin ($_GET['delete'])) {
 
-        // Uninstall plugin if applicable
-        $key = array_search ($_GET['delete'], $active_plugins);
+        // Disable plugin if applicable
+        $key = array_search ($_GET['delete'], $enabled_plugins);
         if ($key !== false) {
-            unset ($active_plugins[$key]);
-            Settings::Set ('active_plugins', serialize ($active_plugins));
-            if (method_exists ($_GET['delete'], 'Uninstall')) call_user_func (array ($_GET['delete'], 'Uninstall'));
+            unset ($enabled_plugins[$key]);
+            Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
         }
-        
+
+        // Uninstall plugin
+        $key = array_search ($_GET['delete'], $installed_plugins);
+        if ($key !== false) {
+            if (method_exists ($_GET['delete'], 'Uninstall')) call_user_func (array ($_GET['delete'], 'Uninstall'));
+            unset ($installed_plugins[$key]);
+            Settings::Set ('installed_plugins', serialize ($installed_plugins));
+        }
+
         // Delete plugin files
         $plugin_info = Plugin::GetPluginInfo ($_GET['delete']);
         $message = $plugin_info->plugin_name . ' plugin has been deleted';
@@ -56,18 +64,26 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
 
 
-### Handle "Activate" plugin if requested
-else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
+### Handle "Enable" plugin if requested
+else if (!empty ($_GET['enable']) && !ctype_space ($_GET['enable'])) {
 
     // Validate plugin
-    if (Plugin::ValidPlugin ($_GET['activate'])) {
-        if (method_exists ($_GET['activate'], 'Install')) call_user_func (array ($_GET['activate'], 'Install'));
-        $active_plugins[] = $_GET['activate'];
-        Settings::Set ('active_plugins', serialize ($active_plugins));
+    if (Plugin::ValidPlugin ($_GET['enable']) && !in_array ($_GET['enable'], $enabled_plugins)) {
+
+        // Install plugin if applicable
+        if (!in_array ($_GET['enable'], $installed_plugins)) {
+            if (method_exists ($_GET['enable'], 'Install')) call_user_func (array ($_GET['enable'], 'Install'));
+            $installed_plugins[] = $_GET['enable'];
+            Settings::Set ('installed_plugins', serialize ($installed_plugins));
+        }
+
+        // Enable plugin
+        $enabled_plugins[] = $_GET['enable'];
+        Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
 
         // Output message
-        $plugin_info = Plugin::GetPluginInfo ($_GET['activate']);
-        $message = $plugin_info->plugin_name . ' has been activated.';
+        $plugin_info = Plugin::GetPluginInfo ($_GET['enable']);
+        $message = $plugin_info->plugin_name . ' has been enabled.';
         $message_type = 'success';
     }
 
@@ -76,23 +92,21 @@ else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
 
 
 
-### Handle "Deactivate" plugin if requested
-else if (!empty ($_GET['deactivate']) && !ctype_space ($_GET['deactivate'])) {
-
-//    echo Plugin::ValidPlugin ($_GET['deactivate']) ? 'yes' : 'no';
-//    exit();
+### Handle "Disable" plugin if requested
+else if (!empty ($_GET['disable']) && !ctype_space ($_GET['disable'])) {
 
     // Uninstall plugin if applicable
-    $key = array_search ($_GET['deactivate'], $active_plugins);
-    if ($key !== false && Plugin::ValidPlugin ($_GET['deactivate'])) {
-        unset ($active_plugins[$key]);
-        Settings::Set ('active_plugins', serialize ($active_plugins));
-        if (method_exists ($_GET['deactivate'], 'Uninstall')) call_user_func (array ($_GET['deactivate'], 'Uninstall'));
+    $key = array_search ($_GET['disable'], $enabled_plugins);
+    if ($key !== false && Plugin::ValidPlugin ($_GET['disable'])) {
+
+        unset ($enabled_plugins[$key]);
+        Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
 
         // Output message
-        $plugin_info = Plugin::GetPluginInfo ($_GET['deactivate']);
-        $message = $plugin_info->plugin_name . ' has been deactivated.';
+        $plugin_info = Plugin::GetPluginInfo ($_GET['disable']);
+        $message = $plugin_info->plugin_name . ' has been disabled.';
         $message_type = 'success';
+
     }
 
 }
@@ -111,7 +125,7 @@ foreach (glob (DOC_ROOT . '/cc-content/plugins/*') as $plugin_path) {
     $plugin = new stdClass();
     $plugin->filename = $plugin_name;
     $plugin->info = Plugin::GetPluginInfo ($plugin_name);
-    $plugin->active = (in_array ($plugin->filename, $active_plugins)) ? true : false;
+    $plugin->enabled = (in_array ($plugin->filename, $enabled_plugins)) ? true : false;
     $plugin->settings = (method_exists ($plugin_name, 'settings')) ? true : false;
     $plugin_list[] = $plugin;
     
@@ -155,14 +169,14 @@ include ('header.php');
 
 
             <p>
-                <?php if ($plugin->active && $plugin->settings): ?>
-                    <a href="<?=ADMIN?>/settings_plugin.php?plugin=<?=$plugin->filename?>">Settings</a>
+                <?php if ($plugin->enabled && $plugin->settings): ?>
+                    <a href="<?=ADMIN?>/settings_plugin.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
                 <?php endif; ?>
 
-                <?php if ($plugin->active): ?>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?deactivate=<?=$plugin->filename?>">Deactivate</a>
+                <?php if ($plugin->enabled): ?>
+                    <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->filename?>">Disable</a>
                 <?php else: ?>
-                    <a href="<?=ADMIN?>/plugins.php?activate=<?=$plugin->filename?>">Activate</a>
+                    <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->filename?>">Enable</a>
                 <?php endif; ?>
 
                 &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>">Delete</a>
