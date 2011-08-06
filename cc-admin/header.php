@@ -87,7 +87,7 @@
             <h3 class="plugins"><span>Plugins</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/plugins.php">Plugins</a></p>
-                <p><a href="<?=ADMIN?>">Add Plugins</a></p>
+                <p><a href="<?=ADMIN?>/plugins_add.php">Add Plugins</a></p>
             </div>
         </div>
 

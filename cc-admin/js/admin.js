@@ -185,6 +185,20 @@ $('document').ready(function(){
 
     });
 
+
+
+
+    // Trigger the file browse window
+    $('#browse-button').click(function(){
+        $('#upload').trigger('click');
+        return false;
+    });
+
+    // Add hidden upload filename to styled upload field
+    $('#upload').change(function(){
+        $('#upload-visible').val($('#upload').val());
+    });
+
 });
 
 
