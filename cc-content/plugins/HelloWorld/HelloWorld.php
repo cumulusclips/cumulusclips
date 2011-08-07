@@ -8,7 +8,7 @@ class HelloWorld {
 
     static function Info() {
         return array(
-            'plugin_name'   => 'Hello World',
+            'name'   => 'Hello World',
             'author'        => 'CumulusClips.org',
             'version'       => '1.0'
         );

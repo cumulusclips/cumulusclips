@@ -127,7 +127,7 @@ include ('header.php');
                 <?php else: ?>
                     <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme->name?>" class="iframe">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>">Delete</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
                 <?php endif; ?>
             </p>
 

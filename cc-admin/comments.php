@@ -220,7 +220,7 @@ include ('header.php');
                                     <a href="<?=$pagination->GetURL('unban='.$comment->comment_id)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->comment_id)?>" data-confirm="You are about to delete this comment, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->comment_id)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td><a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/"><?=$video->title?></a></td>

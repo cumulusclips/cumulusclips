@@ -163,7 +163,7 @@ include ('header.php');
                     <?php endif; ?>
 
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>">Delete</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
                 <?php endif; ?>
             </p>
 

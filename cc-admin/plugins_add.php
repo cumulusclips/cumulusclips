@@ -162,7 +162,7 @@ if (isset ($_POST['submitted'])) {
 
             // Display success message
             $plugin_info = Plugin::GetPluginInfo ($plugin_name);
-            $message = $plugin_info->plugin_name . ' has been added successfully!';
+            $message = $plugin_info->name . ' has been added successfully!';
             $message_type = 'success';
 
 
@@ -213,12 +213,13 @@ include ('header.php');
         <p class="row-shift">If you have a plugin in .zip format use this form
         to upload and add it to the system.</p>
 
+
         <form action="<?=ADMIN?>/plugins_add.php" method="post" enctype="multipart/form-data">
 
-            <div class="row <?=(isset($errors['upload'])) ? ' errors' : ''?>">
+            <div id="upload-row" class="row <?=(isset($errors['upload'])) ? ' errors' : ''?>">
                 <label>*Plugin Zip File:</label>
                 <input id="upload-visible" class="text" type="text" name="upload-visible" />
-                <input id="browse-button" type="button" class="button" value="Browse" />
+                <input type="button" class="button" value="Browse" />
                 <input id="upload" type="file" name="upload" />
             </div>
 
@@ -238,6 +239,7 @@ include ('header.php');
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input type="submit" class="button" value="Add Plugin" />
             </div>
+            
         </form>
 
     </div>

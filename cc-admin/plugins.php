@@ -46,7 +46,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
 
         // Delete plugin files
         $plugin_info = Plugin::GetPluginInfo ($_GET['delete']);
-        $message = $plugin_info->plugin_name . ' plugin has been deleted';
+        $message = $plugin_info->name . ' plugin has been deleted';
         $message_type = 'success';
         try {
             Filesystem::Open();
@@ -83,7 +83,7 @@ else if (!empty ($_GET['enable']) && !ctype_space ($_GET['enable'])) {
 
         // Output message
         $plugin_info = Plugin::GetPluginInfo ($_GET['enable']);
-        $message = $plugin_info->plugin_name . ' has been enabled.';
+        $message = $plugin_info->name . ' has been enabled.';
         $message_type = 'success';
     }
 
@@ -104,7 +104,7 @@ else if (!empty ($_GET['disable']) && !ctype_space ($_GET['disable'])) {
 
         // Output message
         $plugin_info = Plugin::GetPluginInfo ($_GET['disable']);
-        $message = $plugin_info->plugin_name . ' has been disabled.';
+        $message = $plugin_info->name . ' has been disabled.';
         $message_type = 'success';
 
     }
@@ -151,7 +151,7 @@ include ('header.php');
         <div class="block">
 
             <p>
-                <strong><?=$plugin->info->plugin_name?></strong>
+                <strong><?=$plugin->info->name?></strong>
                 <?php if (!empty ($plugin->info->author)): ?>
                     by: <?=$plugin->info->author?>
                 <?php endif; ?>
@@ -179,7 +179,7 @@ include ('header.php');
                     <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->filename?>">Enable</a>
                 <?php endif; ?>
 
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>">Delete</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall &amp; Delete</a>
             </p>
 
         </div>

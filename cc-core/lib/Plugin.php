@@ -26,9 +26,9 @@ class SamplePlugin {
     /**
      * Provide information about the plugin
      * @return array Returns an array with information about the plugin.
-     * @example return array ('plugin_name' => 'Test Plugin', 'author' => 'CumulusClips.org');
+     * @example return array ('name' => 'Test Plugin', 'author' => 'CumulusClips.org');
      *      Required items are:
-     *          plugin_name - Formal name for the plugin
+     *          name - Formal name for the plugin
      *      Optional items are:
      *          author - Person or organization who created plugin
      *          version - Version number of the plugin in 3 place format e.g: 5.1.7
@@ -214,7 +214,7 @@ class Plugin {
             include_once ($plugin_file);
             if (method_exists ($plugin, 'Info')) {
                 $info = (object) call_user_func (array ($plugin, 'Info'));
-                return (!empty ($info->plugin_name)) ? true : false;
+                return (!empty ($info->name)) ? true : false;
             } else {
                 return false;
             }

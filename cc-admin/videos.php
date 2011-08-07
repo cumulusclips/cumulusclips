@@ -270,7 +270,7 @@ include ('header.php');
                                     <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You are about to delete this video, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td class="category"><?=$categories[$video->cat_id]?></td>
