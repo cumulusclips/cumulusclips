@@ -94,8 +94,8 @@
         <div class="panel<?=(Functions::IsPanelOpen('settings'))?' open-panel down-icon':''?>">
             <h3 class="settings"><span>Settings</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>">General</a></p>
-                <p><a href="<?=ADMIN?>">Alerts</a></p>
+                <p><a href="<?=ADMIN?>/settings.php">General</a></p>
+                <p><a href="<?=ADMIN?>/settings_video.php">Video</a></p>
             </div>
         </div>
 
