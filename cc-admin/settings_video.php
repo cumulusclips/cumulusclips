@@ -23,7 +23,7 @@ $message = null;
 $data['enable_uploads'] = Settings::Get('enable_uploads');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
-$data['accepted_video_formats'] = implode (', ', unserialize (Settings::Get('accepted_video_formats')));
+$data['accepted_video_formats_string'] = implode (', ', unserialize (Settings::Get('accepted_video_formats')));
 $data['h264_url'] = Settings::Get('h264_url');
 $data['theora_url'] = Settings::Get('theora_url');
 $data['mobile_url'] = Settings::Get('mobile_url');
@@ -43,73 +43,105 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-    // Validate sitename
-    if (!empty ($_POST['sitename']) && !ctype_space ($_POST['sitename'])) {
-        $data['sitename'] = htmlspecialchars (trim ($_POST['sitename']));
+    // Validate enable uploads setting
+    if (isset ($_POST['enable_uploads']) && in_array ($_POST['enable_uploads'], array ('1', '0'))) {
+        $data['enable_uploads'] = $_POST['enable_uploads'];
     } else {
-        $errors['sitename'] = 'Invalid sitename';
+        $errors['enable_uploads'] = 'Invalid upload enablement option';
     }
 
 
-    // Validate base_url
-    $pattern = '/^https?:\/\/[a-z0-9][a-z0-9\.\-]+.*$/i';
-    if (!empty ($_POST['base_url']) && preg_match ($pattern, $_POST['base_url'])) {
-        $data['base_url'] = htmlspecialchars (trim ($_POST['base_url']));
+    // Validate log encoding setting
+    if (isset ($_POST['debug_conversion']) && in_array ($_POST['debug_conversion'], array ('1', '0'))) {
+        $data['debug_conversion'] = $_POST['debug_conversion'];
     } else {
-        $errors['base_url'] = 'Invalid base url';
+        $errors['debug_conversion'] = 'Invalid encoding log option';
     }
 
 
-    // Validate admin_email
-    $pattern = '/^[a-z0-9][a-z0-9\.\-]+@[a-z0-9][a-z0-9\.\-]+$/i';
-    if (!empty ($_POST['admin_email']) && preg_match ($pattern, $_POST['admin_email'])) {
-        $data['admin_email'] = htmlspecialchars (trim ($_POST['admin_email']));
+    // Validate video size limit
+    if (!empty ($_POST['video_size_limit']) && is_numeric ($_POST['video_size_limit'])) {
+        $data['video_size_limit'] = trim ($_POST['video_size_limit']);
     } else {
-        $errors['admin_email'] = 'Invalid admin email';
+        $errors['video_size_limit'] = 'Invalid video size limit';
     }
 
 
-    // Validate php path
-    if (!empty ($_POST['php']) && !ctype_space ($_POST['php'])) {
-        $data['php'] = htmlspecialchars (trim ($_POST['php']));
+    // Validate accepted video formats
+    if (!empty ($_POST['accepted_video_formats']) && !ctype_space ($_POST['accepted_video_formats'])) {
+        $data['accepted_video_formats_string'] = htmlspecialchars (trim ($_POST['accepted_video_formats']));
+        $formats = preg_split ('/,\s?/', $data['accepted_video_formats_string']);
+        $data['accepted_video_formats'] = serialize ($formats);
     } else {
-        $errors['php'] = 'Invalid path to php';
+        $errors['accepted_video_formats'] = 'Invalid video formats';
     }
 
 
-    // Validate ffmpeg path
-    if (!empty ($_POST['ffmpeg']) && !ctype_space ($_POST['ffmpeg'])) {
-        $data['ffmpeg'] = htmlspecialchars (trim ($_POST['ffmpeg']));
+    // Validate h.264 video url
+    if (!empty ($_POST['h264_url']) && !ctype_space ($_POST['h264_url'])) {
+        $data['h264_url'] = htmlspecialchars (trim ($_POST['h264_url']));
     } else {
-        $errors['ffmpeg'] = 'Invalid path to ffmpeg';
+        $errors['h264_url'] = 'Invalid h.264 video url';
     }
 
 
-    // Validate auto_approve_videos
-    if (isset ($_POST['auto_approve_videos']) && in_array ($_POST['auto_approve_videos'], array ('1', '0'))) {
-        $data['auto_approve_videos'] = $_POST['auto_approve_videos'];
+    // Validate theora video url
+    if (!empty ($_POST['theora_url']) && !ctype_space ($_POST['theora_url'])) {
+        $data['theora_url'] = htmlspecialchars (trim ($_POST['theora_url']));
     } else {
-        $errors['auto_approve_videos'] = 'Invalid video approval option';
+        $errors['theora_url'] = 'Invalid theora video url';
     }
 
 
-    // Validate auto_approve_users
-    if (isset ($_POST['auto_approve_users']) && in_array ($_POST['auto_approve_users'], array ('1', '0'))) {
-        $data['auto_approve_users'] = $_POST['auto_approve_users'];
+    // Validate mobile video url
+    if (!empty ($_POST['mobile_url']) && !ctype_space ($_POST['mobile_url'])) {
+        $data['mobile_url'] = htmlspecialchars (trim ($_POST['mobile_url']));
     } else {
-        $errors['auto_approve_users'] = 'Invalid member approval option';
+        $errors['mobile_url'] = 'Invalid mobile video url';
     }
 
 
-    // Validate auto_approve_comments
-    if (isset ($_POST['auto_approve_comments']) && in_array ($_POST['auto_approve_comments'], array ('1', '0'))) {
-        $data['auto_approve_comments'] = $_POST['auto_approve_comments'];
+    // Validate video thumbnail url
+    if (!empty ($_POST['thumb_url']) && !ctype_space ($_POST['thumb_url'])) {
+        $data['thumb_url'] = htmlspecialchars (trim ($_POST['thumb_url']));
     } else {
-        $errors['auto_approve_comments'] = 'Invalid comment approval option';
+        $errors['thumb_url'] = 'Invalid video thumbnail url';
     }
 
 
+    // Validate h.264 encoding options
+    if (!empty ($_POST['h264_options']) && !ctype_space ($_POST['h264_options'])) {
+        $data['h264_options'] = htmlspecialchars (trim ($_POST['h264_options']));
+    } else {
+        $errors['h264_options'] = 'Invalid h.264 encoding options';
+    }
 
+
+    // Validate theora encoding options
+    if (!empty ($_POST['theora_options']) && !ctype_space ($_POST['theora_options'])) {
+        $data['theora_options'] = htmlspecialchars (trim ($_POST['theora_options']));
+    } else {
+        $errors['theora_options'] = 'Invalid theora encoding options';
+    }
+
+
+    // Validate mobile encoding options
+    if (!empty ($_POST['mobile_options']) && !ctype_space ($_POST['mobile_options'])) {
+        $data['mobile_options'] = htmlspecialchars (trim ($_POST['mobile_options']));
+    } else {
+        $errors['mobile_options'] = 'Invalid mobile encoding options';
+    }
+
+
+    // Validate thumbnail encoding options
+    if (!empty ($_POST['thumb_options']) && !ctype_space ($_POST['thumb_options'])) {
+        $data['thumb_options'] = htmlspecialchars (trim ($_POST['thumb_options']));
+    } else {
+        $errors['thumb_options'] = 'Invalid thumbnail encoding options';
+    }
+
+
+    
     // Update video if no errors were made
     if (empty ($errors)) {
         foreach ($data as $key => $value) {
@@ -142,7 +174,7 @@ include ('header.php');
 
     <div class="block">
 
-        <form action="<?=ADMIN?>/settings.php" method="post">
+        <form action="<?=ADMIN?>/settings_video.php" method="post">
 
             <div class="row <?=(isset ($errors['enable_uploads'])) ? ' errors' : ''?>">
                 <label>Video Uploads:</label>
@@ -162,7 +194,7 @@ include ('header.php');
             
             <div class="row <?=(isset ($errors['accepted_video_formats'])) ? ' errors' : ''?>">
                 <label>Accepted Video Formats:</label>
-                <input class="text" type="text" name="accepted_video_formats" value="<?=$data['accepted_video_formats']?>" />
+                <input class="text" type="text" name="accepted_video_formats" value="<?=$data['accepted_video_formats_string']?>" />
                 (comma delimited)
             </div>
 
