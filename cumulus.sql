@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.54-1ubuntu4 : Database - cumulus
+MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
 *********************************************************************
 */
 
@@ -190,11 +190,11 @@ CREATE TABLE `settings` (
   `name` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 /*Data for the table `settings` */
 
-insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','1'),(5,'auto_approve_videos','1'),(6,'auto_approve_comments','1'),(7,'debug_conversion','0'),(8,'live','true'),(9,'video_size_limit','102000000'),(10,'accepted_video_formats','a:8:{i:0;s:3:\"flv\";i:1;s:3:\"wmv\";i:2;s:3:\"avi\";i:3;s:3:\"ogg\";i:4;s:3:\"mpg\";i:5;s:3:\"mp4\";i:6;s:3:\"mov\";i:7;s:3:\"m4v\";}'),(11,'pagination_page_limit','9'),(12,'flv_bucket_url','http://c1495122.cdn.cloudfiles.rackspacecloud.com'),(13,'mp4_bucket_url','http://c1488222.cdn.cloudfiles.rackspacecloud.com'),(14,'thumb_bucket_url','http://c1495132.cdn.cloudfiles.rackspacecloud.com'),(15,'base_url','http://cumulus'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','miguel@mahurtado.com'),(19,'enable_uploads','1'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{i:10;s:7:\"english\";i:11;s:7:\"spanish\";i:12;s:19:\"chinese_traditional\";}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url','/cc-content/uploads/h264'),(26,'theora_url','/cc-content/uploads/theora'),(27,'mobile_url','/cc-content/uploads/mobile'),(28,'thumb_url','/cc-content/uploads/thumbs'),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 x264opts level=30:cabac=0:brames=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg');
+insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','1'),(5,'auto_approve_videos','1'),(6,'auto_approve_comments','1'),(7,'debug_conversion','0'),(8,'live','true'),(9,'video_size_limit','102000000'),(10,'accepted_video_formats','a:8:{i:0;s:3:\"flv\";i:1;s:3:\"wmv\";i:2;s:3:\"avi\";i:3;s:3:\"ogg\";i:4;s:3:\"mpg\";i:5;s:3:\"mp4\";i:6;s:3:\"mov\";i:7;s:3:\"m4v\";}'),(11,'pagination_page_limit','9'),(12,'flv_bucket_url','http://c1495122.cdn.cloudfiles.rackspacecloud.com'),(13,'mp4_bucket_url','http://c1488222.cdn.cloudfiles.rackspacecloud.com'),(14,'thumb_bucket_url','http://c1495132.cdn.cloudfiles.rackspacecloud.com'),(15,'base_url','http://cumulus'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','miguel@mahurtado.com'),(19,'enable_uploads','1'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{i:10;s:7:\"english\";i:11;s:7:\"spanish\";i:12;s:19:\"chinese_traditional\";}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url','/cc-content/uploads/h264'),(26,'theora_url','/cc-content/uploads/theora'),(27,'mobile_url','/cc-content/uploads/mobile'),(28,'thumb_url','/cc-content/uploads/thumbs'),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 x264opts level=30:cabac=0:brames=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),(33,'smtp','O:8:\"stdClass\":5:{s:7:\"enabled\";s:1:\"0\";s:4:\"host\";s:0:\"\";s:4:\"port\";i:25;s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),(34,'alerts_videos','1'),(35,'alerts_comments','1'),(36,'alerts_ratings','1'),(37,'alerts_users','1'),(38,'from_name',''),(39,'from_address','');
 
 /*Table structure for table `subscriptions` */
 
@@ -211,6 +211,23 @@ CREATE TABLE `subscriptions` (
 /*Data for the table `subscriptions` */
 
 insert  into `subscriptions`(`sub_id`,`user_id`,`member`,`date_created`) values (1,56,52,'2009-07-27 00:00:00'),(2,67,32,'2009-08-24 00:00:00'),(3,69,29,'2009-08-30 00:00:00'),(4,70,29,'2009-09-01 00:00:00'),(5,85,64,'2009-10-12 00:00:00'),(6,89,27,'2009-11-03 00:00:00'),(8,99,63,'2009-12-16 00:00:00'),(9,106,105,'2010-01-04 00:00:00'),(10,114,64,'2010-01-17 00:00:00'),(11,125,97,'2010-02-07 00:00:00'),(12,125,32,'2010-02-07 00:00:00'),(13,125,64,'2010-02-07 00:00:00'),(14,125,110,'2010-02-07 00:00:00'),(15,125,105,'2010-02-07 00:00:00'),(16,125,20,'2010-02-07 00:00:00'),(17,125,31,'2010-02-07 00:00:00'),(18,125,100,'2010-02-07 00:00:00'),(19,125,27,'2010-02-07 00:00:00'),(20,125,34,'2010-02-07 00:00:00'),(21,125,98,'2010-02-07 00:00:00'),(22,125,26,'2010-02-07 00:00:00'),(23,125,63,'2010-02-07 00:00:00'),(24,125,95,'2010-02-07 00:00:00'),(25,125,36,'2010-02-07 00:00:00'),(26,125,29,'2010-02-07 00:00:00'),(27,125,33,'2010-02-07 00:00:00'),(28,125,35,'2010-02-07 00:00:00'),(29,125,30,'2010-02-07 00:00:00'),(30,126,19,'2010-02-09 00:00:00'),(31,150,63,'2010-03-25 00:00:00'),(33,152,28,'2010-04-08 00:00:00'),(34,152,20,'2010-04-08 00:00:00'),(35,152,26,'2010-04-08 00:00:00'),(36,152,34,'2010-04-08 00:00:00'),(37,152,64,'2010-04-08 00:00:00'),(38,152,97,'2010-04-08 00:00:00'),(39,21,141,'2010-04-09 00:00:00'),(40,21,20,'2010-04-09 00:00:00'),(41,21,26,'2010-04-09 00:00:00'),(42,21,25,'2010-04-09 00:00:00'),(43,21,108,'2010-04-09 00:00:00'),(44,164,152,'2010-04-20 00:00:00'),(45,164,34,'2010-04-20 00:00:00'),(46,174,100,'2010-05-26 00:00:00'),(47,176,97,'2010-06-16 00:00:00'),(48,194,29,'2010-08-05 00:00:00'),(49,194,95,'2010-08-05 00:00:00'),(50,216,27,'2010-09-09 00:00:00'),(51,226,105,'2010-09-24 00:00:00'),(52,228,100,'2010-09-29 00:00:00'),(53,229,141,'2010-09-29 00:00:00'),(55,239,63,'2010-10-13 00:00:00'),(57,271,246,'2010-12-15 00:00:00'),(58,304,246,'2011-01-12 00:00:00'),(59,349,274,'2011-02-06 00:00:00'),(60,352,63,'2011-02-06 00:00:00'),(82,20,105,'2011-03-10 05:27:18'),(81,20,29,'2011-03-10 05:27:18'),(80,20,95,'2011-03-10 05:27:18'),(79,20,100,'2011-03-10 05:27:18'),(78,20,246,'2011-03-10 05:27:18'),(75,20,63,'2011-03-10 05:27:18'),(77,20,141,'2011-03-10 05:27:18'),(76,20,274,'2011-03-10 05:27:18'),(99,18,246,'2011-03-10 05:27:18'),(95,18,105,'2011-03-10 05:27:18'),(94,18,63,'2011-03-10 05:27:18'),(91,18,100,'2011-03-10 05:27:18'),(98,18,100,'2011-03-10 05:27:18'),(96,18,29,'2011-03-10 05:27:18'),(101,18,274,'2011-03-10 05:27:18');
+
+/*Table structure for table `updates` */
+
+DROP TABLE IF EXISTS `updates`;
+
+CREATE TABLE `updates` (
+  `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(250) NOT NULL,
+  `cat_description` text,
+  `date_created` date NOT NULL,
+  PRIMARY KEY (`cat_id`),
+  UNIQUE KEY `channel_id` (`cat_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
+/*Data for the table `updates` */
+
+insert  into `updates`(`cat_id`,`cat_name`,`cat_description`,`date_created`) values (28,'Programming',NULL,'2010-09-06'),(12,'Windows','Everything about all Windows operating systems','2009-03-08'),(14,'Computer Hardware','RAM, Motherboards, Hard Drives, CPU & Proccessors','2009-06-08'),(15,'Web Design','PHP, JSP, C#, ASP, AJAX, PERL, ColdFusion, VB.NET, JavaScript','2009-06-08'),(18,'Software and CMS','PhotoShop, Final Cut, GIMP, Excel, Flash, Access, Illustrator, DreamWeaver, Word, and other software','2011-01-08'),(20,'Electronics','Car stereos, home theaters, Blu-Rays, Xbox, PS3, LCD/Plasma','2011-03-08'),(24,'Apple','OS X, Aqua, Finder, Mac Pro, iLife Apps, and other Apple related videos','2011-03-08'),(23,'Linux','Linux operating system and components','2011-03-08'),(25,'Graphic Design and Animation','Graphic Design and production, 3D animation, stopmotion, cartoon animation','2011-03-08'),(26,'Video and Audio','Video production, sound mixing, audio production and other related screencast and tutorials','0000-00-00');
 
 /*Table structure for table `users` */
 

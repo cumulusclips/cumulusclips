@@ -188,9 +188,27 @@ $('document').ready(function(){
 
 
 
+    // Append tipsy tooltip on more info links
+    $('.more-info').click(function(){return false;});
+    $('.more-info').tipsy({
+        fade    : true,
+        gravity : 's'
+    });
+
+
+
+
     // Add hidden upload filename to styled upload field
     $('#upload').change(function(){
         $('#upload-visible').val($('#upload').val());
+    });
+
+
+
+
+    // Toggle SMTP settings visibility based on SMTP enable field
+    $('#settings-email [name="smtp_enabled"]').change(function(){
+        $('#smtp_auth').toggleClass('hide');
     });
 
 });

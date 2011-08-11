@@ -243,15 +243,15 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_mobile_theme','mobile'),
 ('default_language', 'english'),
 ('active_languages', 'a:2:{i:0;s:7:"english";i:1;s:19:"chinese_traditional";}'),
-('installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),
-('enabled_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),
+('installed_plugins','a:1:{i:0;s:10:"HelloWorld";}'),
+('enabled_plugins','a:1:{i:0;s:10:"HelloWorld";}'),
 ('auto_approve_users','1'),
 ('auto_approve_videos','1'),
 ('auto_approve_comments','1'),
 ('debug_conversion','0'),
 ('live','true'),
 ('video_size_limit','102000000'),
-('accepted_video_formats','a:8:{i:0;s:3:\"flv\";i:1;s:3:\"wmv\";i:2;s:3:\"avi\";i:3;s:3:\"ogg\";i:4;s:3:\"mpg\";i:5;s:3:\"mp4\";i:6;s:3:\"mov\";i:7;s:3:\"m4v\";}'),
+('accepted_video_formats','a:8:{i:0;s:3:"flv";i:1;s:3:"wmv";i:2;s:3:"avi";i:3;s:3:"ogg";i:4;s:3:"mpg";i:5;s:3:"mp4";i:6;s:3:"mov";i:7;s:3:"m4v";}'),
 ('pagination_page_limit','9'),
 ('h264_url','/cc-content/uploads/h264'),
 ('theora_url','/cc-content/uploads/theora'),
@@ -263,7 +263,14 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),
 ('flv_bucket_url','http://c1495122.cdn.cloudfiles.rackspacecloud.com'),
 ('mp4_bucket_url','http://c1488222.cdn.cloudfiles.rackspacecloud.com'),
-('thumb_bucket_url','http://c1495132.cdn.cloudfiles.rackspacecloud.com')
+('thumb_bucket_url','http://c1495132.cdn.cloudfiles.rackspacecloud.com'),
+('alerts_videos','1'),
+('alerts_comments','1'),
+('alerts_ratings','1'),
+('alerts_users','1'),
+('from_name',''),
+('from_address',''),
+('smtp','O:8:"stdClass":5:{s:7:"enabled";s:1:"0";s:4:"host";s:0:"";s:4:"port";i:25;s:8:"username";s:0:"";s:8:"password";s:0:"";}')
 
 POPULATE_SETTINGS_TABLE;
 

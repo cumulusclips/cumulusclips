@@ -192,6 +192,11 @@ a.button {
     display:inline-block;
 }
 
+.more-info {
+    margin-left:5px;
+    cursor:pointer;
+}
+
 
 
 
@@ -361,6 +366,10 @@ MISC STYLES
 .options { display:inline; }
 
 #updates-available { margin-bottom: 15px; }
+
+.hide { display:none; }
+
+.tipsy { font-size: 12px; }
 
 
 
@@ -582,6 +591,10 @@ SETTINGS STYLES
 #settings-video label { width: 155px; }
 
 #settings-video .row-shift { margin-left:170px; }
+
+#settings-email label { width: 150px; }
+
+#settings-email .row-shift { margin-left:165px; }
 
 
 

@@ -6,6 +6,7 @@
 <title><?=$page_title?></title>
 <link rel="shortcut icon" href="<?=HOST?>/favicon.ico" type="image/x-icon" />
 <link href="<?=ADMIN?>/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" rel="stylesheet" type="text/css" />
 <link href="<?=ADMIN?>/css/admin.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -96,6 +97,7 @@
             <div>
                 <p><a href="<?=ADMIN?>/settings.php">General</a></p>
                 <p><a href="<?=ADMIN?>/settings_video.php">Video</a></p>
+                <p><a href="<?=ADMIN?>/settings_email.php">Email</a></p>
             </div>
         </div>
 
