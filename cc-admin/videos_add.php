@@ -16,7 +16,7 @@ App::LoadClass ('Flag');
 Plugin::Trigger ('admin.video_edit.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$page_title = 'Edit Video';
+$page_title = 'Add Video';
 $categories = array();
 $data = array();
 $errors = array();
@@ -29,32 +29,6 @@ $query = "SELECT cat_id, cat_name FROM " . DB_PREFIX . "categories";
 $result = $db->Query ($query);
 while ($row = $db->FetchObj ($result)) {
     $categories[$row->cat_id] = $row->cat_name;
-}
-
-
-
-// Build return to list link
-if (!empty ($_SESSION['list_page'])) {
-    $list_page = $_SESSION['list_page'];
-} else {
-    $list_page = ADMIN . '/videos.php';
-}
-
-
-
-### Verify a video was provided
-if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
-
-    ### Retrieve video information
-    $video = new Video ($_GET['id']);
-    if (!$video->found) {
-        header ('Location: ' . ADMIN . '/videos.php');
-        exit();
-    }
-
-} else {
-    header ('Location: ' . ADMIN . '/videos.php');
-    exit();
 }
 
 
@@ -143,9 +117,9 @@ include ('header.php');
 
 ?>
 
-<div id="video-edit">
+<div id="videos-add">
 
-    <h1>Edit Video</h1>
+    <h1>Add Video</h1>
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
@@ -154,46 +128,36 @@ include ('header.php');
 
     <div class="block">
 
-        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+        <form action="<?=ADMIN?>/videos_add.php" method="post">
 
-        <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" method="post">
-
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
-                <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending approval"<?=(isset ($data['status']) && $data['status'] == 'pending approval') || (!isset ($data['status']) && $video->status == 'pending approval')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
-            </div>
-
-            <div class="row<?=(isset ($errors['title'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['title'])) ? 'errors' : ''?>">
                 <label>Title:</label>
-                <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
+                <input class="text" type="text" name="title" value="<?=(isset ($data['title'])) ? $data['title'] : ''?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['description'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['description'])) ? 'errors' : ''?>">
                 <label>Description:</label>
-                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
+                <textarea rows="7" cols="50" class="text" name="description"><?=(isset ($data['title'])) ? $data['title'] : ''?></textarea>
             </div>
 
-            <div class="row<?=(isset ($errors['tags'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['tags'])) ? 'errors' : ''?>">
                 <label>Tags:</label>
-                <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> (Comma Delimited)
+                <input class="text" type="text" name="tags" value="<?=(isset ($data['title'])) ? $data['title'] : ''?>" /> (Comma Delimited)
             </div>
 
-            <div class="row<?=(isset ($errors['cat_id'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['cat_id'])) ? 'errors' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
                 <?php foreach ($categories as $cat_id => $cat_name): ?>
-                    <option value="<?=$cat_id?>"<?=(isset ($data['cat_id']) && $data['cat_id'] == $cat_id) || (!isset ($data['cat_id']) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
+                    <option value="<?=$cat_id?>" <?=(isset ($data['title']) && $data['title'] == $cat_id) ? '' : 'selected="selected"'?>><?=$cat_name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="row-shift">
+                <input type="hidden" name="video" value="" />
                 <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Update Video" />
+                <input type="submit" class="button" value="Add Video" />
             </div>
         </form>
 

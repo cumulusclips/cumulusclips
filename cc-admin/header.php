@@ -33,10 +33,8 @@
         <div class="panel<?=(Functions::IsPanelOpen('videos'))?' open-panel down-icon':''?>">
             <h3 class="videos"><span>Videos</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>/videos.php?status=approved">Approved Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=featured">Featured Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=pending">Pending Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=banned">Banned Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php">Browse Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></p>
             </div>
         </div>
 
