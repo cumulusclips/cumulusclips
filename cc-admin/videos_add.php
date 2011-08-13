@@ -21,6 +21,9 @@ $categories = array();
 $data = array();
 $errors = array();
 $message = null;
+$admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';
+$admin_js[] = ADMIN . '/extras/uploadify/jquery.uploadify.v2.1.4.min.js';
+$admin_js[] = ADMIN . '/js/uploadify.js';
 
 
 
@@ -117,6 +120,7 @@ include ('header.php');
 
 ?>
 
+<link type="text/css" rel="stylesheet" href="<?=ADMIN?>/extras/uploadify/uploadify.css" />
 <div id="videos-add">
 
     <h1>Add Video</h1>
@@ -129,6 +133,15 @@ include ('header.php');
     <div class="block">
 
         <form action="<?=ADMIN?>/videos_add.php" method="post">
+
+            <div class="row <?=(isset ($errors['title'])) ? 'errors' : ''?>">
+                <label>Video File:</label>
+                <div id="upload-box">
+                    <input id="browse-button" type="button" class="button" value="Browse" />
+                    <input id="upload" type="file" name="upload" />
+                    <input id="upload-button" type="button" class="button" value="Upload" />
+                </div>
+            </div>
 
             <div class="row <?=(isset ($errors['title'])) ? 'errors' : ''?>">
                 <label>Title:</label>

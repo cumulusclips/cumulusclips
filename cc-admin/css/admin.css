@@ -447,6 +447,30 @@ VIDEO STYLES
 
 #video-edit form { margin-top:15px; }
 
+#upload-box {
+    float:left;
+    position:relative;
+}
+
+#uploadUploader {
+    position:relative;
+    width:150px;
+    height:28px;
+}
+
+#browse-button {
+    position:absolute;
+    top:0;
+    left:0;
+    width:150px;
+}
+
+#upload-button {
+    position:absolute;
+    top:0;
+    left:165px;
+}
+
 
 
 
