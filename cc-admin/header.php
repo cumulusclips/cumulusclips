@@ -3,11 +3,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseURL" content="<?=HOST?>" />
+<?php Functions::AdminOutputMeta(); ?>
 <title><?=$page_title?></title>
-<link rel="shortcut icon" href="<?=HOST?>/favicon.ico" type="image/x-icon" />
-<link href="<?=ADMIN?>/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" rel="stylesheet" type="text/css" />
-<link href="<?=ADMIN?>/css/admin.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" />
+<?php Functions::AdminOutputCss(); ?>
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/admin.css" />
 </head>
 <body>
 <div id="wrapper">

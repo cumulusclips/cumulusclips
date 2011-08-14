@@ -254,12 +254,46 @@ class Functions {
 
     /**
      * Output loaded JS files to browser for the admin panel
-     * @param array $admin_js List of JS file to be printed
+     * @global array $admin_js List of JS file to be printed
      * @return mixed All JS file entries are printed with javascript tags
      */
-    static function AdminOutputJS ($admin_js) {
+    static function AdminOutputJS() {
+        global $admin_js;
+        if (!isset ($admin_js)) return false;
         foreach ($admin_js as $file) {
             echo '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
+        }
+    }
+
+
+
+
+    /**
+     * Output loaded meta tags to browser for the admin panel
+     * @global array $admin_meta List of meta tags to be printed
+     * @return mixed All meta tag entries are printed in the document head
+     */
+    static function AdminOutputMeta() {
+        global $admin_meta;
+        if (!isset ($admin_meta)) return false;
+        foreach ($admin_meta as $name => $content) {
+            echo '<meta name="' . $name . '" content="' . $content . '" />' . "\n";
+        }
+    }
+
+
+
+
+    /**
+     * Output loaded CSS files to browser for the admin panel
+     * @global array $admin_css List of CSS files to be printed
+     * @return mixed All CSS file entries are printed in document head
+     */
+    static function AdminOutputCss() {
+        global $admin_css;
+        if (!isset ($admin_css)) return false;
+        foreach ($admin_css as $file) {
+            echo '<link rel="stylesheet" type="text/css" href="' . $file . '" />' . "\n";
         }
     }
 

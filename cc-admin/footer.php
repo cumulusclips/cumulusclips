@@ -21,6 +21,6 @@
 <script type="text/javascript" src="<?=ADMIN?>/js/cookie.plugin.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/extras/tipsy/javascripts/jquery.tipsy.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/js/admin.js"></script>
-<?php if (isset ($admin_js)) Functions::AdminOutputJS ($admin_js); ?>
+<?php Functions::AdminOutputJS(); ?>
 </body>
 </html>

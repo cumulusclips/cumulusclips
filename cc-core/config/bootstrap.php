@@ -49,12 +49,25 @@ define ('SECRET_KEY', Settings::Get ('secret_key'));
 define ('ADMIN_EMAIL', Settings::Get ('admin_email'));
 
 $config = new stdClass();
-$config->accepted_video_formats = unserialize (Settings::Get ('accepted_video_formats'));
+$config->admin_email = Settings::Get ('admin_email');
+$config->debug_conversion = Settings::Get ('debug_conversion');
 $config->video_size_limit = Settings::Get ('video_size_limit');
+$config->accepted_video_formats = unserialize (Settings::Get ('accepted_video_formats'));
 $config->pagination_page_limit = Settings::Get ('pagination_page_limit');
 $config->flv_bucket_url = Settings::Get ('flv_bucket_url');
 $config->mp4_bucket_url = Settings::Get ('mp4_bucket_url');
 $config->thumb_bucket_url = Settings::Get ('thumb_bucket_url');
+$config->php = Settings::Get ('php');
+$config->ffmpeg = Settings::Get ('ffmpeg');
+
+$h264_url = Settings::Get('h264_url');
+$theora_url = Settings::Get('theora_url');
+$mobile_url = Settings::Get('mobile_url');
+$thumb_url = Settings::Get('thumb_url');
+$config->h264_url = (empty ($h264_url)) ? HOST . '/cc-content/uploads/h264' : $h264_url;
+$config->theora_url = (empty ($theora_url)) ? HOST . '/cc-content/uploads/theora' : $theora_url;
+$config->mobile_url = (empty ($mobile_url)) ? HOST . '/cc-content/uploads/mobile' : $mobile_url;
+$config->thumb_url = (empty ($thumb_url)) ? HOST . '/cc-content/uploads/thumbs' : $thumb_url;
 
 
 // Load language

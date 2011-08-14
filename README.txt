@@ -12,6 +12,19 @@ Make sure the following directories are writeable by PHP and the webserver:
 
 
 
+[VIDEO STATUS CODES]
+
+1 - New
+3 - Pending Conversion
+4 - Processing
+5 - Pending Approval
+6 - Approved
+7 - Banned
+
+
+
+
+
 [REQUIREMENTS]
 
 System

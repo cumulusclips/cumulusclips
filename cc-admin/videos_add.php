@@ -9,7 +9,6 @@
 include ('../cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-App::LoadClass ('Flag');
 
 
 // Establish page variables, objects, arrays, etc
@@ -24,6 +23,23 @@ $message = null;
 $admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';
 $admin_js[] = ADMIN . '/extras/uploadify/jquery.uploadify.v2.1.4.min.js';
 $admin_js[] = ADMIN . '/js/uploadify.js';
+$admin_css[] = ADMIN . '/extras/uploadify/uploadify.css';
+$admin_meta['token'] = session_id();
+$admin_meta['sizeLimit'] = $config->video_size_limit;
+$admin_meta['fileDesc'] = '';
+$admin_meta['fileExt'] = '';
+$timestamp = time();
+$_SESSION['video_upload_key'] = md5 (md5 ($timestamp) . SECRET_KEY);
+$ext = array();
+
+
+
+// Generate accepted format strings
+foreach ($config->accepted_video_formats as $value) {
+    $admin_meta['fileDesc'] .= " (*.$value)";
+    $ext[] = "*.$value";
+}
+$admin_meta['fileExt'] = implode (';', $ext);
 
 
 
@@ -43,6 +59,37 @@ Handle form if submitted
 ***********************/
 
 if (isset ($_POST['submitted'])) {
+
+    ### Validate video upload
+    try {
+
+        // Validate timestamp
+        if (!empty ($_POST['timestamp']) && is_numeric ($_POST['timestamp'])) {
+            $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
+        } else {
+            throw new Exception ('Invalid timestamp');
+        }
+
+        // Verify video AJAX values were set
+        if (!empty ($_SESSION['video'])) {
+            $video = unserialize ($_SESSION['video']);
+        } else {
+            throw new Exception ('Invalid video upload');
+        }
+
+        // Validate video upload
+        if (!is_array ($video)) throw new Exception ('Invalid video upload2');
+        if (empty ($video['key']) || empty ($video['temp'])) throw new Exception ('Invalid video upload3');
+        if (!file_exists ($video['temp'])) throw new Exception ('Invalid video upload');
+        if ($video['key'] != $upload_key) throw new Exception ('Invalid video upload');
+
+        $_SESSION['video'] = serialize (array ('key' => $_SESSION['video_upload_key'], 'temp' => $video['temp'], 'name' => $video['name']));
+        $data['upload'] = $video;
+
+    } catch (Exception $e) {
+        $errors['upload'] = $e->getMessage();
+    }
+
 
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
@@ -76,36 +123,28 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate status
-    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-        $data['status'] = htmlspecialchars (trim ($_POST['status']));
-    } else {
-        $errors['status'] = 'Invalid status';
-    }
-
 
     // Update video if no errors were made
     if (empty ($errors)) {
 
-        // Perform addional actions based on status change
-        if ($data['status'] != $video->status) {
+        // Create record
+//        $data['user_id'] = $user->user_id;
+        $data['user_id'] = 1;
+        $data['filename'] = basename ($data['upload']['temp'], '.' . Functions::GetExtension ($data['upload']['temp']));
+        unset ($data['upload']);
+        $data['status'] = 'pending_conversion';
+        $id = Video::Create ($data);
 
-            // Handle "Approve" action
-            if ($data['status'] == 'approved') {
-                $video->Approve (true);
-            }
+        // Begin encoding
+        $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
+        $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $id . '" >> ' .  $cmd_output . ' &';
+        exec ($converter_cmd);
 
-            // Handle "Ban" action
-            else if ($data['status'] == 'banned') {
-                Flag::FlagDecision ($video->video_id, 'video', true);
-            }
-
-        }
-
-        $video->Update ($data);
-        $message = 'Video has been updated.';
+        // Output message
+        $message = 'Video has been created.';
         $message_type = 'success';
-        Plugin::Trigger ('admin.video_edit.update_video');
+        unset ($data);
+        
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
@@ -120,7 +159,6 @@ include ('header.php');
 
 ?>
 
-<link type="text/css" rel="stylesheet" href="<?=ADMIN?>/extras/uploadify/uploadify.css" />
 <div id="videos-add">
 
     <h1>Add Video</h1>
@@ -134,11 +172,16 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/videos_add.php" method="post">
 
-            <div class="row <?=(isset ($errors['title'])) ? 'errors' : ''?>">
+            <div class="row <?=(isset ($errors['upload'])) ? 'errors' : ''?>">
                 <label>Video File:</label>
                 <div id="upload-box">
                     <input id="browse-button" type="button" class="button" value="Browse" />
                     <input id="upload" type="file" name="upload" />
+                    <div class="uploadifyQueue" id="uploadQueue">
+                    <?php if (isset ($data['upload'])): ?>
+                        <div class="uploadifyQueueItem"><span class="fileName"><?=$data['upload']['name']?> - has been uploaded</span></div>
+                    <?php endif; ?>
+                    </div>
                     <input id="upload-button" type="button" class="button" value="Upload" />
                 </div>
             </div>
@@ -168,7 +211,7 @@ include ('header.php');
             </div>
 
             <div class="row-shift">
-                <input type="hidden" name="video" value="" />
+                <input type="hidden" name="timestamp" value="<?=$timestamp?>" id="timestamp" />
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input type="submit" class="button" value="Add Video" />
             </div>
