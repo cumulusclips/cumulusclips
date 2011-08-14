@@ -36,17 +36,17 @@
             <h3 class="videos"><span>Videos</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/videos.php">Browse Videos</a></p>
+                <p><a href="<?=ADMIN?>/videos.php?status=pending">Pending Videos</a></p>
                 <p><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></p>
+                <p><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></p>
             </div>
         </div>
 
         <div class="panel<?=(Functions::IsPanelOpen('members'))?' open-panel down-icon':''?>">
             <h3 class="members"><span>Members</span></h3>
             <div>
-                <p><a href="<?=ADMIN?>/members.php?status=active">Active Members</a></p>
-                <p><a href="<?=ADMIN?>/members.php?status=new">New Members</a></p>
+                <p><a href="<?=ADMIN?>/members.php?status=active">Browse Members</a></p>
                 <p><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></p>
-                <p><a href="<?=ADMIN?>/members.php?status=banned">Banned Members</a></p>
             </div>
         </div>
 

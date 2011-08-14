@@ -211,6 +211,24 @@ $('document').ready(function(){
         $('#smtp_auth').toggleClass('hide');
     });
 
+
+
+
+    // Toggle Move Videos / Delete Category Forms
+    $('.category-action').click(function(){
+        var action = $(this).data('action');
+        var parent = $(this).parents('.block');
+        var show = (action == 'move') ? '.move-videos' : '.delete-category';
+        var hide = (action == 'move') ? '.delete-category' : '.move-videos';
+        
+        $('.hide').hide();
+        parent.find('.hide').show();
+        parent.find('input[name="action"]').val(action);
+        parent.find(show).show();
+        parent.find(hide).hide();
+        return false;
+    });
+
 });
 
 

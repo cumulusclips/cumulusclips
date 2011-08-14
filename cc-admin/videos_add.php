@@ -132,7 +132,7 @@ if (isset ($_POST['submitted'])) {
         $data['user_id'] = 1;
         $data['filename'] = basename ($data['upload']['temp'], '.' . Functions::GetExtension ($data['upload']['temp']));
         unset ($data['upload']);
-        $data['status'] = 'pending_conversion';
+        $data['status'] = 'pending conversion';
         $id = Video::Create ($data);
 
         // Begin encoding

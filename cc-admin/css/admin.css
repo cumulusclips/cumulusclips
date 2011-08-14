@@ -471,6 +471,13 @@ VIDEO STYLES
     left:165px;
 }
 
+.move-videos-button, .delete-category-button { display:none; }
+
+#videos-categories .dropdown { margin:0 5px; }
+
+#add-category { margin-bottom:15px; }
+#add-category input[name="name"] { margin:0 5px; }
+
 
 
 
