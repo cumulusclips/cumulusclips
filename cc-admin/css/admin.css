@@ -214,6 +214,7 @@ h1, h2, h3, .big, .large, .huge {
     color:#333;
 }
 
+h1, h2, h3 { margin-top:15px; }
 h1, .huge { font-size:20px; }
 h2, .large { font-size:16px; }
 h3, .big { font-size:14px; }
@@ -365,8 +366,6 @@ MISC STYLES
 
 .options { display:inline; }
 
-#updates-available { margin-bottom: 15px; }
-
 .hide { display:none; }
 
 .tipsy { font-size: 12px; }
@@ -475,8 +474,7 @@ VIDEO STYLES
 
 #videos-categories .dropdown { margin:0 5px; }
 
-#add-category { margin-bottom:15px; }
-#add-category input[name="name"] { margin:0 5px; }
+#add-category input[name="cat_name"] { margin:0 5px; }
 
 
 
