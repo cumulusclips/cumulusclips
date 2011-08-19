@@ -22,16 +22,6 @@ $errors = array();
 $message = null;
 
 
-// Retrieve Category names
-$query = "SELECT " . DB_PREFIX . "categories.cat_id, cat_name, COUNT(video_id) AS video_count ";
-$query .= "FROM " . DB_PREFIX . "categories LEFT JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "categories.cat_id = " . DB_PREFIX . "videos.cat_id ";
-$query .= "GROUP BY " . DB_PREFIX . "categories.cat_id ORDER BY cat_name asc";
-$result = $db->Query ($query);
-while ($row = $db->FetchObj ($result)) {
-    $categories[$row->cat_name] = $row;
-}
-
-
 
 
 
@@ -58,9 +48,7 @@ if (isset ($_POST['submitted_add'])) {
             }
         }
 
-        $id = Category::Create ($data);
-        $categories[$data['cat_name']] = (object) array ('cat_id' => $id, 'cat_name' => $data['cat_name'], 'video_count' => 0);
-        ksort ($categories);
+        Category::Create ($data);
         $message = $data['cat_name'] . ' was successfully created.';
         $message_type = 'success';
         unset ($data);
@@ -79,49 +67,50 @@ if (isset ($_POST['submitted_add'])) {
 
 if (isset ($_POST['submitted_edit'])) {
 
-    // Validate category
-    if (isset ($_POST['category']) && is_numeric ($_POST['category']) && Category::Exists (array ('cat_id' => $_POST['category']))) {
-        $data['category'] = $_POST['category'];
+    // Validate move category
+    if (isset ($_POST['move']) && is_numeric ($_POST['move']) && Category::Exist (array ('cat_id' => $_POST['move']))) {
+        $data['move'] = $_POST['move'];
     } else {
-        $errors['category'] = 'Invalid category';
+        $errors['move'] = 'Invalid receiving (move to) category';
     }
 
+    // Validate category
+    if (isset ($_POST['category']) && is_numeric ($_POST['category']) && Category::Exist (array ('cat_id' => $_POST['category']))) {
+        $data['category'] = $_POST['category'];
+    } else {
+        $errors['category'] = 'Invalid source category';
+    }
+
+    // Verify videos aren't moved to same category
+    if (isset ($data['category'], $data['move'])) {
+        if ($data['category'] == $data['move']) $errors['category'] = "Can't move videos to the same category";
+    }
 
     // Validate action
     if (!empty ($_POST['action']) && in_array ($_POST['action'], array ('move','delete'))) {
         $data['action'] = $_POST['action'];
     } else {
-        $errors['action'] = 'Invalid action';
+        $errors['action'] = 'Invalid category action';
     }
 
 
-    // Validate move category
-    if (isset ($_POST['move']) && is_numeric ($_POST['move']) && Category::Exists (array ('cat_id' => $_POST['move']))) {
-        $data['move'] = $_POST['move'];
-    } else {
-        $errors['move'] = 'Invalid move category';
-    }
-
-
-
-    // Update video if no errors were made
+    // Move videos if no errors were made
     if (empty ($errors)) {
 
-        // Create record
-//        $data['user_id'] = $user->user_id;
-        $data['user_id'] = 1;
-        $data['filename'] = basename ($data['upload']['temp'], '.' . Functions::GetExtension ($data['upload']['temp']));
-        unset ($data['upload']);
-        $data['status'] = 'pending conversion';
-        $id = Video::Create ($data);
+        // Move videos
+        $query = "UPDATE " . DB_PREFIX . "videos SET cat_id = {$data['move']} WHERE cat_id = {$data['category']}";
+        $db->Query ($query);
 
-        // Begin encoding
-        $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
-        $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $id . '" >> ' .  $cmd_output . ' &';
-        exec ($converter_cmd);
+        // Delete category if requested
+        if ($data['action'] == 'delete')  {
+            $cat = new Category ($data['category']);
+            Category::Delete ($data['category']);
+            $message = "$cat->cat_name has been deleted.";
+        } else {
+            $message = 'Videos has been moved.';
+        }
 
         // Output message
-        $message = 'Video has been created.';
         $message_type = 'success';
         unset ($data);
         
@@ -132,6 +121,15 @@ if (isset ($_POST['submitted_edit'])) {
     }
 
 }
+
+
+
+// Retrieve Category names
+$query = "SELECT " . DB_PREFIX . "categories.cat_id, cat_name, COUNT(video_id) AS video_count ";
+$query .= "FROM " . DB_PREFIX . "categories LEFT JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "categories.cat_id = " . DB_PREFIX . "videos.cat_id ";
+$query .= "GROUP BY " . DB_PREFIX . "categories.cat_id ORDER BY cat_name asc";
+$result = $db->Query ($query);
+while ($row = $db->FetchObj ($result)) $categories[] = $row;
 
 
 // Output Header
@@ -158,7 +156,7 @@ include ('header.php');
     
     <h1>Video Categories</h1>
 
-    <?php if (count($categories) > 0): ?>
+    <?php if (count($categories) > 1): ?>
 
         <?php foreach ($categories as $category_obj): ?>
 
@@ -189,7 +187,9 @@ include ('header.php');
         <?php endforeach; ?>
 
     <?php else: ?>
-        <div class="block"><strong>No Categories added yet.</strong></div>
+        <div class="block">
+            <p><strong><?=$categories[0]->cat_name?></strong> (<?=$categories[0]->video_count?> videos)</p>
+        </div>
     <?php endif; ?>
 
 
