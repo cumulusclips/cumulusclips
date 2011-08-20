@@ -143,7 +143,7 @@ include ('header.php');
 
 ?>
 
-<div id="video-edit">
+<div id="videos-edit">
 
     <h1>Edit Video</h1>
 

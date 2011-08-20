@@ -109,7 +109,7 @@ if (isset ($_POST['submitted'])) {
         unset ($data);
 
         // Output message
-        $message = 'Member has been created.';
+        $message = 'Member has been added.';
         $message_type = 'success';
 
     } else {
@@ -131,7 +131,7 @@ include ('header.php');
     <h1>Add New Member</h1>
 
     <?php if ($message): ?>
-        <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="<?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 

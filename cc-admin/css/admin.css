@@ -372,6 +372,12 @@ MISC STYLES
 
 .tipsy { font-size: 12px; }
 
+.loading {
+    background:url('../images/loading.gif') no-repeat 0 0;
+    padding:2px 0 0 20px;
+    height:16px;
+}
+
 
 
 
@@ -395,7 +401,7 @@ RECORD LISTING STYLES
 
 #browse-header .add {
     float:left;
-    margin-left:25px;
+    margin-left:15px;
 }
 
 #browse-header select, #browse-header input[type="text"] {
@@ -438,6 +444,23 @@ RECORD LISTING STYLES
 
 
 
+/***************
+DASHBOARD STYLES
+***************/
+
+#dashboard .block h2 { margin:0 0 10px; }
+
+#dashboard .block {
+    min-width:300px;
+    margin-right:15px;
+    width:44%;
+    float:left;
+}
+
+
+
+
+
 /***********
 VIDEO STYLES
 ***********/
@@ -446,7 +469,7 @@ VIDEO STYLES
 
 #videos .list .video-title { width:40%; }
 
-#video-edit form { margin-top:15px; }
+#videos-edit form { margin-top:15px; }
 
 #upload-box {
     float:left;
@@ -486,7 +509,7 @@ VIDEO STYLES
 MEMBER STYLES
 ************/
 
-#member-edit form { margin-top:15px; }
+#members-edit form { margin-top:15px; }
 
 
 
@@ -505,7 +528,7 @@ COMMENT STYLES
     word-wrap:break-word;
 }
 
-#comment-edit form { margin-top:15px; }
+#comments-edit form { margin-top:15px; }
 
 
 
@@ -619,12 +642,15 @@ PLUGIN STYLES
 SETTINGS STYLES
 **************/
 
-#settings-video label { width: 155px; }
+#settings form { margin-top:15px; }
+#settings label { width: 120px; }
+#settings .row-shift { margin-left:135px; }
 
+#settings-video form { margin-top: 15px; }
+#settings-video label { width: 155px; }
 #settings-video .row-shift { margin-left:170px; }
 
 #settings-email label { width: 150px; }
-
 #settings-email .row-shift { margin-left:165px; }
 
 

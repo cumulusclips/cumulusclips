@@ -69,7 +69,7 @@ try {
 
 
     ### Download patch file
-    $patch_file_content = file_get_contents (UPDATE_URL . '/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
+    $patch_file_content = file_get_contents (MOTHERSHIP_URL . '/updates/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
     $patch_file = null;
     if (!empty ($patch_file_content)) {
         $patch_file = $tmp . '/patch_file.php';

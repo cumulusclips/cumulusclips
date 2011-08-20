@@ -17,10 +17,9 @@ App::LoadClass ('Comment');
 Plugin::Trigger ('admin.member_edit.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$content = 'comment_edit.tpl';
 $page_title = 'Edit Comment';
 $data = array();
-$Errors = array();
+$errors = array();
 $message = null;
 
 
@@ -69,51 +68,53 @@ if (isset ($_POST['submitted'])) {
         if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
             $data['name'] = htmlspecialchars ($_POST['name']);
         } else {
-            $Errors['name'] = Language::GetText('error_name');
+            $errors['name'] = 'Invalid name';
         }
-
 
 
         // Validate Email
         if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
             $data['email'] = $_POST['email'];
         } else {
-            $Errors['email'] = Language::GetText('error_email');
+            $errors['email'] = 'Invalid email address';
         }
 
 
-
-        // Validate Website
-        if (!empty ($comment->website) && $_POST['website'] == '') {
+        // Validate website
+        if (!empty ($comment->website) && empty ($_POST['website'])) {
             $data['website'] = '';
         } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
-            $data['website'] = htmlspecialchars ($_POST['website']);
+            $website = $_POST['website'];
+            if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+                $website = (empty($matches[1])) ? 'http://' . $website : $website;
+                $data['website'] = htmlspecialchars (trim ($website));
+            } else {
+                $errors['website'] = 'Invalid website';
+            }
         }
 
-    }
-
+    }   // END VALIDATE ANONYMOUS POSTER FIELDS
 
 
     // Validate status
     if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
         $data['status'] = htmlspecialchars (trim ($_POST['status']));
     } else {
-        $Errors['status'] = 'Invalid status';
+        $errors['status'] = 'Invalid status';
     }
-
 
 
     // Validate comments
     if (!empty ($_POST['comments']) && !ctype_space ($_POST['comments'])) {
         $data['comments'] = htmlspecialchars (trim ($_POST['comments']));
     } else {
-        $Errors['comments'] = Language::GetText('error_comment');
+        $errors['comments'] = 'Invalid comments';
     }
 
 
 
     // Update record if no errors were found
-    if (empty ($Errors)) {
+    if (empty ($errors)) {
 
         // Perform addional actions based on status change
         if ($data['status'] != $comment->status) {
@@ -136,8 +137,8 @@ if (isset ($_POST['submitted'])) {
         Plugin::Trigger ('admin.member_edit.update_member');
 
     } else {
-        $message = Language::GetText('errors_below');
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $Errors);
+        $message = 'The following errors were found. Please correct them and try again.';
+        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
         $message_type = 'error';
     }
 
@@ -149,7 +150,7 @@ include ('header.php');
 
 ?>
 
-<div id="comment-edit">
+<div id="comments-edit">
 
     <h1>Update Comment</h1>
 
@@ -164,7 +165,7 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>" method="post">
 
-            <div class="row<?=(isset ($Errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
                     <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
@@ -173,44 +174,43 @@ include ('header.php');
                 </select>
             </div>
 
+            <div class="row"><label>Date Posted:</label>
+                <?=$comment->date_created?>
+            </div>
+
+            <div class="row">
+                <label>In Response To:</label>
+                <a target="_ccsite" href="<?=HOST?>/videos/<?=$comment->video_id?>/<?=$video->slug?>/"><?=$video->title?></a>
+            </div>
+
             <?php if ($comment->user_id == 0): ?>
 
-                <div class="row<?=(isset ($Errors['name'])) ? ' errors' : ''?>">
-                    <label>*<?=Language::GetText('name')?>:</label>
+                <div class="row<?=(isset ($errors['name'])) ? ' errors' : ''?>">
+                    <label>*Name:</label>
                     <input class="text" type="text" name="name" value="<?=(isset ($data['name'])) ? $data['name'] : $comment->name?>" />
                 </div>
 
-                <div class="row<?=(isset ($Errors['email'])) ? ' errors' : ''?>">
-                    <label>*<?=Language::GetText('email')?>:</label>
+                <div class="row<?=(isset ($errors['email'])) ? ' errors' : ''?>">
+                    <label>*Email:</label>
                     <input class="text" type="text" name="email" value="<?=(isset ($data['email'])) ? $data['email'] : $comment->email?>" />
                 </div>
 
-                <div class="row<?=(isset ($Errors['website'])) ? ' errors' : ''?>">
-                    <label><?=Language::GetText('website')?>:</label>
+                <div class="row<?=(isset ($errors['website'])) ? ' errors' : ''?>">
+                    <label>Website:</label>
                     <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $comment->website?>" />
                 </div>
 
             <?php else: ?>
 
                 <div class="row">
-                    <label><?=Language::GetText('username')?>:</label>
-                    <a href="<?=$comment->website?>"><?=$comment->name?></a>
+                    <label>Username:</label>
+                    <a target="_ccsite" href="<?=$comment->website?>"><?=$comment->name?></a>
                 </div>
 
             <?php endif; ?>
 
-            <div class="row">
-                <label><?=Language::GetText('date_posted')?>:</label>
-                <?=$comment->date_created?>
-            </div>
-
-            <div class="row">
-                <label>In Response To:</label>
-                <a href="<?=HOST?>/videos/<?=$comment->video_id?>/<?=$video->slug?>/"><?=$video->title?></a>
-            </div>
-
-            <div class="row<?=(isset ($Errors['comment'])) ? ' errors' : ''?>">
-                <label><?=Language::GetText('comments')?>:</label>
+            <div class="row<?=(isset ($errors['comment'])) ? ' errors' : ''?>">
+                <label>Comments:</label>
                 <textarea rows="7" cols="50" class="text" name="comments"><?=(isset ($data['comments'])) ? $data['comments'] : $comment->comments?></textarea>
             </div>
 

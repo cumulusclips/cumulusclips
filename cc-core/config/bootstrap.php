@@ -14,7 +14,7 @@ define ('EMAIL_PATH', DOC_ROOT . '/cc-content/emails');
 define ('CURRENT_VERSION', '1.0');
 define ('LOG_QUERIES', false);
 define ('SITE_EMAIL', 'admin@techievideos.com');
-define ('UPDATE_URL', 'http://updates.cumulusclips.org');
+define ('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
 ini_set ('max_execution_time', 3600);
 
 

@@ -322,7 +322,7 @@ class Functions {
         $client = urlencode ($_SERVER['REMOTE_ADDR']);
         $system = urlencode ($_SERVER['SERVER_ADDR']);
         
-        $update_url = UPDATE_URL . "/?version=$version&client=$client&system=$system";
+        $update_url = MOTHERSHIP_URL . "/updates/?version=$version&client=$client&system=$system";
         $update = @file_get_contents ($update_url);
         $json = json_decode ($update);
         return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;

@@ -39,12 +39,7 @@ $('document').ready(function(){
     // Redirect user to requested location when status dropdown is updated
     $('.jump select').change(function(){
         var jumpLoc = $(this).data('jump');
-        var alternateLoc = $(this).find('option:selected').data('url');
-        if (typeof alternateLoc == 'undefined') {
-            window.location = jumpLoc+'?status='+$(this).val();
-        } else {
-            window.location = alternateLoc;
-        }
+        window.location = jumpLoc+'?status='+$(this).val();
     });
 
 
@@ -267,6 +262,20 @@ $('document').ready(function(){
         return false;
 
     });
+
+
+
+
+    // Load mothership message
+    if ($('#dashboard').length == 1) {
+        $.ajax({
+            'type'      : 'POST',
+            'url'       : baseURL+'/cc-admin/',
+            'data'      : {news:'true'},
+            'error'     : function(){$('#news div').html('<strong>Nothing to report.</strong>');},
+            'success'   : function(data){$('#news div').html(data);}
+        });
+    }
 
 });
 

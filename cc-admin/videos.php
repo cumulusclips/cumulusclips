@@ -250,25 +250,37 @@ include ('header.php');
                         <td class="video-title">
                             <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a><br />
                             <div class="record-actions invisible">
-                                <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch</a>
+
+                                <?php if (in_array ($status, array ('approved','featured'))): ?>
+                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" target="_ccsite">Watch</a>
+                                <?php endif; ?>
+
+
                                 <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
 
-                                <?php if ($status == 'approved'): ?>
 
+                                <?php if ($status == 'approved'): ?>
                                     <?php if ($video->featured == 1): ?>
                                         <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
                                     <?php else: ?>
-                                        <a href="<?=$pagination->GetURL('feature='.$video->video_id)?>">Make Featured</a>
-                                    <?php endif; ?>
+                                        <a href="<?=$pagination->GetURL('feature='.$video->video_id)?>">Feature</a>
+                                    <?php endif ?>
+                                <?php endif; ?>
 
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
-                                <?php elseif ($status == 'featured'): ?>
-                                        <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
-                                <?php elseif ($status == 'pending'): ?>
+                                    
+                                <?php if ($status == 'featured'): ?>
+                                    <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
+                                <?php endif; ?>
+
+
+                                <?php if ($status == 'pending'): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
+                                <?php elseif (in_array ($status, array ('approved','featured'))): ?>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
                                 <?php endif; ?>
+
 
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>

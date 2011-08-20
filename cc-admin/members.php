@@ -209,14 +209,22 @@ include ('header.php');
                         <td>
                             <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
                             <div class="record-actions invisible">
-                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+
+                                <?php if ($status == 'active'): ?>
+                                    <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+                                <?php endif; ?>
+
                                 <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>">Edit</a>
 
                                 <?php if ($status == 'active'): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$user->user_id)?>">Ban</a>
-                                <?php elseif (in_array ($status, array ('new', 'pending'))): ?>
+                                <?php endif; ?>
+
+                                <?php if (in_array ($status, array ('new', 'pending'))): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
-                                <?php elseif ($status == 'banned'): ?>
+                                <?php endif; ?>
+                                    
+                                <?php if ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
                                 <?php endif; ?>
 

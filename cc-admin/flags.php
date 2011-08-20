@@ -27,7 +27,11 @@ $sub_header = null;
 
 
 // Verify content type was provided
-$type = (empty ($_GET['type']) || !in_array ($_GET['type'], array ('video', 'member', 'comment'))) ? $_GET['type'] : 'video';
+if (!empty ($_GET['status']) && in_array ($_GET['status'], array ('video', 'member', 'comment'))) {
+    $type = $_GET['status'];
+} else {
+    $type = 'video';
+}
 
 
 
@@ -88,17 +92,17 @@ else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
 switch ($type) {
 
     case 'member':
-        $query_string['type'] = 'member';
+        $query_string['status'] = 'member';
         $header = 'Flagged Members';
         $page_title = 'Flagged Members';
         break;
     case 'video':
-        $query_string['type'] = 'video';
+        $query_string['status'] = 'video';
         $header = 'Flagged Videos';
         $page_title = 'Flagged Videos';
         break;
     case 'comment':
-        $query_string['type'] = 'comment';
+        $query_string['status'] = 'comment';
         $header = 'Flagged Comments';
         $page_title = 'Flagged Comments';
         break;
@@ -159,7 +163,7 @@ include ('header.php');
     <div id="browse-header">
         <div class="jump">
             Jump To:
-            <select id="flag-type-select" name="type" onChange="window.location='<?=ADMIN?>/flags.php?type='+this.value;">
+            <select name="status" data-jump="<?=ADMIN?>/flags.php">
                 <option <?=($type == 'video') ? 'selected="selected"' : ''?>value="video">Videos</option>
                 <option <?=($type == 'member') ? 'selected="selected"' : ''?>value="member">Members</option>
                 <option <?=($type == 'comment') ? 'selected="selected"' : ''?>value="comment">Comments</option>

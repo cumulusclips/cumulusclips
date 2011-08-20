@@ -81,7 +81,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['h264_url']) && !ctype_space ($_POST['h264_url'])) {
         $data['h264_url'] = htmlspecialchars (trim ($_POST['h264_url']));
     } else {
-        $errors['h264_url'] = 'Invalid h.264 video url';
+        $data['h264_url'] = '';
     }
 
 
@@ -89,7 +89,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['theora_url']) && !ctype_space ($_POST['theora_url'])) {
         $data['theora_url'] = htmlspecialchars (trim ($_POST['theora_url']));
     } else {
-        $errors['theora_url'] = 'Invalid theora video url';
+        $data['theora_url'] = '';
     }
 
 
@@ -97,7 +97,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['mobile_url']) && !ctype_space ($_POST['mobile_url'])) {
         $data['mobile_url'] = htmlspecialchars (trim ($_POST['mobile_url']));
     } else {
-        $errors['mobile_url'] = 'Invalid mobile video url';
+        $data['mobile_url'] = '';
     }
 
 
@@ -105,7 +105,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['thumb_url']) && !ctype_space ($_POST['thumb_url'])) {
         $data['thumb_url'] = htmlspecialchars (trim ($_POST['thumb_url']));
     } else {
-        $errors['thumb_url'] = 'Invalid video thumbnail url';
+        $data['thumb_url'] = '';
     }
 
 
@@ -195,33 +195,37 @@ include ('header.php');
             <div class="row <?=(isset ($errors['accepted_video_formats'])) ? ' errors' : ''?>">
                 <label>Accepted Video Formats:</label>
                 <input class="text" type="text" name="accepted_video_formats" value="<?=$data['accepted_video_formats_string']?>" />
-                (comma delimited)
+                (Comma Delimited)
             </div>
 
             <div class="row <?=(isset ($errors['video_size_limit'])) ? ' errors' : ''?>">
                 <label>Video Site Limit:</label>
                 <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
-                (bytes)
+                (Bytes)
             </div>
 
             <div class="row <?=(isset ($errors['h264_url'])) ? ' errors' : ''?>">
                 <label>h.264 (MP4) Video URL:</label>
                 <input class="text" type="text" name="h264_url" value="<?=$data['h264_url']?>" />
+                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/h264/'">More Info</a>
             </div>
 
             <div class="row <?=(isset ($errors['theora_url'])) ? ' errors' : ''?>">
                 <label>Theora (OGG) Video URL:</label>
                 <input class="text" type="text" name="theora_url" value="<?=$data['theora_url']?>" />
+                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/theora/'">More Info</a>
             </div>
 
             <div class="row <?=(isset ($errors['mobile_url'])) ? ' errors' : ''?>">
                 <label>Mobile Video URL:</label>
                 <input class="text" type="text" name="mobile_url" value="<?=$data['mobile_url']?>" />
+                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/mobile/'">More Info</a>
             </div>
 
             <div class="row <?=(isset ($errors['thumb_url'])) ? ' errors' : ''?>">
                 <label>Thumbnail URL:</label>
                 <input class="text" type="text" name="thumb_url" value="<?=$data['thumb_url']?>" />
+                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/thumbs/'">More Info</a>
             </div>
 
             <div class="row <?=(isset ($errors['h264_options'])) ? ' errors' : ''?>">
