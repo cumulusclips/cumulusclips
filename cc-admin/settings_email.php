@@ -271,7 +271,7 @@ include ('header.php');
 
                 <div class="row <?=(isset ($errors['smtp_password'])) ? ' errors' : ''?>">
                     <label>SMTP Password:</label>
-                    <input class="text" type="text" name="smtp_password" value="<?=$data['smtp_password']?>" />
+                    <input class="text mask" type="password" name="smtp_password" value="<?=$data['smtp_password']?>" />
                 </div>
 
             </div>

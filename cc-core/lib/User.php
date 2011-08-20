@@ -105,7 +105,7 @@ class User {
         $query .= " ($fields) VALUES ($values)";
         $db->Query ($query);
         
-        Privacy::Create ($db->LastId());
+        Privacy::Create (array ('user_id' => $db->LastId()));
         Plugin::Trigger ('user.create');
         return $db->LastId();
 

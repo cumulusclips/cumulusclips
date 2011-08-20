@@ -25,9 +25,9 @@ $message = null;
 
 
 
-/***********************
-Handle form if submitted
-***********************/
+/**************************
+Handle create category form
+**************************/
 
 if (isset ($_POST['submitted_add'])) {
 
@@ -64,6 +64,10 @@ if (isset ($_POST['submitted_add'])) {
 
 
 
+
+/*******************************
+Handle move/delete category form
+*******************************/
 
 if (isset ($_POST['submitted_edit'])) {
 

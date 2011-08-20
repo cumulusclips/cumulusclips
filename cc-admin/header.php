@@ -47,6 +47,7 @@
             <div>
                 <p><a href="<?=ADMIN?>/members.php?status=active">Browse Members</a></p>
                 <p><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></p>
+                <p><a href="<?=ADMIN?>/members_add.php">Add New Member</a></p>
             </div>
         </div>
 
@@ -72,7 +73,7 @@
             <h3 class="pages"><span>Pages</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/pages.php">Browse Pages</a></p>
-                <p><a href="<?=ADMIN?>/pages_add.php">Add Page</a></p>
+                <p><a href="<?=ADMIN?>/pages_add.php">Add New Page</a></p>
             </div>
         </div>
 
