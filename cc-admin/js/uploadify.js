@@ -2,6 +2,7 @@ $('document').ready(function() {
 
     // Retrieve vars from meta tags
     var host = $('meta[name="baseURL"]').attr('content');
+    var handler = $('meta[name="uploadHandler"]').attr('content');
     var token = $('meta[name="token"]').attr('content');
     var fileDesc = $('meta[name="fileDesc"]').attr('content');
     var fileExt = $('meta[name="fileExt"]').attr('content');
@@ -11,7 +12,7 @@ $('document').ready(function() {
 
 
 
-    // Initialize Uploadify for video uploads
+    // Initialize Uploadify for file uploads
     $('#upload').uploadify({
         'width'         : 150,
         'height'        : 28,
@@ -20,11 +21,11 @@ $('document').ready(function() {
         'sizeLimit'     : sizeLimit,
         'scriptData'    : {'token':token,'timestamp':timestamp},
         'uploader'      : host+'/cc-admin/extras/uploadify/uploadify.swf',
-        'script'        : host+'/cc-admin/videos_add_ajax.php',
+        'script'        : handler,
         'cancelImg'     : host+'/cc-admin/extras/uploadify/cancel.png',
         'hideButton'    : true,
         'wmode'         : 'transparent',
-        'fileDesc'      : 'Supported Video Formats:' + fileDesc,
+        'fileDesc'      : fileDesc,
         'fileExt'       : fileExt,
         'onError'       : function(event, queueID, fileObj, errorObj) {
 
@@ -32,10 +33,10 @@ $('document').ready(function() {
 
             // Determine reason for failure
             if (errorObj.type == 'File Size') {
-                message = 'Your video exceeded the maximum filesize limit. Please try your upload again.';
+                message = 'Your file exceeded the maximum filesize limit. Please try your upload again.';
                 $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
             } else {
-                message = 'Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience.';
+                message = 'Errors were encountered during the processing of your file, and it cannot be uploaded at this time. We apologize for this inconvenience.';
                 $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
             }
 
@@ -49,19 +50,19 @@ $('document').ready(function() {
             switch (response.status) {
 
                 case 'extension':
-                    message = 'Your video is not in one of the accepted file formats. Please try your upload again.';
+                    message = 'Your file is not in one of the accepted file formats. Please try your upload again.';
                     $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
                     break;
 
 
                 case 'nofile':
-                    message = 'No video was uploaded. Please try your upload again.';
+                    message = 'No file was uploaded. Please try your upload again.';
                     $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
                     break;
 
 
                 case 'filesize':
-                    message = 'Your video exceeded the maximum filesize limit. Please try your upload again.';
+                    message = 'Your file exceeded the maximum filesize limit. Please try your upload again.';
                     $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
                     break;
 
@@ -72,7 +73,7 @@ $('document').ready(function() {
 
 
                 default:
-                    message = 'Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience.';
+                    message = 'Errors were encountered during the processing of your file, and it cannot be uploaded at this time. We apologize for this inconvenience.';
                     $('#uploadQueue').html('<div class="uploadifyQueueItem uploadifyError"><span class="fileName">'+message+'</span></div>');
                     break;
 

@@ -619,19 +619,6 @@ UPDATE STYLES
 PLUGIN STYLES
 ************/
 
-#upload-row { position:relative; }
-
-#upload {
-    position:absolute;
-    text-align:right;
-    left:115px;
-    filter:alpha(opacity:0);
-    opacity: 0;
-    z-index:2;
-    height:30px;
-    width:392px;
-}
-
 #enable-options { line-height:14px; }
 
 

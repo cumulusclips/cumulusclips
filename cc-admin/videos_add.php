@@ -24,9 +24,10 @@ $admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';
 $admin_js[] = ADMIN . '/extras/uploadify/jquery.uploadify.v2.1.4.min.js';
 $admin_js[] = ADMIN . '/js/uploadify.js';
 $admin_css[] = ADMIN . '/extras/uploadify/uploadify.css';
+$admin_meta['uploadHandler'] = ADMIN . '/videos_add_ajax.php';
 $admin_meta['token'] = session_id();
 $admin_meta['sizeLimit'] = $config->video_size_limit;
-$admin_meta['fileDesc'] = '';
+$admin_meta['fileDesc'] = 'Supported Video Formats:';
 $admin_meta['fileExt'] = '';
 $timestamp = time();
 $_SESSION['video_upload_key'] = md5 (md5 ($timestamp) . SECRET_KEY);
@@ -78,8 +79,8 @@ if (isset ($_POST['submitted'])) {
         }
 
         // Validate video upload
-        if (!is_array ($video)) throw new Exception ('Invalid video upload2');
-        if (empty ($video['key']) || empty ($video['temp'])) throw new Exception ('Invalid video upload3');
+        if (!is_array ($video)) throw new Exception ('Invalid video upload');
+        if (empty ($video['key']) || empty ($video['temp'])) throw new Exception ('Invalid video upload');
         if (!file_exists ($video['temp'])) throw new Exception ('Invalid video upload');
         if ($video['key'] != $upload_key) throw new Exception ('Invalid video upload');
 

@@ -15,9 +15,20 @@ App::LoadClass ('Filesystem');
 Plugin::Trigger ('admin.video_edit.start');
 //$logged_in = User::LoginCheck(HOST . '/login/');
 //$admin = new User ($logged_in);
-$page_title = 'Add Plugin';
+$page_title = 'Add New Plugin';
 $message = null;
-
+$admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';
+$admin_js[] = ADMIN . '/extras/uploadify/jquery.uploadify.v2.1.4.min.js';
+$admin_js[] = ADMIN . '/js/uploadify.js';
+$admin_css[] = ADMIN . '/extras/uploadify/uploadify.css';
+$admin_meta['uploadHandler'] = ADMIN . '/plugins_add_ajax.php';
+$admin_meta['token'] = session_id();
+$admin_meta['sizeLimit'] = 1024*1024*100;
+$admin_meta['fileDesc'] = 'Supported File Formats: (*.zip)';
+$admin_meta['fileExt'] = '*.zip';
+$timestamp = time();
+$_SESSION['upload_key'] = md5 (md5 ($timestamp) . SECRET_KEY);
+$clean_up = true;
 
 
 
@@ -37,51 +48,32 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate file upload
+    ### Validate file upload
     try {
 
-        // Check file was uploaded
-        if (empty ($_FILES['upload']['name'])) {
-            throw new Exception ('Invalid plugin zip file');
+        // Validate timestamp
+        if (!empty ($_POST['timestamp']) && is_numeric ($_POST['timestamp'])) {
+            $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
+        } else {
+            throw new Exception ('Invalid timestamp');
         }
 
-
-        // Check for browser upload errors
-        if (!empty ($_FILES['upload']['error'])) {
-
-            switch ($_FILES['upload']['error']) {
-
-                case 1:
-                case 2:
-                    throw new Exception ('Uploaded file exceeds maximum upload filesize');
-                    break;
-
-                case 3:
-                case 4:
-                    throw new Exception ('File was not uploaded properly');
-                    break;
-
-                default:
-                    throw new Exception ('A system error has occured');
-                    break;
-
-            }
-            
+        // Verify file AJAX values were set
+        if (!empty ($_SESSION['upload'])) {
+            $upload = unserialize ($_SESSION['upload']);
+        } else {
+            throw new Exception ('Invalid file upload');
         }
 
- 
-        // Validate mime-type sent by browser
-        if (!preg_match ('/application\/(zip|x\-zip|octet\-stream|x\-zip\-compressed)/i', $_FILES['upload']['type'])) {
-            throw new Exception ('Uploaded file was not in zip format/mime-type');
-        }
+        // Validate video upload
+        if (!is_array ($upload)) throw new Exception ('Invalid file upload');
+        if (empty ($upload['key']) || empty ($upload['temp'])) throw new Exception ('Invalid file upload');
+        if (!file_exists ($upload['temp'])) throw new Exception ('Invalid file upload');
+        if ($upload['key'] != $upload_key) throw new Exception ('Invalid file upload');
 
-   
-        // Validate file extension
-        $extension = Functions::GetExtension ($_FILES['upload']['name']);
-        if (!preg_match ('/zip/i', $extension)) {
-            throw new Exception ('Uploaded file was not in zip format');
-        }
-    
+        $_SESSION['upload'] = serialize (array ('key' => $_SESSION['upload_key'], 'temp' => $upload['temp'], 'name' => $upload['name']));
+        $data['upload'] = $upload;
+
     } catch (Exception $e) {
         $errors['upload'] = $e->getMessage();
     }
@@ -94,49 +86,33 @@ if (isset ($_POST['submitted'])) {
         // Extract zip archive and move plugin
         try {
 
-            // Create temp dir
-            $temp = DOC_ROOT . '/cc-content/.add-plugin';
-            Filesystem::Open();
-            Filesystem::CreateDir ($temp);
-
-
-            // Make temp dir writeable
-            Filesystem::SetPermissions ($temp, 0777);
-
-
-            // Move zip to temp dir
-            if (!move_uploaded_file ($_FILES['upload']['tmp_name'], $temp . '/plugin.zip')) {
-                $clean_up = true;
-                throw new Exception ('Uploaded file could not be moved from OS temp directory');
-            }
-
-
             // Extract plugin
-            Filesystem::Extract ($temp . '/plugin.zip');
+            $temp_dir = DOC_ROOT . '/cc-content/.add-plugin';
+            Filesystem::Open();
+            Filesystem::Extract ($temp_dir . '/plugin.zip');
 
 
             // Check for duplicates
-            $temp_contents = array_diff (scandir ($temp), array ('.', '..', 'plugin.zip'));
+            $temp_contents = array_diff (scandir ($temp_dir), array ('.', '..', 'plugin.zip'));
             $plugin_name = array_pop ($temp_contents);
             if (file_exists (DOC_ROOT . '/cc-content/plugins/' . $plugin_name)) {
-                $clean_up = true;
                 throw new Exception ("Plugin cannot be added. It conflicts with another plugin.");
             }
 
 
             // Copy plugin cotnents to plugins dir
-            Filesystem::CopyDir ($temp . '/' . $plugin_name, DOC_ROOT . '/cc-content/plugins/' . $plugin_name);
+            Filesystem::CopyDir ($temp_dir . '/' . $plugin_name, DOC_ROOT . '/cc-content/plugins/' . $plugin_name);
 
 
             // Validate Plugin
             if (!Plugin::ValidPlugin ($plugin_name)) {
-                $clean_up = true;
                 throw new Exception ("Plugin contains errors. Please report this to it's developer");
             }
 
 
             // Clean up
-            Filesystem::Delete ($temp);
+            $clean_up = false;
+            Filesystem::Delete ($temp_dir);
             Filesystem::Close();
 
 
@@ -162,8 +138,9 @@ if (isset ($_POST['submitted'])) {
 
             // Display success message
             $plugin_info = Plugin::GetPluginInfo ($plugin_name);
-            $message = $plugin_info->name . ' has been added successfully!';
+            $message = $plugin_info->name . ' has been added.';
             $message_type = 'success';
+            unset ($data);
 
 
         } catch (Exception $e) {
@@ -172,9 +149,9 @@ if (isset ($_POST['submitted'])) {
             $message_type = 'error';
 
             // Perform clean up if plugin contained errors
-            if (isset ($clean_up)) {
+            if ($clean_up) {
                 try {
-                    Filesystem::Delete ($temp);
+                    Filesystem::Delete ($temp_dir);
                     Filesystem::Close();
                 } catch (Exception $e) {
                     $message = $e->getMessage();
@@ -201,7 +178,7 @@ include ('header.php');
 
 <div id="plugins-add">
 
-    <h1>Add Plugins</h1>
+    <h1>Add New Plugin</h1>
 
     <?php if ($message): ?>
     <div class="<?=$message_type?>"><?=$message?></div>
@@ -214,17 +191,24 @@ include ('header.php');
         to upload and add it to the system.</p>
 
 
-        <form action="<?=ADMIN?>/plugins_add.php" method="post" enctype="multipart/form-data">
+        <form action="<?=ADMIN?>/plugins_add.php" method="post">
 
-            <div id="upload-row" class="row <?=(isset($errors['upload'])) ? ' errors' : ''?>">
-                <label>*Plugin Zip File:</label>
-                <input id="upload-visible" class="text" type="text" name="upload-visible" />
-                <input type="button" class="button" value="Browse" />
-                <input id="upload" type="file" name="upload" />
+            <div class="row <?=(isset ($errors['upload'])) ? 'errors' : ''?>">
+                <label>Plugin Zip File:</label>
+                <div id="upload-box">
+                    <input id="browse-button" type="button" class="button" value="Browse" />
+                    <input id="upload" type="file" name="upload" />
+                    <div class="uploadifyQueue" id="uploadQueue">
+                    <?php if (isset ($data['upload'])): ?>
+                        <div class="uploadifyQueueItem"><span class="fileName"><?=$data['upload']['name']?> - has been uploaded</span></div>
+                    <?php endif; ?>
+                    </div>
+                    <input id="upload-button" type="button" class="button" value="Upload" />
+                </div>
             </div>
 
             <div class="row <?=(isset ($errors['enable'])) ? 'errors' : ''?>">
-                <label>*Enable Plugin:</label>
+                <label>Enable Plugin:</label>
                 <div id="enable-options">
                     <input type="radio" name="enable" id="auto-enable" value="auto-enable" checked="checked" />
                     <label for="auto-enable">Automatically enable plugin</label>
@@ -235,7 +219,7 @@ include ('header.php');
             </div>
 
             <div class="row-shift">
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?=1024*1024*100?>" />
+                <input type="hidden" name="timestamp" value="<?=$timestamp?>" id="timestamp" />
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input type="submit" class="button" value="Add Plugin" />
             </div>

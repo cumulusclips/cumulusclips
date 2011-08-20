@@ -190,14 +190,6 @@ $('document').ready(function(){
 
 
 
-    // Add hidden upload filename to styled upload field
-    $('#upload').change(function(){
-        $('#upload-visible').val($('#upload').val());
-    });
-
-
-
-
     // Toggle SMTP settings visibility based on SMTP enable field
     $('#settings-email [name="smtp_enabled"]').change(function(){
         $('#smtp_auth').toggleClass('hide');
