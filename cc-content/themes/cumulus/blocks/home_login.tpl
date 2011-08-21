@@ -1,5 +1,5 @@
 
-<div id="home-login">
+<div id="home-login" class="block">
     <span id="tab"><?=Language::GetText('account_login')?></span>
 
     <form action="<?=HOST?>/login/" method="post">
@@ -16,10 +16,9 @@
         <p><a href="<?=HOST?>/register/" title=""><?=Language::GetText('no_account')?></a></p>
         <p><a href="<?=HOST?>/login/forgot/" title=""><?=Language::GetText('forgot_your_login')?></a></p>
 
-        <div class="row">
+        <div>
             <input type="hidden" name="submitted_login" value="TRUE" />
-            <input type="submit" name="button" value="Login" />
-            <a href="" class="button"><span><?=Language::GetText('login_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('login_button')?>" />
         </div>
 
     </form>

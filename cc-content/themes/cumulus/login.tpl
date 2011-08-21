@@ -27,8 +27,7 @@
 
         <div class="row-shift">
             <input type="hidden" name="submitted_login" value="TRUE" />
-            <input type="submit" name="button" value="Login" />
-            <a href="" class="button"><span><?=Language::GetText('login_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('login_button')?>" />
         </div>
 
         <div class="row-shift">
@@ -54,8 +53,7 @@
 
     <div class="row-shift">
         <input type="hidden" name="submitted_forgot" value="TRUE" />
-        <input type="submit" name="button" value="Forgot Password" />
-        <a href="" class="button"><span><?=Language::GetText('forgot_button')?></span></a>
+        <input class="button" type="submit" name="button" value="<?=Language::GetText('forgot_button')?>" />
     </div>
     </form>
 

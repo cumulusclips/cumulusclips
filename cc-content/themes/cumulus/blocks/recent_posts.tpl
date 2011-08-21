@@ -7,7 +7,7 @@
             <p class="big"><?=Language::GetText('update_status')?></p>
             <textarea name="post" class="text"></textarea>
             <input type="hidden" name="submitted" value="TRUE" />
-            <a class="button-small" href=""><span><?=Language::GetText('post_update_button')?></span></a>
+            <a class="button-small" href=""><?=Language::GetText('post_update_button')?></a>
         </form>
     <?php endif; ?>
 

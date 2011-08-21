@@ -47,12 +47,12 @@ View::Header();
             </div>
 
             <div>
-                <a href="" class="button-small"><span><?=Language::GetText('about')?></span></a>
-                <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-member="<?=$video->user_id?>"><span><?=Language::GetText($subscribe_text)?></span></a>
-                <a href="" class="button-small"><span><?=Language::GetText('share')?></span></a>
-                <a href="" class="button-small"><span class="embed"><?=Language::GetText('embed')?></span></a>
-                <a href="" class="button-small favorite" data-video="<?=$video->video_id?>"><span><?=Language::GetText('favorite')?></span></a>
-                <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><span><?=Language::GetText('flag')?></span></a>
+                <a href="" class="button-small"><?=Language::GetText('about')?></a>
+                <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-member="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
+                <a href="" class="button-small"><?=Language::GetText('share')?></a>
+                <a href="" class="button-small"><?=Language::GetText('embed')?></a>
+                <a href="" class="button-small favorite" data-video="<?=$video->video_id?>"><?=Language::GetText('favorite')?></a>
+                <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><?=Language::GetText('flag')?></a>
             </div>
 
             <div id="about">
@@ -167,7 +167,7 @@ View::Header();
             <div class="row-shift">
                 <input type="hidden" name="video_id" value="<?=$video->video_id?>" />
                 <input type="hidden"name="submitted" value="TRUE" />
-                <a href="" class="button"><span><?=Language::GetText('comments_button')?></span></a>
+                <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
             </div>
             </form>
 

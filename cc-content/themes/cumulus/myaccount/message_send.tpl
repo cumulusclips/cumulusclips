@@ -35,8 +35,7 @@ View::Header();
 
         <div class="row-shift">
             <input type="hidden" name="submitted" value="yes" />
-            <input type="submit" name="button" value="Send Message" />
-            <a href="" class="button"><span><?=Language::GetText('message_send_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('message_send_button')?>" />
         </div>
 
     </form>

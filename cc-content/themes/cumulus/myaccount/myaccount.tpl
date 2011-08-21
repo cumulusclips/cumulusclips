@@ -27,9 +27,9 @@ View::Header();
 
     <form id="status-form">
         <p class="big"><?=Language::GetText('update_status')?></p>
-        <textarea class="text" name="post"></textarea>
+        <textarea class="text" name="post"></textarea><br />
         <input type="hidden" name="submitted" value="TRUE" />
-        <br /><a class="button-small" href=""><span><?=Language::GetText('post_update_button')?></span></a>
+        <input class="button-small" type="submit" name="button" value="<?=Language::GetText('post_update_button')?>" />
     </form>
 
     <div class="clear"></div>

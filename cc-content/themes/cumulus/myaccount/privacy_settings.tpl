@@ -53,7 +53,7 @@ View::Header();
 
         <div class="row">
             <input type="hidden" name="submitted" value="TRUE" />
-            <a href="" class="button"><span><?=Language::GetText('privacy_settings_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('privacy_settings_button')?>" />
         </div>
 
     </form>

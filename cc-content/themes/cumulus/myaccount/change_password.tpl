@@ -32,8 +32,7 @@ View::Header();
 
         <div class="row-shift">
             <input type="hidden" name="submitted" value="TRUE" />
-            <input type="submit" name="button" value="Change Password" />
-            <a href="" class="button"><span><?=Language::GetText('change_password_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('change_password_button')?>" />
         </div>
         
     </form>

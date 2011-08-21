@@ -42,7 +42,7 @@ View::Header();
         </table>
         <div class="row_btn">
             <input type="hidden" name="submitted" value="TRUE" />
-            <a href="" class="button"><span><?=Language::GetText('purge_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('purge_button')?>" />
         </div>
         </form>
 
