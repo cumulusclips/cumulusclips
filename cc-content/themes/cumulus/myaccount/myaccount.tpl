@@ -14,8 +14,8 @@ View::Header();
 
     <div id="myaccount-left">
         <div>
-            <div class="picture"><span><img alt="<?=$user->username?>" src="<?=$user->avatar?>" /></span></div>
-            <a href="<?=HOST?>/myaccount/profile/#update-picture" title="<?=Language::GetText('edit_picture')?>"><?=Language::GetText('edit_picture')?></a>
+            <div class="avatar"><span><img alt="<?=$user->username?>" src="<?=$user->avatar_url?>" /></span></div>
+            <a href="<?=HOST?>/myaccount/profile/#update-avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
         <br />
         <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_created?></p>

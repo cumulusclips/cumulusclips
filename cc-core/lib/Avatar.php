@@ -1,6 +1,6 @@
 <?php
 
-class Picture {
+class Avatar {
 
     /**
      * Save an uploaded image to a new location
@@ -9,10 +9,10 @@ class Picture {
      * @param string $save_as Filename to save the new image as
      * @return void Temporary image is resampled, resized, and saved in its final location
      */
-    static function SavePicture ($original_file, $original_extension, $save_as) {
+    static function SaveAvatar ($original_file, $original_extension, $save_as) {
 
-        $picture_size = 100;
-        $save_as = UPLOAD_PATH . '/pictures/' . $save_as;
+        $avatar_size = 100;
+        $save_as = UPLOAD_PATH . '/avatars/' . $save_as;
         list ($width_src, $height_src) = getimagesize ($original_file);
 
         // Determine new image dimensions
@@ -20,24 +20,24 @@ class Picture {
 
 
         // Check for dimension overage
-        if ($width_src > $height_src && $width_src > $picture_size) {
-            $width_dst = $picture_size;   // Resize width
+        if ($width_src > $height_src && $width_src > $avatar_size) {
+            $width_dst = $avatar_size;   // Resize width
             $height_dst = floor ($width_dst / $ratio); // Resize height based on ratio
 
-        } else  if ($width_src < $height_src && $height_src > $picture_size) {
-            $height_dst = $picture_size;  // Resize height
+        } else  if ($width_src < $height_src && $height_src > $avatar_size) {
+            $height_dst = $avatar_size;  // Resize height
             $width_dst = floor ($height_dst * $ratio); // Resize width based on ratio
 
-        } else if ($width_src == $height_src && $width_src > $picture_size) {
-            $width_dst = $picture_size;  // Resize width
-            $height_dst = $picture_size;  // Resize height
+        } else if ($width_src == $height_src && $width_src > $avatar_size) {
+            $width_dst = $avatar_size;  // Resize width
+            $height_dst = $avatar_size;  // Resize height
 
         } else {
             $width_dst = $width_src;
             $height_dst = $height_src;
         }
 
-        Plugin::Trigger ('picture.before_save');
+        Plugin::Trigger ('avatar.before_save');
 
         // Determin which type of image object to create (and how to process it) based on file extension
         if (in_array ($original_extension, array ('jpg', 'jpeg'))) {
@@ -75,7 +75,7 @@ class Picture {
 
         }
 
-        Plugin::Trigger ('picture.save');
+        Plugin::Trigger ('avatar.save');
 
     }
 
@@ -83,28 +83,15 @@ class Picture {
 
 
     /**
-     * Delete a profile picture from HDD
-     * @param string $picture Name of picture to be deleted
-     * @return void Picture is deleted from HDD
-     */
-    static function Delete ($picture) {
-        Plugin::Trigger ('picture.delete');
-        @unlink (UPLOAD_PATH . '/pictures/' . $picture);
-    }
-
-
-
-
-    /**
-     * Generate a unique random string for a picture filename
-     * @param string $extension The file extension for the picture
-     * @return string Random picture filename
+     * Generate a unique random string for an avatar filename
+     * @param string $extension The file extension for the avatar
+     * @return string Random avatar filename
      */
     static function CreateFilename ($extension) {
         $extension = $extension == 'gif' ? 'png' : $extension;  // GIFs are converted to PNGs
         do {
             $filename = Functions::Random(20) . '.' . $extension;
-            if (!file_exists (UPLOAD_PATH . '/pictures/' . $filename)) $filename_available = true;
+            if (!file_exists (UPLOAD_PATH . '/avatars/' . $filename)) $filename_available = true;
         } while (empty ($filename_available));
         return $filename;
     }  

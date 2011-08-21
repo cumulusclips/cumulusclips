@@ -322,7 +322,7 @@ CREATE TABLE `{DB_PREFIX}users` (
   `confirm_code` varchar(255) DEFAULT NULL,
   `views` bigint(20) DEFAULT '0',
   `last_login` date DEFAULT NULL,
-  `picture` varchar(255) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `released` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),

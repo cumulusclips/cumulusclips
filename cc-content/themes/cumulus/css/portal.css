@@ -192,8 +192,13 @@ MY ACCOUNT STYLES
 
 
 
+/********************
+UPDATE PROFILE STYLES
+********************/
 
-#picture-left {
+#update-avatar { margin-top:15px; }
+
+#avatar-left {
     float:left;
     margin-right:30px;
     font-weight:bold;
@@ -201,29 +206,42 @@ MY ACCOUNT STYLES
     line-height:18px;
 }
 
-#picture-left .picture {
+#avatar-left .avatar {
     margin:0 auto;
     margin-bottom:5px;
 }
 
-#picture-right {
+#avatar-right {
     float:left;
     width:500px;
 }
 
-#picture-right p {
+#avatar-right p {
     margin-bottom:15px;
 }
 
-#upload-picture form {
-    display:block;
-    margin-top:10px;
+.upload-box {
+    float:left;
     position:relative;
 }
 
-#upload {
+#uploadUploader {
+    position:relative;
+    width:150px;
+    height:42px;
+}
+
+#browse-button {
     position:absolute;
-    visibility: hidden;
+    top:0;
+    left:0;
+    width:150px;
+}
+
+#upload-button {
+    position:absolute;
+    top:0;
+    left:165px;
 }
 
 

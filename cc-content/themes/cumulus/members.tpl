@@ -10,7 +10,7 @@
         <?php $member = new User ($row->user_id); ?>
         <div class="member">
             <p class="picture"><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>">
-                <img src="<?=$member->avatar?>" alt="<?=$member->username?>" />
+                <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
             </a></p>
             <a class="large" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff ($member->username,18)?></a>
             <p><strong><?=Language::GetText('member_since')?>: </strong><?=$member->date_created?></p>

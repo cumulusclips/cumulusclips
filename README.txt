@@ -225,8 +225,8 @@ page.update - /cc-core/lib/Page.php
 page.delete - /cc-core/lib/Page.php
 
 
-picture.before_save - /cc-core/lib/Picture.php
-picture.save - /cc-core/lib/Picture.php
+avatar.before_save - /cc-core/lib/Avatar.php
+avatar.save - /cc-core/lib/Avatar.php
 
 
 pagination.start - /cc-core/lib/Pagination.php
@@ -380,8 +380,8 @@ myfavorites.remove_favorite - /cc-core/controllers/myaccount/myfavorites.php
 update_profile.start - /cc-core/controllers/myaccount/update_profile.php
 update_profile.before_render - /cc-core/controllers/myaccount/update_profile.php
 update_profile.update_profile - /cc-core/controllers/myaccount/update_profile.php
-update_profile.update_picture - /cc-core/controllers/myaccount/update_profile.php
-update_profile.reset_picture - /cc-core/controllers/myaccount/update_profile.php
+update_profile.update_avatar - /cc-core/controllers/myaccount/update_profile.php
+update_profile.reset_avatar - /cc-core/controllers/myaccount/update_profile.php
 
 
 privacy_settings.start - /cc-core/controllers/myaccount/privacy_settings.php

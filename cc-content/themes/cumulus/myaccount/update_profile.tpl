@@ -1,5 +1,13 @@
 <?php
 
+View::AddMeta ('uploadify:host', HOST);
+View::AddMeta ('uploadify:theme', THEME);
+View::AddMeta ('uploadify:fileExt', ';*.gif;*.png;*.jpg;*.jpeg');
+View::AddMeta ('uploadify:fileDesc', Language::GetText('uploadify_supported_formats') . ': (*.gif) (*.png) (*.jpg) (*.jpeg)');
+View::AddCss ('uploadify.css');
+View::AddJs ('swfobject.js');
+View::AddJs ('uploadify.plugin.js');
+View::AddJs ('uploadify.js');
 View::SetLayout ('myaccount');
 View::Header();
 
@@ -7,10 +15,8 @@ View::Header();
 
 <h1><?=Language::GetText('profile_header')?></h1>
 
-<?php if ($error_msg): ?>
-    <div id="error"><?=$error_msg?></div>
-<?php elseif ($success): ?>
-    <div id="success"><?=$success?></div>
+<?php if ($message): ?>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 
@@ -42,12 +48,12 @@ View::Header();
 
         <div class="row<?=(isset ($Errors['about_me'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('about_me')?>:</label>
-            <textarea class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
+            <textarea class="text" name="about_me" rows="10" cols="45"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
         </div>
 
         <div class="row-shift">
             <input type="hidden" value="yes" name="submitted" />
-            <a href="" class="button"><span><?=Language::GetText('profile_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('profile_button')?>" />
         </div>
         
     </form>
@@ -55,31 +61,33 @@ View::Header();
 </div>
 
 
-<a name="update-picture"></a>
-<h1><?=Language::GetText('update_picture_header')?></h1>
 
+
+    
+<h1 id="update-avatar"><?=Language::GetText('update_avatar_header')?></h1>
+<div id="uploadify-message"></div>
 <div class="block">
 
-    <div id="picture-left">
-        <p class="picture"><span><img alt="<?=Language::GetText('current_picture')?>" src="<?=$user->avatar?>"></span></p>
-        <?=Language::GetText('current_picture')?><br />
-        <a class="confirm" data-node="confirm_reset_picture" href="<?=HOST?>/myaccount/profile/reset/" title="<?=Language::GetText('reset_picture')?>"><?=Language::GetText('reset_picture')?></a>
+    <div id="avatar-left">
+        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$user->avatar_url?>"></span></p>
+        <?=Language::GetText('current_avatar')?><br />
+        <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
     </div>
 
-    <div id="picture-right">
-        <p><?=Language::GetText('update_picture_text')?></p>
-        <p><?=Language::GetText('update_picture_warning')?></p>
-        <p><?=Language::GetText('update_picture_req')?></p>
+    <div id="avatar-right">
+        <form action="<?=HOST?>/">
+        </form>
+        <?=Language::GetText('update_avatar_text')?>
 
-        <div id="upload-picture">
-            <input type="text" class="text" name="upload-visible" id="upload-visible" disabled="disabled" />
-            <a href="" class="button" id="browse-button"><span><?=Language::GetText('browse_files_button')?></span></a>
-
-            <form action="<?=HOST?>/myaccount/profile/" method="post" enctype="multipart/form-data">
+        <div class="upload-box">
+            <form name="uploadify" action="<?=HOST?>/myaccount/upload/avatar/">
+                <input id="browse-button" class="button" type="button" name="browse-button" value="<?=Language::GetText('browse_files_button')?>" />
+                <input id="upload-button" class="button" type="button" name="upload-button" value="<?=Language::GetText('update_avatar_button')?>" />
                 <input type="file" name="upload" id="upload" />
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?=1024*30?>" />
-                <input type="hidden" name="submitted_picture" value="true" />
-                <a href="" class="button"><span><?=Language::GetText('update_picture_button')?></span></a>
+                <input type="hidden" name="type" id="type" value="avatar" />
+                <input type="hidden" name="limit" id="limit" value="<?=1024*30?>" />
+                <input type="hidden" name="timestamp" id="timestamp" value="<?=$timestamp?>" />
+                <input type="hidden" name="token" id="token" value="<?=session_id()?>" />
             </form>
         </div>
     </div>

@@ -23,6 +23,7 @@
         <yes>@Yes</yes>
         <no>@No</no>
         <quick_links>@Quick Links</quick_links>
+        <uploadify_supported_formats>@Supported Formats</uploadify_supported_formats>
 
         <!-- Mobile -->
         <mobile_heading>@{SITENAME} Mobile</mobile_heading>
@@ -157,7 +158,7 @@
         <!-- My Account / Home Page -->
         <myaccount_header>@Welcome</myaccount_header>
         <last_login>@Last Login</last_login>
-        <edit_picture>@Edit Picture</edit_picture>
+        <edit_avatar>@Edit Avatar</edit_avatar>
         <new_messages>@You have new unread messages!</new_messages>
         <account_menu_header>@Account Menu</account_menu_header>
         <manage_media>@Manage Media</manage_media>
@@ -196,15 +197,16 @@
         <last_name>@Last Name</last_name>
         <about_me>@About Me</about_me>
         <profile_button>@Update Profile</profile_button>
-
-        <update_picture_header>@Update Picture</update_picture_header>
-        <update_picture_text>@Your profile image is displayed with your videos, comments, and other content.</update_picture_text>
-        <current_picture>@Current Picture</current_picture>
-        <reset_picture>@Reset Picture</reset_picture>
-        <update_picture_warning>@If you upload a new picture, your current one will be overwritten.</update_picture_warning>
-        <update_picture_req>@Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</update_picture_req>
-        <browse_files_button>@Browse Files</browse_files_button>
-        <update_picture_button>@Upload Picture</update_picture_button>
+        <update_avatar_header>@Update Avatar</update_avatar_header>
+        <update_avatar_text><![CDATA[
+            <p>@Your avatar is displayed with your videos, comments, and other content.</p>
+            <p>If you upload a new avatar your current one will be overwritten.</p>
+            <p>Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</p>
+        ]]></update_avatar_text>
+        <current_avatar>@Current Avatar</current_avatar>
+        <reset_avatar>@Reset Avatar</reset_avatar>
+        <browse_files_button>@Browse</browse_files_button>
+        <update_avatar_button>@Upload Avatar</update_avatar_button>
 
         <!-- My Account / Privacy Settings Page -->
         <privacy_settings_header>@Privacy Settings</privacy_settings_header>
@@ -291,9 +293,9 @@
         <error_invalid_login>@Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
         <error_no_users_email>@No users were found with that email! Please try again.</error_no_users_email>
         
-        <confirm_remove_favorite>@Video will be removed from your favorites. Please confirm this is what you want to do.</confirm_remove_favorite>
-        <confirm_delete_video>@Video will be deleted permanently. Please confirm this is what you want to do.</confirm_delete_video>
-        <confirm_reset_picture>@Your current picture will be lost permanently. Please confirm this is what you want to do.</confirm_reset_picture>
+        <confirm_remove_favorite>@Video will be removed from your favorites. Do you want to proceed?</confirm_remove_favorite>
+        <confirm_delete_video>@Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
+        <confirm_reset_avatar>@Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
 
         <error_username>@Invalid username</error_username>
         <error_username_unavailable>@That username is unavailable</error_username_unavailable>
@@ -330,21 +332,20 @@
         <error_rate_login>@You must login to rate videos.</error_rate_login>
         <error_rate_own>@You can't rate your own videos.</error_rate_own>
         <error_rate_duplicate>@You have already rated this video.</error_rate_duplicate>
-        <error_picture_format>@Your picture is not an accepted file format</error_picture_format>
-        <error_picture_filesize>@Your picture exceeded the maximum filesize limit.</error_picture_filesize>
-        <error_picture_invalid>@Invalid picture. Please upload a valid picture.</error_picture_invalid>
-        <error_picture_system>@An error occured during the upload. Please try again.</error_picture_system>
         
 
-        <error_uploadify_filesize>@Your video exceeded the maximum filesize limit. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_filesize>
-        <error_uploadify_system>@Errors were encountered during the processing of your video, and it cannot be uploaded at this time. We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue. If you continue to experience problems using this feature please {LINK}contact us{/LINK} for further assistance.</error_uploadify_system>
-        <error_uploadify_extension>@Your video is not in one of the accepted file formats. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_extension>
-        <error_uploadify_empty>@No video was uploaded. Please attempt to {LINK}upload again{/LINK}.</error_uploadify_empty>
-        <error_uploadify_url>@The URL you have submitted seems to be invalid. Please make sure you're providing is for the video page. Double check you entered the entire URL and did not leave of any part of the video identifier.</error_uploadify_url>
+        <error_uploadify_filesize>@Your file exceeded the maximum filesize limit. Please try again.</error_uploadify_filesize>
+        <error_uploadify_system><![CDATA[
+            @Errors were encountered during the processing of your file, and it cannot be uploaded at this time.
+            We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue.
+            If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.
+        ]]></error_uploadify_system>
+        <error_uploadify_extension>@Your file is not in one of the accepted file formats. Please try again.</error_uploadify_extension>
+        <error_uploadify_empty>@No file was uploaded. Please try again.</error_uploadify_empty>
 
 
-        <success_picture_reset>@Your picture has been reset.</success_picture_reset>
-        <success_picture_updated>@Your picture has been updated.</success_picture_updated>
+        <success_avatar_reset>@Your avatar has been reset.</success_avatar_reset>
+        <success_avatar_updated>@Your avatar has been updated.</success_avatar_updated>
         <success_rated>@Rating has been submitted.</success_rated>
         <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>
         <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>

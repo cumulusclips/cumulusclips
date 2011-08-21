@@ -40,7 +40,7 @@ class User {
         }
 
         // User specific values
-        $this->avatar = (empty ($this->picture)) ? THEME . '/images/user_placeholder.gif' : HOST . "/cc-content/uploads/pictures/$this->picture";
+        $this->avatar_url = (empty ($this->avatar)) ? THEME . '/images/avatar.gif' : HOST . "/cc-content/uploads/avatars/$this->avatar";
         $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
         $this->last_login = date ('m/d/Y', strtotime ($this->last_login));
         $this->video_count = $this->GetVideoCount();

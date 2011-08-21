@@ -55,28 +55,6 @@ $(document).ready(function(){
 
 
 
-    // Attach submit action to buttons
-    $('.button, .button-small').click(function(){
-        var parentForm = $(this).closest('form');
-        if (parentForm.length) {
-            parentForm.submit();
-        }
-        return false;
-    });
-
-    // Allow submission of forms with Return key
-    $('form input').keydown(function(event){
-        var code = event.keyCode ? event.keyCode : event.which;
-        var parentForm = $(this).closest('form');
-        if (code == 13 && parentForm.length) {
-            parentForm.submit();
-            return false;
-        }
-    });
-
-
-
-
     // Attach confirm popup to confirm action links
     $('.confirm').click(function() {
         
@@ -90,20 +68,6 @@ $(document).ready(function(){
         // Retrieve confirm string
         GetText (callback, $(this).data('node'), $(this).data('replacements'));
         return false;
-    });
-
-
-
-
-    // Trigger the file browse window
-    $('#browse-button').click(function(){
-        $('#upload').trigger('click');
-        return false;
-    });
-
-    // Add hidden upload filename to styled upload field
-    $('#upload').change(function(){
-        $('#upload-visible').val($('#upload').val());
     });
 
 

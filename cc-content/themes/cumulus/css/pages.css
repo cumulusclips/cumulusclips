@@ -74,32 +74,22 @@ HOMEPAGE STYLES
 
 #home-login {
     margin-top:60px;
-    padding:15px;
     position:relative;
-    border:3px solid #023e7b;
-    background-color:#FFF;
-}
-#home-login .tl,
-#home-login .tr,
-#home-login .bl,
-#home-login .br
-{display:none;
-    background-image:url(../images/home-login-sprite.gif);
+    border-color:#023e7b;
+    border-top-left-radius:0;
 }
 
 #tab {
-    background-image:url(../images/home-login-tab.png);
-    padding-left:28px;
-    width:177px;
-    height:52px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+    background-color:#023e7b;
     position:absolute;
-    top:-43px;
+    padding:10px;
+    top:-40px;
     left:-3px;
-    z-index:1;
     color:#FFF;
     font-size:20px;
     font-weight:bold;
-    line-height:43px;
 }
 
 #home-login p {

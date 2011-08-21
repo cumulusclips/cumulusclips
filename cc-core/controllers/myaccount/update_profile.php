@@ -6,9 +6,9 @@
 
 
 // Include required files
-include ('../../config/bootstrap.php');
+include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Picture');
+App::LoadClass ('Filesystem');
 
 
 // Establish page variables, objects, arrays, etc
@@ -17,8 +17,9 @@ Plugin::Trigger ('update_profile.start');
 View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
-View::$vars->error_msg = NULL;
-View::$vars->success = NULL;
+View::$vars->message = null;
+View::$vars->timestamp = time();
+$_SESSION['upload_key'] = md5 (md5 (View::$vars->timestamp) . SECRET_KEY);
 $duplicate = NULL;
 
 
@@ -83,12 +84,14 @@ if (isset ($_POST['submitted'])) {
 
     // Update User if no errors were found
     if (empty (View::$vars->Errors)) {
-        View::$vars->success = Language::GetText('success_profile_updated');
+        View::$vars->message = Language::GetText('success_profile_updated');
+        View::$vars->message_type = 'success';
         View::$vars->user->Update (View::$vars->data);
         Plugin::Trigger ('update_profile.update_profile');
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message_type = 'error';
     }
 
 
@@ -99,93 +102,22 @@ if (isset ($_POST['submitted'])) {
 
 
 
-/*************************
-Handle Upload picture Form
-*************************/
-
-if (isset ($_POST['submitted_picture'])) {
-
-    $Errors = null;
-
-    ### Validate picture
-    if (!empty ($_FILES['upload']['name'])) {
-
-        // Check for browser upload errors
-        if (!empty ($_FILES['upload']['error'])) {
-            if ($_FILES['upload']['error'] != 4) {
-                $Errors = Language::GetText('error_picture_invalid');
-            } else if ($_FILES['upload']['error'] == 2) {
-                $Errors = Language::GetText('error_picture_filesize');
-            } else {
-                $Errors = Language::GetText('error_picture_system');
-            }
-        }
-
-
-        // Validate mime-type sent by browser
-        if (empty ($Errors) && !preg_match ('/image\/(png|gif|jpeg)/i', $_FILES['upload']['type'])) {
-            $Errors = Language::GetText('error_picture_format');
-        }
-
-        // Validate file extension
-        $extension = Functions::GetExtension ($_FILES['upload']['name']);
-        if (empty ($Errors) && !preg_match ('/(gif|png|jpe?g)/i', $extension)) {
-            $Errors = Language::GetText('error_picture_format');
-        }
-
-        // Validate filesize
-        if (empty ($Errors) && (empty ($_FILES['upload']['size']) || filesize ($_FILES['upload']['tmp_name']) > 30000)) {
-            $Errors = Language::GetText('error_picture_filesize');
-        }
-
-        // Validate image data
-        if (empty ($Errors)) {
-            $handle = fopen ($_FILES['upload']['tmp_name'],'r');
-            $image_data = fread ($handle, filesize ($_FILES['upload']['tmp_name']));
-            if (!@imagecreatefromstring ($image_data)) {
-                $Errors = Language::GetText('error_picture_format');
-            }
-        }
-
-
-        // Store uploaded image if no errors were found
-        if (empty ($Errors)) {
-
-            // Check for existing picture
-            if (!empty (View::$vars->user->picture)) {
-                Picture::Delete (View::$vars->user->picture);
-            }
-
-            // Save Picture
-            $save_as = Picture::CreateFilename ($extension);
-            Picture::SavePicture ($_FILES['upload']['tmp_name'], $extension, $save_as);
-            View::$vars->user->Update (array ('picture' => $save_as));
-            View::$vars->success = Language::GetText('success_picture_updated');
-            Plugin::Trigger ('update_profile.update_picture');
-
-        } else {
-            View::$vars->error_msg = $Errors;
-        }
-
-    } else {
-        View::$vars->error_msg = Language::GetText('error_picture_invalid');
-    }
-
-}
-
-
-
-
-
 /**************************
-Handle Reset picture Action
+Handle Reset Avatar Action
 **************************/
 
-if (!empty ($_GET['action']) && $_GET['action'] == 'reset') {
-    Picture::Delete (View::$vars->user->picture);
-    View::$vars->user->Update (array ('picture' => ''));
-    View::$vars->success = Language::GetText('success_picture_reset');
-    Plugin::Trigger ('update_profile.picture_reset');
+if (!empty ($_GET['action']) && $_GET['action'] == 'reset' && !empty (View::$vars->user->avatar)) {
+    try {
+        Filesystem::Open();
+        Filesystem::Delete (UPLOAD_PATH . '/avatars/' . View::$vars->user->avatar);
+        Filesystem::Close();
+    } catch (Exception $e) {
+        App::Alert('Error during Avatar Reset', $e->getMessage());
+    }
+    View::$vars->user->Update (array ('avatar' => ''));
+    View::$vars->message = Language::GetText('success_avatar_reset');
+    View::$vars->message_type = 'success';
+    Plugin::Trigger ('update_profile.avatar_reset');
 }
 
 
