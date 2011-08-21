@@ -8,7 +8,6 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Recaptcha');
 
 
 // Establish page variables, objects, arrays, etc
@@ -16,8 +15,6 @@ View::InitView ('contact');
 Plugin::Trigger ('contact.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
-$privatekey = '6LeEaQUAAAAAAICeLh_I2dI0unaUm3JtMq6tdEZm';
 $resp = NULL;
 View::$vars->Errors = array();
 View::$vars->name = NULL;
@@ -59,17 +56,6 @@ if (isset ($_POST['submitted'])) {
         View::$vars->message = trim ($_POST['message']);
     } else {
         View::$vars->Errors['message'] = Language::GetText('error_message');
-    }
-
-
-    // Validate word verification
-    if (!empty ($_POST["recaptcha_response_field"]) && !ctype_space ($_POST["recaptcha_response_field"])) {
-        $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-        if (!$resp->is_valid) {
-            View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
-        }
-    } else {
-        View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
     }
 
 

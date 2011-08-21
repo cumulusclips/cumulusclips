@@ -51,16 +51,6 @@ View::Header();
             <input name="password" type="password" class="text" value="" />
         </div>
 
-        <div class="row">
-            <label class="<?=(isset ($Errors['confirm']) || isset($Errors['match'])) ? 'errors' : ''?>">*<?=Language::GetText('confirm_password')?>:</label>
-            <input name="confirm" type="password" class="text" value="" />
-        </div>
-
-        <div class="row">
-            <label class="<?=(isset ($Errors['captcha'])) ? 'errors' : ''?>">*<?=Language::GetText('are_you_human')?></label>
-            <div id="recaptcha"><?=recaptcha_get_html($publickey)?></div>
-        </div>
-
         <div class="row-shift">
             <input name="terms" type="checkbox" id="terms" value="Agree" />
             <label for="terms">*<?=Language::GetText('agree_terms', array ('link' => HOST . '/terms/'))?></label>
@@ -68,7 +58,7 @@ View::Header();
 
         <div class="row-shift">
             <input type="hidden" name="submitted" value="TRUE" />
-            <a href="" class="button"><span><?=Language::GetText('register_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('register_button')?>" />
         </div>
 
     </form>

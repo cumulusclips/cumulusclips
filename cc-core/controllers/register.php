@@ -9,15 +9,12 @@
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('EmailTemplate');
-App::LoadClass ('Recaptcha');
 
 
 // Establish page variables, objects, arrays, etc
 View::InitView ('register');
 Plugin::Trigger ('register.start');
 View::$vars->logged_in = User::LoginCheck() ? header (HOST . '/myaccount/') : '';
-View::$vars->publickey = '6LeEaQUAAAAAACsCaDpe3cq0v0NPrnVE1Qg7v16w';
-$privatekey = '6LeEaQUAAAAAAICeLh_I2dI0unaUm3JtMq6tdEZm';
 $resp = NULL;
 $pass1 = NULL;
 $pass2 = NULL;
@@ -56,33 +53,9 @@ if (isset ($_POST['submitted'])) {
 
     // Validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $pass1 = htmlspecialchars (trim ($_POST['password']));
+        View::$vars->data['password'] = htmlspecialchars (trim ($_POST['password']));
     } else {
         View::$vars->Errors['password'] = Language::GetText('error_password');
-    }
-
-
-    // Validate confirm password
-    if (!empty ($_POST['confirm']) && !ctype_space ($_POST['confirm'])) {
-        $pass2 = htmlspecialchars (trim ($_POST['confirm']));
-        if ($pass1 == $pass2) {
-            View::$vars->data['password'] = $pass1;
-        } else {
-            View::$vars->Errors['match'] = Language::GetText('error_password_match');
-        }
-    } else {
-        View::$vars->Errors['confirm'] = Language::GetText('error_password_confirm');
-    }
-
-
-    // Validate Captcha
-    if (!empty ($_POST["recaptcha_response_field"]) && !ctype_space ($_POST["recaptcha_response_field"])) {
-        $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST['recaptcha_challenge_field'], $_POST["recaptcha_response_field"]);
-        if (!$resp->is_valid) {
-            View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
-        }
-    } else {
-        View::$vars->Errors['captcha'] = Language::GetText('error_security_text');
     }
 
 

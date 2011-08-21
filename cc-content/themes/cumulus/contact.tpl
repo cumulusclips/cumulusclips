@@ -24,11 +24,6 @@
             <label for="email" class="<?=(!empty ($Errors['email'])) ? 'errors' : ''?>"><?=Language::GetText('email')?>:</label>
             <input class="text" type="text" name="email" value="<?=($error_msg && $email) ? $email : ''?>" />
         </div>
-
-        <div class="row">
-            <label class="<?=(!empty ($Errors['captcha'])) ? 'errors' : ''?>"><?=Language::GetText('are_you_human')?>:</label>
-            <div id="recaptcha"><?=recaptcha_get_html ($publickey)?></div>
-        </div>
         
         <div class="row">
             <label for="message" class="<?=(!empty ($Errors['message'])) ? 'errors' : ''?>"><?=Language::GetText('message')?>:</label>
@@ -37,8 +32,7 @@
 
         <div class="row-shift">
             <input type="hidden" value="TRUE" name="submitted" />
-            <input type="submit" value="Contact Us" name="button" />
-            <a href="" class="button"><span><?=Language::GetText('contact_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('contact_button')?>" />
         </div>
         
     </form>
