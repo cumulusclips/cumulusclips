@@ -62,7 +62,6 @@
         <asterisk>@An asterisk (*) denotes required field.</asterisk>
         <username_req>@Username can only contain alphanumeric (A-Z, a-z, 0-9) characters, no spaces or special characters. Your unique url will be derived as:</username_req>
         <confirm_password>@Confirm Password</confirm_password>
-        <are_you_human>@Are you Human?</are_you_human>
         <agree_terms>@I agree to the {LINK}Terms of Use{/LINK}</agree_terms>
         <register_button>@Create Account</register_button>
 

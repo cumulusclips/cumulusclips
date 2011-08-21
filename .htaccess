@@ -94,12 +94,6 @@ RewriteRule ^m/s/$ cc-core/controllers/mobile/search.php?mobile [NC,L]
 
 
 
-### Player
-
-RewriteRule ^p/$ cc-content/player/flowplayer-3.2.5.swf [NC,L]
-RewriteRule ^p/c/([a-z0-9]+)/$ cc-content/player/flowplayer.config.php?video=$1 [NC,L]
-
-
 ### Sitemaps & Feeds
 
 RewriteRule ^mrss/$ cc-core/controllers/mrss.php [NC,L]
@@ -107,11 +101,12 @@ RewriteRule ^sitemap-(index|main|members|videos)(-([0-9]+))?\.xml$ cc-core/syste
 RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ cc-core/system/video_sitemap.php?page=$2 [NC,L]
 
 
+
+
 ### Management & Security
 
-Options -Indexes
+Options -Indexes -MultiViews
 ErrorDocument 404 cc-core/controllers/system_404.php
-#ErrorDocument 403 cc-core/controllers/system_404.php
 RewriteRule ^system-error/$ cc-core/controllers/system_error.php [NC,L]
 
 
