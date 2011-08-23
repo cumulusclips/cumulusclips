@@ -5,32 +5,29 @@
 ### This script validates the uploaded video and moves it to the site temp directory
 
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');
 Plugin::Trigger ('upload.ajax.start');
 
 
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "\n\n### Upload Validator Called...") : '';
-
 ### Retrieve video information
-if (isset ($_POST['token'])) {
+if (!isset ($_POST['token'], $_POST['timestamp'])) App::Throw404();
 
-    // Debug Log
-    DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "Retrieving video information...") : null;
+session_write_close();
+session_id ($_POST['token']);
+session_start();
 
-    $token = $db->Escape ($_POST['token']);
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MD5(CONCAT(video_id,'" . SECRET_KEY . "')) = '$token' AND status = 2";
-    $result = $db->Query ($query);
-    if ($db->Count ($result) == 1) {
-        $row = $db->FetchObj ($result);
-        $video = new Video ($row->video_id);
-        Plugin::Trigger ('upload.ajax.load_video');
-    } else {
-        header ('Location: ' . HOST . '/myaccount/upload/');
-        exit();
-    }
 
+// Validate upload key
+$upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
+if (!isset ($_SESSION['upload_key']) || $_SESSION['upload_key'] != $upload_key) App::Throw404();
+$logged_in = User::LoginCheck (HOST . '/login/');
+$user = new User ($logged_in);
+
+
+if (isset ($_SESSION['upload']) && Video::Exist (array('video_id' => $_SESSION['upload']))) {
+    $video = new Video ($_SESSION['upload']);
+    Plugin::Trigger ('upload.ajax.load_video');
 } else {
     header ('Location: ' . HOST . '/myaccount/upload/');
     exit();
@@ -39,129 +36,81 @@ if (isset ($_POST['token'])) {
 
 
 
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, "Uploaded file's data:\n" . print_r ($_FILES, TRUE)) : null;
+try {
 
-### Verify upload was made
-if (empty ($_FILES) || !isset ($_FILES['uploadify']['name'])) {
-    echo 'nofile';
-    exit();
-}
+    ### Verify upload was made
+    if (empty ($_FILES) || !isset ($_FILES['upload']['name'])) {
+        throw new Exception (Language::GetText('error_uploadify_empty')) ;
+    }
 
 
 
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Checking for HTTP FILE POST errors...') : null;
-
-### Check for upload errors
-if ($_FILES['uploadify']['error'] != 0) {
-    App::Alert ('Error During Processing', 'There was an HTTP FILE POST error (Error code #' . $_FILES['uploadify']['error'] . '). The id of the video is: ' . $video->video_id);
-    echo 'error';
-    exit();
-}
+    ### Check for upload errors
+    if ($_FILES['upload']['error'] != 0) {
+        App::Alert ('Error During Video Upload', 'There was an HTTP FILE POST error (Error code #' . $_FILES['upload']['error'] . '). Video ID: ' . $video->video_id);
+        throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));
+    }
 
 
 
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Validating video size...') : null;
-
-### Validate filesize
-if ($_FILES['uploadify']['size'] > VIDEO_SIZE_LIMIT) {
-    echo 'filesize';
-    exit();
-}
+    ### Validate filesize
+    if ($_FILES['upload']['size'] > $config->video_size_limit || filesize ($_FILES['upload']['tmp_name']) > $config->video_size_limit) {
+        throw new Exception (Language::GetText('error_uploadify_filesize'));
+    }
 
 
 
+    ### Validate video extension
+    $extension = Functions::GetExtension ($_FILES['upload']['name']);
+    if (!in_array ($extension, Functions::GetVideoTypes())) {
+        throw new Exception (Language::GetText('error_uploadify_extension'));
+    }
 
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Validating video extension...') : null;
 
-### Validate video extension
-$extension = Functions::GetExtension ($_FILES['uploadify']['name']);
-if (in_array ($extension, $config->accepted_video_extensions)) {
-    $data = array ('original_extension' => $extension);
-    Plugin::Trigger ('upload.ajax.before_update_video_extension');
+
+    ### Move video to site temp directory
+    $target = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $extension;
+    Plugin::Trigger ('upload.ajax.before_move_video');
+    if (!@move_uploaded_file ($_FILES['upload']['tmp_name'], $target)) {
+        App::Alert ('Error During Video Upload', 'The raw video file transfer failed. Video File: ' . $target);
+        throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));
+    }
+
+
+
+    ### Change permissions on raw video file
+    Plugin::Trigger ('upload.ajax.before_change_permissions');
+    try {
+        Filesystem::Open();
+        Filesystem::SetPermissions ($target, 0644);
+        Filesystem::Close();
+    } catch (Exception $e) {
+        App::Alert ('Error During Video Upload', $e->getMessage());
+        throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));
+    }
+
+
+
+    ### Update video information
+    $data = array ('status' => 'pending conversion', 'original_extension' => $extension);
+    Plugin::Trigger ('upload.ajax.before_update_video');
     $video->Update ($data);
-} else {
-    App::Alert ('Error During Processing', 'Invalid video extension. The id of the video is: ' . $video->video_id);
-    echo 'extension';
-    exit();
+
+
+
+    ### Initilize Encoder
+    if (!LIVE) exit('success'); // Skip Conversion
+    $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
+    Plugin::Trigger ('upload.ajax.before_encode');
+    $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
+    exec ($converter_cmd);
+    Plugin::Trigger ('upload.ajax.encode');
+
+    // Output success message
+    exit (json_encode (array ('status' => 'success', 'message' => '')));
+
+} catch (Exception $e) {
+    exit (json_encode (array ('status' => 'error', 'message' => $e->getMessage())));
 }
-
-
-
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Moving video to temp directory...') : null;
-
-### Move video to site temp directory
-$target = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $extension;
-Plugin::Trigger ('upload.ajax.before_move_video');
-if (!@move_uploaded_file ($_FILES['uploadify']['tmp_name'], $target)) {
-    App::Alert ('Error During Processing', 'The raw video file transfer failed. The id of the video is: ' . $video->video_id);
-    echo 'error';
-    exit();
-}
-
-
-
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Verifying raw video was moved to temp directory...') : null;
-
-### Make sure file was moved
-if (!file_exists ($target)) {
-    App::Alert ('Error During Processing', 'The raw video file was not moved. The id of the video is: ' . $video->video_id);
-    echo 'error';
-    exit();
-}
-
-
-
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Updating raw video file permissions...') : null;
-
-### Change permissions on raw video file
-$permissions = 0755;
-Plugin::Trigger ('upload.ajax.before_change_permissions');
-if (!chmod ($target, $permissions)) {
-    App::Alert ('Error During Processing', 'Could not change the permissions on the raw video file. The id of the video is: ' . $video->video_id);
-    echo 'error';
-    exit();
-}
-
-
-### Update upload stutus & execute processing
-$data = array ('status' => 4);
-Plugin::Trigger ('upload.ajax.before_update_video_status');
-$video->Update ($data);
-
-
-
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Calling Upload Converter...') : '';
-
-### Initiate Converter
-if (!LIVE) exit('success'); // Skip Conversion
-$cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
-Plugin::Trigger ('upload.ajax.before_encode');
-$converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
-system ($converter_cmd);
-Plugin::Trigger ('upload.ajax.encode');
-
-
-
-
-// Debug Log
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Upload Converter Command: ' . $converter_cmd) : null;
-DEBUG_CONVERSION ? App::Log (CONVERSION_LOG, 'Upload Converter has been called.') : null;
-
-### Notify Upload AJAX of success
-echo 'success';
 
 ?>

@@ -105,10 +105,9 @@ subscribe.ajax.unsubscribe - /cc-core/system/subscribe.ajax.php
 
 upload.ajax.start - /cc-core/system/upload.ajax.php
 upload.ajax.load_video - /cc-core/system/upload.ajax.php
-upload.ajax.before_update_video_extension - /cc-core/system/upload.ajax.php
 upload.ajax.before_move_video - /cc-core/system/upload.ajax.php
 upload.ajax.before_change_permissions - /cc-core/system/upload.ajax.php
-upload.ajax.before_update_video_status - /cc-core/system/upload.ajax.php
+upload.ajax.before_update_video - /cc-core/system/upload.ajax.php
 upload.ajax.before_encode - /cc-core/system/upload.ajax.php
 upload.ajax.encode - /cc-core/system/upload.ajax.php
 

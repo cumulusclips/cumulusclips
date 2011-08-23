@@ -53,7 +53,7 @@ try {
 
 
 
-    ### Validate video extension
+    ### Validate avatar extension
     $extension = Functions::GetExtension ($_FILES['upload']['name']);
     if (!in_array ($extension, array('gif','png','jpg','jpeg'))) {
         throw new Exception (Language::GetText('error_uploadify_extension'));
@@ -68,30 +68,32 @@ try {
 
 
 
-    ### Convert & save to final location
+    ### Change permissions on avatar & delete previous IF/APP
     try {
-
         Filesystem::Open();
         $avatar_path = UPLOAD_PATH . '/avatars';
+        $save_as = Avatar::CreateFilename ($extension);
 
         // Check for existing avatar
         if (!empty ($user->avatar)) Filesystem::Delete ("$avatar_path/$user->avatar");
 
-        // Save Avatar
-        $save_as = Avatar::CreateFilename ($extension);
-        Avatar::SaveAvatar ($_FILES['upload']['tmp_name'], $extension, $save_as);
         Filesystem::SetPermissions ("$avatar_path/$save_as", 0644);
-        $user->Update (array ('avatar' => $save_as));
-        Plugin::Trigger ('update_profile.update_avatar');
         Filesystem::Close();
-
-        // Output success message
-        exit (json_encode (array ('status' => 'success', 'message' => (string) Language::GetText('success_avatar_updated'), 'other' => $user->avatar_url)));
 
     } catch (Exception $e) {
         App::Alert ('Error During Avatar Upload', $e->getMessage());
         throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));
     }
+
+
+
+    ### Save avatar to final location
+    Avatar::SaveAvatar ($_FILES['upload']['tmp_name'], $extension, $save_as);
+    $user->Update (array ('avatar' => $save_as));
+    Plugin::Trigger ('update_profile.update_avatar');
+
+    // Output success message
+    exit (json_encode (array ('status' => 'success', 'message' => (string) Language::GetText('success_avatar_updated'), 'other' => $user->avatar_url)));
 
 } catch (Exception $e) {
     exit (json_encode (array ('status' => 'error', 'message' => $e->getMessage())));

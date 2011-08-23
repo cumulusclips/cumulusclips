@@ -66,22 +66,6 @@ class Functions {
 
 
     /**
-     * Format seconds into hr:min:sec
-     * @param integer $seconds
-     * @return string formated string of seconds
-     */
-    static function FormatSeconds ($seconds) {
-        $seconds = floor ($seconds);
-        $hours = str_pad (floor ($seconds/3600), 2, 0, STR_PAD_LEFT);
-        $minutes = str_pad (floor ($seconds/60), 2, 0, STR_PAD_LEFT);
-        $secs = str_pad ($seconds%60, 2, 0, STR_PAD_LEFT);
-        return $hours . ':' . $minutes . ':' . $secs;
-    }
-
-
-
-
-    /**
      * Format video duration into seconds
      * @param string $duration in hh:mm:ss or mm:ss format
      * @return integer Total seconds
