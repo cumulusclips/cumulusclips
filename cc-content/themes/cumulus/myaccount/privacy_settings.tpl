@@ -7,10 +7,8 @@ View::Header();
 
 <h1><?=Language::GetText('privacy_settings_header')?></h1>
 
-<?php if ($errors): ?>
-    <div id="error"><?=$errors?></div>
-<?php elseif ($success): ?>
-    <div id="success"><?=$success?></div>
+<?php if ($message): ?>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="block">

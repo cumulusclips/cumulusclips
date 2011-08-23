@@ -2,10 +2,8 @@
 
 <h1><?=Language::GetText('contact_header')?></h1>
 
-<?php if ($error_msg): ?>
-    <div id="error"><?=$error_msg?></div>
-<?php elseif ($success): ?>
-    <div id="success"><?=$success?></div>
+<?php if ($message): ?>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 

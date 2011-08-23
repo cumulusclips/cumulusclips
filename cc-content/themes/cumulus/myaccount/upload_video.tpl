@@ -1,9 +1,10 @@
 <?php
 
+$supported_formats = Language::GetText ('uploadify_supported_formats') . ':' . Functions::GetVideoTypes ('fileDesc');
 View::AddMeta ('uploadify:host', HOST);
-View::AddMeta ('uploadify:token', $_SESSION['token']);
 View::AddMeta ('uploadify:theme', THEME);
-View::AddMeta ('uploadify:limit', VIDEO_SIZE_LIMIT);
+View::AddMeta ('uploadify:fileExt', Functions::GetVideoTypes ('fileExt'));
+View::AddMeta ('uploadify:fileDesc', $supported_formats);
 View::AddCss ('uploadify.css');
 View::AddJs ('swfobject.js');
 View::AddJs ('uploadify.plugin.js');
@@ -15,54 +16,25 @@ View::Header();
 
 <h1><?=Language::GetText('upload_video_header')?></h1>
 
-<div id="error" style="display:none;"></div>
+<div id="uploadify-message"></div>
 
-<div class="block">
+<div id="upload-video" class="block">
 
-    <div id="selections">
-        <input name="upload-method" type="radio" id="upload-choice" checked="checked" /> &nbsp; <label for="upload-choice"><?=Language::GetText('select_hdd')?></label><br />
-        <input name="upload-method" type="radio" id="grab-choice" /> &nbsp; <label for="grab-choice"><?=Language::GetText('grab_youtube')?></label>
-    </div>
-
-    
-    <!-- Upload Video From Computer -->
-    <div id="upload-video">
-
-        <p class="large"><?=Language::GetText('select_hdd_header')?></p>
-        <p><?=Language::GetText('select_hdd_text', array ('sitename' => Settings::Get ('sitename')))?></p>
-        <p class="big"><?=Language::GetText('filesize_limit')?>: 100MB<br />
-        <?=Language::GetText('accepted_formats')?>: *.flv, *.wmv, *.avi, *.ogg, *.mpg, *.mp4, *.mov, *.m4v</p>
-
-        <div id="upload-button-container"><a id="begin-upload" class="button" href=""><span><?=Language::GetText('begin_upload_button')?></span></a></div>
-        <input type="file" name="select-file" id="select-file" />
-
-    </div>
-    <!-- END Upload Video From Computer -->
+    <p><?=Language::GetText('upload_video_text')?></p>
+    <p class="big"><?=Language::GetText('filesize_limit')?>: 100MB</p>
+    <p class="big"><?=$supported_formats?></p>
 
 
-
-
-    <!-- Grab video from YouTube -->
-    <div id="grab-video">
-
-        <p class="large"><?=Language::GetText('grab_youtube_header')?></p>
-        <p><?=Language::GetText('grab_youtube_text', array('link' => HOST . '/terms/', 'link2' => HOST . '/copyright/'))?></p>
-        <form action="" id="grab-form">
-
-            <div class="row-shift">i.e. <i>http://www.youtube.com/watch?v=abcdefg</i></div>
-
-            <div class="row">
-                <label><?=Language::GetText('video_url')?>:</label>
-                <input class="text grabInput" id="video-url" type="text" name="url" value="" />
-                <span class="loading"><img src="<?=THEME?>/images/loading.gif" alt="loading" />&nbsp;<strong><?=Language::GetText('retrieving_video')?>...</strong></span>
-            </div>
-
-            <div class="row-shift"><a href="" class="button"><span><?=Language::GetText('grab_button')?></span></a></div>
-
+    <div class="upload-box">
+        <form name="uploadify" action="<?=HOST?>/myaccount/upload/validate/">
+            <input id="browse-button" class="button" type="button" name="browse-button" value="<?=Language::GetText('browse_files_button')?>" />
+            <input id="upload-button" class="button" type="button" name="upload-button" value="<?=Language::GetText('upload_video_button')?>" />
+            <input type="file" name="upload" id="upload" />
+            <input type="hidden" name="limit" id="limit" value="<?=$config->video_size_limit?>" />
+            <input type="hidden" name="timestamp" id="timestamp" value="<?=$timestamp?>" />
+            <input type="hidden" name="token" id="token" value="<?=session_id()?>" />
         </form>
-
     </div>
-    <!-- END Grab video from YouTube -->
 
 </div>
 

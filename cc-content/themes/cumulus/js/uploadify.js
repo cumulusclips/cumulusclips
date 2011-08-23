@@ -29,6 +29,16 @@ $('document').ready(function() {
         'fileExt'       : fileExt,
         'onError'       : function(event, queueID, fileObj, errorObj) {
 
+            console.log(event);
+            console.log(queueID);
+            console.log(fileObj);
+            console.log(errorObj);
+//            console.log();
+//            console.log();
+//            console.log();
+//            console.log();
+
+
             var node;
             var replacements = {host:host};
             var message = $('#uploadify-message');
@@ -62,7 +72,7 @@ $('document').ready(function() {
                     $('#uploadify-message').html(response.message).removeClass('error').addClass('success').show();
                     $('.avatar img').attr('src',response.other);
                 } else {
-                    top.location.href = host+'/myaccount/upload-complete/';
+                    top.location.href = host+'/myaccount/upload/complete/';
                 }
 
             } else {

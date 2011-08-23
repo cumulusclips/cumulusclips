@@ -7,8 +7,8 @@ View::Header();
 
 <h1><?=Language::GetText('myfavorites_header')?></h1>
         
-<?php if ($success): ?>
-    <div id="success"><?=$success?></div>
+<?php if ($message): ?>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <?php if ($db->Count($result) > 0): ?>

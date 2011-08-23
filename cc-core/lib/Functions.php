@@ -357,6 +357,28 @@ class Functions {
         return $url;
 
     }
+
+
+
+
+    /**
+     * Retrieve list of supported video types in a requested formats
+     * @global object $config System object with various properties
+     * @param string $output_format (optional) Format to output the list of supported video types
+     * @return string|array Returns list of supported video types in requested format
+     */
+    static function GetVideoTypes ($output_format = 'array') {
+        global $config;
+        $type = array();
+        $type['array'] = $config->accepted_video_formats;
+        $type['fileDesc'] = $type['fileExt'] = '';
+        foreach ($type['array'] as $value) {
+            $format = "*.$value";
+            $type['fileDesc'] .= " ($format)";
+            $type['fileExt'] .= ";$format";
+        }
+        return $type[$output_format];
+    }
     
 }
 

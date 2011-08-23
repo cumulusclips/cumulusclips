@@ -85,6 +85,7 @@ HEADER STYLES
     width:245px;
     height:30px;
     line-height:30px;
+    font-size:15px;
 }
 
 #nav {
@@ -129,6 +130,7 @@ FOOTER STYLES
     line-height:43px;
     border:none;
     color:#FFF;
+    font-size:15px;
 }
 
 #footer-sub li {
@@ -298,6 +300,8 @@ h3, .big { font-size:14px; }
 
 .block h1, .block h2, .block h3 { margin-bottom:10px; }
 
+p { margin:5px 0; }
+
 
 
 
@@ -324,20 +328,19 @@ FORM & MESSAGE STYLES
     font-weight:bold;
 }
 
-.text { border:1px solid #CCC; }
+.text { 
+    border:1px solid #CCC;
+    font-size:15px;
+}
 
 input[type="text"].text, input[type="password"].text {
     width:300px;
     height:22px;
     padding:7px 10px;
-    font-size:22px;
 
 }
 
-textarea.text {
-    padding:10px;
-    font-size:15px;
-}
+textarea.text { padding:10px; }
 
 .dropdown {
     border:1px solid #CCC;
@@ -348,9 +351,8 @@ textarea.text {
 
 
 .defaultText {
-    font-family:verdana,sans-serif;
+    font-family:verdana,arial,helvetica,sans-serif;
     font-style:italic;
-    font-size:15px;
     color:#666;
 }
 

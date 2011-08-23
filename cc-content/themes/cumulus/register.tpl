@@ -10,10 +10,8 @@ View::Header();
 
 <h1><?=Language::GetText('register_header')?></h1>
 
-<?php if ($success): ?>
-    <div id="success"><?=$success?></div>
-<?php elseif ($error_msg): ?>
-    <div id="error"><?=$error_msg?></div>
+<?php if ($message): ?>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="block">

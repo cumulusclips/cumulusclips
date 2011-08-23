@@ -22,7 +22,7 @@ GENERAL PORTAL STYLES
 }
 
 #menu li {
-    padding:2px 0;
+    padding:5px 0;
 }
 
 .member .delete {
@@ -123,52 +123,13 @@ READ MESSAGE PAGE STYLES
 UPLOAD VIDEO PAGE STYLES
 ***********************/
 
-#upload-video {
-    display:inline;
-}
-#grab-video {
-    display:none;
+#upload-video .big {
+    padding-top:7px;
 }
 
-#upload-button-container {
-    margin-top:-22px;
-}
-
-#begin-upload {
-    position:relative;
-    left:170px;
-    top:42px;
-}
-
-#selections {
-    margin-bottom:20px;
-    line-height:18px;
-    font-weight:bold;
-}
-
-#upload-video p {
-    padding:7px 0;
-}
-
-#grab-form {
-    margin-top:10px;
-}
-
-#grab-video p {
-    padding:7px 0;
-}
-
-#grab-video .loading {
-    margin-left:10px;
-    display:none;
-}
-
-#grab-video label {
-    width:65px;
-}
-
-#grab-video .row-shift {
-    margin-left:80px;
+#upload-video .upload-box {
+    float:none;
+    margin-top:15px;
 }
 
 

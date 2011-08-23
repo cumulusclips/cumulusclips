@@ -267,18 +267,9 @@
 
         <!-- My Account / Upload - Video Upload Page -->
         <upload_video_header>@Upload Step 2 - Upload Video</upload_video_header>
-        <select_hdd>@Select a video from your computer's hard drive</select_hdd>
-        <select_hdd_header>@Select a video from your computer's hard drive</select_hdd_header>
-        <select_hdd_text>@Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</select_hdd_text>
+        <upload_video_text>@Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>@Filesize limit is</filesize_limit>
-        <accepted_formats>@Accepted file types</accepted_formats>
-        <begin_upload_button>@Begin Upload</begin_upload_button>
-        <grab_youtube>@Grab a video from YouTube</grab_youtube>
-        <grab_youtube_header>@Grab a video from YouTube</grab_youtube_header>
-        <grab_youtube_text>@Enter the URL of the videos page. The video must be public. Please make sure the video does not violate any copyrights. We reserve the right to remove any video, at any time, for any reason.</grab_youtube_text>
-        <video_url>@Video URL</video_url>
-        <retrieving_video>@Retrieving video</retrieving_video>
-        <grab_button>@Grab Video</grab_button>
+        <upload_video_button>@Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
         <upload_complete_header>@Upload Step 3 - Upload Complete!</upload_complete_header>

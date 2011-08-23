@@ -3,7 +3,7 @@
 <h1><?=Language::GetText('login_header')?></h1>
 
 <?php if ($message): ?>
-    <div id="<?=$message_type?>"><?=$message?></div>
+    <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="block" id="login-block">

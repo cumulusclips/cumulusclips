@@ -251,7 +251,6 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('debug_conversion','0'),
 ('live','true'),
 ('video_size_limit','102000000'),
-('accepted_video_formats','a:8:{i:0;s:3:"flv";i:1;s:3:"wmv";i:2;s:3:"avi";i:3;s:3:"ogg";i:4;s:3:"mpg";i:5;s:3:"mp4";i:6;s:3:"mov";i:7;s:3:"m4v";}'),
 ('pagination_page_limit','9'),
 ('h264_url',''),
 ('theora_url',''),
