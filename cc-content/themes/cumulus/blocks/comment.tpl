@@ -4,7 +4,7 @@
 <div class="block comment">
     <div class="video-comment">
         <p class="thumb">
-            <img width="50" height="50" src="<?=$comment->avatar?>" />
+            <img width="50" height="50" src="<?=$comment->avatar_url?>" />
             <?php if (!empty ($comment->website)): ?>
                 <a href="<?=$comment->website?>/" title="<?=$comment->name?>"><?=$comment->name?></a>
             <?php else: ?>

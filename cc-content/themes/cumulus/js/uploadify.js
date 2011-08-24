@@ -41,12 +41,7 @@ $('document').ready(function() {
             }
 
             // Retrieve and output corresponding error text from language xml
-            var callback = function(data){
-                message.html(data)
-                .removeClass('success')
-                .addClass('error')
-                .show();
-            }
+            var callback = function(data){ displayMessage(0,data); }
             GetText(callback, node, replacements);
 
         },
@@ -54,19 +49,19 @@ $('document').ready(function() {
 
             // Determine result from server validation
             response = $.parseJSON(response);
-            $('#message').hide();
-            if (response.status == 'success') {
+            if (response.result == 1) {
 
                 // Perform success actions based on what was being uploaded
                 if (type == 'avatar') {
-                    $('#uploadify-message').html(response.message).removeClass('error').addClass('success').show();
+                    displayMessage(1,response.msg);
+                    window.scroll(0,0);
                     $('.avatar img').attr('src',response.other);
                 } else {
                     top.location.href = host+'/myaccount/upload/complete/';
                 }
 
             } else {
-                $('#uploadify-message').html(response.message).removeClass('success').addClass('error').show();
+                $('#uploadify-message').html(response.msg).removeClass('success').addClass('error').show();
             }
 
         }   // END onComplete

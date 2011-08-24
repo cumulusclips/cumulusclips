@@ -93,10 +93,10 @@ try {
     Plugin::Trigger ('update_profile.update_avatar');
 
     // Output success message
-    exit (json_encode (array ('status' => 'success', 'message' => (string) Language::GetText('success_avatar_updated'), 'other' => $user->avatar_url)));
+    exit (json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_avatar_updated'), 'other' => $user->avatar_url)));
 
 } catch (Exception $e) {
-    exit (json_encode (array ('status' => 'error', 'message' => $e->getMessage())));
+    exit (json_encode (array ('result' => 0, 'msg' => $e->getMessage())));
 }
 
 ?>

@@ -89,6 +89,13 @@ if (isset ($_POST['submitted'])) {
         $Errors['comments'] = Language::GetText('error_comment');
     }
 
+    // Validate output format block
+    if (!empty ($_POST['block'])) {
+        $block = $_POST['block'] . '.tpl';
+    } else {
+        $block = null;
+    }
+
 
     // Save comment if no errors were found
     if (empty ($Errors)) {
@@ -99,15 +106,19 @@ if (isset ($_POST['submitted'])) {
         $comment_id = Comment::Create ($data);
         $comment = new Comment ($comment_id);
 
-        // Retrieve formatted new comment block
-        View::InitView();
-        ob_start();
-        View::RepeatingBlock('comment.tpl', array ($comment->comment_id));
-        $comment_block = ob_get_contents();
-        ob_end_clean();
+        // Retrieve formatted new comment
+        if ($block) {
+            View::InitView();
+            ob_start();
+            View::RepeatingBlock ($block, array ($comment->comment_id));
+            $output = ob_get_contents();
+            ob_end_clean();
+        } else {
+            $output = $comment;
+        }
 
         Plugin::Trigger ('comment.ajax.post_comment');
-        echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_comment_posted'), 'other' => $comment_block));
+        echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_comment_posted'), 'other' => $output));
         exit();
 
     } else {

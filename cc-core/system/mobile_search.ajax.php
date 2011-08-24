@@ -22,19 +22,8 @@ if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
 }
 
 
-// Validate output format
-if (!empty ($_POST['format']) && in_array ($_POST['format'], array ('json', 'html'))) {
-
-    if ($_POST['format'] == 'html' && !empty ($_POST['block'])) {
-        $format = 'html';
-        $block = $_POST['block'];
-    } else {
-        $format = 'json';
-    }
-
-} else {
-    $format = 'json';
-}
+// Validate block output format
+$block = (isset ($_POST['block'])) ? $_POST['block'] . '.tpl' : null;
 
 
 // Retrieve video list
@@ -46,7 +35,7 @@ while ($video = $db->FetchObj ($result)) $videos[] = $video->video_id;
 
 
 // Output video list in requested format
-if ($format == 'html') {
+if ($block) {
 
     View::InitView();
     ob_start();

@@ -108,10 +108,10 @@ try {
     Plugin::Trigger ('upload.ajax.encode');
 
     // Output success message
-    exit (json_encode (array ('status' => 'success', 'message' => '')));
+    exit (json_encode (array ('result' => 1, 'msg' => '')));
 
 } catch (Exception $e) {
-    exit (json_encode (array ('status' => 'error', 'message' => $e->getMessage())));
+    exit (json_encode (array ('result' => 0, 'msg' => $e->getMessage())));
 }
 
 ?>

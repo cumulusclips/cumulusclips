@@ -13,7 +13,7 @@
                     <form>
                     <input type="hidden" id="loadLocation" name="loadLocation" value="videos" />
                     <input type="hidden" id="format" name="format" value="html" />
-                    <input type="hidden" id="block" name="block" value="video.tpl" />
+                    <input type="hidden" id="block" name="block" value="video" />
                     <input type="hidden" id="submitted" name="submitted" value="true" />
                     <input type="hidden" id="max" name="max" value="<?=$count?>" />
                     <input type="hidden" id="start" name="start" value="20" />

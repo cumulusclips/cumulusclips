@@ -38,13 +38,6 @@ View::$vars->rating = Rating::GetRating (View::$vars->video->video_id);
 View::$vars->meta->title = View::$vars->video->title;
 View::$vars->meta->keywords = implode (', ',View::$vars->video->tags);
 View::$vars->meta->description = View::$vars->video->description;
-
-
-
-### Create Tags Links
-foreach (View::$vars->video->tags as $value) {
-    View::$vars->tags .= '<a href="' . HOST . '/search/?keyword=' . $value . '" title="' . $value . '">' . $value . '</a>&nbsp;&nbsp; ';
-}
 Plugin::Trigger ('play.load_video');
 
 

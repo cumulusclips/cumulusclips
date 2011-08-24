@@ -17,6 +17,8 @@ View::Header();
 
 <?php if ($message): ?>
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
+<?php else: ?>
+    <div id="message"></div>
 <?php endif; ?>
 
 
@@ -65,7 +67,6 @@ View::Header();
 
     
 <h1 id="update-avatar"><?=Language::GetText('update_avatar_header')?></h1>
-<div id="uploadify-message"></div>
 <div class="block">
 
     <div id="avatar-left">
