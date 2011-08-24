@@ -111,7 +111,7 @@ class App {
 
         // Check for mobile devices and if has opted out from mobile site
         $agent = '/ip(ad|hone|od)|android/i';
-        if (preg_match ($agent, $_SERVER['HTTP_USER_AGENT']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
+        if (isset ($_SERVER['HTTP_USER_AGENT']) && preg_match ($agent, $_SERVER['HTTP_USER_AGENT']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
 
             // Verify user isn't already viewing mobile site
             if (!isset ($_GET['mobile'])) {

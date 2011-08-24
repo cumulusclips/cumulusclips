@@ -50,16 +50,14 @@ define ('ADMIN_EMAIL', Settings::Get ('admin_email'));
 
 $config = new stdClass();
 $config->admin_email = Settings::Get ('admin_email');
-$config->debug_conversion = Settings::Get ('debug_conversion');
+$config->debug_conversion = Settings::Get ('debug_conversion') == '1' ? true : false;
 $config->video_size_limit = Settings::Get ('video_size_limit');
 $config->accepted_video_formats = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
 $config->accepted_avatar_formats = array ('png', 'jpeg', 'jpg', 'gif');
 $config->pagination_page_limit = Settings::Get ('pagination_page_limit');
-$config->flv_bucket_url = Settings::Get ('flv_bucket_url');
-$config->mp4_bucket_url = Settings::Get ('mp4_bucket_url');
-$config->thumb_bucket_url = Settings::Get ('thumb_bucket_url');
 $config->php = Settings::Get ('php');
 $config->ffmpeg = Settings::Get ('ffmpeg');
+$config->qt_faststart = Settings::Get ('qt_faststart');
 
 $h264_url = Settings::Get('h264_url');
 $theora_url = Settings::Get('theora_url');

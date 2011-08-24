@@ -19,10 +19,10 @@ View::$vars->user = new User (View::$vars->logged_in);
 
 
 ### Verify user completed upload process
-if (isset ($_SESSION['token'])) {
-    unset ($_SESSION['token']);
+if (isset ($_SESSION['upload'])) {
+    unset ($_SESSION['upload']);
 } else {
-    header ('Location: ' . HOST . '/myaccount/upload-video/');
+    header ('Location: ' . HOST . '/myaccount/upload/video/');
     exit();
 }
 

@@ -16,14 +16,19 @@ GENERAL PORTAL STYLES
     margin-right:40px;
 }
 
-#menu ul {
-    list-style:none;
-    padding:6px 0;
+#menu { padding:0 15px 10px; }
+
+#menu p {
+    margin-top:15px;
+    padding:0;
 }
 
-#menu li {
-    padding:5px 0;
+#menu ul {
+    list-style:none;
+    padding-bottom:5px;
 }
+
+#menu li { margin-top:10px; }
 
 .member .delete {
     z-index:99;

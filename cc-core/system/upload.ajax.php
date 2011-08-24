@@ -6,7 +6,9 @@
 
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
+App::LoadClass ('User');
 App::LoadClass ('Video');
+App::LoadClass ('Filesystem');
 Plugin::Trigger ('upload.ajax.start');
 
 
@@ -25,7 +27,7 @@ $logged_in = User::LoginCheck (HOST . '/login/');
 $user = new User ($logged_in);
 
 
-if (isset ($_SESSION['upload']) && Video::Exist (array('video_id' => $_SESSION['upload']))) {
+if (isset ($_SESSION['upload']) && Video::Exist (array('video_id' => $_SESSION['upload'], 'status' => 'new'))) {
     $video = new Video ($_SESSION['upload']);
     Plugin::Trigger ('upload.ajax.load_video');
 } else {
@@ -99,10 +101,9 @@ try {
 
 
     ### Initilize Encoder
-    if (!LIVE) exit('success'); // Skip Conversion
-    $cmd_output = DEBUG_CONVERSION ? CONVERSION_LOG : '/dev/null';
+    $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
     Plugin::Trigger ('upload.ajax.before_encode');
-    $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' &';
+    $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' 2>&1 &';
     exec ($converter_cmd);
     Plugin::Trigger ('upload.ajax.encode');
 

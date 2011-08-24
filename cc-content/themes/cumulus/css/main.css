@@ -197,22 +197,24 @@ BODY STRUCTURE STYLES
 
 .success {
     font-weight:bold;
-    padding:15px;
+    padding:10px 15px;
     margin-top:15px;
     border:solid 3px #C6D880;
     background-color: #E6EFC2;
     color: #264409;
     border-radius:10px;
+    line-height:1.25;
 }
 
 .error {
     font-weight:bold;
-    padding:15px;
+    padding:10px 15px;
     margin-top:15px;
     border:solid 3px #FBC2C4;
     background-color: #FBE3E4;
     color: #8a1f11;
     border-radius:10px;
+    line-height:1.25;
 }
 
 .errors {
@@ -292,15 +294,17 @@ TEXT STYLES
 h1,h2,h3,strong,.big,.large,.huge {
     color:#333;
     font-weight:bold;
+    line-height:1;
 }
 
 h1, .huge { font-size:24px; }
 h2, .large { font-size:18px; }
 h3, .big { font-size:14px; }
 
-.block h1, .block h2, .block h3 { margin-bottom:10px; }
-
-p { margin:5px 0; }
+p {
+    margin:5px 0;
+    line-height:1.25
+}
 
 
 

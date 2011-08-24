@@ -29,16 +29,6 @@ $('document').ready(function() {
         'fileExt'       : fileExt,
         'onError'       : function(event, queueID, fileObj, errorObj) {
 
-            console.log(event);
-            console.log(queueID);
-            console.log(fileObj);
-            console.log(errorObj);
-//            console.log();
-//            console.log();
-//            console.log();
-//            console.log();
-
-
             var node;
             var replacements = {host:host};
             var message = $('#uploadify-message');

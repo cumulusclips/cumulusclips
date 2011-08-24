@@ -92,13 +92,8 @@ HOMEPAGE STYLES
     font-weight:bold;
 }
 
-#home-login p {
-    margin-bottom:7px;
-}
-
-#home-login .text {
-    width:260px;
-}
+#home-login .text { width:260px; }
+#home-login .button { margin-top:10px; }
 
 
 

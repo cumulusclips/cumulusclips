@@ -23,7 +23,6 @@ $message = null;
 $data['enable_uploads'] = Settings::Get('enable_uploads');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
-$data['accepted_video_formats_string'] = implode (', ', unserialize (Settings::Get('accepted_video_formats')));
 $data['h264_url'] = Settings::Get('h264_url');
 $data['theora_url'] = Settings::Get('theora_url');
 $data['mobile_url'] = Settings::Get('mobile_url');
@@ -64,16 +63,6 @@ if (isset ($_POST['submitted'])) {
         $data['video_size_limit'] = trim ($_POST['video_size_limit']);
     } else {
         $errors['video_size_limit'] = 'Invalid video size limit';
-    }
-
-
-    // Validate accepted video formats
-    if (!empty ($_POST['accepted_video_formats']) && !ctype_space ($_POST['accepted_video_formats'])) {
-        $data['accepted_video_formats_string'] = htmlspecialchars (trim ($_POST['accepted_video_formats']));
-        $formats = preg_split ('/,\s?/', $data['accepted_video_formats_string']);
-        $data['accepted_video_formats'] = serialize ($formats);
-    } else {
-        $errors['accepted_video_formats'] = 'Invalid video formats';
     }
 
 
@@ -190,12 +179,6 @@ include ('header.php');
                     <option value="1" <?=($data['debug_conversion']=='1')?'selected="selected"':''?>>On</option>
                     <option value="0" <?=($data['debug_conversion']=='0')?'selected="selected"':''?>>Off</option>
                 </select>
-            </div>
-            
-            <div class="row <?=(isset ($errors['accepted_video_formats'])) ? ' errors' : ''?>">
-                <label>Accepted Video Formats:</label>
-                <input class="text" type="text" name="accepted_video_formats" value="<?=$data['accepted_video_formats_string']?>" />
-                (Comma Delimited)
             </div>
 
             <div class="row <?=(isset ($errors['video_size_limit'])) ? ' errors' : ''?>">
