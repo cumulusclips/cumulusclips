@@ -40,7 +40,7 @@ class Video {
         }
 
         // Video Specific values
-        $this->tags = explode (' ',$this->tags);
+        $this->tags = preg_split ('/\s?,\s?/', $this->tags);
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
         $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));

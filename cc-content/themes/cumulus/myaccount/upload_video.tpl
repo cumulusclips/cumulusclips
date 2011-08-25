@@ -16,7 +16,7 @@ View::Header();
 
 <h1><?=Language::GetText('upload_video_header')?></h1>
 
-<div id="uploadify-message"></div>
+<div id="message"></div>
 
 <div id="upload-video" class="block">
 

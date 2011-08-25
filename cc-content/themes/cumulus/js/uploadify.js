@@ -31,7 +31,6 @@ $('document').ready(function() {
 
             var node;
             var replacements = {host:host};
-            var message = $('#uploadify-message');
 
             // Determine reason for failure
             if (errorObj.type == 'File Size') {
@@ -61,7 +60,7 @@ $('document').ready(function() {
                 }
 
             } else {
-                $('#uploadify-message').html(response.msg).removeClass('success').addClass('error').show();
+                displayMessage(0,response.msg);
             }
 
         }   // END onComplete

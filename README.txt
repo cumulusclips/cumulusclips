@@ -30,6 +30,7 @@ Make sure the following directories are writeable by PHP and the webserver:
 System
 
 FFMPEG
+QT-FASTSTART
 MYSQL
 APACHE 2.X
     MOD_REWRITE
@@ -38,6 +39,10 @@ PHP5
     ZIP
     CURL
     PHP5-FFMPEG
+
+upload_max_filesize = 100M
+post_max_size = 100M
+max_execution_time = 1500
 
 
 

@@ -43,6 +43,7 @@ $(document).ready(function(){
 
     // Show/Hide Block
     $('.showhide').click(function(){
+        $('.showhide-block').hide();
         var block = $(this).attr('data-block');
         if ($('#'+block).css('display') == 'none') {
             $('#'+block).show();

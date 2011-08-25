@@ -6,7 +6,6 @@ View::AddMeta('slug', $video->slug);
 View::AddMeta('baseURL', HOST);
 View::AddCss('video-js.css');
 View::AddJs('video.js');
-//View::AddJs('play.js');
 View::SetLayout('full');
 View::Header();
 
@@ -58,33 +57,33 @@ View::Header();
         </div>
 
         <div>
-            <a href="" class="button-small"><?=Language::GetText('about')?></a>
+            <a href="" class="button-small showhide" data-block="about"><?=Language::GetText('about')?></a>
             <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-member="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
-            <a href="" class="button-small"><?=Language::GetText('share')?></a>
-            <a href="" class="button-small"><?=Language::GetText('embed')?></a>
+            <a href="" class="button-small showhide" data-block="share"><?=Language::GetText('share')?></a>
+            <a href="" class="button-small showhide" data-block="embed"><?=Language::GetText('embed')?></a>
             <a href="" class="button-small favorite" data-video="<?=$video->video_id?>"><?=Language::GetText('favorite')?></a>
             <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><?=Language::GetText('flag')?></a>
         </div>
 
-        <div id="about">
+        <div id="about" class="showhide-block">
             <p>
                 <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
                 <a class="big" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a>
             </p>
-            <p>Date Uploaded: <?=$video->date_created?></p>
-            <p>Tags:
+            <p><strong>Date Uploaded:</strong> <?=$video->date_created?></p>
+            <p><strong>Tags:</strong>
                 <?php foreach ($video->tags as $value): ?>
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
                 <?php endforeach; ?>
             </p>
-            <p>Description: <?=$video->description?></p>
+            <p><strong>Description:</strong> <?=$video->description?></p>
         </div>
 
-        <div id="embed">
+        <div id="embed" class="showhide-block">
             <textarea class="text"></textarea>
         </div>
 
-        <div id="share">
+        <div id="share" class="showhide-block">
             <!-- FACEBOOK BUTTON -->
             <div class="share-button">
                 <iframe src="http://www.facebook.com/plugins/like.php?href=<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/&amp;layout=box_count&amp;show_faces=false&amp;width=50&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
