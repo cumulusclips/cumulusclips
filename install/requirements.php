@@ -90,6 +90,32 @@ if (empty ($which_results_ffmpeg)) {
 
 
 
+// Check if qt-faststart is installed (using which)
+@exec ('which qt-faststart', $which_results_faststart);
+if (empty ($which_results_faststart)) {
+
+    // Check if qt-faststart is installed (using whereis)
+    @exec ('whereis qt-faststart', $whereis_results_faststart);
+    $whereis_results_faststart = preg_replace ('/^qt\-faststart:\s?/','', $whereis_results_faststart[0]);
+    if (empty ($whereis_results_faststart)) {
+        $settings->qt_faststart = '';
+        $qt_faststart = false;
+        $disable_uploads = true;
+        $warnings = true;
+    } else {
+        $path_faststart = explode (' ', $whereis_results_faststart[0]);
+        $settings->qt_faststart = $path_faststart[0];
+        $qt_faststart = true;
+    }
+
+} else {
+    $settings->qt_faststart = $which_results_faststart[0];
+    $qt_faststart = true;
+}
+
+
+
+
 // Verify 'zip' php module is loaded
 $zip = extension_loaded ('zip');
 if (!$zip) $errors = true;

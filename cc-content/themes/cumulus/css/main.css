@@ -414,15 +414,13 @@ MISCELLANEOUS STYLES
 .thumb {
     position:relative;
     float:left;
-    width:120px;
-    height:80px;
     margin-right:15px;
 }
+.thumb:hover { text-decoration:none; }
 .thumb img {
+    width:120px;
+    height:90px;
     border:none;
-}
-.thumb:hover {
-    text-decoration:none;
 }
 
 .duration {

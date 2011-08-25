@@ -27,7 +27,9 @@ $result_featured = $db->Query ($query);
 
 // Retrieve Recent Videos
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT 3";
-View::$vars->result_recent = $db->Query ($query);
+$result_recent = $db->Query ($query);
+View::$vars->recent_videos = array();
+while ($video = $db->FetchObj ($result_recent)) View::$vars->recent_videos[] = $video->video_id;
 
 
 // Output Page

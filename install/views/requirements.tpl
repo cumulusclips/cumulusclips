@@ -54,6 +54,15 @@
                                 <?php endif; ?>
                             </td>
                         </tr>
+                        <tr>
+                            <td>qt-faststart</td>
+                            <td>
+                                <img src="images/<?php echo ($qt_faststart) ? 'tick.png' : 'flag_yellow.png'; ?>" />
+                                <?php if (!$qt_faststart): ?>
+                                qt-faststart was not found. Video uploads have been disabled. <a href="#" class="more-info" data-content="ffmpeg" title="More Info">More Info</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
                     </table>
 
 

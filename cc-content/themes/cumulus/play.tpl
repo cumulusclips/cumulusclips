@@ -6,6 +6,7 @@ View::AddMeta('slug', $video->slug);
 View::AddMeta('baseURL', HOST);
 View::AddCss('video-js.css');
 View::AddJs('video.js');
+//View::AddJs('play.js');
 View::SetLayout('full');
 View::Header();
 
@@ -31,7 +32,7 @@ View::Header();
                 <param name="movie" value="<?=THEME?>/flash/flowplayer-3.2.7.swf" />
                 <param name="allowfullscreen" value="true" />
                 <param name="flashvars" value='config={"playlist":["<?=$config->thumb_url?>/<?=$video->filename?>.jpg", {"url": "<?=$config->h264_url?>/<?=$video->filename?>.mp4","autoPlay":false,"autoBuffering":true}]}' />
-                <img src="<?=$config->h264_url?>/<?=$video->filename?>.jpg" width="600" height="450" alt="Poster Image" title="No video playback capabilities." />
+                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" width="600" height="450" alt="Poster Image" title="No video playback capabilities." />
             </object>
             <!-- END FLASH FALLBACK -->
 

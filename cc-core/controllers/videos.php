@@ -89,7 +89,9 @@ $start_record = View::$vars->pagination->GetStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-View::$vars->result = $db->Query ($query);
+$result = $db->Query ($query);
+View::$vars->browse_videos = array();
+while ($video = $db->FetchObj ($result)) View::$vars->browse_videos[] = $video->video_id;
 
 
 // Output Page

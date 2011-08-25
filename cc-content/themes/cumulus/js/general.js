@@ -194,6 +194,14 @@ $(document).ready(function(){
         $(this).css('height', '80');
     });
 
+
+
+
+    // Initialize VideoJS on play page
+    if ($('.video-js-box').length > 0) {
+        VideoJS.setupAllWhenReady();
+    }
+
 }); // END jQuery
 
 

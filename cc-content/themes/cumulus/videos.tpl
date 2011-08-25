@@ -24,35 +24,9 @@
 <h2><?=Language::GetText('viewing')?>: <?php echo ($category)?$category:'All'; ?> Videos</h2>
 
 
-<?php if ($db->Count($result) > 0): ?>
-
-    <?php while ($row = $db->FetchObj ($result)): ?>
-
-        <?php
-        $video = new Video ($row->video_id);
-        $rating = Rating::GetRating ($row->video_id);
-        ?>
-
-        <div class="block">
-
-            <a class="thumb" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>" title="<?=$video->title?>">
-                <span class="duration"><?=$video->duration?></span>
-                <span class="play-icon"></span>
-                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" alt="<?=$video->title?>" />
-            </a>
-
-            <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>" title="<?=$video->title?>"><?=$video->title?></a>
-            <p><?=Functions::CutOff ($video->description, 190)?></p>
-            <span class="like">+<?=$rating->likes?></span>
-            <span class="dislike">-<?=$rating->dislikes?></span>
-            <br clear="all" />
-
-        </div>
-
-    <?php endwhile; ?>
-
+<?php if (!empty ($browse_videos)): ?>
+    <?php View::RepeatingBlock('video.tpl', $browse_videos); ?>
     <?=$pagination->Paginate()?>
-
 <?php else: ?>
     <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
 <?php endif; ?>

@@ -44,15 +44,19 @@ Plugin::Trigger ('search.search_count');
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
+
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
 View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
 $start_record = View::$vars->pagination->GetStartRecord();
 
+
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
 Plugin::Trigger ('search.search');
-View::$vars->result = $db->Query ($query);
+$result = $db->Query ($query);
+View::$vars->search_videos = array();
+while ($video = $db->FetchObj ($result)) View::$vars->search_videos[] = $video->video_id;
 
 
 // Output Page

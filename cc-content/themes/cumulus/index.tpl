@@ -76,31 +76,8 @@ View::Header();
 
 <div class="huge"><?=Language::GetText('home_header')?></div>
 
-<?php if ($db->Count ($result_recent) > 0): ?>
-
-    <?php while($row = $db->FetchObj ($result_recent)): ?>
-
-        <?php $video = new Video ($row->video_id); ?>
-        <?php $rating = Rating::GetRating ($video->video_id); ?>
-
-        <div class="block">
-
-            <a class="thumb" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title="">
-                <span class="duration"><?=$video->duration?></span>
-                <span class="play-icon"></span>
-                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" alt="" />
-            </a>
-
-            <a class="large" href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" title=""><?=$video->title?></a>
-            <p><?=$video->description?></p>
-            <span class="like">+<?=$rating->likes?></span>
-            <span class="dislike">-<?=$rating->dislikes?></span>
-            <br clear="all" />
-
-        </div>
-
-    <?php endwhile; ?>
-
+<?php if (!empty ($recent_videos)): ?>
+    <?php View::RepeatingBlock('video.tpl', $recent_videos); ?>
 <?php else: ?>
     <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
 <?php endif; ?>
