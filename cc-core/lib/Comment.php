@@ -47,7 +47,7 @@ class Comment {
             $this->name = $user->username;
             $this->email = $user->email;
             $this->website = HOST . '/members/' . $user->username . '/';
-            $this->avatar = $user->avatar;
+            $this->avatar_url = $user->avatar_url;
         } else {
             $this->avatar = THEME . '/images/user_placeholder.gif';
         }

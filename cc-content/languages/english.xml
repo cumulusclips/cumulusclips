@@ -112,8 +112,10 @@
         <about>@About</about>
         <share>@Share</share>
         <embed>@Embed</embed>
+        <embed_text>@Copy and paste this code into your website or blog.</embed_text>
         <favorite>@Favorite</favorite>
         <flag>@Flag</flag>
+        <date_uploaded>@Date Uploaded</date_uploaded>
         <comments_header>@Video Comments</comments_header>
         <view_all_comments>@View All Comments</view_all_comments>
         <comments_total>@Comments total</comments_total>
@@ -126,6 +128,8 @@
         <suggestions_header>@Suggestions</suggestions_header>
         <no_suggestions>@No suggestions could be made.</no_suggestions>
         <views>@Views</views>
+        <video_unavailable>@Video Is Unavailable</video_unavailable>
+        <no_playback>@No video playback capabilities.</no_playback>
 
         <!-- Comments Page -->
         <comments_header>@View All Comments</comments_header>

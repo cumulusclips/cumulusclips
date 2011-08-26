@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     var baseURL = $('[name=baseURL]').attr('content');
+    var videoID = $('[name=videoID]').attr('content');
 
     // Default text Focus
     $('.defaultText').focus(function(){
@@ -43,13 +44,9 @@ $(document).ready(function(){
 
     // Show/Hide Block
     $('.showhide').click(function(){
-        $('.showhide-block').hide();
         var block = $(this).attr('data-block');
-        if ($('#'+block).css('display') == 'none') {
-            $('#'+block).show();
-        } else {
-            $('#'+block).hide();
-        }
+        $('.showhide-block:not(#'+block+')').hide();
+        $('#'+block).toggle();
         return false;
     });
 
@@ -77,7 +74,7 @@ $(document).ready(function(){
     // Attach favorite action to favorite links / buttons
     $('.favorite').click(function(){
         var url = baseURL+'/actions/favorite/';
-        var data = {video_id: $(this).attr('data-video')};
+        var data = {video_id: videoID};
         executeAction (url, data);
         return false;
     });
@@ -140,7 +137,7 @@ $(document).ready(function(){
     // Attach rating action to like & dislike links
     $('.rating').click(function(){
         var url = baseURL+'/actions/rate/';
-        var data = {video_id: $(this).attr('data-video'), rating: $(this).attr('data-rating')};
+        var data = {video_id: videoID, rating: $(this).attr('data-rating')};
         var callback = function (responseData) {
             if (responseData.result == 1) {
 

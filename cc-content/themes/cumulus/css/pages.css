@@ -133,6 +133,8 @@ PLAY PAGE STYLES
     width:330px;
 }
 
+#play-left .video-js-box { margin-top:10px; }
+
 .other-video {
     margin-bottom:25px;
     overflow:hidden;
@@ -173,19 +175,20 @@ a.dislike {
 
 #about, #embed, #share {
     display:none;
+    margin-top:15px;
 }
 
-#share {
-    overflow:hidden;
-}
-.share-button {
-    float:left;
-}
+#share { overflow:hidden; }
+.share-button { float:left; }
+
+#embed .text { margin-top:5px; }
 
 #comments-form textarea.text {
     width:400px;
     height:140px;
 }
+
+#comments-form { margin-bottom:-15px; }
 
 
 

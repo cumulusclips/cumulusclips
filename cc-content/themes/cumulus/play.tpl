@@ -1,9 +1,7 @@
 <?php
 
 View::AddMeta('baseURL', HOST);
-View::AddMeta('video_id', $video->video_id);
-View::AddMeta('slug', $video->slug);
-View::AddMeta('baseURL', HOST);
+View::AddMeta('videoID', $video->video_id);
 View::AddCss('video-js.css');
 View::AddJs('video.js');
 View::SetLayout('full');
@@ -31,7 +29,7 @@ View::Header();
                 <param name="movie" value="<?=THEME?>/flash/flowplayer-3.2.7.swf" />
                 <param name="allowfullscreen" value="true" />
                 <param name="flashvars" value='config={"playlist":["<?=$config->thumb_url?>/<?=$video->filename?>.jpg", {"url": "<?=$config->h264_url?>/<?=$video->filename?>.mp4","autoPlay":false,"autoBuffering":true}]}' />
-                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" width="600" height="450" alt="Poster Image" title="No video playback capabilities." />
+                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" width="600" height="450" alt="<?=$video->title?>" title="<?=Language::GetText('no_playback')?>" />
             </object>
             <!-- END FLASH FALLBACK -->
 
@@ -51,36 +49,35 @@ View::Header();
                 <span class="red-text"><?=$rating->dislike_text?> (<?=$rating->dislikes?>-)</span>
             </span></p>
             <p id="rating-link">
-                <a class="like rating" href="" data-video="<?=$video->video_id?>" data-rating="1" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>
-                <a class="dislike rating" href="" data-video="<?=$video->video_id?>" data-rating="0" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
+                <a class="like rating" href="" data-rating="1" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>
+                <a class="dislike rating" href="" data-rating="0" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
             </p>
         </div>
 
-        <div>
+        <div id="buttons">
             <a href="" class="button-small showhide" data-block="about"><?=Language::GetText('about')?></a>
             <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-member="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
             <a href="" class="button-small showhide" data-block="share"><?=Language::GetText('share')?></a>
             <a href="" class="button-small showhide" data-block="embed"><?=Language::GetText('embed')?></a>
-            <a href="" class="button-small favorite" data-video="<?=$video->video_id?>"><?=Language::GetText('favorite')?></a>
+            <a href="" class="button-small favorite"><?=Language::GetText('favorite')?></a>
             <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><?=Language::GetText('flag')?></a>
         </div>
 
         <div id="about" class="showhide-block">
-            <p>
-                <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
-                <a class="big" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a>
-            </p>
-            <p><strong>Date Uploaded:</strong> <?=$video->date_created?></p>
-            <p><strong>Tags:</strong>
+            <p class="avatar-small"><img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" /></p>
+            <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
+            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=date('m/d/Y',strtotime($video->date_created))?></p>
+            <p><strong><?=Language::GetText('tags')?>:</strong>
                 <?php foreach ($video->tags as $value): ?>
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
                 <?php endforeach; ?>
             </p>
-            <p><strong>Description:</strong> <?=$video->description?></p>
+            <p class="clear"><strong><?=Language::GetText('description')?>:</strong> <?=$video->description?></p>
         </div>
 
         <div id="embed" class="showhide-block">
-            <textarea class="text"></textarea>
+            <?=Language::GetText('embed_text')?>
+            <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->video_id?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
         </div>
 
         <div id="share" class="showhide-block">

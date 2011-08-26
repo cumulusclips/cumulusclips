@@ -38,6 +38,7 @@ RewriteRule ^contact/$ cc-core/controllers/contact.php [NC,L]
 
 ### System Pages
 
+RewriteRule ^embed/([0-9]+)/$ cc-core/system/embed.php?vid=$1 [NC,L]
 RewriteRule ^page/$ cc-core/system/page.php [NC,L]
 RewriteRule ^notify/$ cc-core/system/notify.php [NC,L]
 RewriteRule ^language/get/$ cc-core/system/language.php [NC,L]

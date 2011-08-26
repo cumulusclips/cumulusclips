@@ -498,6 +498,18 @@ MISCELLANEOUS STYLES
     border:none;
 }
 
+.avatar-small img {
+    width:64px;
+    height:64px;
+    float:left;
+    margin:0 15px 10px 0;
+}
+
+.comment-text {
+    border-top:1px solid #CCC;
+    padding-top:5px;
+}
+
 
 
 
