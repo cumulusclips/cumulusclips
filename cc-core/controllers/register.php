@@ -8,7 +8,7 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('EmailTemplate');
+App::LoadClass ('Mail');
 
 
 // Establish page variables, objects, arrays, etc
@@ -80,8 +80,12 @@ if (isset ($_POST['submitted'])) {
         User::Create (View::$vars->data);
         View::$vars->success = Language::GetText('success_registered');
 
+        $replacements = array (
+            'confirm_code' => View::$vars->data['confirm_code'],
+            'host' => HOST,
+            'sitename' => $config->sitename
+        );
         $mail = new Mail();
-        $replacements = array ('confirm_code' => View::$vars->data['confirm_code'], 'host' => HOST, 'sitename' => $config->sitename);
         $mail->LoadTemplate ('registration', $replacements);
         $mail->Send (View::$vars->data['email']);
         Plugin::Trigger ('register.create');

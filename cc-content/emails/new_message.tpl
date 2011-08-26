@@ -1,5 +1,5 @@
 <!-- Begin: Subject -->
-You have new messages
+You have new messages - {sitename}
 <!-- End: Subject -->
 
 

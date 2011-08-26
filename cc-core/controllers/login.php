@@ -8,7 +8,7 @@
 // Include required files
 include ('../config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('EmailTemplate');
+App::LoadClass ('Mail');
 
 
 // Establish page variables, objects, arrays, etc
@@ -105,13 +105,14 @@ if (isset ($_POST['submitted_forgot'])) {
             View::$vars->message_type = 'success';
             View::$vars->forgot_submit = NULL;
 
-            $Msg = array (
+            $replacements = array (
+                'sitename'  => $config->sitename,
                 'username'  => $user->username,
-                'password' => $user->password
+                'password'  => $user->password
             );
-            $template = new EmailTemplate ('/forgot_password.htm');
-            $template->Replace ($Msg);
-            $template->Send ($user->email);
+            $mail = new Mail();
+            $mail->LoadTemplate ('forgot_password', $replacements);
+            $mail->Send ($user->email);
             Plugin::Trigger ('login.password_reset');
 
         } else {

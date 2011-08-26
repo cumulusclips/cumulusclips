@@ -1,5 +1,5 @@
 <!-- Begin: Subject -->
-Your video has been commented on
+Your video has been commented on - {sitename}
 <!-- End: Subject -->
 
 

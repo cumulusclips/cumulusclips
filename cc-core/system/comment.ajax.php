@@ -10,8 +10,6 @@ include ('../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Comment');
-App::LoadClass ('Privacy');
-App::LoadClass ('EmailTemplate');
 Plugin::Trigger ('comment.ajax.start');
 
 
@@ -105,6 +103,7 @@ if (isset ($_POST['submitted'])) {
         Plugin::Trigger ('comment.ajax.before_post_comment');
         $comment_id = Comment::Create ($data);
         $comment = new Comment ($comment_id);
+        $comment->Approve();
 
         // Retrieve formatted new comment
         if ($block) {

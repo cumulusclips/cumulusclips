@@ -25,6 +25,7 @@ $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
 if (!isset ($_SESSION['upload_key']) || $_SESSION['upload_key'] != $upload_key) App::Throw404();
 $logged_in = User::LoginCheck (HOST . '/login/');
 $user = new User ($logged_in);
+$php_path = Settings::Get ('php');
 
 
 if (isset ($_SESSION['upload']) && Video::Exist (array('video_id' => $_SESSION['upload'], 'status' => 'new'))) {

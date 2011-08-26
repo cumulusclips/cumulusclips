@@ -385,29 +385,30 @@ class User {
 
     /**
      * Make a user visible to the public
-     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @param boolean $bypass_admin_approval [optional] Whether or not to bypass admin approval
      * @return void If allowed, user is approved otherwise user is marked as pending approval
      */
-    public function Approve ($admin = false) {
+    public function Approve ($bypass_admin_approval = false) {
 
         // Determine if video is allowed to be approved
-        if ($admin || Settings::Get ('auto_approve_users') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_users') == 'true') {
 
             $data = array ('status' => 'active');
             if ($this->released == 0) {
 
                 $data['released'] = 1;
 
-                ### Update user's anonymous comments IF/APP
+                // Update user's anonymous comments IF/APP
                 $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
                 $this->db->Query ($query);
 
             }
-            $this->Update ($data);
 
         } else {
-            $this->Update (array ('status' => 'pending'));
+            $data = array ('status' => 'pending');
         }
+
+        $this->Update ($data);
 
     }
 

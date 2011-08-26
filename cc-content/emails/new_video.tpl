@@ -1,12 +1,12 @@
 <!-- Begin: Subject -->
-New videos in your subscribed channel
+New video by a subscribed member - {sitename}
 <!-- End: Subject -->
 
 
 <!-- Begin: Message -->
 Hello,
 
-One of the channels you're subscribed to, ({channel}), has just posted a new video.
+One of the members you're subscribed to, ({member}), has just posted a new video.
 Click on the link below to see it.
 
 ----------------------------------------------------------------------

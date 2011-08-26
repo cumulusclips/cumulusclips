@@ -160,19 +160,21 @@ class Comment {
 
     /**
      * Make a comment visible to the public and notify video owner of comment
-     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @global object $config Site configuration settings
+     * @param boolean $bypass_admin_approval [optional] Whether or not to bypass admin approval
      * @return void If allowed, comment is approved and owner is notified
      * otherwise comment is marked as pending approval
      */
-    public function Approve ($admin = false) {
+    public function Approve ($bypass_admin_approval = false) {
 
+        global $config;
         App::LoadClass ('User');
         App::LoadClass ('Video');
         App::LoadClass ('Privacy');
-        App::LoadClass ('EmailTemplate');
+        App::LoadClass ('Mail');
 
         // Determine if video is allowed to be approved
-        if ($admin || Settings::Get ('auto_approve_comments') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_comments') == 'true') {
 
             $data = array ('status' => 'approved');
 
@@ -185,24 +187,28 @@ class Comment {
                 $privacy = Privacy::LoadByUser ($this->user_id);
                 if ($privacy->OptCheck ('video_comment')) {
                     $video = new Video ($this->video_id);
-                    $video_user = new User ($video->user_id);
-                    $template = new EmailTemplate ('/video_comment.htm');
-                    $template_data = array (
-                        'host'   => HOST,
-                        'email'  => $video_user->email,
-                        'title'  => $video->title
+                    $user = new User ($video->user_id);
+                    
+                    $replacements = array (
+                        'host'      => HOST,
+                        'sitename'  => $config->sitename,
+                        'email'     => $user->email,
+                        'title'     => $video->title
                     );
-                    $template->Replace ($template_data);
-                    $template->Send ($video_user->email);
+                    $mail = new Mail();
+                    $mail->LoadTemplate ('video_comment', $replacements);
+                    $mail->Send ($user->email);
+                    Plugin::Trigger ('comment.notify_member');
                 }
 
             }
 
-            $this->Update ($data);
-
         } else {
-            $this->Update (array ('status' => 'pending'));
+            $data = array ('status' => 'pending');
         }
+
+        $this->Update ($data);
+        Plugin::Trigger ('comment.approve');
 
     }
 

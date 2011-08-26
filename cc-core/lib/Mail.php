@@ -55,7 +55,7 @@ class Mail {
     /**
      * Load an email template into message body & subject
      * @param string $template Name of the email template to load
-     * @param array $replacements (optional) Key/value pair list of placeholders
+     * @param array $replacements [optional] Key/value pair list of placeholders
      * and their values, to be swaped within the template
      * @return void Template is loaded into body & subject properties
      */

@@ -32,7 +32,7 @@ class View {
         if ($page) {
             self::$options->page = $page;
             self::$vars->meta = Language::GetMeta ($page);
-            if (empty (self::$vars->meta->title)) self::$vars->meta->title = Settings::Get ('sitename');
+            if (empty (self::$vars->meta->title)) self::$vars->meta->title = $config->sitename;
         }
 
         Plugin::Trigger ('view.init');

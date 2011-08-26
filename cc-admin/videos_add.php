@@ -20,6 +20,7 @@ $categories = array();
 $data = array();
 $errors = array();
 $message = null;
+$php_path = Settings::Get('php');
 $admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';
 $admin_js[] = ADMIN . '/extras/uploadify/jquery.uploadify.v2.1.4.min.js';
 $admin_js[] = ADMIN . '/js/uploadify.js';
@@ -138,7 +139,7 @@ if (isset ($_POST['submitted'])) {
 
         // Begin encoding
         $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
-        $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $id . '" >> ' .  $cmd_output . ' &';
+        $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $id . '" >> ' .  $cmd_output . ' &';
         exec ($converter_cmd);
 
         // Output message

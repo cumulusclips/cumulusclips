@@ -205,18 +205,20 @@ class Video {
 
     /**
      * Make a video visible to the public and notify subscribers of new video
-     * @param boolean $admin [optional] Whether an admin is performing approval or not
+     * @global object $config Site configuration settings
+     * @param boolean $bypass_admin_approval [optional] Whether or not to bypass admin approval
      * @return void If allowed, video is approved and subscribers are notified
      * otherwise video is marked as pending approval
      */
-    public function Approve ($admin = false) {
+    public function Approve ($bypass_admin_approval = false) {
 
+        global $config;
         App::LoadClass ('User');
         App::LoadClass ('Privacy');
-        App::LoadClass ('EmailTemplate');
+        App::LoadClass ('Mail');
 
         // Determine if video is allowed to be approved
-        if ($admin || Settings::Get ('auto_approve_videos') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_videos') == 'true') {
 
             $data = array ('status' => 'approved');
 
@@ -233,28 +235,31 @@ class Video {
                     $subscriber = new User ($opt->user_id);
                     $privacy = Privacy::LoadByUser ($opt->user_id);
                     if ($privacy->OptCheck ('new_video')) {
-                        $template = new EmailTemplate ('/new_video.htm');
-                        $template_data = array (
+                        $replacements = array (
                             'host'      => HOST,
+                            'sitename'  => $config->sitename,
                             'email'     => $subscriber->email,
-                            'channel'   => $this->username,
+                            'member'    => $this->username,
                             'title'     => $this->title,
                             'video_id'  => $this->video_id,
-                            'dashed'    => $this->slug
+                            'slug'      => $this->slug
                         );
-                        $template->Replace ($template_data);
-                        $template->Send ($subscriber->email);
+                        $mail = new Mail();
+                        $mail->LoadTemplate ('new_video', $replacements);
+                        $mail->Send ($subscriber->email);
+                        Plugin::Trigger ('video.notify_subscribers');
                     }
 
                 }
                 
             }
             
-            $this->Update ($data);
-
         } else {
-            $this->Update (array ('status' => 'pending approval'));
+            $data = array ('status' => 'pending approval');
         }
+
+        $this->Update ($data);
+        Plugin::Trigger ('video.approve');
 
     }
 

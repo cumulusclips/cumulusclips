@@ -363,8 +363,8 @@ class Functions {
 
     /**
      * Retrieve list of supported video types in a requested formats
-     * @global object $config System object with various properties
-     * @param string $output_format (optional) Format to output the list of supported video types
+     * @global object $config Site configuration settings
+     * @param string $output_format [optional] Format to output the list of supported video types
      * @return string|array Returns list of supported video types in requested format
      */
     static function GetVideoTypes ($output_format = 'array') {

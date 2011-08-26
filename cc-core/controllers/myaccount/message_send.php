@@ -10,7 +10,7 @@ include ('../../config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Message');
 App::LoadClass ('Privacy');
-App::LoadClass ('EmailTemplate');
+App::LoadClass ('Mail');
 
 
 // Establish page variables, objects, arrays, etc
@@ -125,14 +125,15 @@ if (isset ($_POST['submitted'])) {
         // Send recipient email notification if opted-in
         $privacy = Privacy::LoadByUser ($recipient->user_id);
         if ($privacy->OptCheck ('new_message')) {
-            $template = new EmailTemplate ('/new_message.htm');
-            $Msg = array (
+            $replacements = array (
                 'host'      => HOST,
+                'sitename'  => $config->sitename,
                 'sender'    => View::$vars->user->username,
                 'email'     => $recipient->email
             );
-            $template->Replace ($Msg);
-            $template->Send ($recipient->email);
+            $mail = new Mail();
+            $mail->LoadTemplate ('new_message', $replacements);
+            $mail->Send ($recipient->email);
         }
         View::$vars->success = Language::GetText('success_message_sent');
         Plugin::Trigger ('message_send.send_message');

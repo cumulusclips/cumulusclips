@@ -147,7 +147,6 @@ encode.before_create_thumbnail - /cc-core/system/encode.php
 encode.create_thumbnail - /cc-core/system/encode.php
 encode.before_update - /cc-core/system/encode.php
 encode.update - /cc-core/system/encode.php
-encode.notify_subscribers - /cc-core/system/encode.php
 encode.complete - /cc-core/system/encode.php
 
 
@@ -167,12 +166,16 @@ video.get - /cc-core/lib/Video.php
 video.create - /cc-core/lib/Video.php
 video.update - /cc-core/lib/Video.php
 video.delete - /cc-core/lib/Video.php
+video.notify_subscribers - /cc-core/lib/Video.php
+video.approve - /cc-core/lib/Video.php
 
 
 comment.get - /cc-core/lib/Comment.php
 comment.create - /cc-core/lib/Comment.php
 comment.update - /cc-core/lib/Comment.php
 comment.delete - /cc-core/lib/Comment.php
+comment.notify_member - /cc-core/lib/Comment.php
+comment.approve - /cc-core/lib/Comment.php
 
 
 post.get - /cc-core/lib/Post.php

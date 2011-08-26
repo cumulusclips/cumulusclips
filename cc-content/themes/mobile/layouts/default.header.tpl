@@ -14,7 +14,7 @@
 <body class="<?=Language::GetCSSName()?>">
     
 <div id="header">
-    <a href="<?=MOBILE_HOST?>/"><img src="<?=THEME?>/images/logo.png" alt="<?=Language::GetText('mobile_heading', array ('sitename' => Settings::Get('sitename')))?>" /></a>
+    <a href="<?=MOBILE_HOST?>/"><img src="<?=THEME?>/images/logo.png" alt="<?=Language::GetText('mobile_heading', array ('sitename' => $config->sitename))?>" /></a>
 </div>
 
 <div id="wrapper">

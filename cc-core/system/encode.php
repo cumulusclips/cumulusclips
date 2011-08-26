@@ -10,10 +10,7 @@
 // Include required files
 include (dirname (dirname ( __FILE__ )) . '/config/bootstrap.php');
 App::LoadClass ('Video');
-App::LoadClass ('User');
-App::LoadClass ('Privacy');
 App::LoadClass ('Filesystem');
-App::LoadClass ('EmailTemplate');
 Plugin::Trigger ('encode.start');
 
 
@@ -21,7 +18,8 @@ Plugin::Trigger ('encode.start');
 if (!isset ($argv[1]) || !preg_match ('/--video=(.*)$/i', $argv[1], $arg_matches)) exit();
 $video_id = $arg_matches[1];
 Plugin::Trigger ('encode.parse');
-$auto_approve = Settings::Get ('auto_approve_videos') == '1' ? true : false;
+$ffmpeg_path = Settings::Get ('ffmpeg');
+$qt_faststart_path = Settings::Get ('qt_faststart');
 
 
 
@@ -105,7 +103,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: H.264 Encoding...") : null;
 
     ### Encode raw video to H.264 mp4
-    $h264_command = "$config->ffmpeg -i $raw_video " . Settings::Get('h264_options') . " $h264_temp >> $debug_log 2>&1";
+    $h264_command = "$ffmpeg_path -i $raw_video " . Settings::Get('h264_options') . " $h264_temp >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_h264_encode');
 
     // Debug Log
@@ -135,7 +133,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on H.264 video...') : null;
 
     ### Execute H.264 Moov Atom Command
-    $h264_faststart_command = "$config->qt_faststart $h264_temp $h264";
+    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264";
     exec ($h264_faststart_command);
 
 
@@ -167,7 +165,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: Theora Encoding...") : null;
 
     ### Encode raw video to Theora
-    $theora_command = "$config->ffmpeg -i $raw_video " . Settings::Get('theora_options') . " $theora >> $debug_log 2>&1";
+    $theora_command = "$ffmpeg_path -i $raw_video " . Settings::Get('theora_options') . " $theora >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_theora_encode');
 
     // Debug Log
@@ -210,7 +208,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: Mobile Encoding...") : null;
 
     ### Encode raw video to Mobile
-    $mobile_command = "$config->ffmpeg -i $raw_video " . Settings::Get('mobile_options') . " $mobile_temp >> $debug_log 2>&1";
+    $mobile_command = "$ffmpeg_path -i $raw_video " . Settings::Get('mobile_options') . " $mobile_temp >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_mobile_encode');
 
     // Debug Log
@@ -240,7 +238,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on mobile video...') : null;
 
     ### Execute Mobile Moov Atom Command
-    $mobile_faststart_command = "$config->qt_faststart $mobile_temp $mobile";
+    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile";
     exec ($mobile_faststart_command);
 
 
@@ -269,7 +267,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nRetrieving video duration...") : null;
 
     ### Retrieve duration of raw video file.
-    $duration_cmd = "$config->ffmpeg -i $raw_video 2>&1 | grep Duration:";
+    $duration_cmd = "$ffmpeg_path -i $raw_video 2>&1 | grep Duration:";
     Plugin::Trigger ('encode.before_get_duration');
     exec ($duration_cmd, $duration_results);
 
@@ -314,7 +312,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing to create video thumbnail...") : null;
 
     ### Create video thumbnail image
-    $thumb_command = "$config->ffmpeg -i $h264 -ss $thumb_position " . Settings::Get('thumb_options') . " $thumb >> $debug_log 2>&1";
+    $thumb_command = "$ffmpeg_path -i $h264 -ss $thumb_position " . Settings::Get('thumb_options') . " $thumb >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_create_thumbnail');
 
     // Debug Log
@@ -348,20 +346,21 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 7                           //
-    //               Update database details                   //
+    //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
 
     // Debug Log
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nUpdating video information...") : null;
 
-    ### Update database with new video status information
+    // Update database with new video status information
     $data['duration'] = $duration[0];
-    $data['status'] = ($auto_approve) ? 'approved' : 'pending';
-    $data['released'] = ($auto_approve) ? '1' : '0';
     Plugin::Trigger ('encode.before_update');
     $video->Update ($data);
     Plugin::Trigger ('encode.update');
+
+    // Approve video
+    $video->Approve();
 
 
 
@@ -373,50 +372,6 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 8                           //
-    //               Notify users of new video                 //
-    /////////////////////////////////////////////////////////////
-
-    if ($auto_approve) {
-
-        // Debug Log
-        $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Notifying users of new video...') : null;
-
-        ### Send subscribers notification if opted-in
-        $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $video->user_id";
-        $result_alert = $db->Query ($query);
-        while ($opt = $db->FetchRow ($result_alert)) {
-
-            $subscriber = new User ($opt[0]);
-            $privacy = Privacy::LoadByUser ($opt[0]);
-            if ($privacy->OptCheck ('new_video')) {
-                $template = new EmailTemplate ('/new_video.htm');
-                $template_data = array (
-                    'host'      => HOST,
-                    'email'  => $subscriber->email,
-                    'channel'   => $user->username,
-                    'title'     => $video->title,
-                    'video_id'  => $video->video_id,
-                    'dashed'    => $video->dashed
-                );
-                $template->Replace($template_data);
-                $template->Send ($subscriber->email);
-            }
-
-        }
-        Plugin::Trigger ('encode.notify_subscribers');
-
-    }
-
-
-
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////
-    //                        STEP 9                           //
     //                       Clean up                          //
     /////////////////////////////////////////////////////////////
 
