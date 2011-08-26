@@ -102,10 +102,11 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Create user
-        $data['released'] = 1;
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['status'] = 'active';
-        User::Create ($data);
+        $data['status'] = 'new';
+        $id = User::Create ($data);
+        $user = new User ($id);
+        $user->Approve (true);
         unset ($data);
 
         // Output message

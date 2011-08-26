@@ -159,7 +159,7 @@ user.delete - /cc-core/lib/User.php
 user.login - /cc-core/lib/User.php
 user.logout - /cc-core/lib/User.php
 user.reset_password - /cc-core/lib/User.php
-user.activate - /cc-core/lib/User.php
+user.approve - /cc-core/lib/User.php
 
 
 video.get - /cc-core/lib/Video.php

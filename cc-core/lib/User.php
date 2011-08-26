@@ -264,25 +264,6 @@ class User {
         } while (empty ($token_available));
         return $token;
     }
-
-
-
-
-    /**
-     * Activate registered user's account
-     * @return void User is activated, if user had anonymous comments they're
-     * transfered to the main account
-     */
-    public function Activate() {
-
-        // Update user status
-        $this->Update (array ('status' => 'Active'));
-        $msg = 'ID: ' . $this->user_id . "\nUsername: " . $this->username;
-        @mail (MAIN_EMAIL, 'New Member Registered', $msg, 'From: Admin - TechieVideos.com <admin@techievideos.com>');
-        Plugin::Trigger ('user.activate');
-       
-
-    }
     
     
 
@@ -390,7 +371,7 @@ class User {
      */
     public function Approve ($bypass_admin_approval = false) {
 
-        // Determine if video is allowed to be approved
+        // Determine if user is allowed to be approved
         if ($bypass_admin_approval || Settings::Get ('auto_approve_users') == 'true') {
 
             $data = array ('status' => 'active');
@@ -409,6 +390,7 @@ class User {
         }
 
         $this->Update ($data);
+        Plugin::Trigger ('user.approve');
 
     }
 
