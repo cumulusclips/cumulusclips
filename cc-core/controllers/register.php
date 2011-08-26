@@ -80,13 +80,10 @@ if (isset ($_POST['submitted'])) {
         User::Create (View::$vars->data);
         View::$vars->success = Language::GetText('success_registered');
 
-        $template = new EmailTemplate ('/new_account.htm');
-        $Msg = array (
-            'confirm_code' => View::$vars->data['confirm_code'],
-            'host'  => HOST
-        );
-        $template->Replace ($Msg);
-        $template->Send (View::$vars->data['email']);
+        $mail = new Mail();
+        $replacements = array ('confirm_code' => View::$vars->data['confirm_code'], 'host' => HOST, 'sitename' => $config->sitename);
+        $mail->LoadTemplate ('registration', $replacements);
+        $mail->Send (View::$vars->data['email']);
         Plugin::Trigger ('register.create');
 
     } else {
