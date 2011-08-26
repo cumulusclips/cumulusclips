@@ -258,7 +258,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('thumb_url',''),
 ('h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),
 ('theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),
-('mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),
+('mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 2 -ab 96k -ar 44100 -f mp4'),
 ('thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),
 ('alerts_videos','1'),
 ('alerts_comments','1'),
