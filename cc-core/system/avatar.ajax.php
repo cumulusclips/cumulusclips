@@ -75,7 +75,7 @@ try {
         $save_as = Avatar::CreateFilename ($extension);
 
         // Check for existing avatar
-        if (!empty ($user->avatar)) Filesystem::Delete ("$avatar_path/$user->avatar");
+        if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
 
         Filesystem::SetPermissions ("$avatar_path/$save_as", 0644);
         Filesystem::Close();

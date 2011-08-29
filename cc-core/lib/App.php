@@ -54,8 +54,11 @@ class App {
      * @return void sends an alert email to site admin
      */
     static function Alert ($subject, $body) {
-        $from = 'From: CumulusClips <' . SITE_EMAIL . '>';
-        @mail (MAIN_EMAIL, $subject, $body, $from);
+        App::LoadClass('Mail');
+        $mail = new Mail();
+        $mail->subject = $subject;
+        $mail->body = $body;
+        $mail->Send (Settings::Get ('admin_email'));
     }
 
 
@@ -117,12 +120,8 @@ class App {
             if (!isset ($_GET['mobile'])) {
                 header ("Location: " . MOBILE_HOST . "/");
                 exit();
-            } else {
-                define ('MOBILE', true);
             }
 
-        } else {
-            define ('MOBILE', false);
         }
 
     }

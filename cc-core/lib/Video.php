@@ -44,6 +44,7 @@ class Video {
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
         $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
+        $this->url = HOST . '/videos/' . $this->video_id . '/' . $this->slug;
         Plugin::Trigger ('video.get');
 
     }
@@ -218,7 +219,7 @@ class Video {
         App::LoadClass ('Mail');
 
         // Determine if video is allowed to be approved
-        if ($bypass_admin_approval || Settings::Get ('auto_approve_videos') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_videos') == '1') {
 
             $data = array ('status' => 'approved');
 

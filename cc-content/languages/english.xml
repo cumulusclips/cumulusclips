@@ -24,6 +24,7 @@
         <no>@No</no>
         <quick_links>@Quick Links</quick_links>
         <uploadify_supported_formats>@Supported Formats</uploadify_supported_formats>
+        <video_feed>@Video Feed</video_feed>
 
         <!-- Mobile -->
         <mobile_heading>@{SITENAME} Mobile</mobile_heading>

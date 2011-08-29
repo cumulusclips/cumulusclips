@@ -147,7 +147,7 @@ class User {
     static function Delete ($id) {
 
         App::LoadClass ('Privacy');
-        App::LoadClass ('Picture');
+        App::LoadClass ('Avatar');
         App::LoadClass ('Video');
         App::LoadClass ('Subscription');
         App::LoadClass ('Rating');
@@ -161,8 +161,8 @@ class User {
         $user = new self ($id);
         Plugin::Trigger ('user.delete');
 
-        // Delete Picture
-        if (!empty ($user->picture)) Picture::Delete ($user->picture);
+        // Delete Avatar
+        if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
 
         // Delete Privacy Record
         $privacy_id = Privacy::Exist (array ('user_id' => $id));
@@ -372,7 +372,7 @@ class User {
     public function Approve ($bypass_admin_approval = false) {
 
         // Determine if user is allowed to be approved
-        if ($bypass_admin_approval || Settings::Get ('auto_approve_users') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_users') == '1') {
 
             $data = array ('status' => 'active');
             if ($this->released == 0) {

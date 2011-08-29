@@ -43,6 +43,7 @@ RewriteRule ^page/$ cc-core/system/page.php [NC,L]
 RewriteRule ^notify/$ cc-core/system/notify.php [NC,L]
 RewriteRule ^language/get/$ cc-core/system/language.php [NC,L]
 RewriteRule ^feed(/([a-z0-9]+))?/$ cc-core/system/feed.php?username=$2 [NC,L]
+RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ cc-core/system/video_sitemap.php?page=$2 [NC,L]
 RewriteRule ^myaccount/upload/avatar/$ cc-core/system/avatar.ajax.php [NC,L]
 RewriteRule ^myaccount/upload/validate/$ cc-core/system/upload.ajax.php [NC,L]
 RewriteRule ^myaccount/grab/validate/$ cc-core/system/grab.ajax.php [NC,L]
@@ -54,7 +55,6 @@ RewriteRule ^actions/rate/$ cc-core/system/rate.ajax.php [NC,L]
 RewriteRule ^actions/comment/$ cc-core/system/comment.ajax.php [NC,L]
 RewriteRule ^actions/post/$ cc-core/system/post.ajax.php [NC,L]
 RewriteRule ^actions/mobile\-(videos|search)/$ cc-core/system/mobile_$1.ajax.php?mobile [NC,L]
-
 
 
 
@@ -92,15 +92,6 @@ RewriteRule ^m/$ cc-core/controllers/mobile/index.php?mobile [NC,L]
 RewriteRule ^m/v/$ cc-core/controllers/mobile/videos.php?mobile [NC,L]
 RewriteRule ^m/v/([0-9]+)/$ cc-core/controllers/mobile/play.php?mobile&vid=$1 [NC,L]
 RewriteRule ^m/s/$ cc-core/controllers/mobile/search.php?mobile [NC,L]
-
-
-
-
-### Sitemaps & Feeds
-
-RewriteRule ^mrss/$ cc-core/controllers/mrss.php [NC,L]
-RewriteRule ^sitemap-(index|main|members|videos)(-([0-9]+))?\.xml$ cc-core/system/sitemap.php?type=$1&page=$3 [NC,L]
-RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ cc-core/system/video_sitemap.php?page=$2 [NC,L]
 
 
 

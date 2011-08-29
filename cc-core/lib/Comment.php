@@ -174,7 +174,7 @@ class Comment {
         App::LoadClass ('Mail');
 
         // Determine if video is allowed to be approved
-        if ($bypass_admin_approval || Settings::Get ('auto_approve_comments') == 'true') {
+        if ($bypass_admin_approval || Settings::Get ('auto_approve_comments') == '1') {
 
             $data = array ('status' => 'approved');
 

@@ -252,7 +252,7 @@ include ('header.php');
                             <div class="record-actions invisible">
 
                                 <?php if (in_array ($status, array ('approved','featured'))): ?>
-                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/" target="_ccsite">Watch</a>
+                                    <a href="<?=$video->url?>/" target="_ccsite">Watch</a>
                                 <?php endif; ?>
 
 

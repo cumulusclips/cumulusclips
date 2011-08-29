@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$('document').ready(function(){
 
     var baseURL = $('[name=baseURL]').attr('content');
     var videoID = $('[name=videoID]').attr('content');

@@ -6,7 +6,7 @@
 
 
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('Rating');
 Plugin::Trigger ('video_sitemap.start');
@@ -24,7 +24,7 @@ if (!isset ($_GET['page'])) App::Throw404();
 
 
 ### Count number of video xml files
-$query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 6";
+$query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 'approved'";
 $result = $db->Query ($query);
 $row = $db->FetchRow ($result);
 if ($row[0] > $limit) {
@@ -58,7 +58,7 @@ if (empty ($_GET['page'])) {
     $page = $_GET['page'];
     $start = ($page*$limit)-$limit;
     $query_limit = ($page > 1) ? " LIMIT $start, $limit" : " LIMIT $limit";
-    $query = "SELECT video_id, cat_name FROM " . DB_PREFIX . "videos INNER JOIN " . DB_PREFIX . "categories ON " . DB_PREFIX . "videos.cat_id = " . DB_PREFIX . "categories.cat_id WHERE status = 6" . $query_limit;
+    $query = "SELECT video_id, cat_name FROM " . DB_PREFIX . "videos INNER JOIN " . DB_PREFIX . "categories ON " . DB_PREFIX . "videos.cat_id = " . DB_PREFIX . "categories.cat_id WHERE status = 'approved'" . $query_limit;
     $result = $db->Query ($query);
 
     // Open video sitemap
@@ -76,13 +76,13 @@ if (empty ($_GET['page'])) {
         $video = new Video ($row->video_id);
         $url = $xml->addChild ('url');
 
-        $url->addChild ('loc', HOST . '/videos/' . $video->video_id . '/' . $video->slug . '/');
+        $url->addChild ('loc', $video->url . '/');
         $block = $url->addChild ('video:video','','video');
 
-        $block->addChild ('content_loc', $config->flv_bucket_url . '/' . $video->filename);
-        $block->addChild ('thumbnail_loc', $config->thumb_bucket_url . '/' . $video->filename);
-        $block->addChild ('title', Functions::CutOff ($video->title,90));
-        $block->addChild ('description', Functions::CutOff ($video->description,2040));
+        $block->addChild ('content_loc', $config->h264_url . '/' . $video->filename . '.mp4');
+        $block->addChild ('thumbnail_loc', $config->thumb_url . '/' . $video->filename . '.jpg');
+        $block->addChild ('title', $video->title);
+        $block->addChild ('description', $video->description);
         $block->addChild ('rating', Rating::GetFiveScaleRating ($row->video_id));
         $block->addChild ('view_count', $video->views);
         $block->addChild ('publication_date', date ('Y-m-d', strtotime ($video->date_created)));
@@ -100,6 +100,7 @@ if (empty ($_GET['page'])) {
 } else {
     App::Throw404();
 }
+
 
 // Output XML
 Plugin::Trigger ('video_sitemap.output');

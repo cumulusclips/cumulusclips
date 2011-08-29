@@ -180,7 +180,7 @@ include ('header.php');
 
             <div class="row">
                 <label>In Response To:</label>
-                <a target="_ccsite" href="<?=HOST?>/videos/<?=$comment->video_id?>/<?=$video->slug?>/"><?=$video->title?></a>
+                <a target="_ccsite" href="<?=$video->url?>/"><?=$video->title?></a>
             </div>
 
             <?php if ($comment->user_id == 0): ?>

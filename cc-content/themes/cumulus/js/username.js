@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$('document').ready(function() {
 
     var host = $('[name="register:host"]').attr('content');
     var theme = $('[name="register:theme"]').attr('content');

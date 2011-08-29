@@ -83,7 +83,7 @@ View::Header();
         <div id="share" class="showhide-block">
             <!-- FACEBOOK BUTTON -->
             <div class="share-button">
-                <iframe src="http://www.facebook.com/plugins/like.php?href=<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/&amp;layout=box_count&amp;show_faces=false&amp;width=50&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
+                <iframe src="http://www.facebook.com/plugins/like.php?href=<?=$video->url?>/&amp;layout=box_count&amp;show_faces=false&amp;width=50&amp;action=like&amp;font&amp;colorscheme=light&amp;height=65" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:65px;" allowTransparency="true"></iframe>
             </div>
 
             <!-- TWITTER BUTTON -->
@@ -206,13 +206,13 @@ View::Header();
 
                 <div class="other-video">
                     <p class="thumb">
-                    <a class="video-thumb" href="<?=HOST?>/videos/<?=$related_video->video_id?>/<?=$related_video->slug?>/" title="<?=$related_video->title?>">
+                    <a class="video-thumb" href="<?=$related_video->url?>/" title="<?=$related_video->title?>">
                         <span class="play-button"></span>
                         <span class="duration"><?=$related_video->duration?></span>
                         <img src="<?=$config->thumb_url?>/<?=$related_video->filename?>.jpg" alt="<?=$related_video->title?>" />
                     </a>
                     </p>
-                    <p><a href="<?=HOST?>/videos/<?=$related_video->video_id?>/<?=$related_video->slug?>/" title="<?=$related_video->title?>"><?=$related_video->title?></a></p>
+                    <p><a href="<?=$related_video->url?>/" title="<?=$related_video->title?>"><?=$related_video->title?></a></p>
                     <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$related_video->username?>/" title="<?=$related_video->username?>"><?=$related_video->username?></a></p>
                     <p><strong><?=Language::GetText('views')?>:</strong> <?=$related_video->views?></p>
                 </div>

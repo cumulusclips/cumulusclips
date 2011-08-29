@@ -12,9 +12,7 @@ define ('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
 
 define ('CURRENT_VERSION', '1.0');
 define ('LOG_QUERIES', false);
-define ('SITE_EMAIL', 'admin@techievideos.com');
 define ('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
-ini_set ('max_execution_time', 3600);
 
 
 // Load App class and perform pre-init checks
@@ -45,11 +43,9 @@ Settings::LoadSettings();
 define ('HOST', Settings::Get ('base_url'));
 define ('MOBILE_HOST', Settings::Get ('base_url') . '/m');
 define ('SECRET_KEY', Settings::Get ('secret_key'));
-define ('ADMIN_EMAIL', Settings::Get ('admin_email'));
 
 $config = new stdClass();
 $config->sitename = Settings::Get ('sitename');
-$config->admin_email = Settings::Get ('admin_email');
 $config->debug_conversion = Settings::Get ('debug_conversion') == '1' ? true : false;
 $config->video_size_limit = Settings::Get ('video_size_limit');
 $config->accepted_video_formats = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');

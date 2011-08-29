@@ -136,7 +136,6 @@ class Database {
             header ("Location: " . HOST . "/system-error/");
         } else {
             echo '<script>top.location = "' . HOST . '/system-error/";</script>';
-            echo '<noscript>We are unable to continue due to a system error. We apologize for any inconvenience.</noscript>';
         }
         exit();
 

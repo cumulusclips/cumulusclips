@@ -223,7 +223,7 @@ include ('header.php');
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->comment_id)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
-                        <td><a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/"><?=$video->title?></a></td>
+                        <td><a href="<?=$video->url?>/"><?=$video->title?></a></td>
                         <td><?=$comment->date_created?></td>
                     </tr>
 

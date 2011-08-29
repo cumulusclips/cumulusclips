@@ -25,7 +25,6 @@ $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
 if (!isset ($_SESSION['upload_key']) || $_SESSION['upload_key'] != $upload_key) App::Throw404();
 $logged_in = User::LoginCheck (HOST . '/login/');
 $user = new User ($logged_in);
-$php_path = Settings::Get ('php');
 
 
 if (isset ($_SESSION['upload']) && Video::Exist (array('video_id' => $_SESSION['upload'], 'status' => 'new'))) {
@@ -104,7 +103,7 @@ try {
     ### Initilize Encoder
     $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
     Plugin::Trigger ('upload.ajax.before_encode');
-    $converter_cmd = 'nohup ' . $config->php . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' 2>&1 &';
+    $converter_cmd = 'nohup ' . Settings::Get ('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->video_id . '" >> ' .  $cmd_output . ' 2>&1 &';
     exec ($converter_cmd);
     Plugin::Trigger ('upload.ajax.encode');
 

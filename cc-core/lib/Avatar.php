@@ -94,7 +94,26 @@ class Avatar {
             if (!file_exists (UPLOAD_PATH . '/avatars/' . $filename)) $filename_available = true;
         } while (empty ($filename_available));
         return $filename;
-    }  
+    }
+
+
+
+
+    /**
+     * Delete an avatar
+     * @param integer $filename Name of file to be deleted
+     * @return void Avatar is deleted from filesystem
+     */
+    static function Delete ($filename) {
+        App::LoadClass('Filesystem');
+        try {
+            Filesystem::Open();
+            Filesystem::Delete (DOC_ROOT . '/cc-content/avatars/' . $filename);
+            Filesystem::Close();
+        } catch (Exception $e) {
+            App::Alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
+        }
+    }
 
 }
 
