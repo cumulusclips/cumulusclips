@@ -172,6 +172,8 @@ class Comment {
         App::LoadClass ('Video');
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
+        
+        $video = new Video ($this->video_id);
 
         // Determine if video is allowed to be approved
         if ($bypass_admin_approval || Settings::Get ('auto_approve_comments') == '1') {
@@ -182,13 +184,14 @@ class Comment {
             if ($this->released == 0) {
 
                 $data['released'] = 1;
+                $subject = 'New Comment Posted';
+                $body = 'A new comment has been posted.';
+                $send_alert = Settings::Get ('alerts_comments') == '1' ? true : null;
 
                 ### Send video owner new comment notifition, if opted-in
                 $privacy = Privacy::LoadByUser ($this->user_id);
                 if ($privacy->OptCheck ('video_comment')) {
-                    $video = new Video ($this->video_id);
                     $user = new User ($video->user_id);
-                    
                     $replacements = array (
                         'host'      => HOST,
                         'sitename'  => $config->sitename,
@@ -204,7 +207,21 @@ class Comment {
             }
 
         } else {
+            $send_alert = true;
             $data = array ('status' => 'pending');
+            $subject = 'New Comment Awaiting Approval';
+            $body = 'A new comment has been posted and is awaiting admin approval.';
+        }
+
+
+        // Send admin alert
+        if (isset ($send_alert)) {
+            $body .= "\n\n=======================================================\n";
+            $body .= "Author: $this->name\n";
+            $body .= "Video URL: $video->url/\n";
+            $body .= "Comments: $this->comments\n";
+            $body .= "=======================================================";
+            App::Alert ($subject, $body);
         }
 
         $this->Update ($data);

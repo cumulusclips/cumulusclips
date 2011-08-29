@@ -218,6 +218,8 @@ class Video {
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
 
+
+
         // Determine if video is allowed to be approved
         if ($bypass_admin_approval || Settings::Get ('auto_approve_videos') == '1') {
 
@@ -227,6 +229,9 @@ class Video {
             if ($this->released == 0) {
 
                 $data['released'] = 1;
+                $subject = 'New Video Uploaded';
+                $body = 'A new video has been uploaded.';
+                $send_alert = Settings::Get ('alerts_videos') == '1' ? true : null;
 
                 ### Send subscribers notification if opted-in
                 $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $this->user_id";
@@ -256,8 +261,22 @@ class Video {
             }
             
         } else {
+            $send_alert = true;
             $data = array ('status' => 'pending approval');
+            $subject = 'New Video Awaiting Approval';
+            $body = 'A new video has been uploaded and is awaiting admin approval.';
         }
+
+
+        // Send admin alert
+        if (isset ($send_alert)) {
+            $body .= "\n\n=======================================================\n";
+            $body .= "Title: $this->title\n";
+            $body .= "URL: $this->url\n";
+            $body .= "=======================================================";
+            App::Alert ($subject, $body);
+        }
+
 
         $this->Update ($data);
         Plugin::Trigger ('video.approve');

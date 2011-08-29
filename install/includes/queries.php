@@ -266,7 +266,6 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),
 ('alerts_videos','1'),
 ('alerts_comments','1'),
-('alerts_ratings','1'),
 ('alerts_users','1'),
 ('from_name',''),
 ('from_address',''),

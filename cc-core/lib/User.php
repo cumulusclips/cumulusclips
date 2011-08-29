@@ -378,6 +378,9 @@ class User {
             if ($this->released == 0) {
 
                 $data['released'] = 1;
+                $subject = 'New Member Registered';
+                $body = 'A new member has registered.';
+                $send_alert = Settings::Get ('alerts_users') == '1' ? true : null;
 
                 // Update user's anonymous comments IF/APP
                 $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
@@ -386,8 +389,22 @@ class User {
             }
 
         } else {
+            $send_alert = true;
             $data = array ('status' => 'pending');
+            $subject = 'New Member Awaiting Approval';
+            $body = 'A new member has registered and is awaiting admin approval.';
         }
+
+
+        // Send admin alert
+        if (isset ($send_alert)) {
+            $body .= "\n\n=======================================================\n";
+            $body .= "Username: $this->username\n";
+            $body .= "Profile URL: " . HOST . "/members/$this->username/\n";
+            $body .= "=======================================================";
+            App::Alert ($subject, $body);
+        }
+
 
         $this->Update ($data);
         Plugin::Trigger ('user.approve');
