@@ -62,10 +62,14 @@
         <join_today>@Join {SITENAME} Today!</join_today>
         <register_text>@As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to channels, and much more!</register_text>
         <asterisk>@An asterisk (*) denotes required field.</asterisk>
-        <username_req>@Username can only contain alphanumeric (A-Z, a-z, 0-9) characters, no spaces or special characters. Your unique url will be derived as:</username_req>
+        <username_req>@Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
         <confirm_password>@Confirm Password</confirm_password>
         <agree_terms>@I agree to the {LINK}Terms of Use{/LINK}</agree_terms>
         <register_button>@Create Account</register_button>
+        <checking_availability>@Checking availability</checking_availability>
+        <username_minimum>@At least 4 characters are required.</username_minimum>
+        <username_available>@Username is available!</username_available>
+
 
         <!-- Contact Page -->
         <contact_header>@Contact Us</contact_header>
@@ -294,14 +298,14 @@
         <confirm_reset_avatar>@Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
 
         <error_username>@Invalid username</error_username>
-        <error_username_unavailable>@That username is unavailable</error_username_unavailable>
+        <error_username_unavailable>@Username is unavailable</error_username_unavailable>
         <error_password>@Invalid password</error_password>
         <error_password_match>@Your passwords don't match</error_password_match>
         <error_password_confirm>@Invalid confirmed password</error_password_confirm>
         <error_security_text>@Invalid security text</error_security_text>
         <error_email>@You must enter a valid email address</error_email>
         <error_email_invalid>@Invalid email address</error_email_invalid>
-        <error_email_unavailable>@That email address is unavailable</error_email_unavailable>
+        <error_email_unavailable>@Email address is unavailable</error_email_unavailable>
         <error_recipient>@Invalid recipient username</error_recipient>
         <error_recipient_exist>@No members exist with that username</error_recipient_exist>
         <error_recipient_self>@You can't send yourself a message</error_recipient_self>

@@ -18,10 +18,9 @@ View::$vars->logged_in = User::LoginCheck() ? header (HOST . '/myaccount/') : ''
 $resp = NULL;
 $pass1 = NULL;
 $pass2 = NULL;
-View::$vars->success = NULL;
-View::$vars->error_msg = NULL;
+View::$vars->message = null;
 View::$vars->data = array ();
-View::$vars->Errors = array();
+View::$vars->errors = array();
 
 
 
@@ -35,7 +34,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate terms
     if (!isset ($_POST['terms']) || $_POST['terms'] != 'Agree') {
-        View::$vars->Errors['terms'] = Language::GetText('error_terms');
+        View::$vars->errors['terms'] = Language::GetText('error_terms');
     }
 
 
@@ -44,10 +43,10 @@ if (isset ($_POST['submitted'])) {
         if (!User::Exist (array ('username' => $_POST['username']))) {
             $data['username'] = htmlspecialchars (trim ($_POST['username']));
         } else {
-            View::$vars->Errors['username'] = Language::GetText('error_username_unavailable');
+            View::$vars->errors['username'] = Language::GetText('error_username_unavailable');
         }
     } else {
-        View::$vars->Errors['username'] = Language::GetText('error_username');
+        View::$vars->errors['username'] = Language::GetText('error_username');
     }
 
 
@@ -55,7 +54,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
         View::$vars->data['password'] = htmlspecialchars (trim ($_POST['password']));
     } else {
-        View::$vars->Errors['password'] = Language::GetText('error_password');
+        View::$vars->errors['password'] = Language::GetText('error_password');
     }
 
 
@@ -64,21 +63,22 @@ if (isset ($_POST['submitted'])) {
         if (!User::Exist (array ('email' => $_POST['email']))) {
             View::$vars->data['email'] = htmlspecialchars (trim ($_POST['email']));
         } else {
-            View::$vars->Errors['email'] = Language::GetText('error_email_unavailable');
+            View::$vars->errors['email'] = Language::GetText('error_email_unavailable');
         }
     } else {
-        View::$vars->Errors['email'] = Language::GetText('error_email_invalid');
+        View::$vars->errors['email'] = Language::GetText('error_email_invalid');
     }
 
 
 
     ### Create user if no errors were found
-    if (empty (View::$vars->Errors)) {
+    if (empty (View::$vars->errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
         Plugin::Trigger ('register.before_create');
         User::Create (View::$vars->data);
-        View::$vars->success = Language::GetText('success_registered');
+        View::$vars->message = Language::GetText('success_registered');
+        View::$vars->message_type = 'success';
 
         $replacements = array (
             'confirm_code' => View::$vars->data['confirm_code'],
@@ -91,8 +91,9 @@ if (isset ($_POST['submitted'])) {
         Plugin::Trigger ('register.create');
 
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
+        View::$vars->message_type = 'error';
     }
 
 }

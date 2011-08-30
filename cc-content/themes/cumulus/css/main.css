@@ -221,6 +221,15 @@ BODY STRUCTURE STYLES
     color:#C00;
 }
 
+.ok { color:#060; }
+
+.loading {
+    background:url(../images/loading.gif) no-repeat 0 0;
+    padding-left:20px;
+    display:inline-block;
+    line-height:16px;
+}
+
 
 
 

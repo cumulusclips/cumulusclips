@@ -1,35 +1,37 @@
 $('document').ready(function() {
 
     var host = $('[name="register:host"]').attr('content');
-    var theme = $('[name="register:theme"]').attr('content');
+    var xhr;
+    var minMessage = '';
+    var checkAvailability = '';
+    GetText (function(data){minMessage = data;}, 'username_minimum');
+    GetText (function(data){checkAvailability = data;}, 'checking_availability');
 
-    $("#username").keydown(function() {
+    $("#username").keyup(function() {
 
+        if (typeof xhr != 'undefined') xhr.abort();
         var username = $("#username").val();
         if (username.length >= 4) {
 
-            $("#status").html('&nbsp;<img src="'+theme+'/images/loading.gif" align="absmiddle">&nbsp;<strong>Checking availability...</strong>');
-            $.ajax({
+            $("#status").html('<span class="loading">'+checkAvailability+'...</span>');
+
+            xhr = $.ajax({
                 type: 'POST',
-                url: host+'/username/validate/',
-                data: 'username=' + username,
+                url: host+'/actions/username/',
+                data: {username:username},
                 success: function(response, textStatus, jqXHR) {
-
-                    if (response == 'TRUE') {
-                        $("#username_label").removeClass('errors');
-                        $(this).html('&nbsp;<img id="icon" src="'+theme+'/images/silk_accept.gif">&nbsp; <span class="available">Username is available!</span>');
+                    response = $.parseJSON(response);
+                    if (response.result == 1) {
+                        $('#status').html('<span class="ok">'+response.msg+'</span>');
                     } else {
-                        $("#username_label").addClass('errors');
-                        $(this).html('&nbsp;<img id="icon" src="'+theme+'/images/silk_exclamation.gif">&nbsp; <span class="errors">That username is unavailable</span>');
+                        $('#status').html('<span class="errors">'+response.msg+'</span>');
                     }
-
                  }
 
             }); // END AJAX Call
 
         } else {
-            $("#status").html('&nbsp;<img id="icon" src="'+theme+'/images/silk_exclamation.gif">&nbsp; <span class="errors">At least 4 characters are required.</span>');
-            $("#username").removeClass('object_ok'); // if necessary
+            $('#status').html('<span class="errors">'+minMessage+'</span>');
         }
 
     });

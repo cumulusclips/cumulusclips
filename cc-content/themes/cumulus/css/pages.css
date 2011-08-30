@@ -119,6 +119,25 @@ LOGIN PAGE STYLES
 
 
 
+/*******************
+REGISTER PAGE STYLES
+*******************/
+
+#status { font-weight:bold; }
+
+#status .errors, #status .ok {
+    padding-left:20px;
+    display:inline-block;
+    line-height:16px;
+}
+
+#status .errors { background:url(../images/cross.png) no-repeat 0 0; }
+#status .ok { background:url(../images/tick.png) no-repeat 0 0; }
+
+
+
+
+
 /***************
 PLAY PAGE STYLES
 ***************/

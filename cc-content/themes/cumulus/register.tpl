@@ -1,9 +1,7 @@
 <?php
 
 View::AddMeta ('register:host', HOST);
-View::AddMeta ('register:theme', THEME);
 View::AddJs ('username.js');
-View::AddCss ('username_validation.css');
 View::Header();
 
 ?>
@@ -29,23 +27,21 @@ View::Header();
         <p class="row-shift"><?=Language::GetText('asterisk')?></p>
 
         <div class="row">
-            <label class="<?=(isset ($Errors['email'])) ? 'errors' : ''?>">*<?=Language::GetText('email')?>:</label>
-            <input name="email" type="text" class="text" value="<?=(isset ($Errors, $data['email'])) ? $data['email'] : ''?>" />
+            <label class="<?=(isset ($errors['email'])) ? 'errors' : ''?>">*<?=Language::GetText('email')?>:</label>
+            <input name="email" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
         </div>
 
-        <div class="row-shift">
-            <?=Language::GetText('username_req')?>:<br /><br />
-            <strong>CumulusClips.com/ members/ [USERNAME]</strong>
-        </div>
+        <div class="row-shift"><?=Language::GetText('username_req')?></div>
 
         <div class="row">
-            <label class="<?=(isset ($Errors['username'])) ? 'errors' : ''?>">*<?=Language::GetText('username')?>:</label>
-            <input name="username" type="text" class="text" id="username" value="<?=(isset ($Errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
-            <br /><span id="status"></span>
+            <label class="<?=(isset ($errors['username'])) ? 'errors' : ''?>">*<?=Language::GetText('username')?>:</label>
+            <input name="username" type="text" class="text" id="username" value="<?=(isset ($errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
         </div>
+        
+        <div id="status" class="row-shift"></div>
 
         <div class="row">
-            <label class="<?=(isset ($Errors['password']) || isset($Errors['match'])) ? 'errors' : ''?>">*<?=Language::GetText('password')?>:</label>
+            <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'errors' : ''?>">*<?=Language::GetText('password')?>:</label>
             <input name="password" type="password" class="text" value="" />
         </div>
 
