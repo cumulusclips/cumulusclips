@@ -359,7 +359,8 @@
         <success_favorite_added>@Video has been added to your favorites.</success_favorite_added>
         <success_flag>@Thank you for reporting this. We will look into this immediately.</success_flag>
         <success_status_updated>@Your status update has been posted.</success_status_updated>
-        <success_comment_posted>@Your comment has been submitted.</success_comment_posted>
+        <success_comment_posted>@Your comment has been posted.</success_comment_posted>
+        <success_comment_approve>@Your comment has been submitted to our team for approval.</success_comment_approve>
         <success_contact_sent>@Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
         <success_registered>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>
         <success_login_sent>@We have sent you your login information. Please check your email.</success_login_sent>

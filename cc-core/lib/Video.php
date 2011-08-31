@@ -207,33 +207,51 @@ class Video {
     /**
      * Make a video visible to the public and notify subscribers of new video
      * @global object $config Site configuration settings
-     * @param boolean $bypass_admin_approval [optional] Whether or not to bypass admin approval
-     * @return void If allowed, video is approved and subscribers are notified
-     * otherwise video is marked as pending approval
+     * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
+     * @return void Video is activated, subscribers are notified, and admin
+     * alerted. If approval is required video is marked as pending and placed in queue
      */
-    public function Approve ($bypass_admin_approval = false) {
+    public function Approve ($action) {
 
-        global $config;
         App::LoadClass ('User');
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
+        
+        global $config;
+        $send_alert = false;
+        Plugin::Trigger ('video.before_approve');
 
 
+        // 1) Admin created video in Admin Panel
+        // 2) User created video
+        // 3) Video is being approved by admin for first time
+        if ((in_array ($action, array ('create','activate'))) || ($action == 'approve' && $this->released == 0)) {
 
-        // Determine if video is allowed to be approved
-        if ($bypass_admin_approval || Settings::Get ('auto_approve_videos') == '1') {
+            // User uploaded video but needs admin approval
+            if ($action == 'activate' && Settings::Get ('auto_approve_videos') == '0') {
 
-            $data = array ('status' => 'approved');
+                // Send Admin Approval Alert
+                $send_alert = true;
+                $subject = 'New Video Awaiting Approval';
+                $body = 'A new video has been uploaded and is awaiting admin approval.';
 
-            // Execute approval actions if they haven't been executed before
-            if ($this->released == 0) {
+                // Set Pending
+                $this->Update (array ('status' => 'pending approval'));
+                Plugin::Trigger ('video.approve_required');
 
-                $data['released'] = 1;
-                $subject = 'New Video Uploaded';
-                $body = 'A new video has been uploaded.';
-                $send_alert = Settings::Get ('alerts_videos') == '1' ? true : null;
+            } else {
 
-                ### Send subscribers notification if opted-in
+                // Send Admin Alert
+                if (in_array ($action, array ('create','activate')) && Settings::Get ('alerts_videos') == '1') {
+                    $send_alert = true;
+                    $subject = 'New Video Uploaded';
+                    $body = 'A new video has been uploaded.';
+                }
+
+                // Activate & Release
+                $this->Update (array ('status' => 'approved', 'released' => 1));
+
+                // Send subscribers notification if opted-in
                 $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $this->user_id";
                 $result = $this->db->Query ($query);
                 while ($opt = $this->db->FetchObj ($result)) {
@@ -257,19 +275,21 @@ class Video {
                     }
 
                 }
-                
+
+                Plugin::Trigger ('video.release');
+
             }
-            
-        } else {
-            $send_alert = true;
-            $data = array ('status' => 'pending approval');
-            $subject = 'New Video Awaiting Approval';
-            $body = 'A new video has been uploaded and is awaiting admin approval.';
+
+        // Video is being re-approved
+        } else if ($action == 'approve' && $this->released != 0) {
+            // Approve Video
+            $this->Update (array ('status' => 'approved'));
+            Plugin::Trigger ('video.reapprove');
         }
 
 
         // Send admin alert
-        if (isset ($send_alert)) {
+        if ($send_alert) {
             $body .= "\n\n=======================================================\n";
             $body .= "Title: $this->title\n";
             $body .= "URL: $this->url\n";
@@ -277,8 +297,6 @@ class Video {
             App::Alert ($subject, $body);
         }
 
-
-        $this->Update ($data);
         Plugin::Trigger ('video.approve');
 
     }

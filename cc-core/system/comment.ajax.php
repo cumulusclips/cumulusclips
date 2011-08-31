@@ -103,21 +103,31 @@ if (isset ($_POST['submitted'])) {
         Plugin::Trigger ('comment.ajax.before_post_comment');
         $comment_id = Comment::Create ($data);
         $comment = new Comment ($comment_id);
-        $comment->Approve();
+        $comment->Approve ('activate');
 
         // Retrieve formatted new comment
-        if ($block) {
-            View::InitView();
-            ob_start();
-            View::RepeatingBlock ($block, array ($comment->comment_id));
-            $output = ob_get_contents();
-            ob_end_clean();
+        if (Settings::Get('auto_approve_comments') == 1) {
+            
+            if ($block) {
+                View::InitView();
+                ob_start();
+                View::RepeatingBlock ($block, array ($comment->comment_id));
+                $output = ob_get_contents();
+                ob_end_clean();
+            } else {
+                $output = $comment;
+            }
+            
+            $message = (string)Language::GetText ('success_comment_posted');
+            $other = array ('auto_approve' => 1, 'output' => $output);
+            
         } else {
-            $output = $comment;
+            $message = (string)Language::GetText ('success_comment_approve');
+            $other = array ('auto_approve' => 0, 'output' => '');
         }
 
+        echo json_encode (array ('result' => 1, 'msg' => $message, 'other' => $other));
         Plugin::Trigger ('comment.ajax.post_comment');
-        echo json_encode (array ('result' => 1, 'msg' => (string)Language::GetText('success_comment_posted'), 'other' => $output));
         exit();
 
     } else {

@@ -132,7 +132,8 @@ if (isset ($_POST['submitted'])) {
         // Create record
 //        $data['user_id'] = $user->user_id;
         $data['user_id'] = 1;
-        $data['filename'] = basename ($data['upload']['temp'], '.' . Functions::GetExtension ($data['upload']['temp']));
+        $data['original_extension'] = Functions::GetExtension ($data['upload']['temp']);
+        $data['filename'] = basename ($data['upload']['temp'], '.' . $data['original_extension']);
         unset ($data['upload']);
         $data['status'] = 'pending conversion';
         $id = Video::Create ($data);

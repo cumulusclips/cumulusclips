@@ -45,7 +45,7 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     // Validate id
     $comment = new Comment ($_GET['approve']);
     if ($comment->found) {
-        $comment->Approve (true);
+        $comment->Approve ('approve');
         $message = 'Comment has been approved';
         $message_type = 'success';
     }
@@ -59,7 +59,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     // Validate id
     $comment = new Comment ($_GET['unban']);
     if ($comment->found) {
-        $comment->Approve (true);
+        $comment->Approve ('approve');
         $message = 'Comment has been unbanned';
         $message_type = 'success';
     }

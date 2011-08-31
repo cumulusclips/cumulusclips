@@ -115,7 +115,7 @@ if (isset ($_POST['submitted'])) {
 
             // Handle "Approve" action
             if ($data['status'] == 'approved') {
-                $video->Approve (true);
+                $video->Approve ('approve');
             }
 
             // Handle "Ban" action

@@ -359,8 +359,8 @@ try {
     $video->Update ($data);
     Plugin::Trigger ('encode.update');
 
-    // Approve video
-    $video->Approve();
+    // Activate video
+    $video->Approve ('activate');
 
 
 

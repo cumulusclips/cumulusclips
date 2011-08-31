@@ -82,7 +82,7 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['approve']))) {
         $video = new Video ($_GET['approve']);
-        $video->Approve (true);
+        $video->Approve ('approve');
         $message = 'Video has been approved and is now available';
         $message_type = 'success';
     }
@@ -96,7 +96,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
         $video = new Video ($_GET['unban']);
-        $video->Approve (true);
+        $video->Approve ('approve');
         $message = 'Video has been unbanned';
         $message_type = 'success';
     }

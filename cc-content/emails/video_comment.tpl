@@ -6,7 +6,7 @@ Your video has been commented on - {sitename}
 <!-- Begin: Message -->
 Hello,
 
-One of your videos, ({title}), has just received a comment. Login in and check it out.
+One of your videos, ({title}), has just received a comment. Login and check it out.
 
 Thanks,
 {sitename}

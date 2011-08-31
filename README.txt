@@ -15,11 +15,11 @@ Make sure the following directories are writeable by PHP and the webserver:
 [VIDEO STATUS CODES]
 
 1 - New
-3 - Pending Conversion
-4 - Processing
-5 - Pending Approval
-6 - Approved
-7 - Banned
+2 - Pending Conversion
+3 - Processing
+4 - Pending Approval
+5 - Approved
+6 - Banned
 
 
 
@@ -160,9 +160,11 @@ user.login - /cc-core/lib/User.php
 user.logout - /cc-core/lib/User.php
 user.reset_password - /cc-core/lib/User.php
 user.activate - /cc-core/lib/User.php
+user.before_approve - /cc-core/lib/User.php
+user.approve - /cc-core/lib/User.php
 user.approve_required - /cc-core/lib/User.php
-user.admin_approve - /cc-core/lib/User.php
-user.admin_reapprove - /cc-core/lib/User.php
+user.release- /cc-core/lib/User.php
+user.reapprove - /cc-core/lib/User.php
 
 
 video.get - /cc-core/lib/Video.php
@@ -171,6 +173,10 @@ video.update - /cc-core/lib/Video.php
 video.delete - /cc-core/lib/Video.php
 video.notify_subscribers - /cc-core/lib/Video.php
 video.approve - /cc-core/lib/Video.php
+video.before_approve - /cc-core/lib/Video.php
+video.approve_required - /cc-core/lib/Video.php
+video.release - /cc-core/lib/Video.php
+video.reapprove - /cc-core/lib/Video.php
 
 
 comment.get - /cc-core/lib/Comment.php
@@ -178,7 +184,11 @@ comment.create - /cc-core/lib/Comment.php
 comment.update - /cc-core/lib/Comment.php
 comment.delete - /cc-core/lib/Comment.php
 comment.notify_member - /cc-core/lib/Comment.php
+comment.before_approve - /cc-core/lib/Comment.php
 comment.approve - /cc-core/lib/Comment.php
+comment.approve_required - /cc-core/lib/Comment.php
+comment.release - /cc-core/lib/Comment.php
+comment.reapprove - /cc-core/lib/Comment.php
 
 
 post.get - /cc-core/lib/Post.php

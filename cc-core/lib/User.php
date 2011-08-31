@@ -367,87 +367,82 @@ class User {
 
 
     /**
-     * Make a user visible to the public
-     * @param string $action (create|activate|approve) Step in the approval proccess to perform
-     * @return void If allowed, user is approved otherwise user is marked as pending approval
+     * Make a user visible to the public and notify admin of registration
+     * @global object $config Site configuration settings
+     * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
+     * @return void User is activated, and admin alerted. If approval is
+     * required user is marked pending and placed in queue
      */
     public function Approve ($action) {
 
-        Plugin::Trigger ('user.approve');
+        global $config;
         $send_alert = false;
+        Plugin::Trigger ('user.before_approve');
 
-        switch ($action) {
+        
+        // 1) Admin created user in Admin Panel
+        // 2) User signed up & activated
+        // 3) User is being approved by admin for first time
+        if ((in_array ($action, array ('create','activate'))) || $action == 'approve' && $this->released == 0) {
 
-            case 'create':
-            case 'activate':
+            // User is activating account, but approval is required
+            if ($action == 'activate' && Settings::Get ('auto_approve_users') == '0') {
 
-                if ($action == 'create' || Settings::Get ('auto_approve_users') == '1') {
+                // Send Admin Approval Alert
+                $send_alert = true;
+                $subject = 'New Member Awaiting Approval';
+                $body = 'A new member has registered and is awaiting admin approval.';
 
-                    // Send Admin Alert
-                    if (Settings::Get ('alerts_users') == '1') {
-                        $send_alert = true;
-                        $subject = 'New Member Registered';
-                        $body = 'A new member has registered.';
-                    }
+                // Set Pending
+                $this->Update (array ('status' => 'pending'));
+                Plugin::Trigger ('user.approve_required');
 
-                    // Activate & Release
-                    $this->Update (array ('status' => 'active', 'released' => 1));
+            } else {
 
-                    // Update user's anonymous comments IF/APP
-                    $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
-                    $this->db->Query ($query);
-                    Plugin::Trigger ('user.activate');
-
-                } else {
-
-                    // Send Admin Approval Alert
+                // Send Admin Alert
+                if (in_array ($action, array ('create','activate')) && Settings::Get ('alerts_users') == '1') {
                     $send_alert = true;
-                    $subject = 'New Member Awaiting Approval';
-                    $body = 'A new member has registered and is awaiting admin approval.';
-
-                    // Set Pending
-                    $this->Update (array ('status' => 'pending'));
-                    Plugin::Trigger ('user.approve_required');
-
+                    $subject = 'New Member Registered';
+                    $body = 'A new member has registered.';
                 }
-                break;
 
-            case 'approve':
+                // Activate & Release
+                $this->Update (array ('status' => 'active', 'released' => 1));
 
-                if ($this->released == 0) {
+                // Update user's anonymous comments IF/APP
+                $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
+                $this->db->Query ($query);
 
-                    // Activate & Release
-                    $this->Update (array ('status' => 'active', 'released' => 1));
-
-                    // Update user's anonymous comments IF/APP
-                    $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
-                    $this->db->Query ($query);
-
-                    // Send Welcome email
+                // Send Welcome email
+                if ($action == 'approve') {
                     App::LoadClass ('Mail');
                     $mail = new Mail();
                     $mail->LoadTemplate ('account_approved', array ('sitename' => $config->sitename));
                     $mail->Send ($this->email);
-                    Plugin::Trigger ('user.admin_approve');
-
-                } else {
-                    // Activate
-                    $this->Update (array ('status' => 'active'));
-                    Plugin::Trigger ('user.admin_reapprove');
                 }
-                break;
 
+                Plugin::Trigger ('user.release');
+
+            }
+
+        // User is being re-approved
+        } else if ($action == 'approve' && $this->released != 0) {
+            // Activate User
+            $this->Update (array ('status' => 'active'));
+            Plugin::Trigger ('user.reapprove');
         }
 
 
         // Send admin alert
         if ($send_alert) {
-            $body .= "\n\n=====================================\n";
+            $body .= "\n\n=======================================================\n";
             $body .= "Username: $this->username\n";
             $body .= "Profile URL: " . HOST . "/members/$this->username/\n";
-            $body .= "=====================================";
+            $body .= "=======================================================";
             App::Alert ($subject, $body);
         }
+
+        Plugin::Trigger ('user.approve');
 
     }
 

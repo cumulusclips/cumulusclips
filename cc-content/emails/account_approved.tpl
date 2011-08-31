@@ -6,7 +6,7 @@ Your Account Has Been Approved! - {sitename}
 <!-- Begin: Message -->
 Hello,
 
-Your account at {sitename} has been approved by our team. You can now able to
+Your account at {sitename} has been approved by our team. You're now able to
 login and enjoy all the benefits of membership to our video sharing community.
 
 Enjoy!

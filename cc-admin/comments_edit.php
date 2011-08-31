@@ -121,7 +121,7 @@ if (isset ($_POST['submitted'])) {
 
             // Handle "Approve" action
             if ($data['status'] == 'approved') {
-                $comment->Approve (true);
+                $comment->Approve ('approve');
             }
 
             // Handle "Ban" action

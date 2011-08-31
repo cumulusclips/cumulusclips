@@ -165,9 +165,10 @@ $('document').ready(function(){
     $('#comments-form').submit(function(){
         var url = baseURL+'/actions/comment/';
         var callback = function (responseData) {
-            console.log(responseData);
-            $('#comments').prepend(responseData.other);
             $('#comments-form')[0].reset();
+            if (responseData.other.auto_approve == 1) {
+                $('#comments').prepend(responseData.other);
+            }
         }
         executeAction (url, $(this).serialize(), callback);
         return false;

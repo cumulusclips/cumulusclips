@@ -49,7 +49,6 @@ try {
     ### Validate video extension
     $extension = Functions::GetExtension ($_FILES['upload']['name']);
     if (!in_array ($extension, $config->accepted_video_formats)) throw new Exception ('extension');
-    $data = array ('original_extension' => $extension);
 
 
 

@@ -49,7 +49,7 @@ class Comment {
             $this->website = HOST . '/members/' . $user->username . '/';
             $this->avatar_url = $user->avatar_url;
         } else {
-            $this->avatar = THEME . '/images/user_placeholder.gif';
+            $this->avatar_url = THEME . '/images/avatar.gif';
         }
         Plugin::Trigger ('comment.get');
 
@@ -159,37 +159,56 @@ class Comment {
 
 
     /**
-     * Make a comment visible to the public and notify video owner of comment
+     * Make a comment visible to the public and notify user of new comment
      * @global object $config Site configuration settings
-     * @param boolean $bypass_admin_approval [optional] Whether or not to bypass admin approval
-     * @return void If allowed, comment is approved and owner is notified
-     * otherwise comment is marked as pending approval
+     * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
+     * @return void Comment is activated, user is notified, and admin alerted.
+     * If approval is required comment is marked pending and placed in queue
      */
-    public function Approve ($bypass_admin_approval = false) {
+    public function Approve ($action) {
 
-        global $config;
         App::LoadClass ('User');
         App::LoadClass ('Video');
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
-        
+
+        global $config;
+        $send_alert = false;
         $video = new Video ($this->video_id);
+        Plugin::Trigger ('comment.before_approve');
 
-        // Determine if video is allowed to be approved
-        if ($bypass_admin_approval || Settings::Get ('auto_approve_comments') == '1') {
+        
+        // 1) Admin posted comment in Admin Panel
+        // 2) Comment is posted by user
+        // 3) Comment is being approved by admin for first time
+        if ((in_array ($action, array ('create','activate'))) || $action == 'approve' && $this->released == 0) {
 
-            $data = array ('status' => 'approved');
+            // Comment is being posted by user, but approval is required
+            if ($action == 'activate' && Settings::Get ('auto_approve_comments') == '0') {
 
-            // Execute approval actions if they haven't been executed before
-            if ($this->released == 0) {
+                // Send Admin Approval Alert
+                $send_alert = true;
+                $subject = 'New Comment Awaiting Approval';
+                $body = 'A new comment has been posted and is awaiting admin approval.';
 
-                $data['released'] = 1;
-                $subject = 'New Comment Posted';
-                $body = 'A new comment has been posted.';
-                $send_alert = Settings::Get ('alerts_comments') == '1' ? true : null;
+                // Set Pending
+                $this->Update (array ('status' => 'pending'));
+                Plugin::Trigger ('comment.approve_required');
 
-                ### Send video owner new comment notifition, if opted-in
-                $privacy = Privacy::LoadByUser ($this->user_id);
+            } else {
+
+                // Send Admin Alert
+                if (in_array ($action, array ('create','activate')) && Settings::Get ('alerts_comments') == '1') {
+                    $send_alert = true;
+                    $subject = 'New Comment Posted';
+                    $body = 'A new comment has been posted.';
+                }
+
+                // Activate & Release
+                $this->Update (array ('status' => 'approved', 'released' => 1));
+
+                // Send video owner new comment notifition, if opted-in
+                $privacy = Privacy::LoadByUser ($video->user_id);
                 if ($privacy->OptCheck ('video_comment')) {
                     $user = new User ($video->user_id);
                     $replacements = array (
@@ -204,18 +223,20 @@ class Comment {
                     Plugin::Trigger ('comment.notify_member');
                 }
 
+                Plugin::Trigger ('comment.release');
+
             }
 
-        } else {
-            $send_alert = true;
-            $data = array ('status' => 'pending');
-            $subject = 'New Comment Awaiting Approval';
-            $body = 'A new comment has been posted and is awaiting admin approval.';
+        // Comment is being re-approved
+        } else if ($action == 'approve' && $this->released != 0) {
+            // Activate Comment
+            $this->Update (array ('status' => 'approved'));
+            Plugin::Trigger ('comment.reapprove');
         }
 
 
         // Send admin alert
-        if (isset ($send_alert)) {
+        if ($send_alert) {
             $body .= "\n\n=======================================================\n";
             $body .= "Author: $this->name\n";
             $body .= "Video URL: $video->url/\n";
@@ -224,7 +245,6 @@ class Comment {
             App::Alert ($subject, $body);
         }
 
-        $this->Update ($data);
         Plugin::Trigger ('comment.approve');
 
     }
