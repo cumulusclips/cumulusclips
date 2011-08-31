@@ -46,7 +46,7 @@ CREATE TABLE `{DB_PREFIX}comments` (
   `name` varchar(255) DEFAULT NULL,
   `website` varchar(255) DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
-  `user_agent` longtext`,
+  `user_agent` longtext,
   `released` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`comment_id`),
   UNIQUE KEY `indexer` (`comment_id`)

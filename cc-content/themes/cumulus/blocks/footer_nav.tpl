@@ -21,16 +21,16 @@
         <div id="footer-right">
             <div id="quick-links"><span>Quick Links</span></div>
             <ul class="link-col">
-                <li><a href="" title="<?=Language::GetCustomText('about')?>"><?=Language::GetCustomText('about')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('about')?>"><?=Language::GetCustomText('about')?></a></li>
                 <li><a href="<?=HOST?>/contact/" title="<?=Language::GetCustomText('contact')?>"><?=Language::GetCustomText('contact')?></a></li>
-                <li><a href="" title="<?=Language::GetCustomText('careers')?>"><?=Language::GetCustomText('careers')?></a></li>
-                <li><a href="" title="<?=Language::GetCustomText('sitemap')?>"><?=Language::GetCustomText('sitemap')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('careers')?>"><?=Language::GetCustomText('careers')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('sitemap')?>"><?=Language::GetCustomText('sitemap')?></a></li>
             </ul>
             <ul class="link-col">
-                <li><a href="" title="<?=Language::GetCustomText('terms')?>"><?=Language::GetCustomText('terms')?></a></li>
-                <li><a href="" title="<?=Language::GetCustomText('privacy')?>"><?=Language::GetCustomText('privacy')?></a></li>
-                <li><a href="" title="<?=Language::GetCustomText('copyright')?>"><?=Language::GetCustomText('copyright')?></a></li>
-                <li><a href="" title="<?=Language::GetCustomText('advertising')?>"><?=Language::GetCustomText('advertising')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('terms')?>"><?=Language::GetCustomText('terms')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('privacy')?>"><?=Language::GetCustomText('privacy')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('copyright')?>"><?=Language::GetCustomText('copyright')?></a></li>
+                <li><a href="<?=HOST?>/" title="<?=Language::GetCustomText('advertising')?>"><?=Language::GetCustomText('advertising')?></a></li>
             </ul>
         </div>
 
