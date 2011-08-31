@@ -58,13 +58,14 @@
         <forgot_button>@Forgot Login</forgot_button>
 
         <!-- Register Page -->
-        <register_header>@Register with</register_header>
-        <join_today>@Join {SITENAME} Today!</join_today>
-        <register_text>@As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to channels, and much more!</register_text>
+        <register_header>@Register with Us</register_header>
+        <register_text><![CDATA[
+            <strong>@Join {SITENAME} Today!</strong><br /><br />
+            As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to members, and much more!</p>
+        ]]></register_text>
         <asterisk>@An asterisk (*) denotes required field.</asterisk>
         <username_req>@Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
         <confirm_password>@Confirm Password</confirm_password>
-        <agree_terms>@I agree to the {LINK}Terms of Use{/LINK}</agree_terms>
         <register_button>@Create Account</register_button>
         <checking_availability>@Checking availability</checking_availability>
         <username_minimum>@At least 4 characters are required.</username_minimum>
@@ -311,7 +312,6 @@
         <error_recipient_self>@You can't send yourself a message</error_recipient_self>
         <error_subject>@Invalid subject</error_subject>
         <error_message>@Invalid message</error_message>
-        <error_terms>@You must agree to our Terms of Use</error_terms>
         <error_title>@Invalid title</error_title>
         <error_description>@Invalid description</error_description>
         <error_tags>@Invalid tags</error_tags>

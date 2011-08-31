@@ -108,7 +108,7 @@ class Avatar {
         App::LoadClass('Filesystem');
         try {
             Filesystem::Open();
-            Filesystem::Delete (DOC_ROOT . '/cc-content/avatars/' . $filename);
+            Filesystem::Delete (UPLOAD_PATH . '/avatars/' . $filename);
             Filesystem::Close();
         } catch (Exception $e) {
             App::Alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());

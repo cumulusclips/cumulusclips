@@ -31,17 +31,10 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-
-    // Validate terms
-    if (!isset ($_POST['terms']) || $_POST['terms'] != 'Agree') {
-        View::$vars->errors['terms'] = Language::GetText('error_terms');
-    }
-
-
     // Validate Username
     if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
         if (!User::Exist (array ('username' => $_POST['username']))) {
-            $data['username'] = htmlspecialchars (trim ($_POST['username']));
+            View::$vars->data['username'] = htmlspecialchars (trim ($_POST['username']));
         } else {
             View::$vars->errors['username'] = Language::GetText('error_username_unavailable');
         }
@@ -52,9 +45,23 @@ if (isset ($_POST['submitted'])) {
 
     // Validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        View::$vars->data['password'] = htmlspecialchars (trim ($_POST['password']));
+        $password_first = trim ($_POST['password']);
     } else {
         View::$vars->errors['password'] = Language::GetText('error_password');
+    }
+
+
+    // Validate password confirm
+    if (!empty ($_POST['password_confirm']) && !ctype_space ($_POST['password'])) {
+
+        if (isset ($password_first) && $password_first == $_POST['password_confirm']) {
+            View::$vars->data['password'] = trim ($_POST['password']);
+        } else {
+            View::$vars->errors['match'] = Language::GetText('error_password_match');
+        }
+
+    } else {
+        View::$vars->errors['password_confirm'] = Language::GetText('error_password_confirm');
     }
 
 
@@ -75,6 +82,9 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
+        View::$vars->data['date_created'] = date('Y-m-d');
+        View::$vars->data['status'] = 'new';
+
         Plugin::Trigger ('register.before_create');
         User::Create (View::$vars->data);
         View::$vars->message = Language::GetText('success_registered');
@@ -86,9 +96,10 @@ if (isset ($_POST['submitted'])) {
             'sitename' => $config->sitename
         );
         $mail = new Mail();
-        $mail->LoadTemplate ('registration', $replacements);
+        $mail->LoadTemplate ('activation', $replacements);
         $mail->Send (View::$vars->data['email']);
         Plugin::Trigger ('register.create');
+        unset (View::$vars->data);
 
     } else {
         View::$vars->message = Language::GetText('errors_below');

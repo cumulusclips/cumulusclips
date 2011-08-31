@@ -12,42 +12,34 @@ View::Header();
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block">
+<div class="block"><p><?=Language::GetText('register_text', array ('sitename' => $config->sitename))?></p></div>
 
-    <p><strong><?=Language::GetText('join_today')?></strong><br /><br />
-    <?=Language::GetText('register_text')?></p>
-
-</div>
-
-        
 <div class="block" id="register-form" style="padding-left:40px;">
 
     <form action="<?=HOST?>/register/" method="post">
 
-        <p class="row-shift"><?=Language::GetText('asterisk')?></p>
-
         <div class="row">
-            <label class="<?=(isset ($errors['email'])) ? 'errors' : ''?>">*<?=Language::GetText('email')?>:</label>
+            <label class="<?=(isset ($errors['email'])) ? 'errors' : ''?>"><?=Language::GetText('email')?>:</label>
             <input name="email" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
         </div>
 
         <div class="row-shift"><?=Language::GetText('username_req')?></div>
 
         <div class="row">
-            <label class="<?=(isset ($errors['username'])) ? 'errors' : ''?>">*<?=Language::GetText('username')?>:</label>
+            <label class="<?=(isset ($errors['username'])) ? 'errors' : ''?>"><?=Language::GetText('username')?>:</label>
             <input name="username" type="text" class="text" id="username" value="<?=(isset ($errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
         </div>
         
         <div id="status" class="row-shift"></div>
 
         <div class="row">
-            <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'errors' : ''?>">*<?=Language::GetText('password')?>:</label>
-            <input name="password" type="password" class="text" value="" />
+            <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'errors' : ''?>"><?=Language::GetText('password')?>:</label>
+            <input name="password" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
         </div>
 
-        <div class="row-shift">
-            <input name="terms" type="checkbox" id="terms" value="Agree" />
-            <label for="terms">*<?=Language::GetText('agree_terms', array ('link' => HOST . '/terms/'))?></label>
+        <div class="row">
+            <label class="<?=(isset ($errors['password_confirm']) || isset($errors['match'])) ? 'errors' : ''?>"><?=Language::GetText('confirm_password')?>:</label>
+            <input name="password_confirm" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
         </div>
 
         <div class="row-shift">

@@ -371,6 +371,36 @@ class User {
      */
     public function Approve ($bypass_admin_approval = false) {
 
+        // Register
+        // Activation Email
+        // Member Activates
+
+            // Auto-Approve
+
+                // Welcome Email
+                // Admin Alert
+
+
+
+            // Approval Required
+
+                // Admin Approval Alert
+                // Admin Approves
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Determine if user is allowed to be approved
         if ($bypass_admin_approval || Settings::Get ('auto_approve_users') == '1') {
 

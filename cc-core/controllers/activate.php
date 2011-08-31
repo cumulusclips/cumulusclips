@@ -15,8 +15,7 @@ View::InitView ('activate');
 Plugin::Trigger ('activate.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
-View::$vars->Error = NULL;
-View::$vars->Success = NULL;
+View::$vars->message = null;
 
 
 
@@ -24,16 +23,17 @@ View::$vars->Success = NULL;
 if (isset ($_GET['token'])) {
 	
     $token = $_GET['token'];
-    $data = array ('confirm_code' => $token, 'status' => 'Pending');
-    $id = User::Exist ($data);
+    $id = User::Exist (array ('confirm_code' => $token, 'status' => 'new'));
     if ($id) {
         $user = new User ($id);
         $user->Approve();
-        View::$vars->success = Language::GetText('activate_text_success', array ('link' => HOST . '/myaccount/'));
+        View::$vars->message = Language::GetText ('activate_text_success', array ('link' => HOST . '/myaccount/'));
+        View::$vars->message_type = 'success';
         User::Login ($user->username, $user->password);
         Plugin::Trigger ('activate.activate');
     } else {
-        View::$vars->error_msg = Language::GetText('activate_text_error', array ('link' => HOST . '/login/forgot/'));
+        View::$vars->message = Language::GetText ('activate_text_error', array ('link' => HOST . '/login/forgot/'));
+        View::$vars->message_type = 'error';
     }
 	
 } else {

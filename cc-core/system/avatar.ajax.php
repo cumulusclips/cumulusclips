@@ -73,6 +73,7 @@ try {
         Filesystem::Open();
         $avatar_path = UPLOAD_PATH . '/avatars';
         $save_as = Avatar::CreateFilename ($extension);
+        Avatar::SaveAvatar ($_FILES['upload']['tmp_name'], $extension, $save_as);
 
         // Check for existing avatar
         if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
@@ -87,8 +88,7 @@ try {
 
 
 
-    ### Save avatar to final location
-    Avatar::SaveAvatar ($_FILES['upload']['tmp_name'], $extension, $save_as);
+    ### Update User
     $user->Update (array ('avatar' => $save_as));
     Plugin::Trigger ('update_profile.update_avatar');
 

@@ -4,6 +4,7 @@ App::LoadClass ('PHPMailer');
 
 class Mail {
 
+    private $config;
     public $template;
     public $phpmailer;
     public $from_name;
@@ -14,10 +15,13 @@ class Mail {
 
     /**
      * Instantiate object
+     * @global object $config Site configuration settings
      * @return object Returns object of class type
      */
     public function __construct() {
 
+        global $config;
+        $this->config = $config;
         $this->phpmailer = new PHPMailer();
 
         // Retrieve "From" name and address
@@ -25,12 +29,11 @@ class Mail {
         $this->from_name = Settings::Get ('from_name');
         $this->from_address = Settings::Get ('from_address');
 
-        $this->from_name = (empty ($this->from_name)) ? $config->sitename : $this->from_name;
+        $this->from_name = (empty ($this->from_name)) ? $this->config->sitename : $this->from_name;
         $this->from_address = (empty ($this->from_address)) ? 'cumulusclips@' . $url['host'] : $this->from_address;
 
-        $this->phpmailer->AddReplyTo ($this->from_name, $this->from_address);
-        $this->phpmailer->SetFrom ($this->from_name, $this->from_address);
-
+        $this->phpmailer->FromName = $this->from_name;
+        $this->phpmailer->From = $this->from_address;
 
 
         // Retrieve SMTP settings
@@ -68,15 +71,15 @@ class Mail {
 
         // Perform replacements if neccessary
         if (!empty ($replacements)) {
-            foreach ($data as $key => $value) {
+            foreach ($replacements as $key => $value) {
                 $search = '{' . $key . '}';
                 $this->template = str_replace ($search, $value, $this->template);
             }
         }
 
         // Load Message content
-        $this->subject = $this->GetBlock ('subject');
-        $this->body = $this->GetBlock ('body');
+        $this->subject = $this->GetBlock ('Subject');
+        $this->body = $this->GetBlock ('Message');
 
     }
     
@@ -90,9 +93,9 @@ class Mail {
      */
     private function GetBlock ($block) {
 
-        $pattern = '/<!\-\- Begin:' . $block . '\-\->\s(.*?)\s<!\-\- End: ' . $block . ' \-\->/';
+        $pattern = '/<!\-\-\sBegin:\s' .$block . '\s\-\->(.*?)<!\-\-\sEnd:\s' . $block . '\s\-\->/is';
         if (preg_match ($pattern, $this->template, $reg)) {
-            return $reg[1];
+            return trim ($reg[1]);
         } else {
             return false;
         }
