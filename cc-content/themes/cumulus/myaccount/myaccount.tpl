@@ -19,7 +19,7 @@ View::Header();
         </div>
         <br />
         <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_created?></p>
-        <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login?></p>
+        <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login_formatted?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong> <?=$user->views?></p>
     </div>
 

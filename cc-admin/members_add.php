@@ -106,7 +106,7 @@ if (isset ($_POST['submitted'])) {
         $data['status'] = 'new';
         $id = User::Create ($data);
         $user = new User ($id);
-        $user->Approve (true);
+        $user->Approve ('create');
         unset ($data);
 
         // Output message

@@ -82,7 +82,7 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
-        View::$vars->data['date_created'] = date('Y-m-d');
+        View::$vars->data['date_created'] = date('Y-m-d H:i:s');
         View::$vars->data['status'] = 'new';
 
         Plugin::Trigger ('register.before_create');
@@ -96,7 +96,7 @@ if (isset ($_POST['submitted'])) {
             'sitename' => $config->sitename
         );
         $mail = new Mail();
-        $mail->LoadTemplate ('activation', $replacements);
+        $mail->LoadTemplate ('welcome', $replacements);
         $mail->Send (View::$vars->data['email']);
         Plugin::Trigger ('register.create');
         unset (View::$vars->data);

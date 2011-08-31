@@ -135,7 +135,7 @@ if (isset ($_POST['submitted'])) {
                 // Handle "Approve" action
                 case 'active':
                     $user->UpdateContentStatus ('active');
-                    $user->Approve (true);
+                    $user->Approve ('approve');
                     break;
 
 

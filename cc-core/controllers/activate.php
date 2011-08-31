@@ -26,13 +26,17 @@ if (isset ($_GET['token'])) {
     $id = User::Exist (array ('confirm_code' => $token, 'status' => 'new'));
     if ($id) {
         $user = new User ($id);
-        $user->Approve();
-        View::$vars->message = Language::GetText ('activate_text_success', array ('link' => HOST . '/myaccount/'));
+        $user->Approve ('activate');
+        if (Settings::Get('auto_approve_users') == 1) {
+            View::$vars->message = Language::GetText ('activate_success', array ('host' => HOST));
+            User::Login ($user->username, $user->password);
+        } else {
+            View::$vars->message = Language::GetText ('activate_approve');
+        }
         View::$vars->message_type = 'success';
-        User::Login ($user->username, $user->password);
         Plugin::Trigger ('activate.activate');
     } else {
-        View::$vars->message = Language::GetText ('activate_text_error', array ('link' => HOST . '/login/forgot/'));
+        View::$vars->message = Language::GetText ('activate_error', array ('host' => HOST));
         View::$vars->message_type = 'error';
     }
 	

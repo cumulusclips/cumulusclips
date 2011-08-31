@@ -153,8 +153,15 @@
 
         <!-- Activate Account Page -->
         <activate_header>@Activate your Account</activate_header>
-        <activate_text_success>@Thank you! Your account is now active. {LINK}Go to My Account{/LINK}</activate_text_success>
-        <activate_text_error>@Invalid code! Please check you entered the code correctly. Your account may already be active. If you forgot your login, {LINK}click here{/LINK} to retrieve it.</activate_text_error>
+        <activate_success><![CDATA[
+        @Thank you! Your account is now active. <a href="{HOST}/myaccount/">Go to My Account</a>
+        ]]></activate_success>
+        <activate_approve>@Thank you! Your account is now active, however it still needs to be approved by a member of our team before you can login. We will notify you once this is complete.</activate_approve>
+        <activate_error><![CDATA[
+        @Invalid code! Please check you entered the code correctly.
+        Your account may already be active. If you forgot your login,
+        <a href="{HOST}/login/forgot/">click here</a> to retrieve it.
+        ]]></activate_error>
 
         <!-- 404 Page -->
         <system_404_header>@404 - Page Not Found</system_404_header>
