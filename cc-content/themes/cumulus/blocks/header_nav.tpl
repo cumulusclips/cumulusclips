@@ -16,7 +16,22 @@
                 <a href="<?=HOST?>/login/" title="<?=Language::GetText('login')?>"><?=Language::GetText('login')?></a>
                 <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
             <?php endif; ?>
-                
+
+            <?php $active_languages = Language::GetActiveLanguages(); ?>
+            <?php if (count ($active_languages) > 1): ?>
+
+                <span class="languages">
+                    <a class="active-language" href=""><?=Language::GetLanguage (true)?></a>
+                    <span class="arrow"></span>
+                    <ul>
+                        <?php foreach ($active_languages as $key => $lang): ?>
+                            <li><a href="<?=HOST?>/language/set/<?=$key?>/"><?=$lang['native_name']?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </span>
+
+            <?php endif; ?>
+
         </div>
         <div id="nav">
             <a href="<?=HOST?>/videos/" title="<?=Language::GetText('videos')?>"><?=Language::GetText('videos')?></a>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language>
     <information>
-        <lang_name>Spanish</lang_name>
-        <native_name>Español</native_name>
-        <css_name>spanish</css_name>
+        <lang_name>Portuguese</lang_name>
+        <native_name>Português</native_name>
+        <css_name>portuguese</css_name>
         <author>CumulusClips.com</author>
-        <sample>El zorro marrón rápido salta sobre el perro perezoso</sample>
+        <sample>A ligeira raposa marrom ataca o cão preguiçoso</sample>
         <notes></notes>
     </information>
     <terms>

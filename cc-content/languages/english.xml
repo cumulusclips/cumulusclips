@@ -2,9 +2,8 @@
 <language>
     <information>
         <lang_name>English</lang_name>
-        <locale>en_US</locale>
+        <native_name>English</native_name>
         <css_name>english</css_name>
-        <image_prefix>en_</image_prefix>
         <author>CumulusClips.com</author>
         <sample>The quick brown fox jumps over the lazy dog</sample>
         <notes></notes>
@@ -70,7 +69,6 @@
         <checking_availability>@Checking availability</checking_availability>
         <username_minimum>@At least 4 characters are required.</username_minimum>
         <username_available>@Username is available!</username_available>
-
 
         <!-- Contact Page -->
         <contact_header>@Contact Us</contact_header>

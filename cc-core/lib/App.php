@@ -167,6 +167,11 @@ class App {
         $preview_lang = false;
         $default_lang = Settings::Get ('default_language');
 
+        // Check if user selected language
+        if (isset ($_SESSION['user_lang']) && file_exists (DOC_ROOT . '/cc-content/languages/' . $_SESSION['user_lang'] . '.xml')) {
+            $default_lang = $_SESSION['user_lang'];
+        }
+
         // Check if 'Preview' language was provided
         if (isset ($_GET['preview_lang']) && file_exists (DOC_ROOT . '/cc-content/languages/' . $_GET['preview_lang'] . '.xml')) {
             $default_lang = $_GET['preview_lang'];

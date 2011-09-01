@@ -93,6 +93,45 @@ HEADER STYLES
     *margin-top:35px;
 }
 
+#welcome {
+    position:relative;
+}
+
+.active-language {
+    border-radius:5px;
+    padding:5px;
+    background-color:#023e7b;
+    padding:5px 15px 5px 5px;
+}
+
+.languages ul {
+    position:absolute;
+    right:0;
+    top:16px;
+    *top:23px;
+    border:2px solid #023e7b;
+    background-color:#FFF;
+    display:none;
+    border-radius:5px;
+    padding:5px;
+}
+
+.languages:hover ul {
+    display:block;
+}
+
+.arrow {
+    width:7px;
+    height:4px;
+    position:absolute;
+    right:4px;
+    top:5px;
+    *top:10px;
+    background:url('../images/arrow.png') no-repeat 0 0;
+}
+
+
+
 
 
 
@@ -171,8 +210,6 @@ FOOTER STYLES
     float:left;
     width:75px;
     line-height:24px;
-}
-.link-col a {
 }
 
 
@@ -292,7 +329,11 @@ a.button-small {
 
 a.large { color:#023e7b; }
 
-
+#header-sub ul a {
+    color:#023e7b;
+    margin-left:0;
+    line-height:18px;
+}
 
 
 

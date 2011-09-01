@@ -23,6 +23,16 @@ $admin_js[] = ADMIN . '/js/fancybox.js';
 $active_languages = Language::GetActiveLanguages();
 
 
+// Remove any orphaned languages
+foreach ($active_languages as $key => $language) {
+    $language_file = DOC_ROOT . '/cc-content/languages/' . $key . '.xml';
+    if (!file_exists ($language_file)) {
+        unset ($active_languages[$key]);
+    }
+}
+reset ($active_languages);
+Settings::Set ('active_languages', serialize ($active_languages));
+
 
 
 ### Handle "Delete" language if requested
@@ -32,9 +42,8 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
     if (file_exists ($language_file) && $_GET['delete'] != Settings::Get ('default_language')) {
 
         // Deactivate language if applicable
-        $key = array_search ($_GET['delete'], $active_languages);
-        if ($key !== false) {
-            unset ($active_languages[$key]);
+        if (array_key_exists ($_GET['delete'], $active_languages)) {
+            unset ($active_languages[$_GET['delete']]);
             Settings::Set ('active_languages', serialize ($active_languages));
         }
         
@@ -63,7 +72,10 @@ else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
     $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['activate'] . '.xml';
     if (file_exists ($language_file)) {
         $xml = simplexml_load_file ($language_file);
-        $active_languages[] = $_GET['activate'];
+        $active_languages[$_GET['activate']] = array (
+            'lang_name' => (string) $xml->information->lang_name,
+            'native_name' => (string) $xml->information->native_name
+        );
         Settings::Set ('active_languages', serialize ($active_languages));
         $message = $xml->information->lang_name . ' has been activated.';
         $message_type = 'success';
@@ -77,10 +89,9 @@ else if (!empty ($_GET['deactivate']) && !ctype_space ($_GET['deactivate'])) {
 
     // Validate theme
     $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['deactivate'] . '.xml';
-    $key = array_search ($_GET['deactivate'], $active_languages);
-    if ($key !== false) {
+    if (array_key_exists ($_GET['deactivate'], $active_languages)) {
         $xml = simplexml_load_file ($language_file);
-        unset ($active_languages[$key]);
+        unset ($active_languages[$_GET['deactivate']]);
         Settings::Set ('active_languages', serialize ($active_languages));
         $message = $xml->information->lang_name . ' has been deactivated.';
         $message_type = 'success';
@@ -94,7 +105,7 @@ else if (!empty ($_GET['default']) && !ctype_space ($_GET['default'])) {
 
     // Validate language
     $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['default'] . '.xml';
-    if (in_array ($_GET['default'], $active_languages) && file_exists ($language_file)) {
+    if (array_key_exists ($_GET['default'], $active_languages) && file_exists ($language_file)) {
         $xml = simplexml_load_file ($language_file);
         Settings::Set ('default_language', $_GET['default']);
         $message = $xml->information->lang_name . ' is now the default language.';
@@ -110,7 +121,7 @@ else if (!empty ($_GET['default']) && !ctype_space ($_GET['default'])) {
 foreach (glob (DOC_ROOT . '/cc-content/languages/*') as $language) {
     $lang = new stdClass();
     $lang->filename = basename ($language, '.xml');
-    $lang->active = (in_array ($lang->filename, $active_languages)) ? true : false;
+    $lang->active = (array_key_exists ($lang->filename, $active_languages)) ? true : false;
     $lang->default = ($lang->filename == Settings::Get ('default_language')) ? true : false;
     $lang->xml = simplexml_load_file ($language);
     $lang_list[] = $lang;
@@ -151,7 +162,7 @@ include ('header.php');
 
 
             <p>
-                <?php if ($language->default): ?>
+                <?php if ($language->active && $language->default): ?>
                     <strong>Default Language</strong>
                 <?php else: ?>
 

@@ -78,20 +78,11 @@ class Language {
 
     /**
      * Output the formal English language name of the loaded language
+     * @param boolean $native (optional) Whether or not to return the native translation for the current language
      * @return string The language name in the language xml file
      */
-    static function GetLanguage() {
-        return self::$xml->information->language_name;
-    }
-
-
-
-    /**
-     * Output the locale code of the loaded language
-     * @return string The locale code in the language xml file
-     */
-    static function GetLocale() {
-        return self::$xml->information->locale;
+    static function GetLanguage ($native = false) {
+        return ($native) ? self::$xml->information->native_name : self::$xml->information->lang_name;
     }
 
 
@@ -119,25 +110,12 @@ class Language {
 
 
     /**
-     * Retrieve a list of valid active languages
-     * @return array Returns a list of active languages, any orphaned languages are deactivated
+     * Retrieve a list of active languages
+     * @return array Returns a list of active languages
      */
     static function GetActiveLanguages() {
-
         $active = Settings::Get ('active_languages');
-        $active = unserialize ($active);
-
-        foreach ($active as $key => $language) {
-            $language_file = DOC_ROOT . '/cc-content/languages/' . $language . '.xml';
-            if (!file_exists ($language_file)) {
-                unset ($active[$key]);
-            }
-        }
-
-        reset ($active);
-        Settings::Set ('active_languages', serialize ($active));
-        return $active;
-
+        return unserialize ($active);
     }
 
 }

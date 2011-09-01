@@ -62,10 +62,6 @@ $config->mobile_url = (empty ($mobile_url)) ? HOST . '/cc-content/uploads/mobile
 $config->thumb_url = (empty ($thumb_url)) ? HOST . '/cc-content/uploads/thumbs' : $thumb_url;
 
 
-// Load language
-Language::LoadLangPack (App::CurrentLang());
-
-
 // Define Theme settings
 $theme = App::CurrentTheme();
 define ('THEME', HOST . '/cc-content/themes/' . $theme);
@@ -76,6 +72,10 @@ define ('THEME_PATH', THEMES_DIR . '/' . $theme);
 if (!headers_sent() && session_id() == '') {
     @session_start();
 }
+
+
+// Load language
+Language::LoadLangPack (App::CurrentLang());
 
 
 // Initialize plugin system
