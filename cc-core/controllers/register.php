@@ -14,7 +14,8 @@ App::LoadClass ('Mail');
 // Establish page variables, objects, arrays, etc
 View::InitView ('register');
 Plugin::Trigger ('register.start');
-View::$vars->logged_in = User::LoginCheck() ? header (HOST . '/myaccount/') : '';
+View::$vars->logged_in = User::LoginCheck();
+Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
 $resp = NULL;
 $pass1 = NULL;
 $pass2 = NULL;

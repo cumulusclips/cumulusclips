@@ -40,6 +40,7 @@ class User {
         }
 
         // User specific values
+        $this->role = (empty ($this->role)) ? 'user' : $this->role;
         $this->avatar_url = (empty ($this->avatar)) ? THEME . '/images/avatar.gif' : HOST . "/cc-content/uploads/avatars/$this->avatar";
         $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
         $this->last_login_formatted = date ('m/d/Y', strtotime ($this->last_login));
@@ -305,23 +306,49 @@ class User {
     /**
      * Check if user is logged in, with optional redirect
      * @param string $redirect_location optional Location to redirect user if login check fails
-     * @return boolean|mixed Returns logged in users' ID if user is logged,
-     * if user login check fails and redirect is provided user is redirected,
-     * returns boolean false otherwise
+     * @return boolean|integer Returns logged in users' ID if user is logged, boolean false otherwise
      */
-    static function LoginCheck ($redirect_location = null) {
+    static function LoginCheck() {
         if (!empty ($_SESSION['user_id']) && self::Exist (array ('user_id' => $_SESSION['user_id']))) {
             return $_SESSION['user_id'];
-        }  else {
-            if ($redirect_location) {
-                if (PREVIEW_LANG) $redirect_location = Functions::AppendQueryString ($redirect_location, array ('preview_lang' => PREVIEW_LANG));
-                if (PREVIEW_THEME) $redirect_location = Functions::AppendQueryString ($redirect_location, array ('preview_theme' => PREVIEW_THEME));
-                header ("Location: $redirect_location");
-                exit();
-            } else {
-                return false;
-            }
+        } else {
+            return false;
         }
+    }
+
+
+
+
+    /**
+     * Check if a user has a given permission
+     * @global object $config Site configuration settings
+     * @param string $permission Name of permission to check
+     * @param mixed $user_to_check (optional) User object or ID of user to check permissions for. If null, logged in user is used
+     * @return boolean Returns true if user's role has permission, false otherwise
+     */
+    static function CheckPermissions ($permission, $user_to_check = null) {
+
+        global $config;
+        
+        // Retrieve user information
+        if (!empty ($user_to_check) && is_object ($user_to_check) && get_class ($user_to_check) == __CLASS__) {
+            $user = $user_to_check;
+        } else if (!empty ($user_to_check)) {
+            $user = new self ($user_to_check);
+        } else if ($logged_in = self::LoginCheck()) {
+            $user = new self ($logged_in);
+        } else {
+            return false;
+        }
+
+        // Check for given permission in user's role
+        if (array_key_exists ($user->role, $config->permission_mappings)) {
+            $permissions_list = $config->permission_mappings[$user->role]['permissions'];
+            return in_array ($permission, $permissions_list);
+        } else {
+            return false;
+        }
+
     }
 
 

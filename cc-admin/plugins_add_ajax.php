@@ -12,12 +12,18 @@ App::LoadClass ('Plugin');
 App::LoadClass ('Filesystem');
 
 
-### Retrieve video information
+// Retrieve video information
 if (!isset ($_POST['token'], $_POST['timestamp'])) App::Throw404();
 
+
+// Load main session and validate login
 session_write_close();
 session_id ($_POST['token']);
 session_start();
+Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
+$admin = new User ($logged_in);
+Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+
 
 // Validate file upload key
 $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);

@@ -14,10 +14,10 @@ App::LoadClass ('Privacy');
 // Establish page variables, objects, arrays, etc
 View::InitView ('privacy_settings');
 Plugin::Trigger ('privacy_settings.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
-View::$vars->data = array();
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->privacy = new Privacy (View::$vars->user->user_id);
+View::$vars->data = array();
 View::$vars->errors = NULL;
 View::$vars->success = NULL;
 

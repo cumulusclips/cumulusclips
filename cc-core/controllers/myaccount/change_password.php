@@ -13,7 +13,7 @@ App::LoadClass ('User');
 // Establish page variables, objects, arrays, etc
 View::InitView ('change_password');
 Plugin::Trigger ('change_password.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->error_msg = NULL;

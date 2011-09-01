@@ -14,7 +14,7 @@ App::LoadClass ('Filesystem');
 // Establish page variables, objects, arrays, etc
 View::InitView ('update_profile');
 Plugin::Trigger ('update_profile.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->message = null;

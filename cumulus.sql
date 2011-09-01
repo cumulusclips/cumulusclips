@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.54-1ubuntu4 : Database - cumulus
+MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
 *********************************************************************
 */
 
@@ -177,11 +177,11 @@ CREATE TABLE `settings` (
   `name` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 /*Data for the table `settings` */
 
-insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','0'),(5,'auto_approve_videos','0'),(6,'auto_approve_comments','0'),(7,'debug_conversion','1'),(9,'video_size_limit','102000000'),(11,'pagination_page_limit','9'),(40,'qt_faststart','/usr/local/bin/qt-faststart'),(15,'base_url','http://cumulus'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','cumulus.admin@mailinator.com'),(19,'enable_uploads','1'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{s:7:\"english\";a:2:{s:9:\"lang_name\";s:7:\"English\";s:11:\"native_name\";s:7:\"English\";}s:10:\"portuguese\";a:2:{s:9:\"lang_name\";s:10:\"Portuguese\";s:11:\"native_name\";s:10:\"PortuguÃªs\";}s:7:\"spanish\";a:2:{s:9:\"lang_name\";s:7:\"Spanish\";s:11:\"native_name\";s:8:\"EspaÃ±ol\";}}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url',''),(26,'theora_url',''),(27,'mobile_url',''),(28,'thumb_url',''),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),(33,'smtp','O:8:\"stdClass\":5:{s:7:\"enabled\";s:1:\"0\";s:4:\"host\";s:0:\"\";s:4:\"port\";i:25;s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),(34,'alerts_videos','1'),(35,'alerts_comments','1'),(37,'alerts_users','1'),(38,'from_name',''),(39,'from_address','');
+insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','0'),(5,'auto_approve_videos','0'),(6,'auto_approve_comments','0'),(7,'debug_conversion','1'),(9,'video_size_limit','102000000'),(11,'pagination_page_limit','9'),(40,'qt_faststart','/usr/local/bin/qt-faststart'),(15,'base_url','http://cumulus'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','cumulus.admin@mailinator.com'),(19,'enable_uploads','1'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{s:7:\"english\";a:2:{s:9:\"lang_name\";s:7:\"English\";s:11:\"native_name\";s:7:\"English\";}s:10:\"portuguese\";a:2:{s:9:\"lang_name\";s:10:\"Portuguese\";s:11:\"native_name\";s:10:\"PortuguÃªs\";}s:7:\"spanish\";a:2:{s:9:\"lang_name\";s:7:\"Spanish\";s:11:\"native_name\";s:8:\"EspaÃ±ol\";}}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url',''),(26,'theora_url',''),(27,'mobile_url',''),(28,'thumb_url',''),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),(33,'smtp','O:8:\"stdClass\":5:{s:7:\"enabled\";s:1:\"0\";s:4:\"host\";s:0:\"\";s:4:\"port\";i:25;s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),(34,'alerts_videos','1'),(35,'alerts_comments','1'),(37,'alerts_users','1'),(38,'from_name',''),(39,'from_address',''),(41,'permission_mappings','a:1:{s:5:\"admin\";a:2:{s:4:\"name\";s:13:\"Administrator\";s:11:\"permissions\";a:1:{i:0;s:11:\"admin_panel\";}}}');
 
 /*Table structure for table `subscriptions` */
 
@@ -207,6 +207,7 @@ CREATE TABLE `users` (
   `email` varchar(80) NOT NULL,
   `password` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'user',
   `date_created` date NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
@@ -217,7 +218,6 @@ CREATE TABLE `users` (
   `last_login` date DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `released` tinyint(1) NOT NULL DEFAULT '0',
-  `admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
   KEY `username` (`username`),
   KEY `email` (`email`)
@@ -225,7 +225,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`user_id`,`username`,`email`,`password`,`status`,`date_created`,`first_name`,`last_name`,`about_me`,`website`,`confirm_code`,`views`,`last_login`,`avatar`,`released`,`admin`) values (1,'admin','damian.torres@mailinator.com','Damian646','active','2011-08-26','',NULL,'','',NULL,1393,'2011-08-31','',1,1);
+insert  into `users`(`user_id`,`username`,`email`,`password`,`status`,`role`,`date_created`,`first_name`,`last_name`,`about_me`,`website`,`confirm_code`,`views`,`last_login`,`avatar`,`released`) values (1,'admin','damian.torres@mailinator.com','Damian646','active','admin','2011-08-26','',NULL,'','',NULL,1393,'2011-08-31','',1);
 
 /*Table structure for table `videos` */
 

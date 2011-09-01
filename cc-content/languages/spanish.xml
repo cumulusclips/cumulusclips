@@ -14,6 +14,7 @@
         <register>@Sign Up Free</register>
         <logout>@Logout</logout>
         <myaccount>@My Account</myaccount>
+        <admin_panel>@Admin Panel</admin_panel>
         <videos>@Videos</videos>
         <members>@Members</members>
         <upload>@Upload</upload>

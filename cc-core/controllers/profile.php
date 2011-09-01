@@ -19,7 +19,7 @@ App::LoadClass ('Post');
 View::InitView ('profile');
 Plugin::Trigger ('profile.start');
 View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
+if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $success = NULL;
 $errors = NULL;
 $sub_id = NULL;

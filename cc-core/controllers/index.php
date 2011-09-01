@@ -16,7 +16,7 @@ App::LoadClass ('Rating');
 View::InitView ('index');
 Plugin::Trigger ('index.start');
 View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
+if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 
 
 

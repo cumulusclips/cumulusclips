@@ -15,7 +15,7 @@ App::LoadClass ('Pagination');
 // Establish page variables, objects, arrays, etc
 View::InitView ('subscriptions');
 Plugin::Trigger ('subscriptions.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/subscriptions';

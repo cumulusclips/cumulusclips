@@ -14,7 +14,7 @@ App::LoadClass ('Message');
 // Establish page variables, objects, arrays, etc
 View::InitView ('message_read');
 Plugin::Trigger ('message_read.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 
 

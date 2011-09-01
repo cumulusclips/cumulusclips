@@ -13,8 +13,9 @@ App::LoadClass ('Filesystem');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.video_edit.start');
-//$logged_in = User::LoginCheck(HOST . '/login/');
-//$admin = new User ($logged_in);
+Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
+$admin = new User ($logged_in);
+Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $page_title = 'Add New Plugin';
 $message = null;
 $admin_js[] = ADMIN . '/extras/uploadify/swfobject.js';

@@ -13,8 +13,9 @@ App::LoadClass ('Video');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.video_edit.start');
-//$logged_in = User::LoginCheck(HOST . '/login/');
-//$admin = new User ($logged_in);
+Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
+$admin = new User ($logged_in);
+Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $page_title = 'Add Video';
 $categories = array();
 $data = array();
@@ -130,8 +131,7 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Create record
-//        $data['user_id'] = $user->user_id;
-        $data['user_id'] = 1;
+        $data['user_id'] = $admin->user_id;
         $data['original_extension'] = Functions::GetExtension ($data['upload']['temp']);
         $data['filename'] = basename ($data['upload']['temp'], '.' . $data['original_extension']);
         unset ($data['upload']);

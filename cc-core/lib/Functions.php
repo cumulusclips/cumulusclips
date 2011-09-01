@@ -33,6 +33,24 @@ class Functions {
 
 
     /**
+     * Redirect user if based on a condition's value
+     * @param mixed $condition Condition to be tested
+     * @param string $redirect Location to send user if condition evaluates to empty
+     * @return void If condition evaluates to empty value user is redirected, nothing otherwise
+     */
+    static function RedirectIf ($condition, $redirect) {
+        if (PREVIEW_LANG) $redirect = Functions::AppendQueryString ($redirect, array ('preview_lang' => PREVIEW_LANG));
+        if (PREVIEW_THEME) $redirect = Functions::AppendQueryString ($redirect, array ('preview_theme' => PREVIEW_THEME));
+        if (empty ($condition)) {
+            header ("Location: $redirect");
+            exit();
+        }
+    }
+
+
+
+
+    /**
      * Generate a string of random characters, numbers, and special characters
      * @param integer $length of string to be returned
      * @param boolean $special Whether or not to allow special characters

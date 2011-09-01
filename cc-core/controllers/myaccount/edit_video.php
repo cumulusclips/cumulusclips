@@ -14,7 +14,7 @@ App::LoadClass ('Video');
 // Establish page variables, objects, arrays, etc
 View::InitView ('edit_video');
 Plugin::Trigger ('edit_video.start');
-View::$vars->logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->error_msg = null;

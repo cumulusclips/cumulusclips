@@ -14,8 +14,9 @@ App::LoadClass ('Pagination');
 
 // Establish page variables, objects, arrays, etc
 Plugin::Trigger ('admin.members.start');
-//$logged_in = User::LoginCheck(HOST . '/login/');
-//$admin = new User ($logged_in);
+Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
+$admin = new User ($logged_in);
+Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $records_per_page = 9;
 $url = ADMIN . '/members.php';
 $query_string = array();

@@ -14,7 +14,7 @@ App::LoadClass ('User');
 View::InitView ('activate');
 Plugin::Trigger ('activate.start');
 View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) header ('Location: ' . HOST . '/myaccount/');
+Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
 View::$vars->message = null;
 
 

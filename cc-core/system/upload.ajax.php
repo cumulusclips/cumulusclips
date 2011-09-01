@@ -23,7 +23,7 @@ session_start();
 // Validate upload key
 $upload_key = md5 (md5 ($_POST['timestamp']) . SECRET_KEY);
 if (!isset ($_SESSION['upload_key']) || $_SESSION['upload_key'] != $upload_key) App::Throw404();
-$logged_in = User::LoginCheck (HOST . '/login/');
+Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
 $user = new User ($logged_in);
 
 
