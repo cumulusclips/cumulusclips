@@ -28,116 +28,59 @@ if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'member
 
 
 ### Handle flag according to type of content being flagged
-switch ($_POST['type']) {
+try {
 
-    ### Handle report abuse video
-    case 'video':
-
-        // Verify a valid video was provided
-        $video = new Video ($_POST['id']);
-        if (!$video->found || $video->status != 'approved')  App::Throw404();
-
-
-        // Check if user is logged in
-        if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
-            exit();
-        }
-
-
-        // Verify user doesn't flag own content
-        if ($user->user_id == $video->user_id) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
-            exit();
-        }
-
-
-        // Create Flag if one doesn't exist
-        $data = array ('type' => 'video', 'id' => $video->video_id, 'user_id' => $user->user_id);
-        if (!Flag::Exist ($data)) {
-            Flag::Create ($data);
-            Plugin::Trigger ('flag.ajax.flag_video');
-            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
-            exit();
-        } else {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
-            exit();
-        }
+     // Check if user is logged in
+    if (!$logged_in) throw new Exception (Language::GetText ('error_flag_login'));
 
 
 
-
-    ### Handle report abuse user
-    case 'member':
-
-        // Verify a valid video was provided
-        $member = new User ($_POST['id']);
-        if (!$member->found || $member->status != 'active')  App::Throw404();
-
-
-        // Check if user is logged in
-        if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
-            exit();
-        }
-
-
-        // Verify user doesn't flag himself
-        if ($user->user_id == $member->user_id) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
-            exit();
-        }
-
-
-        // Create Flag if one doesn't exist
-        $data = array ('type' => 'member', 'id' => $member->user_id, 'user_id' => $user->user_id);
-        if (!Flag::Exist ($data)) {
-            Flag::Create ($data);
-            Plugin::Trigger ('flag.ajax.flag_member');
-            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
-            exit();
-        } else {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
-            exit();
-        }
+    switch ($_POST['type']) {
+        case 'video':
+            $id = Video::Exist (array ('video_id' => $_POST['id'], 'status' => 'approved'));
+            if (!$id) App::Throw404();
+            $video = new Video ($_POST['id']);
+            $member_id = $video->user_id;
+            break;
+        case 'user':
+            if (User::Exist (array ('user_id' => $_POST['id'], 'status' => 'active'))) App::Throw404();
+            $member_id = $video->user_id;
+            break;
+        case 'comment':
+            $id = Comment::Exist (array ('comment_id' => $_POST['id'], 'status' => 'approved'));
+            if (!$id) App::Throw404();
+            $comment = new Comment ($_POST['id']);
+            $member_id = $comment->user_id;
+            break;
+    }
 
 
 
-
-    ### Handle report abuse comment
-    case 'comment':
-
-        // Verify a valid comment was provided
-        $comment = new Comment ($_POST['id']);
-        if (!$comment->found || $comment->status != 'approved')  App::Throw404();
+    // Verify user doesn't flag thier content
+    if ($user->user_id == $member_id) throw new Exception (Language::GetText ('error_flag_own'));
 
 
-        // Check if user is logged in
-        if (!$logged_in) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_login')));
-            exit();
-        }
+
+    // Create Flag if one doesn't exist
+    $data = array ('type' => $_POST['type'], 'id' => $_POST['id'], 'user_id' => $user->user_id);
+    if (!Flag::Exist ($data)) {
+        Flag::Create ($data);
+        Plugin::Trigger ('flag.ajax.flag_video');
+        echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
+        exit();
+    } else {
+        throw new Exception (Language::GetText ('error_flag_duplicate'));
+    }
 
 
-        // Verify user doesn't flag thier comment
-        if ($user->user_id == $comment->user_id) {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_own')));
-            exit();
-        }
+    ### ADD ADMIN ALERT
+    ### UPDATE PLUGIN HOOKS
 
 
-        // Create Flag if one doesn't exist
-        $data = array ('type' => 'comment', 'id' => $comment->comment_id, 'user_id' => $user->user_id);
-        if (!Flag::Exist ($data)) {
-            Flag::Create ($data);
-            Plugin::Trigger ('flag.ajax.flag_comment');
-            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
-            exit();
-        } else {
-            echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_flag_duplicate')));
-            exit();
-        }
 
-    }   // END action switch
+} catch (Exception $e) {
+    echo json_encode (array ('result' => 0, 'msg' => $e->getMessage()));
+    exit();
+}
 
 ?>
