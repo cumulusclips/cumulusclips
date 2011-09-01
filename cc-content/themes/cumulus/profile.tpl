@@ -14,7 +14,7 @@ View::Header();
  
     <div id="profile-avatar">
         <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
-        <p><a class="button-small subscribe" data-member="<?=$member->user_id?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
+        <p><a class="button-small subscribe" data-user="<?=$member->user_id?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
     </div>
     <div id="profile-info">
         <p>

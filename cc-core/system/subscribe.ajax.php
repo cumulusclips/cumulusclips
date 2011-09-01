@@ -20,12 +20,12 @@ Plugin::Trigger ('subscribe.ajax.login_check');
 
 // Verify passed values
 if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('subscribe', 'unsubscribe'))) App::Throw404();
-if (empty ($_POST['member']) || !is_numeric ($_POST['member'])) App::Throw404();
+if (empty ($_POST['user']) || !is_numeric ($_POST['user'])) App::Throw404();
 
 
 // Validate user
-$member = new User ($_POST['member']);
-if (!$member->found || $member->status != 'Active') App::Throw404();
+if (!User::Exist (array ('user_id' => $_POST['user'], 'status' => 'active'))) App::Throw404();
+$member = new User ($_POST['user']);
 
 
 
@@ -53,7 +53,7 @@ switch ($_POST['type']) {
         if (!Subscription::Exist ($data)) {
             $subscribed = Subscription::Create ($data);
             Plugin::Trigger ('subscribe.ajax.subscribe');
-            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_subscribed', array ('username' => $member->username))));
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_subscribed', array ('username' => $member->username)),'other' => (string) Language::GetText ('unsubscribe')));
             exit();
         } else {
             echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_duplicate')));
@@ -77,7 +77,7 @@ switch ($_POST['type']) {
         if ($subscription_id) {
             Subscription::Delete ($subscription_id);
             Plugin::Trigger ('subscribe.ajax.unsubscribe');
-            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed')));
+            echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed', array ('username' => $member->username)),'other' => (string) Language::GetText ('subscribe')));
             exit();
         } else {
             echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_noexist')));

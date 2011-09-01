@@ -239,7 +239,7 @@
 
         <!-- My Account / View My Subscriptions Page -->
         <subscriptions_header>@My Subscriptions</subscriptions_header>
-        <confirm_subscription>You are about to unsubscribe from this member. Please confirm this is what you intended to do</confirm_subscription>
+        <confirm_subscription>You will be unsubscribed from this member. Do you want to proceed?</confirm_subscription>
         <no_subscriptions>@You haven't subscribed to any members yet.</no_subscriptions>
 
         <!-- My Account / View My Subscribers Page -->
@@ -351,7 +351,7 @@
         <success_avatar_reset>@Your avatar has been reset.</success_avatar_reset>
         <success_avatar_updated>@Your avatar has been updated.</success_avatar_updated>
         <success_rated>@Rating has been submitted.</success_rated>
-        <success_unsubscribed>@You have been unsubscribed from this member.</success_unsubscribed>
+        <success_unsubscribed>@You have been unsubscribed from {USERNAME}.</success_unsubscribed>
         <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>
         <success_favorite_added>@Video has been added to your favorites.</success_favorite_added>
         <success_flag>@Thank you for reporting this. We will look into this immediately.</success_flag>

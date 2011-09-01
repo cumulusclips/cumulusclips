@@ -98,30 +98,21 @@ $('document').ready(function(){
 
         var subscribeType = $(this).attr('data-type');
         var url = baseURL+'/actions/subscribe/';
-        var data = {type: subscribeType, member: $(this).attr('data-member')};
+        var data = {type: subscribeType, user: $(this).attr('data-user')};
         var subscribeButton = $(this);
 
 
         // Callback for AJAX call - Update button if the action (subscribe / unsubscribe) was successful
         var callback = function (responseData) {
             
-            // Prepare for Unsubscription
-            if (responseData.result == 1 && subscribeType == 'subscribe') {
+            if (responseData.result == 1) {
 
-                // Update button & change text
-                subscribeButton.attr('data-type','unsubscribe');
-                GetText(function(buttonText){
-                    subscribeButton.find('span').text(buttonText);
-                },'unsubscribe');
-
-            // Prepare for Subscription
-            } else if (responseData.result == 1 && subscribeType == 'unsubscribe') {
-
-                // Update button & change text
-                subscribeButton.attr('data-type','subscribe');
-                GetText(function(buttonText){
-                    subscribeButton.find('span').text(buttonText);
-                },'subscribe');
+                subscribeButton.text(responseData.other);
+                if (subscribeType == 'subscribe') {
+                    subscribeButton.attr('data-type','unsubscribe');
+                } else if (subscribeType == 'unsubscribe') {
+                    subscribeButton.attr('data-type','subscribe');
+                }
 
             }
         }

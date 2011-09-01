@@ -56,7 +56,7 @@ View::Header();
 
         <div id="buttons">
             <a href="" class="button-small showhide" data-block="about"><?=Language::GetText('about')?></a>
-            <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-member="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
+            <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-user="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
             <a href="" class="button-small showhide" data-block="share"><?=Language::GetText('share')?></a>
             <a href="" class="button-small showhide" data-block="embed"><?=Language::GetText('embed')?></a>
             <a href="" class="button-small favorite"><?=Language::GetText('favorite')?></a>

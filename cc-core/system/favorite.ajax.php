@@ -21,9 +21,9 @@ Plugin::Trigger ('favorite.ajax.login_check');
 
 
 // Verify a valid video was provided
-if (empty ($_POST['video_id']) || !is_numeric ($_POST['video_id']))  App::Throw404();
+if (empty ($_POST['video_id']) || !is_numeric ($_POST['video_id'])) App::Throw404();
+if (!Video::Exist (array ('video_id' => $_POST['video_id'], 'status' => 'approved'))) App::Throw404();
 $video = new Video ($_POST['video_id']);
-if (!$video->found || $video->status != 6) App::Throw404();
 
 
 // Verify user is logged in
