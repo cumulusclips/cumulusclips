@@ -150,7 +150,7 @@ class Privacy {
      * @return boolean Returns true if user accepts message type, false otherwise
      */
     public function OptCheck ($message_type) {
-        if ($this->$message_type == 'yes') {
+        if ($this->$message_type == '1') {
             return true;
         } else {
             return false;

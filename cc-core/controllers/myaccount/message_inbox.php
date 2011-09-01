@@ -19,7 +19,7 @@ Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/log
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 20;
 $url = HOST . '/myaccount/message/inbox';
-View::$vars->success = NULL;
+View::$vars->message = null;
 
 
 
@@ -43,19 +43,21 @@ if (isset ($_POST['submitted'])) {
                 Plugin::Trigger ('message_inbox.purge_single_message');
             }
         }
-        View::$vars->success = Language::GetText('success_messages_purged');
+        View::$vars->message = Language::GetText('success_messages_purged');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('messsage_inbox.purge_all_messages');
 
     }
 
 // Delete message (Request came from view message page)
-} elseif (isset ($_GET['delete']) && is_numeric ($_GET['delete']) && $_GET['delete'] > 0) {
+} else if (isset ($_GET['delete']) && is_numeric ($_GET['delete']) && $_GET['delete'] > 0) {
 
     $data = array ('recipient' => View::$vars->user->user_id, 'message_id' => $_GET['delete']);
     $message_id = Message::Exist ($data);
     if ($message_id) {
         Message::Delete ($message_id);
-        View::$vars->success = Language::GetText('success_messages_purged');
+        View::$vars->message = Language::GetText('success_messages_purged');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('message_inbox.delete_message');
     }
 

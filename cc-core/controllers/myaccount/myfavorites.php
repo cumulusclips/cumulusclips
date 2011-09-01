@@ -21,7 +21,7 @@ Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/log
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/myfavorites';
-View::$vars->success = NULL;
+View::$vars->message = null;
 
 
 
@@ -37,7 +37,8 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid']) && $_GET['vid'] != 0) {
     $id = Favorite::Exist ($data);
     if ($id) {
         Favorite::Delete ($id);
-        View::$vars->success = Language::GetText('success_favorite_removed');
+        View::$vars->message = Language::GetText('success_favorite_removed');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('myfavorites.remove_favorite');
     }
 

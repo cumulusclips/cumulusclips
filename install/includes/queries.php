@@ -188,10 +188,9 @@ $_CREATE_PRIVACY_TABLE = <<<CREATE_PRIVACY_TABLE
 CREATE TABLE `{DB_PREFIX}privacy` (
   `privacy_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
-  `video_comment` varchar(100) NOT NULL DEFAULT 'yes',
-  `new_message` varchar(100) NOT NULL DEFAULT 'yes',
-  `newsletter` varchar(100) NOT NULL DEFAULT 'yes',
-  `new_video` varchar(100) NOT NULL DEFAULT 'yes',
+  `video_comment` tinyint(1) NOT NULL DEFAULT '1',
+  `new_message` tinyint(1) NOT NULL DEFAULT '1',
+  `new_video` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`privacy_id`)
 ) DEFAULT CHARSET=utf8
 

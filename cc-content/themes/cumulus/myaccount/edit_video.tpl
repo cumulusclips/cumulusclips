@@ -17,22 +17,22 @@ View::Header();
     <p><a href="<?=HOST?>/myaccount/myvideos/"><?=Language::GetText('back_to_videos')?></a></p><br />
     <form action="<?=HOST?>/myaccount/editvideo/<?=$video->video_id?>/" method="post">
 
-        <div class="row<?=(isset ($Errors['title'])) ? ' errors' : ''?>">
+        <div class="row<?=(isset ($errors['title'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('title')?>:</label>
-            <input class="text" type="text" name="title" value="<?=(!empty ($Errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
+            <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
         </div>
 
-        <div class="row<?=(isset ($Errors['description'])) ? ' errors' : ''?>">
+        <div class="row<?=(isset ($errors['description'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('description')?>:</label>
-            <textarea class="text" name="description"><?=(!empty ($Errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
+            <textarea class="text" name="description"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
         </div>
 
-        <div class="row<?=(isset ($Errors['tags'])) ? ' errors' : ''?>">
+        <div class="row<?=(isset ($errors['tags'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('tags')?>:</label>
-            <input class="text" type="text" name="tags" value="<?=(!empty ($Errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> <em>*<?=Language::GetText('comma_delimited')?></em>
+            <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> <em>*<?=Language::GetText('comma_delimited')?></em>
         </div>
 
-        <div class="row<?=(isset ($Errors['cat_id'])) ? ' errors' : ''?>">
+        <div class="row<?=(isset ($errors['cat_id'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('category')?>:</label>
             <select class="dropdown" name="cat_id">
             <?php while ($cat = $db->FetchObj ($result_cat)): ?>

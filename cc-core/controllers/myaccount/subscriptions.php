@@ -19,7 +19,7 @@ Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/log
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/subscriptions';
-View::$vars->success = NULL;
+View::$vars->message = null;
 
 
 
@@ -34,7 +34,8 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
     $id = Subscription::Exist ($data);
     if ($id) {
         Subscription::Delete ($id);
-        View::$vars->success = Language::GetText('success_unsubscribed');
+        View::$vars->message = Language::GetText('success_unsubscribed');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('subscriptions.unsubscribe');
     }
 }

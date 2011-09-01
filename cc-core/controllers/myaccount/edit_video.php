@@ -16,9 +16,8 @@ View::InitView ('edit_video');
 Plugin::Trigger ('edit_video.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->Errors = array();
-View::$vars->error_msg = null;
-View::$vars->success = null;
+View::$vars->errors = array();
+View::$vars->message = null;
 
 
 
@@ -55,7 +54,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
         View::$vars->data['title'] = htmlspecialchars (trim ($_POST['title']));
     } else {
-        View::$vars->Errors['title'] = Language::GetText('error_title');
+        View::$vars->errors['title'] = Language::GetText('error_title');
     }
 
 
@@ -63,7 +62,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['description']) && !ctype_space ($_POST['description'])) {
         View::$vars->data['description'] = htmlspecialchars (trim ($_POST['description']));
     } else {
-        View::$vars->Errors['description'] = Language::GetText('error_description');
+        View::$vars->errors['description'] = Language::GetText('error_description');
     }
 
 
@@ -71,7 +70,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['tags']) && !ctype_space ($_POST['tags'])) {
         View::$vars->data['tags'] = htmlspecialchars (trim ($_POST['tags']));
     } else {
-        View::$vars->Errors['tags'] = Language::GetText('error_tags');
+        View::$vars->errors['tags'] = Language::GetText('error_tags');
     }
 
 
@@ -79,18 +78,20 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['cat_id']) && is_numeric ($_POST['cat_id'])) {
         View::$vars->data['cat_id'] = $_POST['cat_id'];
     } else {
-        View::$vars->Errors['cat_id'] = Language::GetText('error_category');
+        View::$vars->errors['cat_id'] = Language::GetText('error_category');
     }
 
 
     // Update video if no errors were made
-    if (empty (View::$vars->Errors)) {
+    if (empty (View::$vars->errors)) {
         View::$vars->video->Update (View::$vars->data);
-        View::$vars->success = Language::GetText('success_video_updated');
+        View::$vars->message = Language::GetText('success_video_updated');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('edit_video.edit');
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
+        View::$vars->message_type = 'error';
     }
 
 }

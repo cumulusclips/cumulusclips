@@ -15,9 +15,8 @@ View::InitView ('change_password');
 Plugin::Trigger ('change_password.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->Errors = array();
-View::$vars->error_msg = NULL;
-View::$vars->success = NULL;
+View::$vars->errors = array();
+View::$vars->message = null;
 $password = NULL;
 $confirm_password = NULL;
 
@@ -35,7 +34,7 @@ if ((isset ($_POST['submitted']))) {
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
         $password = $_POST['password'];
     } else {
-        View::$vars->Errors['password'] = Language::GetText('error_password');
+        View::$vars->errors['password'] = Language::GetText('error_password');
     }
 
 
@@ -43,7 +42,7 @@ if ((isset ($_POST['submitted']))) {
     if (!empty ($_POST['confirm_password']) && !ctype_space ($_POST['confirm_password'])) {
         $confirm_password = $_POST['confirm_password'];
     } else {
-        View::$vars->Errors['confirm_password'] = Language::GetText('error_password_confirm');
+        View::$vars->errors['confirm_password'] = Language::GetText('error_password_confirm');
     }
 
 
@@ -54,16 +53,19 @@ if ((isset ($_POST['submitted']))) {
         if ($confirm_password == $password) {
             $data = array ('password' => $password);
             View::$vars->user->Update ($data);
-            View::$vars->success = Language::GetText('success_password_updated');
+            View::$vars->message = Language::GetText('success_password_updated');
+            View::$vars->message_type = 'success';
             Plugin::Trigger ('change_password.change_password');
         } else {
-            View::$vars->Errors['match'] = TRUE;
-            View::$vars->error_msg = Language::GetText('error_password_match');
+            View::$vars->errors['match'] = TRUE;
+            View::$vars->message = Language::GetText('error_password_match');
+            View::$vars->message_type = 'error';
         }
 
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
+        View::$vars->message_type = 'error';
     }
 
 }

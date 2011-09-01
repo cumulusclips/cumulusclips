@@ -20,7 +20,7 @@ Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/log
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/myvideos';
-View::$vars->success = NULL;
+View::$vars->message = null;
 
 
 
@@ -36,7 +36,8 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
     $video_id = Video::Exist ($data);
     if ($video_id) {
         Video::Delete ($video_id);
-        View::$vars->success = Language::GetText('success_video_deleted');
+        View::$vars->message = Language::GetText('success_video_deleted');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('myvideos.delete_video');
     }
 

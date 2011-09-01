@@ -16,10 +16,10 @@ View::InitView ('privacy_settings');
 Plugin::Trigger ('privacy_settings.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->privacy = new Privacy (View::$vars->user->user_id);
+View::$vars->privacy = Privacy::LoadByUser (View::$vars->user->user_id);
 View::$vars->data = array();
-View::$vars->errors = NULL;
-View::$vars->success = NULL;
+View::$vars->errors = array();
+View::$vars->message = null;
 
 
 
@@ -32,43 +32,37 @@ View::$vars->success = NULL;
 if (isset ($_POST['submitted'])) {
 
     // Validate Video Comments
-    if (isset ($_POST['video_comment']) && ($_POST['video_comment'] == 'yes' || $_POST['video_comment'] == 'no')) {
+    if (isset ($_POST['video_comment']) && in_array ($_POST['video_comment'], array ('0','1'))) {
         View::$vars->data['video_comment'] = $_POST['video_comment'];
     } else {
-        View::$vars->errors = TRUE;
+        View::$vars->errors['video_comment'] = TRUE;
     }
 
 
     // Validate Private Message
-    if (isset ($_POST['new_message']) && ($_POST['new_message'] == 'yes' || $_POST['new_message'] == 'no')) {
+    if (isset ($_POST['new_message']) && in_array ($_POST['new_message'], array ('0','1'))) {
         View::$vars->data['new_message'] = $_POST['new_message'];
     } else {
-        View::$vars->errors = TRUE;
+        View::$vars->errors['new_message'] = TRUE;
     }
 
 
-    // Validate Newsletter
-    if (isset ($_POST['newsletter']) && ($_POST['newsletter'] == 'yes' || $_POST['newsletter'] == 'no')) {
-        View::$vars->data['newsletter'] = $_POST['newsletter'];
-    } else {
-        View::$vars->errors = TRUE;
-    }
-
-
-    // Validate New Channel Videos
-    if (isset ($_POST['new_video']) && ($_POST['new_video'] == 'yes' || $_POST['new_video'] == 'no')) {
+    // Validate New member Videos
+    if (isset ($_POST['new_video']) && in_array ($_POST['new_video'], array ('0','1'))) {
         View::$vars->data['new_video'] = $_POST['new_video'];
     } else {
-        View::$vars->errors = TRUE;
+        View::$vars->errors['new_video'] = TRUE;
     }
 
 
-    if (!View::$vars->errors) {
+    if (empty (View::$vars->errors)) {
         View::$vars->privacy->Update (View::$vars->data);
-        View::$vars->success = Language::GetText('success_privacy_updated');
+        View::$vars->message = Language::GetText('success_privacy_updated');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('privacy_settings.update_privacy');
     } else {
-        View::$vars->errors = Language::GetText('error_general');
+        View::$vars->message = Language::GetText('error_general');
+        View::$vars->message_type = 'error';
     }
 
 }

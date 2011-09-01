@@ -17,17 +17,17 @@ View::Header();
     <form action="<?=HOST?>/myaccount/message/send/" method="post">
 
         <div class="row">
-            <label<?=(isset ($Errors['recipient'])) ? ' class="errors"' : ''?>><?=Language::GetText('to')?>: </label>
+            <label<?=(isset ($errors['recipient'])) ? ' class="errors"' : ''?>><?=Language::GetText('to')?>: </label>
             <input class="text" type="text" name="to" value="<?=$to?>" /> *<?=Language::GetText('members_username')?>
         </div>
 
         <div class="row">
-            <label<?=(isset ($Errors['subject'])) ? ' class="errors"' : ''?>><?=Language::GetText('subject')?>: </label>
+            <label<?=(isset ($errors['subject'])) ? ' class="errors"' : ''?>><?=Language::GetText('subject')?>: </label>
             <input class="text" type="text" name="subject" value="<?=$subject?>" />
         </div>
 
         <div class="row">
-            <label<?=(isset ($Errors['message'])) ? ' class="errors"' : ''?>><?=Language::GetText('message')?>: </label>
+            <label<?=(isset ($errors['message'])) ? ' class="errors"' : ''?>><?=Language::GetText('message')?>: </label>
             <textarea class="text" name="message"><?=$msg?></textarea>
         </div>
 

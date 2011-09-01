@@ -21,9 +21,8 @@ View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->to = NULL;
 View::$vars->subject = NULL;
 View::$vars->msg = NULL;
-View::$vars->Errors = array();
-View::$vars->error_msg = NULL;
-View::$vars->success = NULL;
+View::$vars->errors = array();
+View::$vars->message = null;
 $message = array();
 
 
@@ -79,15 +78,15 @@ if (isset ($_POST['submitted'])) {
                 View::$vars->to = $recipient->username;
                 $message['recipient'] = $recipient->user_id;
             } else {
-                View::$vars->Errors['recipient'] = Language::GetText('error_recipient_self');
+                View::$vars->errors['recipient'] = Language::GetText('error_recipient_self');
             }    
 
         } else {
-            View::$vars->Errors['recipient'] = Language::GetText('error_recipient_exist');
+            View::$vars->errors['recipient'] = Language::GetText('error_recipient_exist');
         }
 
     } else {
-        View::$vars->Errors['recipient'] = Language::GetText('error_recipient');
+        View::$vars->errors['recipient'] = Language::GetText('error_recipient');
     }
 
 
@@ -97,7 +96,7 @@ if (isset ($_POST['submitted'])) {
         $message['subject'] = htmlspecialchars ($_POST['subject']);
         View::$vars->subject = $message['subject'];
     } else {
-        View::$vars->Errors['subject'] = Language::GetText('error_subject');
+        View::$vars->errors['subject'] = Language::GetText('error_subject');
     }
 
 
@@ -107,13 +106,13 @@ if (isset ($_POST['submitted'])) {
         $message['message'] = htmlspecialchars ($_POST['message']);
         View::$vars->msg = $message['message'];
     } else {
-        View::$vars->Errors['message'] = Language::GetText('error_message');
+        View::$vars->errors['message'] = Language::GetText('error_message');
     }
 
 
 
     // Create message if no errors were found
-    if (empty (View::$vars->Errors)) {
+    if (empty (View::$vars->errors)) {
 
         $message['user_id'] = View::$vars->user->user_id;
         Plugin::Trigger ('message_send.before_send_message');
@@ -135,12 +134,14 @@ if (isset ($_POST['submitted'])) {
             $mail->LoadTemplate ('new_message', $replacements);
             $mail->Send ($recipient->email);
         }
-        View::$vars->success = Language::GetText('success_message_sent');
+        View::$vars->message = Language::GetText('success_message_sent');
+        View::$vars->message_type = 'success';
         Plugin::Trigger ('message_send.send_message');
 
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
+        View::$vars->message_type = 'error';
     }
 
 }

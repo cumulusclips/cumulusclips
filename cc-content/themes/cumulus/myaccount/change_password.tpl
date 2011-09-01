@@ -19,12 +19,12 @@ View::Header();
     <form action="<?=HOST?>/myaccount/change-password/" method="post">
 
         <div class="row">
-            <label<?=(isset ($Errors['password']) || isset ($Errors['match'])) ? ' class="errors"' : ''?>><?=Language::GetText('new_password')?>:</label>
+            <label<?=(isset ($errors['password']) || isset ($errors['match'])) ? ' class="errors"' : ''?>><?=Language::GetText('new_password')?>:</label>
             <input class="text" type="password" name="password" />
         </div>
 
         <div class="row">
-            <label<?=(isset ($Errors['confirm_password']) || isset ($Errors['match'])) ? ' class="errors"' : ''?>><?=Language::GetText('confirm_password')?>:</label>
+            <label<?=(isset ($errors['confirm_password']) || isset ($errors['match'])) ? ' class="errors"' : ''?>><?=Language::GetText('confirm_password')?>:</label>
             <input class="text" type="password" name="confirm_password" />
         </div>
 
