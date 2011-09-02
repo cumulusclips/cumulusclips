@@ -268,6 +268,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('alerts_videos','1'),
 ('alerts_comments','1'),
 ('alerts_users','1'),
+('alerts_flags','1'),
 ('from_name',''),
 ('from_address',''),
 ('smtp','O:8:"stdClass":5:{s:7:"enabled";s:1:"0";s:4:"host";s:0:"";s:4:"port";i:25;s:8:"username";s:0:"";s:8:"password";s:0:"";}')

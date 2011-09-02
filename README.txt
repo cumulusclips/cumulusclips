@@ -78,6 +78,9 @@ flag.ajax.login_check - /cc-core/system/flag.ajax.php
 flag.ajax.flag_video - /cc-core/system/flag.ajax.php
 flag.ajax.flag_member - /cc-core/system/flag.ajax.php
 flag.ajax.flag_comment - /cc-core/system/flag.ajax.php
+flag.ajax.alert - /cc-core/system/flag.ajax.php
+flag.ajax.before_flag - /cc-core/system/flag.ajax.php
+flag.ajax.flag - /cc-core/system/flag.ajax.php
 
 
 rate.ajax.start - /cc-core/system/rate.ajax.php
@@ -439,6 +442,15 @@ message_send.before_render - /cc-core/controllers/myaccount/message_send.php
 message_send.load_original_message - /cc-core/controllers/myaccount/message_send.php
 message_send.before_send_message - /cc-core/controllers/myaccount/message_send.php
 message_send.send_message - /cc-core/controllers/myaccount/message_send.php
+
+
+### ADMIN
+
+admin.plugin_settings.start - /cc-admin/plugins_settings.php
+admin.[PLUGIN NAME].before_render - /cc-admin/plugins_settings.php
+admin.[PLUGIN NAME].settings - /cc-admin/plugins_settings.php
+
+
 
 
 

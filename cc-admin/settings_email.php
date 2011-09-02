@@ -24,8 +24,8 @@ $smtp_auth = null;
 
 $data['alerts_videos'] = Settings::Get('alerts_videos');
 $data['alerts_comments'] = Settings::Get('alerts_comments');
-$data['alerts_ratings'] = Settings::Get('alerts_ratings');
 $data['alerts_users'] = Settings::Get('alerts_users');
+$data['alerts_flags'] = Settings::Get('alerts_flags');
 $data['from_name'] = Settings::Get('from_name');
 $data['from_address'] = Settings::Get('from_address');
 $data['smtp'] = unserialize (Settings::Get('smtp'));
@@ -60,11 +60,11 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate video rating alerts
-    if (isset ($_POST['alerts_ratings']) && in_array ($_POST['alerts_ratings'], array ('1', '0'))) {
-        $data['alerts_ratings'] = $_POST['alerts_ratings'];
+    // Validate flagged content alerts
+    if (isset ($_POST['alerts_flags']) && in_array ($_POST['alerts_flags'], array ('1', '0'))) {
+        $data['alerts_flags'] = $_POST['alerts_flags'];
     } else {
-        $errors['alerts_ratings'] = 'Invalid video ratings alert option';
+        $errors['alerts_flags'] = 'Invalid content flag alert option';
     }
 
 
@@ -214,19 +214,19 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row <?=(isset ($errors['alerts_ratings'])) ? ' errors' : ''?>">
-                <label>Video Rating Alerts:</label>
-                <select name="alerts_ratings" class="dropdown">
-                    <option value="1" <?=($data['alerts_ratings']=='1')?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($data['alerts_ratings']=='0')?'selected="selected"':''?>>Disabled</option>
-                </select>
-            </div>
-
             <div class="row <?=(isset ($errors['alerts_users'])) ? ' errors' : ''?>">
                 <label>New Member Alerts:</label>
                 <select name="alerts_users" class="dropdown">
                     <option value="1" <?=($data['alerts_users']=='1')?'selected="selected"':''?>>Enabled</option>
                     <option value="0" <?=($data['alerts_users']=='0')?'selected="selected"':''?>>Disabled</option>
+                </select>
+            </div>
+
+            <div class="row <?=(isset ($errors['alerts_flags'])) ? ' errors' : ''?>">
+                <label>Flagged Content Alerts:</label>
+                <select name="alerts_flags" class="dropdown">
+                    <option value="1" <?=($data['alerts_flags']=='1')?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($data['alerts_flags']=='0')?'selected="selected"':''?>>Disabled</option>
                 </select>
             </div>
 
