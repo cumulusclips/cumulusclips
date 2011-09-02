@@ -133,8 +133,8 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on H.264 video...') : null;
 
     ### Execute H.264 Moov Atom Command
-    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264";
-    exec ($h264_faststart_command);
+    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264 2>&1";
+    exec ($h264_faststart_command, $qt_faststart_results);
 
 
 
@@ -142,8 +142,13 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final H.264 was created successfully...') : null;
 
     ### Verify final H.264 video was created successfully
-    if (!file_exists ($h264)) throw new Exception ("The final H.264 file was not created. The id of the video is: $video->video_id");
-
+    if (!file_exists ($h264)) {
+        // If moov atom has already been moved, simply rename original FFMPEG output
+        if (preg_match ('/last atom in file was not a moov atom/', implode (' ', $qt_faststart_results))) {
+            @copy ($h264_temp, $h264);
+            if (!file_exists ($h264)) throw new Exception ("The final H.264 file was not created. The id of the video is: $video->video_id");
+        }
+    }
 
 
 
@@ -238,8 +243,8 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on mobile video...') : null;
 
     ### Execute Mobile Moov Atom Command
-    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile";
-    exec ($mobile_faststart_command);
+    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile 2>&1";
+    exec ($mobile_faststart_command, $qt_faststart_results);
 
 
 
@@ -247,7 +252,13 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final Mobile file was created successfully...') : null;
 
     ### Verify Mobile Video was created successfully
-    if (!file_exists ($mobile)) throw new Exception ("The final Mobile file was not created. The id of the video is: $video->video_id");
+    if (!file_exists ($mobile)) {
+        // If moov atom has already been moved, simply rename original FFMPEG output
+        if (preg_match ('/last atom in file was not a moov atom/', implode (' ', $qt_faststart_results))) {
+            @copy ($mobile_temp, $mobile);
+            if (!file_exists ($mobile)) throw new Exception ("The final Mobile file was not created. The id of the video is: $video->video_id");
+        }
+    }
 
 
 

@@ -22,14 +22,9 @@ View::Header();
             <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
         </div>
 
-        <div class="row<?=(isset ($errors['description'])) ? ' errors' : ''?>">
-            <label><?=Language::GetText('description')?>:</label>
-            <textarea class="text" name="description"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
-        </div>
-
         <div class="row<?=(isset ($errors['tags'])) ? ' errors' : ''?>">
             <label><?=Language::GetText('tags')?>:</label>
-            <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> <em>*<?=Language::GetText('comma_delimited')?></em>
+            <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> (<?=Language::GetText('comma_delimited')?>)
         </div>
 
         <div class="row<?=(isset ($errors['cat_id'])) ? ' errors' : ''?>">
@@ -41,9 +36,14 @@ View::Header();
             </select>
         </div>
 
+        <div class="row<?=(isset ($errors['description'])) ? ' errors' : ''?>">
+            <label><?=Language::GetText('description')?>:</label>
+            <textarea class="text" name="description" rows="10" cols="45"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
+        </div>
+
         <div class="row-shift">
             <input type="hidden" name="submitted" value="TRUE" />
-            <a class="button" href=""><span><?=Language::GetText('update_video_button')?></span></a>
+            <input class="button" type="submit" name="button" value="<?=Language::GetText('update_video_button')?>" />
         </div>
     </form>
 

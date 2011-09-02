@@ -129,7 +129,7 @@ switch ($status) {
 
     case 'pending':
         $query .= " status = 'pending approval'";
-        $query_string['status'] = 'pending approval';
+        $query_string['status'] = 'pending';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
         break;
