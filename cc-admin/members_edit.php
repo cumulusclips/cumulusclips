@@ -57,19 +57,19 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-    // Validate First Name
-    if (!empty ($user->first_name) && $_POST['first_name'] == '') {
-        $data['first_name'] = '';
-    } elseif (!empty ($_POST['first_name']) && !ctype_space ($_POST['first_name'])) {
-        $data['first_name'] = htmlspecialchars ($_POST['first_name']);
+    // Validate status
+    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+        $data['status'] = htmlspecialchars (trim ($_POST['status']));
+    } else {
+        $errors['status'] = 'Invalid status';
     }
 
 
-    // Validate Last Name
-    if (!empty ($user->last_name) && $_POST['last_name'] == '') {
-        $data['last_name'] = '';
-    } elseif (!empty ($_POST['last_name']) && !ctype_space ($_POST['last_name'])) {
-        $data['last_name'] = htmlspecialchars ($_POST['last_name']);
+    // Validate role
+    if (!empty ($_POST['role']) && !ctype_space ($_POST['role'])) {
+        $data['role'] = htmlspecialchars (trim ($_POST['role']));
+    } else {
+        $errors['role'] = 'Invalid role';
     }
 
 
@@ -85,6 +85,28 @@ if (isset ($_POST['submitted'])) {
 
     } else {
         $errors['email'] = 'Invalid email address';
+    }
+
+
+    // Validate password
+    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
+        $data['password'] = trim ($_POST['password']);
+    }
+
+
+    // Validate First Name
+    if (!empty ($user->first_name) && $_POST['first_name'] == '') {
+        $data['first_name'] = '';
+    } elseif (!empty ($_POST['first_name']) && !ctype_space ($_POST['first_name'])) {
+        $data['first_name'] = htmlspecialchars ($_POST['first_name']);
+    }
+
+
+    // Validate Last Name
+    if (!empty ($user->last_name) && $_POST['last_name'] == '') {
+        $data['last_name'] = '';
+    } elseif (!empty ($_POST['last_name']) && !ctype_space ($_POST['last_name'])) {
+        $data['last_name'] = htmlspecialchars ($_POST['last_name']);
     }
 
 
@@ -110,22 +132,8 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate status
-    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-        $data['status'] = htmlspecialchars (trim ($_POST['status']));
-    } else {
-        $errors['status'] = 'Invalid status';
-    }
 
-
-    // Validate make admin
-    if (isset ($_POST['admin']) && $_POST['admin'] == '1') {
-        $data['admin'] = 1;
-    }
-
-
-
-    // Update User if no errors were found
+    ### Update User if no errors were found
     if (empty ($errors)) {
 
         // Perform addional actions based on status change
@@ -193,7 +201,7 @@ include ('header.php');
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
             <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
-                <label>Status:</label>
+                <label>*Status:</label>
                 <select name="status" class="dropdown">
                     <option value="active"<?=(isset ($data['status']) && $data['status'] == 'active') || (!isset ($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
                     <option value="new"<?=(isset ($data['status']) && $data['status'] == 'new') || (!isset ($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
@@ -202,14 +210,28 @@ include ('header.php');
                 </select>
             </div>
 
+            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+                <label>*Role:</label>
+                <select name="role" class="dropdown">
+                <?php foreach ($config->roles as $key => $value): ?>
+                    <option value="<?=$key?>" <?=(isset ($data['role']) && $data['role'] == $key) || (!isset ($data['role']) && $user->role == $key)?'selected="selected"':''?>><?=$value['name']?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="row<?=(isset ($errors['email'])) ? ' errors' : ''?>">
                 <label>*Email:</label>
-                <input class="text" type="text" name="email" value="<?=(isset ($data['email'])) ? $data['email'] : $user->email?>" />
+                <input class="text" type="text" name="email" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : $user->email?>" />
             </div>
 
             <div class="row">
                 <label>Username:</label>
                 <p><a href="<?=HOST?>/members/<?=$user->username?>/"><?=$user->username?></a></p>
+            </div>
+
+            <div class="row">
+                <label class="<?=(isset ($errors['password'])) ? 'errors' : ''?>">Password:</label>
+                <input name="password" type="password" class="text mask" value="<?=(!empty ($errors) && !empty ($data['password'])) ? htmlspecialchars ($data['password']):''?>" />
             </div>
 
             <div class="row<?=(isset ($errors['first_name'])) ? ' errors' : ''?>">
@@ -230,11 +252,6 @@ include ('header.php');
             <div class="row<?=(isset ($errors['about_me'])) ? ' errors' : ''?>">
                 <label>About Me:</label>
                 <textarea rows="7" cols="50" class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
-            </div>
-
-            <div class="row-shift">
-                <input name="admin" id="make_admin" type="checkbox" value="1" <?=((isset ($errors, $data['admin']))||(!isset($errors) && $user->admin == 1)) ? 'checked="checked"':''?> />
-                <label for="make_admin">Make member a system admin</label>
             </div>
             
             <div class="row-shift">

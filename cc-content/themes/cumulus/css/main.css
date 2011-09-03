@@ -1,14 +1,12 @@
-html {
+html, body {
     height:100%;
+    background-color:#ebebeb;
 }
 
 body {
-    background-color:#ebebeb;
-    background-image:url(../images/background.png);
     font-size:12px;
     font-family:arial,helvetica,sans-serif;
     color:#666;
-    height:100%;
 }
 
 
@@ -20,6 +18,7 @@ MAIN BODY STYLES
 ***************/
 
 #wrapper {
+    background-image:url(../images/background.png);
     margin-bottom: -218px;
     min-height: 100%;
     height: auto !important;
@@ -500,22 +499,18 @@ MISCELLANEOUS STYLES
 }
 
 .like, .dislike {
-    margin-top:5px;
+    line-height:18px;
     padding-right:19px;
     display:inline-block;
-    *display:block;
-    *float:left;
     font-weight:bold;
 }
 .like {
     background:url(../images/icon-like.png) no-repeat right center;
     margin-right:10px;
-    padding-top:1px;
     color:#060;
 }
 .dislike {
     background:url(../images/icon-dislike.png) no-repeat right 3px;
-    padding-bottom:3px;
     color:#900;
 }
 

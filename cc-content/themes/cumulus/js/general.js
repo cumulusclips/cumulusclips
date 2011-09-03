@@ -132,17 +132,14 @@ $('document').ready(function(){
         var callback = function (responseData) {
             if (responseData.result == 1) {
 
-                var like;
-                like.html('span')
-                    .addClass('like')
-                    .text(responseData.other.likes);
+                var likeText = responseData.other.like_text;
+                likeText += ' (' + responseData.other.likes + '+)';
+                $('.like-text').text(likeText);
 
-                var dislike;
-                dislike.html('span')
-                    .addClass('dislike')
-                    .text(responseData.other.dislikes);
-
-                $('#rating-text').append(like, dislike);
+                var dislikeText = responseData.other.dislike_text;
+                dislikeText += ' (' + responseData.other.dislikes + '-)';
+                $('.dislike-text').text(dislikeText);
+                
             }
         }
         executeAction (url, data, callback);

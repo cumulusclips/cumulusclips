@@ -171,7 +171,7 @@ include ('header.php');
 
             <p>
                 <?php if ($plugin->enabled && $plugin->settings): ?>
-                    <a href="<?=ADMIN?>/settings_plugin.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
                 <?php endif; ?>
 
                 <?php if ($plugin->enabled): ?>

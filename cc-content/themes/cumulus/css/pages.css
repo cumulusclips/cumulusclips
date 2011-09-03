@@ -175,7 +175,7 @@ PLAY PAGE STYLES
 p#rating-link {
     width:150px;
     margin-left:30px;
-    margin-top:-5px;
+    margin-top:3px;
     text-align:right;
 }
 
@@ -198,7 +198,10 @@ a.dislike {
 }
 
 #share { overflow:hidden; }
-.share-button { float:left; }
+.share-button {
+    float:left;
+    margin-right:25px;
+}
 
 #embed .text { margin-top:5px; }
 

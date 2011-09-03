@@ -342,8 +342,8 @@ class User {
         }
 
         // Check for given permission in user's role
-        if (array_key_exists ($user->role, $config->permission_mappings)) {
-            $permissions_list = $config->permission_mappings[$user->role]['permissions'];
+        if (array_key_exists ($user->role, $config->roles)) {
+            $permissions_list = $config->roles[$user->role]['permissions'];
             return in_array ($permission, $permissions_list);
         } else {
             return false;

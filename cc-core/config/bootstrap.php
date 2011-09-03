@@ -46,7 +46,7 @@ define ('SECRET_KEY', Settings::Get ('secret_key'));
 
 $config = new stdClass();
 $config->sitename = Settings::Get ('sitename');
-$config->permission_mappings = unserialize (Settings::Get ('permission_mappings'));
+$config->roles = unserialize (Settings::Get ('roles'));
 $config->debug_conversion = Settings::Get ('debug_conversion') == '1' ? true : false;
 $config->video_size_limit = Settings::Get ('video_size_limit');
 $config->accepted_video_formats = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');

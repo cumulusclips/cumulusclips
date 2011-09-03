@@ -205,7 +205,7 @@ include ('header.php');
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <img src="<?=$comment->avatar?>" height="80" width="80" />
+                            <img src="<?=$comment->avatar_url?>" height="80" width="80" />
                             <p class="poster"><?=($comment->user_id==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
                         </td>
                         <td class="comments-text">

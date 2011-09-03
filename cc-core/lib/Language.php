@@ -37,7 +37,7 @@ class Language {
                 $string = Functions::Replace ($string, $replace);
             }
 
-            return $string;
+            return (string) $string;
 
         } else {
             return false;

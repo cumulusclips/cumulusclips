@@ -30,6 +30,26 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
+    // Validate role
+    if (!empty ($_POST['role']) && !ctype_space ($_POST['role'])) {
+        $data['role'] = htmlspecialchars (trim ($_POST['role']));
+    } else {
+        $errors['role'] = 'Invalid role';
+    }
+
+
+    // Validate email
+    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
+        if (!User::Exist (array ('email' => $_POST['email']))) {
+            $data['email'] = htmlspecialchars (trim ($_POST['email']));
+        } else {
+            $errors['email'] = 'Email is unavailable';
+        }
+    } else {
+        $errors['email'] = 'Invalid email address';
+    }
+
+
     // Validate Username
     if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
         if (!User::Exist (array ('username' => $_POST['username']))) {
@@ -47,24 +67,6 @@ if (isset ($_POST['submitted'])) {
         $data['password'] = htmlspecialchars (trim ($_POST['password']));
     } else {
         $errors['password'] = 'Invalid password';
-    }
-
-
-    // Validate email
-    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        if (!User::Exist (array ('email' => $_POST['email']))) {
-            $data['email'] = htmlspecialchars (trim ($_POST['email']));
-        } else {
-            $errors['email'] = 'Email is unavailable';
-        }
-    } else {
-        $errors['email'] = 'Invalid email address';
-    }
-
-
-    // Validate make admin
-    if (isset ($_POST['admin']) && $_POST['admin'] == '1') {
-        $data['admin'] = 1;
     }
 
 
@@ -143,6 +145,15 @@ include ('header.php');
 
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
+            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+                <label>*Role:</label>
+                <select name="role" class="dropdown">
+                <?php foreach ($config->roles as $key => $value): ?>
+                    <option value="<?=$key?>" <?=(isset ($data['role']) && $data['role'] == $key)?'selected="selected"':''?>><?=$value['name']?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="row">
                 <label class="<?=(isset ($errors['email'])) ? 'errors' : ''?>">*E-mail:</label>
                 <input name="email" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
@@ -179,11 +190,6 @@ include ('header.php');
             <div class="row">
                 <label>About Me:</label>
                 <textarea name="about_me" rows="5" cols="50" class="text"><?=(isset ($errors, $data['about_me'])) ? $data['about_me']:''?></textarea>
-            </div>
-
-            <div class="row-shift">
-                <input name="admin" id="make_admin" type="checkbox" value="1" <?=(isset ($errors, $data['admin'])) ? 'checked="checked"':''?> />
-                <label for="make_admin">Make member a system admin</label>
             </div>
 
             <div class="row-shift">

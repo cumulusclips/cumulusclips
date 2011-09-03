@@ -44,10 +44,10 @@ View::Header();
 
         <div id="actions">
             <p class="large"><?=$video->views?></p>
-            <p><span id="rating-text">
-                <span class="green-text"><?=$rating->like_text?> (<?=$rating->likes?>+)</span> /
-                <span class="red-text"><?=$rating->dislike_text?> (<?=$rating->dislikes?>-)</span>
-            </span></p>
+            <p>
+                <span class="like-text"><?=$rating->like_text?> (<?=$rating->likes?>+)</span> /
+                <span class="dislike-text"><?=$rating->dislike_text?> (<?=$rating->dislikes?>-)</span>
+            </p>
             <p id="rating-link">
                 <a class="like rating" href="" data-rating="1" title="<?=Language::GetText('like')?>"><?=Language::GetText('like')?></a>
                 <a class="dislike rating" href="" data-rating="0" title="<?=Language::GetText('dislike')?>"><?=Language::GetText('dislike')?></a>
@@ -89,6 +89,12 @@ View::Header();
             <!-- TWITTER BUTTON -->
             <div class="share-button">
                 <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            </div>
+
+            <!-- Google +1 BUTTON -->
+            <div class="share-button">
+                <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                <g:plusone size="tall"></g:plusone>
             </div>
 
             <!-- DIGG BUTTON -->

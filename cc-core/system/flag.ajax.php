@@ -82,8 +82,8 @@ try {
 
     // Send admin alert
     $subject = 'Content Flagged As Inappropriate';
-    $body = "One of your members flagged content as inappropriate.";
-    $body .= "Please review the content to verify it is valid.";
+    $body = "One of your members flagged content as inappropriate. ";
+    $body .= "Please review the content to verify it is valid. ";
     $body .= "You can login to the Admin Panel to dismiss the flag, or uphold it and ban the content.";
 
     $body .= "\n\n=======================================================\n";
