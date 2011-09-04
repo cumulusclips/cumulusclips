@@ -24,8 +24,6 @@ $message = null;
 $data['sitename'] = Settings::Get('sitename');
 $data['base_url'] = Settings::Get('base_url');
 $data['admin_email'] = Settings::Get('admin_email');
-$data['php'] = Settings::Get('php');
-$data['ffmpeg'] = Settings::Get('ffmpeg');
 $data['auto_approve_videos'] = Settings::Get('auto_approve_videos');
 $data['auto_approve_users'] = Settings::Get('auto_approve_users');
 $data['auto_approve_comments'] = Settings::Get('auto_approve_comments');
@@ -63,22 +61,6 @@ if (isset ($_POST['submitted'])) {
         $data['admin_email'] = htmlspecialchars (trim ($_POST['admin_email']));
     } else {
         $errors['admin_email'] = 'Invalid admin email';
-    }
-
-
-    // Validate php path
-    if (!empty ($_POST['php']) && !ctype_space ($_POST['php'])) {
-        $data['php'] = htmlspecialchars (trim ($_POST['php']));
-    } else {
-        $errors['php'] = 'Invalid path to php';
-    }
-
-
-    // Validate ffmpeg path
-    if (!empty ($_POST['ffmpeg']) && !ctype_space ($_POST['ffmpeg'])) {
-        $data['ffmpeg'] = htmlspecialchars (trim ($_POST['ffmpeg']));
-    } else {
-        $errors['ffmpeg'] = 'Invalid path to ffmpeg';
     }
 
 
@@ -154,16 +136,6 @@ include ('header.php');
             <div class="row <?=(isset ($errors['admin_email'])) ? ' errors' : ''?>">
                 <label>Admin Email:</label>
                 <input class="text" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
-            </div>
-
-            <div class="row <?=(isset ($errors['php'])) ? ' errors' : ''?>">
-                <label>PHP Path:</label>
-                <input class="text" type="text" name="php" value="<?=$data['php']?>" />
-            </div>
-
-            <div class="row <?=(isset ($errors['ffmpeg'])) ? ' errors' : ''?>">
-                <label>FFMPEG Path:</label>
-                <input class="text" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
             </div>
 
             <div class="row <?=(isset ($errors['auto_approve_videos'])) ? ' errors' : ''?>">

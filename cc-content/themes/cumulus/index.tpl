@@ -1,8 +1,8 @@
 <?php
 
-View::AddJs ('jcycle.plugin.js');
-View::AddJs ('slideshow.js');
-View::AddSidebarBlock ('home_login.tpl');
+View::AddJs('jcycle.plugin.js');
+View::AddJs('slideshow.js');
+if (!$logged_in) View::AddSidebarBlock('home_login.tpl');
 View::Header();
 
 ?>

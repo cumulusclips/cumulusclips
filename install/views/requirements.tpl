@@ -59,7 +59,7 @@
                             <td>
                                 <img src="images/<?php echo ($qt_faststart) ? 'tick.png' : 'flag_yellow.png'; ?>" />
                                 <?php if (!$qt_faststart): ?>
-                                qt-faststart was not found. Video uploads have been disabled. <a href="#" class="more-info" data-content="qt-faststart" title="More Info">More Info</a>
+                                qt-faststart was not found. Video uploads have disabled. <a href="#" class="more-info" data-content="qt-faststart" title="More Info">More Info</a>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -220,23 +220,23 @@
 
                     <div class="more-info-content" id="qt-faststart">
                         <span class="tip">qt-faststart is used to allow progressive
-                        playback of videos. You will not be able to upload videos
+                        playback of videos. You won't be able to upload videos
                         without this. You can add this later in the admin panel,
-                        or also use a plugin or other service instead.</span>
+                        or use a plugin or service instead.</span>
                     </div>
 
                     <div class="more-info-content" id="ffmpeg">
                         <span class="tip">FFMPEG is used to convert uploaded videos.
-                        You will not be able to upload videos without this.
-                        You can add this later in the admin panel, or also use a
-                        plugin or other service instead.</span>
+                        You won't be able to upload videos without this. You can
+                        add this later in the admin panel, or use a plugin or
+                        service instead.</span>
                     </div>
 
                     <div class="more-info-content" id="php">
-                        <span class="tip">PHP path is used to convert uploaded
-                        videos if you're not using a plugin or service to do so.
-                        You can find out what the path is to PHP from your web
-                        host, and add it later in the admin panel.</span>
+                        <span class="tip">PHP path is needed to trigger video conversion.
+                        You won't be able to upload videos without this. You can
+                        add this later in the admin panel, or use a plugin or
+                        service instead.</span>
                     </div>
 
 

@@ -48,8 +48,7 @@ if ($user->user_id == $video->user_id) {
 
 
 // Submit rating if none exists
-//if (Rating::AddRating ($_POST['rating'], $video->video_id, $logged_in)) {
-if (true) {
+if (Rating::AddRating ($_POST['rating'], $video->video_id, $logged_in)) {
     Plugin::Trigger ('rate.ajax.rate_video');
     echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText ('success_rated'), 'other' => Rating::GetRating ($video->video_id)));
     exit();

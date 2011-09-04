@@ -107,7 +107,7 @@ class View {
      */
     static function Block ($tpl_file) {
         extract (get_object_vars (self::$vars));
-        $block = THEME_PATH . '/blocks/' . $tpl_file;
+        $block = (file_exists (THEME_PATH . '/blocks/' . $tpl_file)) ? THEME_PATH . '/blocks/' . $tpl_file : $tpl_file;
         Plugin::Trigger ('view.block');
         include ($block);
     }
@@ -124,7 +124,7 @@ class View {
     static function RepeatingBlock ($tpl_file, $records) {
 
         extract (get_object_vars (self::$vars));
-        $block = THEME_PATH . '/blocks/' . $tpl_file;
+        $block = (file_exists (THEME_PATH . '/blocks/' . $tpl_file)) ? THEME_PATH . '/blocks/' . $tpl_file : $tpl_file;
         Plugin::Trigger ('view.repeating_block');
 
         foreach ($records as $_id) {
@@ -171,7 +171,7 @@ class View {
      * @return void CSS file is stored to be written in document
      */
     static function AddCss ($css_name) {
-        $css_url = THEME . '/css/' . $css_name;
+        $css_url = (file_exists (THEME_PATH . '/css/' . $css_name)) ? THEME . '/css/' . $css_name : $css_name;
         self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
         Plugin::Trigger ('view.add_css');
     }
@@ -202,7 +202,7 @@ class View {
      * @return void JS file is stored to be written in document
      */
     static function AddJs ($js_name) {
-        $js_url = THEME . '/js/' . $js_name;
+        $js_url = (file_exists (THEME_PATH . '/js/' . $js_name)) ? THEME . '/js/' . $js_name : $js_name;
         self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
         Plugin::Trigger ('view.add_js');
     }

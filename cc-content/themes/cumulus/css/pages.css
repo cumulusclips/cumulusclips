@@ -93,7 +93,30 @@ HOMEPAGE STYLES
 }
 
 #home-login .text { width:260px; }
-#home-login .button { margin-top:10px; }
+#home-login .button { margin-bottom:10px; }
+
+
+
+
+
+/******************
+BROWSE VIDEO STYLES
+******************/
+
+#sort-options, #category-options {
+    float:left;
+}
+
+#category-options {
+    margin-left:45px;
+    width:395px;
+}
+#category-options li {
+    line-height:1.25;
+    float:left;
+    width:130px;
+}
+
 
 
 

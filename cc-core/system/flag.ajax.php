@@ -81,18 +81,20 @@ try {
 
 
     // Send admin alert
-    $subject = 'Content Flagged As Inappropriate';
-    $body = "One of your members flagged content as inappropriate. ";
-    $body .= "Please review the content to verify it is valid. ";
-    $body .= "You can login to the Admin Panel to dismiss the flag, or uphold it and ban the content.";
+    if (Settings::Get ('alerts_flags') == '1') {
+        $subject = 'Content Flagged As Inappropriate';
+        $body = "One of your members flagged content as inappropriate. ";
+        $body .= "Please review the content to verify it is valid. ";
+        $body .= "You can login to the Admin Panel to dismiss the flag, or uphold it and ban the content.";
 
-    $body .= "\n\n=======================================================\n";
-    $body .= "Content Type: $type\n";
-    $body .= "URL: $url\n";
-    $body .= "$name\n";
-    $body .= "=======================================================";
-    Plugin::Trigger ('flag.ajax.alert');
-    App::Alert ($subject, $body);
+        $body .= "\n\n=======================================================\n";
+        $body .= "Content Type: $type\n";
+        $body .= "URL: $url\n";
+        $body .= "$name\n";
+        $body .= "=======================================================";
+        Plugin::Trigger ('flag.ajax.alert');
+        App::Alert ($subject, $body);
+    }
 
 
     // Create flag and output message

@@ -1,6 +1,6 @@
 /*
 SQLyog Community v8.63 
-MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
+MySQL - 5.1.54-1ubuntu4 : Database - cumulus-dump
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 5.1.37-1ubuntu5.5 : Database - cumulus
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`cumulus` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`cumulus-dump` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `cumulus`;
+USE `cumulus-dump`;
 
 /*Table structure for table `categories` */
 
@@ -22,14 +22,15 @@ DROP TABLE IF EXISTS `categories`;
 
 CREATE TABLE `categories` (
   `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `cat_name` varchar(250) NOT NULL,
+  `cat_name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   PRIMARY KEY (`cat_id`),
   UNIQUE KEY `channel_id` (`cat_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Data for the table `categories` */
 
-insert  into `categories`(`cat_id`,`cat_name`) values (1,'General');
+insert  into `categories`(`cat_id`,`cat_name`,`slug`) values (1,'General','general'),(9,'Horror','horror'),(8,'Alien','alien'),(5,'Action','action'),(6,'Sports','sports'),(7,'Animated','animated'),(10,'Comedy','comedy');
 
 /*Table structure for table `comments` */
 
@@ -147,11 +148,9 @@ CREATE TABLE `privacy` (
   `newsletter` varchar(100) NOT NULL DEFAULT 'yes',
   `new_video` varchar(100) NOT NULL DEFAULT 'yes',
   PRIMARY KEY (`privacy_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=360 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Data for the table `privacy` */
-
-insert  into `privacy`(`privacy_id`,`user_id`,`video_comment`,`new_message`,`newsletter`,`new_video`) values (1,1,'yes','yes','yes','yes');
 
 /*Table structure for table `ratings` */
 
@@ -177,11 +176,11 @@ CREATE TABLE `settings` (
   `name` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 /*Data for the table `settings` */
 
-insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','0'),(5,'auto_approve_videos','0'),(6,'auto_approve_comments','0'),(7,'debug_conversion','1'),(9,'video_size_limit','102000000'),(11,'pagination_page_limit','9'),(40,'qt_faststart','/usr/local/bin/qt-faststart'),(15,'base_url','http://cumulus'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','cumulus.admin@mailinator.com'),(19,'enable_uploads','1'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{s:7:\"english\";a:2:{s:9:\"lang_name\";s:7:\"English\";s:11:\"native_name\";s:7:\"English\";}s:10:\"portuguese\";a:2:{s:9:\"lang_name\";s:10:\"Portuguese\";s:11:\"native_name\";s:10:\"PortuguÃªs\";}s:7:\"spanish\";a:2:{s:9:\"lang_name\";s:7:\"Spanish\";s:11:\"native_name\";s:8:\"EspaÃ±ol\";}}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url',''),(26,'theora_url',''),(27,'mobile_url',''),(28,'thumb_url',''),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 1 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),(33,'smtp','O:8:\"stdClass\":5:{s:7:\"enabled\";s:1:\"0\";s:4:\"host\";s:0:\"\";s:4:\"port\";i:25;s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),(34,'alerts_videos','1'),(35,'alerts_comments','1'),(37,'alerts_users','1'),(38,'from_name',''),(39,'from_address',''),(41,'permission_mappings','a:1:{s:5:\"admin\";a:2:{s:4:\"name\";s:13:\"Administrator\";s:11:\"permissions\";a:1:{i:0;s:11:\"admin_panel\";}}}');
+insert  into `settings`(`setting_id`,`name`,`value`) values (1,'active_theme','cumulus'),(2,'default_language','english'),(3,'enabled_plugins','a:0:{}'),(4,'auto_approve_users','0'),(5,'auto_approve_videos','0'),(6,'auto_approve_comments','0'),(7,'debug_conversion','1'),(9,'video_size_limit','102000000'),(11,'pagination_page_limit','9'),(40,'qt_faststart','/usr/local/bin/qt-faststart'),(15,'base_url','http://192.168.1.106'),(16,'secret_key','75ddabc22ef65219ca07012bd3270936'),(17,'sitename','CumulusClips'),(18,'admin_email','cumulus.admin@mailinator.com'),(19,'enable_uploads','0'),(20,'ffmpeg','/usr/local/bin/ffmpeg'),(21,'php','/usr/bin/php'),(22,'active_mobile_theme','mobile'),(23,'active_languages','a:3:{s:7:\"english\";a:2:{s:9:\"lang_name\";s:7:\"English\";s:11:\"native_name\";s:7:\"English\";}s:10:\"portuguese\";a:2:{s:9:\"lang_name\";s:10:\"Portuguese\";s:11:\"native_name\";s:10:\"PortuguÃªs\";}s:7:\"spanish\";a:2:{s:9:\"lang_name\";s:7:\"Spanish\";s:11:\"native_name\";s:8:\"EspaÃ±ol\";}}'),(24,'installed_plugins','a:1:{i:0;s:10:\"HelloWorld\";}'),(25,'h264_url',''),(26,'theora_url',''),(27,'mobile_url',''),(28,'thumb_url',''),(29,'h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),(30,'theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),(31,'mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 2 -ab 96k -ar 44100 -f mp4'),(32,'thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),(33,'smtp','O:8:\"stdClass\":5:{s:7:\"enabled\";s:1:\"0\";s:4:\"host\";s:0:\"\";s:4:\"port\";i:25;s:8:\"username\";s:0:\"\";s:8:\"password\";s:0:\"\";}'),(34,'alerts_videos','1'),(35,'alerts_comments','1'),(37,'alerts_users','1'),(38,'from_name',''),(39,'from_address',''),(41,'roles','a:2:{s:5:\"admin\";a:2:{s:4:\"name\";s:13:\"Administrator\";s:11:\"permissions\";a:1:{i:0;s:11:\"admin_panel\";}}s:4:\"user\";a:2:{s:4:\"name\";s:4:\"User\";s:11:\"permissions\";a:0:{}}} '),(42,'alerts_flags','1');
 
 /*Table structure for table `subscriptions` */
 
@@ -221,11 +220,9 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `username` (`username`),
   KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=365 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Data for the table `users` */
-
-insert  into `users`(`user_id`,`username`,`email`,`password`,`status`,`role`,`date_created`,`first_name`,`last_name`,`about_me`,`website`,`confirm_code`,`views`,`last_login`,`avatar`,`released`) values (1,'admin','damian.torres@mailinator.com','Damian646','active','admin','2011-08-26','',NULL,'','',NULL,1393,'2011-08-31','',1);
 
 /*Table structure for table `videos` */
 

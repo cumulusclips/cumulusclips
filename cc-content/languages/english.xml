@@ -82,6 +82,11 @@
         <!-- Browse Videos Page -->
         <videos_header>@Browse Videos</videos_header>
         <viewing>@Viewing</viewing>
+        <grouping>@Grouping</grouping>
+        <most_recent>@Most Recent</most_recent>
+        <most_viewed>@Most Viewed</most_viewed>
+        <most_discussed>@Most Discussed</most_discussed>
+        <most_rated>@Most Rated</most_rated>
         <no_videos>@No videos added yet.</no_videos>
         <by>@By</by>
 
@@ -396,7 +401,7 @@
         </index>
 
         <videos>
-            <title>@Browse {BROWSING} Videos</title>
+            <title>@Browse Videos:</title>
             <keywords>@Browse Videos, Browse, Videos</keywords>
             <description>@Browse videos on the video sharing community</description>
         </videos>

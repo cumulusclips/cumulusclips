@@ -253,10 +253,7 @@ BODY STRUCTURE STYLES
     line-height:1.25;
 }
 
-.errors {
-    color:#C00;
-}
-
+.errors { color:#C00; }
 .ok { color:#060; }
 
 .loading {

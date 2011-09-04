@@ -39,14 +39,11 @@ if (isset ($_POST['submitted_add'])) {
             throw new Exception ('Invalid category name. Please try again.');
         }
 
+        $data['slug'] = Functions::CreateSlug (trim ($_POST['cat_name']));
         $data['cat_name'] = htmlspecialchars (trim ($_POST['cat_name']));
 
-        foreach ($categories as $category) {
-            $category_slug = Functions::CreateSlug ($category->cat_name);
-            $new_category_slug = Functions::CreateSlug ($data['cat_name']);
-            if ($category_slug == $new_category_slug) {
-                throw new Exception ('Category name or slug already exists. Please note that in the slug special characters are replaced by hyphens.');
-            }
+        if (Category::Exist (array ('slug' => $data['slug']))) {
+            throw new Exception ('Category name or slug already exists. Please note that in the slug special characters are replaced by hyphens.');
         }
 
         Category::Create ($data);

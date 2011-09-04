@@ -13,13 +13,13 @@
             <input style="display:none;" type="password" class="text defaultText" name="password" />
         </div>
 
-        <p><a href="<?=HOST?>/register/" title=""><?=Language::GetText('no_account')?></a></p>
-        <p><a href="<?=HOST?>/login/forgot/" title=""><?=Language::GetText('forgot_your_login')?></a></p>
-
         <div>
             <input type="hidden" name="submitted_login" value="TRUE" />
             <input class="button" type="submit" name="button" value="<?=Language::GetText('login_button')?>" />
         </div>
+
+        <p><a href="<?=HOST?>/register/" title=""><?=Language::GetText('no_account')?></a></p>
+        <p><a href="<?=HOST?>/login/forgot/" title=""><?=Language::GetText('forgot_your_login')?></a></p>
 
     </form>
 

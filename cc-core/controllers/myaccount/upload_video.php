@@ -15,6 +15,7 @@ App::LoadClass ('Video');
 View::InitView ('upload_video');
 Plugin::Trigger ('upload_video.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+App::EnableUploadsCheck();
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->timestamp = time();
 

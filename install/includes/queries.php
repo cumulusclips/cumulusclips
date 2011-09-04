@@ -10,17 +10,15 @@ $_CREATE_CATEGORIES_TABLE = <<<CREATE_CATEGORIES_TABLE
 
 CREATE TABLE `{DB_PREFIX}categories` (
   `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `cat_name` varchar(250) NOT NULL,
-  `cat_description` text,
-  `date_created` date NOT NULL,
-  PRIMARY KEY (`cat_id`),
-  UNIQUE KEY `channel_id` (`cat_id`)
+  `cat_name` varchar(252) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  PRIMARY KEY (`cat_id`)
 ) DEFAULT CHARSET=utf8
 
 CREATE_CATEGORIES_TABLE;
 
 $_POPULATE_CATEGORIES_TABLE = <<<POPULATE_CATEGORIES_TABLE
-INSERT INTO `{DB_PREFIX}categories` (`cat_name`) VALUES ('General')
+INSERT INTO `{DB_PREFIX}categories` (`cat_name`,`slug`) VALUES ('General','general')
 POPULATE_CATEGORIES_TABLE;
 
 
@@ -48,8 +46,7 @@ CREATE TABLE `{DB_PREFIX}comments` (
   `ip` varchar(255) DEFAULT NULL,
   `user_agent` longtext,
   `released` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`comment_id`),
-  UNIQUE KEY `indexer` (`comment_id`)
+  PRIMARY KEY (`comment_id`)
 ) DEFAULT CHARSET=utf8
 
 CREATE_COMMENTS_TABLE;
@@ -95,8 +92,7 @@ CREATE TABLE `{DB_PREFIX}flags` (
   `user_id` bigint(20) NOT NULL,
   `date_created` date NOT NULL,
   `status` varchar(255) DEFAULT 'pending',
-  PRIMARY KEY (`flag_id`),
-  UNIQUE KEY `indexer` (`flag_id`)
+  PRIMARY KEY (`flag_id`)
 ) DEFAULT CHARSET=utf8
 
 CREATE_FLAGS_TABLE;
@@ -249,7 +245,6 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_languages', 'a:3:{s:7:"english";a:2:{s:9:"lang_name";s:7:"English";s:11:"native_name";s:7:"English";}s:10:"portuguese";a:2:{s:9:"lang_name";s:10:"Portuguese";s:11:"native_name";s:10:"PortuguÃªs";}s:7:"spanish";a:2:{s:9:"lang_name";s:7:"Spanish";s:11:"native_name";s:8:"EspaÃ±ol";}}'),
 ('installed_plugins','a:1:{i:0;s:10:"HelloWorld";}'),
 ('enabled_plugins','a:0:{}'),
-('live','true'),
 ('pagination_page_limit','9'),
 ('roles','a:2:{s:5:"admin";a:2:{s:4:"name";s:13:"Administrator";s:11:"permissions";a:1:{i:0;s:11:"admin_panel";}}s:4:"user";a:2:{s:4:"name";s:4:"User";s:11:"permissions";a:0:{}}}'),
 ('debug_conversion','0'),

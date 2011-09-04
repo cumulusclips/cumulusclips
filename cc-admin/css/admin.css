@@ -221,12 +221,10 @@ h1, .huge { font-size:20px; }
 h2, .large { font-size:16px; }
 h3, .big { font-size:14px; }
 
+
+.small { font-size:10px; }
 .errors, .delete { color:#C00; }
-
 .approve { color:green; }
-
-.pending { color:orange; }
-
 em { font-style: italic; }
 
 

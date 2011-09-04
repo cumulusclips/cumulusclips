@@ -100,6 +100,18 @@ class App {
 
 
     /**
+     * Check if a system update is in progress and display a "Maintenance" message
+     * to any user attempting to access the site
+     */
+    static function EnableUploadsCheck() {
+        global $config;
+        if ($config->enable_uploads != '1') exit('<!DOCTYPE html><html><head><title>Uploads Disabled</title><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><style type="text/css">*{padding:0;margin:0;}body{background-color:#ebebeb;font-size:12px;font-family:arial,helvetica,sans-serif;color:#666;}#main{margin:200px auto 0;width:960px;}.block{margin-top:15px;border:3px solid #CCC;padding:15px;background-color:#FFF;border-radius:10px;}h1{color:#333;font-weight:bold;font-size:24px;}p{padding:5px 0;}</style></head><body><div id="main"><h1>Uploads Disabled</h1><div class="block"><p>Your server does not meet the minimum requirements for video encoding. As a result video uploads have been disabled. Please check with your web host to ensure they fully support CumulusClips.</p><p>Visit the Admin Panel -> Settings -> Video, to re-check your system and enable uploads. You could also use a plugin to manage video encoding for you.</p></div></div></body></html>');
+    }
+
+
+
+
+    /**
      * Check for mobile devices or mobile site opt-out. If a mobile device is
      * detected via it's user agent header they will be sent to the mobile version
      * of the site unless they're already viewing the mobile site or have opted

@@ -205,9 +205,9 @@ include ('header.php');
                             <?php elseif ($type == 'video'): ?>
 
                                 <?php $video = new Video ($flag->id); ?>
-                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->title?>" class="large"><?=$video->title?></a>
+                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a>
                                 <div class="record-actions invisible">
-                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->title?>/">Watch Video</a>
+                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch Video</a>
                                     <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
 
                             <?php elseif ($type == 'comment'): ?>

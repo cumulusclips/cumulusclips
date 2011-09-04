@@ -14,6 +14,7 @@ App::LoadClass ('User');
 View::InitView ('upload_complete');
 Plugin::Trigger ('upload_complete.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+App::EnableUploadsCheck();
 View::$vars->user = new User (View::$vars->logged_in);
 
 

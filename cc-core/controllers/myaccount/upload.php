@@ -15,6 +15,7 @@ App::LoadClass ('Video');
 View::InitView ('upload');
 Plugin::Trigger ('upload.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+App::EnableUploadsCheck();
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->categories = NULL;
 View::$vars->data = array();

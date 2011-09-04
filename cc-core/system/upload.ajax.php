@@ -10,6 +10,7 @@ App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Filesystem');
 Plugin::Trigger ('upload.ajax.start');
+App::EnableUploadsCheck();
 
 
 ### Retrieve video information
