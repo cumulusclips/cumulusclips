@@ -7,7 +7,6 @@ App::LoadClass ('Flag');
 
 
 // Establish page variables, objects, arrays, etc
-Plugin::Trigger ('admin.member_edit.start');
 Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
 $admin = new User ($logged_in);
 Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
@@ -163,7 +162,6 @@ if (isset ($_POST['submitted'])) {
         $message = 'Member has been updated.';
         $message_type = 'success';
         $user->Update ($data);
-        Plugin::Trigger ('admin.member_edit.update_member');
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);

@@ -8,7 +8,6 @@ App::LoadClass ('Pagination');
 
 
 // Establish page variables, objects, arrays, etc
-Plugin::Trigger ('admin.videos.start');
 Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
 $admin = new User ($logged_in);
 Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
