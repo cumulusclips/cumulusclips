@@ -12,6 +12,11 @@ HOMEPAGE STYLES
     background-color:#000;
 }
 
+#slideshow > div > img {
+    width:580px;
+    height:355px;
+}
+
 #slideshow > div {
     height:355px;
     position:absolute;
@@ -34,6 +39,8 @@ HOMEPAGE STYLES
     font-size:14px;
     padding:10px;
 }
+
+#slideshow .large { color:#FFF; }
 
 #slide-count {
     text-align:center;

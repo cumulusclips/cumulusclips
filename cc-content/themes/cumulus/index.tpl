@@ -18,6 +18,22 @@ View::Header();
     <!-- BEGIN SLIDESHOW -->
     <div id="slideshow">
 
+
+        <!-- BEGIN FEATURED VIDEO SLIDES -->
+        <?php foreach ($featured_videos as $featured_id): ?>
+            <?php $featured = new Video ($featured_id); ?>
+            <div>
+                <img src="<?=$config->thumb_url?>/<?=$featured->filename?>.jpg" />
+                <div class="slide-text">
+                    <p class="large"><u>Featured Video:</u> <?=$featured->title?></p>
+                    <p><?=Functions::CutOff ($featured->description, 80)?></p>
+                    <a class="button" href="<?=$featured->url?>/">Watch Now</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <!-- END FEATURED VIDEO SLIDES -->
+
+
         <!-- BEGIN SLIDE 1 -->
         <div>
             <img src="<?=THEME?>/images/slide1.jpg" />
