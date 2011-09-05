@@ -1,12 +1,7 @@
 <?php
 
-### Created on March 6, 2009
-### Created by Miguel A. Hurtado
-### This script displays and handles the contact page
-
-
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 
 

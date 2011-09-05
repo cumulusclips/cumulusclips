@@ -93,7 +93,7 @@
         <!-- Browse Members Page -->
         <members_header>@Browse Members</members_header>
         <no_members>@No registered members yet.</no_members>
-        <member_since>@Member Since</member_since>
+        <joined>@Joined</joined>
         <videos_uploaded>@Videos Uploaded</videos_uploaded>
 
         <!-- Member Profile Page -->

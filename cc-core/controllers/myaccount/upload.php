@@ -1,10 +1,5 @@
 <?php
 
-### Created on May 10, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to provide the information for the video to be uploaded
-
-
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');

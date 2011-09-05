@@ -1,12 +1,7 @@
 <?php
 
-### Created on February 28, 2009
-### Created by Miguel A. Hurtado
-### This script displays the site homepage
-
-
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Page');
 
@@ -15,7 +10,7 @@ App::LoadClass ('Page');
 View::InitView();
 Plugin::Trigger ('page.start');
 View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) $user = new User (View::$vars->logged_in);
+if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 $page_id = null;
 
 

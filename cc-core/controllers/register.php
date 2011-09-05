@@ -1,12 +1,7 @@
 <?php
 
-### Created on March 9, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to register
-
-
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Mail');
 

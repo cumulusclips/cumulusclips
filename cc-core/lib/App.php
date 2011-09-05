@@ -9,7 +9,7 @@ class App {
      */
     static function Throw404() {
         global $config;
-        include (DOC_ROOT . '/cc-core/controllers/system_404.php');
+        include_once (DOC_ROOT . '/cc-core/controllers/system_404.php');
         exit();
     }
 
@@ -100,8 +100,9 @@ class App {
 
 
     /**
-     * Check if a system update is in progress and display a "Maintenance" message
-     * to any user attempting to access the site
+     * Check if uploads are enabled and display message if applicable
+     * @global object $config
+     * @return void Script is terminated, user is presented with uploads disabled message
      */
     static function EnableUploadsCheck() {
         global $config;

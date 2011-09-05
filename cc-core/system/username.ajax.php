@@ -1,10 +1,5 @@
 <?php
 
-### Created on March 9, 2009
-### Created by Miguel A. Hurtado
-### This script checks if a username has already been taken
-
-
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');

@@ -1,14 +1,7 @@
 <?php
 
-### Created on May 11, 2009
-### Created by Miguel A. Hurtado
-### This script processes an uploaded video for usage on the site
-
-# $argv[1]: Video ID
-
-
 // Include required files
-include (dirname (dirname ( __FILE__ )) . '/config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');
 App::LoadClass ('Filesystem');
 Plugin::Trigger ('encode.start');

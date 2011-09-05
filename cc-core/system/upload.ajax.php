@@ -1,9 +1,5 @@
 <?php
 
-### Created on May 16, 2009
-### Created by Miguel A. Hurtado
-### This script validates the uploaded video and moves it to the site temp directory
-
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');

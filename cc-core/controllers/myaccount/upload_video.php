@@ -1,10 +1,5 @@
 <?php
 
-### Created on May 11, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to actually browse for and upload their videos
-
-
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');

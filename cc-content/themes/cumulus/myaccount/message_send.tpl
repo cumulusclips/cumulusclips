@@ -28,7 +28,7 @@ View::Header();
 
         <div class="row">
             <label<?=(isset ($errors['message'])) ? ' class="errors"' : ''?>><?=Language::GetText('message')?>: </label>
-            <textarea class="text" name="message"><?=$msg?></textarea>
+            <textarea class="text" name="message" cols="45" rows="10"><?=$msg?></textarea>
         </div>
 
         <div class="row-shift">

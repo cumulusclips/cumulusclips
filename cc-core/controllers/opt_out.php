@@ -1,12 +1,7 @@
 <?php
 
-### Created on June 10, 2009
-### Created by Miguel A. Hurtado
-### This script unsubscribes users from all non-account mailings
-
-
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Privacy');
 

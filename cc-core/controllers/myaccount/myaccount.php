@@ -1,12 +1,7 @@
 <?php
 
-### Created on March 24, 2009
-### Created by Miguel A. Hurtado
-### This script displays the my account page
-
-
 // Include required files
-include ('../../config/bootstrap.php');
+include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');
 
 

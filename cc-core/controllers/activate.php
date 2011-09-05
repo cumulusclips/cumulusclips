@@ -1,12 +1,7 @@
 <?php
 
-### Created on March 14, 2009
-### Created by Miguel A. Hurtado
-### This script confirms a users account
-
-
 // Include required files
-include ('../config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 
 

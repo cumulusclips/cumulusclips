@@ -1,10 +1,5 @@
 <?php
 
-### Created on July 4, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to search for videos on the mobile site
-
-
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('Video');

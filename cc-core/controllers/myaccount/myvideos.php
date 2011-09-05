@@ -1,12 +1,7 @@
 <?php
 
-### Created on April 30, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to view and remove their uploaded videos
-
-
 // Include required files
-include ('../../config/bootstrap.php');
+include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Pagination');

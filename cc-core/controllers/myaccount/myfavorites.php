@@ -1,12 +1,7 @@
 <?php
 
-### Created on May 10, 2009
-### Created by Miguel A. Hurtado
-### This script allows users to view and remove their favorite videos
-
-
 // Include required files
-include ('../../config/bootstrap.php');
+include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
 App::LoadClass ('Pagination');

@@ -1,10 +1,5 @@
 <?php
 
-### Created on October 23, 2010
-### Created by Miguel A. Hurtado
-### This script retrieves more videos to display on the videos page
-
-
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');

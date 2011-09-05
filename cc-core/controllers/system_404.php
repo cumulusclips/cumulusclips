@@ -1,12 +1,7 @@
 <?php
 
-### Created on March 8, 2009
-### Created by Miguel A. Hurtado
-### This script displays the 404 not found page
-
-
 // Include required files
-include_once ( dirname ( dirname ( __FILE__ )) . '/config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 
 // Establish page variables, objects, arrays, etc

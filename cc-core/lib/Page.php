@@ -24,10 +24,6 @@ class Page {
         'feed',
         'page',
         'video-sitemap',
-        'sitemap-videos',
-        'sitemap-members',
-        'sitemap-index',
-        'sitemap-main',
         'language'
     );
 

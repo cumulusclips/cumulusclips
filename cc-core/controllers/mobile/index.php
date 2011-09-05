@@ -1,10 +1,5 @@
 <?php
 
-### Created on July 3, 2009
-### Created by Miguel A. Hurtado
-### This script displays the homepage for the mobile site
-
-
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('Video');

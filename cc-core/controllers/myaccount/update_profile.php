@@ -1,10 +1,5 @@
 <?php
 
-### Created on March 24, 2009
-### Created by Miguel A. Hurtado
-### This script allows the user to edit their profile
-
-
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');

@@ -18,7 +18,7 @@ View::Header();
             <a href="<?=HOST?>/myaccount/profile/#update-avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
         <br />
-        <p><strong><?=Language::GetText('member_since')?>:</strong> <?=$user->date_created?></p>
+        <p><strong><?=Language::GetText('joined')?>:</strong> <?=$user->date_created_formatted?></p>
         <p><strong><?=Language::GetText('last_login')?>:</strong> <?=$user->last_login_formatted?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong> <?=$user->views?></p>
     </div>

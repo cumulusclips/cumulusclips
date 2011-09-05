@@ -1,10 +1,5 @@
 <?php
 
-### Created on March 8, 2009
-### Created by Miguel A. Hurtado
-### This script logs users out
-
-
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');

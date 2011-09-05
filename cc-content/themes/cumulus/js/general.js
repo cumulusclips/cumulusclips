@@ -171,6 +171,7 @@ $('document').ready(function(){
         var callback = function(responseData) {
             $('#status-posts').prepend(responseData.other);
             $('#status-form')[0].reset();
+            $('#status-form .text').css('height', '20')
         }
         executeAction (url, $(this).serialize(), callback);
         return false;
@@ -179,6 +180,9 @@ $('document').ready(function(){
     // Make status update field expand on initial focus
     $('#status-form .text').focus(function(){
         $(this).css('height', '80');
+    });
+    $('#status-form .text').blur(function(){
+        if ($(this).val() == '') $(this).css('height', '20');
     });
 
 
