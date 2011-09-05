@@ -1,7 +1,7 @@
 <?php
 
 // Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/bootstrap.php');
+include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Flag');
 App::LoadClass ('Pagination');
