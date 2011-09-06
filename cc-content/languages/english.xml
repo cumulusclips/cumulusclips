@@ -9,570 +9,570 @@
         <notes></notes>
     </information>
     <terms>
-        <search_text>@Search Videos...</search_text>
-        <login>@Login</login>
-        <register>@Sign Up Free</register>
-        <logout>@Logout</logout>
-        <myaccount>@My Account</myaccount>
-        <view_my_profile>@View My Profile</view_my_profile>
-        <admin_panel>@Admin Panel</admin_panel>
-        <videos>@Videos</videos>
-        <members>@Members</members>
-        <upload>@Upload</upload>
-        <previous>@Previous</previous>
-        <next>@Next</next>
-        <yes>@Yes</yes>
-        <no>@No</no>
-        <quick_links>@Quick Links</quick_links>
-        <uploadify_supported_formats>@Supported Formats</uploadify_supported_formats>
-        <video_feed>@Video Feed</video_feed>
+        <search_text>Search Videos...</search_text>
+        <login>Login</login>
+        <register>Sign Up Free</register>
+        <logout>Logout</logout>
+        <myaccount>My Account</myaccount>
+        <view_my_profile>View My Profile</view_my_profile>
+        <admin_panel>Admin Panel</admin_panel>
+        <videos>Videos</videos>
+        <members>Members</members>
+        <upload>Upload</upload>
+        <previous>Previous</previous>
+        <next>Next</next>
+        <yes>Yes</yes>
+        <no>No</no>
+        <quick_links>Quick Links</quick_links>
+        <uploadify_supported_formats>Supported Formats</uploadify_supported_formats>
+        <video_feed>Video Feed</video_feed>
 
         <!-- Mobile -->
-        <mobile_heading>@{SITENAME} Mobile</mobile_heading>
-        <home>@Home</home>
-        <back>@Back</back>
-        <duration>@Duration</duration>
-        <load_more>@Load 20 More</load_more>
-        <loading>@Loading</loading>
-        <featured_video_header>@Featured Video</featured_video_header>
-        <search>@Search</search>
-        <standard_site>@Standard Site</standard_site>
-        <search_body>@When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
-        <device_not_supported>@Your device is not supported for video playback.</device_not_supported>
+        <mobile_heading>{SITENAME} Mobile</mobile_heading>
+        <home>Home</home>
+        <back>Back</back>
+        <duration>Duration</duration>
+        <load_more>Load 20 More</load_more>
+        <loading>Loading</loading>
+        <featured_video_header>Featured Video</featured_video_header>
+        <search>Search</search>
+        <standard_site>Standard Site</standard_site>
+        <search_body>When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
+        <device_not_supported>Your device is not supported for video playback.</device_not_supported>
 
         <!-- Home Page -->
-        <home_header>@Fresh Out The Oven!</home_header>
-        <advertisement>@Advertisement</advertisement>
-        <account_login>@Account Login</account_login>
-        <username>@Username</username>
-        <password>@Password</password>
-        <no_account>@Don't Have an Account? Create one Free!</no_account>
-        <forgot_your_login>@Forgot your Login</forgot_your_login>
-        <login_button>@Login</login_button>
+        <home_header>Fresh Out The Oven!</home_header>
+        <advertisement>Advertisement</advertisement>
+        <account_login>Account Login</account_login>
+        <username>Username</username>
+        <password>Password</password>
+        <no_account>Don't Have an Account? Create one Free!</no_account>
+        <forgot_your_login>Forgot your Login</forgot_your_login>
+        <login_button>Login</login_button>
 
         <!-- Login Page -->
-        <login_header>@Login to your Account</login_header>
-        <remember_me>@Remember me</remember_me>
-        <forgot_text>@Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
-        <email>@E-mail</email>
-        <forgot_header>@Forgot your Login</forgot_header>
-        <forgot_button>@Forgot Login</forgot_button>
+        <login_header>Login to your Account</login_header>
+        <remember_me>Remember me</remember_me>
+        <forgot_text>Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
+        <email>E-mail</email>
+        <forgot_header>Forgot your Login</forgot_header>
+        <forgot_button>Forgot Login</forgot_button>
 
         <!-- Register Page -->
-        <register_header>@Register with Us</register_header>
+        <register_header>Register with Us</register_header>
         <register_text><![CDATA[
-            <strong>@Join {SITENAME} Today!</strong><br /><br />
+            <strong>Join {SITENAME} Today!</strong><br /><br />
             As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to members, and much more!</p>
         ]]></register_text>
-        <asterisk>@An asterisk (*) denotes required field.</asterisk>
-        <username_req>@Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
-        <confirm_password>@Confirm Password</confirm_password>
-        <register_button>@Create Account</register_button>
-        <checking_availability>@Checking availability</checking_availability>
-        <username_minimum>@At least 4 characters are required.</username_minimum>
-        <username_available>@Username is available!</username_available>
+        <asterisk>An asterisk (*) denotes required field.</asterisk>
+        <username_req>Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
+        <confirm_password>Confirm Password</confirm_password>
+        <register_button>Create Account</register_button>
+        <checking_availability>Checking availability</checking_availability>
+        <username_minimum>At least 4 characters are required.</username_minimum>
+        <username_available>Username is available!</username_available>
 
         <!-- Contact Page -->
-        <contact_header>@Contact Us</contact_header>
-        <contact_text>@Please fill out and submit the form below and we'll get back to you as soon as we can. Due to the high volume of submissions, it may take some time for us to get to your inquiry.</contact_text>
-        <name>@Name</name>
-        <message>@Message</message>
-        <contact_us>@Contact Us</contact_us>
-        <contact_button>@Contact Us</contact_button>
+        <contact_header>Contact Us</contact_header>
+        <contact_text>Please fill out and submit the form below and we'll get back to you as soon as we can. Due to the high volume of submissions, it may take some time for us to get to your inquiry.</contact_text>
+        <name>Name</name>
+        <message>Message</message>
+        <contact_us>Contact Us</contact_us>
+        <contact_button>Contact Us</contact_button>
 
         <!-- Browse Videos Page -->
-        <videos_header>@Browse Videos</videos_header>
-        <viewing>@Viewing</viewing>
-        <grouping>@Grouping</grouping>
-        <most_recent>@Most Recent</most_recent>
-        <most_viewed>@Most Viewed</most_viewed>
-        <most_discussed>@Most Discussed</most_discussed>
-        <most_rated>@Most Rated</most_rated>
-        <no_videos>@No videos added yet.</no_videos>
-        <by>@By</by>
+        <videos_header>Browse Videos</videos_header>
+        <viewing>Viewing</viewing>
+        <grouping>Grouping</grouping>
+        <most_recent>Most Recent</most_recent>
+        <most_viewed>Most Viewed</most_viewed>
+        <most_discussed>Most Discussed</most_discussed>
+        <most_rated>Most Rated</most_rated>
+        <no_videos>No videos added yet.</no_videos>
+        <by>By</by>
 
         <!-- Browse Members Page -->
-        <members_header>@Browse Members</members_header>
-        <no_members>@No registered members yet.</no_members>
-        <joined>@Joined</joined>
-        <videos_uploaded>@Videos Uploaded</videos_uploaded>
+        <members_header>Browse Members</members_header>
+        <no_members>No registered members yet.</no_members>
+        <joined>Joined</joined>
+        <videos_uploaded>Videos Uploaded</videos_uploaded>
 
         <!-- Member Profile Page -->
-        <subscribe>@Subscribe</subscribe>
-        <unsubscribe>@Unsubscribe</unsubscribe>
-        <send_message>@Send Message</send_message>
-        <report_abuse>@Report Abuse</report_abuse>
-        <member_rss>@Member's RSS Feed</member_rss>
-        <profile_views>@Profile Views</profile_views>
-        <subscribers>@Subscribers</subscribers>
-        <website>@Website</website>
-        <recent_videos>@Recent Videos</recent_videos>
-        <view_all_videos>@View all Videos</view_all_videos>
-        <recent_posts_header>@Recent Updates</recent_posts_header>
-        <update_status>@Update your Status</update_status>
-        <post_update_button>@Post Update</post_update_button>
-        <no_updates>@No recent status updates.</no_updates>
-        <no_member_videos>@Member currently has no videos.</no_member_videos>
+        <subscribe>Subscribe</subscribe>
+        <unsubscribe>Unsubscribe</unsubscribe>
+        <send_message>Send Message</send_message>
+        <report_abuse>Report Abuse</report_abuse>
+        <member_rss>Member's RSS Feed</member_rss>
+        <profile_views>Profile Views</profile_views>
+        <subscribers>Subscribers</subscribers>
+        <website>Website</website>
+        <recent_videos>Recent Videos</recent_videos>
+        <view_all_videos>View all Videos</view_all_videos>
+        <recent_posts_header>Recent Updates</recent_posts_header>
+        <update_status>Update your Status</update_status>
+        <post_update_button>Post Update</post_update_button>
+        <no_updates>No recent status updates.</no_updates>
+        <no_member_videos>Member currently has no videos.</no_member_videos>
 
         <!-- Member Videos Page -->
-        <videos_by>@Videos By</videos_by>
-        <go_to_profile>@Go to Profile</go_to_profile>
+        <videos_by>Videos By</videos_by>
+        <go_to_profile>Go to Profile</go_to_profile>
 
         <!-- Play Video Page -->
-        <like>@Like</like>
-        <dislike>@Dislike</dislike>
-        <about>@About</about>
-        <share>@Share</share>
-        <embed>@Embed</embed>
-        <embed_text>@Copy and paste this code into your website or blog.</embed_text>
-        <favorite>@Favorite</favorite>
-        <flag>@Flag</flag>
-        <date_uploaded>@Date Uploaded</date_uploaded>
-        <comments_header>@Video Comments</comments_header>
-        <view_all_comments>@View All Comments</view_all_comments>
-        <comments_total>@Comments total</comments_total>
-        <posted>@Posted By</posted>
-        <date_posted>@Date Posted</date_posted>
-        <comments_post_header>@Post a Comment</comments_post_header>
-        <optional>@Optional</optional>
-        <comments>@Comments</comments>
-        <comments_button>@Comment</comments_button>
-        <suggestions_header>@Suggestions</suggestions_header>
-        <no_suggestions>@No suggestions could be made.</no_suggestions>
-        <views>@Views</views>
-        <video_unavailable>@Video Is Unavailable</video_unavailable>
-        <no_playback>@No video playback capabilities.</no_playback>
+        <like>Like</like>
+        <dislike>Dislike</dislike>
+        <about>About</about>
+        <share>Share</share>
+        <embed>Embed</embed>
+        <embed_text>Copy and paste this code into your website or blog.</embed_text>
+        <favorite>Favorite</favorite>
+        <flag>Flag</flag>
+        <date_uploaded>Date Uploaded</date_uploaded>
+        <comments_header>Video Comments</comments_header>
+        <view_all_comments>View All Comments</view_all_comments>
+        <comments_total>Comments total</comments_total>
+        <posted>Posted By</posted>
+        <date_posted>Date Posted</date_posted>
+        <comments_post_header>Post a Comment</comments_post_header>
+        <optional>Optional</optional>
+        <comments>Comments</comments>
+        <comments_button>Comment</comments_button>
+        <suggestions_header>Suggestions</suggestions_header>
+        <no_suggestions>No suggestions could be made.</no_suggestions>
+        <views>Views</views>
+        <video_unavailable>Video Is Unavailable</video_unavailable>
+        <no_playback>No video playback capabilities.</no_playback>
 
         <!-- Comments Page -->
-        <comments_header>@View All Comments</comments_header>
-        <comments_for>@Viewing comments for</comments_for>
-        <no_comments>@No comments have been posted for this video yet.</no_comments>
+        <comments_header>View All Comments</comments_header>
+        <comments_for>Viewing comments for</comments_for>
+        <no_comments>No comments have been posted for this video yet.</no_comments>
 
         <!-- Search Page -->
-        <search_header>@Search Videos</search_header>
-        <results_for>@Search Results for</results_for>
-        <no_results>@No results were found.</no_results>
+        <search_header>Search Videos</search_header>
+        <results_for>Search Results for</results_for>
+        <no_results>No results were found.</no_results>
 
         <!-- Opt-Out Page -->
-        <opt_out_header>@Email Opt-Out</opt_out_header>
-        <opt_out_text>@Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</opt_out_text>
+        <opt_out_header>Email Opt-Out</opt_out_header>
+        <opt_out_text>Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</opt_out_text>
 
         <!-- Activate Account Page -->
-        <activate_header>@Activate your Account</activate_header>
+        <activate_header>Activate your Account</activate_header>
         <activate_success><![CDATA[
-        @Thank you! Your account is now active. <a href="{HOST}/myaccount/">Go to My Account</a>
+        Thank you! Your account is now active. <a href="{HOST}/myaccount/">Go to My Account</a>
         ]]></activate_success>
-        <activate_approve>@Thank you! Your account is now active, however it still needs to be approved by a member of our team before you can login. We will notify you once this is complete.</activate_approve>
+        <activate_approve>Thank you! Your account is now active, however it still needs to be approved by a member of our team before you can login. We will notify you once this is complete.</activate_approve>
         <activate_error><![CDATA[
-        @Invalid code! Please check you entered the code correctly.
+        Invalid code! Please check you entered the code correctly.
         Your account may already be active. If you forgot your login,
         <a href="{HOST}/login/forgot/">click here</a> to retrieve it.
         ]]></activate_error>
 
         <!-- 404 Page -->
-        <system_404_header>@404 - Page Not Found</system_404_header>
-        <system_404_sub_header>@Oops!</system_404_sub_header>
-        <system_404_text>@The Page you're looking for either doesn't exist or was moved to another location.</system_404_text>
+        <system_404_header>404 - Page Not Found</system_404_header>
+        <system_404_sub_header>Oops!</system_404_sub_header>
+        <system_404_text>The Page you're looking for either doesn't exist or was moved to another location.</system_404_text>
 
         <!-- System Error Page -->
-        <system_error_header>@System Error</system_error_header>
-        <system_error_text>@We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
+        <system_error_header>System Error</system_error_header>
+        <system_error_text>We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
 
         <!-- My Account / Home Page -->
-        <myaccount_header>@Welcome</myaccount_header>
-        <last_login>@Last Login</last_login>
-        <edit_avatar>@Edit Avatar</edit_avatar>
-        <new_messages>@You have new unread messages!</new_messages>
-        <account_menu_header>@Account Menu</account_menu_header>
-        <manage_media>@Manage Media</manage_media>
-        <upload_video>@Upload a Video</upload_video>
-        <my_videos>@My Videos</my_videos>
-        <my_favorite_videos>@My Favorite Videos</my_favorite_videos>
-        <account_settings>@Account Settings</account_settings>
-        <update_profile>@Update Member Profile</update_profile>
-        <privacy_settings>@Privacy Settings</privacy_settings>
-        <change_password>@Change Password</change_password>
-        <community>@Community</community>
-        <my_subscriptions>@My Subscriptions</my_subscriptions>
-        <my_subscribers>@View My Subscribers</my_subscribers>
-        <inbox>@Inbox</inbox>
+        <myaccount_header>Welcome</myaccount_header>
+        <last_login>Last Login</last_login>
+        <edit_avatar>Edit Avatar</edit_avatar>
+        <new_messages>You have new unread messages!</new_messages>
+        <account_menu_header>Account Menu</account_menu_header>
+        <manage_media>Manage Media</manage_media>
+        <upload_video>Upload a Video</upload_video>
+        <my_videos>My Videos</my_videos>
+        <my_favorite_videos>My Favorite Videos</my_favorite_videos>
+        <account_settings>Account Settings</account_settings>
+        <update_profile>Update Member Profile</update_profile>
+        <privacy_settings>Privacy Settings</privacy_settings>
+        <change_password>Change Password</change_password>
+        <community>Community</community>
+        <my_subscriptions>My Subscriptions</my_subscriptions>
+        <my_subscribers>View My Subscribers</my_subscribers>
+        <inbox>Inbox</inbox>
 
         <!-- My Account / Update Video Page -->
-        <update_video_header>@Edit Video</update_video_header>
-        <update_video_button>@Update Video</update_video_button>
-        <back_to_videos>@Back to videos</back_to_videos>
+        <update_video_header>Edit Video</update_video_header>
+        <update_video_button>Update Video</update_video_button>
+        <back_to_videos>Back to videos</back_to_videos>
 
         <!-- My Account / My Videos Page -->
-        <myvideos_header>@My Videos</myvideos_header>
-        <no_user_videos>@You haven't uploaded any videos yet.</no_user_videos>
-        <edit_video>@Edit Video</edit_video>
-        <delete_video>@Delete Video</delete_video>
+        <myvideos_header>My Videos</myvideos_header>
+        <no_user_videos>You haven't uploaded any videos yet.</no_user_videos>
+        <edit_video>Edit Video</edit_video>
+        <delete_video>Delete Video</delete_video>
 
         <!-- My Account / My Favorite Videos Page -->
-        <myfavorites_header>@My Favorite Videos</myfavorites_header>
-        <no_favorites>@You haven't added any videos to your favorites yet.</no_favorites>
-        <remove_favorite>@Remove from Favorites</remove_favorite>
+        <myfavorites_header>My Favorite Videos</myfavorites_header>
+        <no_favorites>You haven't added any videos to your favorites yet.</no_favorites>
+        <remove_favorite>Remove from Favorites</remove_favorite>
 
         <!-- My Account / Edit Profile Page -->
-        <profile_header>@Update Profile</profile_header>
-        <personal_header>@Edit Personal Information</personal_header>
-        <first_name>@First Name</first_name>
-        <last_name>@Last Name</last_name>
-        <about_me>@About Me</about_me>
-        <profile_button>@Update Profile</profile_button>
-        <update_avatar_header>@Update Avatar</update_avatar_header>
+        <profile_header>Update Profile</profile_header>
+        <personal_header>Edit Personal Information</personal_header>
+        <first_name>First Name</first_name>
+        <last_name>Last Name</last_name>
+        <about_me>About Me</about_me>
+        <profile_button>Update Profile</profile_button>
+        <update_avatar_header>Update Avatar</update_avatar_header>
         <update_avatar_text><![CDATA[
-            <p>@Your avatar is displayed with your videos, comments, and other content.</p>
+            <p>Your avatar is displayed with your videos, comments, and other content.</p>
             <p>If you upload a new avatar your current one will be overwritten.</p>
             <p>Select an image (jpeg, gif, png) from your computers hard drive. Max allowed filesize is 30K.</p>
         ]]></update_avatar_text>
-        <current_avatar>@Current Avatar</current_avatar>
-        <reset_avatar>@Reset Avatar</reset_avatar>
-        <browse_files_button>@Browse</browse_files_button>
-        <update_avatar_button>@Upload Avatar</update_avatar_button>
+        <current_avatar>Current Avatar</current_avatar>
+        <reset_avatar>Reset Avatar</reset_avatar>
+        <browse_files_button>Browse</browse_files_button>
+        <update_avatar_button>Upload Avatar</update_avatar_button>
 
         <!-- My Account / Privacy Settings Page -->
-        <privacy_settings_header>@Privacy Settings</privacy_settings_header>
-        <alert_comment>@E-mail me when one of my videos receives a comment</alert_comment>
-        <alert_video>@Inform me of new videos by members subscribed to</alert_video>
-        <alert_message>@E-mail me when I receive a message</alert_message>
-        <privacy_settings_button>@Update Privacy</privacy_settings_button>
+        <privacy_settings_header>Privacy Settings</privacy_settings_header>
+        <alert_comment>E-mail me when one of my videos receives a comment</alert_comment>
+        <alert_video>Inform me of new videos by members subscribed to</alert_video>
+        <alert_message>E-mail me when I receive a message</alert_message>
+        <privacy_settings_button>Update Privacy</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->
-        <change_password_header>@Change Password</change_password_header>
-        <change_password_text>@Passwords should be 6-10 characters long with upper &amp; lower case letters, numbers, and special characters.</change_password_text>
-        <new_password>@New Password</new_password>
-        <change_password_button>@Change Password</change_password_button>
+        <change_password_header>Change Password</change_password_header>
+        <change_password_text>Passwords should be 6-10 characters long with upper &amp; lower case letters, numbers, and special characters.</change_password_text>
+        <new_password>New Password</new_password>
+        <change_password_button>Change Password</change_password_button>
 
         <!-- My Account / View My Subscriptions Page -->
-        <subscriptions_header>@My Subscriptions</subscriptions_header>
+        <subscriptions_header>My Subscriptions</subscriptions_header>
         <confirm_subscription>You will be unsubscribed from this member. Do you want to proceed?</confirm_subscription>
-        <no_subscriptions>@You haven't subscribed to any members yet.</no_subscriptions>
+        <no_subscriptions>You haven't subscribed to any members yet.</no_subscriptions>
 
         <!-- My Account / View My Subscribers Page -->
-        <subscribers_header>@My Subscribers</subscribers_header>
-        <no_subscribers>@No one has subscribed to you yet.</no_subscribers>
+        <subscribers_header>My Subscribers</subscribers_header>
+        <no_subscribers>No one has subscribed to you yet.</no_subscribers>
 
         <!-- My Account / Message Inbox Page -->
-        <message_inbox_header>@Message Inbox</message_inbox_header>
-        <purge>@Purge</purge>
-        <message_status>@Status</message_status>
-        <read>@Read</read>
-        <unread>@Unread</unread>
-        <subject>@Subject</subject>
-        <sender>@Sender</sender>
-        <date>@Date</date>
-        <purge_button>@Purge Messages</purge_button>
-        <no_messages>@No messages</no_messages>
+        <message_inbox_header>Message Inbox</message_inbox_header>
+        <purge>Purge</purge>
+        <message_status>Status</message_status>
+        <read>Read</read>
+        <unread>Unread</unread>
+        <subject>Subject</subject>
+        <sender>Sender</sender>
+        <date>Date</date>
+        <purge_button>Purge Messages</purge_button>
+        <no_messages>No messages</no_messages>
 
         <!-- My Account / Read Message Page -->
-        <message_read_header>@Read Message</message_read_header>
-        <return_inbox>@Return to Inbox</return_inbox>
-        <reply>@Reply</reply>
-        <delete>@Delete</delete>
+        <message_read_header>Read Message</message_read_header>
+        <return_inbox>Return to Inbox</return_inbox>
+        <reply>Reply</reply>
+        <delete>Delete</delete>
 
         <!-- My Account / Send Message Page -->
-        <message_send_header>@Send a Message</message_send_header>
-        <to>@To</to>
-        <members_username>@Member's username</members_username>
-        <message_send_button>@Send Message</message_send_button>
+        <message_send_header>Send a Message</message_send_header>
+        <to>To</to>
+        <members_username>Member's username</members_username>
+        <message_send_button>Send Message</message_send_button>
 
         <!-- My Account / Upload - Video Information Page -->
-        <upload_header>@Upload Step 1 - Video Information</upload_header>
-        <title>@Title</title>
-        <description>@Description</description>
-        <tags>@Tags</tags>
-        <comma_delimited>@Comma Delimited</comma_delimited>
-        <category>@Category</category>
-        <submit_button>@Submit</submit_button>
+        <upload_header>Upload Step 1 - Video Information</upload_header>
+        <title>Title</title>
+        <description>Description</description>
+        <tags>Tags</tags>
+        <comma_delimited>Comma Delimited</comma_delimited>
+        <category>Category</category>
+        <submit_button>Submit</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->
-        <upload_video_header>@Upload Step 2 - Upload Video</upload_video_header>
-        <upload_video_text>@Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
-        <filesize_limit>@Filesize limit is</filesize_limit>
-        <upload_video_button>@Upload Video</upload_video_button>
+        <upload_video_header>Upload Step 2 - Upload Video</upload_video_header>
+        <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
+        <filesize_limit>Filesize limit is</filesize_limit>
+        <upload_video_button>Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
-        <upload_complete_header>@Upload Step 3 - Upload Complete!</upload_complete_header>
-        <upload_complete_text>@Your video has been successfully uploaded. Please allow several minutes for processing before it is availble on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
+        <upload_complete_header>Upload Step 3 - Upload Complete!</upload_complete_header>
+        <upload_complete_text>Your video has been successfully uploaded. Please allow several minutes for processing before it is availble on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
 
 
 
 
         <!-- Form Messages -->
-        <error_general>@Errors were found. Please try again.</error_general>
-        <errors_below>@Errors were found. Please correct the errors below and try again.</errors_below>
-        <error_invalid_login>@Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
-        <error_no_users_email>@No users were found with that email! Please try again.</error_no_users_email>
+        <error_general>Errors were found. Please try again.</error_general>
+        <errors_below>Errors were found. Please correct the errors below and try again.</errors_below>
+        <error_invalid_login>Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
+        <error_no_users_email>No users were found with that email! Please try again.</error_no_users_email>
         
-        <confirm_remove_favorite>@Video will be removed from your favorites. Do you want to proceed?</confirm_remove_favorite>
-        <confirm_delete_video>@Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
-        <confirm_reset_avatar>@Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
+        <confirm_remove_favorite>Video will be removed from your favorites. Do you want to proceed?</confirm_remove_favorite>
+        <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
+        <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
 
-        <error_username>@Invalid username</error_username>
-        <error_username_unavailable>@Username is unavailable</error_username_unavailable>
-        <error_password>@Invalid password</error_password>
-        <error_password_match>@Your passwords don't match</error_password_match>
-        <error_password_confirm>@Invalid confirmed password</error_password_confirm>
-        <error_security_text>@Invalid security text</error_security_text>
-        <error_email>@You must enter a valid email address</error_email>
-        <error_email_invalid>@Invalid email address</error_email_invalid>
-        <error_email_unavailable>@Email address is unavailable</error_email_unavailable>
-        <error_recipient>@Invalid recipient username</error_recipient>
-        <error_website_invalid>@Invalid website</error_website_invalid>
-        <error_recipient_exist>@No members exist with that username</error_recipient_exist>
-        <error_recipient_self>@You can't send yourself a message</error_recipient_self>
-        <error_subject>@Invalid subject</error_subject>
-        <error_message>@Invalid message</error_message>
-        <error_title>@Invalid title</error_title>
-        <error_description>@Invalid description</error_description>
-        <error_tags>@Invalid tags</error_tags>
-        <error_category>@Invalid category</error_category>
-        <error_name>@Invalid name</error_name>
-        <error_comment>@Invalid comment</error_comment>
-        <error_status_update>@Invalid status update</error_status_update>
-        <error_flag_login>@You must login to report inappropriate content.</error_flag_login>
-        <error_flag_own>@You can't flag your own content.</error_flag_own>
-        <error_flag_duplicate>@You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
-        <error_favorite_login>@You must login to add videos to your favorites.</error_favorite_login>
-        <error_favorite_own>@You can't add your own video to your favorites.</error_favorite_own>
-        <error_favorite_duplicate>@This video is already in your favorites.</error_favorite_duplicate>
-        <error_subscribe_login>@You must login to subscribe to members.</error_subscribe_login>
-        <error_subscribe_own>@You can't subscribe to yourself.</error_subscribe_own>
-        <error_subscribe_duplicate>@You have already subscribed to this member.</error_subscribe_duplicate>
-        <error_subscribe_noexist>@You are not subscribed to this member.</error_subscribe_noexist>
-        <error_rate_login>@You must login to rate videos.</error_rate_login>
-        <error_rate_own>@You can't rate your own videos.</error_rate_own>
-        <error_rate_duplicate>@You have already rated this video.</error_rate_duplicate>
+        <error_username>Invalid username</error_username>
+        <error_username_unavailable>Username is unavailable</error_username_unavailable>
+        <error_password>Invalid password</error_password>
+        <error_password_match>Your passwords don't match</error_password_match>
+        <error_password_confirm>Invalid confirmed password</error_password_confirm>
+        <error_security_text>Invalid security text</error_security_text>
+        <error_email>You must enter a valid email address</error_email>
+        <error_email_invalid>Invalid email address</error_email_invalid>
+        <error_email_unavailable>Email address is unavailable</error_email_unavailable>
+        <error_recipient>Invalid recipient username</error_recipient>
+        <error_website_invalid>Invalid website</error_website_invalid>
+        <error_recipient_exist>No members exist with that username</error_recipient_exist>
+        <error_recipient_self>You can't send yourself a message</error_recipient_self>
+        <error_subject>Invalid subject</error_subject>
+        <error_message>Invalid message</error_message>
+        <error_title>Invalid title</error_title>
+        <error_description>Invalid description</error_description>
+        <error_tags>Invalid tags</error_tags>
+        <error_category>Invalid category</error_category>
+        <error_name>Invalid name</error_name>
+        <error_comment>Invalid comment</error_comment>
+        <error_status_update>Invalid status update</error_status_update>
+        <error_flag_login>You must login to report inappropriate content.</error_flag_login>
+        <error_flag_own>You can't flag your own content.</error_flag_own>
+        <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
+        <error_favorite_login>You must login to add videos to your favorites.</error_favorite_login>
+        <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
+        <error_favorite_duplicate>This video is already in your favorites.</error_favorite_duplicate>
+        <error_subscribe_login>You must login to subscribe to members.</error_subscribe_login>
+        <error_subscribe_own>You can't subscribe to yourself.</error_subscribe_own>
+        <error_subscribe_duplicate>You have already subscribed to this member.</error_subscribe_duplicate>
+        <error_subscribe_noexist>You are not subscribed to this member.</error_subscribe_noexist>
+        <error_rate_login>You must login to rate videos.</error_rate_login>
+        <error_rate_own>You can't rate your own videos.</error_rate_own>
+        <error_rate_duplicate>You have already rated this video.</error_rate_duplicate>
         
 
-        <error_uploadify_filesize>@Your file exceeded the maximum filesize limit. Please try again.</error_uploadify_filesize>
+        <error_uploadify_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_uploadify_filesize>
         <error_uploadify_system><![CDATA[
-            @Errors were encountered during the processing of your file, and it cannot be uploaded at this time.
+            Errors were encountered during the processing of your file, and it cannot be uploaded at this time.
             We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue.
             If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.
         ]]></error_uploadify_system>
-        <error_uploadify_extension>@Your file is not in one of the accepted file formats. Please try again.</error_uploadify_extension>
-        <error_uploadify_empty>@No file was uploaded. Please try again.</error_uploadify_empty>
+        <error_uploadify_extension>Your file is not in one of the accepted file formats. Please try again.</error_uploadify_extension>
+        <error_uploadify_empty>No file was uploaded. Please try again.</error_uploadify_empty>
 
 
-        <success_avatar_reset>@Your avatar has been reset.</success_avatar_reset>
-        <success_avatar_updated>@Your avatar has been updated.</success_avatar_updated>
-        <success_rated>@Rating has been submitted.</success_rated>
-        <success_unsubscribed>@You have been unsubscribed from {USERNAME}.</success_unsubscribed>
-        <success_subscribed>@You are now subscribed to {USERNAME}.</success_subscribed>
-        <success_favorite_added>@Video has been added to your favorites.</success_favorite_added>
-        <success_flag>@Thank you for reporting this. We will look into this immediately.</success_flag>
-        <success_status_updated>@Your status update has been posted.</success_status_updated>
-        <success_comment_posted>@Your comment has been posted.</success_comment_posted>
-        <success_comment_approve>@Your comment has been submitted to our team for approval.</success_comment_approve>
-        <success_contact_sent>@Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
-        <success_registered>@Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>
-        <success_login_sent>@We have sent you your login information. Please check your email.</success_login_sent>
-        <success_video_updated>@Video has been updated.</success_video_updated>
-        <success_video_deleted>@Video has been deleted.</success_video_deleted>
-        <success_favorite_removed>@Video has been removed from your favorites.</success_favorite_removed>
-        <success_profile_updated>@Your profile has been successfully updated.</success_profile_updated>
-        <success_privacy_updated>@Your privacy settings have been updated.</success_privacy_updated>
-        <success_password_updated>@Your password has been updated.</success_password_updated>
-        <success_messages_purged>@Messages successfully deleted!</success_messages_purged>
-        <success_message_sent>@Your message has been delivered.</success_message_sent>
+        <success_avatar_reset>Your avatar has been reset.</success_avatar_reset>
+        <success_avatar_updated>Your avatar has been updated.</success_avatar_updated>
+        <success_rated>Rating has been submitted.</success_rated>
+        <success_unsubscribed>You have been unsubscribed from {USERNAME}.</success_unsubscribed>
+        <success_subscribed>You are now subscribed to {USERNAME}.</success_subscribed>
+        <success_favorite_added>Video has been added to your favorites.</success_favorite_added>
+        <success_flag>Thank you for reporting this. We will look into this immediately.</success_flag>
+        <success_status_updated>Your status update has been posted.</success_status_updated>
+        <success_comment_posted>Your comment has been posted.</success_comment_posted>
+        <success_comment_approve>Your comment has been submitted to our team for approval.</success_comment_approve>
+        <success_contact_sent>Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
+        <success_registered>Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>
+        <success_login_sent>We have sent you your login information. Please check your email.</success_login_sent>
+        <success_video_updated>Video has been updated.</success_video_updated>
+        <success_video_deleted>Video has been deleted.</success_video_deleted>
+        <success_favorite_removed>Video has been removed from your favorites.</success_favorite_removed>
+        <success_profile_updated>Your profile has been successfully updated.</success_profile_updated>
+        <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
+        <success_password_updated>Your password has been updated.</success_password_updated>
+        <success_messages_purged>Messages successfully deleted!</success_messages_purged>
+        <success_message_sent>Your message has been delivered.</success_message_sent>
 
     </terms>
 
     <custom>
-        <most_discussed_videos>@Most Discussed Videos</most_discussed_videos>
-        <highest_rated_videos>@Highest Rated Videos</highest_rated_videos>
-        <documentation>@Documentation</documentation>
-        <rss>@RSS</rss>
-        <contact>@Contact</contact>
-        <sample>@Sample</sample>
-        <sitemap>@Sitemap</sitemap>
+        <most_discussed_videos>Most Discussed Videos</most_discussed_videos>
+        <highest_rated_videos>Highest Rated Videos</highest_rated_videos>
+        <documentation>Documentation</documentation>
+        <rss>RSS</rss>
+        <contact>Contact</contact>
+        <sample>Sample</sample>
+        <sitemap>Sitemap</sitemap>
     </custom>
 
 
     <meta>
         <index>
-            <title>@CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
-            <keywords>@Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>@Free video sharing cms software that allows you to have your own video sharing website and community</description>
+            <title>CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
+            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
+            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
         </index>
 
         <videos>
-            <title>@Browse Videos:</title>
-            <keywords>@Browse Videos, Browse, Videos</keywords>
-            <description>@Browse videos on the video sharing community</description>
+            <title>Browse Videos:</title>
+            <keywords>Browse Videos, Browse, Videos</keywords>
+            <description>Browse videos on the video sharing community</description>
         </videos>
 
         <members>
-            <title>@Browse Members</title>
-            <keywords>@Browse Members, Browse, Members</keywords>
-            <description>@Browse through registered members.</description>
+            <title>Browse Members</title>
+            <keywords>Browse Members, Browse, Members</keywords>
+            <description>Browse through registered members.</description>
         </members>
 
         <member_videos>
-            <title>@Videos By: {MEMBER}</title>
-            <keywords>@Member Videos, Videos by member, Member, Videos</keywords>
-            <description>@Browse all videos uploaded by this member.</description>
+            <title>Videos By: {MEMBER}</title>
+            <keywords>Member Videos, Videos by member, Member, Videos</keywords>
+            <description>Browse all videos uploaded by this member.</description>
         </member_videos>
 
         <profile>
-            <title>@{MEMBER}'s Profile</title>
-            <keywords>@Member Profile, Member, Profile</keywords>
-            <description>@Member profile for this member.</description>
+            <title>{MEMBER}'s Profile</title>
+            <keywords>Member Profile, Member, Profile</keywords>
+            <description>Member profile for this member.</description>
         </profile>
 
         <comments>
-            <title>@View All Comments for: {VIDEO}</title>
-            <keywords>@Video Comments, Comments, Video</keywords>
-            <description>@View all comments for this videos.</description>
+            <title>View All Comments for: {VIDEO}</title>
+            <keywords>Video Comments, Comments, Video</keywords>
+            <description>View all comments for this videos.</description>
         </comments>
 
         <contact>
-            <title>@Contact Us</title>
-            <keywords>@Contact Us, Contact, Send us a message</keywords>
-            <description>@Get in contact with us.</description>
+            <title>Contact Us</title>
+            <keywords>Contact Us, Contact, Send us a message</keywords>
+            <description>Get in contact with us.</description>
         </contact>
 
         <activate>
-            <title>@Activate your Account</title>
-            <keywords>@Activate your Account, Account Activation</keywords>
-            <description>@Activate your Accoun.t</description>
+            <title>Activate your Account</title>
+            <keywords>Activate your Account, Account Activation</keywords>
+            <description>Activate your Accoun.t</description>
         </activate>
 
         <opt_out>
-            <title>@Opt-out From All Mailing Lists</title>
-            <keywords>@Opt-out, Email, Mailing list</keywords>
-            <description>@Opt-out from all mailing lists.</description>
+            <title>Opt-out From All Mailing Lists</title>
+            <keywords>Opt-out, Email, Mailing list</keywords>
+            <description>Opt-out from all mailing lists.</description>
         </opt_out>
 
         <search>
-            <title>@Search results for: '{KEYWORD}'</title>
-            <keywords>@Search Videos, Search, Video, Search Results</keywords>
-            <description>@Search for videos using keywords likely to appear in the title, description, or video tags.</description>
+            <title>Search results for: '{KEYWORD}'</title>
+            <keywords>Search Videos, Search, Video, Search Results</keywords>
+            <description>Search for videos using keywords likely to appear in the title, description, or video tags.</description>
         </search>
 
         <login>
-            <title>@Login to your Account</title>
-            <keywords>@Login, Account</keywords>
-            <description>@Login into your account.</description>
+            <title>Login to your Account</title>
+            <keywords>Login, Account</keywords>
+            <description>Login into your account.</description>
         </login>
 
         <register>
-            <title>@Sign Up for an Account</title>
-            <keywords>@Sing up, Register, Account</keywords>
-            <description>@Sign up for an account.</description>
+            <title>Sign Up for an Account</title>
+            <keywords>Sing up, Register, Account</keywords>
+            <description>Sign up for an account.</description>
         </register>
 
         <system_404>
-            <title>@Page Not Found</title>
-            <keywords>@Page Not Found, 404 Error</keywords>
-            <description>@404 Error Page Not Found.</description>
+            <title>Page Not Found</title>
+            <keywords>Page Not Found, 404 Error</keywords>
+            <description>404 Error Page Not Found.</description>
         </system_404>
 
         <system_error>
-            <title>@System Error</title>
-            <keywords>@System Error</keywords>
-            <description>@A System error has occured.</description>
+            <title>System Error</title>
+            <keywords>System Error</keywords>
+            <description>A System error has occured.</description>
         </system_error>
 
         <myaccount>
-            <title>@Welcome - {USERNAME}</title>
-            <keywords>@Welcome</keywords>
-            <description>@Welcome</description>
+            <title>Welcome - {USERNAME}</title>
+            <keywords>Welcome</keywords>
+            <description>Welcome</description>
         </myaccount>
 
         <upload>
-            <title>@Upload Step 1 - Video Information</title>
-            <keywords>@Upload Video, Step 1, Video Information</keywords>
-            <description>@Upload Step 1 - Video Information.</description>
+            <title>Upload Step 1 - Video Information</title>
+            <keywords>Upload Video, Step 1, Video Information</keywords>
+            <description>Upload Step 1 - Video Information.</description>
         </upload>
 
         <upload_video>
-            <title>@Upload Step 2 - Upload Video</title>
-            <keywords>@Upload Video, Step 2</keywords>
-            <description>@Upload Step 2 - Upload Video.</description>
+            <title>Upload Step 2 - Upload Video</title>
+            <keywords>Upload Video, Step 2</keywords>
+            <description>Upload Step 2 - Upload Video.</description>
         </upload_video>
 
         <upload_complete>
-            <title>@Upload Step 3 - Upload Complete!</title>
-            <keywords>@Upload Video, Step 3, Upload Complete</keywords>
-            <description>@Upload Step 3 - Upload Complete!</description>
+            <title>Upload Step 3 - Upload Complete!</title>
+            <keywords>Upload Video, Step 3, Upload Complete</keywords>
+            <description>Upload Step 3 - Upload Complete!</description>
         </upload_complete>
 
         <edit_video>
-            <title>@Edit Video</title>
-            <keywords>@Edit Video, Video Information</keywords>
-            <description>@Edit video information.</description>
+            <title>Edit Video</title>
+            <keywords>Edit Video, Video Information</keywords>
+            <description>Edit video information.</description>
         </edit_video>
 
         <myvideos>
-            <title>@My Videos</title>
-            <keywords>@My Videos, Videos</keywords>
-            <description>@View all videos uploaded by member.</description>
+            <title>My Videos</title>
+            <keywords>My Videos, Videos</keywords>
+            <description>View all videos uploaded by member.</description>
         </myvideos>
 
         <myfavorites>
-            <title>@My Favorite Videos</title>
-            <keywords>@My Favorite Videos, Favorite Videos, Favorites</keywords>
-            <description>@View all of member's favorite videos.</description>
+            <title>My Favorite Videos</title>
+            <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
+            <description>View all of member's favorite videos.</description>
         </myfavorites>
 
         <update_profile>
-            <title>@Update Profile</title>
-            <keywords>@Update profile, profile</keywords>
-            <description>@Update user profile information.</description>
+            <title>Update Profile</title>
+            <keywords>Update profile, profile</keywords>
+            <description>Update user profile information.</description>
         </update_profile>
 
         <privacy_settings>
-            <title>@Privacy Settings</title>
-            <keywords>@Privacy Settings, Update Privacy Settings</keywords>
-            <description>@Update privacy settings.</description>
+            <title>Privacy Settings</title>
+            <keywords>Privacy Settings, Update Privacy Settings</keywords>
+            <description>Update privacy settings.</description>
         </privacy_settings>
 
         <change_password>
-            <title>@Change Password</title>
-            <keywords>@Change Password, Password, Update Password</keywords>
-            <description>@Change account password.</description>
+            <title>Change Password</title>
+            <keywords>Change Password, Password, Update Password</keywords>
+            <description>Change account password.</description>
         </change_password>
 
         <subscriptions>
-            <title>@My Subscriptions</title>
-            <keywords>@Subscriptions, Member Subscriptions</keywords>
-            <description>@View all users member is subscribed to.</description>
+            <title>My Subscriptions</title>
+            <keywords>Subscriptions, Member Subscriptions</keywords>
+            <description>View all users member is subscribed to.</description>
         </subscriptions>
 
         <subscribers>
-            <title>@My Subscribers</title>
-            <keywords>@Subscribers, Subscribing Members</keywords>
-            <description>@View all members that are subscribed to this members.</description>
+            <title>My Subscribers</title>
+            <keywords>Subscribers, Subscribing Members</keywords>
+            <description>View all members that are subscribed to this members.</description>
         </subscribers>
 
         <message_inbox>
-            <title>@Message Inbox</title>
-            <keywords>@Message Inbox, Message, Inbox</keywords>
-            <description>@View all messages.</description>
+            <title>Message Inbox</title>
+            <keywords>Message Inbox, Message, Inbox</keywords>
+            <description>View all messages.</description>
         </message_inbox>
 
         <message_read>
-            <title>@Read Message</title>
-            <keywords>@Read Message, Message</keywords>
-            <description>@Read a message.</description>
+            <title>Read Message</title>
+            <keywords>Read Message, Message</keywords>
+            <description>Read a message.</description>
         </message_read>
 
         <message_send>
-            <title>@Send a Message</title>
-            <keywords>@Send Message, Message</keywords>
-            <description>@Send another member a message.</description>
+            <title>Send a Message</title>
+            <keywords>Send Message, Message</keywords>
+            <description>Send another member a message.</description>
         </message_send>
 
 
         <mobile_videos>
-            <title>@Browse Videos</title>
+            <title>Browse Videos</title>
         </mobile_videos>
 
         <mobile_search>
-            <title>@Search Videos</title>
+            <title>Search Videos</title>
         </mobile_search>
 
     </meta>
