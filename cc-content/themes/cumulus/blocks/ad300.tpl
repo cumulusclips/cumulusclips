@@ -1,11 +1,5 @@
 
 <p id="ad-title"><?=Language::GetText('advertisement')?></p>
 <div class="block ad300">
-
-    <script LANGUAGE="JavaScript1.1">
-    OAS_rn = new String (Math.random());
-    OAS_rns = OAS_rn.substring (2, 11);
-    document.write('<scr'+'ipt LANGUAGE="JavaScript1.1" SRC="http://network.realmedia.com/RealMedia/ads/adstream_jx.ads/techvideo/ros/300x250/jx/ss/a/1'+OAS_rns+'@x15"></scr'+'ipt>');
-    </script>
-    
+    <div style="background-color:#003;color:#FFF;font-size:16px;font-weight:bold;text-align:center;padding:125px 0;height:50px;width:300px;"><?=Language::GetText('your_ad_goes_here')?></div>
 </div>
