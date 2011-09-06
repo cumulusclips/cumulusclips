@@ -46,8 +46,7 @@ if (empty ($which_results)) {
     @exec ('whereis php', $whereis_results);
     $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
     if (!empty ($whereis_results)) {
-        $path = explode (' ', $whereis_results[0]);
-        $settings->php = $path[0];
+        $settings->php = $whereis_results;
         $php_path = true;
     } else {
         $settings->php = '';
@@ -77,8 +76,7 @@ if (empty ($which_results_ffmpeg)) {
         $disable_uploads = true;
         $warnings = true;
     } else {
-        $path_ffmpeg = explode (' ', $whereis_results_ffmpeg[0]);
-        $settings->ffmpeg = $path_ffmpeg[0];
+        $settings->ffmpeg = $whereis_results_ffmpeg;
         $ffmpeg = true;
     }
     
@@ -103,8 +101,7 @@ if (empty ($which_results_faststart)) {
         $disable_uploads = true;
         $warnings = true;
     } else {
-        $path_faststart = explode (' ', $whereis_results_faststart[0]);
-        $settings->qt_faststart = $path_faststart[0];
+        $settings->qt_faststart = $whereis_results_faststart;
         $qt_faststart = true;
     }
 

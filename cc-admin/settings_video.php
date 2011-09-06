@@ -133,8 +133,7 @@ if (isset ($_POST['submitted'])) {
                 $warnings['php'] = 'Unable to detect path to PHP';
                 $data['php'] = '';
             } else {
-                $path = explode (' ', $whereis_results[0]);
-                $data['php'] = $path[0];
+                $data['php'] = $whereis_results;
             }
 
         } else {
@@ -163,8 +162,7 @@ if (isset ($_POST['submitted'])) {
                 $warnings['ffmpeg'] = 'Unable to locate FFMPEG';
                 $data['ffmpeg'] = '';
             } else {
-                $path_ffmpeg = explode (' ', $whereis_results_ffmpeg[0]);
-                $data['ffmpeg'] = $path_ffmpeg[0];
+                $data['ffmpeg'] = $whereis_results_ffmpeg;
             }
 
         } else {
@@ -192,8 +190,7 @@ if (isset ($_POST['submitted'])) {
                 $warnings['qt_faststart'] = 'Unable to located qt-faststart';
                 $data['qt_faststart'] = '';
             } else {
-                $path_faststart = explode (' ', $whereis_results_faststart[0]);
-                $data['qt_faststart'] = $path_faststart[0];
+                $data['qt_faststart'] = $whereis_results_faststart;
             }
 
         } else {
