@@ -155,7 +155,7 @@ $('document').ready(function(){
         var callback = function (responseData) {
             $('#comments-form')[0].reset();
             if (responseData.other.auto_approve == 1) {
-                $('#comments').prepend(responseData.other);
+                $('#comments').prepend(responseData.other.output);
             }
         }
         executeAction (url, $(this).serialize(), callback);
@@ -170,6 +170,7 @@ $('document').ready(function(){
         var url = baseURL+'/actions/post/';
         var callback = function(responseData) {
             $('#status-posts').prepend(responseData.other);
+            $('#no-updates').remove();
             $('#status-form')[0].reset();
             $('#status-form .text').css('height', '20')
         }

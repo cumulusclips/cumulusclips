@@ -14,6 +14,7 @@
         <register>@Sign Up Free</register>
         <logout>@Logout</logout>
         <myaccount>@My Account</myaccount>
+        <view_my_profile>@View My Profile</view_my_profile>
         <admin_panel>@Admin Panel</admin_panel>
         <videos>@Videos</videos>
         <members>@Members</members>
@@ -73,7 +74,7 @@
 
         <!-- Contact Page -->
         <contact_header>@Contact Us</contact_header>
-        <contact_text>@Fill out and submit the form below and I'll get back to you as soon as I can. I'll really try to get back to everyone, but sometimes it's hard and I can't guarantee it.</contact_text>
+        <contact_text>@Please fill out and submit the form below and we'll get back to you as soon as we can. Due to the high volume of submissions, it may take some time for us to get to your inquiry.</contact_text>
         <name>@Name</name>
         <message>@Message</message>
         <contact_us>@Contact Us</contact_us>
@@ -110,6 +111,7 @@
         <recent_posts_header>@Recent Updates</recent_posts_header>
         <update_status>@Update your Status</update_status>
         <post_update_button>@Post Update</post_update_button>
+        <no_updates>@No recent status updates.</no_updates>
         <no_member_videos>@Member currently has no videos.</no_member_videos>
 
         <!-- Member Videos Page -->
@@ -317,6 +319,7 @@
         <error_email_invalid>@Invalid email address</error_email_invalid>
         <error_email_unavailable>@Email address is unavailable</error_email_unavailable>
         <error_recipient>@Invalid recipient username</error_recipient>
+        <error_website_invalid>@Invalid website</error_website_invalid>
         <error_recipient_exist>@No members exist with that username</error_recipient_exist>
         <error_recipient_self>@You can't send yourself a message</error_recipient_self>
         <error_subject>@Invalid subject</error_subject>
@@ -380,22 +383,17 @@
     <custom>
         <most_discussed_videos>@Most Discussed Videos</most_discussed_videos>
         <highest_rated_videos>@Highest Rated Videos</highest_rated_videos>
-        <faq>@F.A.Q.</faq>
-        <need_help>@Need Help?</need_help>
-        <about>@About</about>
+        <documentation>@Documentation</documentation>
+        <rss>@RSS</rss>
         <contact>@Contact</contact>
-        <careers>@Careers</careers>
+        <sample>@Sample</sample>
         <sitemap>@Sitemap</sitemap>
-        <terms>@Terms</terms>
-        <privacy>@Privacy</privacy>
-        <copyright>@Copyright</copyright>
-        <advertising>@Advertising</advertising>
     </custom>
 
 
     <meta>
         <index>
-            <title>@Cumulus - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
+            <title>@CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
             <keywords>@Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
             <description>@Free video sharing cms software that allows you to have your own video sharing website and community</description>
         </index>

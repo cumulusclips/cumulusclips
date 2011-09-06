@@ -25,7 +25,7 @@
         
         <div class="row">
             <label for="message" class="<?=(!empty ($Errors['message'])) ? 'errors' : ''?>"><?=Language::GetText('message')?>:</label>
-            <textarea name="message" class="text"><?=($error_msg && $message) ? htmlspecialchars ($message) : ''?></textarea>
+            <textarea name="message" class="text" cols="40" rows="9"><?=($error_msg && $message) ? htmlspecialchars ($message) : ''?></textarea>
         </div>
 
         <div class="row-shift">

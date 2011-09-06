@@ -515,30 +515,20 @@ MISCELLANEOUS STYLES
     position:relative;
     margin:25px 25px 0px 0px;
     padding:10px;
-    border:3px solid #CCC;
-    background-color:#FFF;
     width:160px;
-    float:left;
+    display:inline-block;
+    vertical-align:top;
+    text-align:center;
 }
+.member .large { word-wrap:break-word; }
 
-.picture {
+.avatar {
     border:1px solid #CCC;
     width:100px;
     height:100px;
     margin:0 auto;
 }
-
-.picture a, .picture > span {
-    display:table-cell;
-    vertical-align:middle;
-    text-align:center;
-    width:100px;
-    height:100px;
-}
-
-.picture img {
-    border:none;
-}
+.avatar img { border:none; }
 
 .avatar-small img {
     width:64px;
@@ -551,6 +541,8 @@ MISCELLANEOUS STYLES
     border-top:1px solid #CCC;
     padding-top:5px;
 }
+
+.space { margin-top:15px; }
 
 
 

@@ -28,8 +28,9 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
     $data = array ('user_id' => View::$vars->user->user_id, 'member' => $_GET['id']);
     $id = Subscription::Exist ($data);
     if ($id) {
+        $subscribed_user = new User ($_GET['id']);
         Subscription::Delete ($id);
-        View::$vars->message = Language::GetText('success_unsubscribed');
+        View::$vars->message = Language::GetText('success_unsubscribed', array ('username' => $subscribed_user->username));
         View::$vars->message_type = 'success';
         Plugin::Trigger ('subscriptions.unsubscribe');
     }

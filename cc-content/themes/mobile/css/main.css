@@ -89,6 +89,7 @@ GENERAL STYLES
 
 .thumb {
     width:75px;
+    height:56px;
     float:left;
     margin-right:10px;
 }

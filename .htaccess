@@ -55,7 +55,7 @@ RewriteRule ^actions/subscribe/$ cc-core/system/subscribe.ajax.php [NC,L]
 RewriteRule ^actions/rate/$ cc-core/system/rate.ajax.php [NC,L]
 RewriteRule ^actions/comment/$ cc-core/system/comment.ajax.php [NC,L]
 RewriteRule ^actions/post/$ cc-core/system/post.ajax.php [NC,L]
-RewriteRule ^actions/mobile\-(videos|search)/$ cc-core/system/mobile_$1.ajax.php?mobile [NC,L]
+RewriteRule ^actions/mobile-(videos|search)/$ cc-core/system/mobile_$1.ajax.php?mobile [NC,L]
 
 
 
@@ -112,38 +112,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*) cc-core/system/page.php [L]
 
-
-
-
-
-
-
-
-
-
-
-
-
-#RewriteRule index.php - [F,L]
-#<FilesMatch "index.php">
-#    order deny,allow
-#    deny from all
-#</FilesMatch>
-
-
-
-
-
-# Prevent known script types from executing
-#AddHandler cgi-script .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
-#Options -ExecCGI
-
-
-# Prevent access to any file type other than allowed image types
-#SetEnvIf Request_URI "\.gif$" image=gif
-#SetEnvIf Request_URI "\.jpe?g$" image=jpg
-#SetEnvIf Request_URI "\.png$" image=png
-
-#order deny,allow
-#deny from all
-#allow from env=image

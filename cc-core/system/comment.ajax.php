@@ -69,8 +69,8 @@ if (isset ($_POST['submitted'])) {
 
         // Validate website
         $website_pattern = '/^(https?:\/\/)?[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i';
-        if (!empty ($_POST['website']) && !ctype_space ($_POST['website']) && preg_match ($website_pattern, $_POST['website'])) {
-            $data['website'] = htmlspecialchars( trim ($_POST['website']));
+        if (!empty ($_POST['website']) && !ctype_space ($_POST['website']) && preg_match ($website_pattern, $_POST['website'], $matches)) {
+            $data['website'] = (empty ($matches[1]) ? 'http://' : '') . htmlspecialchars (trim ($_POST['website']));
         }
 
     }

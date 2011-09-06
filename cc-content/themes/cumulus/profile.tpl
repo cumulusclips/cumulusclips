@@ -39,7 +39,7 @@ View::Header();
 
 <!-- BEGIN Recent Videos -->
 <?php if ($db->Count ($result_videos) >= 1): ?>
-    <p class="large"><?=Language::GetText('recent_videos')?></p>
+    <p class="large space"><?=Language::GetText('recent_videos')?></p>
 
     <p class="post-header"><a href="<?=HOST?>/members/<?=$member->username?>/videos/" title="<?=Language::GetText('view_all_videos')?>"><?=Language::GetText('view_all_videos')?></a></p>
     <?php while ($row = $db->FetchObj ($result_videos)): ?>

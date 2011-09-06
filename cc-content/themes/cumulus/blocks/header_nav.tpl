@@ -10,8 +10,10 @@
         <div id="welcome">
 
             <?php if ($logged_in): ?>
+            
                 <a href="<?=HOST?>/logout/" title="<?=Language::GetText('logout')?>"><?=Language::GetText('logout')?></a>
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
+                <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$user->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
                 <?php if (User::CheckPermissions ('admin_panel', $user)): ?>
                     <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
@@ -41,8 +43,11 @@
         <div id="nav">
             <a href="<?=HOST?>/videos/" title="<?=Language::GetText('videos')?>"><?=Language::GetText('videos')?></a>
             <a href="<?=HOST?>/members/" title="<?=Language::GetText('members')?>"><?=Language::GetText('members')?></a>
-            <a href="<?=HOST?>/myaccount/upload/" title="<?=Language::GetText('upload')?>"><?=Language::GetText('upload')?></a>
+            <a href="<?=HOST?>/myaccount/upload/" title="<?=Language::GetText('upload')?>"><?=Language::GetText('upload')?></a>               
         </div>
     </div>
 </div>
 <!-- END HEADER -->
+
+
+

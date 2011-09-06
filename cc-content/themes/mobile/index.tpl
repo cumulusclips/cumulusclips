@@ -4,15 +4,17 @@
 
     <!-- BEGIN FEATURED VIDEO -->
     <h1><?=Language::GetText('featured_video_header')?></h1>
-    <?php if (!empty ($featured_video)): ?>
+    <div id="featured-video">
+        <?php if (!empty ($featured_video)): ?>
 
-        <div id="featured-video" class="list">
-            <?php View::RepeatingBlock ('video.tpl', $featured_video); ?>
-        </div>
+            <div class="list">
+                <?php View::RepeatingBlock ('video.tpl', $featured_video); ?>
+            </div>
 
-    <?php else: ?>
-        <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
-    <?php endif; ?>
+        <?php else: ?>
+            <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
+        <?php endif; ?>
+    </div>
     <!-- END FEATURED VIDEO -->
     
     

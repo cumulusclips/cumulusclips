@@ -58,14 +58,18 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-
     // Validate Website
-    if (!empty (View::$vars->user->website) && $_POST['website'] == '') {
+    if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
+        $website = $_POST['website'];
+        if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+            $website = (empty ($matches[1]) ? 'http://' : '') . $website;
+            View::$vars->data['website'] = htmlspecialchars (trim ($website));
+        } else {
+            View::$vars->errors['website'] = Language::GetText('error_website_invalid');
+        }
+    } else {
         View::$vars->data['website'] = '';
-    } elseif (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
-        View::$vars->data['website'] = htmlspecialchars ($_POST['website']);
     }
-
 
 
     // Validate About Me

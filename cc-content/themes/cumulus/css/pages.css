@@ -280,20 +280,8 @@ MEMBER PROFILE STYLES
 CONTACT PAGE STYLES
 ******************/
 
-#contact-list {
-    list-style:none;
-}
-#contact-list li {
-    padding:3px 0;
-}
-
 #contact-form {
     margin-top:30px;
-}
-
-#contact-form textarea {
-    width:380px;
-    height:140px;
 }
 
 

@@ -8,8 +8,8 @@
     <?php while ($row = $db->FetchObj ($result)): ?>
 
         <?php $member = new User ($row->user_id); ?>
-        <div class="member">
-            <p class="picture"><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>">
+        <div class="block member">
+            <p class="avatar"><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>">
                 <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
             </a></p>
             <a class="large" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff ($member->username,18)?></a>

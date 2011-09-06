@@ -80,7 +80,7 @@ if (isset ($_POST['submitted'])) {
     if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
         $website = $_POST['website'];
         if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
-            $website = (empty($matches[1])) ? 'http://' . $website : $website;
+            $website = (empty ($matches[1]) ? 'http://' : '') . $website;
             $data['website'] = htmlspecialchars (trim ($website));
         } else {
             $errors['website'] = 'Invalid website';

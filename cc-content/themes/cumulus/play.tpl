@@ -118,7 +118,7 @@ View::Header();
     <!-- BEGIN COMMENTS -->
     <?php if ($comment_count > 0): ?>
 
-        <p class="large"><?=Language::GetText('comments_header')?></p>
+        <p class="large space"><?=Language::GetText('comments_header')?></p>
 
         <?php if ($comment_count >= 5): ?>
             <!-- BEGIN View All Comments Link -->
@@ -146,7 +146,7 @@ View::Header();
 
 
     <!-- BEGIN COMMENTS FORM -->
-    <p class="large"><?=Language::GetText('comments_post_header')?></p>
+    <p class="large space"><?=Language::GetText('comments_post_header')?></p>
     <div class="block">
 
         <form id="comments-form" action="" method="post">
@@ -201,7 +201,7 @@ View::Header();
 
 
     <!-- BEGIN RELATED VIDEOS -->
-    <p class="large"><?=Language::GetText('suggestions_header')?></p>
+    <p class="large space"><?=Language::GetText('suggestions_header')?></p>
     <div class="block" id="related-videos">
 
         <?php if ($db->Count ($result_related) > 0): ?>

@@ -54,11 +54,6 @@ GENERAL PORTAL STYLES
     margin-right:15px;
 }
 
-.thumb img {
-    width:120px;
-    height:80px;
-}
-
 
 
 
@@ -150,7 +145,7 @@ MY ACCOUNT STYLES
     margin-right:40px;
 }
 
-#myaccount-left .picture {
+#myaccount-left .avatar {
     margin:0 0 5px 0;
 }
 
