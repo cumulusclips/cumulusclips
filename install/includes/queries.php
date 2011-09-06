@@ -148,7 +148,7 @@ CREATE TABLE `{DB_PREFIX}pages` (
 CREATE_PAGES_TABLE;
 
 $_POPULATE_PAGES_TABLE = <<<POPULATE_PAGES_TABLE
-INSERT INTO `pages`(`page_id`,`title`,`content`,`slug`,`layout`,`date_created`,`status`) values (1,'Sample Page','<p>This is a sample page. You can create custom static pages like this in the Admin Panel.</p>','sample-page','default','2011-09-05 06:28:49','published');
+INSERT INTO `{DB_PREFIX}pages`(`page_id`,`title`,`content`,`slug`,`layout`,`date_created`,`status`) values (1,'Sample Page','<p>This is a sample page. You can create custom static pages like this in the Admin Panel.</p>','sample-page','default','2011-09-05 06:28:49','published');
 POPULATE_PAGES_TABLE;
 
 
@@ -384,8 +384,8 @@ $install_queries = array (
     $_DROP_MESSAGES_TABLE,
     $_CREATE_MESSAGES_TABLE,
     $_DROP_PAGES_TABLE,
-    $_POPULATE_PAGES_TABLE,
     $_CREATE_PAGES_TABLE,
+    $_POPULATE_PAGES_TABLE,
     $_DROP_POSTS_TABLE,
     $_CREATE_POSTS_TABLE,
     $_DROP_PRIVACY_TABLE,

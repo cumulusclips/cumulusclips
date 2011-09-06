@@ -46,7 +46,7 @@ class Settings {
      */
     public static function Set ($setting_name, $value) {
         $db = Database::GetInstance();
-        $query = "UPDATE settings SET value = '$value' WHERE name = '$setting_name'";
+        $query = "UPDATE " . DB_PREFIX . "settings SET value = '$value' WHERE name = '$setting_name'";
         $db->Query ($query);
         self::$settings->$setting_name = $value;
     }
