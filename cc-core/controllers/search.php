@@ -33,16 +33,36 @@ View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array (
 $keyword = $db->Escape (View::$vars->cleaned);
 
 
+// Retrieve count of all videos
+$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved'";
+$result_total = $db->Query ($query);
+$total = $db->FetchObj ($result_total);
+
+
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST('$keyword')";
+if ($total->total > 20 && strlen ($keyword) > 3) {
+
+    // Use FULLTEXT query
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST('$keyword')";
+    Plugin::Trigger ('search.search_count');
+    $result_count = $db->Query ($query);
+    $count = $db->Count ($result_count);
+
+} else {
+
+    // Use LIKE query
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND (title LIKE '%$keyword%' OR description LIKE '%$keyword%' OR tags LIKE '%$keyword%')";
+    $result_count = $db->Query ($query);
+    $count = $db->Count ($result_count);
+
+}
 Plugin::Trigger ('search.search_count');
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+
 
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
+View::$vars->pagination = new Pagination ($url, $count, $records_per_page);
 $start_record = View::$vars->pagination->GetStartRecord();
 
 

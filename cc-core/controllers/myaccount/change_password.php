@@ -46,7 +46,7 @@ if ((isset ($_POST['submitted']))) {
 
         // Update password if no errors were found
         if ($confirm_password == $password) {
-            $data = array ('password' => $password);
+            $data = array ('password' => md5 ($password));
             View::$vars->user->Update ($data);
             View::$vars->message = Language::GetText('success_password_updated');
             View::$vars->message_type = 'success';

@@ -159,6 +159,7 @@ if (isset ($_POST['submitted'])) {
 
         }
 
+        if (isset ($data['password'])) $data['password'] = md5 ($data['password']);
         $message = 'Member has been updated.';
         $message_type = 'success';
         $user->Update ($data);

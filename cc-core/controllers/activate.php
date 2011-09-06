@@ -24,7 +24,7 @@ if (isset ($_GET['token'])) {
         $user->Approve ('activate');
         if (Settings::Get('auto_approve_users') == 1) {
             View::$vars->message = Language::GetText ('activate_success', array ('host' => HOST));
-            User::Login ($user->username, $user->password);
+            $_SESSION['user_id'] = $user->user_id;
         } else {
             View::$vars->message = Language::GetText ('activate_approve');
         }

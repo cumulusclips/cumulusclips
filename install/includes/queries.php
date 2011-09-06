@@ -147,6 +147,10 @@ CREATE TABLE `{DB_PREFIX}pages` (
 
 CREATE_PAGES_TABLE;
 
+$_POPULATE_PAGES_TABLE = <<<POPULATE_PAGES_TABLE
+INSERT INTO `pages`(`page_id`,`title`,`content`,`slug`,`layout`,`date_created`,`status`) values (1,'Sample Page','<p>This is a sample page. You can create custom static pages like this in the Admin Panel.</p>','sample-page','default','2011-09-05 06:28:49','published');
+POPULATE_PAGES_TABLE;
+
 
 
 
@@ -253,7 +257,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('theora_url',''),
 ('mobile_url',''),
 ('thumb_url',''),
-('h264_options','-vcodec libx264 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),
+('h264_options','-vcodec libx264 -x264opts cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1600k -acodec libfaac -ac 2 -ab 128k -ar 44100 -f mp4'),
 ('theora_options','-vcodec libtheora -b 1600k -acodec libvorbis -ac 2 -ab 128k -ar 44100 -f ogg'),
 ('mobile_options','-vf scale=480:-1 -vcodec libx264 -x264opts level=30:cabac=0:bframes=0:weightb=0:weightp=0:8x8dct=0 -b 1000k -acodec libfaac -ac 2 -ab 96k -ar 44100 -f mp4'),
 ('thumb_options','-vf scale=640:-1 -t 1 -r 1 -f mjpeg'),
@@ -308,7 +312,7 @@ CREATE TABLE `{DB_PREFIX}users` (
   `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(80) NOT NULL,
   `email` varchar(80) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(32) NOT NULL,
   `status` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'user',
   `date_created` date NOT NULL,
@@ -380,6 +384,7 @@ $install_queries = array (
     $_DROP_MESSAGES_TABLE,
     $_CREATE_MESSAGES_TABLE,
     $_DROP_PAGES_TABLE,
+    $_POPULATE_PAGES_TABLE,
     $_CREATE_PAGES_TABLE,
     $_DROP_POSTS_TABLE,
     $_CREATE_POSTS_TABLE,

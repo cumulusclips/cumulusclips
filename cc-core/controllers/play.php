@@ -48,11 +48,39 @@ if (View::$vars->logged_in) {
 
 
 
+// Retrieve count of all videos
+$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved'";
+$result_total = $db->Query ($query);
+$total = $db->FetchObj ($result_total);
+
+
 ### Retrieve related videos
-$search_terms = $db->Escape (View::$vars->video->title) . ' ' . $db->Escape (implode (' ', View::$vars->video->tags));
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 'approved' LIMIT 9";
+if ($total->total > 20) {
+
+    // Use FULLTEXT query
+    $search_terms = $db->Escape (View::$vars->video->title) . ' ' . $db->Escape (implode (' ', View::$vars->video->tags));
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
+    View::$vars->result_related = $db->Query ($query);
+
+} else {
+
+    // Use LIKE query
+    $tags = View::$vars->video->tags;
+    foreach ($tags as $key => $tag) {
+        $tag = $db->Escape ($tag);
+        $sub_queries[] = "video_id IN (SELECT video_id FROM " . DB_PREFIX . "videos WHERE title LIKE '%$tag%' OR description LIKE '%$tag%' OR tags LIKE '%$tag%')";
+    }
+
+    $sub_queries = implode (' OR ', $sub_queries);
+    $query = "SELECT video_id FROM videos WHERE ($sub_queries) AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
+    View::$vars->result_related = $db->Query ($query);
+
+}
 Plugin::Trigger ('play.load_suggestions');
-View::$vars->result_related = $db->Query ($query);
+
+
+
+
 
 
 

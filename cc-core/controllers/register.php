@@ -80,6 +80,7 @@ if (isset ($_POST['submitted'])) {
         View::$vars->data['confirm_code'] = User::CreateToken();
         View::$vars->data['date_created'] = date('Y-m-d H:i:s');
         View::$vars->data['status'] = 'new';
+        View::$vars->data['password'] = md5 (View::$vars->data['password']);
 
         Plugin::Trigger ('register.before_create');
         User::Create (View::$vars->data);

@@ -95,7 +95,7 @@ if (isset ($_POST['submitted_forgot'])) {
         if ($user_id) {
 
             $user = new User ($user_id);
-            $user->ResetPassword();
+            $new_password = $user->ResetPassword();
             View::$vars->message = Language::GetText('success_login_sent');
             View::$vars->message_type = 'success';
             View::$vars->forgot_submit = NULL;
@@ -103,7 +103,7 @@ if (isset ($_POST['submitted_forgot'])) {
             $replacements = array (
                 'sitename'  => $config->sitename,
                 'username'  => $user->username,
-                'password'  => $user->password
+                'password'  => $new_password
             );
             $mail = new Mail();
             $mail->LoadTemplate ('forgot_password', $replacements);

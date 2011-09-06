@@ -15,6 +15,6 @@ $rating = Rating::GetRating ($video->video_id);
     <p><?=Functions::CutOff ($video->description, 190)?></p>
     <span class="like">+<?=$rating->likes?></span>
     <span class="dislike">-<?=$rating->dislikes?></span>
-    <br clear="all" />
+    <div class="clear"></div>
 
 </div>

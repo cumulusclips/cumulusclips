@@ -240,14 +240,15 @@ class User {
 
 
     /**
-     * Generate a new password for user
-     * @return void User's password is reset and updated in DB
+     * Generate and save a new password for user
+     * @return string Returns user's new password
      */
     public function ResetPassword() {
         $password = Functions::Random (10,true);
         $data = array ('password' => md5 ($password));
         Plugin::Trigger ('user.reset_password');
         $this->Update ($data);
+        return $password;
     }
 	
 	
@@ -276,7 +277,7 @@ class User {
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     static function Login ($username, $password) {
-        $id = self::Exist (array ('username' => $username, 'password' => $password, 'status' => 'active'));
+        $id = self::Exist (array ('username' => $username, 'password' => md5 ($password), 'status' => 'active'));
         if ($id) {
             $_SESSION['user_id'] = $id;
             $user = new self ($id);

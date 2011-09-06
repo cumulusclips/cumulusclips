@@ -58,7 +58,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $data['password'] = htmlspecialchars (trim ($_POST['password']));
+        $data['password'] = trim ($_POST['password']);
     } else {
         $errors['password'] = 'Invalid password';
     }
@@ -100,6 +100,7 @@ if (isset ($_POST['submitted'])) {
 
         // Create user
         $data['date_created'] = date('Y-m-d H:i:s');
+        $data['password'] = md5 ($data['password']);
         $data['status'] = 'new';
         $id = User::Create ($data);
         $user = new User ($id);
@@ -163,7 +164,7 @@ include ('header.php');
 
             <div class="row">
                 <label class="<?=(isset ($errors['password'])) ? 'errors' : ''?>">*Password:</label>
-                <input name="password" type="password" class="text mask" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
+                <input name="password" type="password" class="text mask" value="<?=(isset ($errors, $data['password'])) ? htmlspecialchars ($data['password']):''?>" />
             </div>
 
             <div class="row">

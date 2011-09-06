@@ -14,7 +14,7 @@
             </ul>
             <ul class="link-col">
                 <li><a href="http://cumulusclips.org/" title="CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script">CumulusClips</a></li>
-                <li><a href="http://cumulusclips.org/" title="<?=Language::GetCustomText('documentation')?>"><?=Language::GetCustomText('documentation')?></a></li>
+                <li><a href="http://cumulusclips.org/docs/" title="<?=Language::GetCustomText('documentation')?>"><?=Language::GetCustomText('documentation')?></a></li>
             </ul>
         </div>
 
