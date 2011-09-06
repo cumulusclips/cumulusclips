@@ -60,14 +60,14 @@ if (isset ($_GET['category']) && preg_match ('/[a-z0-9\-]+/i', $_GET['category']
         case 'most-discussed':
 
             View::$vars->sub_header = Language::GetText ('most_discussed');
-            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "comments.video_id WHERE videos.status = 'approved' GROUP BY video_id ORDER BY sum DESC";
+            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "comments.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' GROUP BY video_id ORDER BY sum DESC";
             $url .= '/most-discussed';
             break;
 
         case 'most-rated':
 
             View::$vars->sub_header = Language::GetText ('most_rated');
-            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(rating) AS 'rating_count', SUM(rating) as 'rating_sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "ratings ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "ratings.video_id WHERE videos.status = 'approved' GROUP BY video_id ORDER BY rating_count DESC, rating_sum DESC";
+            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(rating) AS 'rating_count', SUM(rating) as 'rating_sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "ratings ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "ratings.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' GROUP BY video_id ORDER BY rating_count DESC, rating_sum DESC";
             $url .= '/most-rated';
             break;
 

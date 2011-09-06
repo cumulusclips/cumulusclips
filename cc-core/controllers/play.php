@@ -72,7 +72,7 @@ if ($total->total > 20) {
     }
 
     $sub_queries = implode (' OR ', $sub_queries);
-    $query = "SELECT video_id FROM videos WHERE ($sub_queries) AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE ($sub_queries) AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
     View::$vars->result_related = $db->Query ($query);
 
 }
