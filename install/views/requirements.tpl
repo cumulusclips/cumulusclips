@@ -71,6 +71,16 @@
                     
                     <h2>PHP Modules</h2>
                     <table>
+                        <tr>
+                            <td class="server-setting">GD</td>
+                            <td>
+                                <img src="images/<?php echo ($gd) ? 'tick.png' : 'cross.png'; ?>" />
+                                <?php if (!$gd): ?>
+                                This needs to be enabled
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="server-setting">FTP</td>
                             <td>
                                 <img src="images/<?php echo ($ftp) ? 'tick.png' : 'cross.png'; ?>" />

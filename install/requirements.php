@@ -113,6 +113,11 @@ if (empty ($which_results_faststart)) {
 
 
 
+// Verify 'gd' php module is loaded
+$gd = extension_loaded ('gd');
+if (!$gd) $errors = true;
+
+
 // Verify 'zip' php module is loaded
 $zip = extension_loaded ('zip');
 if (!$zip) $errors = true;
