@@ -141,45 +141,51 @@ include ('header.php');
     <?php endif; ?>
 
 
-    <?php foreach ($plugin_list as $plugin): ?>
-    
-        <div class="block">
+    <?php if (!empty ($plugin_list)): ?>
 
-            <p>
-                <strong><?=$plugin->info->name?></strong>
-                <?php if (!empty ($plugin->info->author)): ?>
-                    by: <?=$plugin->info->author?>
-                <?php endif; ?>
-            </p>
+        <?php foreach ($plugin_list as $plugin): ?>
 
+            <div class="block">
 
-            <?php if (!empty ($plugin->info->version)): ?>
-            <p><strong>Version:</strong> <?=$plugin->info->version?></p>
-            <?php endif; ?>
+                <p>
+                    <strong><?=$plugin->info->name?></strong>
+                    <?php if (!empty ($plugin->info->author)): ?>
+                        by: <?=$plugin->info->author?>
+                    <?php endif; ?>
+                </p>
 
 
-            <?php if (!empty ($plugin->info->notes)): ?>
-                <p><?=$plugin->info->notes?></p>
-            <?php endif; ?>
-
-
-            <p>
-                <?php if ($plugin->enabled && $plugin->settings): ?>
-                    <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <?php if (!empty ($plugin->info->version)): ?>
+                <p><strong>Version:</strong> <?=$plugin->info->version?></p>
                 <?php endif; ?>
 
-                <?php if ($plugin->enabled): ?>
-                    <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->filename?>">Disable</a>
-                <?php else: ?>
-                    <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->filename?>">Enable</a>
+
+                <?php if (!empty ($plugin->info->notes)): ?>
+                    <p><?=$plugin->info->notes?></p>
                 <?php endif; ?>
 
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall &amp; Delete</a>
-            </p>
 
-        </div>
-    
-    <?php endforeach; ?>
+                <p>
+                    <?php if ($plugin->enabled && $plugin->settings): ?>
+                        <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <?php endif; ?>
+
+                    <?php if ($plugin->enabled): ?>
+                        <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->filename?>">Disable</a>
+                    <?php else: ?>
+                        <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->filename?>">Enable</a>
+                    <?php endif; ?>
+
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall &amp; Delete</a>
+                </p>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    <?php else: ?>
+        <div class="block"><strong>No plugins added yet.</strong></div>
+    <?php endif; ?>
 
 </div>
 

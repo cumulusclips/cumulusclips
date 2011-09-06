@@ -53,6 +53,7 @@ PHP REQUIREMENTS
 
 The following PHP modules are required:
 
+- GD
 - SimpleXML
 - ZIP
 - CURL
