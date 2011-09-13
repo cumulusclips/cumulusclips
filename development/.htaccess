@@ -1,0 +1,114 @@
+
+RewriteEngine on
+
+### Add trailing slash
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !\.[a-z0-9]{2,4}$
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
+
+
+### Main Pages
+
+RewriteRule ^videos/$ cc-core/controllers/videos.php [NC,L]
+RewriteRule ^videos/page/([0-9]+)/$ cc-core/controllers/videos.php?page=$1 [NC,QSA,L]
+RewriteRule ^videos/(most-recent|most-viewed|most-discussed|most-rated)/$ cc-core/controllers/videos.php?load=$1 [NC,QSA,L]
+RewriteRule ^videos/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)/$ cc-core/controllers/videos.php?load=$1&page=$2 [NC,QSA,L]
+RewriteRule ^videos/([a-z0-9\-]+)/$ cc-core/controllers/videos.php?category=$1 [NC,QSA,L]
+RewriteRule ^videos/([a-z-]+)/page/([0-9]+)/$ cc-core/controllers/videos.php?category=$1&page=$2 [NC,QSA,L]
+RewriteRule ^videos/([0-9]+)/comments/$ cc-core/controllers/comments.php?vid=$1 [NC,QSA,L]
+RewriteRule ^videos/([0-9]+)/(.*)$ cc-core/controllers/play.php?vid=$1 [NC,QSA,L]
+RewriteRule ^members/$ cc-core/controllers/members.php [NC,L]
+RewriteRule ^members/page/([0-9]+)/$ cc-core/controllers/members.php?page=$1 [NC,QSA,L]
+RewriteRule ^members/([a-z0-9]+)/$ cc-core/controllers/profile.php?username=$1 [NC,QSA,L]
+RewriteRule ^members/([a-z0-9]+)/videos/$ cc-core/controllers/member_videos.php?username=$1 [NC,QSA,L]
+RewriteRule ^members/([a-z0-9]+)/videos/page/([0-9]+)/$ cc-core/controllers/member_videos.php?username=$1&page=$2 [NC,QSA,L]
+RewriteRule ^search(/page/([0-9]+))?/$ cc-core/controllers/search.php?page=$2 [NC,QSA,L]
+RewriteRule ^login/$ cc-core/controllers/login.php [NC,L]
+RewriteRule ^login/forgot/$ cc-core/controllers/login.php?action=forgot [NC,QSA,L]
+RewriteRule ^logout/$ cc-core/system/logout.php [NC,L]
+RewriteRule ^register/$ cc-core/controllers/register.php [NC,L]
+RewriteRule ^activate/$ cc-core/controllers/activate.php [NC,L]
+RewriteRule ^opt-out/$ cc-core/controllers/opt_out.php [NC,L]
+RewriteRule ^contact/$ cc-core/controllers/contact.php [NC,L]
+
+
+
+
+### System Pages
+
+RewriteRule ^embed/([0-9]+)/$ cc-core/system/embed.php?vid=$1 [NC,L]
+RewriteRule ^page/$ cc-core/system/page.php [NC,L]
+RewriteRule ^notify/$ cc-core/system/notify.php [NC,L]
+RewriteRule ^language/get/$ cc-core/system/language.php?get [NC,L]
+RewriteRule ^language/set/(.*)/$ cc-core/system/language.php?set&language=$1 [NC,L]
+RewriteRule ^feed(/([a-z0-9]+))?/$ cc-core/system/feed.php?username=$2 [NC,L]
+RewriteRule ^video-sitemap(-([0-9]+))?\.xml$ cc-core/system/video_sitemap.php?page=$2 [NC,L]
+RewriteRule ^myaccount/upload/avatar/$ cc-core/system/avatar.ajax.php [NC,L]
+RewriteRule ^myaccount/upload/validate/$ cc-core/system/upload.ajax.php [NC,L]
+RewriteRule ^myaccount/grab/validate/$ cc-core/system/grab.ajax.php [NC,L]
+RewriteRule ^actions/username/$ cc-core/system/username.ajax.php [NC,L]
+RewriteRule ^actions/flag/$ cc-core/system/flag.ajax.php [NC,L]
+RewriteRule ^actions/favorite/$ cc-core/system/favorite.ajax.php [NC,L]
+RewriteRule ^actions/subscribe/$ cc-core/system/subscribe.ajax.php [NC,L]
+RewriteRule ^actions/rate/$ cc-core/system/rate.ajax.php [NC,L]
+RewriteRule ^actions/comment/$ cc-core/system/comment.ajax.php [NC,L]
+RewriteRule ^actions/post/$ cc-core/system/post.ajax.php [NC,L]
+RewriteRule ^actions/mobile-(videos|search)/$ cc-core/system/mobile_$1.ajax.php?mobile [NC,L]
+
+
+
+### My Account Pages
+
+RewriteRule ^myaccount/$ cc-core/controllers/myaccount/myaccount.php [NC,L]
+RewriteRule ^myaccount/upload/$ cc-core/controllers/myaccount/upload.php [NC,L]
+RewriteRule ^myaccount/upload/video/$ cc-core/controllers/myaccount/upload_video.php [NC,L]
+RewriteRule ^myaccount/upload/complete/$ cc-core/controllers/myaccount/upload_complete.php [NC,L]
+RewriteRule ^myaccount/myvideos(/page/([0-9]+))?/$ cc-core/controllers/myaccount/myvideos.php?page=$2 [NC,QSA,L]
+RewriteRule ^myaccount/myvideos/([0-9]+)/$ cc-core/controllers/myaccount/myvideos.php?vid=$1 [NC,QSA,L]
+RewriteRule ^myaccount/editvideo/([0-9]+)/$ cc-core/controllers/myaccount/edit_video.php?vid=$1 [NC,QSA,L]
+RewriteRule ^myaccount/myfavorites(/page/([0-9]+))?/$ cc-core/controllers/myaccount/myfavorites.php?page=$2 [NC,QSA,L]
+RewriteRule ^myaccount/myfavorites/([0-9]+)/$ cc-core/controllers/myaccount/myfavorites.php?vid=$1 [NC,QSA,L]
+RewriteRule ^myaccount/profile/$ cc-core/controllers/myaccount/update_profile.php [NC,L]
+RewriteRule ^myaccount/profile/reset/$ cc-core/controllers/myaccount/update_profile.php?action=reset [NC,QSA,L]
+RewriteRule ^myaccount/privacy-settings/$ cc-core/controllers/myaccount/privacy_settings.php [NC,L]
+RewriteRule ^myaccount/change-password/$ cc-core/controllers/myaccount/change_password.php [NC,L]
+RewriteRule ^myaccount/subscriptions(/([0-9]+))?/$ cc-core/controllers/myaccount/subscriptions.php?id=$2 [NC,QSA,L]
+RewriteRule ^myaccount/subscriptions(/page/([0-9]+))?/$ cc-core/controllers/myaccount/subscriptions.php?page=$2 [NC,QSA,L]
+RewriteRule ^myaccount/subscribers(/page/([0-9]+))?/$ cc-core/controllers/myaccount/subscribers.php?page=$2 [NC,QSA,L]
+RewriteRule ^myaccount/message/inbox(/page/([0-9]+))?/$ cc-core/controllers/myaccount/message_inbox.php?page=$2 [NC,QSA,L]
+RewriteRule ^myaccount/message/inbox/([0-9]+)/$ cc-core/controllers/myaccount/message_inbox.php?delete=$1 [NC,QSA,L]
+RewriteRule ^myaccount/message/read/([0-9]+)/$ cc-core/controllers/myaccount/message_read.php?msg=$1 [NC,QSA,L]
+RewriteRule ^myaccount/message/send/$ cc-core/controllers/myaccount/message_send.php [NC,L]
+RewriteRule ^myaccount/message/send/([a-z0-9]+)/$ cc-core/controllers/myaccount/message_send.php?username=$1 [NC,QSA,L]
+RewriteRule ^myaccount/message/reply/([0-9]+)/$ cc-core/controllers/myaccount/message_send.php?msg=$1 [NC,QSA,L]
+
+
+
+
+### Mobile Site
+
+RewriteRule ^m/$ cc-core/controllers/mobile/index.php?mobile [NC,L]
+RewriteRule ^m/v/$ cc-core/controllers/mobile/videos.php?mobile [NC,L]
+RewriteRule ^m/v/([0-9]+)/$ cc-core/controllers/mobile/play.php?mobile&vid=$1 [NC,L]
+RewriteRule ^m/s/$ cc-core/controllers/mobile/search.php?mobile [NC,L]
+
+
+
+
+### Management & Security
+
+Options -Indexes -MultiViews
+ErrorDocument 404 cc-core/controllers/system_404.php
+RewriteRule ^system-error/$ cc-core/controllers/system_error.php [NC,L]
+
+
+
+
+### Catch-All for custom pages
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) cc-core/system/page.php [L]
+
