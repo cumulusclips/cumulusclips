@@ -1,1 +1,0 @@
-VideoJS.setupAllWhenReady();
