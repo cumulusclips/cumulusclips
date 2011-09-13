@@ -1,0 +1,216 @@
+/* MAIN PAGE STRUCTRES */
+
+body {
+    margin:0px;
+    background-color:#f0f0f0;
+    -webkit-text-size-adjust: none;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#666;
+}
+
+#wrapper {
+    margin:10px;
+}
+
+#header {
+    background-color:#003;
+    height:24px;
+    padding:15px 10px;
+}
+
+#nav {
+    height:25px;
+    margin-top:15px;
+    margin-bottom:15px;
+}
+#nav div {
+    float:left;
+    width:33%;
+}
+#nav a, #nav a.back {
+    display:block;
+    background-color:#023e7b;
+    border-radius:5px;
+    margin-left:auto;
+    margin-right:auto;
+    height:23px;
+    width:85px;
+    line-height:23px;
+    text-align:center;
+    padding:3px;
+    font-size:14px;
+    font-weight:bold;
+    color:#FFF;
+}
+
+.list, .block {
+    margin-top:5px;
+    background-color:#FFFFFF;
+    border:solid 1px #CCCCCC;
+    border-radius:10px;
+}
+
+.block { padding:10px; }
+
+#footer {
+    padding:0px 5px;
+    text-align:right;
+    margin-top:3px;
+    font-size:10px;
+}
+
+
+
+
+
+/*************
+GENERAL STYLES
+*************/
+
+.list div:last-child {
+    border-bottom:none;
+}
+
+.list .video {
+    border-bottom:solid 1px #CCCCCC;
+}
+
+.video {
+    margin:0px;
+    padding:10px 45px 10px 10px;
+    position:relative;
+    background:url(../images/listArrow.png) no-repeat right center;
+}
+
+.video a {
+    display:none;
+}
+
+.thumb {
+    width:75px;
+    height:56px;
+    float:left;
+    margin-right:10px;
+}
+
+.title {
+    margin:0px;
+    font-weight:bold;
+    color:#023e7b;
+}
+
+.clear {
+    clear:both;
+}
+
+#load-more {
+    padding:20px;
+    font-weight:bold;
+    color:#023e7b;
+}
+
+#load-more div {
+    text-align:center;
+    height:16px;
+    line-height:16px;
+}
+
+#loading-text {
+    background:url(../images/loading.gif) no-repeat;
+    padding-left:18px;
+    display:inline-block;
+    height:16px;
+    line-height:16px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+
+
+
+/***************
+Home page styles
+***************/
+
+#featured-video {
+    margin-bottom:15px;
+}
+
+
+
+
+
+/*********************
+Play Video Page Styles
+*********************/
+
+#play h1 {
+    margin-bottom:10px;
+}
+
+
+
+
+
+/*****************
+SEARCH PAGE STYLES
+*****************/
+
+#search-padding {
+    padding:10px;
+}
+
+#search-form {
+     background-color:#FFF;
+    border-radius:5px;
+    border:1px solid #CCC;
+    padding:4px 4px 4px 0px;
+    height:24px;
+    margin-bottom:10px;
+}
+
+#search-field {
+    width:80%;
+    background-color:transparent;
+    -webkit-appearance: none;
+    border:none;
+    font-size:16px;
+    padding-bottom:2px;
+    color:#999;
+}
+
+#search-button {
+    width:28px;
+    float:right;
+}
+
+
+
+
+
+/* MISC Styles */
+
+p { padding:5px 0; }
+
+img {
+    border:none;
+}
+
+h1 {
+    font-weight:bold;
+    font-size:16px;
+    color:#333;
+}
+
+strong {
+    font-weight:bold;
+    color:#333;
+}
+
+a {
+    font-weight:bold;
+    color:#023e7b;
+    text-decoration:none;
+}
