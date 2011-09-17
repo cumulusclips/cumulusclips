@@ -75,7 +75,7 @@ class App {
             $PROTOCOL = (!empty ($_SERVER['HTTPS'])) ? 'https://' : 'http://';
             $HOSTNAME = $_SERVER['SERVER_NAME'];
             $PORT = ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT']);
-            $PATH = rtrim (dirname (preg_replace ('/\?.*/', '', $_SERVER['REQUEST_URI'])), '/');
+            $PATH = rtrim (preg_replace ('/\?.*/', '', $_SERVER['REQUEST_URI']), '/');
             $HOST = $PROTOCOL . $HOSTNAME . $PORT . $PATH;
             header ("Location: $HOST/install/");
             exit();
