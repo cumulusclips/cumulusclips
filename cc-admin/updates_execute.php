@@ -101,7 +101,7 @@ try {
     Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n");
 
     ### Applying changes
-    Filesystem::CopyDir ($tmp . '/cumulus', DOC_ROOT);
+    Filesystem::CopyDir ($tmp . '/cumulusclips', DOC_ROOT);
 
 
     ### Perform patch file modifications
