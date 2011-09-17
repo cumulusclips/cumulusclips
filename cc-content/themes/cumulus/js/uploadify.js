@@ -1,6 +1,5 @@
 $('document').ready(function() {
 
-    var host = $('[name="uploadify:host"]').attr('content');
     var handler = $('form[name="uploadify"]').attr('action');
     var fileDesc = $('[name="uploadify:fileDesc"]').attr('content');
     var fileExt = $('[name="uploadify:fileExt"]').attr('content');
@@ -29,8 +28,13 @@ $('document').ready(function() {
         'fileExt'       : fileExt,
         'onError'       : function(event, queueID, fileObj, errorObj) {
 
+            console.log(event);
+            console.log(queueID);
+            console.log(fileObj);
+            console.log(errorObj);
+
             var node;
-            var replacements = {host:host};
+            var replacements = {host:baseURL};
 
             // Determine reason for failure
             if (errorObj.type == 'File Size') {
@@ -46,6 +50,12 @@ $('document').ready(function() {
         },
         'onComplete': function(event, queueID, fileObj, response, data) {
 
+            console.log(event);
+            console.log(queueID);
+            console.log(fileObj);
+            console.log(response);
+            console.log(data);
+
             // Determine result from server validation
             response = $.parseJSON(response);
             if (response.result == 1) {
@@ -56,7 +66,7 @@ $('document').ready(function() {
                     window.scroll(0,0);
                     $('.avatar img').attr('src',response.other);
                 } else {
-                    top.location.href = host+'/myaccount/upload/complete/';
+                    top.location.href = baseURL+'/myaccount/upload/complete/';
                 }
 
             } else {

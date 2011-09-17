@@ -130,7 +130,7 @@ if (isset ($_POST['submitted'])) {
             @exec ('whereis php', $whereis_results);
             $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
             if (empty ($whereis_results)) {
-                $warnings['php'] = 'Unable to detect path to PHP';
+                $warnings['php'] = 'Unable to locate path to PHP';
                 $data['php'] = '';
             } else {
                 $data['php'] = $whereis_results;
@@ -187,7 +187,7 @@ if (isset ($_POST['submitted'])) {
             @exec ('whereis qt-faststart', $whereis_results_faststart);
             $whereis_results_faststart = preg_replace ('/^qt\-faststart:\s?/','', $whereis_results_faststart[0]);
             if (empty ($whereis_results_faststart)) {
-                $warnings['qt_faststart'] = 'Unable to located qt-faststart';
+                $warnings['qt_faststart'] = 'Unable to locate qt-faststart';
                 $data['qt_faststart'] = '';
             } else {
                 $data['qt_faststart'] = $whereis_results_faststart;

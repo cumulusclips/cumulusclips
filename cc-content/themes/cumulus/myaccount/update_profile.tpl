@@ -1,6 +1,5 @@
 <?php
 
-View::AddMeta ('uploadify:host', HOST);
 View::AddMeta ('uploadify:theme', THEME);
 View::AddMeta ('uploadify:fileExt', ';*.gif;*.png;*.jpg;*.jpeg');
 View::AddMeta ('uploadify:fileDesc', Language::GetText('uploadify_supported_formats') . ': (*.gif) (*.png) (*.jpg) (*.jpeg)');

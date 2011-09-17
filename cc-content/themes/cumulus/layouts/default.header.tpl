@@ -3,6 +3,7 @@
 <head>
 <title><?=$meta->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="baseURL" content="<?=HOST?>" />
 <?php View::WriteMeta(); ?>
 <link rel="stylesheet" type="text/css" href="<?=THEME?>/css/reset.css" />
 <link rel="stylesheet" type="text/css" href="<?=THEME?>/css/main.css" />

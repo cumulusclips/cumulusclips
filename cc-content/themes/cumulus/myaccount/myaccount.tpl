@@ -1,6 +1,5 @@
 <?php
 
-View::AddMeta ('baseURL', HOST);
 View::SetLayout ('myaccount');
 View::Header();
 

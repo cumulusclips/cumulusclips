@@ -1,6 +1,5 @@
 <?php
 
-View::AddMeta('baseURL', HOST);
 View::AddMeta('videoID', $video->video_id);
 View::AddCss('video-js.css');
 View::AddJs('video.js');

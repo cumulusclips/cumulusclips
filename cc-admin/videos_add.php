@@ -10,6 +10,7 @@ App::LoadClass ('Video');
 Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
 $admin = new User ($logged_in);
 Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+App::EnableUploadsCheck();
 $page_title = 'Add Video';
 $categories = array();
 $data = array();

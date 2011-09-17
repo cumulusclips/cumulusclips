@@ -29,6 +29,7 @@ SERVER REQUIREMENTS
 
 CumulusClips requires:
 
+- Linux operating system
 - Apache web server version 2.0 (or greater) (http://httpd.apache.org/).
     - Apache mod_rewrite module
 - PHP 5.2 (or greater) (http://www.php.net/).

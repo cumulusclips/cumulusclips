@@ -1,7 +1,6 @@
 $('document').ready(function() {
 
     // Retrieve vars from meta tags
-    var host = $('meta[name="baseURL"]').attr('content');
     var handler = $('meta[name="uploadHandler"]').attr('content');
     var token = $('meta[name="token"]').attr('content');
     var fileDesc = $('meta[name="fileDesc"]').attr('content');
@@ -20,9 +19,9 @@ $('document').ready(function() {
         'queueID'       : 'uploadQueue',
         'sizeLimit'     : sizeLimit,
         'scriptData'    : {'token':token,'timestamp':timestamp},
-        'uploader'      : host+'/cc-admin/extras/uploadify/uploadify.swf',
+        'uploader'      : baseURL+'/cc-admin/extras/uploadify/uploadify.swf',
         'script'        : handler,
-        'cancelImg'     : host+'/cc-admin/extras/uploadify/cancel.png',
+        'cancelImg'     : baseURL+'/cc-admin/extras/uploadify/cancel.png',
         'hideButton'    : true,
         'wmode'         : 'transparent',
         'fileDesc'      : fileDesc,

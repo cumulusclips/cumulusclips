@@ -1,6 +1,5 @@
 <?php
 
-View::AddMeta ('baseURL', HOST);
 View::AddSidebarBlock ('recent_posts.tpl');
 View::Header();
 

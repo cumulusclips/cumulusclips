@@ -1,7 +1,8 @@
-$('document').ready(function(){
+// Global vars
+var baseURL = $('meta[name="baseURL"]').attr('content');
+var videoID = $('[meta[name="videoID"]').attr('content');
 
-    var baseURL = $('[name=baseURL]').attr('content');
-    var videoID = $('[name=videoID]').attr('content');
+$('document').ready(function(){
 
     // Default text Focus
     $('.defaultText').focus(function(){
@@ -215,7 +216,7 @@ GENERAL FUNCTIONS
 function GetText(callback, node, replacements) {
     $.ajax({
         type        : 'POST',
-        url         : '/language/get/',
+        url         : baseURL+'/language/get/',
         data        : {node:node, replacements:replacements},
         success     : callback
     });

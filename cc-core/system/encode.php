@@ -75,8 +75,8 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying raw video was valid size...') : null;
 
     ### Verify Raw Video has valid file size
-    // (Greater than min. 10KB, anything smaller is probably corrupted
-    if (!filesize ($raw_video) > 1024*10) throw new Exception ("The raw video file is not a valid filesize. The id of the video is: $video->video_id");
+    // (Greater than min. 5KB, anything smaller is probably corrupted
+    if (!filesize ($raw_video) > 1024*5) throw new Exception ("The raw video file is not a valid filesize. The id of the video is: $video->video_id");
 
 
 
@@ -103,7 +103,7 @@ try {
     $log_msg = "\n\n\n\n==================================================================\n";
     $log_msg .= "H.264 ENCODING\n";
     $log_msg .= "==================================================================\n\n";
-    $log_msg .= "H.264 Encoding Command: $h264_command";
+    $log_msg .= "H.264 Encoding Command: $h264_command\n";
     $log_msg .= "H.264 Encoding Output:\n\n";
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'H.264 Encoding Command: ' . $h264_command) : null;
     App::Log ($debug_log, $log_msg);
@@ -115,27 +115,10 @@ try {
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp H.264 was created successfully...') : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp H.264 was created...') : null;
 
     ### Verify temp H.264 video was created successfully
-    if (!file_exists ($h264_temp)) throw new Exception ("The temp H.264 file was not created. The id of the video is: $video->video_id");
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on H.264 video...') : null;
-
-    ### Execute H.264 Moov Atom Command
-    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264 2>&1";
-    exec ($h264_faststart_command, $qt_faststart_results);
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final H.264 was created successfully...') : null;
-
-    ### Verify final H.264 video was created successfully
-    if (!file_exists ($h264) || filesize ($h264) < 1024*1024) throw new Exception ("The final H.264 file was not created. The id of the video is: $video->video_id");
+    if (!file_exists ($h264_temp) || filesize ($h264_temp) < 1024*5) throw new Exception ("The temp H.264 file was not created. The id of the video is: $video->video_id");
 
 
 
@@ -147,6 +130,48 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 3                           //
+    //             Shift Moov atom on H.264 video              //
+    /////////////////////////////////////////////////////////////
+
+
+    // Debug Log
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on H.264 video...") : null;
+
+    ### Execute H.264 Moov Atom Command
+    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264 >> $debug_log 2>&1";
+    Plugin::Trigger ('encode.before_h264_faststart');
+
+    // Debug Log
+    $log_msg = "\n\n\n\n==================================================================\n";
+    $log_msg .= "H.264 FASTSTART\n";
+    $log_msg .= "==================================================================\n\n";
+    $log_msg .= "H.264 Faststart Command: $h264_faststart_command\n";
+    $log_msg .= "H.264 Faststart Output:\n\n";
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'H.264 Faststart Command: ' . $h264_faststart_command) : null;
+    App::Log ($debug_log, $log_msg);
+
+    ### Execute H.264 faststart command
+    exec ($h264_faststart_command);
+    Plugin::Trigger ('encode.h264_faststart');
+
+
+
+    // Debug Log
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final H.264 was created...') : null;
+
+    ### Verify final H.264 video was created successfully
+    if (!file_exists ($h264) || filesize ($h264) < 1024*5) throw new Exception ("The final H.264 file was not created. The id of the video is: $video->video_id");
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    //                        STEP 4                           //
     //              Encode raw video to Theora                 //
     /////////////////////////////////////////////////////////////
 
@@ -162,7 +187,7 @@ try {
     $log_msg = "\n\n\n\n==================================================================\n";
     $log_msg .= "THEORA ENCODING\n";
     $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Theora Encoding Command: $theora_command";
+    $log_msg .= "Theora Encoding Command: $theora_command\n";
     $log_msg .= "Theora Encoding Output:\n\n";
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Theora Encoding Command: ' . $theora_command) : null;
     App::Log ($debug_log, $log_msg);
@@ -175,10 +200,10 @@ try {
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying Theora file was created successfully...') : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying Theora file was created...') : null;
 
-    ### Verify Theora Video was created successfully
-    if (!file_exists ($theora)) throw new Exception ("The Theora file was not created. The id of the video is: $video->video_id");
+    ### Verify Theora video was created successfully
+    if (!file_exists ($theora) || filesize ($theora) < 1024*5) throw new Exception ("The Theora file was not created. The id of the video is: $video->video_id");
 
 
 
@@ -189,7 +214,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 4                           //
+    //                        STEP 5                           //
     //              Encode raw video to Mobile                 //
     /////////////////////////////////////////////////////////////
 
@@ -205,7 +230,7 @@ try {
     $log_msg = "\n\n\n\n==================================================================\n";
     $log_msg .= "MOBILE ENCODING\n";
     $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Mobile Encoding Command: $mobile_command";
+    $log_msg .= "Mobile Encoding Command: $mobile_command\n";
     $log_msg .= "Mobile Encoding Output:\n\n";
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Mobile Encoding Command: ' . $mobile_command) : null;
     App::Log ($debug_log, $log_msg);
@@ -217,27 +242,17 @@ try {
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp Mobile file was created successfully...') : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp Mobile file was created...') : null;
 
-    ### Verify temp Mobile Video was created successfully
-    if (!file_exists ($mobile_temp)) throw new Exception ("The temp Mobile file was not created. The id of the video is: $video->video_id");
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Moving moov atom on mobile video...') : null;
-
-    ### Execute Mobile Moov Atom Command
-    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile 2>&1";
-    exec ($mobile_faststart_command, $qt_faststart_results);
+    ### Verify temp Mobile video was created successfully
+    if (!file_exists ($mobile_temp) || filesize ($mobile_temp) < 1024*5) throw new Exception ("The temp Mobile file was not created. The id of the video is: $video->video_id");
 
 
 
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final Mobile file was created successfully...') : null;
 
-    ### Verify Mobile Video was created successfully
-    if (!file_exists ($mobile) || filesize ($mobile) < 1024*1024) throw new Exception ("The final Mobile file was not created. The id of the video is: $video->video_id");
+
+
+
 
 
 
@@ -248,7 +263,49 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 5                           //
+    //                        STEP 6                           //
+    //            Shift Moov atom on Mobile video              //
+    /////////////////////////////////////////////////////////////
+
+
+    // Debug Log
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
+
+    ### Execute H.264 Faststart Command
+    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile >> $debug_log 2>&1";
+    Plugin::Trigger ('encode.before_mobile_faststart');
+
+    // Debug Log
+    $log_msg = "\n\n\n\n==================================================================\n";
+    $log_msg .= "MOBILE FASTSTART\n";
+    $log_msg .= "==================================================================\n\n";
+    $log_msg .= "Mobile Faststart Command: $mobile_faststart_command\n";
+    $log_msg .= "Mobile Faststart Output:\n\n";
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Mobile Faststart Command: ' . $mobile_faststart_command) : null;
+    App::Log ($debug_log, $log_msg);
+
+    ### Execute Mobile faststart command
+    exec ($mobile_faststart_command);
+    Plugin::Trigger ('encode.mobile_faststart');
+
+
+
+    // Debug Log
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final Mobile file was created...') : null;
+
+    ### Verify Mobile video was created successfully
+    if (!file_exists ($mobile) || filesize ($mobile) < 1024*5) throw new Exception ("The final Mobile file was not created. The id of the video is: $video->video_id");
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    //                        STEP 7                           //
     //                  Get Video Duration                     //
     /////////////////////////////////////////////////////////////
 
@@ -293,7 +350,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 6                           //
+    //                        STEP 8                           //
     //                Create Thumbnail Image                   //
     /////////////////////////////////////////////////////////////
 
@@ -321,7 +378,7 @@ try {
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying valid thumbnail was created successfully...') : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying valid thumbnail was created...') : null;
 
     // Verify valid thumbnail was created
     if (!file_exists ($thumb) || filesize ($thumb) == 0) throw new Exception ("The video thumbnail is invalid. The id of the video is: $video->video_id");
@@ -335,7 +392,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 7                           //
+    //                        STEP 9                           //
     //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
@@ -361,8 +418,8 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 8                           //
-    //                       Clean up                          //
+    //                        STEP 10                          //
+    //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 
     try {
