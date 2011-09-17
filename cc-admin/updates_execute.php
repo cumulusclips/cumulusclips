@@ -141,6 +141,7 @@ try {
     ### Activate themes
     ### Activate plugins
     Filesystem::Close();
+    unset ($_SESSION['updates_available']);
 
 } catch (Exception $e) {
     $error = $e->getMessage();
