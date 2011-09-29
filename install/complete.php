@@ -28,7 +28,6 @@ $query .= " ('sitename', '" . mysql_real_escape_string ($settings->sitename) . "
 $query .= " ('admin_email', '$settings->admin_email'),";
 $query .= " ('enable_uploads', '$settings->uploads_enabled'),";
 $query .= " ('ffmpeg', '$settings->ffmpeg'),";
-$query .= " ('qt_faststart', '$settings->qt_faststart'),";
 $query .= " ('php', '$settings->php')";
 $result = @mysql_query ($query);
 

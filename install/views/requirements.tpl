@@ -54,15 +54,6 @@
                                 <?php endif; ?>
                             </td>
                         </tr>
-                        <tr>
-                            <td>qt-faststart</td>
-                            <td>
-                                <img src="images/<?php echo ($qt_faststart) ? 'tick.png' : 'flag_yellow.png'; ?>" />
-                                <?php if (!$qt_faststart): ?>
-                                qt-faststart was not found. Video uploads have disabled. <a href="#" class="more-info" data-content="qt-faststart" title="More Info">More Info</a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
                     </table>
 
 
@@ -226,13 +217,6 @@
 
                     <div class="more-info-content" id="filesize">
                         <span class="tip">At least '100M' is recommended, this is to allow maximum video uploads of 100MB.</span>
-                    </div>
-
-                    <div class="more-info-content" id="qt-faststart">
-                        <span class="tip">qt-faststart is used to allow progressive
-                        playback of videos. You won't be able to upload videos
-                        without this. You can add this later in the admin panel,
-                        or use a plugin or service instead.</span>
                     </div>
 
                     <div class="more-info-content" id="ffmpeg">

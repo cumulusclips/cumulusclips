@@ -1,8 +1,10 @@
 <?php
 
 View::AddMeta('videoID', $video->video_id);
-View::AddCss('video-js.css');
-View::AddJs('video.js');
+View::AddMeta('videoURL', $config->flv_url . '/' . $video->filename . '.flv');
+View::AddMeta('theme', THEME);
+View::AddJs('jwplayer.js');
+View::AddJs('player.js');
 View::SetLayout('full');
 View::Header();
 
@@ -17,23 +19,7 @@ View::Header();
         
         
     <!-- BEGIN VIDEO -->
-    <div class="video-js-box">
-        <video class="video-js" width="600" height="450" controls preload poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
-
-            <source src="<?=$config->h264_url?>/<?=$video->filename?>.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
-            <source src="<?=$config->theora_url?>/<?=$video->filename?>.ogg" type='video/ogg; codecs="theora, vorbis"' />
-
-            <!-- BEGIN FLASH FALLBACK -->
-            <object id="flash_fallback_1" class="vjs-flash-fallback" width="600" height="400" type="application/x-shockwave-flash" data="<?=THEME?>/flash/flowplayer-3.2.7.swf">
-                <param name="movie" value="<?=THEME?>/flash/flowplayer-3.2.7.swf" />
-                <param name="allowfullscreen" value="true" />
-                <param name="flashvars" value='config={"playlist":["<?=$config->thumb_url?>/<?=$video->filename?>.jpg", {"url": "<?=$config->h264_url?>/<?=$video->filename?>.mp4","autoPlay":false,"autoBuffering":true}]}' />
-                <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" width="600" height="450" alt="<?=$video->title?>" title="<?=Language::GetText('no_playback')?>" />
-            </object>
-            <!-- END FLASH FALLBACK -->
-
-        </video>
-    </div>
+    <div id="container">Loading the player ...</div>
     <!-- END VIDEO -->
 
 

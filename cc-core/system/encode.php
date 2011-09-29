@@ -51,9 +51,7 @@ try {
     $video->Update (array ('status' => 'processing'));
     $debug_log = LOG . '/' . $video->filename . '.log';
     $raw_video = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->original_extension;
-    $h264_temp = UPLOAD_PATH . '/h264/' . $video->filename . '_temp.mp4';
-    $h264 = UPLOAD_PATH . '/h264/' . $video->filename . '.mp4';
-    $theora = UPLOAD_PATH . '/theora/' . $video->filename . '.ogg';
+    $flv = UPLOAD_PATH . '/flv/' . $video->filename . '.flv';
     $mobile_temp = UPLOAD_PATH . '/mobile/' . $video->filename . '_temp.mp4';
     $mobile = UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4';
     $thumb = UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg';
@@ -88,37 +86,37 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 2                           //
-    //              Encode raw video to H.264                  //
+    //                Encode raw video to FLV                  //
     /////////////////////////////////////////////////////////////
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: H.264 Encoding...") : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: FLV Encoding...") : null;
 
-    ### Encode raw video to H.264 mp4
-    $h264_command = "$ffmpeg_path -i $raw_video " . Settings::Get('h264_options') . " $h264_temp >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_h264_encode');
+    ### Encode raw video to FLV
+    $flv_command = "$ffmpeg_path -i $raw_video " . Settings::Get('flv_options') . " $flv >> $debug_log 2>&1";
+    Plugin::Trigger ('encode.before_flv_encode');
 
     // Debug Log
     $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "H.264 ENCODING\n";
+    $log_msg .= "FLV ENCODING\n";
     $log_msg .= "==================================================================\n\n";
-    $log_msg .= "H.264 Encoding Command: $h264_command\n";
-    $log_msg .= "H.264 Encoding Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'H.264 Encoding Command: ' . $h264_command) : null;
+    $log_msg .= "FLV Encoding Command: $flv_command";
+    $log_msg .= "FLV Encoding Output:\n\n";
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'FLV Encoding Command: ' . $flv_command) : null;
     App::Log ($debug_log, $log_msg);
 
-    ### Execute H.264 encoding command
-    exec ($h264_command);
-    Plugin::Trigger ('encode.h264_encode');
+    ### Execute FLV encoding command
+    exec ($flv_command);
+    Plugin::Trigger ('encode.flv_encode');
 
 
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp H.264 was created...') : null;
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying FLV video was created...') : null;
 
-    ### Verify temp H.264 video was created successfully
-    if (!file_exists ($h264_temp) || filesize ($h264_temp) < 1024*5) throw new Exception ("The temp H.264 file was not created. The id of the video is: $video->video_id");
+    ### Verify temp FLV video was created successfully
+    if (!file_exists ($flv) || filesize ($flv) < 1024*5) throw new Exception ("The FLV file was not created. The id of the video is: $video->video_id");
 
 
 
@@ -130,91 +128,6 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 3                           //
-    //             Shift Moov atom on H.264 video              //
-    /////////////////////////////////////////////////////////////
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on H.264 video...") : null;
-
-    ### Execute H.264 Moov Atom Command
-    $h264_faststart_command = "$qt_faststart_path $h264_temp $h264 >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_h264_faststart');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "H.264 FASTSTART\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "H.264 Faststart Command: $h264_faststart_command\n";
-    $log_msg .= "H.264 Faststart Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'H.264 Faststart Command: ' . $h264_faststart_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    ### Execute H.264 faststart command
-    exec ($h264_faststart_command);
-    Plugin::Trigger ('encode.h264_faststart');
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final H.264 was created...') : null;
-
-    ### Verify final H.264 video was created successfully
-    if (!file_exists ($h264) || filesize ($h264) < 1024*5) throw new Exception ("The final H.264 file was not created. The id of the video is: $video->video_id");
-
-
-
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////
-    //                        STEP 4                           //
-    //              Encode raw video to Theora                 //
-    /////////////////////////////////////////////////////////////
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: Theora Encoding...") : null;
-
-    ### Encode raw video to Theora
-    $theora_command = "$ffmpeg_path -i $raw_video " . Settings::Get('theora_options') . " $theora >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_theora_encode');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "THEORA ENCODING\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Theora Encoding Command: $theora_command\n";
-    $log_msg .= "Theora Encoding Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Theora Encoding Command: ' . $theora_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    ### Execute Theora Encoding Command
-    exec ($theora_command);
-    Plugin::Trigger ('encode.theora_encode');
-
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying Theora file was created...') : null;
-
-    ### Verify Theora video was created successfully
-    if (!file_exists ($theora) || filesize ($theora) < 1024*5) throw new Exception ("The Theora file was not created. The id of the video is: $video->video_id");
-
-
-
-
-
-
-
-
-
-    /////////////////////////////////////////////////////////////
-    //                        STEP 5                           //
     //              Encode raw video to Mobile                 //
     /////////////////////////////////////////////////////////////
 
@@ -255,15 +168,8 @@ try {
 
 
 
-
-
-
-
-
-
-
     /////////////////////////////////////////////////////////////
-    //                        STEP 6                           //
+    //                        STEP 4                           //
     //            Shift Moov atom on Mobile video              //
     /////////////////////////////////////////////////////////////
 
@@ -271,22 +177,22 @@ try {
     // Debug Log
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
 
-    ### Execute H.264 Faststart Command
-    $mobile_faststart_command = "$qt_faststart_path $mobile_temp $mobile >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_mobile_faststart');
+    ### Execute Faststart Command
+    $faststart_command = DOC_ROOT . "/cc-core/system/qt-faststart $mobile_temp $mobile >> $debug_log 2>&1";
+    Plugin::Trigger ('encode.before_faststart');
 
     // Debug Log
     $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "MOBILE FASTSTART\n";
+    $log_msg .= "FASTSTART\n";
     $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Mobile Faststart Command: $mobile_faststart_command\n";
-    $log_msg .= "Mobile Faststart Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Mobile Faststart Command: ' . $mobile_faststart_command) : null;
+    $log_msg .= "Faststart Command: $faststart_command\n";
+    $log_msg .= "Faststart Output:\n\n";
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Faststart Command: ' . $faststart_command) : null;
     App::Log ($debug_log, $log_msg);
 
-    ### Execute Mobile faststart command
-    exec ($mobile_faststart_command);
-    Plugin::Trigger ('encode.mobile_faststart');
+    ### Execute Faststart command
+    exec ($faststart_command);
+    Plugin::Trigger ('encode.faststart');
 
 
 
@@ -305,7 +211,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 7                           //
+    //                        STEP 5                           //
     //                  Get Video Duration                     //
     /////////////////////////////////////////////////////////////
 
@@ -350,7 +256,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 8                           //
+    //                        STEP 6                           //
     //                Create Thumbnail Image                   //
     /////////////////////////////////////////////////////////////
 
@@ -359,7 +265,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing to create video thumbnail...") : null;
 
     ### Create video thumbnail image
-    $thumb_command = "$ffmpeg_path -i $h264 -ss $thumb_position " . Settings::Get('thumb_options') . " $thumb >> $debug_log 2>&1";
+    $thumb_command = "$ffmpeg_path -i $flv -ss $thumb_position " . Settings::Get('thumb_options') . " $thumb >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_create_thumbnail');
 
     // Debug Log
@@ -392,7 +298,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 9                           //
+    //                        STEP 7                           //
     //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
@@ -418,7 +324,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 10                          //
+    //                         STEP 8                          //
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 
@@ -430,7 +336,6 @@ try {
         ### Delete raw videos & pre-faststart files
         Filesystem::Open();
         Filesystem::Delete ($raw_video);
-        Filesystem::Delete ($h264_temp);
         Filesystem::Delete ($mobile_temp);
 
 

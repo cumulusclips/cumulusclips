@@ -17,15 +17,12 @@ $message = null;
 
 $data['php'] = Settings::Get('php');
 $data['ffmpeg'] = Settings::Get('ffmpeg');
-$data['qt_faststart'] = Settings::Get('qt_faststart');
-$data['h264_options'] = Settings::Get('h264_options');
-$data['theora_options'] = Settings::Get('theora_options');
+$data['flv_options'] = Settings::Get('flv_options');
 $data['mobile_options'] = Settings::Get('mobile_options');
 $data['thumb_options'] = Settings::Get('thumb_options');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
-$data['h264_url'] = Settings::Get('h264_url');
-$data['theora_url'] = Settings::Get('theora_url');
+$data['flv_url'] = Settings::Get('flv_url');
 $data['mobile_url'] = Settings::Get('mobile_url');
 $data['thumb_url'] = Settings::Get('thumb_url');
 
@@ -55,19 +52,11 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate h.264 video url
-    if (!empty ($_POST['h264_url']) && !ctype_space ($_POST['h264_url'])) {
-        $data['h264_url'] = htmlspecialchars (trim ($_POST['h264_url']));
+    // Validate flv video url
+    if (!empty ($_POST['flv_url']) && !ctype_space ($_POST['flv_url'])) {
+        $data['flv_url'] = htmlspecialchars (trim ($_POST['flv_url']));
     } else {
-        $data['h264_url'] = '';
-    }
-
-
-    // Validate theora video url
-    if (!empty ($_POST['theora_url']) && !ctype_space ($_POST['theora_url'])) {
-        $data['theora_url'] = htmlspecialchars (trim ($_POST['theora_url']));
-    } else {
-        $data['theora_url'] = '';
+        $data['flv_url'] = '';
     }
 
 
@@ -87,19 +76,11 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate h.264 encoding options
-    if (!empty ($_POST['h264_options']) && !ctype_space ($_POST['h264_options'])) {
-        $data['h264_options'] = htmlspecialchars (trim ($_POST['h264_options']));
+    // Validate flv encoding options
+    if (!empty ($_POST['flv_options']) && !ctype_space ($_POST['flv_options'])) {
+        $data['flv_options'] = htmlspecialchars (trim ($_POST['flv_options']));
     } else {
-        $errors['h264_options'] = 'Invalid h.264 encoding options';
-    }
-
-
-    // Validate theora encoding options
-    if (!empty ($_POST['theora_options']) && !ctype_space ($_POST['theora_options'])) {
-        $data['theora_options'] = htmlspecialchars (trim ($_POST['theora_options']));
-    } else {
-        $errors['theora_options'] = 'Invalid theora encoding options';
+        $errors['flv_options'] = 'Invalid flv encoding options';
     }
 
 
@@ -173,34 +154,6 @@ if (isset ($_POST['submitted'])) {
         $data['ffmpeg'] = rtrim ($_POST['ffmpeg'], '/');
     } else {
         $errors['ffmpeg'] = 'Invalid path to FFMPEG';
-    }
-
-
-    // Validate qt-fast start path
-    if (empty ($_POST['qt_faststart'])) {
-
-        // Check if qt-faststart is installed (using which)
-        @exec ('which qt-faststart', $which_results_faststart);
-        if (empty ($which_results_faststart)) {
-
-            // Check if qt-faststart is installed (using whereis)
-            @exec ('whereis qt-faststart', $whereis_results_faststart);
-            $whereis_results_faststart = preg_replace ('/^qt\-faststart:\s?/','', $whereis_results_faststart[0]);
-            if (empty ($whereis_results_faststart)) {
-                $warnings['qt_faststart'] = 'Unable to locate qt-faststart';
-                $data['qt_faststart'] = '';
-            } else {
-                $data['qt_faststart'] = $whereis_results_faststart;
-            }
-
-        } else {
-            $data['qt_faststart'] = $which_results_faststart[0];
-        }
-
-    } else if (file_exists ($_POST['qt_faststart'])) {
-        $data['qt_faststart'] = rtrim ($_POST['qt_faststart'], '/');
-    } else {
-        $errors['qt_faststart'] = 'Invalid path to qt-faststart';
     }
 
 
@@ -282,20 +235,9 @@ include ('header.php');
                 <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
             </div>
 
-            <div class="row <?=(isset ($errors['qt_faststart'])) ? ' errors' : ''?>">
-                <label>qt-faststart Path:</label>
-                <input class="text" type="text" name="qt_faststart" value="<?=$data['qt_faststart']?>" />
-                <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
-            </div>
-
-            <div class="row <?=(isset ($errors['h264_options'])) ? ' errors' : ''?>">
-                <label>h.264 Options:</label>
-                <input class="text" type="text" name="h264_options" value="<?=$data['h264_options']?>" />
-            </div>
-
-            <div class="row <?=(isset ($errors['theora_options'])) ? ' errors' : ''?>">
-                <label>Theora Options:</label>
-                <input class="text" type="text" name="theora_options" value="<?=$data['theora_options']?>" />
+            <div class="row <?=(isset ($errors['flv_options'])) ? ' errors' : ''?>">
+                <label>FLV Options:</label>
+                <input class="text" type="text" name="flv_options" value="<?=$data['flv_options']?>" />
             </div>
 
             <div class="row <?=(isset ($errors['mobile_options'])) ? ' errors' : ''?>">
@@ -314,16 +256,10 @@ include ('header.php');
                 (Bytes)
             </div>
 
-            <div class="row <?=(isset ($errors['h264_url'])) ? ' errors' : ''?>">
-                <label>h.264 (MP4) Video URL:</label>
-                <input class="text" type="text" name="h264_url" value="<?=$data['h264_url']?>" />
-                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/h264/'">More Info</a>
-            </div>
-
-            <div class="row <?=(isset ($errors['theora_url'])) ? ' errors' : ''?>">
-                <label>Theora (OGG) Video URL:</label>
-                <input class="text" type="text" name="theora_url" value="<?=$data['theora_url']?>" />
-                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/theora/'">More Info</a>
+            <div class="row <?=(isset ($errors['flv_url'])) ? ' errors' : ''?>">
+                <label>FLV Video URL:</label>
+                <input class="text" type="text" name="flv_url" value="<?=$data['flv_url']?>" />
+                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/flv/'">More Info</a>
             </div>
 
             <div class="row <?=(isset ($errors['mobile_url'])) ? ' errors' : ''?>">

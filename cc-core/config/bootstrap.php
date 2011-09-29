@@ -54,12 +54,10 @@ $config->accepted_video_formats = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4
 $config->accepted_avatar_formats = array ('png', 'jpeg', 'jpg', 'gif');
 $config->pagination_page_limit = Settings::Get ('pagination_page_limit');
 
-$h264_url = Settings::Get('h264_url');
-$theora_url = Settings::Get('theora_url');
+$flv_url = Settings::Get('flv_url');
 $mobile_url = Settings::Get('mobile_url');
 $thumb_url = Settings::Get('thumb_url');
-$config->h264_url = (empty ($h264_url)) ? HOST . '/cc-content/uploads/h264' : $h264_url;
-$config->theora_url = (empty ($theora_url)) ? HOST . '/cc-content/uploads/theora' : $theora_url;
+$config->flv_url = (empty ($flv_url)) ? HOST . '/cc-content/uploads/flv' : $flv_url;
 $config->mobile_url = (empty ($mobile_url)) ? HOST . '/cc-content/uploads/mobile' : $mobile_url;
 $config->thumb_url = (empty ($thumb_url)) ? HOST . '/cc-content/uploads/thumbs' : $thumb_url;
 
