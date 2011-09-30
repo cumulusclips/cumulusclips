@@ -1,10 +1,6 @@
 <?php
 
 View::AddMeta('videoID', $video->video_id);
-View::AddMeta('videoURL', $config->flv_url . '/' . $video->filename . '.flv');
-View::AddMeta('theme', THEME);
-View::AddJs('jwplayer.js');
-View::AddJs('player.js');
 View::SetLayout('full');
 View::Header();
 
@@ -19,7 +15,19 @@ View::Header();
         
         
     <!-- BEGIN VIDEO -->
-    <div id="container">Loading the player ...</div>
+    <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
+    <script type="text/javascript" src="<?=THEME?>/js/jwplayer.js"></script>
+    <script type="text/javascript">
+    jwplayer("player").setup({
+        flashplayer : '<?=THEME?>/flash/player.swf',
+        autostart   : true,
+        file        : '<?=$config->flv_url?>/<?=$video->filename?>.flv',
+        image       : '<?=$config->thumb_url?>/<?=$video->filename?>.jpg',
+        controlbar  : 'bottom',
+        width       : 600,
+        height      : 450
+    });
+    </script>
     <!-- END VIDEO -->
 
 

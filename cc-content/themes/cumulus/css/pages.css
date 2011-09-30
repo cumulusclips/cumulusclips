@@ -184,7 +184,7 @@ PLAY PAGE STYLES
 
 #play-right .ad300 { padding:12px; }
 
-#play-left .video-js-box { margin-top:10px; }
+#player_wrapper { margin-top:10px; }
 
 .other-video {
     margin-bottom:25px;
