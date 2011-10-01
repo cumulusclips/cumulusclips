@@ -74,7 +74,7 @@ if (empty ($_GET['page'])) {
         $url->addChild ('loc', $video->url . '/');
         $block = $url->addChild ('video:video','','video');
 
-        $block->addChild ('content_loc', $config->h264_url . '/' . $video->filename . '.mp4');
+        $block->addChild ('content_loc', $config->flv_url . '/' . $video->filename . '.flv');
         $block->addChild ('thumbnail_loc', $config->thumb_url . '/' . $video->filename . '.jpg');
         $block->addChild ('title', $video->title);
         $block->addChild ('description', $video->description);

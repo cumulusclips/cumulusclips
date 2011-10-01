@@ -12,7 +12,7 @@ if (!isset ($argv[1]) || !preg_match ('/--video=(.*)$/i', $argv[1], $arg_matches
 $video_id = $arg_matches[1];
 Plugin::Trigger ('encode.parse');
 $ffmpeg_path = Settings::Get ('ffmpeg');
-$qt_faststart_path = Settings::Get ('qt_faststart');
+$qt_faststart_path = DOC_ROOT . '/cc-core/system/qt-faststart';
 
 
 
@@ -178,7 +178,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
 
     ### Execute Faststart Command
-    $faststart_command = DOC_ROOT . "/cc-core/system/qt-faststart $mobile_temp $mobile >> $debug_log 2>&1";
+    $faststart_command = "$qt_faststart_path $mobile_temp $mobile >> $debug_log 2>&1";
     Plugin::Trigger ('encode.before_faststart');
 
     // Debug Log
@@ -328,6 +328,7 @@ try {
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 
+    
     try {
 
         // Debug Log
