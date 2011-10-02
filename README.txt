@@ -38,7 +38,6 @@ CumulusClips requires:
 For video encoding:
 
 - FFMPEG (http://ffmpeg.org/ - videolan mirror recommended).
-- qt-faststart (ships with FFMPEG).
 - x264 (http://www.videolan.org/).
 - faac (http://www.audiocoding.com/).
 - Theora (http://www.theora.org/).
@@ -62,8 +61,8 @@ The following PHP modules are required:
 The following PHP settings are required:
 
 short_open_tags = on
-upload_max_filesize = 100M
-post_max_size = 100M
+upload_max_filesize = 110M
+post_max_size = 110M
 max_execution_time = 1500
 
 
@@ -79,5 +78,5 @@ Make sure the following directories are writeable by PHP and the webserver:
 /cc-core/log
 /cc-content/uploads/temp
 /cc-content/uploads/flv
-/cc-content/uploads/mp4
+/cc-content/uploads/mobile
 /cc-content/uploads/thumbs
