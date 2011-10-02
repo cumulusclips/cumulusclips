@@ -323,9 +323,15 @@ class Functions {
         $version = self::NumerizeVersion (CURRENT_VERSION);
         $client = urlencode ($_SERVER['REMOTE_ADDR']);
         $system = urlencode ($_SERVER['SERVER_ADDR']);
-        
         $update_url = MOTHERSHIP_URL . "/updates/?version=$version&client=$client&system=$system";
-        $update = @file_get_contents ($update_url);
+
+        $curl_handle = curl_init();
+        curl_setopt ($curl_handle, CURLOPT_URL, $update_url);
+        curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+        $update = curl_exec ($curl_handle);
+        curl_close ($curl_handle);
+
         $json = json_decode ($update);
         return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;
         

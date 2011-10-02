@@ -56,16 +56,31 @@ try {
     Filesystem::Write ($log, "<p>Downloading package&hellip;</p>\n");
 
     ### Download archive
-    $zip_content = file_get_contents ($update->location);
+
+    $curl_handle = curl_init();
+    curl_setopt ($curl_handle, CURLOPT_URL, $update->location);
+    curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+    $zip_content = curl_exec ($curl_handle);
+    curl_close ($curl_handle);
+
     $zip_file = $tmp . '/update.zip';
     Filesystem::Create ($zip_file);
     Filesystem::Write ($zip_file, $zip_content);
     if (md5_file ($zip_file) != $update->checksum) throw new Exception ("Error - Checksums don't match");
 
 
+
     ### Download patch file
-    $patch_file_content = file_get_contents (MOTHERSHIP_URL . '/updates/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
+
+    $curl_handle = curl_init();
+    curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/updates/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
+    curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+    $patch_file_content = curl_exec ($curl_handle);
+    curl_close ($curl_handle);
     $patch_file = null;
+
     if (!empty ($patch_file_content)) {
         $patch_file = $tmp . '/patch_file.php';
         Filesystem::Create ($patch_file);

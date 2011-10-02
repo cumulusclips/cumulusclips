@@ -25,9 +25,16 @@ if (isset ($_GET['first_run']) && file_exists (DOC_ROOT . '/install')) {
 
 // Retrieve news from mothership
 if (isset ($_POST['news'])) {
-    $news = htmlspecialchars (@file_get_contents (MOTHERSHIP_URL . "/news/"));
+    
+    $curl_handle = curl_init();
+    curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/news/');
+    curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+    $news = htmlspecialchars (curl_exec ($curl_handle));
+    curl_close ($curl_handle);
     $news = (!empty ($news)) ? $news : '<strong>Nothing to report.</strong>';
-    exit($news);
+    exit ($news);
+    
 }
 
 // Retrieve Video totals
