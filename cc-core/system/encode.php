@@ -175,6 +175,21 @@ try {
 
 
     // Debug Log
+    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nChecking qt-faststart permissions...") : null;
+
+    if ((string) substr (sprintf ('%o', fileperms ($qt_faststart_path)), -4) != '0777') {
+        try {
+            Filesystem::Open();
+            Filesystem::SetPermissions ($qt_faststart_path, 0777);
+            Filesystem::Close();
+        } catch (Exception $e) {
+            throw new Exception ("Unable to update permissions for qt-faststart. Please make sure it ($qt_faststart_path) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
+        }
+    }
+
+
+
+    // Debug Log
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
 
     ### Execute Faststart Command
