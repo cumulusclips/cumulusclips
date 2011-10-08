@@ -155,7 +155,11 @@
 
         <!-- Opt-Out Page -->
         <opt_out_header>Email Opt-Out</opt_out_header>
-        <opt_out_text>Your email address has been successfully removed from all mailing lists. If you wish to modify your email preferences, you may do so by visiting the {LINK}Privacy Settings{/LINK} section of your account.</opt_out_text>
+        <opt_out_text><![CDATA[
+        Your email address has been successfully removed from all mailing lists.
+        If you wish to modify your email preferences, you may do so by visiting the
+        <a href="{LINK}">Privacy Settings</a> section of your account.
+        ]]></opt_out_text>
 
         <!-- Activate Account Page -->
         <activate_header>Activate your Account</activate_header>
