@@ -154,9 +154,16 @@ class Video {
         Plugin::Trigger ('video.delete');
 
         // Delete files
-        @unlink(UPLOAD_PATH . '/' . $video->filename . '.flv');
-        @unlink(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
-        @unlink(UPLOAD_PATH . '/mp4/' . $video->filename . '.mp4');
+        try {
+            Filesystem::Open();
+            Filesystem::Delete (UPLOAD_PATH . '/flv/' . $video->filename . '.flv');
+            Filesystem::Delete (UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
+            Filesystem::Delete (UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
+            Filesystem::Close();
+        } catch (Exception $e) {
+            App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
+        }
+
 
 
         // Delete Comments

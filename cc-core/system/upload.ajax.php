@@ -4,7 +4,6 @@
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('User');
 App::LoadClass ('Video');
-App::LoadClass ('Filesystem');
 Plugin::Trigger ('upload.ajax.start');
 App::EnableUploadsCheck();
 

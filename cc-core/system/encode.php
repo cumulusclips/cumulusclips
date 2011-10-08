@@ -3,7 +3,6 @@
 // Include required files
 include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 App::LoadClass ('Video');
-App::LoadClass ('Filesystem');
 Plugin::Trigger ('encode.start');
 
 

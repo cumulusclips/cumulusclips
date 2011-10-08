@@ -3,7 +3,6 @@
 // Include required files
 include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
 App::LoadClass ('User');
-App::LoadClass ('Filesystem');
 
 
 // Establish page variables, objects, arrays, etc

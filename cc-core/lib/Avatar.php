@@ -105,7 +105,6 @@ class Avatar {
      * @return void Avatar is deleted from filesystem
      */
     static function Delete ($filename) {
-        App::LoadClass('Filesystem');
         try {
             Filesystem::Open();
             Filesystem::Delete (UPLOAD_PATH . '/avatars/' . $filename);

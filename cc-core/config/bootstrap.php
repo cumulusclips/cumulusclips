@@ -9,7 +9,7 @@ define ('CONVERSION_LOG', LOG . '/converter.log');
 define ('QUERY_LOG', LOG . '/query.log');
 define ('DB_ERR_LOG', LOG . '/db_errors.log');
 define ('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
-define ('CURRENT_VERSION', '1.0.4');
+define ('CURRENT_VERSION', '1.0.5');
 define ('LOG_QUERIES', false);
 define ('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
 date_default_timezone_set ('America/New_York');
@@ -32,6 +32,7 @@ App::LoadClass ('Functions');
 App::LoadClass ('Language');
 App::LoadClass ('View');
 App::LoadClass ('Plugin');
+App::LoadClass ('Filesystem');
 
 
 // Retrieve site settings from DB
