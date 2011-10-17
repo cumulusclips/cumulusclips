@@ -15,17 +15,17 @@
 
         <div class="row">
             <label for="name" class="<?=(!empty ($Errors['name'])) ? 'errors' : ''?>"><?=Language::GetText('name')?>:</label>
-            <input class="text" type="text" name="name" value="<?=($error_msg && $name) ? htmlspecialchars ($name) : ''?>" />
+            <input class="text" type="text" name="name" value="<?=(!empty ($Errors) && !empty ($name)) ? htmlspecialchars ($name) : ''?>" />
         </div>
 
         <div class="row">
             <label for="email" class="<?=(!empty ($Errors['email'])) ? 'errors' : ''?>"><?=Language::GetText('email')?>:</label>
-            <input class="text" type="text" name="email" value="<?=($error_msg && $email) ? $email : ''?>" />
+            <input class="text" type="text" name="email" value="<?=(!empty ($Errors) && !empty ($email)) ? $email : ''?>" />
         </div>
         
         <div class="row">
-            <label for="message" class="<?=(!empty ($Errors['message'])) ? 'errors' : ''?>"><?=Language::GetText('message')?>:</label>
-            <textarea name="message" class="text" cols="40" rows="9"><?=($error_msg && $message) ? htmlspecialchars ($message) : ''?></textarea>
+            <label for="feedback" class="<?=(!empty ($Errors['feedback'])) ? 'errors' : ''?>"><?=Language::GetText('message')?>:</label>
+            <textarea name="feedback" class="text" cols="40" rows="9"><?=(!empty ($Errors) && !empty ($feedback)) ? htmlspecialchars ($feedback) : ''?></textarea>
         </div>
 
         <div class="row-shift">

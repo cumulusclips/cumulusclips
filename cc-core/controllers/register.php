@@ -69,7 +69,7 @@ if (isset ($_POST['submitted'])) {
             View::$vars->errors['email'] = Language::GetText('error_email_unavailable');
         }
     } else {
-        View::$vars->errors['email'] = Language::GetText('error_email_invalid');
+        View::$vars->errors['email'] = Language::GetText('error_email');
     }
 
 

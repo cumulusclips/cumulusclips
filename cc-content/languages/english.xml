@@ -56,7 +56,7 @@
         <forgot_text>Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
         <email>E-mail</email>
         <forgot_header>Forgot your Login</forgot_header>
-        <forgot_button>Forgot Login</forgot_button>
+        <forgot_button>Forgot My Login</forgot_button>
 
         <!-- Register Page -->
         <register_header>Register with Us</register_header>
@@ -298,7 +298,7 @@
 
         <!-- My Account / Upload - Complete Page -->
         <upload_complete_header>Upload Step 3 - Upload Complete!</upload_complete_header>
-        <upload_complete_text>Your video has been successfully uploaded. Please allow several minutes for processing before it is availble on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
+        <upload_complete_text>Your video has been successfully uploaded. Please allow several minutes for processing before it is available on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
 
 
 
@@ -320,7 +320,6 @@
         <error_password_confirm>Invalid confirmed password</error_password_confirm>
         <error_security_text>Invalid security text</error_security_text>
         <error_email>You must enter a valid email address</error_email>
-        <error_email_invalid>Invalid email address</error_email_invalid>
         <error_email_unavailable>Email address is unavailable</error_email_unavailable>
         <error_recipient>Invalid recipient username</error_recipient>
         <error_website_invalid>Invalid website</error_website_invalid>
@@ -442,7 +441,7 @@
         <activate>
             <title>Activate your Account</title>
             <keywords>Activate your Account, Account Activation</keywords>
-            <description>Activate your Accoun.t</description>
+            <description>Activate your Account</description>
         </activate>
 
         <opt_out>
@@ -460,25 +459,25 @@
         <login>
             <title>Login to your Account</title>
             <keywords>Login, Account</keywords>
-            <description>Login into your account.</description>
+            <description>Log into your account.</description>
         </login>
 
         <register>
             <title>Sign Up for an Account</title>
-            <keywords>Sing up, Register, Account</keywords>
+            <keywords>Sign up, Register, Account</keywords>
             <description>Sign up for an account.</description>
         </register>
 
         <system_404>
             <title>Page Not Found</title>
             <keywords>Page Not Found, 404 Error</keywords>
-            <description>404 Error Page Not Found.</description>
+            <description>404 Error, Page Not Found.</description>
         </system_404>
 
         <system_error>
             <title>System Error</title>
             <keywords>System Error</keywords>
-            <description>A System error has occured.</description>
+            <description>A system error has occurred.</description>
         </system_error>
 
         <myaccount>
@@ -514,13 +513,13 @@
         <myvideos>
             <title>My Videos</title>
             <keywords>My Videos, Videos</keywords>
-            <description>View all videos uploaded by member.</description>
+            <description>View all videos uploaded by this member.</description>
         </myvideos>
 
         <myfavorites>
             <title>My Favorite Videos</title>
             <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
-            <description>View all of member's favorite videos.</description>
+            <description>View all of this member's favorite videos.</description>
         </myfavorites>
 
         <update_profile>
@@ -550,7 +549,7 @@
         <subscribers>
             <title>My Subscribers</title>
             <keywords>Subscribers, Subscribing Members</keywords>
-            <description>View all members that are subscribed to this members.</description>
+            <description>View all members that are subscribed to this member.</description>
         </subscribers>
 
         <message_inbox>

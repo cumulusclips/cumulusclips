@@ -10,14 +10,12 @@ View::InitView ('contact');
 Plugin::Trigger ('contact.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-$resp = NULL;
 View::$vars->Errors = array();
-View::$vars->name = NULL;
-View::$vars->email = NULL;
-View::$vars->message = NULL;
-View::$vars->captcha = NULL;
-View::$vars->error_msg = NULL;
-View::$vars->success = NULL;
+View::$vars->name = null;
+View::$vars->email = null;
+View::$vars->feedback = null;
+View::$vars->message = null;
+View::$vars->message_type = null;
 
 
 
@@ -47,30 +45,30 @@ if (isset ($_POST['submitted'])) {
 
 
     // Validate feedback
-    if (!empty ($_POST['message']) && !ctype_space ($_POST['message'])) {
-        View::$vars->message = trim ($_POST['message']);
+    if (!empty ($_POST['feedback']) && !ctype_space ($_POST['feedback'])) {
+        View::$vars->feedback = trim ($_POST['feedback']);
     } else {
-        View::$vars->Errors['message'] = Language::GetText('error_message');
+        View::$vars->Errors['feedback'] = Language::GetText('error_message');
     }
 
 
     // Send email if no errors
     if (empty (View::$vars->Errors)) {
 
-        $to = MAIN_EMAIL;
-        $subject = 'Message received From {SITENAME}';
-        $headers = 'From: Admin - TechieVideos.com <admin@techievideos.com>';
+        $subject = 'Message received From ' . $config->sitename;
         $Msg = "Name: " . View::$vars->name . "\n";
-        $Msg .= "E-mail: " . View::$vars->email . "\n\n";
-        $Msg .= "Message:\n" . View::$vars->message;
-
+        $Msg .= "E-mail: " . View::$vars->email . "\n";
+        $Msg .= "Message:\n" . View::$vars->feedback;
+        App::Alert ($subject, $Msg);
         Plugin::Trigger ('contact.send');
-        @mail ($to, $subject, $Msg, $headers);
-        View::$vars->success = Language::GetText('success_contact_sent');
+
+        View::$vars->message_type = 'success';
+        View::$vars->message = Language::GetText('success_contact_sent');
 
     } else {
-        View::$vars->error_msg = Language::GetText('errors_below');
-        View::$vars->error_msg .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        View::$vars->message_type = 'error';
+        View::$vars->message = Language::GetText('errors_below');
+        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
     }
 	
 }
