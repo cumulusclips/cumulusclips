@@ -157,11 +157,11 @@ class Flag {
         $db = Database::GetInstance();
         if ($decision) {
             // Content is being banned - Update flag requests
-            $query = "UPDATE flags SET status = 'approved' WHERE type = '$type' AND id = $id";
+            $query = "UPDATE " . DB_PREFIX . "flags SET status = 'approved' WHERE type = '$type' AND id = $id";
             $db->Query ($query);
         } else {
             // Ban request is declined - Update flag requests
-            $query = "UPDATE flags SET status = 'declined' WHERE type = '$type' AND id = $id";
+            $query = "UPDATE " . DB_PREFIX . "flags SET status = 'declined' WHERE type = '$type' AND id = $id";
             $db->Query ($query);
         } 
 
