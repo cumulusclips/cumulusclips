@@ -11,7 +11,7 @@ if (!isset ($argv[1]) || !preg_match ('/--video=(.*)$/i', $argv[1], $arg_matches
 $video_id = $arg_matches[1];
 Plugin::Trigger ('encode.parse');
 $ffmpeg_path = Settings::Get ('ffmpeg');
-$qt_faststart_path = DOC_ROOT . '/cc-core/system/qt-faststart';
+$qt_faststart_path = DOC_ROOT . '/cc-core/system/bin/qtfaststart';
 
 
 

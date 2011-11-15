@@ -114,7 +114,12 @@ if (isset ($_POST['submitted'])) {
             FilesystemInstaller::Open();
             FilesystemInstaller::Create ($perm_config_file);
             FilesystemInstaller::Write ($perm_config_file, $config_content);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qt-faststart', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/bin', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
+            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
             FilesystemInstaller::Close();
 
 
