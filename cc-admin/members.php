@@ -227,7 +227,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><?=$user->email?></td>
-                        <td><?=$user->date_created?></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$user->date_created)?></td>
                     </tr>
 
                 <?php endwhile; ?>

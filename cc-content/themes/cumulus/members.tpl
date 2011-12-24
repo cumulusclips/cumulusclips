@@ -13,7 +13,7 @@
                 <img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" />
             </a></p>
             <a class="large" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff ($member->username,18)?></a>
-            <p><strong><?=Language::GetText('joined')?>: </strong><?=$member->date_created_formatted?></p>
+            <p><strong><?=Language::GetText('joined')?>: </strong><?=Functions::DateFormat('m/d/Y',$member->date_created)?></p>
             <p><strong><?=Language::GetText('videos')?>: </strong><?=$member->video_count?></p>
         </div>
 

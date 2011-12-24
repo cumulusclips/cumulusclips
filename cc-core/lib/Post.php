@@ -38,6 +38,7 @@ class Post {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('post.get');
     }
 
@@ -82,7 +83,7 @@ class Post {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('post.before_create');
         foreach ($data as $_key => $_value) {

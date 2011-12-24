@@ -18,16 +18,14 @@ if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in
 ### Verify user actually unsubscribed
 if (isset ($_GET['email'])) {
 
-    $data = array ('email' => $email);
+    $data = array ('email' => $_GET['email']);
     $id = User::Exist ($data);
     if ($id) {
         $privacy = Privacy::LoadByUser ($id);
         $data = array (
             'new_video'         => 'no',
             'new_message'       => 'no',
-            'newsletter'        => 'no',
-            'video_comment'     => 'no',
-            'channel_comment'   => 'no'
+            'video_comment'     => 'no'
         );
         Plugin::Trigger ('opt_out.opt_out');
         $privacy->Update ($data);

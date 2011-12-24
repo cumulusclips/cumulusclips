@@ -13,7 +13,7 @@
         <?php else: ?>
             Version <?=CURRENT_VERSION?> (Latest) 
         <?php endif; ?>
-        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" title="Documentation">Documentation</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://cumulusclips.org/docs/" title="Documentation">Documentation</a>
     </div>
 </div>
 

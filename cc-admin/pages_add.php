@@ -92,7 +92,6 @@ if (isset ($_POST['submitted'])) {
 
     // Create page if no errors were found
     if (empty ($errors)) {
-        $data['date_created'] = date('Y-m-d H:i:s');
         $page_id = Page::Create ($data);
         $message = 'Page has been created';
         $message_type = 'success';

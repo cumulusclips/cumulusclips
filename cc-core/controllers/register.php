@@ -78,7 +78,6 @@ if (isset ($_POST['submitted'])) {
     if (empty (View::$vars->errors)) {
 
         View::$vars->data['confirm_code'] = User::CreateToken();
-        View::$vars->data['date_created'] = date('Y-m-d H:i:s');
         View::$vars->data['status'] = 'new';
         View::$vars->data['password'] = md5 (View::$vars->data['password']);
 

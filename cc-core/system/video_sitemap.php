@@ -80,7 +80,7 @@ if (empty ($_GET['page'])) {
         $block->addChild ('description', $video->description);
         $block->addChild ('rating', Rating::GetFiveScaleRating ($row->video_id));
         $block->addChild ('view_count', $video->views);
-        $block->addChild ('publication_date', date ('Y-m-d', strtotime ($video->date_created)));
+        $block->addChild ('publication_date', Functions::DateFormat ('Y-m-d', $video->date_created));
 
         foreach ($video->tags as $_value) {
             $block->addChild ('tag', $_value);

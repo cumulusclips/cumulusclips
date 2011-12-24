@@ -21,7 +21,7 @@ View::Header();
             <a class="flag" data-type="user" data-id="<?=$member->user_id?>" href="" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
             <a href="<?=HOST?>/feed/<?=$member->username?>/" title="<?=Language::GetText('member_rss')?>"><?=Language::GetText('member_rss')?></a>
         </p>
-        <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=$member->date_created_formatted?></p>
+        <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=Functions::DateFormat('m/d/Y',$member->date_created)?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong>&nbsp; <?=$member->views?></p>
         <p><strong><?=Language::GetText('subscribers')?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></p>
         <?php if (!empty ($member->website)): ?>

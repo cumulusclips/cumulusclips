@@ -403,6 +403,35 @@ class Functions {
         }
         return $type[$output_format];
     }
+
+
+
+
+    /**
+     * Format given date into the format provided
+     * Works exactly like PHP date(), only that it can format any given date rather than current date
+     * @param string $date Date to be formatted; any format supported by PHP strtotime() is supported
+     * @param string $format Format to apply to the date. See PHP date() for formatting options
+     * @return string Returns the formated date
+     */
+    static function DateFormat ($format, $date) {
+        return date ($format, strtotime ($date));
+    }
+
+    
+
+
+    /**
+     * Converts a GMT/UTC date into local time
+     * @param string $date_time A GMT date to be converted. Any format accepted by PHP strtotime()
+     * @param string $format Format to output time in. See PHP date() for formatting options
+     * @return string Returns date string formatted by given format
+     */
+    static function GmtToLocal ($date_time, $format = 'Y-m-d G:i:s') {
+        $date = new DateTime ( $date_time , new DateTimeZone('UTC') );
+        $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
+        return $date->format ($format);
+    }
     
 }
 

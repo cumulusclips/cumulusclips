@@ -60,9 +60,7 @@ class Page {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
-
-        $this->date_created_formatted = date ('m/d/Y',strtotime ($this->date_created));
-
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('page.get');
     }
 
@@ -108,8 +106,8 @@ class Page {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('page.before_create');
         foreach ($data as $_key => $_value) {

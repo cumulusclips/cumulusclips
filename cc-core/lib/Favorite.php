@@ -38,6 +38,7 @@ class Favorite {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('favorite.get');
     }
 
@@ -81,8 +82,8 @@ class Favorite {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('favorite.before_create');
         foreach ($data as $_key => $_value) {

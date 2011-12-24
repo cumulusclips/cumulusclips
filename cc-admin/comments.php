@@ -219,7 +219,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><a href="<?=$video->url?>/"><?=$video->title?></a></td>
-                        <td><?=$comment->date_created?></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$comment->date_created)?></td>
                     </tr>
 
                 <?php endwhile; ?>

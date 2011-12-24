@@ -38,8 +38,7 @@ class Subscription {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
-        $date = new DateTime ($row['date_created']);
-        $this->date_created = $date->format('m/d/Y');
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('subscription.get');
     }
 
@@ -83,8 +82,8 @@ class Subscription {
 
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('subscription.before_create');
         foreach ($data as $_key => $_value) {

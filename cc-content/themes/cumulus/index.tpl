@@ -25,7 +25,7 @@ View::Header();
             <div>
                 <img src="<?=$config->thumb_url?>/<?=$featured->filename?>.jpg" />
                 <div class="slide-text">
-                    <p class="large"><u>Featured Video:</u> <?=$featured->title?></p>
+                    <p class="large"><u><?=Language::GetText('featured_video_header')?>:</u> <?=$featured->title?></p>
                     <p><?=Functions::CutOff ($featured->description, 80)?></p>
                     <a class="button" href="<?=$featured->url?>/">Watch Now</a>
                 </div>

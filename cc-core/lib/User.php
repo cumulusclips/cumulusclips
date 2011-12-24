@@ -42,8 +42,8 @@ class User {
         // User specific values
         $this->role = (empty ($this->role)) ? 'user' : $this->role;
         $this->avatar_url = (empty ($this->avatar)) ? THEME . '/images/avatar.gif' : HOST . "/cc-content/uploads/avatars/$this->avatar";
-        $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
-        $this->last_login_formatted = date ('m/d/Y', strtotime ($this->last_login));
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
+        $this->last_login = Functions::GmtToLocal ($this->last_login);
         $this->video_count = $this->GetVideoCount();
         Plugin::Trigger ('user.get');
 
@@ -92,8 +92,8 @@ class User {
         App::LoadClass ('Privacy');
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
-        $fields = '';
-        $values = '';
+        $fields = 'date_created, ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('user.before_create');
         foreach ($data as $_key => $_value) {

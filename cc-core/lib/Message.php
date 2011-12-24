@@ -38,10 +38,8 @@ class Message {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
-
-        $this->date = date ('m/d/Y', strtotime ($this->date_created));
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('message.get');
-
     }
 
 
@@ -85,7 +83,7 @@ class Message {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('message.before_create');
         foreach ($data as $_key => $_value) {

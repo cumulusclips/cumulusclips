@@ -157,7 +157,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                        <td><?=$page->date_created_formatted?></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$page->date_created)?></td>
                     </tr>
 
                 <?php endwhile; ?>

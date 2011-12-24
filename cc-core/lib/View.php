@@ -166,6 +166,18 @@ class View {
 
 
     /**
+     * Retrieve page name, language, and layout type as class names
+     * for use in theme as CSS Hooks
+     * @return string Returns string of page name and layout type
+     */
+    static function CssHooks() {
+        return self::$options->page . ' ' . self::$options->layout . ' ' . Language::GetCSSName();
+    }
+
+
+
+
+    /**
      * Add CSS file to the document
      * @param string $css_name Filename of the CSS file to be attached
      * @return void CSS file is stored to be written in document

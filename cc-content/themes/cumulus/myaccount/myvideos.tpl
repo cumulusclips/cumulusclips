@@ -28,7 +28,7 @@ View::Header();
                 <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" alt="<?=$video->title?>" />
             </a>
 
-            <a class="large" href="<?=$video->url?>/" title="<?=$video->title?>"><?=$video->title?></a>
+            <p class="large title"><a href="<?=$video->url?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
             <p><?=Functions::CutOff ($video->description, 190)?></p>
             <span class="like">+<?=$rating->likes?></span>
             <span class="dislike">-<?=$rating->dislikes?></span>

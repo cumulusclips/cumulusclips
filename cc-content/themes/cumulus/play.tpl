@@ -59,7 +59,7 @@ View::Header();
         <div id="about" class="showhide-block">
             <p class="avatar-small"><img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" /></p>
             <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
-            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=date('m/d/Y',strtotime($video->date_created))?></p>
+            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=Functions::DateFormat('m/d/Y',$video->date_created)?></p>
             <p><strong><?=Language::GetText('tags')?>:</strong>
                 <?php foreach ($video->tags as $value): ?>
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;

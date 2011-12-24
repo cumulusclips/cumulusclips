@@ -220,7 +220,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><?=$user->username?></td>
-                        <td><?=date('m/d/Y',strtotime ($flag->date_created))?></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$flag->date_created)?></td>
                     </tr>
 
                 <?php endwhile; ?>

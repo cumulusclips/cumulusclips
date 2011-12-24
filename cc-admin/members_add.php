@@ -99,7 +99,6 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Create user
-        $data['date_created'] = date('Y-m-d H:i:s');
         $data['password'] = md5 ($data['password']);
         $data['status'] = 'new';
         $id = User::Create ($data);

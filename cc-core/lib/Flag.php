@@ -39,6 +39,7 @@ class Flag {
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         Plugin::Trigger ('flag.get');
     }
 
@@ -85,7 +86,7 @@ class Flag {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('flag.before_create');
         foreach ($data as $_key => $_value) {

@@ -40,7 +40,7 @@ class Comment {
         }
 
         // Custom Vars
-        $this->date_created = date ('m/d/Y', strtotime ($row['date_created']));
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         $this->comments_display = nl2br ($row['comments']);
         if ($this->user_id != 0) {
             $user = new User ($this->user_id);
@@ -98,7 +98,7 @@ class Comment {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('comment.before_create');
         foreach ($data as $_key => $_value) {

@@ -169,7 +169,7 @@ include ('header.php');
             </div>
 
             <div class="row"><label>Date Posted:</label>
-                <?=$comment->date_created?>
+                <?=Functions::DateFormat('m/d/Y',$comment->date_created)?>
             </div>
 
             <div class="row">

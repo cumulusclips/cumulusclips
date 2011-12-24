@@ -43,7 +43,7 @@ class Video {
         $this->tags = preg_split ('/\s?,\s?/', $this->tags);
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
-        $this->date_created_formatted = date ('m/d/Y', strtotime ($this->date_created));
+        $this->date_created = Functions::GmtToLocal ($this->date_created);
         $this->url = HOST . '/videos/' . $this->video_id . '/' . $this->slug;
         Plugin::Trigger ('video.get');
 
@@ -92,7 +92,7 @@ class Video {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = 'NOW(), ';
+        $values = gmdate (DATE_FORMAT) . ', ';
 
         Plugin::Trigger ('video.before_save');
         foreach ($data as $_key => $_value) {
