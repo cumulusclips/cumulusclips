@@ -32,6 +32,12 @@ class Database {
      * @return resource_id of query results if successful
      */
     public function Query ($query) {
+        
+        // Re-connect if connection is no longer valid
+        if (!mysql_ping ($this->dbc)) {
+            self::$db = new self;
+            $this->dbc = self::$db->dbc;
+        }
 
         // Log query if requested
         if (LOG_QUERIES) {
