@@ -11,6 +11,7 @@ define ('DB_ERR_LOG', LOG . '/db_errors.log');
 define ('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
 define ('CURRENT_VERSION', '1.1.0');
 define ('LOG_QUERIES', false);
+define ('DATE_FORMAT', 'Y-m-d H:i:s');
 define ('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
 date_default_timezone_set ('America/New_York');
 
@@ -63,25 +64,26 @@ $config->mobile_url = (empty ($mobile_url)) ? HOST . '/cc-content/uploads/mobile
 $config->thumb_url = (empty ($thumb_url)) ? HOST . '/cc-content/uploads/thumbs' : $thumb_url;
 
 
-// Define Theme settings
-$theme = App::CurrentTheme();
-define ('THEME', HOST . '/cc-content/themes/' . $theme);
-define ('THEME_PATH', THEMES_DIR . '/' . $theme);
-
-
 // Start session
 if (!headers_sent() && session_id() == '') {
     @session_start();
 }
 
 
-// Load language
-Language::LoadLangPack (App::CurrentLang());
-
-
 // Initialize plugin system
 Plugin::Init();
 Plugin::Trigger ('app.start');
+
+
+// Define Theme settings
+$theme = App::CurrentTheme();
+Plugin::Trigger ('app.before_set_theme');
+define ('THEME', HOST . '/cc-content/themes/' . $theme);
+define ('THEME_PATH', THEMES_DIR . '/' . $theme);
+
+
+// Load language
+Language::LoadLangPack (App::CurrentLang());
 
 
 // Check for mobile devices
