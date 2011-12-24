@@ -34,7 +34,7 @@
         <duration>Duration</duration>
         <load_more>Load 20 More</load_more>
         <loading>Loading</loading>
-        <featured_video_header>Featured Video</featured_video_header>
+        <featured_video_header>Featured</featured_video_header>
         <search>Search</search>
         <standard_site>Standard Site</standard_site>
         <search_body>When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
@@ -61,7 +61,7 @@
         <!-- Register Page -->
         <register_header>Register with Us</register_header>
         <register_text><![CDATA[
-            <strong>Join {SITENAME} Today!</strong><br /><br />
+            <p><strong>Join {SITENAME} Today!</strong><br /><br />
             As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to members, and much more!</p>
         ]]></register_text>
         <asterisk>An asterisk (*) denotes required field.</asterisk>
