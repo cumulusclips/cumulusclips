@@ -3,7 +3,7 @@
 <div id="home">
 
     <!-- BEGIN FEATURED VIDEO -->
-    <h1><?=Language::GetText('featured_video_header')?></h1>
+    <h1><?=Language::GetText('featured')?></h1>
     <div id="featured-video">
         <?php if (!empty ($featured_video)): ?>
 

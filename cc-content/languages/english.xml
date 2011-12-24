@@ -34,7 +34,7 @@
         <duration>Duration</duration>
         <load_more>Load 20 More</load_more>
         <loading>Loading</loading>
-        <featured_video_header>Featured</featured_video_header>
+        <featured>Featured</featured>
         <search>Search</search>
         <standard_site>Standard Site</standard_site>
         <search_body>When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
