@@ -29,7 +29,7 @@ if (isset ($_POST['news'])) {
     curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/news/');
     curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
     curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
-    $news = htmlspecialchars (curl_exec ($curl_handle));
+    $news = curl_exec ($curl_handle);
     curl_close ($curl_handle);
     $news = (!empty ($news)) ? $news : '<strong>Nothing to report.</strong>';
     exit ($news);

@@ -83,7 +83,7 @@ class Favorite {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = gmdate (DATE_FORMAT) . ', ';
+        $values = "'" . gmdate (DATE_FORMAT) . "', ";
 
         Plugin::Trigger ('favorite.before_create');
         foreach ($data as $_key => $_value) {

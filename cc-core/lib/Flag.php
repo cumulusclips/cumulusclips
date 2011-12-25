@@ -86,7 +86,7 @@ class Flag {
         $db = Database::GetInstance();
         $query = 'INSERT INTO ' . DB_PREFIX . self::$table;
         $fields = 'date_created, ';
-        $values = gmdate (DATE_FORMAT) . ', ';
+        $values = "'" . gmdate (DATE_FORMAT) . "', ";
 
         Plugin::Trigger ('flag.before_create');
         foreach ($data as $_key => $_value) {
