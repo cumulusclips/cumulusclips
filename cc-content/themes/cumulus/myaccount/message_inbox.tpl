@@ -34,7 +34,7 @@ View::Header();
                     <td><?=$message->status == 'read' ? Language::GetText('read') : Language::GetText('unread')?></td>
                     <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->message_id?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
                     <td><?=$message->username?></td>
-                    <td><?=$message->date?></td>
+                    <td><?=Functions::DateFormat('m/d/Y', $message->date_created)?></td>
                 </tr>
 
             <?php endwhile; ?>
