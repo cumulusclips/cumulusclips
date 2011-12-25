@@ -134,6 +134,11 @@ SIDEBAR STYLES
     background-position:0 -231px;
 }
 
+#sidebar p {
+    margin:0;
+    padding:5px 0;
+}
+
 #sidebar h3 span {
     background:url(../images/icon-sprite.png) no-repeat 125px -259px;
     display:block;
@@ -209,7 +214,10 @@ FONT STYLES
 
 strong { font-weight:bold; }
 
-p { padding:5px 0; }
+p {
+    margin:5px 0;
+    line-height:1.25em;
+}
 
 h1, h2, h3, .big, .large, .huge {
     font-weight:bold;
