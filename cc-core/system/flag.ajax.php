@@ -17,7 +17,7 @@ Plugin::Trigger ('flag.ajax.login_check');
 
 // Verify valid ID was provided
 if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
-if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'user', 'comment')))  App::Throw404();
+if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'member', 'comment')))  App::Throw404();
 
 
 try {
@@ -39,7 +39,7 @@ try {
             Plugin::Trigger ('flag.ajax.flag_video');
             break;
 
-        case 'user':
+        case 'member':
             $id = User::Exist (array ('user_id' => $_POST['id'], 'status' => 'active'));
             if (!$id) App::Throw404();
             $member = new User ($id);
