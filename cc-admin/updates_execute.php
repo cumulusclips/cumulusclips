@@ -149,13 +149,13 @@ try {
     Filesystem::Write ($log, "<p>Clean up&hellip;</p>\n");
 
     ### Setting required permissions
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/logs', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/flv', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/mobile', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/temp', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/avatars', 0777);
+    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/logs', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/bin', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
     Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
