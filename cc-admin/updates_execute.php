@@ -171,6 +171,7 @@ try {
     ### Activate plugins
     Filesystem::Close();
     unset ($_SESSION['updates_available']);
+    Settings::Set ('version', $update->version);
 
 } catch (Exception $e) {
     $error = $e->getMessage();
