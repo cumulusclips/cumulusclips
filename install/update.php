@@ -32,7 +32,7 @@ try {
     
     // Create and load db patch file
     $patch_file = DOC_ROOT . '/install/patch_file.php';
-    if (false === file_put_contents ($patch_file, $patch_file_content)) throw new Exception ("<p>Unable to create db patch file at: $patch_file.</p><p>Please make sure the webserver/PHP has write permissions to: " . DOC_ROOT . "/install</p>");
+    if (false === @file_put_contents ($patch_file, $patch_file_content)) throw new Exception ("<p>Unable to create db patch file at: $patch_file.</p><p>Please make sure the webserver/PHP has write permissions to: " . DOC_ROOT . "/install</p>");
     include_once ($patch_file);
 
 
