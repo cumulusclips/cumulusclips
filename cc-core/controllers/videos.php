@@ -93,7 +93,7 @@ while ($video = $db->FetchObj ($result)) View::$vars->browse_videos[] = $video->
 
 
 // Output Page
-View::$vars->meta->title .= ' ' . View::$vars->sub_header;
+View::$vars->meta->title = View::$vars->meta->title . ' ' . View::$vars->sub_header;
 Plugin::Trigger ('videos.before_render');
 View::Render ('videos.tpl');
 
