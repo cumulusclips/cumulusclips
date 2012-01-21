@@ -28,7 +28,7 @@ while ($video = $db->FetchObj ($result)) $videos[] = $video->video_id;
 
 
 // Output video list in requested format
-if ($format == 'html') {
+if ($block) {
 
     View::InitView();
     ob_start();
