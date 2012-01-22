@@ -29,6 +29,7 @@ $admin_meta['fileExt'] = '';
 $timestamp = time();
 $_SESSION['video_upload_key'] = md5 (md5 ($timestamp) . SECRET_KEY);
 $ext = array();
+$private_url = Video::GeneratePrivate();
 
 
 
@@ -121,6 +122,38 @@ if (isset ($_POST['submitted'])) {
     }
 
 
+    // Validate disable embed
+    if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
+        $data['disable_embed'] = '1';
+    } else {
+        $data['disable_embed'] = '0';
+    }
+
+
+    // Validate gated
+    if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
+        $data['gated'] = '1';
+    } else {
+        $data['gated'] = '0';
+    }
+
+
+    // Validate private
+    if (!empty ($_POST['private']) && $_POST['private'] == '1') {
+        $data['private'] = '1';
+        if (!empty ($_POST['private_url']) && strlen ($_POST['private_url']) == 7 && !Video::Exist (array ('private_url' => $_POST['private_url']))) {
+            $data['private_url'] = htmlspecialchars (trim ($_POST['private_url']));
+            $private_url = $data['private_url'];
+
+        } else {
+            $errors['private_url'] = 'Invalid private URL';
+        }
+    } else {
+        $data['private'] = '0';
+    }
+
+
+
 
     // Update video if no errors were made
     if (empty ($errors)) {
@@ -206,6 +239,28 @@ include ('header.php');
                     <option value="<?=$cat_id?>" <?=(isset ($data['title']) && $data['title'] == $cat_id) ? '' : 'selected="selected"'?>><?=$cat_name?></option>
                 <?php endforeach; ?>
                 </select>
+            </div>
+
+            <div class="row-shift">
+                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors) && !empty ($data['disable_embed'])) ? 'checked="checked"' : ''?> />
+                <label for="disable-embed">Disable Embed</label> <em>(Video cannot be embedded on third party sites)</em>
+            </div>
+
+            <div class="row-shift">
+                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors) && !empty ($data['gated'])) ? 'checked="checked"' : ''?> />
+                <label for="gated-video">Gated</label> <em>(Video can only be viewed by members who are logged in)</em>
+            </div>
+
+            <div class="row-shift">
+                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors) && !empty ($data['private'])) ? 'checked="checked"' : ''?> />
+                <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
+            </div>
+
+            <div id="private-url" class="row <?=(isset ($errors['private_url'])) ? 'errors' : ''?> <?=(!empty ($errors) && !empty ($data['private'])) ? '' : 'hide'?>">
+                <label>Private URL:</label>
+                <?=HOST?>/videos/private/<span><?=$private_url?></span>/
+                <input type="hidden" name="private_url" value="<?=$private_url?>" />
+                <a href="" class="small">Regenerate</a>
             </div>
 
             <div class="row-shift">

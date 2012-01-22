@@ -18,15 +18,19 @@ View::$vars->tags = NULL;
 
 
 // Validate requested video
-$data = array ('video_id' => $_GET['vid'], 'status' => 'approved');
-if (!isset ($_GET['vid']) || !is_numeric ($_GET['vid']) || !Video::Exist ($data)) {
+if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('video_id' => $_GET['vid'], 'status' => 'approved'))) {
+    View::$vars->video = new Video ($_GET['vid']);
+} else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('private_url' => $_GET['private']))) {
+    View::$vars->video = new Video ($video_id);
+} else if (!empty ($_GET['get_private'])) {
+    exit (Video::GeneratePrivate());
+} else {
     App::Throw404();
 }
 
 
 
 // Load video data for page rendering
-View::$vars->video = new Video ($_GET['vid']);
 View::$vars->member = new User (View::$vars->video->user_id);
 View::$vars->video->Update (array ('views' => View::$vars->video->views+1));
 View::$vars->rating = Rating::GetRating (View::$vars->video->video_id);
@@ -49,7 +53,7 @@ if (View::$vars->logged_in) {
 
 
 // Retrieve count of all videos
-$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved'";
+$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $result_total = $db->Query ($query);
 $total = $db->FetchObj ($result_total);
 
@@ -59,7 +63,7 @@ if ($total->total > 20) {
 
     // Use FULLTEXT query
     $search_terms = $db->Escape (View::$vars->video->title) . ' ' . $db->Escape (implode (' ', View::$vars->video->tags));
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST ('$search_terms') AND status = 'approved' AND private = '0' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
     View::$vars->result_related = $db->Query ($query);
 
 } else {
@@ -72,7 +76,7 @@ if ($total->total > 20) {
     }
 
     $sub_queries = implode (' OR ', $sub_queries);
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE ($sub_queries) AND status = 'approved' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE ($sub_queries) AND status = 'approved' AND private = '0' AND video_id != " . View::$vars->video->video_id . " LIMIT 9";
     View::$vars->result_related = $db->Query ($query);
 
 }

@@ -11,7 +11,7 @@ View::Header();
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block">
+<div class="block view-myaccount-upload">
     
     <form action="<?=HOST?>/myaccount/upload/" method="post">
         
@@ -27,6 +27,11 @@ View::Header();
         </div>
 
         <div class="row">
+            <label<?=(isset ($errors['description'])) ? ' class="errors"' : ''?>><?=Language::GetText('description')?>:</label>
+            <textarea class="text" name="description" rows="10" cols="45"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : ''?></textarea>
+        </div>
+
+        <div class="row">
             <label<?=(isset ($errors['cat_id'])) ? ' class="errors"' : ''?>><?=Language::GetText('category')?>:</label>
             <select class="dropdown" name="cat_id">
             <?php while ($cat = $db->FetchObj ($result_cat)): ?>
@@ -35,9 +40,26 @@ View::Header();
             </select>
         </div>
 
-        <div class="row">
-            <label<?=(isset ($errors['description'])) ? ' class="errors"' : ''?>><?=Language::GetText('description')?>:</label>
-            <textarea class="text" name="description" rows="10" cols="45"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : ''?></textarea>
+        <div class="row-shift">
+            <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors) && !empty ($data['disable_embed'])) ? 'checked="checked"' : ''?> />
+            <label for="disable-embed"><?=Language::GetText('disable_embed')?></label> <em>(<?=Language::GetText('disable_embed_description')?>)</em>
+        </div>
+
+        <div class="row-shift">
+            <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors) && !empty ($data['gated'])) ? 'checked="checked"' : ''?> />
+            <label for="gated-video"><?=Language::GetText('gated')?></label> <em>(<?=Language::GetText('gated_description')?>)</em>
+        </div>
+
+        <div class="row-shift">
+            <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors) && !empty ($data['private'])) ? 'checked="checked"' : ''?> />
+            <label for="private-video"><?=Language::GetText('private')?></label> <em>(<?=Language::GetText('private_description')?>)</em>
+        </div>
+
+        <div id="private-url" class="row <?=(!empty ($errors) && !empty ($data['private'])) ? '' : 'hide'?>">
+            <label <?=(isset ($errors['private_url'])) ? 'class="errors"' : ''?>><?=Language::GetText('private_url')?>:</label>
+            <?=HOST?>/videos/private/<span><?=$private_url?></span>/
+            <input type="hidden" name="private_url" value="<?=$private_url?>" />
+            <a href="" class="small"><?=Language::GetText('regenerate')?></a>
         </div>
 
         <div class="row-shift">

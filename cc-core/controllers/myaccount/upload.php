@@ -16,6 +16,7 @@ View::$vars->categories = NULL;
 View::$vars->data = array();
 View::$vars->errors = array();
 View::$vars->message = null;
+View::$vars->private_url = Video::GeneratePrivate();
 unset ($_SESSION['upload']);
 
 
@@ -64,6 +65,37 @@ if (isset ($_POST['submitted'])) {
     } else {
         View::$vars->errors['cat_id'] = Language::GetText('error_category');
     }
+
+
+
+    // Validate disable embed
+    if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
+        View::$vars->data['disable_embed'] = '1';
+    } else {
+        View::$vars->data['disable_embed'] = '0';
+    }
+
+    // Validate gated
+    if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
+        View::$vars->data['gated'] = '1';
+    } else {
+        View::$vars->data['gated'] = '0';
+    }
+
+    // Validate private
+    if (!empty ($_POST['private']) && $_POST['private'] == '1') {
+        View::$vars->data['private'] = '1';
+        if (!empty ($_POST['private_url']) && strlen ($_POST['private_url']) == 7 && !Video::Exist (array ('private_url' => $_POST['private_url']))) {
+            View::$vars->data['private_url'] = htmlspecialchars (trim ($_POST['private_url']));
+            View::$vars->private_url = View::$vars->data['private_url'];
+
+        } else {
+            View::$vars->errors['private_url'] = Language::GetText('error_private_url');
+        }
+    } else {
+        View::$vars->data['private'] = '0';
+    }
+
 
 
 

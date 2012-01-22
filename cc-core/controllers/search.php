@@ -34,7 +34,7 @@ $keyword = $db->Escape (View::$vars->cleaned);
 
 
 // Retrieve count of all videos
-$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved'";
+$query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $result_total = $db->Query ($query);
 $total = $db->FetchObj ($result_total);
 
@@ -43,7 +43,7 @@ $total = $db->FetchObj ($result_total);
 if ($total->total > 20 && strlen ($keyword) > 3) {
 
     // Use FULLTEXT query
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST('$keyword')";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND MATCH(title, tags, description) AGAINST('$keyword')";
     Plugin::Trigger ('search.search_count');
     $result_count = $db->Query ($query);
     $count = $db->Count ($result_count);
@@ -51,7 +51,7 @@ if ($total->total > 20 && strlen ($keyword) > 3) {
 } else {
 
     // Use LIKE query
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND (title LIKE '%$keyword%' OR description LIKE '%$keyword%' OR tags LIKE '%$keyword%')";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND (title LIKE '%$keyword%' OR description LIKE '%$keyword%' OR tags LIKE '%$keyword%')";
     $result_count = $db->Query ($query);
     $count = $db->Count ($result_count);
 

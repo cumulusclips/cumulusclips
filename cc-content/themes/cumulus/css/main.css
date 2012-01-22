@@ -139,10 +139,6 @@ HEADER STYLES
 FOOTER STYLES
 ************/
 
-.clear {
-    clear:both;
-}
-
 #footer-spacer {
     height:218px;
 }
@@ -354,6 +350,7 @@ p {
 }
 
 em { font-style:italic; }
+.small { font-size:10px; }
 
 
 
@@ -378,8 +375,9 @@ FORM & MESSAGE STYLES
     text-align:right;
     margin-right:15px;
     width:100px;
-    font-weight:bold;
 }
+
+.row-shift label, .row label { font-weight:bold; }
 
 .text { 
     border:1px solid #CCC;
@@ -459,6 +457,9 @@ textarea.text { padding:10px; }
 /*******************
 MISCELLANEOUS STYLES
 *******************/
+
+.clear { clear:both; }
+.hide { display:none; }
 
 .thumb {
     position:relative;

@@ -123,9 +123,9 @@ READ MESSAGE PAGE STYLES
 UPLOAD VIDEO PAGE STYLES
 ***********************/
 
-#upload-video .big {
-    padding-top:7px;
-}
+#private-url a { margin-left:15px; }
+
+#upload-video .big { padding-top:7px; }
 
 #upload-video .upload-box {
     float:none;

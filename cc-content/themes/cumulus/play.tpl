@@ -12,28 +12,43 @@ View::Header();
     <h1><?=$video->title?></h1>
 
     <div id="message"></div>
-        
-        
-    <!-- BEGIN VIDEO -->
-    <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
-    <script type="text/javascript" src="<?=THEME?>/js/jwplayer.js"></script>
-    <script type="text/javascript">
-    jwplayer("player").setup({
-        flashplayer : '<?=THEME?>/flash/player.swf',
-        autostart   : true,
-        file        : '<?=$config->flv_url?>/<?=$video->filename?>.flv',
-        image       : '<?=$config->thumb_url?>/<?=$video->filename?>.jpg',
-        controlbar  : 'bottom',
-        width       : 600,
-        height      : 450
-    });
-    </script>
-    <!-- END VIDEO -->
+
+    
+    <?php if ($video->gated == '1' && !$logged_in): ?>
+
+        <div id="player-gated">
+            <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" alt="" />
+            <div>
+                <?=Language::GetText('gated_video')?><br />
+                <a href="<?=HOST?>/login/" class="button-small"><?=Language::GetText('login')?></a>
+                <a href="<?=HOST?>/register/" class="button-small"><?=Language::GetText('register')?></a>
+            </div>
+        </div>
+    
+    <?php else: ?>
+
+        <!-- BEGIN VIDEO -->
+        <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
+        <script type="text/javascript" src="<?=THEME?>/js/jwplayer.js"></script>
+        <script type="text/javascript">
+        jwplayer("player").setup({
+            flashplayer : '<?=THEME?>/flash/player.swf',
+            autostart   : true,
+            file        : '<?=$config->flv_url?>/<?=$video->filename?>.flv',
+            image       : '<?=$config->thumb_url?>/<?=$video->filename?>.jpg',
+            controlbar  : 'bottom',
+            width       : 600,
+            height      : 450
+        });
+        </script>
+        <!-- END VIDEO -->
+
+    <?php endif; ?>
 
 
 
     <!-- BEGIN ACTIONS -->
-    <div class="block">
+    <div class="block view-play-actions">
 
         <div id="actions">
             <p class="large"><?=$video->views?></p>
@@ -109,29 +124,28 @@ View::Header();
 
 
     <!-- BEGIN COMMENTS -->
-    <?php if ($comment_count > 0): ?>
+    <div id="comments" class="view-play-comments">
 
-        <p class="large space"><?=Language::GetText('comments_header')?></p>
+        <?php if ($comment_count > 0): ?>
 
-        <?php if ($comment_count >= 5): ?>
-            <!-- BEGIN View All Comments Link -->
-            <p class="post-header">
-                <a id="view-comments" href="<?=HOST?>/videos/<?=$video->video_id?>/comments/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$comment_count?> <?=Language::GetText('comments_total')?></strong>
-            </p>
-            <!-- END View All Comments Link -->
+            <p class="large space"><?=Language::GetText('comments_header')?></p>
+
+            <?php if ($comment_count >= 5): ?>
+                <!-- BEGIN View All Comments Link -->
+                <p class="post-header">
+                    <a id="view-comments" href="<?=HOST?>/videos/<?=$video->video_id?>/comments/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$comment_count?> <?=Language::GetText('comments_total')?></strong>
+                </p>
+                <!-- END View All Comments Link -->
+            <?php endif; ?>
+
+            <!-- BEGIN COMMENT BLOCKS -->
+                <?php View::RepeatingBlock ('comment.tpl', $comment_list); ?>
+            <!-- END COMMENT BLOCKS -->
+
         <?php endif; ?>
 
-
-        <!-- BEGIN COMMENT BLOCKS -->
-        <div id="comments">
-            <?php View::RepeatingBlock ('comment.tpl', $comment_list); ?>
-        </div>
-        <!-- END COMMENT BLOCKS -->
-
-    <?php else: ?>
-        <div id="comments"></div>
-    <?php endif; ?>
+    </div>
     <!-- END COMMENTS -->
 
 
@@ -140,7 +154,7 @@ View::Header();
 
     <!-- BEGIN COMMENTS FORM -->
     <p class="large space"><?=Language::GetText('comments_post_header')?></p>
-    <div class="block">
+    <div class="block view-play-comments-form">
 
         <form id="comments-form" action="" method="post">
 
@@ -195,7 +209,7 @@ View::Header();
 
     <!-- BEGIN RELATED VIDEOS -->
     <p class="large space"><?=Language::GetText('suggestions_header')?></p>
-    <div class="block" id="related-videos">
+    <div class="block view-play-related-videos" id="related-videos">
 
         <?php if ($db->Count ($result_related) > 0): ?>
 

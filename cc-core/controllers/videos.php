@@ -31,7 +31,7 @@ while ($row = $db->FetchObj ($result_cats)) View::$vars->category_list[] = $row-
 
 // Prepare for default sorting ('Most Recent Videos')
 View::$vars->sub_header = Language::GetText ('most_recent');
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC";
 
 
 
@@ -41,7 +41,7 @@ if (isset ($_GET['category']) && preg_match ('/[a-z0-9\-]+/i', $_GET['category']
     $id = Category::Exist (array ('slug' => $_GET['category']));
     if ($id) {
         $category = new Category ($id);
-        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND cat_id = $id ORDER BY video_id DESC";
+        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND cat_id = $id ORDER BY video_id DESC";
         View::$vars->sub_header = $category->cat_name;
         $url .= '/' . $_GET['category'];
     }
@@ -53,21 +53,21 @@ if (isset ($_GET['category']) && preg_match ('/[a-z0-9\-]+/i', $_GET['category']
         case 'most-viewed':
 
             View::$vars->sub_header = Language::GetText ('most_viewed');
-            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY views DESC";
+            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY views DESC";
             $url .= '/most-viewed';
             break;
 
         case 'most-discussed':
 
             View::$vars->sub_header = Language::GetText ('most_discussed');
-            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "comments.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' GROUP BY video_id ORDER BY sum DESC";
+            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(comment_id) AS 'sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "comments ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "comments.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' AND private = '0' GROUP BY video_id ORDER BY sum DESC";
             $url .= '/most-discussed';
             break;
 
         case 'most-rated':
 
             View::$vars->sub_header = Language::GetText ('most_rated');
-            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(rating) AS 'rating_count', SUM(rating) as 'rating_sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "ratings ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "ratings.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' GROUP BY video_id ORDER BY rating_count DESC, rating_sum DESC";
+            $query = "SELECT " . DB_PREFIX . "videos.video_id, COUNT(rating) AS 'rating_count', SUM(rating) as 'rating_sum' from " . DB_PREFIX . "videos LEFT JOIN " . DB_PREFIX . "ratings ON " . DB_PREFIX . "videos.video_id = " . DB_PREFIX . "ratings.video_id WHERE " . DB_PREFIX . "videos.status = 'approved' AND private = '0' GROUP BY video_id ORDER BY rating_count DESC, rating_sum DESC";
             $url .= '/most-rated';
             break;
 

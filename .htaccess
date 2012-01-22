@@ -13,6 +13,8 @@ RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
 
 RewriteRule ^videos/$ cc-core/controllers/videos.php [NC,L]
 RewriteRule ^videos/page/([0-9]+)/$ cc-core/controllers/videos.php?page=$1 [NC,QSA,L]
+RewriteRule ^videos/private/get/$ cc-core/controllers/play.php?get_private=true [NC,QSA,L]
+RewriteRule ^videos/private/([a-z0-9]+)/$ cc-core/controllers/play.php?private=$1 [NC,QSA,L]
 RewriteRule ^videos/(most-recent|most-viewed|most-discussed|most-rated)/$ cc-core/controllers/videos.php?load=$1 [NC,QSA,L]
 RewriteRule ^videos/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)/$ cc-core/controllers/videos.php?load=$1&page=$2 [NC,QSA,L]
 RewriteRule ^videos/([a-z0-9\-]+)/$ cc-core/controllers/videos.php?category=$1 [NC,QSA,L]

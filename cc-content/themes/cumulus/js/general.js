@@ -45,10 +45,16 @@ $('document').ready(function(){
 
     // Show/Hide Block
     $('.showhide').click(function(){
-        var block = $(this).attr('data-block');
-        $('.showhide-block:not(#'+block+')').hide();
+
+        // Retrieve and toggle targeted block
+        var block = $(this).data('block');
         $('#'+block).toggle();
-        return false;
+
+        // Hide other blocks on same level as toggled block
+        $('.showhide-block:not(#'+block+')').hide();
+
+        // Prevent link click through
+        if ($(this).is('a')) return false;
     });
 
 
@@ -194,6 +200,22 @@ $('document').ready(function(){
     if ($('.video-js-box').length > 0) {
         VideoJS.setupAllWhenReady();
     }
+
+
+
+
+    // Regenerate Private URL
+    $('#private-url a').click(function(){
+        $.ajax({
+            type    : 'get',
+            url     : baseURL + '/videos/private/get/',
+            success : function (responseData, textStatus, jqXHR) {
+                $('#private-url span').text(responseData);
+                $('#private-url input').val(responseData);
+            }
+        });
+        return false;
+    });
 
 }); // END jQuery
 

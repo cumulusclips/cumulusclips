@@ -212,6 +212,22 @@ class Video {
 
 
     /**
+     * Generate a unique random url for accessing a private video
+     * @return string URL for private video is returned
+     */
+    static function GeneratePrivate() {
+        $db = Database::GetInstance();
+        do {
+            $private = Functions::Random(7);
+            if (!self::Exist (array ('private_url' => $private))) $private_available = true;
+        } while (empty ($private_available));
+        return $private;
+    }
+
+
+
+
+    /**
      * Make a video visible to the public and notify subscribers of new video
      * @global object $config Site configuration settings
      * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve

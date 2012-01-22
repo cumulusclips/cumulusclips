@@ -39,8 +39,8 @@ $feed->addChild ('link', $url);
 
 
 
-### Pull Videos
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved'" . $query_addon . " ORDER BY video_id DESC LIMIT 20";
+### Retrieve Videos
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'" . $query_addon . " ORDER BY video_id DESC LIMIT 20";
 $result = $db->Query($query);
 while ($row = $db->FetchObj ($result)) {
 
