@@ -11,6 +11,7 @@ View::InitView ('edit_video');
 Plugin::Trigger ('edit_video.start');
 Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
+View::$vars->private_url = Video::GeneratePrivate();
 View::$vars->errors = array();
 View::$vars->message = null;
 
@@ -24,6 +25,7 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid']) && $_GET['vid'] != 0) {
     $id = Video::Exist(View::$vars->data);
     if ($id) {
         View::$vars->video = new Video ($id);
+        if (View::$vars->video->private == '1') View::$vars->private_url = View::$vars->video->private_url;
     } else {
         header ('Location: ' . HOST . '/myaccount/myvideos/');
         exit();
@@ -77,10 +79,54 @@ if (isset ($_POST['submitted'])) {
     }
 
 
+    // Validate disable embed
+    if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
+        View::$vars->data['disable_embed'] = '1';
+    } else {
+        View::$vars->data['disable_embed'] = '0';
+    }
+
+
+    // Validate gated
+    if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
+        View::$vars->data['gated'] = '1';
+    } else {
+        View::$vars->data['gated'] = '0';
+    }
+
+
+    // Validate private
+    if (!empty ($_POST['private']) && $_POST['private'] == '1') {
+        View::$vars->data['private'] = '1';
+
+        try {
+
+            // Validate private URL
+            if (empty ($_POST['private_url'])) throw new Exception ('error');
+            if (strlen ($_POST['private_url']) != 7) throw new Exception ('error');
+            $vid = Video::Exist (array ('private_url' => $_POST['private_url']));
+            if ($vid && $vid != View::$vars->video->video_id) throw new Exception ('error');
+
+            // Set private URL
+            View::$vars->data['private_url'] = htmlspecialchars (trim ($_POST['private_url']));
+            View::$vars->private_url = View::$vars->data['private_url'];
+            
+        } catch (Exception $e) {
+            View::$vars->errors['private_url'] = Language::GetText('error_private_url');
+        }
+
+    } else {
+        View::$vars->data['private'] = '0';
+        View::$vars->data['private_url'] = '';
+        View::$vars->private_url = Video::GeneratePrivate();
+    }
+
+
     // Update video if no errors were made
     if (empty (View::$vars->errors)) {
         View::$vars->video->Update (View::$vars->data);
         View::$vars->message = Language::GetText('success_video_updated');
+        if (View::$vars->video->private == '1') View::$vars->private_url = View::$vars->video->private_url;
         View::$vars->message_type = 'success';
         Plugin::Trigger ('edit_video.edit');
     } else {

@@ -12,6 +12,7 @@ Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
 $admin = new User ($logged_in);
 Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $page_title = 'Edit Video';
+$private_url = Video::GeneratePrivate();
 $categories = array();
 $data = array();
 $errors = array();
@@ -42,6 +43,7 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
 
     ### Retrieve video information
     $video = new Video ($_GET['id']);
+    if ($video->private == '1') $private_url = $video->private_url;
     if (!$video->found) {
         header ('Location: ' . ADMIN . '/videos.php');
         exit();
@@ -91,6 +93,49 @@ if (isset ($_POST['submitted'])) {
         $data['cat_id'] = $_POST['cat_id'];
     } else {
         $errors['cat_id'] = 'Invalid category';
+    }
+
+
+    // Validate disable embed
+    if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
+        $data['disable_embed'] = '1';
+    } else {
+        $data['disable_embed'] = '0';
+    }
+
+
+    // Validate gated
+    if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
+        $data['gated'] = '1';
+    } else {
+        $data['gated'] = '0';
+    }
+
+
+    // Validate private
+    if (!empty ($_POST['private']) && $_POST['private'] == '1') {
+        $data['private'] = '1';
+
+        try {
+
+            // Validate private URL
+            if (empty ($_POST['private_url'])) throw new Exception ('error');
+            if (strlen ($_POST['private_url']) != 7) throw new Exception ('error');
+            $vid = Video::Exist (array ('private_url' => $_POST['private_url']));
+            if ($vid && $vid != $video->video_id) throw new Exception ('error');
+
+            // Set private URL
+            $data['private_url'] = htmlspecialchars (trim ($_POST['private_url']));
+            $private_url = $data['private_url'];
+
+        } catch (Exception $e) {
+            $errors['private_url'] = 'Invalid private URL';
+        }
+
+    } else {
+        $data['private'] = '0';
+        $data['private_url'] = '';
+        $private_url = Video::GeneratePrivate();
     }
 
 
@@ -183,6 +228,30 @@ include ('header.php');
                     <option value="<?=$cat_id?>"<?=(isset ($data['cat_id']) && $data['cat_id'] == $cat_id) || (!isset ($data['cat_id']) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
                 <?php endforeach; ?>
                 </select>
+            </div>
+
+            <div class="row-shift">
+                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors)) ? ($data['disable_embed'] == '1' ? 'checked="checked"' : '') : ($video->disable_embed == '1' ? 'checked="checked"' : '')?> />
+                <label for="disable-embed">Disable Embed</label> <em>(Video cannot be embedded on third party sites)</em>
+            </div>
+
+            <div class="row-shift">
+                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors)) ? ($data['gated'] == '1' ? 'checked="checked"' : '') : ($video->gated == '1' ? 'checked="checked"' : '')?> />
+                <label for="gated-video">Gated</label> <em>(Video can only be viewed by members who are logged in)</em>
+            </div>
+
+            <div class="row-shift">
+                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors)) ? ($data['private'] == '1' ? 'checked="checked"' : '') : ($video->private == '1' ? 'checked="checked"' : '')?> />
+                <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
+            </div>
+
+            <div id="private-url" class="row <?=(!empty ($errors)) ? ($data['private'] == '1' ? '' : 'hide') : ($video->private == '1' ? '' : 'hide')?>">
+
+                <label <?=(isset ($errors['private_url'])) ? 'class="errors"' : ''?>>Private URL:</label>
+                <?=HOST?>/videos/private/<span><?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?></span>/
+
+                <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?>" />
+                <a href="" class="small">Regenerate</a>
             </div>
 
             <div class="row-shift">

@@ -67,7 +67,6 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-
     // Validate disable embed
     if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
         View::$vars->data['disable_embed'] = '1';
@@ -75,12 +74,14 @@ if (isset ($_POST['submitted'])) {
         View::$vars->data['disable_embed'] = '0';
     }
 
+
     // Validate gated
     if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
         View::$vars->data['gated'] = '1';
     } else {
         View::$vars->data['gated'] = '0';
     }
+
 
     // Validate private
     if (!empty ($_POST['private']) && $_POST['private'] == '1') {

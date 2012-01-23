@@ -20,7 +20,13 @@ View::$vars->tags = NULL;
 // Validate requested video
 if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('video_id' => $_GET['vid'], 'status' => 'approved'))) {
     View::$vars->video = new Video ($_GET['vid']);
-} else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('private_url' => $_GET['private']))) {
+
+    // Prevent direct access to video to all users except owner
+    if (View::$vars->video->private == '1' && View::$vars->logged_in != View::$vars->video->user_id) {
+        App::Throw404();
+    }
+
+} else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('status' => 'approved', 'private_url' => $_GET['private']))) {
     View::$vars->video = new Video ($video_id);
 } else if (!empty ($_GET['get_private'])) {
     exit (Video::GeneratePrivate());
