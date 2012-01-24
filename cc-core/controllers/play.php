@@ -13,7 +13,8 @@ App::LoadClass ('Comment');
 View::InitView ('play');
 Plugin::Trigger ('play.start');
 View::$vars->logged_in = User::LoginCheck();
-View::$vars->tags = NULL;
+View::$vars->tags = null;
+View::$vars->private = null;
 
 
 
@@ -28,6 +29,7 @@ if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('
 
 } else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('status' => 'approved', 'private_url' => $_GET['private']))) {
     View::$vars->video = new Video ($video_id);
+    View::$vars->private = true;
 } else if (!empty ($_GET['get_private'])) {
     exit (Video::GeneratePrivate());
 } else {

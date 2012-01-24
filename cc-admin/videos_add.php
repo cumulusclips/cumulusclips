@@ -258,7 +258,7 @@ include ('header.php');
 
             <div id="private-url" class="row <?=(isset ($errors['private_url'])) ? 'errors' : ''?> <?=(!empty ($errors) && !empty ($data['private'])) ? '' : 'hide'?>">
                 <label>Private URL:</label>
-                <?=HOST?>/videos/private/<span><?=$private_url?></span>/
+                <?=HOST?>/private/videos/<span><?=$private_url?></span>/
                 <input type="hidden" name="private_url" value="<?=$private_url?>" />
                 <a href="" class="small">Regenerate</a>
             </div>

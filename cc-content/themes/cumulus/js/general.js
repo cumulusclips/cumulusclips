@@ -208,7 +208,7 @@ $('document').ready(function(){
     $('#private-url a').click(function(){
         $.ajax({
             type    : 'get',
-            url     : baseURL + '/videos/private/get/',
+            url     : baseURL + '/private/get/',
             success : function (responseData, textStatus, jqXHR) {
                 $('#private-url span').text(responseData);
                 $('#private-url input').val(responseData);

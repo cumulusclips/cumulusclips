@@ -248,7 +248,7 @@ include ('header.php');
             <div id="private-url" class="row <?=(!empty ($errors)) ? ($data['private'] == '1' ? '' : 'hide') : ($video->private == '1' ? '' : 'hide')?>">
 
                 <label <?=(isset ($errors['private_url'])) ? 'class="errors"' : ''?>>Private URL:</label>
-                <?=HOST?>/videos/private/<span><?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?></span>/
+                <?=HOST?>/private/videos/<span><?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?></span>/
 
                 <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?>" />
                 <a href="" class="small">Regenerate</a>

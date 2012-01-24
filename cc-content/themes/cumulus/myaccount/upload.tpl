@@ -57,7 +57,7 @@ View::Header();
 
         <div id="private-url" class="row <?=(!empty ($errors) && !empty ($data['private'])) ? '' : 'hide'?>">
             <label <?=(isset ($errors['private_url'])) ? 'class="errors"' : ''?>><?=Language::GetText('private_url')?>:</label>
-            <?=HOST?>/videos/private/<span><?=$private_url?></span>/
+            <?=HOST?>/private/videos/<span><?=$private_url?></span>/
             <input type="hidden" name="private_url" value="<?=$private_url?>" />
             <a href="" class="small"><?=Language::GetText('regenerate')?></a>
         </div>

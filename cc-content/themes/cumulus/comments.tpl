@@ -6,7 +6,11 @@
 
 <p class="big">
     <?=Language::GetText('comments_for')?>:
-    <a href="<?=$video->url?>/" title="<?=$video->title?>"><?=$video->title?></a>
+    <?php if ($private): ?>
+        <a href="<?=HOST?>/private/videos/<?=$video->private_url?>/" title="<?=$video->title?>"><?=$video->title?></a>
+    <?php else: ?>
+        <a href="<?=$video->url?>/" title="<?=$video->title?>"><?=$video->title?></a>
+    <?php endif; ?>
 </p>
 
 

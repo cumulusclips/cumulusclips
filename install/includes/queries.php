@@ -358,6 +358,10 @@ CREATE TABLE `{DB_PREFIX}videos` (
   `original_extension` varchar(255) DEFAULT NULL,
   `job_id` bigint(20) DEFAULT NULL,
   `released` tinyint(1) NOT NULL DEFAULT '0',
+  `disable_embed` TINYINT(1) DEFAULT '0' NOT NULL,
+  `gated` TINYINT(1) DEFAULT '0' NOT NULL,
+  `private` TINYINT(1) DEFAULT '0' NOT NULL,
+  `private_url` VARCHAR(255) NULL,
   PRIMARY KEY (`video_id`),
   KEY `user_id` (`user_id`),
   FULLTEXT KEY `title_description_tags` (`title`,`description`,`tags`)

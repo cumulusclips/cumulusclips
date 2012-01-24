@@ -14,19 +14,25 @@ Plugin::Trigger ('comments.start');
 View::$vars->logged_in = User::LoginCheck();
 if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
+View::$vars->private = null;
 
 
 
 // Verify a comment type and id was given
-if (empty ($_GET['vid']) || !is_numeric ($_GET['vid']) || !Video::Exist (array ('video_id' => $_GET['vid']))) {
+if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('status' => 'approved', 'video_id' => $_GET['vid']))) {
+    View::$vars->video = new Video ($_GET['vid']);
+    $url = HOST . '/videos/' . View::$vars->video->video_id . '/comments';
+} else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('status' => 'approved', 'private_url' => $_GET['private']))) {
+    View::$vars->video = new Video ($video_id);
+    View::$vars->private = true;
+    $url = HOST . '/private/comments/' . View::$vars->video->private_url;
+} else {
     App::Throw404();
 }
 
 
 // Retrieve Video
-View::$vars->video = new Video ($_GET['vid']);
 View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('video' => View::$vars->video->title));
-$url = '/videos/' . View::$vars->video->video_id . '/comments';
 
 
 // Retrieve comments count

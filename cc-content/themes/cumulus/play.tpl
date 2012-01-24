@@ -133,7 +133,11 @@ View::Header();
             <?php if ($comment_count >= 5): ?>
                 <!-- BEGIN View All Comments Link -->
                 <p class="post-header">
-                    <a id="view-comments" href="<?=HOST?>/videos/<?=$video->video_id?>/comments/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    <?php if ($private): ?>
+                        <a id="view-comments" href="<?=HOST?>/private/comments/<?=$video->private_url?>/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    <?php else: ?>
+                        <a id="view-comments" href="<?=HOST?>/videos/<?=$video->video_id?>/comments/" title="<?=Language::GetText('view_all_comments')?>"><?=Language::GetText('view_all_comments')?></a>
+                    <?php endif; ?>
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<strong><?=$comment_count?> <?=Language::GetText('comments_total')?></strong>
                 </p>
                 <!-- END View All Comments Link -->
