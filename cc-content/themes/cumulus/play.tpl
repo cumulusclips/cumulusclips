@@ -62,14 +62,22 @@ View::Header();
             </p>
         </div>
 
+        
+        <!-- BEGIN Action Buttons -->
         <div id="buttons">
             <a href="" class="button-small showhide" data-block="about"><?=Language::GetText('about')?></a>
             <a href="" class="button-small subscribe" data-type="<?=$subscribe_text?>" data-user="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
             <a href="" class="button-small showhide" data-block="share"><?=Language::GetText('share')?></a>
-            <a href="" class="button-small showhide" data-block="embed"><?=Language::GetText('embed')?></a>
+
+            <?php if ($video->disable_embed == '0' && $video->gated == '0' && $video->private == '0'): ?>
+                <a href="" class="button-small showhide" data-block="embed"><?=Language::GetText('embed')?></a>
+            <?php endif; ?>
+
             <a href="" class="button-small favorite"><?=Language::GetText('favorite')?></a>
             <a href="" class="button-small flag" data-type="video" data-id="<?=$video->video_id?>"><?=Language::GetText('flag')?></a>
         </div>
+        <!-- END Action Buttons -->
+
 
         <div id="about" class="showhide-block">
             <p class="avatar-small"><img src="<?=$member->avatar_url?>" alt="<?=$member->username?>" /></p>
@@ -83,10 +91,12 @@ View::Header();
             <p class="clear"><strong><?=Language::GetText('description')?>:</strong> <?=$video->description?></p>
         </div>
 
-        <div id="embed" class="showhide-block">
-            <?=Language::GetText('embed_text')?>
-            <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->video_id?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
-        </div>
+        <?php if ($video->disable_embed == '0' && $video->gated == '0' && $video->private == '0'): ?>
+            <div id="embed" class="showhide-block">
+                <?=Language::GetText('embed_text')?>
+                <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->video_id?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+            </div>
+        <?php endif; ?>
 
         <div id="share" class="showhide-block">
             <!-- FACEBOOK BUTTON -->

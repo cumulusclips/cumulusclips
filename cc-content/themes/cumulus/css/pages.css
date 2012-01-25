@@ -182,6 +182,8 @@ PLAY PAGE STYLES
     width:330px;
 }
 
+.play #message  { margin-bottom:10px; }
+
 #player-gated {
     position:relative;
 }
@@ -209,8 +211,6 @@ PLAY PAGE STYLES
 }
 
 #play-right .ad300 { padding:12px; }
-
-#player_wrapper { margin-top:10px; }
 
 .other-video {
     margin-bottom:25px;
