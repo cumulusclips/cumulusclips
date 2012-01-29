@@ -6,7 +6,7 @@ View::Header();
 ?>
 
 <h1><?=Language::GetText('message_read_header')?></h1>
-<div class="block" id="message-display">
+<div class="block view-myaccount-message-read" id="message-display">
 
     <p><a href="<?=HOST?>/myaccount/message/inbox/" title="<?=Language::GetText('return_inbox')?>"><?=Language::GetText('return_inbox')?></a></p>
     <p><strong><?=Language::GetText('sender')?>: </strong>&nbsp;&nbsp;&nbsp;<?=$message->username?></p>

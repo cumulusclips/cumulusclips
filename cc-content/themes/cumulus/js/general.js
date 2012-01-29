@@ -1,6 +1,15 @@
 // Global vars
 var baseURL = $('meta[name="baseURL"]').attr('content');
 var videoID = $('[meta[name="videoID"]').attr('content');
+var $thisObject = {};
+var confirmCallback = function(){};
+var favoriteCallback = function(){};
+var flagCallback = function(){};
+var subscribeCallback = function(){};
+var ratingCallback = function(){};
+var commentCallback = function(){};
+var statusCallback = function(){};
+var regenerateCallback = function(){};
 
 $('document').ready(function(){
 
@@ -62,16 +71,8 @@ $('document').ready(function(){
 
     // Attach confirm popup to confirm action links
     $('.confirm').click(function() {
-        
-        // Code to execute once string is retrieved
-        var location = $(this).attr('href')
-        var callback = function (confirmString){
-            var agree = confirm (confirmString);
-            if (agree) window.location = location;
-        }
-
-        // Retrieve confirm string
-        GetText (callback, $(this).data('node'), $(this).data('replacements'));
+        $thisObject = $(this);
+        GetText (confirmCallback, $(this).data('node'), $(this).data('replacements'));
         return false;
     });
 
@@ -80,9 +81,10 @@ $('document').ready(function(){
 
     // Attach favorite action to favorite links / buttons
     $('.favorite').click(function(){
+        $thisObject = $(this);
         var url = baseURL+'/actions/favorite/';
         var data = {video_id: videoID};
-        executeAction (url, data);
+        executeAction (url, data, favoriteCallback);
         return false;
     });
 
@@ -91,9 +93,10 @@ $('document').ready(function(){
 
     // Attach flag action to flag links / buttons
     $('.flag').click(function(){
+        $thisObject = $(this);
         var url = baseURL+'/actions/flag/';
         var data = {type: $(this).attr('data-type'), id: $(this).attr('data-id')};
-        executeAction (url, data);
+        executeAction (url, data, flagCallback);
         return false;
     });
 
@@ -102,31 +105,11 @@ $('document').ready(function(){
 
     // Attach Subscribe & Unsubscribe action to buttons
     $('.subscribe').click(function(){
-
-        var subscribeType = $(this).attr('data-type');
+        $thisObject = $(this);
         var url = baseURL+'/actions/subscribe/';
-        var data = {type: subscribeType, user: $(this).attr('data-user')};
-        var subscribeButton = $(this);
-
-
-        // Callback for AJAX call - Update button if the action (subscribe / unsubscribe) was successful
-        var callback = function (responseData) {
-            
-            if (responseData.result == 1) {
-
-                subscribeButton.text(responseData.other);
-                if (subscribeType == 'subscribe') {
-                    subscribeButton.attr('data-type','unsubscribe');
-                } else if (subscribeType == 'unsubscribe') {
-                    subscribeButton.attr('data-type','subscribe');
-                }
-
-            }
-        }
-
-        executeAction (url, data, callback);
+        var data = {type: $(this).attr('data-type'), user: $(this).attr('data-user')};
+        executeAction (url, data, subscribeCallback);
         return false;
-        
     });
 
 
@@ -134,22 +117,10 @@ $('document').ready(function(){
 
     // Attach rating action to like & dislike links
     $('.rating').click(function(){
+        $thisObject = $(this);
         var url = baseURL+'/actions/rate/';
         var data = {video_id: videoID, rating: $(this).attr('data-rating')};
-        var callback = function (responseData) {
-            if (responseData.result == 1) {
-
-                var likeText = responseData.other.like_text;
-                likeText += ' (' + responseData.other.likes + '+)';
-                $('.like-text').text(likeText);
-
-                var dislikeText = responseData.other.dislike_text;
-                dislikeText += ' (' + responseData.other.dislikes + '-)';
-                $('.dislike-text').text(dislikeText);
-                
-            }
-        }
-        executeAction (url, data, callback);
+        executeAction (url, data, ratingCallback);
         return false;
     });
 
@@ -158,14 +129,9 @@ $('document').ready(function(){
 
     // Attach comment action to comment forms
     $('#comments-form').submit(function(){
+        $thisObject = $(this);
         var url = baseURL+'/actions/comment/';
-        var callback = function (responseData) {
-            $('#comments-form')[0].reset();
-            if (responseData.other.auto_approve == 1) {
-                $('#comments').prepend(responseData.other.output);
-            }
-        }
-        executeAction (url, $(this).serialize(), callback);
+        executeAction (url, $(this).serialize(), commentCallback);
         return false;
     });
 
@@ -174,14 +140,9 @@ $('document').ready(function(){
 
     // Attach post status update action to status update forms
     $('#status-form').submit(function(){
+        $thisObject = $(this);
         var url = baseURL+'/actions/post/';
-        var callback = function(responseData) {
-            $('#status-posts').prepend(responseData.other);
-            $('#no-updates').remove();
-            $('#status-form')[0].reset();
-            $('#status-form .text').css('height', '20')
-        }
-        executeAction (url, $(this).serialize(), callback);
+        executeAction (url, $(this).serialize(), statusCallback);
         return false;
     });
 
@@ -209,10 +170,7 @@ $('document').ready(function(){
         $.ajax({
             type    : 'get',
             url     : baseURL + '/private/get/',
-            success : function (responseData, textStatus, jqXHR) {
-                $('#private-url span').text(responseData);
-                $('#private-url input').val(responseData);
-            }
+            success : regenerateCallback
         });
         return false;
     });
@@ -285,4 +243,89 @@ function displayMessage (result, message) {
     $('#message').html(message);
     $('#message').removeClass(existingClass);
     $('#message').addClass(cssClass);
+}
+
+
+
+
+
+/*****************
+CALLBACK FUNCTIONS
+*****************/
+
+// Confirm Dialog Callback
+confirmCallback = function (confirmString){
+    var location = $thisObject.attr('href');
+    var agree = confirm (confirmString);
+    if (agree) window.location = location;
+}
+
+
+
+
+// Subscribe / Unsubscribe Callback
+subscribeCallback = function (responseData) {
+
+    var subscribeType = $thisObject.attr('data-type');
+    var subscribeButton = $thisObject;
+
+    if (responseData.result == 1) {
+
+        subscribeButton.text(responseData.other);
+        if (subscribeType == 'subscribe') {
+            subscribeButton.attr('data-type','unsubscribe');
+        } else if (subscribeType == 'unsubscribe') {
+            subscribeButton.attr('data-type','subscribe');
+        }
+
+    }
+}
+
+
+
+
+// Video Rating Callback
+ratingCallback = function (responseData) {
+    if (responseData.result == 1) {
+
+        var likeText = responseData.other.like_text;
+        likeText += ' (' + responseData.other.likes + '+)';
+        $('.like-text').text(likeText);
+
+        var dislikeText = responseData.other.dislike_text;
+        dislikeText += ' (' + responseData.other.dislikes + '-)';
+        $('.dislike-text').text(dislikeText);
+
+    }
+}
+
+
+
+
+// Video Commment Submission Callback
+commentCallback = function (responseData) {
+    $('#comments-form')[0].reset();
+    if (responseData.other.auto_approve == 1) {
+        $('#comments').prepend(responseData.other.output);
+    }
+}
+
+
+
+
+// Status Update Submission Callback
+statusCallback = function(responseData) {
+    $('#status-posts').prepend(responseData.other);
+    $('#no-updates').remove();
+    $('#status-form')[0].reset();
+    $('#status-form .text').css('height', '20')
+}
+
+
+
+
+// Regenerate Private Video URL Callback
+regenerateCallback = function (responseData, textStatus, jqXHR) {
+    $('#private-url span').text(responseData);
+    $('#private-url input').val(responseData);
 }

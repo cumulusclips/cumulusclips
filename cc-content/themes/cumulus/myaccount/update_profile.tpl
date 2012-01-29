@@ -21,7 +21,7 @@ View::Header();
 <?php endif; ?>
 
 
-<div class="block">
+<div class="block view-myaccount-update-profile">
 
     <p class="row-shift large"><?=Language::GetText('personal_header')?></p>
     <p class="row-shift"><?=Language::GetText('asterisk')?></p>
@@ -66,7 +66,7 @@ View::Header();
 
     
 <h1 id="update-avatar"><?=Language::GetText('update_avatar_header')?></h1>
-<div class="block">
+<div class="block view-myaccount-update-avatar">
 
     <div id="avatar-left">
         <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$user->avatar_url?>"></span></p>

@@ -12,7 +12,7 @@ View::Header();
 <?php endif; ?>
 
 
-<div class="block">
+<div class="block view-myaccount-change-password">
 
     <p class="row-shift"><?=Language::GetText('change_password_text')?></p>
     

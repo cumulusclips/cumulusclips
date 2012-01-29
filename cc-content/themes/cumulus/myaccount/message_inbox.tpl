@@ -13,7 +13,7 @@ View::Header();
 
 <?php if ($db->Count($result) > 0): ?>
 
-    <div class="block">
+    <div class="block view-myaccount-message-inbox">
         
         <form action="<?=HOST?>/myaccount/message/inbox/" method="post">
         <table id="inbox">
@@ -46,13 +46,12 @@ View::Header();
         </div>
         </form>
 
-
     </div>
 
     <?=$pagination->Paginate()?>
 
 <?php else: ?>
-    <div class="block">
+    <div class="block view-myaccount-message-inbox-none">
         <strong><?=Language::GetText('no_messages')?></strong>
     </div>
 <?php endif; ?>
