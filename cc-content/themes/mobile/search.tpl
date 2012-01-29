@@ -7,7 +7,7 @@
         <form action="<?=MOBILE_HOST?>/s/" method="post">
         <input type="text" name="keyword" id="search-field" title="<?=Language::GetText('search_text')?>" value="" />
         <input type="hidden" name="submitted" value="TRUE" />
-        <input id="search-button" type="image" value="<?=Language::GetText('search_text')?>" src="<?=THEME?>/images/search-button.png">
+        <input id="search-button" type="image" value="<?=Language::GetText('search_text')?>" src="<?=$config->theme_url?>/images/search-button.png">
         </form>
     </div>
     <!-- END SEARCH FORM -->

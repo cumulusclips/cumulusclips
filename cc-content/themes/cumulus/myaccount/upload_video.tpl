@@ -1,7 +1,7 @@
 <?php
 
 $supported_formats = Language::GetText ('uploadify_supported_formats') . ':' . Functions::GetVideoTypes ('fileDesc');
-View::AddMeta ('uploadify:theme', THEME);
+View::AddMeta ('uploadify:theme', $config->theme_url);
 View::AddMeta ('uploadify:fileExt', Functions::GetVideoTypes ('fileExt'));
 View::AddMeta ('uploadify:fileDesc', $supported_formats);
 View::AddCss ('uploadify.css');

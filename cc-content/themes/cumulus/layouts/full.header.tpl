@@ -7,9 +7,9 @@
 <?php View::WriteMeta(); ?>
 <?php Plugin::Trigger ('theme.head'); ?>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
-<link rel="stylesheet" type="text/css" href="<?=THEME?>/css/reset.css" />
-<link rel="stylesheet" type="text/css" href="<?=THEME?>/css/main.css" />
-<link rel="stylesheet" type="text/css" href="<?=THEME?>/css/pages.css" />
+<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/main.css" />
+<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/pages.css" />
 <?php View::WriteCSS(); ?>
 
 </head>

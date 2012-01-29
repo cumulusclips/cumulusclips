@@ -6,15 +6,15 @@
 <meta name="baseURL" content="<?=HOST?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php View::WriteMeta(); ?>
-<link rel="apple-touch-icon" href="<?=THEME?>/images/touch.png"/>
-<link href="<?=THEME?>/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="<?=THEME?>/css/main.css" rel="stylesheet" type="text/css" />
+<link rel="apple-touch-icon" href="<?=$config->theme_url?>/images/touch.png"/>
+<link href="<?=$config->theme_url?>/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="<?=$config->theme_url?>/css/main.css" rel="stylesheet" type="text/css" />
 <?php View::WriteCSS(); ?>
 </head>
 <body class="<?=Language::GetCSSName()?>">
     
 <div id="header">
-    <a href="<?=MOBILE_HOST?>/"><img src="<?=THEME?>/images/logo.png" alt="<?=Language::GetText('mobile_heading', array ('sitename' => $config->sitename))?>" /></a>
+    <a href="<?=MOBILE_HOST?>/"><img src="<?=$config->theme_url?>/images/logo.png" alt="<?=Language::GetText('mobile_heading', array ('sitename' => $config->sitename))?>" /></a>
 </div>
 
 <div id="wrapper">

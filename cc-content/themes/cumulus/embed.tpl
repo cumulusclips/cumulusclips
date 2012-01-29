@@ -3,7 +3,7 @@
 <head>
 <title><?=$video->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="<?=THEME?>/css/reset.css" />
+<link rel="stylesheet" href="<?=$config->theme_url?>/css/reset.css" />
 <style type="text/css">
 html, body, .video-unavailable, object, img {
     width:100% !important;
@@ -25,10 +25,10 @@ html, body, .video-unavailable, object, img {
 
     <!-- BEGIN VIDEO -->
     <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
-    <script type="text/javascript" src="<?=THEME?>/js/jwplayer.js"></script>
+    <script type="text/javascript" src="<?=$config->theme_url?>/js/jwplayer.js"></script>
     <script type="text/javascript">
     jwplayer("player").setup({
-        flashplayer : '<?=THEME?>/flash/player.swf',
+        flashplayer : '<?=$config->theme_url?>/flash/player.swf',
         file        : '<?=$config->flv_url?>/<?=$video->filename?>.flv',
         image       : '<?=$config->thumb_url?>/<?=$video->filename?>.jpg',
         controlbar  : 'bottom',

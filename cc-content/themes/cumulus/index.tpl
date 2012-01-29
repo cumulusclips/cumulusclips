@@ -36,7 +36,7 @@ View::Header();
 
         <!-- BEGIN SLIDE 1 -->
         <div>
-            <img src="<?=THEME?>/images/slide1.jpg" />
+            <img src="<?=$config->theme_url?>/images/slide1.jpg" />
             <div class="slide-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Duis a porta ante. Vivamus et lorem eget mi faucibus
@@ -51,7 +51,7 @@ View::Header();
 
         <!-- BEGIN SLIDE 2 -->
         <div>
-            <img src="<?=THEME?>/images/slide2.jpg" />
+            <img src="<?=$config->theme_url?>/images/slide2.jpg" />
             <div class="slide-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Duis a porta ante. Vivamus et lorem eget mi faucibus
@@ -66,7 +66,7 @@ View::Header();
 
         <!-- BEGIN SLIDE 3 -->
         <div>
-            <img src="<?=THEME?>/images/slide3.jpg" />
+            <img src="<?=$config->theme_url?>/images/slide3.jpg" />
             <div class="slide-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Duis a porta ante. Vivamus et lorem eget mi faucibus
