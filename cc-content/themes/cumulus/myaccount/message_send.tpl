@@ -12,7 +12,7 @@ View::Header();
 <?php endif; ?>
 
 
-<div class="block view-myaccount-message-send">
+<div class="block">
 
     <form action="<?=HOST?>/myaccount/message/send/" method="post">
 

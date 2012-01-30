@@ -9,22 +9,21 @@ View::Header();
 
 <?php if ($db->Count($result) >= 1): ?>
 
-    <div class="view-myaccount-subscribers">
-        <?php while ($row = $db->FetchObj ($result)): ?>
+    <?php while ($row = $db->FetchObj ($result)): ?>
 
-            <?php $member = new User ($row->user_id); ?>
-            <div class="block member">
-                <p><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><img class="picture" src="<?=$member->avatar_url?>" alt="<?=$member->username?>" /></a></p>
-                <p><a class="large" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff ($member->username,18)?></a></p>
-            </div>
+        <?php $member = new User ($row->user_id); ?>
+        <div class="block member">
+            <p><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><img class="picture" src="<?=$member->avatar_url?>" alt="<?=$member->username?>" /></a></p>
+            <p><a class="large" href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff ($member->username,18)?></a></p>
+        </div>
 
-        <?php endwhile; ?>
-    </div>
+    <?php endwhile; ?>
 
+    <br clear="all" />
     <?=$pagination->Paginate()?>
 
 <?php else: ?>
-    <div class="block view-myaccount-subscribers-none">
+    <div class="block">
         <strong><?=Language::GetText('no_subscribers')?></strong>
     </div>
 <?php endif; ?>

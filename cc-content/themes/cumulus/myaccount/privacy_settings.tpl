@@ -11,7 +11,7 @@ View::Header();
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block view-myaccount-privacy">
+<div class="block">
 
     <form action="<?=HOST?>/myaccount/privacy-settings/" method="post" id="privacy-form">
 

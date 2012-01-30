@@ -11,7 +11,7 @@ View::Header();
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block view-myaccount-edit-video">
+<div class="block">
 
     <p><a href="<?=HOST?>/myaccount/myvideos/"><?=Language::GetText('back_to_videos')?></a></p><br />
     <form action="<?=HOST?>/myaccount/editvideo/<?=$video->video_id?>/" method="post">

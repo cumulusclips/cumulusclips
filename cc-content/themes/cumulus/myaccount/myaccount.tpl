@@ -9,7 +9,7 @@ View::Header();
 
 <div id="message"></div>
 
-<div class="block view-myaccount">
+<div class="block">
 
     <div id="myaccount-left">
         <div>

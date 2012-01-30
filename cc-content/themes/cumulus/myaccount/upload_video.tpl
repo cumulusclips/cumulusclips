@@ -17,7 +17,7 @@ View::Header();
 
 <div id="message"></div>
 
-<div id="upload-video" class="block view-myaccount-upload-video">
+<div id="upload-video" class="block">
 
     <p><?=Language::GetText('upload_video_text')?></p>
     <p class="big"><?=Language::GetText('filesize_limit')?>: 100MB</p>
