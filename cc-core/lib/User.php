@@ -40,8 +40,9 @@ class User {
         }
 
         // User specific values
+        View::InitView();
         $this->role = (empty ($this->role)) ? 'user' : $this->role;
-        $this->avatar_url = (empty ($this->avatar)) ? THEME . '/images/avatar.gif' : HOST . "/cc-content/uploads/avatars/$this->avatar";
+        $this->avatar_url = (empty ($this->avatar)) ? View::GetFallbackUrl ('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$this->avatar";
         $this->date_created = Functions::GmtToLocal ($this->date_created);
         $this->last_login = Functions::GmtToLocal ($this->last_login);
         $this->video_count = $this->GetVideoCount();

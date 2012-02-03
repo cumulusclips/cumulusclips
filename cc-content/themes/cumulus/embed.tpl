@@ -16,12 +16,15 @@ html, body, .video-unavailable, object, img {
     color:#FFF;
     font-size:16px;
     font-family:arial,helvetica,sans-serif;
-    padding-top:50px;
+}
+.video-unavailable p {
+    padding:50px;
+    line-height:1.5em;
 }
 </style>
 <body>
 
-<?php if ($video): ?>
+<?php if ($video && $video->disable_embed == '0'): ?>
 
     <!-- BEGIN VIDEO -->
     <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
@@ -38,10 +41,11 @@ html, body, .video-unavailable, object, img {
     </script>
     <!-- END VIDEO -->
 
+<?php elseif ($video && $video->disable_embed == '1'): ?>
+    <?php $link = HOST . "/videos/$video->video_id/$video->slug/"; ?>
+    <div class="video-unavailable"><p><?=Language::GetText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename))?></p></div>
 <?php else: ?>
-
-<div class="video-unavailable"><?=Language::GetText('video_unavailable')?></div>
-
+    <div class="video-unavailable"><p><?=Language::GetText('video_unavailable')?></p></div>
 <?php endif; ?>
 
 </body>

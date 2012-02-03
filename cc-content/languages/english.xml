@@ -142,6 +142,9 @@
         <views>Views</views>
         <gated_video>You must login to your account to view this video</gated_video>
         <video_unavailable>Video Is Unavailable</video_unavailable>
+        <embed_disabled><![CDATA[
+            Embedding is disabled for this video. You can view it at <a target="_top" href="{LINK}">{SITENAME}</a>.
+        ]]></embed_disabled>
         <no_playback>No video playback capabilities.</no_playback>
 
         <!-- Comments Page -->

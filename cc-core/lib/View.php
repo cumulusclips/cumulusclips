@@ -16,17 +16,20 @@ class View {
      * @param string $page [optional] Page whose information to load
      * @return void View is initialized
      */
-    static function  InitView ($page = null) {
-        global $db, $config;
-        self::$options = new stdClass();
-        self::$options->layout = 'default';
-        self::$options->header = THEME_PATH . '/layouts/' . self::$options->layout . '.header.tpl';
-        self::$options->footer = THEME_PATH . '/layouts/' . self::$options->layout . '.footer.tpl';
-        self::$options->blocks = array();
+    static function InitView ($page = null) {
 
+        if (!empty (self::$vars)) return true;
+        
+        global $db, $config;
         self::$vars = new stdClass();
         self::$vars->db = $db;
         self::$vars->config = $config;
+
+        self::$options = new stdClass();
+        self::$options->layout = 'default';
+        self::$options->header = self::GetFallbackPath ('layouts/' . self::$options->layout . '.header.tpl');
+        self::$options->footer = self::GetFallbackPath ('layouts/' . self::$options->layout . '.footer.tpl');
+        self::$options->blocks = array();
 
         // Load page's meta information into memory for use in templates
         if ($page) {
@@ -38,6 +41,28 @@ class View {
         Plugin::Trigger ('view.init');
 
     }
+
+
+
+    static function GetFallbackPath ($file) {
+        if (file_exists (self::$vars->config->theme_path . "/$file")) {
+            return self::$vars->config->theme_path . "/$file";
+        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
+            return self::$vars->config->theme_path_default . "/$file";
+        } else {
+            return false;
+        }
+    }
+
+    static function GetFallbackUrl ($file) {
+        if (file_exists (self::$vars->config->theme_path . "/$file")) {
+            return self::$vars->config->theme_url . "/$file";
+        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
+            return self::$vars->config->theme_url_default . "/$file";
+        } else {
+            return false;
+        }
+    }
     
 
 
@@ -48,7 +73,7 @@ class View {
      * @return mixed Page is output to browser
      */
     static function Render ($view) {
-        self::$options->view = THEME_PATH . '/' . $view;
+        self::$options->view = self::GetFallbackPath ($view);
         extract (get_object_vars (self::$vars));
         Plugin::Trigger ('view.render');
         include (self::$options->view);
@@ -64,8 +89,8 @@ class View {
      */
     static function SetLayout ($layout) {
         self::$options->layout = $layout;
-        $header = THEME_PATH . "/layouts/$layout.header.tpl";
-        $footer = THEME_PATH . "/layouts/$layout.footer.tpl";
+        $header = self::GetFallbackPath ("layouts/$layout.header.tpl");
+        $footer = self::GetFallbackPath ("layouts/$layout.footer.tpl");
         if (file_exists ($header)) self::$options->header = $header;
         if (file_exists ($header)) self::$options->footer = $footer;
         Plugin::Trigger ('view.set_layout');
@@ -106,8 +131,12 @@ class View {
      * @return mixed Block is output to browser
      */
     static function Block ($tpl_file) {
+
+        // Detect correct block path
+        $request_block = self::GetFallbackPath ("blocks/$tpl_file");
+        $block = ($request_block) ? $request_block : $tpl_file;
+
         extract (get_object_vars (self::$vars));
-        $block = (file_exists (THEME_PATH . '/blocks/' . $tpl_file)) ? THEME_PATH . '/blocks/' . $tpl_file : $tpl_file;
         Plugin::Trigger ('view.block');
         include ($block);
     }
@@ -123,8 +152,11 @@ class View {
      */
     static function RepeatingBlock ($tpl_file, $records) {
 
+        // Detect correct block path
+        $request_block = self::GetFallbackPath ("blocks/$tpl_file");
+        $block = ($request_block) ? $request_block : $tpl_file;
+        
         extract (get_object_vars (self::$vars));
-        $block = (file_exists (THEME_PATH . '/blocks/' . $tpl_file)) ? THEME_PATH . '/blocks/' . $tpl_file : $tpl_file;
         Plugin::Trigger ('view.repeating_block');
 
         foreach ($records as $_id) {
@@ -183,7 +215,11 @@ class View {
      * @return void CSS file is stored to be written in document
      */
     static function AddCss ($css_name) {
-        $css_url = (file_exists (THEME_PATH . '/css/' . $css_name)) ? THEME . '/css/' . $css_name : $css_name;
+
+        // Detect correct file path
+        $request_file = self::GetFallbackUrl ("css/$css_name");
+        $css_url = ($request_file) ? $request_file : $css_name;
+
         self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
         Plugin::Trigger ('view.add_css');
     }
@@ -214,7 +250,11 @@ class View {
      * @return void JS file is stored to be written in document
      */
     static function AddJs ($js_name) {
-        $js_url = (file_exists (THEME_PATH . '/js/' . $js_name)) ? THEME . '/js/' . $js_name : $js_name;
+
+        // Detect correct file path
+        $request_file = self::GetFallbackUrl ("js/$js_name");
+        $js_url = ($request_file) ? $request_file : $js_name;
+
         self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
         Plugin::Trigger ('view.add_js');
     }

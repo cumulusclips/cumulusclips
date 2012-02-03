@@ -55,6 +55,9 @@ $config->video_size_limit = Settings::Get ('video_size_limit');
 $config->accepted_video_formats = array ('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
 $config->accepted_avatar_formats = array ('png', 'jpeg', 'jpg', 'gif');
 $config->pagination_page_limit = Settings::Get ('pagination_page_limit');
+$config->theme_default = 'cumulus';
+$config->theme_url_default = HOST . '/cc-content/themes/cumulus';
+$config->theme_path_default = THEMES_DIR . '/cumulus';
 
 $flv_url = Settings::Get('flv_url');
 $mobile_url = Settings::Get('mobile_url');
@@ -80,6 +83,8 @@ $theme = App::CurrentTheme();
 Plugin::Trigger ('app.before_set_theme');
 define ('THEME', HOST . '/cc-content/themes/' . $theme);
 define ('THEME_PATH', THEMES_DIR . '/' . $theme);
+$config->theme_url = HOST . '/cc-content/themes/' . $theme;
+$config->theme_path = THEMES_DIR . '/' . $theme;
 
 
 // Load language

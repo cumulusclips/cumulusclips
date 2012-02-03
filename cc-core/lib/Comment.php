@@ -49,7 +49,8 @@ class Comment {
             $this->website = HOST . '/members/' . $user->username . '/';
             $this->avatar_url = $user->avatar_url;
         } else {
-            $this->avatar_url = THEME . '/images/avatar.gif';
+            View::InitView();
+            $this->avatar_url = View::GetFallbackUrl ('images/avatar.gif');
         }
         Plugin::Trigger ('comment.get');
 
