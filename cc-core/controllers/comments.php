@@ -21,10 +21,12 @@ View::$vars->private = null;
 // Verify a comment type and id was given
 if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('status' => 'approved', 'video_id' => $_GET['vid']))) {
     View::$vars->video = new Video ($_GET['vid']);
+    View::$vars->video_url = View::$vars->video->url;
     $url = HOST . '/videos/' . View::$vars->video->video_id . '/comments';
 } else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('status' => 'approved', 'private_url' => $_GET['private']))) {
     View::$vars->video = new Video ($video_id);
     View::$vars->private = true;
+    View::$vars->video_url = HOST . '/private/videos/' . View::$vars->video->private_url;
     $url = HOST . '/private/comments/' . View::$vars->video->private_url;
 } else {
     App::Throw404();

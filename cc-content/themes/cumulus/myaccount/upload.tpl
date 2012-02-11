@@ -11,7 +11,7 @@ View::Header();
     <div id="message" class="<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block view-myaccount-upload">
+<div class="block">
     
     <form action="<?=HOST?>/myaccount/upload/" method="post">
         

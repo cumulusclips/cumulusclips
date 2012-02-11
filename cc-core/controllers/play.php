@@ -20,7 +20,9 @@ View::$vars->private = null;
 
 // Validate requested video
 if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('video_id' => $_GET['vid'], 'status' => 'approved'))) {
+
     View::$vars->video = new Video ($_GET['vid']);
+    View::$vars->comments_url = HOST . '/videos/' . View::$vars->video->video_id . '/comments';
 
     // Prevent direct access to video to all users except owner
     if (View::$vars->video->private == '1' && View::$vars->logged_in != View::$vars->video->user_id) {
@@ -30,6 +32,7 @@ if (!empty ($_GET['vid']) && is_numeric ($_GET['vid']) && Video::Exist (array ('
 } else if (!empty ($_GET['private']) && $video_id = Video::Exist (array ('status' => 'approved', 'private_url' => $_GET['private']))) {
     View::$vars->video = new Video ($video_id);
     View::$vars->private = true;
+    View::$vars->comments_url = HOST . '/private/comments/' . View::$vars->video->private_url;
 } else if (!empty ($_GET['get_private'])) {
     exit (Video::GeneratePrivate());
 } else {

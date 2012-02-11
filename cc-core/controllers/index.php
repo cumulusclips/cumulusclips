@@ -16,7 +16,7 @@ if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in
 
 
 // Retrieve Featured Video
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1 AND private = '0'";
 $result_featured = $db->Query ($query);
 View::$vars->featured_videos = array();
 while ($video = $db->FetchObj ($result_featured)) View::$vars->featured_videos[] = $video->video_id;
