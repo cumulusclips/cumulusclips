@@ -4,4 +4,6 @@
     <name>Cumulus Mobile</name>
     <mobile>true</mobile>
     <description>The default mobile theme for CumulusClips</description>
+    <version>1.2</version>
+    <update>http://mothership.cumulusclips.org/updates/themes/mobile/</update>
 </theme>

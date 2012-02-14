@@ -15,7 +15,7 @@ if (!isset ($_GET['vid']) || !is_numeric ($_GET['vid'])) App::Throw404();
 
 
 // Verify video exists
-$data = array ('video_id' => $_GET['vid'], 'status' => 'approved');
+$data = array ('video_id' => $_GET['vid'], 'status' => 'approved', 'private' => '0', 'gated' => '0');
 $id = Video::Exist ($data);
 if (!$id) App::Throw404();
 

@@ -44,6 +44,14 @@ class View {
 
 
 
+
+    /**
+     * Determine which theme to obtain requested file path from.
+     * @param string $file Path of file to check relative to theme root
+     * @return mixed If file is found in current theme, it's path is returned
+     * If file is not found in current theme, but rather default theme, it's path is returned.
+     * Returns boolean false if file is not found in either theme.
+     */
     static function GetFallbackPath ($file) {
         if (file_exists (self::$vars->config->theme_path . "/$file")) {
             return self::$vars->config->theme_path . "/$file";
@@ -54,6 +62,16 @@ class View {
         }
     }
 
+
+
+
+    /**
+     * Determine which theme to obtain requested file URL from.
+     * @param string $file Path of file to check relative to theme root
+     * @return mixed If file is found in current theme, it's URL is returned
+     * If file is not found in current theme, but rather default theme, it's URL is returned.
+     * Returns boolean false if file is not found in either theme.
+     */
     static function GetFallbackUrl ($file) {
         if (file_exists (self::$vars->config->theme_path . "/$file")) {
             return self::$vars->config->theme_url . "/$file";
