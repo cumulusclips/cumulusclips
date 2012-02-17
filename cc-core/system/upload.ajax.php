@@ -57,10 +57,9 @@ try {
     }
 
 
-
     ### Validate video extension
     $extension = Functions::GetExtension ($_FILES['upload']['name']);
-    if (!in_array ($extension, Functions::GetVideoTypes())) {
+    if (!preg_match ("/$extension/i", Functions::GetVideoTypes ('fileDesc'))) {
         throw new Exception (Language::GetText('error_uploadify_extension'));
     }
 
