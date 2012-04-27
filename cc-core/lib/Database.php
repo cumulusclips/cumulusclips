@@ -35,6 +35,7 @@ class Database {
         
         // Re-connect if connection is no longer valid
         if (!mysql_ping ($this->dbc)) {
+            $this->Close();
             self::$db = new self;
             $this->dbc = self::$db->dbc;
         }
@@ -111,6 +112,16 @@ class Database {
     // Return error thrown my MySQL
     public function Error() {
         return mysql_error();
+    }
+
+
+
+    /**
+     * Close current database connection
+     * @return boolean Returns true if connection was successfully close, false otherwise
+     */
+    public function Close() {
+        return mysql_close ($this->dbc);
     }
 
 
