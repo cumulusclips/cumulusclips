@@ -14,6 +14,8 @@ $ffmpeg_path = Settings::Get ('ffmpeg');
 $qt_faststart_path = DOC_ROOT . '/cc-core/system/bin/qtfaststart';
 
 
+// Set MySQL wait_timeout to 10 hours to prevent 'MySQL server has gone away' errors
+$db->Query ("SET @@session.wait_timeout=36000");
 
 
 // Debug Log
