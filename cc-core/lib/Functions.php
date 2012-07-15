@@ -9,8 +9,7 @@ class Functions {
      */
     static function CreateSlug ($string) {
         $slug = strtolower (preg_replace ('/[^a-z0-9]+/i', '-', $string));
-        $slug = substr($slug, 0, 1) == '-' ? substr($slug,1) : $slug;
-        $slug = substr($slug, -1) == '-' ? substr($slug,0, -1) : $slug;
+        $slug = preg_replace ('/^-|-$/', '', $slug);
         return $slug;
     }
 

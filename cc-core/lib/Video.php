@@ -44,7 +44,7 @@ class Video {
         $this->duration = (substr ($this->duration,0,3) == '00:')?substr ($this->duration,3):$this->duration;
         $this->slug = Functions::CreateSlug($this->title);
         $this->date_created = Functions::GmtToLocal ($this->date_created);
-        $this->url = HOST . '/videos/' . $this->video_id . '/' . $this->slug;
+        $this->url = HOST . '/videos/' . $this->video_id . (!empty($this->slug) ? '/' . $this->slug : '');
         Plugin::Trigger ('video.get');
 
     }

@@ -11,6 +11,9 @@ RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
 
 ### Main Pages
 
+RewriteRule ^videos/([0-9]+)/(.*)$ cc-core/controllers/play.php?vid=$1 [NC,QSA,L]
+RewriteRule ^private/get/$ cc-core/controllers/play.php?get_private=true [NC,QSA,L]
+RewriteRule ^private/videos/([a-z0-9]+)/$ cc-core/controllers/play.php?private=$1 [NC,QSA,L]
 RewriteRule ^videos/$ cc-core/controllers/videos.php [NC,L]
 RewriteRule ^videos/page/([0-9]+)/$ cc-core/controllers/videos.php?page=$1 [NC,QSA,L]
 RewriteRule ^videos/(most-recent|most-viewed|most-discussed|most-rated)/$ cc-core/controllers/videos.php?load=$1 [NC,QSA,L]
@@ -19,9 +22,6 @@ RewriteRule ^videos/([a-z0-9\-]+)/$ cc-core/controllers/videos.php?category=$1 [
 RewriteRule ^videos/([a-z-]+)/page/([0-9]+)/$ cc-core/controllers/videos.php?category=$1&page=$2 [NC,QSA,L]
 RewriteRule ^videos/([0-9]+)/comments/$ cc-core/controllers/comments.php?vid=$1 [NC,QSA,L]
 RewriteRule ^videos/([0-9]+)/comments/page/([0-9]+)/$ cc-core/controllers/comments.php?vid=$1&page=$2 [NC,QSA,L]
-RewriteRule ^videos/([0-9]+)/(.*)$ cc-core/controllers/play.php?vid=$1 [NC,QSA,L]
-RewriteRule ^private/get/$ cc-core/controllers/play.php?get_private=true [NC,QSA,L]
-RewriteRule ^private/videos/([a-z0-9]+)/$ cc-core/controllers/play.php?private=$1 [NC,QSA,L]
 RewriteRule ^private/comments/([a-z0-9]+)/$ cc-core/controllers/comments.php?private=$1 [NC,QSA,L]
 RewriteRule ^private/comments/([a-z0-9]+)/page/([a-z0-9]+)/$ cc-core/controllers/comments.php?private=$1&page=$2 [NC,QSA,L]
 RewriteRule ^members/$ cc-core/controllers/members.php [NC,L]

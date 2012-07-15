@@ -39,25 +39,28 @@ if (count ($version) > 1){
 
 
 // Retrieve php path
-@exec ('which php', $which_results);
-if (empty ($which_results)) {
-
-    // Find PHP path using whereis
-    @exec ('whereis php', $whereis_results);
-    $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
-    if (!empty ($whereis_results)) {
-        $settings->php = $whereis_results;
-        $php_path = true;
-    } else {
-        $settings->php = '';
-        $warnings = true;
-        $php_path = false;
-        $disable_uploads = true;
+@exec ('whereis php', $whereis_results);
+$whereis_results = explode (' ', preg_replace ('/^php:\s?/','', $whereis_results[0]));
+if (!empty ($whereis_results)) {
+    
+    foreach ($whereis_results as $phpExe) {
+        $phpCliResults = null;
+        @exec($phpExe . ' -v 2>&1', $phpCliResults);
+        $phpCliResults = implode(' ', $phpCliResults);
+        if (preg_match('/\(cli\)/',$phpCliResults)) {
+            $settings->php = $phpExe;
+            $php_path = true;
+            break;
+        }
     }
+    
+}
 
-} else {
-    $settings->php = $which_results[0];
-    $php_path = true;
+if (!isset($php_path)) {
+    $settings->php = '';
+    $warnings = true;
+    $php_path = false;
+    $disable_uploads = true;
 }
 
 
