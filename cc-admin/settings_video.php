@@ -100,33 +100,34 @@ if (isset ($_POST['submitted'])) {
     }
 
 
-    // Validate php path
+    // Validate php-cli path
     if (empty ($_POST['php'])) {
-
-        // Find php path (using which)
-        @exec ('which php', $which_results);
-        if (empty ($which_results)) {
-
-            // Find PHP path (using whereis)
-            @exec ('whereis php', $whereis_results);
-            $whereis_results = preg_replace ('/^php:\s?/','', $whereis_results[0]);
-            if (empty ($whereis_results)) {
-                $warnings['php'] = 'Unable to locate path to PHP';
-                $data['php'] = '';
-            } else {
-                $data['php'] = $whereis_results;
-            }
-
-        } else {
-            $data['php'] = $which_results[0];
-        }
-
-    } else if (file_exists ($_POST['php'])) {
-        $data['php'] = rtrim ($_POST['php'], '/');
+        @exec('whereis php', $whereis_results);
+        $phpPaths = explode (' ', preg_replace ('/^php:\s?/','', $whereis_results[0]));
+    } else if (!empty ($_POST['php']) && file_exists ($_POST['php'])) {
+        $phpPaths = array(rtrim ($_POST['php'], '/'));
     } else {
-        $errors['php'] = 'Invalid path to PHP';
+        $phpPaths = array();
+    }
+    
+    $phpBinary = false;
+    foreach ($phpPaths as $phpExe) {
+        if (!is_executable($phpExe)) continue;
+        @exec($phpExe . ' -r "' . "echo 'cliBinary';" . '" 2>&1 | grep cliBinary', $phpCliResults);
+        $phpCliResults = implode(' ', $phpCliResults);
+        if (!empty($phpCliResults)) {
+            $phpCliBinary = $phpExe;
+            break;
+        }
     }
 
+    if ($phpCliBinary) {
+        $data['php'] = $phpCliBinary;
+    } else {
+        $warnings['php'] = 'Unable to locate path to PHP-CLI';
+        $data['php'] = '';
+    }
+        
 
 
     // Validate ffmpeg path

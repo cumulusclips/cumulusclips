@@ -38,22 +38,20 @@ if (count ($version) > 1){
 
 
 
-// Retrieve php path
-@exec ('whereis php', $whereis_results);
+// Retrieve php-cli path
+@exec('whereis php', $whereis_results);
 $whereis_results = explode (' ', preg_replace ('/^php:\s?/','', $whereis_results[0]));
 if (!empty ($whereis_results)) {
-    
     foreach ($whereis_results as $phpExe) {
-        $phpCliResults = null;
-        @exec($phpExe . ' -v 2>&1', $phpCliResults);
+        if (!is_executable($phpExe)) continue;
+        @exec($phpExe . ' -r "' . "echo 'cliBinary';" . '" 2>&1 | grep cliBinary', $phpCliResults);
         $phpCliResults = implode(' ', $phpCliResults);
-        if (preg_match('/\(cli\)/',$phpCliResults)) {
+        if (!empty($phpCliResults)) {
             $settings->php = $phpExe;
             $php_path = true;
             break;
         }
     }
-    
 }
 
 if (!isset($php_path)) {
