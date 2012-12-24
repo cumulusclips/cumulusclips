@@ -9,7 +9,7 @@ define ('CONVERSION_LOG', LOG . '/converter.log');
 define ('QUERY_LOG', LOG . '/query.log');
 define ('DB_ERR_LOG', LOG . '/db_errors.log');
 define ('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
-define ('CURRENT_VERSION', '1.3.0');
+define ('CURRENT_VERSION', '1.3.1');
 define ('LOG_QUERIES', false);
 define ('DATE_FORMAT', 'Y-m-d H:i:s');
 define ('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
