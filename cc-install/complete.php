@@ -2,10 +2,10 @@
 
 // Send user to appropriate step
 if (!isset ($settings->completed)) {
-    header ("Location: " . HOST . '/install/');
+    header ("Location: " . HOST . '/cc-install/');
     exit();
 } else if (!in_array ('site-details', $settings->completed)) {
-    header ("Location: " . HOST . '/install/?site-details');
+    header ("Location: " . HOST . '/cc-install/?site-details');
     exit();
 }
 

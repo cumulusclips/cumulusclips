@@ -2,13 +2,13 @@
 
 // Send user to appropriate step
 if (!isset ($settings->completed)) {
-    header ("Location: " . HOST . '/install/');
+    header ("Location: " . HOST . '/cc-install/');
     exit();
 } else if (!in_array ('database', $settings->completed)) {
-    header ("Location: " . HOST . '/install/?database');
+    header ("Location: " . HOST . '/cc-install/?database');
     exit();
 } else if (in_array ('site-details', $settings->completed)) {
-    header ("Location: " . HOST . '/install/?complete');
+    header ("Location: " . HOST . '/cc-install/?complete');
     exit();
 }
 
@@ -76,7 +76,7 @@ if (isset ($_POST['submitted'])) {
         $settings->admin_email = $email;
         $settings->completed[] = 'site-details';
         $_SESSION['settings'] = serialize ($settings);
-        header ("Location: " . HOST . '/install/?complete');
+        header ("Location: " . HOST . '/cc-install/?complete');
         exit();
 
     } else {

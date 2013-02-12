@@ -15,7 +15,7 @@
 
             <div class="block">
 
-                <form method="post" action="<?php echo HOST; ?>/install/?database">
+                <form method="post" action="<?php echo HOST; ?>/cc-install/?database">
                 <div class="row-shift">An asterisk (*) denotes required field</div>
 
                 <div class="row <?php echo (isset ($errors['hostname'])) ? 'errors' : ''; ?>"><label>*Database Host:</label><input type="text" class="text" name="hostname" value="<?php echo (isset ($hostname)) ? $hostname : 'localhost'; ?>" /></div>

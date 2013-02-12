@@ -15,7 +15,7 @@
 
             <div class="block">
 
-                <form method="post" action="<?php echo HOST; ?>/install/?site-details">
+                <form method="post" action="<?php echo HOST; ?>/cc-install/?site-details">
 
                 <div class="row-shift"><h2>Site Configuration</h2></div>
                 <div class="row <?php echo (isset ($errors['url'])) ? 'errors' : ''; ?>"><label>Base URL:</label><input type="text" class="text" name="url" value="<?php echo (isset ($url)) ? $url : HOST; ?>" /></div>

@@ -14,7 +14,7 @@
                     few steps, and after a couple of minutes your video site
                     will be ready for use.
                 </p>
-                <p><a href="<?php echo HOST; ?>/install/?requirements" class="button">Continue</a></p>
+                <p><a href="<?php echo HOST; ?>/cc-install/?requirements" class="button">Continue</a></p>
             </div>
 
         </div>
