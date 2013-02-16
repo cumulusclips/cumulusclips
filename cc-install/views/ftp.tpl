@@ -15,7 +15,7 @@
 
             <div class="block">
 
-                <form method="post" action="<?php echo HOST; ?>/install/?ftp">
+                <form method="post" action="<?php echo HOST; ?>/cc-install/?ftp">
                 <div class="row-shift"><a href="#" class="more-info why" data-content="why" title="Why do we ask">Why do we ask</a></div>
 
                 <div class="row <?php echo (isset ($errors['hostname'])) ? 'errors' : ''; ?>"><label>FTP Host:</label><input type="text" class="text" name="hostname" value="<?php echo (isset ($hostname)) ? $hostname : 'localhost'; ?>" /></div>

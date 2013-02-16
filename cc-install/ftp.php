@@ -2,13 +2,13 @@
 
 // Send user to appropriate step
 if (!isset ($settings->completed)) {
-    header ("Location: " . HOST . '/install/');
+    header ("Location: " . HOST . '/cc-install/');
     exit();
 } else if (!in_array ('requirements', $settings->completed)) {
-    header ("Location: " . HOST . '/install/?requirements');
+    header ("Location: " . HOST . '/cc-install/?requirements');
     exit();
 } else if (in_array ('ftp', $settings->completed)) {
-    header ("Location: " . HOST . '/install/?database');
+    header ("Location: " . HOST . '/cc-install/?database');
     exit();
 }
 
@@ -50,7 +50,7 @@ if ($native) {
     $settings->ftp_ssl = false;
     $settings->completed[] = 'ftp';
     $_SESSION['settings'] = serialize ($settings);
-    header ("Location: " . HOST . '/install/?database');
+    header ("Location: " . HOST . '/cc-install/?database');
     exit();
 }
 
@@ -144,7 +144,7 @@ if (isset ($_POST['submitted'])) {
             $settings->ftp_ssl = ($method == 'ftps') ? true : false;
             $settings->completed[] = 'ftp';
             $_SESSION['settings'] = serialize ($settings);
-            header ("Location: " . HOST . '/install/?database');
+            header ("Location: " . HOST . '/cc-install/?database');
             exit();
 
         } catch (Exception $e) {

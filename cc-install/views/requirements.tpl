@@ -198,9 +198,9 @@
 
                     <p>
                         <?php if ($continue): ?>
-                            <a href="<?php echo HOST; ?>/install/?ftp" class="button">Continue to next step</a>
+                            <a href="<?php echo HOST; ?>/cc-install/?ftp" class="button">Continue to next step</a>
                         <?php else: ?>
-                            <a href="<?php echo HOST; ?>/install/?requirements" class="button">Check Again</a>
+                            <a href="<?php echo HOST; ?>/cc-install/?requirements" class="button">Check Again</a>
                         <?php endif; ?>
                     </p>
 

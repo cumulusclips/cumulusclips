@@ -14,10 +14,10 @@ $first_run = null;
 
 
 // Execute post install / first run operations
-if (isset ($_GET['first_run']) && file_exists (DOC_ROOT . '/install')) {
+if (isset ($_GET['first_run']) && file_exists (DOC_ROOT . '/cc-install')) {
     Settings::Set ('version', CURRENT_VERSION);
     Filesystem::Open();
-    Filesystem::Delete (DOC_ROOT . '/install');
+    Filesystem::Delete (DOC_ROOT . '/cc-install');
     Filesystem::Close();
     $first_run = true;
 }

@@ -12,7 +12,7 @@ $HOST = $PROTOCOL . $HOSTNAME . $PORT . $PATH;
 
 // Establish vars
 define ('DOC_ROOT', dirname (dirname (__FILE__)));
-define ('INSTALL', DOC_ROOT . '/install');
+define ('INSTALL', DOC_ROOT . '/cc-install');
 define ('HOST', $HOST);
 $action = null;
 

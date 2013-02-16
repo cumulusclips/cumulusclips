@@ -63,13 +63,13 @@ if (isset ($_POST['submitted_login'])) {
 
         } else {
             View::$vars->message = Language::GetText('error_invalid_login');
-            View::$vars->message_type = 'error';
+            View::$vars->message_type = 'errors';
             View::$vars->login_submit = NULL;
         }
 
     } else {
         View::$vars->message = Language::GetText('error_general');
-        View::$vars->message_type = 'error';
+        View::$vars->message_type = 'errors';
     }
 	
 }
@@ -112,12 +112,12 @@ if (isset ($_POST['submitted_forgot'])) {
 
         } else {
             View::$vars->message = Language::GetText('error_no_users_email');
-            View::$vars->message_type = 'error';
+            View::$vars->message_type = 'errors';
         }
 
     } else {
         View::$vars->message = Language::GetText('error_email');
-        View::$vars->message_type = 'error';
+        View::$vars->message_type = 'errors';
     }
 	
 }
