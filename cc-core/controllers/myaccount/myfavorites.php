@@ -41,7 +41,7 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid']) && $_GET['vid'] != 0) {
 
 
 // Retrieve total count
-$query = "SELECT " . DB_PREFIX . "favorites.video_id FROM " . DB_PREFIX . "favorites INNER JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "favorites.video_id = " . DB_PREFIX . "videos.video_id WHERE status = 'approved' AND private = '0' AND " . DB_PREFIX . "favorites.user_id = " . View::$vars->user->user_id;
+$query = "SELECT " . DB_PREFIX . "favorites.video_id FROM " . DB_PREFIX . "favorites INNER JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "favorites.video_id = " . DB_PREFIX . "videos.video_id WHERE status = 'approved' AND private = '0' AND " . DB_PREFIX . "favorites.user_id = " . View::$vars->user->user_id . " ORDER BY " . DB_PREFIX . "favorites.date_created DESC";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 
