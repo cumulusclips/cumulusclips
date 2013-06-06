@@ -57,7 +57,7 @@ if (isset ($_POST['submitted'])) {
         Plugin::Trigger ('privacy_settings.update_privacy');
     } else {
         View::$vars->message = Language::GetText('error_general');
-        View::$vars->message_type = 'error';
+        View::$vars->message_type = 'errors';
     }
 
 }

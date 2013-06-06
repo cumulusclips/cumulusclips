@@ -132,7 +132,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         View::$vars->message = Language::GetText('errors_below');
         View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
-        View::$vars->message_type = 'error';
+        View::$vars->message_type = 'errors';
     }
 
 }
