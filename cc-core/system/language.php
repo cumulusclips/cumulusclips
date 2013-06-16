@@ -5,7 +5,7 @@ include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
 
 
 // Node requested from language file
-if (isset ($_GET['get'])) {
+if (isset($_GET['action']) && $_GET['action'] == 'get') {
 
     // Return requested string
     if (!empty ($_POST['node'])) {
@@ -21,7 +21,7 @@ if (isset ($_GET['get'])) {
 
 
 // Language change requested
-} else if (isset ($_GET['set'])) {
+} else if (isset($_GET['action']) && $_GET['action'] == 'set') {
 
     // Set language to user's request
     $active_languages = Language::GetActiveLanguages();

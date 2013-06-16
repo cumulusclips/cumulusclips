@@ -34,6 +34,8 @@ App::LoadClass ('Language');
 App::LoadClass ('View');
 App::LoadClass ('Plugin');
 App::LoadClass ('Filesystem');
+App::LoadClass ('Router');
+App::LoadClass ('Route');
 
 
 // Retrieve site settings from DB

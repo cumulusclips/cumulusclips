@@ -13,11 +13,6 @@ $limit = 45000;
 
 
 
-### Verify if page was provided
-if (!isset ($_GET['page'])) App::Throw404();
-
-
-
 ### Count number of video xml files
 $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $result = $db->Query ($query);
