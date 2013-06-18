@@ -528,7 +528,7 @@ class Router
             'path' => 'actions/mobile-search',
             'location' => 'cc-core/system/mobile_search.ajax.php'
         ));
-        
-        return $routes;
+
+        return Plugin::triggerFilter('router.getRoutes', $routes);
     }
 }
