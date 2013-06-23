@@ -190,9 +190,13 @@ $('document').ready(function(){
 
 
 
-    // Toggle SMTP settings visibility based on SMTP enable field
-    $('#settings-email [name="smtp_enabled"]').change(function(){
-        $('#smtp_auth').toggleClass('hide');
+    // Toggle display of a block via select box change
+    $('select[data-toggle]').change(function(){
+        var targetBlock = '#' + $(this).data('toggle');
+        $(targetBlock).toggle({
+            complete:function(){$(targetBlock).trigger('toggle');},
+            duration:0
+        });
     });
 
 

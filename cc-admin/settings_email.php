@@ -240,7 +240,7 @@ include ('header.php');
 
             <div class="row <?=(isset ($errors['smtp_enabled'])) ? ' errors' : ''?>">
                 <label>SMTP Authentication:</label>
-                <select name="smtp_enabled" class="dropdown">
+                <select data-toggle="smtp_auth" name="smtp_enabled" class="dropdown">
                     <option value="1" <?=($data['smtp_enabled']=='1')?'selected="selected"':''?>>Enabled</option>
                     <option value="0" <?=($data['smtp_enabled']=='0')?'selected="selected"':''?>>Disabled</option>
                 </select>
