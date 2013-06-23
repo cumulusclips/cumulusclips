@@ -56,12 +56,11 @@ $config->theme_default = 'cumulus';
 $config->theme_url_default = HOST . '/cc-content/themes/cumulus';
 $config->theme_path_default = THEMES_DIR . '/cumulus';
 
-$flv_url = Settings::Get('flv_url');
-$mobile_url = Settings::Get('mobile_url');
-$thumb_url = Settings::Get('thumb_url');
-$config->flv_url = (empty($flv_url)) ? HOST . '/cc-content/uploads/flv' : $flv_url;
-$config->mobile_url = (empty($mobile_url)) ? HOST . '/cc-content/uploads/mobile' : $mobile_url;
-$config->thumb_url = (empty($thumb_url)) ? HOST . '/cc-content/uploads/thumbs' : $thumb_url;
+$config->h264Url = HOST . '/cc-content/uploads/h264';
+$config->theoraUrl = HOST . '/cc-content/uploads/theora';
+$config->vp8Url = HOST . '/cc-content/uploads/vp8';
+$config->mobile_url = HOST . '/cc-content/uploads/mobile';
+$config->thumb_url = HOST . '/cc-content/uploads/thumbs';
 
 // Start session
 if (!headers_sent() && session_id() == '') @session_start();

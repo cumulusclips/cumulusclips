@@ -15,6 +15,7 @@ Plugin::Trigger ('play.start');
 View::$vars->logged_in = User::LoginCheck();
 View::$vars->tags = null;
 View::$vars->private = null;
+View::$vars->vp8Options = json_decode(Settings::Get('vp8Options'));
 
 
 

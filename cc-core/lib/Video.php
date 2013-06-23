@@ -156,7 +156,9 @@ class Video {
         // Delete files
         try {
             Filesystem::Open();
-            Filesystem::Delete (UPLOAD_PATH . '/flv/' . $video->filename . '.flv');
+            Filesystem::Delete (UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
+            Filesystem::Delete (UPLOAD_PATH . '/theora/' . $video->filename . '.ogv');
+            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8')) Filesystem::Delete (UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8');
             Filesystem::Delete (UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
             Filesystem::Delete (UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
             Filesystem::Close();

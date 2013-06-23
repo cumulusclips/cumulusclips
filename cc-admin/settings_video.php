@@ -1,14 +1,14 @@
 <?php
 
 // Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
+App::LoadClass('User');
 
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+Functions::RedirectIf($logged_in = User::LoginCheck(), HOST . '/login/');
+$admin = new User($logged_in);
+Functions::RedirectIf(User::CheckPermissions('admin_panel', $admin), HOST . '/myaccount/');
 $page_title = 'Video Settings';
 $data = array();
 $errors = array();
@@ -17,14 +17,14 @@ $message = null;
 
 $data['php'] = Settings::Get('php');
 $data['ffmpeg'] = Settings::Get('ffmpeg');
-$data['flv_options'] = Settings::Get('flv_options');
+$data['h264EncodingOptions'] = Settings::Get('h264EncodingOptions');
+$data['theoraEncodingOptions'] = Settings::Get('theoraEncodingOptions');
+$data['vp8Options'] = Settings::Get('vp8Options');
+$vp8Options = json_decode($data['vp8Options']);
 $data['mobile_options'] = Settings::Get('mobile_options');
 $data['thumb_options'] = Settings::Get('thumb_options');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
-$data['flv_url'] = Settings::Get('flv_url');
-$data['mobile_url'] = Settings::Get('mobile_url');
-$data['thumb_url'] = Settings::Get('thumb_url');
 
 
 
@@ -43,7 +43,6 @@ if (isset ($_POST['submitted'])) {
         $errors['debug_conversion'] = 'Invalid encoding log option';
     }
 
-
     // Validate video size limit
     if (!empty ($_POST['video_size_limit']) && is_numeric ($_POST['video_size_limit'])) {
         $data['video_size_limit'] = trim ($_POST['video_size_limit']);
@@ -51,54 +50,50 @@ if (isset ($_POST['submitted'])) {
         $errors['video_size_limit'] = 'Invalid video size limit';
     }
 
-
-    // Validate flv video url
-    if (!empty ($_POST['flv_url']) && !ctype_space ($_POST['flv_url'])) {
-        $data['flv_url'] = htmlspecialchars (trim ($_POST['flv_url']));
+    // Validate H.264 encoding options
+    if (!empty($_POST['h264EncodingOptions']) && !ctype_space($_POST['h264EncodingOptions'])) {
+        $data['h264EncodingOptions'] = trim($_POST['h264EncodingOptions']);
     } else {
-        $data['flv_url'] = '';
+        $errors['h264EncodingOptions'] = 'Invalid H.264 encoding options';
     }
 
-
-    // Validate mobile video url
-    if (!empty ($_POST['mobile_url']) && !ctype_space ($_POST['mobile_url'])) {
-        $data['mobile_url'] = htmlspecialchars (trim ($_POST['mobile_url']));
+    // Validate Theora encoding options
+    if (!empty($_POST['theoraEncodingOptions']) && !ctype_space($_POST['theoraEncodingOptions'])) {
+        $data['theoraEncodingOptions'] = trim($_POST['theoraEncodingOptions']);
     } else {
-        $data['mobile_url'] = '';
+        $errors['theoraEncodingOptions'] = 'Invalid Theora encoding options';
     }
 
-
-    // Validate video thumbnail url
-    if (!empty ($_POST['thumb_url']) && !ctype_space ($_POST['thumb_url'])) {
-        $data['thumb_url'] = htmlspecialchars (trim ($_POST['thumb_url']));
+    // Validate VP8 encoding enabled
+    if (isset($_POST['vp8EncodingEnabled']) && in_array($_POST['vp8EncodingEnabled'], array('1', '0'))) {
+        $vp8Options->enabled = $_POST['vp8EncodingEnabled'] == '1' ? true : false;
+        
+        // Validate VP8 encoding options
+        if ($vp8Options->enabled) {
+            if (!empty($_POST['vp8EncodingOptions']) && !ctype_space($_POST['vp8EncodingOptions'])) {
+                $vp8Options->options = trim($_POST['vp8EncodingOptions']);
+            } else {
+                $errors['vp8EncodingOptions'] = 'Invalid VP8 encoding options';
+            }
+        }
+        $data['vp8Options'] = json_encode($vp8Options);
     } else {
-        $data['thumb_url'] = '';
+        $errors['vp8EncodingEnabled'] = 'Invalid Theora encoding options';
     }
-
-
-    // Validate flv encoding options
-    if (!empty ($_POST['flv_options']) && !ctype_space ($_POST['flv_options'])) {
-        $data['flv_options'] = htmlspecialchars (trim ($_POST['flv_options']));
-    } else {
-        $errors['flv_options'] = 'Invalid flv encoding options';
-    }
-
 
     // Validate mobile encoding options
-    if (!empty ($_POST['mobile_options']) && !ctype_space ($_POST['mobile_options'])) {
-        $data['mobile_options'] = htmlspecialchars (trim ($_POST['mobile_options']));
+    if (!empty($_POST['mobile_options']) && !ctype_space($_POST['mobile_options'])) {
+        $data['mobile_options'] = trim($_POST['mobile_options']);
     } else {
         $errors['mobile_options'] = 'Invalid mobile encoding options';
     }
 
-
     // Validate thumbnail encoding options
-    if (!empty ($_POST['thumb_options']) && !ctype_space ($_POST['thumb_options'])) {
-        $data['thumb_options'] = htmlspecialchars (trim ($_POST['thumb_options']));
+    if (!empty($_POST['thumb_options']) && !ctype_space($_POST['thumb_options'])) {
+        $data['thumb_options'] = trim($_POST['thumb_options']);
     } else {
         $errors['thumb_options'] = 'Invalid thumbnail encoding options';
     }
-
 
     // Validate php-cli path
     if (empty ($_POST['php'])) {
@@ -128,8 +123,6 @@ if (isset ($_POST['submitted'])) {
         $data['php'] = '';
     }
         
-
-
     // Validate ffmpeg path
     if (empty ($_POST['ffmpeg'])) {
 
@@ -157,8 +150,6 @@ if (isset ($_POST['submitted'])) {
         $errors['ffmpeg'] = 'Invalid path to FFMPEG';
     }
 
-
-    
     // Update video if no errors were made
     if (empty ($errors)) {
 
@@ -180,6 +171,7 @@ if (isset ($_POST['submitted'])) {
             $message_type = 'success';
         }
 
+        
         foreach ($data as $key => $value) {
             Settings::Set ($key, $value);
         }
@@ -189,12 +181,10 @@ if (isset ($_POST['submitted'])) {
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
         $message_type = 'error';
     }
-
 }
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
@@ -236,43 +226,43 @@ include ('header.php');
                 <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
             </div>
 
-            <div class="row <?=(isset ($errors['flv_options'])) ? ' errors' : ''?>">
-                <label>FLV Options:</label>
-                <input class="text" type="text" name="flv_options" value="<?=$data['flv_options']?>" />
+            <div class="row <?=(isset($errors['h264EncodingOptions'])) ? ' errors' : ''?>">
+                <label>H.264 Encoding Options:</label>
+                <input class="text" type="text" name="h264EncodingOptions" value="<?=htmlspecialchars($data['h264EncodingOptions'])?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['mobile_options'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['theoraEncodingOptions'])) ? ' errors' : ''?>">
+                <label>Theora Encoding Options:</label>
+                <input class="text" type="text" name="theoraEncodingOptions" value="<?=htmlspecialchars($data['theoraEncodingOptions'])?>" />
+            </div>
+
+            <div class="row <?=(isset($errors['vp8EncodingEnabled'])) ? ' errors' : ''?>">
+                <label>VP8 Encoding:</label>
+                <select data-toggle="vp8EncodingOptions" name="vp8EncodingEnabled" class="dropdown">
+                    <option value="1" <?=($vp8Options->enabled == true)?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($vp8Options->enabled == false)?'selected="selected"':''?>>Disabled</option>
+                </select>
+            </div> 
+            
+            <div id="vp8EncodingOptions" class="row <?=(isset($errors['vp8EncodingOptions'])) ? ' errors' : ''?> <?=($vp8Options->enabled == false) ? 'hide' : ''?>">
+                <label>VP8 Encoding Options:</label>
+                <input class="text" type="text" name="vp8EncodingOptions" value="<?=htmlspecialchars($vp8Options->options)?>" />
+            </div>
+            
+            <div class="row <?=(isset($errors['mobile_options'])) ? ' errors' : ''?>">
                 <label>Mobile Options:</label>
-                <input class="text" type="text" name="mobile_options" value="<?=$data['mobile_options']?>" />
+                <input class="text" type="text" name="mobile_options" value="<?=htmlspecialchars($data['mobile_options'])?>" />
             </div>
 
             <div class="row <?=(isset ($errors['thumb_options'])) ? ' errors' : ''?>">
                 <label>Thumbnail Options:</label>
-                <input class="text" type="text" name="thumb_options" value="<?=$data['thumb_options']?>" />
+                <input class="text" type="text" name="thumb_options" value="<?=htmlspecialchars($data['thumb_options'])?>" />
             </div>
 
             <div class="row <?=(isset ($errors['video_size_limit'])) ? ' errors' : ''?>">
                 <label>Video Site Limit:</label>
                 <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
                 (Bytes)
-            </div>
-
-            <div class="row <?=(isset ($errors['flv_url'])) ? ' errors' : ''?>">
-                <label>FLV Video URL:</label>
-                <input class="text" type="text" name="flv_url" value="<?=$data['flv_url']?>" />
-                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/flv/'">More Info</a>
-            </div>
-
-            <div class="row <?=(isset ($errors['mobile_url'])) ? ' errors' : ''?>">
-                <label>Mobile Video URL:</label>
-                <input class="text" type="text" name="mobile_url" value="<?=$data['mobile_url']?>" />
-                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/mobile/'">More Info</a>
-            </div>
-
-            <div class="row <?=(isset ($errors['thumb_url'])) ? ' errors' : ''?>">
-                <label>Thumbnail URL:</label>
-                <input class="text" type="text" name="thumb_url" value="<?=$data['thumb_url']?>" />
-                <a class="more-info" title="If left blank, defaults to '<?=HOST?>/cc-content/uploads/thumbs/'">More Info</a>
             </div>
 
             <div class="row-shift">
