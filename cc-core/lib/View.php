@@ -1,45 +1,36 @@
 <?php
 
-class View {
-    
+class View
+{
     // Object Properties
     public static $options;
     public static $vars;
 
-
-
-
     /**
      * Initialize view and set template & layout properties
-     * @global object $db Instance of database object
-     * @global object $config Site configuration settings
      * @param string $page [optional] Page whose information to load
      * @return void View is initialized
      */
-    static function InitView ($page = null) {
-
-        if (!empty (self::$vars)) return true;
-        
-        global $db, $config;
+    static function InitView($page = null)
+    {
         self::$vars = new stdClass();
-        self::$vars->db = $db;
-        self::$vars->config = $config;
+        self::$vars->db = Registry::get('db');
+        self::$vars->config = Registry::get('config');
 
         self::$options = new stdClass();
         self::$options->layout = 'default';
-        self::$options->header = self::GetFallbackPath ('layouts/' . self::$options->layout . '.header.tpl');
-        self::$options->footer = self::GetFallbackPath ('layouts/' . self::$options->layout . '.footer.tpl');
+        self::$options->header = self::GetFallbackPath('layouts/' . self::$options->layout . '.header.tpl');
+        self::$options->footer = self::GetFallbackPath('layouts/' . self::$options->layout . '.footer.tpl');
         self::$options->blocks = array();
 
         // Load page's meta information into memory for use in templates
         if ($page) {
             self::$options->page = $page;
-            self::$vars->meta = Language::GetMeta ($page);
-            if (empty (self::$vars->meta->title)) self::$vars->meta->title = $config->sitename;
+            self::$vars->meta = Language::GetMeta($page);
+            if (empty (self::$vars->meta->title)) self::$vars->meta->title = self::$config->sitename;
         }
 
-        Plugin::Trigger ('view.init');
-
+        Plugin::triggerEvent('view.init');
     }
 
 
@@ -52,11 +43,13 @@ class View {
      * If file is not found in current theme, but rather default theme, it's path is returned.
      * Returns boolean false if file is not found in either theme.
      */
-    static function GetFallbackPath ($file) {
-        if (file_exists (self::$vars->config->theme_path . "/$file")) {
-            return self::$vars->config->theme_path . "/$file";
-        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
-            return self::$vars->config->theme_path_default . "/$file";
+    static function GetFallbackPath($file)
+    {
+        $config = Registry::get('config');
+        if (file_exists($config->theme_path . "/$file")) {
+            return $config->theme_path . "/$file";
+        } else if (file_exists($config->theme_path_default . "/$file")) {
+            return $config->theme_path_default . "/$file";
         } else {
             return false;
         }
@@ -72,11 +65,13 @@ class View {
      * If file is not found in current theme, but rather default theme, it's URL is returned.
      * Returns boolean false if file is not found in either theme.
      */
-    static function GetFallbackUrl ($file) {
-        if (file_exists (self::$vars->config->theme_path . "/$file")) {
-            return self::$vars->config->theme_url . "/$file";
-        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
-            return self::$vars->config->theme_url_default . "/$file";
+    static function GetFallbackUrl($file)
+    {
+        $config = Registry::get('config');
+        if (file_exists($config->theme_path . "/$file")) {
+            return $config->theme_url . "/$file";
+        } else if (file_exists($config->theme_path_default . "/$file")) {
+            return $config->theme_url_default . "/$file";
         } else {
             return false;
         }

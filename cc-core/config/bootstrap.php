@@ -24,6 +24,7 @@ App::MaintCheck();
 include_once('config.php');
 
 // Load Main Classes
+App::LoadClass('Registry');
 App::LoadClass('Database');
 App::LoadClass('Settings');
 App::LoadClass('Functions');
@@ -36,6 +37,7 @@ App::LoadClass('Route');
 
 // Retrieve site settings from DB
 $db = Database::GetInstance();
+Registry::set('db', $db);
 Settings::LoadSettings();
 
 // General Site Settings from DB
@@ -76,6 +78,7 @@ define('THEME', HOST . '/cc-content/themes/' . $theme);
 define('THEME_PATH', THEMES_DIR . '/' . $theme);
 $config->theme_url = HOST . '/cc-content/themes/' . $theme;
 $config->theme_path = THEMES_DIR . '/' . $theme;
+Registry::set('config', $config);
 
 // Load language
 Language::LoadLangPack(App::CurrentLang());

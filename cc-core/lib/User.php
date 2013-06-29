@@ -31,23 +31,21 @@ class User {
      * @param integer $id ID of record to be instantiated
      * @return void DB record's fields are loaded into object properties
      */
-    private function Get ($id) {
+    private function Get($id)
+    {
         $query = 'SELECT * FROM ' . DB_PREFIX . self::$table . ' WHERE ' . self::$id_name . "= $id";
-        $result = $this->db->Query ($query);
-        $row = $this->db->FetchAssoc ($result);
+        $result = $this->db->Query($query);
+        $row = $this->db->FetchAssoc($result);
         foreach ($row as $key => $value) {
             $this->$key = $value;
         }
 
         // User specific values
-        View::InitView();
-        $this->role = (empty ($this->role)) ? 'user' : $this->role;
-        $this->avatar_url = (empty ($this->avatar)) ? View::GetFallbackUrl ('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$this->avatar";
-        $this->date_created = Functions::GmtToLocal ($this->date_created);
-        $this->last_login = Functions::GmtToLocal ($this->last_login);
+        $this->role = (empty($this->role)) ? 'user' : $this->role;
+        $this->date_created = Functions::GmtToLocal($this->date_created);
+        $this->last_login = Functions::GmtToLocal($this->last_login);
         $this->video_count = $this->GetVideoCount();
-        Plugin::Trigger ('user.get');
-
+        Plugin::triggerEvent('user.get', $this);
     }
 
 
@@ -474,7 +472,13 @@ class User {
         Plugin::Trigger ('user.approve');
 
     }
-
+    
+    /**
+     * Retrieve URL to current user's avatar
+     * @return string URL to user's uploaded avatar or default theme avatar if none is set
+     */
+    public function getAvatarUrl()
+    {
+        return (empty($this->avatar)) ? View::GetFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$this->avatar";
+    }
 }
-
-?>

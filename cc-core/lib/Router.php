@@ -407,23 +407,23 @@ class Router
         
         /** Mobile Routes **/
         
-        $route['mobile'] = new Route(array(
+        $routes['mobile'] = new Route(array(
             'path' => 'm',
             'location' => 'cc-core/controllers/mobile/index.php'
         ));
         
-        $route['mobileBrowseVideos'] = new Route(array(
+        $routes['mobileBrowseVideos'] = new Route(array(
             'path' => 'm/v',
             'location' => 'cc-core/controllers/mobile/videos.php'
         ));
         
-        $route['mobilePlay'] = new Route(array(
+        $routes['mobilePlay'] = new Route(array(
             'path' => 'm/v/([0-9+])',
             'location' => 'cc-core/controllers/mobile/play.php',
             'mappings' => array('vid')
         ));
         
-        $route['mobileSearch'] = new Route(array(
+        $routes['mobileSearch'] = new Route(array(
             'path' => 'm/s',
             'location' => 'cc-core/controllers/mobile/search.php'
         ));
@@ -431,8 +431,8 @@ class Router
         
         /** System Routes **/
         
-        $route['systemError'] = new Route(array(
-            'path' => 'system/error',
+        $routes['systemError'] = new Route(array(
+            'path' => 'system\-error',
             'location' => 'cc-core/controllers/system_error.php'
         ));
                 
