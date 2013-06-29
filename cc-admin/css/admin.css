@@ -650,6 +650,18 @@ SETTINGS STYLES
 
 
 
+/**********
+LOGS STYLES
+**********/
 
-
-
+#logs pre {
+    padding: 10px;
+    margin: 10px 0 0 10px;
+    font-family: Courier New, Courier New, monospace;
+    color: #444;
+    background-color: #F5F5F5;
+    width: 90%;
+    height: 350px;
+    overflow: scroll;
+    border: 1px solid #DDD;
+}
