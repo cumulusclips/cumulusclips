@@ -82,6 +82,7 @@
             <h3 class="appearance"><span>Appearance</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/themes.php">Themes</a></p>
+                <p><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></p>
                 <p><a href="<?=ADMIN?>/languages.php">Languages</a></p>
             </div>
         </div>

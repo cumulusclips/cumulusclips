@@ -18,7 +18,9 @@ $query_string = array();
 $categories = array();
 $message = null;
 $sub_header = null;
-
+$vp8Options = json_decode(Settings::Get('vp8Options'));
+$admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
+$admin_js[] = ADMIN . '/js/fancybox.js';
 
 
 // Retrieve Category names
@@ -190,6 +192,14 @@ include ('header.php');
 
 ?>
 
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
+<meta name="h264Url" content="<?=$config->h264Url?>" />
+<meta name="theoraUrl" content="<?=$config->theoraUrl?>" />
+<meta name="thumbUrl" content="<?=$config->thumb_url?>" />
+<?php if ($vp8Options->enabled): ?>
+    <meta name="vp8Url" content="<?=$config->vp8Url?>" />
+<?php endif; ?>
+
 <div id="videos">
 
     <h1><?=$header?></h1>
@@ -244,15 +254,9 @@ include ('header.php');
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td class="video-title">
                             <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a><br />
-                            <div class="record-actions invisible">
-
-                                <?php if (in_array ($status, array ('approved','featured'))): ?>
-                                    <a href="<?=$video->url?>/" target="_ccsite">Watch</a>
-                                <?php endif; ?>
-
-
+                            <div class="record-actions">
+                                <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
                                 <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
-
 
                                 <?php if ($status == 'approved'): ?>
                                     <?php if ($video->featured == 1): ?>
@@ -261,12 +265,14 @@ include ('header.php');
                                         <a href="<?=$pagination->GetURL('feature='.$video->video_id)?>">Feature</a>
                                     <?php endif ?>
                                 <?php endif; ?>
-
                                     
                                 <?php if ($status == 'featured'): ?>
                                     <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
                                 <?php endif; ?>
 
+                                <?php if (in_array ($status, array ('approved','featured'))): ?>
+                                    <a href="<?=$video->url?>/" target="_ccsite">Go to Video</a>
+                                <?php endif; ?>
 
                                 <?php if ($status == 'pending'): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
@@ -275,7 +281,6 @@ include ('header.php');
                                 <?php elseif ($status == 'banned'): ?>
                                     <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
                                 <?php endif; ?>
-
 
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
@@ -295,7 +300,15 @@ include ('header.php');
     <?php else: ?>
         <div class="block"><strong>No videos found</strong></div>
     <?php endif; ?>
+        
+    <video width="600" height="337" controls="controls" poster="">
+        <source src="" type="video/mp4" />
+        <source src="" type="video/ogg" />
+        <?php if ($vp8Options->enabled): ?>
+            <source src="" type="video/webm" />
+        <?php endif; ?>
+    </video>
 
 </div>
-
+    
 <?php include ('footer.php'); ?>

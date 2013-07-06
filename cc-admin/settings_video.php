@@ -25,6 +25,7 @@ $data['mobile_options'] = Settings::Get('mobile_options');
 $data['thumb_options'] = Settings::Get('thumb_options');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
+$data['keepOriginalVideo'] = Settings::Get('keepOriginalVideo');
 
 
 
@@ -48,6 +49,13 @@ if (isset ($_POST['submitted'])) {
         $data['video_size_limit'] = trim ($_POST['video_size_limit']);
     } else {
         $errors['video_size_limit'] = 'Invalid video size limit';
+    }
+
+    // Validate video size limit
+    if (isset($_POST['keepOriginalVideo']) && in_array ($_POST['keepOriginalVideo'], array ('1', '0'))) {
+        $data['keepOriginalVideo'] = trim($_POST['keepOriginalVideo']);
+    } else {
+        $errors['keepOriginalVideo'] = 'Invalid keep original video option';
     }
 
     // Validate H.264 encoding options
@@ -264,6 +272,14 @@ include('header.php');
                 <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
                 (Bytes)
             </div>
+            
+            <div class="row <?=(isset($errors['keepOriginalVideo'])) ? ' errors' : ''?>">
+                <label>Keep Original Video:</label>
+                <select name="keepOriginalVideo" class="dropdown">
+                    <option value="1" <?=($data['keepOriginalVideo'] == '1')?'selected="selected"':''?>>Keep</option>
+                    <option value="0" <?=($data['keepOriginalVideo'] == '0')?'selected="selected"':''?>>Discard</option>
+                </select>
+            </div> 
 
             <div class="row-shift">
                 <input type="hidden" name="submitted" value="TRUE" />

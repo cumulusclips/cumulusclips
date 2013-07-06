@@ -27,7 +27,7 @@ class View
         if ($page) {
             self::$options->page = $page;
             self::$vars->meta = Language::GetMeta($page);
-            if (empty (self::$vars->meta->title)) self::$vars->meta->title = self::$config->sitename;
+            if (empty (self::$vars->meta->title)) self::$vars->meta->title = self::$vars->config->sitename;
         }
 
         Plugin::triggerEvent('view.init');

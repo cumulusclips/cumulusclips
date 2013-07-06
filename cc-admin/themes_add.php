@@ -4,7 +4,6 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 App::LoadClass('User');
 
-
 // Establish page variables, objects, arrays, etc
 Functions::RedirectIf($logged_in = User::LoginCheck(), HOST . '/login/');
 $admin = new User($logged_in);
@@ -23,27 +22,27 @@ if (isset($_POST['submitted'])) {
     // Validate file upload
     if (!empty($_POST['tempFile']) && file_exists($_POST['tempFile'])) {
         
-        // Extract zip archive and move plugin
+        // Extract zip archive and move theme
         try {
 
-            // Extract plugin
+            // Extract theme
             $tempDirectory = dirname($_POST['tempFile']);
             Filesystem::Open();
             Filesystem::Extract($_POST['tempFile']);
 
             // Check for duplicates
             $temp_contents = array_diff(scandir($tempDirectory), array('.', '..', 'addon.zip'));
-            $pluginName = array_pop($temp_contents);
-            if (file_exists(DOC_ROOT . '/cc-content/plugins/' . $pluginName)) {
-                throw new Exception("Plugin cannot be added. It conflicts with another plugin.");
+            $themeName = array_pop($temp_contents);
+            if (file_exists(DOC_ROOT . '/cc-content/themes/' . $themeName)) {
+                throw new Exception("Theme cannot be added. It conflicts with another theme.");
             }
 
-            // Copy plugin contents to plugins dir
-            Filesystem::CopyDir($tempDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
+            // Copy theme contents to themes dir
+            Filesystem::CopyDir($tempDirectory . '/' . $themeName, DOC_ROOT . '/cc-content/themes/' . $themeName);
 
-            // Validate Plugin
-            if (!Plugin::ValidPlugin($pluginName)) {
-                throw new Exception("Plugin contains errors. Please report this to it's developer");
+            // Validate theme
+            if (!Functions::ValidTheme($themeName)) {
+                throw new Exception("Theme contains errors. Please report this to it's developer");
             }
 
             // Clean up
@@ -52,8 +51,8 @@ if (isset($_POST['submitted'])) {
             Filesystem::Close();
 
             // Display success message
-            $plugin_info = Plugin::GetPluginInfo($pluginName);
-            $message = $plugin_info->name . ' has been added.';
+            $xml = simplexml_load_file(THEMES_DIR . '/' . $themeName . '/theme.xml');
+            $message = $xml->name . ' has been added.';
             $message_type = 'success';
 
         } catch (Exception $e) {
@@ -72,7 +71,7 @@ if (isset($_POST['submitted'])) {
                 }
             }
 
-        }   //  END extract and move plugin
+        }   //  END extract and move theme
 
     } else {
         $message = 'Invalid file upload';
@@ -85,22 +84,21 @@ if (isset($_POST['submitted'])) {
 include('header.php');
 
 ?>
-
 <div id="plugins-add">
 
-    <h1>Add New Plugin</h1>
+    <h1>Add New Theme</h1>
 
     <div class="message <?=$message_type?>"><?=$message?></div>
 
     <div class="block">
 
-        <p class="row-shift">If you have a plugin in .zip format use this form
+        <p class="row-shift">If you have a theme in .zip format use this form
         to upload and add it to the system.</p>
 
-        <form name="uploadify" action="<?=ADMIN?>/plugins_add.php" method="post">
+        <form name="uploadify" action="<?=ADMIN?>/themes_add.php" method="post">
 
             <div class="row">
-                <label>Plugin Zip File:</label>
+                <label>Theme Zip File:</label>
                 <input id="upload" type="file" name="upload" />
                 <input id="upload_button" class="button" type="button" value="Upload" />
                 <input type="hidden" name="uploadLimit" value="<?=1024*1024*100?>" />

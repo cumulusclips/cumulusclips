@@ -475,13 +475,15 @@ try {
         // Debug Log
         $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Deleting raw video...') : null;
 
-        ### Delete raw videos & pre-faststart files
+        ### Delete pre-faststart files
         Filesystem::Open();
-        Filesystem::Delete ($raw_video);
         Filesystem::Delete ($h264TempFilePath);
         Filesystem::Delete ($mobile_temp);
 
-
+        // Delete original video
+        if (Settings::Get('keepOriginalVideo') != '1') {
+            Filesystem::Delete ($raw_video);
+        }
 
         ### Delete encoding log files
         if ($config->debug_conversion) {

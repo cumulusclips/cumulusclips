@@ -3,7 +3,7 @@ var settings = retrieveSettings();
 var customSlug = false;
 var baseURL = $('meta[name="baseURL"]').attr('content');
 
-$('document').ready(function(){
+$(document).ready(function(){
 
     $("#sidebar h3").disableSelection();    // Disable selection (<= IE8 fix)
 
@@ -15,15 +15,6 @@ $('document').ready(function(){
         $(this).next().slideToggle('fast');
         updateSettings(name, updatedSetting);
     });
-
-
-
-
-    // Display record actions when hovering over record
-    $('.list tr').hover(function(){$(this).find('.record-actions').toggleClass('invisible');});
-    
-
-
 
     // Trigger confirmation popup for confirm action links
     $('.confirm').click(function() {
