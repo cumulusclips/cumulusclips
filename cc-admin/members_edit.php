@@ -166,7 +166,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -194,7 +194,7 @@ include ('header.php');
 
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Status:</label>
                 <select name="status" class="dropdown">
                     <option value="active"<?=(isset ($data['status']) && $data['status'] == 'active') || (!isset ($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
@@ -204,7 +204,7 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Role:</label>
                 <select name="role" class="dropdown">
                 <?php foreach ($config->roles as $key => $value): ?>
@@ -213,7 +213,7 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['email'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['email'])) ? ' error' : ''?>">
                 <label>*Email:</label>
                 <input class="text" type="text" name="email" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : $user->email?>" />
             </div>
@@ -224,26 +224,26 @@ include ('header.php');
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['password'])) ? 'errors' : ''?>">Password:</label>
+                <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">Password:</label>
                 <input name="password" type="password" class="text mask" value="<?=(!empty ($errors) && !empty ($data['password'])) ? htmlspecialchars ($data['password']):''?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['first_name'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['first_name'])) ? ' error' : ''?>">
                 <label>First Name:</label>
                 <input class="text" type="text" name="first_name" value="<?=(isset ($data['first_name'])) ? $data['first_name'] : $user->first_name?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['last_name'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['last_name'])) ? ' error' : ''?>">
                 <label>Last Name:</label>
                 <input class="text" type="text" name="last_name" value="<?=(isset ($data['last_name'])) ? $data['last_name'] : $user->last_name?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['website'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['website'])) ? ' error' : ''?>">
                 <label>Website:</label>
                 <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $user->website?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['about_me'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['about_me'])) ? ' error' : ''?>">
                 <label>About Me:</label>
                 <textarea rows="7" cols="50" class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
             </div>

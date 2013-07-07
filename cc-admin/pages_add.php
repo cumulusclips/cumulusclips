@@ -98,7 +98,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
         $message .= implode ('<br />- ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -124,12 +124,12 @@ include ('header.php');
 
         <form method="post" action="<?=ADMIN?>/pages_add.php">
 
-            <div class="row <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
+            <div class="row <?=(isset ($errors['title'])) ? 'error' : '' ?>">
                 <label>*Title:</label>
                 <input id="page-title" class="text" type="text" name="title" />
             </div>
 
-            <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
+            <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'error' : '' ?>">
                 
                 <label>*URL:</label>
                 <input type="hidden" name="slug" />

@@ -113,7 +113,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -139,7 +139,7 @@ include ('header.php');
 
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Role:</label>
                 <select name="role" class="dropdown">
                 <?php foreach ($config->roles as $key => $value): ?>
@@ -149,12 +149,12 @@ include ('header.php');
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['email'])) ? 'errors' : ''?>">*E-mail:</label>
+                <label class="<?=(isset ($errors['email'])) ? 'error' : ''?>">*E-mail:</label>
                 <input name="email" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['username'])) ? 'errors' : ''?>">*Username:</label>
+                <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>">*Username:</label>
                 <input name="username" type="text" class="text" value="<?=(isset ($errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
                 <br /><span id="status"></span>
             </div>
@@ -162,7 +162,7 @@ include ('header.php');
             <div class="row-shift">Username can only contain alphanumeric (a-z, 0-9) characters, no spaces or special characters.</div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['password'])) ? 'errors' : ''?>">*Password:</label>
+                <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">*Password:</label>
                 <input name="password" type="password" class="text mask" value="<?=(isset ($errors, $data['password'])) ? htmlspecialchars ($data['password']):''?>" />
             </div>
 
@@ -177,7 +177,7 @@ include ('header.php');
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['website'])) ? 'errors' : ''?>">Website:</label>
+                <label class="<?=(isset ($errors['website'])) ? 'error' : ''?>">Website:</label>
                 <input name="website" type="text" class="text" value="<?=(isset ($errors, $data['website'])) ? $data['website'] : ''?>" />
             </div>
 

@@ -133,7 +133,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -159,7 +159,7 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>" method="post">
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
                     <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
@@ -179,17 +179,17 @@ include ('header.php');
 
             <?php if ($comment->user_id == 0): ?>
 
-                <div class="row<?=(isset ($errors['name'])) ? ' errors' : ''?>">
+                <div class="row<?=(isset ($errors['name'])) ? ' error' : ''?>">
                     <label>*Name:</label>
                     <input class="text" type="text" name="name" value="<?=(isset ($data['name'])) ? $data['name'] : $comment->name?>" />
                 </div>
 
-                <div class="row<?=(isset ($errors['email'])) ? ' errors' : ''?>">
+                <div class="row<?=(isset ($errors['email'])) ? ' error' : ''?>">
                     <label>*Email:</label>
                     <input class="text" type="text" name="email" value="<?=(isset ($data['email'])) ? $data['email'] : $comment->email?>" />
                 </div>
 
-                <div class="row<?=(isset ($errors['website'])) ? ' errors' : ''?>">
+                <div class="row<?=(isset ($errors['website'])) ? ' error' : ''?>">
                     <label>Website:</label>
                     <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $comment->website?>" />
                 </div>
@@ -203,7 +203,7 @@ include ('header.php');
 
             <?php endif; ?>
 
-            <div class="row<?=(isset ($errors['comment'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['comment'])) ? ' error' : ''?>">
                 <label>Comments:</label>
                 <textarea rows="7" cols="50" class="text" name="comments"><?=(isset ($data['comments'])) ? $data['comments'] : $comment->comments?></textarea>
             </div>

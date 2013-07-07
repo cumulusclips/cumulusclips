@@ -171,7 +171,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -197,7 +197,7 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" method="post">
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
                     <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
@@ -206,22 +206,22 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['title'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['title'])) ? ' error' : ''?>">
                 <label>Title:</label>
                 <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['description'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['description'])) ? ' error' : ''?>">
                 <label>Description:</label>
                 <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
             </div>
 
-            <div class="row<?=(isset ($errors['tags'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['tags'])) ? ' error' : ''?>">
                 <label>Tags:</label>
                 <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> (Comma Delimited)
             </div>
 
-            <div class="row<?=(isset ($errors['cat_id'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['cat_id'])) ? ' error' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
                 <?php foreach ($categories as $cat_id => $cat_name): ?>
@@ -247,7 +247,7 @@ include ('header.php');
 
             <div id="private-url" class="row <?=(!empty ($errors)) ? ($data['private'] == '1' ? '' : 'hide') : ($video->private == '1' ? '' : 'hide')?>">
 
-                <label <?=(isset ($errors['private_url'])) ? 'class="errors"' : ''?>>Private URL:</label>
+                <label <?=(isset ($errors['private_url'])) ? 'class="error"' : ''?>>Private URL:</label>
                 <?=HOST?>/private/videos/<span><?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?></span>/
 
                 <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?>" />

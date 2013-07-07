@@ -48,7 +48,7 @@ if (isset ($_POST['submitted_add'])) {
     } catch (Exception $e) {
         $errors['cat_name'] = true;
         $message = $e->getMessage();
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -113,7 +113,7 @@ if (isset ($_POST['submitted_edit'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -142,7 +142,7 @@ include ('header.php');
     <h1>Add Category</h1>
     <div id="add-category" class="block">
         <form action="<?=ADMIN?>/videos_categories.php" method="post">
-            <span class="<?=(isset ($errors['cat_name']))?'errors':''?>"><strong>Category Name:</strong></span>
+            <span class="<?=(isset ($errors['cat_name']))?'error':''?>"><strong>Category Name:</strong></span>
             <input type="text" class="text" name="cat_name" value="<?=(isset($data['cat_name']))?$data['cat_name']:''?>"/>
             <input type="hidden" name="submitted_add" value="TRUE" />
             <input type="submit" class="button" value="Add Category" />

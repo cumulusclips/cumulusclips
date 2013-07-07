@@ -59,7 +59,7 @@ if (isset($_POST['submitted'])) {
         } catch (Exception $e) {
 
             $message = $e->getMessage();
-            $message_type = 'error';
+            $message_type = 'errors';
 
             // Perform clean up if plugin contained errors
             if ($clean_up) {
@@ -68,7 +68,7 @@ if (isset($_POST['submitted'])) {
                     Filesystem::Close();
                 } catch (Exception $e) {
                     $message = $e->getMessage();
-                    $message_type = 'error';
+                    $message_type = 'errors';
                 }
             }
 
@@ -76,7 +76,7 @@ if (isset($_POST['submitted'])) {
 
     } else {
         $message = 'Invalid file upload';
-        $message_type = 'error';
+        $message_type = 'errors';
     }   // END check for form errors
 
 }

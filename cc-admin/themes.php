@@ -31,12 +31,12 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete']) && Functions::Val
             Filesystem::Close();
         } catch (Exception $e) {
             $message = $e->getMessage();
-            $message_type = 'error';
+            $message_type = 'errors';
         }
 
     } else {
         $message = 'Active theme cannot be deleted. Activate another theme and then try again';
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }

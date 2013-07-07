@@ -187,7 +187,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 }
 
@@ -209,12 +209,12 @@ include('header.php');
 
         <form action="<?=ADMIN?>/settings_video.php" method="post">
 
-            <div class="row <?=(isset ($errors['enable_uploads'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['enable_uploads'])) ? ' error' : ''?>">
                 <label>Video Uploads:</label>
                 <span id="enable_uploads"><?=(Settings::Get('enable_uploads')=='1')?'Enabled':'Disabled'?></span>
             </div>
 
-            <div class="row <?=(isset ($errors['debug_conversion'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['debug_conversion'])) ? ' error' : ''?>">
                 <label>Log Encoding:</label>
                 <select name="debug_conversion" class="dropdown">
                     <option value="1" <?=($data['debug_conversion']=='1')?'selected="selected"':''?>>On</option>
@@ -222,29 +222,29 @@ include('header.php');
                 </select>
             </div>
 
-            <div class="row <?=(isset ($errors['php'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['php'])) ? ' error' : ''?>">
                 <label>PHP Path:</label>
                 <input class="text" type="text" name="php" value="<?=$data['php']?>" />
                 <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
             </div>
 
-            <div class="row <?=(isset ($errors['ffmpeg'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['ffmpeg'])) ? ' error' : ''?>">
                 <label>FFMPEG Path:</label>
                 <input class="text" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
                 <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
             </div>
 
-            <div class="row <?=(isset($errors['h264EncodingOptions'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['h264EncodingOptions'])) ? ' error' : ''?>">
                 <label>H.264 Encoding Options:</label>
                 <input class="text" type="text" name="h264EncodingOptions" value="<?=htmlspecialchars($data['h264EncodingOptions'])?>" />
             </div>
 
-            <div class="row <?=(isset($errors['theoraEncodingOptions'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['theoraEncodingOptions'])) ? ' error' : ''?>">
                 <label>Theora Encoding Options:</label>
                 <input class="text" type="text" name="theoraEncodingOptions" value="<?=htmlspecialchars($data['theoraEncodingOptions'])?>" />
             </div>
 
-            <div class="row <?=(isset($errors['vp8EncodingEnabled'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['vp8EncodingEnabled'])) ? ' error' : ''?>">
                 <label>VP8 Encoding:</label>
                 <select data-toggle="vp8EncodingOptions" name="vp8EncodingEnabled" class="dropdown">
                     <option value="1" <?=($vp8Options->enabled == true)?'selected="selected"':''?>>Enabled</option>
@@ -252,28 +252,28 @@ include('header.php');
                 </select>
             </div> 
             
-            <div id="vp8EncodingOptions" class="row <?=(isset($errors['vp8EncodingOptions'])) ? ' errors' : ''?> <?=($vp8Options->enabled == false) ? 'hide' : ''?>">
+            <div id="vp8EncodingOptions" class="row <?=(isset($errors['vp8EncodingOptions'])) ? ' error' : ''?> <?=($vp8Options->enabled == false) ? 'hide' : ''?>">
                 <label>VP8 Encoding Options:</label>
                 <input class="text" type="text" name="vp8EncodingOptions" value="<?=htmlspecialchars($vp8Options->options)?>" />
             </div>
             
-            <div class="row <?=(isset($errors['mobile_options'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['mobile_options'])) ? ' error' : ''?>">
                 <label>Mobile Options:</label>
                 <input class="text" type="text" name="mobile_options" value="<?=htmlspecialchars($data['mobile_options'])?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['thumb_options'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['thumb_options'])) ? ' error' : ''?>">
                 <label>Thumbnail Options:</label>
                 <input class="text" type="text" name="thumb_options" value="<?=htmlspecialchars($data['thumb_options'])?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['video_size_limit'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['video_size_limit'])) ? ' error' : ''?>">
                 <label>Video Site Limit:</label>
                 <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
                 (Bytes)
             </div>
             
-            <div class="row <?=(isset($errors['keepOriginalVideo'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset($errors['keepOriginalVideo'])) ? ' error' : ''?>">
                 <label>Keep Original Video:</label>
                 <select name="keepOriginalVideo" class="dropdown">
                     <option value="1" <?=($data['keepOriginalVideo'] == '1')?'selected="selected"':''?>>Keep</option>

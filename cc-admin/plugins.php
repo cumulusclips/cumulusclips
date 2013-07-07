@@ -48,7 +48,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
             Filesystem::Close();
         } catch (Exception $e) {
             $message = $e->getMessage();
-            $message_type = 'error';
+            $message_type = 'errors';
         }
 
     }

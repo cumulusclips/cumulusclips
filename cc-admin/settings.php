@@ -93,7 +93,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -117,22 +117,22 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/settings.php" method="post">
 
-            <div class="row <?=(isset ($errors['sitename'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['sitename'])) ? ' error' : ''?>">
                 <label>Sitename:</label>
                 <input class="text" type="text" name="sitename" value="<?=$data['sitename']?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['base_url'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['base_url'])) ? ' error' : ''?>">
                 <label>Base URL:</label>
                 <input class="text" type="text" name="base_url" value="<?=$data['base_url']?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['admin_email'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['admin_email'])) ? ' error' : ''?>">
                 <label>Admin Email:</label>
                 <input class="text" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
             </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_videos'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['auto_approve_videos'])) ? ' error' : ''?>">
                 <label>Video Approval:</label>
                 <select name="auto_approve_videos" class="dropdown">
                     <option value="1" <?=($data['auto_approve_videos']=='1')?'selected="selected"':''?>>Auto-Approve</option>
@@ -140,7 +140,7 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_users'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['auto_approve_users'])) ? ' error' : ''?>">
                 <label>Member Approval:</label>
                 <select name="auto_approve_users" class="dropdown">
                     <option value="1" <?=($data['auto_approve_users']=='1')?'selected="selected"':''?>>Auto-Approve</option>
@@ -148,7 +148,7 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_comments'])) ? ' errors' : ''?>">
+            <div class="row <?=(isset ($errors['auto_approve_comments'])) ? ' error' : ''?>">
                 <label>Comment Approval:</label>
                 <select name="auto_approve_comments" class="dropdown">
                     <option value="1" <?=($data['auto_approve_comments']=='1')?'selected="selected"':''?>>Auto-Approve</option>
