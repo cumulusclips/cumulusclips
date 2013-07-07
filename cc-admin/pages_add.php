@@ -114,7 +114,7 @@ include ('header.php');
     <h1>Add New Page</h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
