@@ -1,0 +1,83 @@
+<?php
+
+View::AddMeta ('uploadify:theme', $config->theme_url);
+View::AddMeta ('uploadify:buttonText', Language::GetText('browse_files_button'));
+View::AddCss ('uploadify.css');
+View::AddJs ('uploadify.plugin.js');
+View::AddJs ('uploadify.js');
+View::SetLayout ('myaccount');
+View::Header();
+
+?>
+
+<h1><?=Language::GetText('profile_header')?></h1>
+
+<div class="message <?=$message_type?>"><?=$message?></div>
+
+
+
+<div class="form wide">
+    <p class="large"><?=Language::GetText('personal_header')?></p>
+    <p><?=Language::GetText('asterisk')?></p>
+    <form action="<?=HOST?>/myaccount/profile/" method="post">
+        <label class="<?=(isset ($Errors['first_name'])) ? ' error' : ''?>"><?=Language::GetText('first_name')?>:</label>
+        <input class="text" type="text" name="first_name" value="<?=(isset ($data['first_name'])) ? $data['first_name'] : $user->first_name?>" />
+
+        <label class="row<?=(isset ($Errors['last_name'])) ? ' error' : ''?>"><?=Language::GetText('last_name')?>:</label>
+        <input class="text" type="text" name="last_name" value="<?=(isset ($data['last_name'])) ? $data['last_name'] : $user->last_name?>" />
+
+        <label class="row<?=(isset ($Errors['email'])) ? ' error' : ''?>">*<?=Language::GetText('email')?>:</label>
+        <input class="text" type="text" name="email" value="<?=(isset ($data['email'])) ? $data['email'] : $user->email?>" />
+
+        <label class="row<?=(isset ($Errors['website'])) ? ' error' : ''?>"><?=Language::GetText('website')?>:</label>
+        <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $user->website?>" />
+
+        <label class="row<?=(isset ($Errors['about_me'])) ? ' error' : ''?>"><?=Language::GetText('about_me')?>:</label>
+        <textarea class="text" name="about_me" rows="10" cols="45"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
+
+        <input type="hidden" value="yes" name="submitted" />
+        <input class="button" type="submit" name="button" value="<?=Language::GetText('profile_button')?>" />
+    </form>
+</div>
+
+
+
+
+    
+<h1><?=Language::GetText('update_avatar_header')?></h1>
+<div id="update_avatar" class="form">
+
+    <div class="left">
+        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$user->getAvatarUrl()?>"></span></p>
+        <?=Language::GetText('current_avatar')?><br />
+        <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
+    </div>
+
+    <div class="right">
+        <?=Language::GetText('update_avatar_text')?>
+        <form name="uploadify" action="<?=HOST?>/myaccount/upload/avatar/">
+            <input id="upload" type="file" name="upload" />
+            <input id="upload_button" class="button" type="button" value="<?=Language::GetText('update_avatar_button')?>" />
+            <input type="hidden" name="uploadLimit" id="uploadLimit" value="<?=1024*30?>" />
+            <input type="hidden" name="uploadTimestamp" id="uploadTimestamp" value="<?=$timestamp?>" />
+            <input type="hidden" name="uploadToken" id="uploadToken" value="<?=session_id()?>" />
+            <input type="hidden" name="fileTypes" id="fileTypes" value="<?=htmlspecialchars(json_encode($config->accepted_avatar_formats))?>" />
+            <input type="hidden" name="uploadType" id="uploadType" value="avatar" />
+            <input type="hidden" name="debugUpload" id="debugUpload" value="<?=(isset($_GET['debugUpload']) ? 'true' : 'false')?>" />
+
+            <div id="upload_status">
+                <div class="title"></div>
+                <div class="progress">
+                    <a href="" title="<?=Language::GetText('cancel')?>"><?=Language::GetText('cancel')?></a>
+                    <div class="meter">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="percentage">0%</div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<?php View::Footer(); ?>
