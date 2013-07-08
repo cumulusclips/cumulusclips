@@ -85,7 +85,7 @@
         <!-- Browse Videos Page -->
         <videos_header>Browse Videos</videos_header>
         <viewing>Viewing</viewing>
-        <grouping>Grouping</grouping>
+        <sorting>Sorting</sorting>
         <most_recent>Most Recent</most_recent>
         <most_viewed>Most Viewed</most_viewed>
         <most_discussed>Most Discussed</most_discussed>
@@ -110,11 +110,14 @@
         <website>Website</website>
         <recent_videos>Recent Videos</recent_videos>
         <view_all_videos>View all Videos</view_all_videos>
-        <recent_posts_header>Recent Updates</recent_posts_header>
-        <update_status>Update your Status</update_status>
-        <post_update_button>Post Update</post_update_button>
-        <no_updates>No recent status updates.</no_updates>
         <no_member_videos>Member currently has no videos.</no_member_videos>
+        <no_member_playlists>Member currently has no playlists.</no_member_playlists>
+        <no_member_activity>Member has no recent activity.</no_member_activity>
+        <activity>Activity</activity>
+        <member_commented_video>{MEMBER} commented on a video</member_commented_video>
+        <member_favorited_video>{MEMBER} added a video to Favorites</member_favorited_video>
+        <member_liked_video>{MEMBER} liked a video</member_liked_video>
+        <video>Video</video>
 
         <!-- Member Videos Page -->
         <videos_by>Videos By</videos_by>
@@ -127,7 +130,17 @@
         <share>Share</share>
         <embed>Embed</embed>
         <embed_text>Copy and paste this code into your website or blog.</embed_text>
+        <add>Add</add>
+        <add_to>Add To</add_to>
         <favorite>Favorite</favorite>
+        <favorites>Favorites</favorites>
+        <watch_later>Watch Later</watch_later>
+        <playlists>Playlists</playlists>
+        <create_new_playlist>Create New Playlist</create_new_playlist>
+        <playlist_name>Playlist Name</playlist_name>
+        <visibility>Visibility</visibility>
+        <public>Public</public>
+        <create_playlist_button>Create Playlist</create_playlist_button>
         <flag>Flag</flag>
         <date_uploaded>Date Uploaded</date_uploaded>
         <comments_header>Video Comments</comments_header>
@@ -138,7 +151,8 @@
         <comments_post_header>Post a Comment</comments_post_header>
         <optional>Optional</optional>
         <comments>Comments</comments>
-        <comments_button>Comment</comments_button>
+        <reply_to>Reply to</reply_to>
+        <comments_button>Post Comment</comments_button>
         <suggestions_header>Suggestions</suggestions_header>
         <no_suggestions>No suggestions could be made.</no_suggestions>
         <views>Views</views>
@@ -308,6 +322,7 @@
         <upload_video_header>Upload Step 2 - Upload Video</upload_video_header>
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
+        <cancel>Cancel</cancel>
         <upload_video_button>Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
