@@ -28,8 +28,7 @@ if (isset($_POST['submitted'])) {
 
             // Extract plugin
             $tempDirectory = dirname($_POST['tempFile']);
-            Filesystem::Open();
-            Filesystem::Extract($_POST['tempFile']);
+            Filesystem::extract($_POST['tempFile']);
 
             // Check for duplicates
             $temp_contents = array_diff(scandir($tempDirectory), array('.', '..', 'addon.zip'));
@@ -39,7 +38,7 @@ if (isset($_POST['submitted'])) {
             }
 
             // Copy plugin contents to plugins dir
-            Filesystem::CopyDir($tempDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
+            Filesystem::copyDir($tempDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
 
             // Validate Plugin
             if (!Plugin::ValidPlugin($pluginName)) {
@@ -48,8 +47,7 @@ if (isset($_POST['submitted'])) {
 
             // Clean up
             $clean_up = false;
-            Filesystem::Delete($tempDirectory);
-            Filesystem::Close();
+            Filesystem::delete($tempDirectory);
 
             // Display success message
             $plugin_info = Plugin::GetPluginInfo($pluginName);
@@ -64,8 +62,7 @@ if (isset($_POST['submitted'])) {
             // Perform clean up if plugin contained errors
             if ($clean_up) {
                 try {
-                    Filesystem::Delete($tempDirectory);
-                    Filesystem::Close();
+                    Filesystem::delete($tempDirectory);
                 } catch (Exception $e) {
                     $message = $e->getMessage();
                     $message_type = 'errors';

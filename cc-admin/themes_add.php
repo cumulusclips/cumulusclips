@@ -27,8 +27,7 @@ if (isset($_POST['submitted'])) {
 
             // Extract theme
             $tempDirectory = dirname($_POST['tempFile']);
-            Filesystem::Open();
-            Filesystem::Extract($_POST['tempFile']);
+            Filesystem::extract($_POST['tempFile']);
 
             // Check for duplicates
             $temp_contents = array_diff(scandir($tempDirectory), array('.', '..', 'addon.zip'));
@@ -38,7 +37,7 @@ if (isset($_POST['submitted'])) {
             }
 
             // Copy theme contents to themes dir
-            Filesystem::CopyDir($tempDirectory . '/' . $themeName, DOC_ROOT . '/cc-content/themes/' . $themeName);
+            Filesystem::copyDir($tempDirectory . '/' . $themeName, DOC_ROOT . '/cc-content/themes/' . $themeName);
 
             // Validate theme
             if (!Functions::ValidTheme($themeName)) {
@@ -47,8 +46,7 @@ if (isset($_POST['submitted'])) {
 
             // Clean up
             $clean_up = false;
-            Filesystem::Delete($tempDirectory);
-            Filesystem::Close();
+            Filesystem::delete($tempDirectory);
 
             // Display success message
             $xml = simplexml_load_file(THEMES_DIR . '/' . $themeName . '/theme.xml');
@@ -63,8 +61,7 @@ if (isset($_POST['submitted'])) {
             // Perform clean up if plugin contained errors
             if ($clean_up) {
                 try {
-                    Filesystem::Delete($tempDirectory);
-                    Filesystem::Close();
+                    Filesystem::delete($tempDirectory);
                 } catch (Exception $e) {
                     $message = $e->getMessage();
                     $message_type = 'errors';

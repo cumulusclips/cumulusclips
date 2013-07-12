@@ -54,9 +54,8 @@ try {
 
     // Create temp dir
     if ($createDir) {
-        Filesystem::Open();
-        Filesystem::CreateDir($temp);
-        Filesystem::SetPermissions($temp, 0777);
+        Filesystem::createDir($temp);
+        Filesystem::setPermissions($temp, 0777);
     }
 
     // Move zip to temp dir
