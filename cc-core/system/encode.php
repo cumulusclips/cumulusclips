@@ -139,9 +139,7 @@ try {
 
     if ((string) substr(sprintf('%o', fileperms($qt_faststart_path)), -4) != '0777') {
         try {
-            Filesystem::Open();
-            Filesystem::SetPermissions($qt_faststart_path, 0777);
-            Filesystem::Close();
+            Filesystem::setPermissions($qt_faststart_path, 0777);
         } catch (Exception $e) {
             throw new Exception("Unable to update permissions for qt-faststart. Please make sure it ($qt_faststart_path) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
         }
@@ -476,20 +474,19 @@ try {
         $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Deleting raw video...') : null;
 
         ### Delete pre-faststart files
-        Filesystem::Open();
-        Filesystem::Delete ($h264TempFilePath);
-        Filesystem::Delete ($mobile_temp);
+        Filesystem::delete($h264TempFilePath);
+        Filesystem::delete($mobile_temp);
 
         // Delete original video
         if (Settings::Get('keepOriginalVideo') != '1') {
-            Filesystem::Delete ($raw_video);
+            Filesystem::delete($raw_video);
         }
 
         ### Delete encoding log files
         if ($config->debug_conversion) {
             App::Log (CONVERSION_LOG, "Video ID: $video->video_id, has completed processing!\n");
         } else {
-            Filesystem::Delete ($debug_log);
+            Filesystem::delete($debug_log);
         }
 
     } catch (Exception $e) {

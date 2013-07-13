@@ -43,7 +43,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
         $message = $plugin_info->name . ' plugin has been deleted';
         $message_type = 'success';
         try {
-            Filesystem::delete (DOC_ROOT . '/cc-content/plugins/' . $_GET['delete']);
+            Filesystem::delete(DOC_ROOT . '/cc-content/plugins/' . $_GET['delete']);
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'errors';

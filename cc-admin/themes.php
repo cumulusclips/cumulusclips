@@ -26,7 +26,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete']) && Functions::Val
         $message = $xml->name . ' theme has been deleted';
         $message_type = 'success';
         try {
-            Filesystem::delete ($theme_path);
+            Filesystem::delete($theme_path);
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'errors';

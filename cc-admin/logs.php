@@ -29,11 +29,9 @@ if (!empty($_GET['log']) && in_array($_GET['log'], $contents) && file_exists(LOG
 if (isset($_GET['purge']) && $_GET['purge'] == 'all' && !empty($contents)) {
     try {
         // Delete files
-        Filesystem::Open();
         foreach (glob(LOG . '/*.log') as $log) {
-            Filesystem::Delete($log);
+            Filesystem::delete($log);
         }
-        Filesystem::Close();
         $messageType = 'success';
         $message = 'Logs have been successfully purged.';
         $contents = array();

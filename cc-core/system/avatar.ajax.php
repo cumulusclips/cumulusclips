@@ -64,7 +64,6 @@ try {
 
     ### Change permissions on avatar & delete previous IF/APP
     try {
-        Filesystem::Open();
         $avatar_path = UPLOAD_PATH . '/avatars';
         $save_as = Avatar::CreateFilename ($extension);
         Avatar::SaveAvatar ($_FILES['upload']['tmp_name'], $extension, $save_as);
@@ -72,9 +71,7 @@ try {
         // Check for existing avatar
         if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
 
-        Filesystem::SetPermissions ("$avatar_path/$save_as", 0644);
-        Filesystem::Close();
-
+        Filesystem::setPermissions("$avatar_path/$save_as", 0644);
     } catch (Exception $e) {
         App::Alert ('Error During Avatar Upload', $e->getMessage());
         throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));

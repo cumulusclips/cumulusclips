@@ -106,9 +106,7 @@ Handle Reset Avatar Action
 
 if (!empty ($_GET['action']) && $_GET['action'] == 'reset' && !empty (View::$vars->user->avatar)) {
     try {
-        Filesystem::Open();
-        Filesystem::Delete (UPLOAD_PATH . '/avatars/' . View::$vars->user->avatar);
-        Filesystem::Close();
+        Filesystem::delete(UPLOAD_PATH . '/avatars/' . View::$vars->user->avatar);
     } catch (Exception $e) {
         App::Alert('Error during Avatar Reset', $e->getMessage());
     }

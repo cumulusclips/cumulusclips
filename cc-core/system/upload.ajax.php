@@ -78,9 +78,7 @@ try {
     ### Change permissions on raw video file
     Plugin::Trigger ('upload.ajax.before_change_permissions');
     try {
-        Filesystem::Open();
-        Filesystem::SetPermissions ($target, 0644);
-        Filesystem::Close();
+        Filesystem::setPermissions($target, 0644);
     } catch (Exception $e) {
         App::Alert ('Error During Video Upload', $e->getMessage());
         throw new Exception (Language::GetText('error_uploadify_system', array ('host' => HOST)));

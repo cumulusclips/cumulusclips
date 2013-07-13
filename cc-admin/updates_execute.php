@@ -31,13 +31,12 @@ try {
     *****************/
 
     ### Create hidden temp dir
-    Filesystem::Open();
-    Filesystem::CreateDir ($tmp);
-    Filesystem::SetPermissions($tmp, 0777);
+    Filesystem::createDir($tmp);
+    Filesystem::setPermissions($tmp, 0777);
 
     // Update log
-    Filesystem::Create ($log);
-    Filesystem::Write ($log, "<p>Initializing update&hellip;</p>\n");
+    Filesystem::create($log);
+    Filesystem::write($log, "<p>Initializing update&hellip;</p>\n");
 
 
     ### De-activate plugins
@@ -52,7 +51,7 @@ try {
     ***************/
 
     // Update log
-    Filesystem::Write ($log, "<p>Downloading package&hellip;</p>\n");
+    Filesystem::write($log, "<p>Downloading package&hellip;</p>\n");
 
     ### Download archive
 
@@ -64,8 +63,8 @@ try {
     curl_close ($curl_handle);
 
     $zip_file = $tmp . '/update.zip';
-    Filesystem::Create ($zip_file);
-    Filesystem::Write ($zip_file, $zip_content);
+    Filesystem::create($zip_file);
+    Filesystem::write($zip_file, $zip_content);
     if (md5_file ($zip_file) != $update->checksum) throw new Exception ("Error - Checksums don't match");
 
 
@@ -82,8 +81,8 @@ try {
 
     if (!empty ($patch_file_content)) {
         $patch_file = $tmp . '/patch_file.php';
-        Filesystem::Create ($patch_file);
-        Filesystem::Write ($patch_file, $patch_file_content);
+        Filesystem::create($patch_file);
+        Filesystem::write($patch_file, $patch_file_content);
     }
 
 
@@ -95,10 +94,10 @@ try {
     ***********/
 
     // Update log
-    Filesystem::Write ($log, "<p>Unpacking files&hellip;</p>\n");
+    Filesystem::write($log, "<p>Unpacking files&hellip;</p>\n");
 
     ### Extracting files
-    Filesystem::Extract ($zip_file);
+    Filesystem::extract($zip_file);
 
     ### Load patch file into memory
     if ($patch_file) include_once ($patch_file);
@@ -112,10 +111,10 @@ try {
     ************/
 
     // Update log
-    Filesystem::Write ($log, "<p>Applying changes&hellip;</p>\n");
+    Filesystem::write($log, "<p>Applying changes&hellip;</p>\n");
 
     ### Applying changes
-    Filesystem::CopyDir ($tmp . '/cumulusclips', DOC_ROOT);
+    Filesystem::copyDir($tmp . '/cumulusclips', DOC_ROOT);
 
 
     ### Perform patch file modifications
@@ -131,7 +130,7 @@ try {
 
             ### Delete files marked for removal
             $remove_files = call_user_func ('remove_files_' . $version);
-            foreach ($remove_files as $file) Filesystem::Delete (DOC_ROOT . $file);
+            foreach ($remove_files as $file) Filesystem::delete(DOC_ROOT . $file);
 
         }
 
@@ -146,30 +145,29 @@ try {
     *******/
 
     // Update log
-    Filesystem::Write ($log, "<p>Clean up&hellip;</p>\n");
+    Filesystem::write($log, "<p>Clean up&hellip;</p>\n");
 
     ### Setting required permissions
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/flv', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/mobile', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/temp', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-content/uploads/avatars', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/logs', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/bin', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
-    Filesystem::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/flv', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/mobile', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/temp', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/avatars', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/logs', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
 
     ### Delete temp. dir.
-    Filesystem::Delete ($tmp);
+    Filesystem::delete($tmp);
 
 
     ### Activate themes
     ### Activate plugins
-    Filesystem::Close();
     unset ($_SESSION['updates_available']);
     Settings::Set ('version', $update->version);
 

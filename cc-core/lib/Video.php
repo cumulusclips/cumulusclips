@@ -155,13 +155,11 @@ class Video {
 
         // Delete files
         try {
-            Filesystem::Open();
-            Filesystem::Delete (UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
-            Filesystem::Delete (UPLOAD_PATH . '/theora/' . $video->filename . '.ogv');
-            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8')) Filesystem::Delete (UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8');
-            Filesystem::Delete (UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
-            Filesystem::Delete (UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
-            Filesystem::Close();
+            Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
+            Filesystem::delete(UPLOAD_PATH . '/theora/' . $video->filename . '.ogv');
+            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8')) Filesystem::delete(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8');
+            Filesystem::delete(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
+            Filesystem::delete(UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
         } catch (Exception $e) {
             App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
         }

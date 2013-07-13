@@ -46,9 +46,7 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
         $message = $xml->information->lang_name . ' language has been deleted';
         $message_type = 'success';
         try {
-            Filesystem::Open();
-            Filesystem::Delete ($language_file);
-            Filesystem::Close();
+            Filesystem::delete($language_file);
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'errors';
