@@ -157,7 +157,7 @@ class Video {
         try {
             Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
             Filesystem::delete(UPLOAD_PATH . '/theora/' . $video->filename . '.ogv');
-            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8')) Filesystem::delete(UPLOAD_PATH . '/vp8/' . $video->filename . '.vp8');
+            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.webm')) Filesystem::delete(UPLOAD_PATH . '/vp8/' . $video->filename . '.webm');
             Filesystem::delete(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
             Filesystem::delete(UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
         } catch (Exception $e) {
