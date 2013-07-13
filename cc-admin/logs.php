@@ -51,7 +51,7 @@ include ('header.php');
     <h1>System Logs</h1>
     
     <?php if ($message): ?>
-    <div class="<?=$messageType?>"><?=$message?></div>
+    <div class="message <?=$messageType?>"><?=$message?></div>
     <?php endif; ?>
 
     <div class="block">
