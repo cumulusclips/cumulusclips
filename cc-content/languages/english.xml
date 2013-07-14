@@ -260,6 +260,7 @@
         <alert_comment>E-mail me when one of my videos receives a comment</alert_comment>
         <alert_video>Inform me of new videos by members subscribed to</alert_video>
         <alert_message>E-mail me when I receive a message</alert_message>
+        <alertVideoReady>Notify me when my uploaded video is done processing and is available</alertVideoReady>
         <privacy_settings_button>Update Privacy</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->

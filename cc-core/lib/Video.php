@@ -6,6 +6,7 @@ class Video {
     private $db;
     protected static $table = 'videos';
     protected static $id_name = 'video_id';
+    protected $_config;
 
 
     /**
@@ -14,7 +15,8 @@ class Video {
      * @return object Returns object of class type
      */
     public function  __construct ($id) {
-        $this->db = Database::GetInstance();
+        $this->db = Registry::get('db');
+        $this->_config = Registry::get('config');
         if (self::Exist (array (self::$id_name => $id))) {
             $this->Get ($id);
             $this->found = true;
@@ -240,7 +242,6 @@ class Video {
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
         
-        global $config;
         $send_alert = false;
         Plugin::Trigger ('video.before_approve');
 
@@ -273,6 +274,9 @@ class Video {
 
                 // Activate & Release
                 $this->Update (array ('status' => 'approved', 'released' => 1));
+                
+                // Send video owner notification if opted-in
+                $this->_notifyUserVideoIsReady();
 
                 // Send subscribers notification if opted-in
                 $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $this->user_id";
@@ -284,7 +288,7 @@ class Video {
                     if ($privacy->OptCheck ('new_video')) {
                         $replacements = array (
                             'host'      => HOST,
-                            'sitename'  => $config->sitename,
+                            'sitename'  => $this->_config->sitename,
                             'email'     => $subscriber->email,
                             'member'    => $this->username,
                             'title'     => $this->title,
@@ -323,7 +327,28 @@ class Video {
         Plugin::Trigger ('video.approve');
 
     }
-
+    
+    /**
+     * Send video owner notification that video is now available 
+     */
+    protected function _notifyUserVideoIsReady()
+    {
+        $user = new User($this->user_id);
+        $privacy = Privacy::LoadByUser($this->user_id);
+        if ($privacy->OptCheck('videoReady')) {
+            $replacements = array(
+                'host'      => HOST,
+                'sitename'  => $this->_config->sitename,
+                'email'     => $user->email,
+                'member'    => $this->username,
+                'title'     => $this->title,
+                'video_id'  => $this->video_id,
+                'slug'      => $this->slug
+            );
+            $mail = new Mail();
+            $mail->LoadTemplate('VideoReady', $replacements);
+            $mail->Send($user->email);
+            Plugin::trigger('video.notifyUserVideoIsReady', $this);
+        }
+    }
 }
-
-?>

@@ -49,6 +49,13 @@ if (isset ($_POST['submitted'])) {
         View::$vars->errors['new_video'] = TRUE;
     }
 
+    // Validate Video Ready
+    if (isset ($_POST['videoReady']) && in_array ($_POST['videoReady'], array ('0','1'))) {
+        View::$vars->data['videoReady'] = $_POST['videoReady'];
+    } else {
+        View::$vars->errors['videoReady'] = TRUE;
+    }
+
 
     if (empty (View::$vars->errors)) {
         View::$vars->privacy->Update (View::$vars->data);

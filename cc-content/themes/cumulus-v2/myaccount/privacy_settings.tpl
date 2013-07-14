@@ -32,6 +32,12 @@ View::Header();
             <option value="0"<?=(isset ($data['new_message']) && $data['new_message'] == '0' || !$privacy->OptCheck ('new_message')) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
         </select>
 
+        <label><?=Language::GetText('alertVideoReady')?>:</label>
+        <select class="dropdown" size="1" name="videoReady">
+            <option value="1"<?=(isset($data['videoReady']) && $data['videoReady'] == '1' || $privacy->OptCheck('videoReady')) ? ' selected="selected"' : ''?>><?=Language::GetText('yes')?></option>
+            <option value="0"<?=(isset($data['videoReady']) && $data['videoReady'] == '0' || !$privacy->OptCheck('videoReady')) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
+        </select>
+
         <input type="hidden" name="submitted" value="TRUE" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('privacy_settings_button')?>" />
     </form>
