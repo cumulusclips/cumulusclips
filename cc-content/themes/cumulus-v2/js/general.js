@@ -166,12 +166,6 @@ $(document).ready(function(){
 //    });
 
 
-    // Initialize VideoJS on play page
-    if ($('.video-js-box').length > 0) {
-        VideoJS.setupAllWhenReady();
-    }
-
-
     // Regenerate Private URL
     $('#private_url a').click(function(){
         $.ajax({
