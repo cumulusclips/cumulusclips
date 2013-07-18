@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=Language::GetText('videos_header')?></h1>
 <p class="large"><?=Language::GetText('viewing')?>: <?=$sub_header?></p>
 
@@ -33,5 +31,3 @@
 <?php else: ?>
     <p><strong><?=Language::GetText('no_videos')?></strong></p>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

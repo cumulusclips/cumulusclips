@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=Language::GetText('contact_header')?></h1>
 
 <?php if ($message): ?>
@@ -23,5 +21,3 @@
         <input class="button" type="submit" name="button" value="<?=Language::GetText('contact_button')?>" />
     </form>
 </div>
-
-<?php View::Footer(); ?>

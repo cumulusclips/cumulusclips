@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('message_send_header')?></h1>
 
@@ -28,5 +23,3 @@ View::Header();
         <input class="button" type="submit" name="button" value="<?=Language::GetText('message_send_button')?>" />
     </form>
 </div>
-
-<?php View::Footer(); ?>

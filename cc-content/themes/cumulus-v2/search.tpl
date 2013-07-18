@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=Language::GetText('search_header')?></h1>
 
 <p><strong><?=Language::GetText('results_for')?>: '<em><?=$cleaned?></em>'</strong></p>
@@ -30,5 +28,3 @@
 <?php else: ?>
     <p><strong><?=Language::GetText('no_results')?></strong></p>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

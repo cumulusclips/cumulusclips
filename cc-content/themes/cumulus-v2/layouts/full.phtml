@@ -4,17 +4,17 @@
 <title><?=$meta->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseUrl" content="<?=HOST?>" />
-<?php View::WriteMeta(); ?>
-<?php Plugin::Trigger ('theme.head'); ?>
+<?php View::writeMeta(); ?>
+<?php Plugin::triggerEvent('theme.head'); ?>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/reset.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/main.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/pages.css" />
-<?php View::WriteCSS(); ?>
+<?php View::writeCSS(); ?>
 
 </head>
-<body class="<?=View::CssHooks()?>">
-<?php Plugin::Trigger ('theme.body'); ?>
+<body class="<?=View::cssHooks()?>">
+<?php Plugin::triggerEvent('theme.body'); ?>
     
 <!-- BEGIN WRAPPER -->
 <div id="wrapper">
@@ -31,7 +31,7 @@
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
                 <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$user->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
-                <?php if (User::CheckPermissions ('admin_panel', $user)): ?>
+                <?php if (User::CheckPermissions('admin_panel', $user)): ?>
                     <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
                 <?php endif ?>
 
@@ -49,9 +49,26 @@
     </div>
     <!-- END HEADER -->
     
-    <?php View::Block ('header_nav.tpl'); ?>
+    <?php View::block('header_nav.tpl'); ?>
     
     <!-- BEGIN MAIN CONTAINER -->
     <div id="retainer">
         <div id="main">
                 
+            <?=View::body()?>
+            
+        </div>
+    </div>
+    <!-- END MAIN CONTAINER -->
+    
+</div>
+<!-- END WRAPPER -->
+    
+<?php View::block('footer_nav.tpl'); ?>
+
+<script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=$config->theme_url?>/js/general.js"></script>
+<?php View::writeJs(); ?>
+
+</body>
+</html>

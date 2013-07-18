@@ -1,12 +1,5 @@
-<?php
-
-View::SetLayout ($page->layout);
-View::Header();
-
-?>
+<?php View::SetLayout ($page->layout); ?>
 
 <h1><?=$page->title?></h1>
 
 <div class="block"><?=$page->content?></div>
-
-<?php View::Footer(); ?>

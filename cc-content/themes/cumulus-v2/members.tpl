@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=Language::GetText('members_header')?></h1>
 
 <?php if ($db->Count ($result) > 0): ?>
@@ -23,5 +21,3 @@
 <?php else: ?>
     <p><strong><?=Language::GetText('no_members')?></strong></p>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

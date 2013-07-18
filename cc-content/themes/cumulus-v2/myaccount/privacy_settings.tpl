@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('privacy_settings_header')?></h1>
 
@@ -42,5 +37,3 @@ View::Header();
         <input class="button" type="submit" name="button" value="<?=Language::GetText('privacy_settings_button')?>" />
     </form>
 </div>
-
-<?php View::Footer(); ?>

@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('myfavorites_header')?></h1>
         
@@ -38,5 +33,3 @@ View::Header();
 <?php else: ?>
     <p><strong><?=Language::GetText('no_favorites')?></strong></p>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

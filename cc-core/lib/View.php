@@ -5,6 +5,7 @@ class View
     // Object Properties
     public static $options;
     public static $vars;
+    protected static $_body;
 
     /**
      * Initialize view and set template & layout properties
@@ -19,8 +20,6 @@ class View
 
         self::$options = new stdClass();
         self::$options->layout = 'default';
-        self::$options->header = self::GetFallbackPath('layouts/' . self::$options->layout . '.header.tpl');
-        self::$options->footer = self::GetFallbackPath('layouts/' . self::$options->layout . '.footer.tpl');
         self::$options->blocks = array();
 
         // Load page's meta information into memory for use in templates
@@ -72,16 +71,33 @@ class View
     }
     
     /**
-     * Output the requested page to the browser
-     * @param string $view The view file to be output
-     * @return mixed Page is output to browser
+     * Output the given view to the browser
+     * @param string $view Path of the view to be output, relative to theme root
+     * @return mixed View is output to browser
      */
     public static function render($view)
     {
-        self::$options->view = self::GetFallbackPath($view);
+        Plugin::triggerEvent('view.render', $view);
+        self::$options->view = self::getFallbackPath($view);
         extract(get_object_vars(self::$vars));
-        Plugin::Trigger('view.render');
+        
+        // Catch output of body
+        ob_start();
         include(self::$options->view);
+        self::$_body = ob_get_contents();
+        ob_end_clean();
+        
+        // Output layout of page
+        include(self::getFallbackPath('layouts/' . self::$options->layout . '.phtml'));
+    }
+    
+    /**
+     * Retrieve the HTML for the body of a page
+     * @return string Returns the HTML for the body of a page
+     */
+    public static function body()
+    {
+        return Plugin::triggerFilter('view.body', self::$_body);
     }
     
     /**
@@ -91,34 +107,13 @@ class View
      */
     public static function setLayout($layout)
     {
-        self::$options->layout = $layout;
-        $header = self::GetFallbackPath("layouts/$layout.header.tpl");
-        $footer = self::GetFallbackPath("layouts/$layout.footer.tpl");
-        if (file_exists($header)) self::$options->header = $header;
-        if (file_exists($header)) self::$options->footer = $footer;
-        Plugin::Trigger('view.set_layout');
-    }
-    
-    /**
-     * Output the layout header to the browser
-     * @return mixed Header is output to browser
-     */
-    public static function header()
-    {
-        extract(get_object_vars(self::$vars));
-        Plugin::Trigger('view.header');
-        include(self::$options->header);
-    }
-    
-    /**
-     * Output the layout footer to the browser
-     * @return mixed Footer is output to browser
-     */
-    public static function footer()
-    {
-        extract(get_object_vars(self::$vars));
-        Plugin::Trigger('view.footer');
-        include(self::$options->footer);
+        $layoutPath = self::getFallbackPath("layouts/$layout.phtml");
+        if (file_exists($layoutPath)) {
+            self::$options->layout = $layout;
+        } else {
+            throw new Exception('Unknown layout "' . $layout . '"');
+        }
+        Plugin::triggerEvent('view.set_layout');
     }
     
     /**
@@ -129,11 +124,11 @@ class View
     public static function block($tpl_file)
     {
         // Detect correct block path
-        $request_block = self::GetFallbackPath("blocks/$tpl_file");
+        $request_block = self::getFallbackPath("blocks/$tpl_file");
         $block = ($request_block) ? $request_block : $tpl_file;
 
         extract(get_object_vars(self::$vars));
-        Plugin::Trigger('view.block');
+        Plugin::triggerEvent('view.block');
         include($block);
     }
     
@@ -146,14 +141,14 @@ class View
     public static function repeatingBlock($tpl_file, $records)
     {
         // Detect correct block path
-        $request_block = self::GetFallbackPath("blocks/$tpl_file");
+        $request_block = self::getFallbackPath("blocks/$tpl_file");
         $block = ($request_block) ? $request_block : $tpl_file;
         
         extract(get_object_vars(self::$vars));
-        Plugin::Trigger('view.repeating_block');
+        Plugin::triggerEvent('view.repeating_block');
 
         foreach ($records as $_id) {
-            Plugin::Trigger('view.repeating_block_loop');
+            Plugin::triggerEvent('view.repeating_block_loop');
             include($block);
         }
     }
@@ -166,7 +161,7 @@ class View
     public static function addSidebarBlock($tpl_file)
     {
         self::$options->blocks[] = $tpl_file;
-        Plugin::Trigger('view.add_sidebar_block');
+        Plugin::triggerEvent('view.add_sidebar_block');
     }
     
     /**
@@ -175,10 +170,10 @@ class View
      */
     public static function writeSidebarBlocks()
     {
-        Plugin::Trigger('view.write_sidebar_blocks');
+        Plugin::triggerEvent('view.write_sidebar_blocks');
         foreach (self::$options->blocks as $_block) {
-            Plugin::Trigger('view.write_sidebar_blocks_loop');
-            self::Block($_block);
+            Plugin::triggerEvent('view.write_sidebar_blocks_loop');
+            self::block($_block);
         }
     }
     
@@ -200,11 +195,11 @@ class View
     public static function addCss($css_name)
     {
         // Detect correct file path
-        $request_file = self::GetFallbackUrl("css/$css_name");
+        $request_file = self::getFallbackUrl("css/$css_name");
         $css_url = ($request_file) ? $request_file : $css_name;
 
         self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
-        Plugin::Trigger('view.add_css');
+        Plugin::triggerEvent('view.add_css');
     }
 
     /**
@@ -213,10 +208,10 @@ class View
      */
     public static function writeCss()
     {
-        Plugin::Trigger('view.write_css');
+        Plugin::triggerEvent('view.write_css');
         if (isset(self::$options->css)) {
             foreach (self::$options->css as $_value) {
-                Plugin::Trigger('view.write_css_loop');
+                Plugin::triggerEvent('view.write_css_loop');
                 echo $_value, "\n";
             }
         }
@@ -230,11 +225,11 @@ class View
     public static function addJs($js_name)
     {
         // Detect correct file path
-        $request_file = self::GetFallbackUrl("js/$js_name");
+        $request_file = self::getFallbackUrl("js/$js_name");
         $js_url = ($request_file) ? $request_file : $js_name;
 
         self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
-        Plugin::Trigger('view.add_js');
+        Plugin::triggerEvent('view.add_js');
     }
 
     /**
@@ -259,10 +254,10 @@ class View
             self::$options->js[] = $js_lang_preview;
         }
 
-        Plugin::Trigger('view.write_js');
+        Plugin::triggerEvent('view.write_js');
         if (isset(self::$options->js)) {
             foreach (self::$options->js as $_value) {
-                Plugin::Trigger('view.write_js_loop');
+                Plugin::triggerEvent('view.write_js_loop');
                 echo $_value, "\n";
             }
         }
@@ -277,7 +272,7 @@ class View
     public static function addMeta($meta_name, $meta_content)
     {
         self::$options->meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
-        Plugin::Trigger('view.add_meta');
+        Plugin::triggerEvent('view.add_meta');
     }
 
     /**
@@ -286,14 +281,14 @@ class View
      */
     public static function writeMeta()
     {
-        Plugin::Trigger('view.write_meta');
-        self::AddMeta('generator', 'CumulusClips');
-        if (!empty(self::$vars->meta->keywords)) self::AddMeta('keywords', self::$vars->meta->keywords);
-        if (!empty(self::$vars->meta->description)) self::AddMeta('description', self::$vars->meta->description);
+        Plugin::triggerEvent('view.write_meta');
+        self::addMeta('generator', 'CumulusClips');
+        if (!empty(self::$vars->meta->keywords)) self::addMeta('keywords', self::$vars->meta->keywords);
+        if (!empty(self::$vars->meta->description)) self::addMeta('description', self::$vars->meta->description);
         
         if (isset(self::$options->meta)) {
             foreach (self::$options->meta as $_value) {
-                Plugin::Trigger('view.write_meta_loop');
+                Plugin::triggerEvent('view.write_meta_loop');
                 echo $_value, "\n";
             }
         }

@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=$member->username?></h1>
 
 <div class="message"></div>
@@ -58,5 +56,3 @@
     <p><strong><?=Language::GetText('no_member_activity')?></strong></p>
 </div>
 <!-- END Member's Activity -->
-
-<?php View::Footer(); ?>

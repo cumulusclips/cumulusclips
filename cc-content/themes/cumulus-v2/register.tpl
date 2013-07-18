@@ -1,9 +1,4 @@
-<?php
-
-View::AddJs ('username.js');
-View::Header();
-
-?>
+<?php View::AddJs ('username.js'); ?>
 
 <h1><?=Language::GetText('register_header')?></h1>
 
@@ -35,5 +30,3 @@ View::Header();
     </form>
 
 </div>
-
-<?php View::Footer(); ?>

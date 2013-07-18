@@ -4,7 +4,6 @@ View::AddCss('jscrollpane.css');
 View::AddJs('jscrollpane.plugin.js');
 View::AddJs('mousewheel.plugin.js');
 View::SetLayout('full');
-View::Header();
 ?>
 
 
@@ -314,5 +313,3 @@ View::Header();
 </div>
 <!-- END PLAY RIGHT -->
 <br clear="all" />
-
-<?php View::Footer(); ?>

@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <div id="myaccount">
     <p class="large"><?=Language::GetText('myaccount_header')?> - <?=$user->username?></p>
@@ -27,6 +22,3 @@ View::Header();
         <p><a href="<?=HOST?>/myaccount/profile/" title="<?=Language::GetText('update_profile')?>"><?=Language::GetText('update_profile')?></a></p>
     </div>
 </div>
-
-
-<?php View::Footer(); ?>

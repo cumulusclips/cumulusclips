@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('change_password_header')?></h1>
 
@@ -25,5 +20,3 @@ View::Header();
         <input class="button" type="submit" name="button" value="<?=Language::GetText('change_password_button')?>" />
     </form>
 </div>
-
-<?php View::Footer(); ?>

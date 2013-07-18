@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('update_video_header')?></h1>
 
@@ -55,5 +50,3 @@ View::Header();
     </form>
 
 </div>
-
-<?php View::Footer(); ?>

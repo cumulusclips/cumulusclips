@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('message_inbox_header')?></h1>
 
@@ -53,5 +48,3 @@ View::Header();
         <strong><?=Language::GetText('no_messages')?></strong>
     </div>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

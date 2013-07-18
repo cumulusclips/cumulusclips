@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <h1><?=Language::GetText('comments_header')?></h1>
 
 <div id="message"></div>
@@ -21,5 +19,3 @@
 <?php else: ?>
     <div class="block"><strong><?=Language::GetText('no_comments')?></strong></div>
 <?php endif; ?>
-
-<?php View::Footer(); ?>

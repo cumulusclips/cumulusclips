@@ -1,10 +1,7 @@
 <?php
-
 View::AddJs('jcycle.plugin.js');
 View::AddJs('jcycle.js');
 if (!$logged_in) View::AddSidebarBlock('home_login.tpl');
-View::Header();
-
 ?>
 
 
@@ -90,5 +87,3 @@ View::Header();
 
 </div>
 <!-- END RECENT VIDEOS --> 
-     
-<?php View::Footer(); ?>

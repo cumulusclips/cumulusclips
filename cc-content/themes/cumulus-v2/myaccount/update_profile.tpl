@@ -6,7 +6,6 @@ View::AddCss ('uploadify.css');
 View::AddJs ('uploadify.plugin.js');
 View::AddJs ('uploadify.js');
 View::SetLayout ('myaccount');
-View::Header();
 
 ?>
 
@@ -79,5 +78,3 @@ View::Header();
         </form>
     </div>
 </div>
-
-<?php View::Footer(); ?>

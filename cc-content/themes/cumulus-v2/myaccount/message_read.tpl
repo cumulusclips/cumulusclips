@@ -1,9 +1,4 @@
-<?php
-
-View::SetLayout ('myaccount');
-View::Header();
-
-?>
+<?php View::SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('message_read_header')?></h1>
 <div id="message_display">
@@ -15,5 +10,3 @@ View::Header();
     <a class="button" href="<?=HOST?>/myaccount/message/reply/<?=$message->message_id?>/"><?=Language::GetText('reply')?></a>
     <a class="button" href="<?=HOST?>/myaccount/message/inbox/<?=$message->message_id?>/"><?=Language::GetText('delete')?></a>
 </div>
-
-<?php View::Footer(); ?>
