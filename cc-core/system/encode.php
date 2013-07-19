@@ -40,7 +40,7 @@ try {
 
     ### Validate requested video
     $video = new Video ($video_id);
-    if (!Video::Exist(array ('video_id' => $video_id, 'status' => 'pending conversion'))) throw new Exception ("An invalid video was passed to the video encoder.");
+    if (!Video::Exist(array ('video_id' => $video_id, 'status' => 'pendingConversion'))) throw new Exception ("An invalid video was passed to the video encoder.");
 
 
 
@@ -446,7 +446,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nUpdating video information...") : null;
 
     // Update database with new video status information
-    $data['duration'] = $duration[0];
+    $data = array('duration' => $duration[0]);
     Plugin::Trigger ('encode.before_update');
     $video->Update ($data);
     Plugin::Trigger ('encode.update');

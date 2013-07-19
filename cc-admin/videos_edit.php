@@ -44,7 +44,7 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
     ### Retrieve video information
     $video = new Video ($_GET['id']);
     if ($video->private == '1') $private_url = $video->private_url;
-    if (!$video->found) {
+    if (!$video->found || !in_array($video->status, array('approved', 'processing', 'pendingConversion', 'pendingApproval', 'banned'))) {
         header ('Location: ' . ADMIN . '/videos.php');
         exit();
     }
@@ -140,10 +140,12 @@ if (isset ($_POST['submitted'])) {
 
 
     // Validate status
-    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-        $data['status'] = htmlspecialchars (trim ($_POST['status']));
-    } else {
-        $errors['status'] = 'Invalid status';
+    if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+            $data['status'] = htmlspecialchars (trim ($_POST['status']));
+        } else {
+            $errors['status'] = 'Invalid status';
+        }
     }
 
 
@@ -151,7 +153,7 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Perform addional actions based on status change
-        if ($data['status'] != $video->status) {
+        if (isset($data['status']) && $data['status'] != $video->status) {
 
             // Handle "Approve" action
             if ($data['status'] == 'approved') {
@@ -199,11 +201,16 @@ include ('header.php');
 
             <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending approval"<?=(isset ($data['status']) && $data['status'] == 'pending approval') || (!isset ($data['status']) && $video->status == 'pending approval')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
+                <?php if (!in_array($video->status, array('processing', 'pendingConversion'))): ?>
+                    <select name="status" class="dropdown">
+                        <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                        <option value="pendingApproval"<?=(isset ($data['status']) && $data['status'] == 'pendingApproval') || (!isset ($data['status']) && $video->status == 'pendingApproval')?' selected="selected"':''?>>Pending</option>
+                        <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                    </select>
+                <?php else: ?>
+                    <?=($video->status == 'processing') ? 'Processing' : 'Pending Conversion'?>
+                <?php endif; ?>
+
             </div>
 
             <div class="row<?=(isset ($errors['title'])) ? ' error' : ''?>">

@@ -51,9 +51,11 @@ else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['feature'], 'featured' => 0))) {
         $video = new Video ($_GET['feature']);
-        $video->Update (array ('featured' => 1));
-        $message = 'Video has been featured';
-        $message_type = 'success';
+        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+            $video->Update (array ('featured' => 1));
+            $message = 'Video has been featured';
+            $message_type = 'success';
+        }
     }
 
 }
@@ -65,9 +67,11 @@ else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
         $video = new Video ($_GET['unfeature']);
-        $video->Update (array ('featured' => 0));
-        $message = 'Video has been unfeatured';
-        $message_type = 'success';
+        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+            $video->Update (array ('featured' => 0));
+            $message = 'Video has been unfeatured';
+            $message_type = 'success';
+        }
     }
 
 }
@@ -79,9 +83,11 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['approve']))) {
         $video = new Video ($_GET['approve']);
-        $video->Approve ('approve');
-        $message = 'Video has been approved and is now available';
-        $message_type = 'success';
+        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+            $video->Approve ('approve');
+            $message = 'Video has been approved and is now available';
+            $message_type = 'success';
+        }
     }
 
 }
@@ -93,9 +99,11 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
         $video = new Video ($_GET['unban']);
-        $video->Approve ('approve');
-        $message = 'Video has been unbanned';
-        $message_type = 'success';
+        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+            $video->Approve ('approve');
+            $message = 'Video has been unbanned';
+            $message_type = 'success';
+        }
     }
 
 }
@@ -107,10 +115,12 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['ban']))) {
         $video = new Video ($_GET['ban']);
-        $video->Update (array ('status' => 'banned'));
-        Flag::FlagDecision ($video->video_id, 'video', true);
-        $message = 'Video has been banned';
-        $message_type = 'success';
+        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+            $video->Update (array ('status' => 'banned'));
+            Flag::FlagDecision ($video->video_id, 'video', true);
+            $message = 'Video has been banned';
+            $message_type = 'success';
+        }
     }
 
 }
@@ -124,7 +134,7 @@ $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
 
     case 'pending':
-        $query .= " status = 'pending approval'";
+        $query .= " status IN ('processing', 'pendingApproval', 'pendingConversion')";
         $query_string['status'] = 'pending';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
@@ -255,7 +265,11 @@ include ('header.php');
                         <td class="video-title">
                             <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a><br />
                             <div class="record-actions">
-                                <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
+                                
+                                <?php if (!in_array($video->status, array('processing', 'pendingConversion'))): ?>
+                                    <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
+                                <?php endif; ?>
+                                    
                                 <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
@@ -274,7 +288,7 @@ include ('header.php');
                                     <a href="<?=$video->url?>/" target="_ccsite">Go to Video</a>
                                 <?php endif; ?>
 
-                                <?php if ($status == 'pending'): ?>
+                                <?php if ($video->status == 'pendingApproval'): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
                                 <?php elseif (in_array ($status, array ('approved','featured'))): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>

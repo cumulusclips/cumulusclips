@@ -37,7 +37,6 @@
             <h3 class="videos"><span>Videos</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/videos.php">Browse Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=pending">Pending Videos</a></p>
                 <p><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></p>
                 <p><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></p>
             </div>

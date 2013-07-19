@@ -87,7 +87,7 @@ try {
 
 
     ### Update video information
-    $data = array ('status' => 'pending conversion', 'original_extension' => $extension);
+    $data = array ('status' => 'pendingConversion', 'original_extension' => $extension);
     Plugin::Trigger ('upload.ajax.before_update_video');
     $video->Update ($data);
 

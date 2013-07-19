@@ -40,7 +40,7 @@ if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
 
 
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->user->user_id . " AND status = 'approved' ORDER BY date_created DESC";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->user->user_id . " AND status IN ('approved', 'processing', 'pendingConversion', 'pendingApproval') ORDER BY date_created DESC";
 $result_count = $db->Query ($query);
 $total = $db->Count ($result_count);
 

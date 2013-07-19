@@ -231,6 +231,9 @@
         <no_user_videos>You haven't uploaded any videos yet.</no_user_videos>
         <edit_video>Edit Video</edit_video>
         <delete_video>Delete Video</delete_video>
+        <pendingConversion>Pending Conversion</pendingConversion>
+        <processing>Processing</processing>
+        <pendingApproval>Pending Approval</pendingApproval>
 
         <!-- My Account / My Favorite Videos Page -->
         <myfavorites_header>My Favorite Videos</myfavorites_header>

@@ -260,7 +260,7 @@ class Video {
                 $body = 'A new video has been uploaded and is awaiting admin approval.';
 
                 // Set Pending
-                $this->Update (array ('status' => 'pending approval'));
+                $this->Update (array ('status' => 'pendingApproval'));
                 Plugin::Trigger ('video.approve_required');
 
             } else {
