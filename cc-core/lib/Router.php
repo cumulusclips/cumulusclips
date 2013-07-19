@@ -135,19 +135,7 @@ class Router
             'path' => 'videos/([0-9]+)/[a-z0-9\-]+',
             'location' => 'cc-core/controllers/play.php',
             'mappings' => array('vid')
-        ));
-
-        $routes['videoComments'] = new Route(array(
-            'path' => 'videos/([0-9]+)/comments',
-            'location' => 'cc-core/controllers/comments.php',
-            'mappings' => array('vid')
-        ));    
-
-        $routes['videoCommentsPaginated'] = new Route(array(
-            'path' => 'videos/([0-9]+)/comments/page/([0-9]+)',
-            'location' => 'cc-core/controllers/comments.php',
-            'mappings' => array('vid', 'page')
-        ));    
+        ));  
 
         $routes['browseMembers'] = new Route(array(
             'path' => 'members',
@@ -164,18 +152,6 @@ class Router
             'path' => 'members/([a-z0-9]+)',
             'location' => 'cc-core/controllers/profile.php',
             'mappings' => array('username')
-        ));
-
-        $routes['memberVideos'] = new Route(array(
-            'path' => 'members/([a-z0-9]+)/videos',
-            'location' => 'cc-core/controllers/member_videos.php',
-            'mappings' => array('username')
-        ));
-
-        $routes['memberVideosPaginated'] = new Route(array(
-            'path' => 'members/([a-z0-9]+)/videos/page/([0-9]+)',
-            'location' => 'cc-core/controllers/member_videos.php',
-            'mappings' => array('username', 'page')
         ));
 
         $routes['optOut'] = new Route(array(
@@ -238,18 +214,6 @@ class Router
             'path' => 'private/videos/([a-z0-9]+)',
             'location' => 'cc-core/controllers/play.php',
             'mappings' => array('private')
-        ));
-
-        $routes['privateVideoComments'] = new Route(array(
-            'path' => 'private/comments/([a-z0-9]+)',
-            'location' => 'cc-core/controllers/comments.php',
-            'mappings' => array('private')
-        ));
-
-        $routes['privateVideoCommentsPaginated'] = new Route(array(
-            'path' => 'private/comments/([a-z0-9]+)/page/([0-9]+)',
-            'location' => 'cc-core/controllers/comments.php',
-            'mappings' => array('private', 'page')
         ));
 
         
