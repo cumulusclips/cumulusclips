@@ -1,163 +1,110 @@
 <?php
 
-class Database {
-
-    static public $db;
-    public $dbc;
-    public $last_query;
-
-    // Constructor method
-    public function  __construct() {
-        $this->dbc = @mysql_connect (DB_HOST, DB_USER, DB_PASS) OR die ('Unable to connect to database');
-        @mysql_select_db (DB_NAME, $this->dbc) OR die ('Unable to select database');
+class Database
+{
+    protected $_connection;
+    protected $_fetchMode = PDO::FETCH_ASSOC;
+    protected $_lastStatement;
+    
+    public function __construct()
+    {
+        $this->_getConnection();
     }
 
-
-
-    /**
-     * Retrieve DB object
-     * @return object Returns new instance of DB object if non exists, or current
-     * instance if already instantiated
-     */
-    static function GetInstance() {
-        if (empty (self::$db)) self::$db = new self;
-        return self::$db;
+    protected function _getConnection()
+    {
+        return $this->_connection instanceof PDO ? $this->_connection : $this->_connect();
     }
 
-
-
-    /**
-     * Execute MySQL query method
-     * @param string $query MySQL query to be executed
-     * @return resource_id of query results if successful
-     */
-    public function Query ($query) {
-        
-        // Re-connect if connection is no longer valid
-        if (!mysql_ping ($this->dbc)) {
-            $this->Close();
-            self::$db = new self;
-            $this->dbc = self::$db->dbc;
-        }
-
-        // Log query if requested
-        if (LOG_QUERIES) {
-            App::Log (QUERY_LOG, 'Date: ' . date ('m/d/Y h:i:sA') . "\t\t Query: $query");
-        }
-
-        $result = mysql_query ($query);
-        $this->last_query = $query;
-        if ($result) {
-            return $result;
-        } else {
-            $this->KillDB ($this->last_query);
+    protected function _connect()
+    {
+        try {
+            $this->_connection = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            return $this->_connection;
+        } catch (Exception $exception) {
+            exit();
         }
     }
 
-
-
-    // Retrieve result set as object
-    public function FetchObj ($result) {
-        return mysql_fetch_object ($result);
+    protected function _reconnect()
+    {
+        $this->_connection = null;
+        return $this->_connect();
     }
 
+    public function query($sql, $bindParams = array())
+    {
+        $pdo = $this->_getConnection();
+        try {
+            // Log query if requested
+            if (LOG_QUERIES) {
+                $params = json_encode($bindParams);
+                $date = date('D M d Y H:i:s');
+                App::Log(DATABASE_LOG, "[$date] [query] Query: $sql; Params: $params");
+            }
+            
+            $pdoStatement = $pdo->prepare($sql);
+            $pdoStatement->execute($bindParams);
+            $this->_lastStatement = $pdoStatement;
+            return $pdoStatement;
+        } catch (Exception $exception) {
+            $error = $exception->getMessage();
+            $date = date('D M d Y H:i:s');
+            $params = json_encode($bindParams);
 
+            // Log Database Error
+            $messageLog = "[$date] [error] ";
+            $messageLog .= 'Error: ' . $error . '; ';
+            $messageLog .= 'Query: ' . $sql . '; ';
+            $messageLog .= 'Params: ' . $params;
+            App::Log(DATABASE_LOG, $messageLog);
 
-    // Retrieve result set as numbered array
-    public function FetchRow ($result) {
-        return mysql_fetch_row ($result);
-    }
+            // Send Notification
+            $subject = 'Site Error Encountered ' . $date;
+            $messageAlert = "An error was encountered on the website\n\n";
+            $messageAlert .= 'Date: ' . $date . "\n\n";
+            $messageAlert .= "Error:\n" . $error . "\n\n";
+            $messageAlert .= "Query:$sql";
+            $messageAlert .= "Params:\n" . $params;
+            App::Alert($subject, $messageAlert);
 
-
-
-    // Retrieve result set as named array
-    public function FetchAssoc ($result) {
-        return mysql_fetch_assoc ($result);
-    }
-
-
-
-    // Count the number of rows in query result resource
-    public function Count ($result) {
-        return mysql_num_rows ($result);
-    }
-
-
-
-    // Return the number of rows affected by the last UPDATE/DELETE query
-    public function AffectedRows() {
-        return mysql_affected_rows();
-    }
-
-
-
-
-    // Retrieve the last value created in the auto_increment field
-    public function LastId() {
-        return mysql_insert_id();
-    }
-
-
-
-    // Escape string for safe use in queries
-    public function Escape ($string) {
-        if (ini_get ('magic_quotes_gpc')) {
-            $string = stripslashes ($string);
+            // Send user to error page
+            if (!headers_sent()) {
+                header("Location: " . HOST . "/system-error/");
+            } else {
+                echo '<script>top.location = "' . HOST . '/system-error/";</script>';
+            }
+            exit();
         }
-        return mysql_real_escape_string (trim ($string), $this->dbc);
     }
 
-
-
-    // Return error thrown my MySQL
-    public function Error() {
-        return mysql_error();
-    }
-
-
-
-    /**
-     * Close current database connection
-     * @return boolean Returns true if connection was successfully close, false otherwise
-     */
-    public function Close() {
-        return mysql_close ($this->dbc);
-    }
-
-
-
-    /**
-     * Terminate execution of web site in case of Database error.
-     * @return void Website execution is terminated. Errors are logged and sent
-     * via Email. User is redirected to error page if possible.
-     */
-    private function KillDB() {
-
-        // Log Database Error
-        $date = date('m/d/Y G:iA');
-        $message_log = "### MySQL Error - $date\n\n";
-        $message_log .= "Error:\n" . $this->Error() . "\n\n";
-        $message_log .= "Query: " . $this->last_query . "\n\n";
-        App::Log (DB_ERR_LOG, $message_log);
-
-
-        // Send Notification
-        $subject = 'Site Error Encountered ' . $date;
-        $message_alert = "An error was encountered on the website\n\n";
-        $message_alert .= "Date: " . $date . "\n\n";
-        $message_alert .= "Error:\n" . $this->Error() . "\n\n";
-        $message_alert .= "Query:\n" . $this->last_query;
-        App::Alert ($subject, $message_alert);
-
-        if (!headers_sent()) {
-            header ("Location: " . HOST . "/system-error/");
-        } else {
-            echo '<script>top.location = "' . HOST . '/system-error/";</script>';
+    public function fetchRow($sql, $bindParams = array(), $fetchMode = null)
+    {
+        if ($fetchMode === null) {
+            $fetchMode = $this->_fetchMode;
         }
-        exit();
-
+        $pdoStatement = $this->query($sql, $bindParams);
+        $this->_lastStatement = $pdoStatement;
+        return $pdoStatement->fetch($fetchMode);
     }
 
+    public function fetchAll($sql, $bindParams = array(), $fetchMode = null)
+    {
+        if ($fetchMode === null) {
+            $fetchMode = $this->_fetchMode;
+        }
+        $pdoStatement = $this->query($sql, $bindParams);
+        $this->_lastStatement = $pdoStatement;
+        return $pdoStatement->fetchAll($fetchMode);
+    }
+    
+    public function rowCount()
+    {
+        return $this->_lastStatement->rowCount();
+    }
+    
+    public function lastId()
+    {
+        return $this->_connection->lastInsertId();
+    }
 }
-
-?>
