@@ -17,17 +17,17 @@ if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in
 
 // Retrieve Featured Video
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1 AND private = '0'";
-$result_featured = $db->Query ($query);
+$featuredVideosResults = $db->fetchAll($query);
 View::$vars->featured_videos = array();
-while ($video = $db->FetchObj ($result_featured)) View::$vars->featured_videos[] = $video->video_id;
+foreach ($featuredVideosResults as $video) View::$vars->featured_videos[] = $video['video_id'];
 
 
 
 // Retrieve Recent Videos
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC LIMIT 6";
-$result_recent = $db->Query ($query);
+$recentVideosResults = $db->fetchAll($query);
 View::$vars->recent_videos = array();
-while ($video = $db->FetchObj ($result_recent)) View::$vars->recent_videos[] = $video->video_id;
+foreach ($recentVideosResults as $video) View::$vars->recent_videos[] = $video['video_id'];
 
 
 // Output Page
