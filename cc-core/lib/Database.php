@@ -31,6 +31,14 @@ class Database
         $this->_connection = null;
         return $this->_connect();
     }
+    
+    public function basicQuery($sql)
+    {
+        $pdo = $this->_getConnection();
+        $pdoStatement = $pdo->prepare($sql);
+        $pdoStatement->execute();
+        return $pdoStatement->fetchAll();
+    }
 
     public function query($sql, $bindParams = array())
     {

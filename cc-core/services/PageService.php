@@ -1,6 +1,6 @@
 <?php
 
-class Page {
+class PageService {
 
     public $found;
     private $db;

@@ -5,7 +5,7 @@ class VideoMapper
     public function getVideoById($videoId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE videoId = :videoId';
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE video_id = :videoId';
         $dbResults = $db->fetchRow($query, array(':videoId' => $videoId));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
@@ -29,7 +29,7 @@ class VideoMapper
     public function getUserVideos($userId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE userId = :userId';
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE user_id = :userId';
         $dbResults = $db->fetchAll($query, array(':userId' => $userId));
         $userVideos = array();
         foreach($dbResults as $record) {
@@ -41,24 +41,24 @@ class VideoMapper
     protected function _map($dbResults)
     {
         $video = new Video();
-        $video->videoId = $dbResults['videoId'];
+        $video->videoId = $dbResults['video_id'];
         $video->filename = $dbResults['filename'];
         $video->title = $dbResults['title'];
         $video->description = $dbResults['description'];
         $video->tags = explode(', ', $dbResults['tags']);
-        $video->categoryId = $dbResults['categoryId'];
-        $video->userId = $dbResults['userId'];
-        $video->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
+        $video->categoryId = $dbResults['category_id'];
+        $video->userId = $dbResults['user_id'];
+        $video->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $video->duration = $dbResults['duration'];
         $video->status = ($dbResults['status'] == 1) ? true : false;
         $video->views = $dbResults['views'];
-        $video->originalExtension = $dbResults['originalExtension'];
+        $video->originalExtension = $dbResults['original_extension'];
         $video->featured = ($dbResults['featured'] == 1) ? true : false;
         $video->gated = ($dbResults['gated'] == 1) ? true : false;
         $video->released = ($dbResults['released'] == 1) ? true : false;
-        $video->disableEmbed = ($dbResults['disableEmbed'] == 1) ? true : false;
+        $video->disableEmbed = ($dbResults['disable_embed'] == 1) ? true : false;
         $video->private = ($dbResults['private'] == 1) ? true : false;
-        $video->privateUrl = $dbResults['privateUrl'];
+        $video->privateUrl = $dbResults['private_url'];
         return $video;
     }
 
@@ -70,7 +70,7 @@ class VideoMapper
             // Update
             Plugin::triggerEvent('video.update', $video);
             $query = 'UPDATE ' . DB_PREFIX . 'videos SET';
-            $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, categoryId = :categoryId, userId = :userId, dateCreated = :dateCreated, duration = :duration, status = :status, views = :views, originalExtension = :originalExtension, featured = :featured, gated = :gated, released = :released, disableEmbed = :disableEmbed, private = :private, privateUrl = :privateUrl';
+            $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, category_id = :categoryId, user_id = :userId, date_created = :dateCreated, duration = :duration, status = :status, views = :views, original_extension = :originalExtension, featured = :featured, gated = :gated, released = :released, disable_embed = :disableEmbed, private = :private, private_url = :privateUrl';
             $query .= ' WHERE videoId = :videoId';
             $bindParams = array(
                 ':videoId' => $video->videoId,
@@ -96,7 +96,7 @@ class VideoMapper
             // Create
             Plugin::triggerEvent('video.create', $video);
             $query = 'INSERT INTO ' . DB_PREFIX . 'videos';
-            $query .= ' (filename, title, description, tags, categoryId, userId, dateCreated, duration, status, views, originalExtension, featured, gated, released, disableEmbed, private, privateUrl)';
+            $query .= ' (filename, title, description, tags, category_id, user_id, date_created, duration, status, views, original_extension, featured, gated, released, disable_embed, private, private_url)';
             $query .= ' VALUES (:filename, :title, :description, :tags, :categoryId, :userId, :dateCreated, :duration, :status, :views, :originalExtension, :featured, :gated, :released, :disableEmbed, :private, :privateUrl)';
             $bindParams = array(
                 ':filename' => $video->filename,
@@ -123,5 +123,21 @@ class VideoMapper
         $videoId = (!empty($video->videoId)) ? $video->videoId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $videoId);
         return $videoId;
+    }
+    
+    public function getMultipleVideosById(array $videoIds)
+    {
+        $videoList = array();
+        if (empty($videoIds)) return $videoList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($videoIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE video_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $videoIds);
+
+        foreach($result as $videoRecord) {
+            $videoList[] = $this->_map($videoRecord);
+        }
+        return $videoList;
     }
 }

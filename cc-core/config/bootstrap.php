@@ -2,7 +2,6 @@
 
 // Define system paths and vars
 define('DOC_ROOT', dirname(dirname(dirname(__FILE__))));
-define('LIB', DOC_ROOT . '/cc-core/lib');
 define('THEMES_DIR', DOC_ROOT . '/cc-content/themes');
 define('LOG', DOC_ROOT . '/cc-core/logs');
 define('CONVERSION_LOG', LOG . '/converter.log');
@@ -15,24 +14,23 @@ define('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
 date_default_timezone_set('America/New_York');
 
 // Load App class and perform pre-init checks
-if (!class_exists('App')) include(LIB . '/App.php');
+if (!class_exists('App')) include(DOC_ROOT . '/cc-core/lib/App.php');
+
+// Set Include Path
+$includePath = get_include_path();
+$includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/lib';
+$includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/models';
+$includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/mappers';
+$includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/services';
+if (!set_include_path($includePath)) exit('Host does not all custom include paths');
+spl_autoload_register(array('App', 'LoadClass'));
+
+// Checks
 App::InstallCheck();
 App::MaintCheck();
 
 // Load DB & FTP credentials
 include_once('config.php');
-
-// Load Main Classes
-App::LoadClass('Registry');
-App::LoadClass('Database');
-App::LoadClass('Settings');
-App::LoadClass('Functions');
-App::LoadClass('Language');
-App::LoadClass('View');
-App::LoadClass('Plugin');
-App::LoadClass('Filesystem');
-App::LoadClass('Router');
-App::LoadClass('Route');
 
 // Retrieve site settings from DB
 $db = new Database();

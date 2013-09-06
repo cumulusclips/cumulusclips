@@ -5,7 +5,7 @@ class UserMapper
     public function getUserById($userId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE userId = :userId';
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE user_id = :userId';
         $dbResults = $db->fetchRow($query, array(':userId' => $userId));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
@@ -29,20 +29,20 @@ class UserMapper
     protected function _map($dbResults)
     {
         $user = new User();
-        $user->userId = $dbResults['userId'];
+        $user->userId = $dbResults['user_id'];
         $user->username = $dbResults['username'];
         $user->email = $dbResults['email'];
         $user->password = $dbResults['password'];
         $user->status = ($dbResults['status'] == 1) ? true : false;
         $user->role = $dbResults['role'];
-        $user->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
-        $user->firstName = $dbResults['firstName'];
-        $user->lastName = $dbResults['lastName'];
-        $user->aboutMe = $dbResults['aboutMe'];
+        $user->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
+        $user->firstName = $dbResults['first_name'];
+        $user->lastName = $dbResults['last_name'];
+        $user->aboutMe = $dbResults['about_me'];
         $user->website = $dbResults['website'];
-        $user->confirmCode = $dbResults['confirmCode'];
+        $user->confirmCode = $dbResults['confirm_code'];
         $user->views = $dbResults['views'];
-        $user->lastLogin = date(DATE_FORMAT, strtotime($dbResults['lastLogin']));
+        $user->lastLogin = date(DATE_FORMAT, strtotime($dbResults['last_login']));
         $user->avatar = $dbResults['avatar'];
         $user->released = ($dbResults['released'] == 1) ? true : false;
         return $user;
@@ -56,7 +56,7 @@ class UserMapper
             // Update
             Plugin::triggerEvent('video.update', $user);
             $query = 'UPDATE ' . DB_PREFIX . 'users SET';
-            $query .= ' username = :username, email = :email, password = :password, status = :status, role = :role, dateCreated = :dateCreated, firstName = :firstName, lastName = :lastName, aboutMe = :aboutMe, website = :website, confirmCode = :confirmCode, views = :views, lastLogin = :lastLogin, avatar = :avatar, :released';
+            $query .= ' username = :username, email = :email, password = :password, status = :status, role = :role, date_created = :dateCreated, first_name = :firstName, last_name = :lastName, about_me = :aboutMe, website = :website, confirm_code = :confirmCode, views = :views, last_login = :lastLogin, avatar = :avatar, :released';
             $query .= ' WHERE userId = :userId';
             $bindParams = array(
                 ':userId' => $user->userId,
@@ -80,7 +80,7 @@ class UserMapper
             // Create
             Plugin::triggerEvent('video.create', $user);
             $query = 'INSERT INTO ' . DB_PREFIX . 'users';
-            $query .= ' (username, email, password, status, role, dateCreated, firstName, lastName, aboutMe, website, confirmCode, views, lastLogin, avatar, :released)';
+            $query .= ' (username, email, password, status, role, date_created, first_name, last_name, about_me, website, confirm_code, views, last_login, avatar, :released)';
             $query .= ' VALUES (:username, :email, :password, :status, :role, :dateCreated, :firstName, :lastName, :aboutMe, :website, :confirmCode, :views, :lastLogin, :avatar, :released)';
             $bindParams = array(
                 ':username' => $user->username,
@@ -105,5 +105,33 @@ class UserMapper
         $userId = (!empty($user->userId)) ? $user->userId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $userId);
         return $userId;
+    }
+    
+    public function getMultipleUsersById(array $userIds)
+    {
+        $userList = array();
+        if (empty($userIds)) return $userList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($userIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE user_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $userIds);
+
+        foreach($result as $userRecord) {
+            $userList[] = $this->_map($userRecord);
+        }
+        return $userList;
+    }
+    
+    /**
+     * Get video count Method
+     * @return integer Returns the number of approved videos uploaded by the user
+     */
+    public function getVideoCount($userId)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $userId AND status = 'approved'";
+        $db->fetchRow($query);
+        return $db->rowCount();
     }
 }

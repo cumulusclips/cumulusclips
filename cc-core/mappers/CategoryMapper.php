@@ -5,8 +5,20 @@ class CategoryMapper
     public function getCategoryById($categoryId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE categoryId = :categoryId';
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE category_id = :categoryId';
         $dbResults = $db->fetchRow($query, array(':categoryId' => $categoryId));
+        if ($db->rowCount() == 1) {
+            return $this->_map($dbResults);
+        } else {
+            return false;
+        }
+    }
+    
+    public function getCategoryBySlug($slug)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE slug = :slug';
+        $dbResults = $db->fetchRow($query, array(':slug' => $slug));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {
@@ -17,7 +29,7 @@ class CategoryMapper
     protected function _map($dbResults)
     {
         $category = new Category();
-        $category->categoryId = $dbResults['categoryId'];
+        $category->categoryId = $dbResults['category_id'];
         $category->name = $dbResults['name'];
         $category->slug = $dbResults['slug'];
         return $category;
@@ -32,7 +44,7 @@ class CategoryMapper
             Plugin::triggerEvent('video.update', $category);
             $query = 'UPDATE ' . DB_PREFIX . 'categories SET';
             $query .= ' name = :name, slug = :slug';
-            $query .= ' WHERE categoryId = :categoryId';
+            $query .= ' WHERE category_id = :categoryId';
             $bindParams = array(
                 ':categoryId' => $category->categoryId,
                 ':name' => $category->name,
@@ -54,5 +66,21 @@ class CategoryMapper
         $categoryId = (!empty($category->categoryId)) ? $category->categoryId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $categoryId);
         return $categoryId;
+    }
+    
+    public function getMultipleCategoriesById(array $categoryIds)
+    {
+        $categoryList = array();
+        if (empty($categoryIds)) return $categoryList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($categoryIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE category_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $categoryIds);
+
+        foreach($result as $categoryRecord) {
+            $categoryList[] = $this->_map($categoryRecord);
+        }
+        return $categoryList;
     }
 }

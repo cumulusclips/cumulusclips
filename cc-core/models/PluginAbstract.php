@@ -5,13 +5,13 @@ abstract class PluginAbstract
     /**
      * Attaches plugin to plugin's HTML Head 
      */
-    public static function load(){}
+    abstract public static function load();
  
     /**
      * Provides information regarding plugin to Admin Panel
      * @return array Plugin information
      */
-    public static function info(){}
+    abstract public static function info();
 
     /**
      * Display and process the settings form for the plugin 

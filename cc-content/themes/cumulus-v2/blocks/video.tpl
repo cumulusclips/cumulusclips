@@ -1,11 +1,11 @@
-<?php $video = new Video($_id); ?>
+<?php $video = $model ?>
 
 <div class="video">
     <div>
-        <a href="<?=$video->url?>/" title="<?=$video->title?>">
+        <a href="<?=VideoService::getUrl($video)?>/" title="<?=$video->title?>">
             <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
         </a>
         <span><?=$video->duration?></span>
     </div>
-    <p><a href="<?=$video->url?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
+    <p><a href="<?=VideoService::getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
 </div>

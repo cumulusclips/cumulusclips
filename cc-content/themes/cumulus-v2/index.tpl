@@ -53,13 +53,12 @@ if (!$logged_in) View::AddSidebarBlock('home_login.tpl');
     <!-- END SLIDE 3 -->
     
     <!-- BEGIN FEATURED VIDEO SLIDES -->
-    <?php foreach ($featured_videos as $featured_id): ?>
-        <?php $featured = new Video ($featured_id); ?>
+    <?php foreach ($featured_videos as $featuredVideo): ?>
         <div>
-            <img src="<?=$config->thumb_url?>/<?=$featured->filename?>.jpg" />
+            <img src="<?=$config->thumb_url?>/<?=$featuredVideo->filename?>.jpg" />
             <div class="slide-text">
-                <p class="large"><u><?=Language::GetText('featured')?>:</u> <?=$featured->title?></p>
-                <p><?=Functions::CutOff ($featured->description, 80)?></p>
+                <p class="large"><u><?=Language::GetText('featured')?>:</u> <?=$featuredVideo->title?></p>
+                <p><?=Functions::CutOff ($featuredVideo->description, 80)?></p>
                 <a class="button" href="<?=$featured->url?>/">Watch Now</a>
             </div>
         </div>

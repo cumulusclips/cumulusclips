@@ -1,11 +1,11 @@
 <?php
 
-class Message {
+class FavoriteService {
 
     public $found;
     private $db;
-    protected static $table = 'messages';
-    protected static $id_name = 'message_id';
+    protected static $table = 'favorites';
+    protected static $id_name = 'fav_id';
 
 
 
@@ -16,7 +16,7 @@ class Message {
      */
     static function Delete ($id) {
         $db = Database::GetInstance();
-        Plugin::Trigger ('message.delete');
+        Plugin::Trigger ('favorite.delete');
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }

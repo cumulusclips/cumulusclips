@@ -1,6 +1,6 @@
 <?php
 
-class Flag {
+class FlagService {
 
     public $found;
     private $db;

@@ -147,7 +147,7 @@ class View
         extract(get_object_vars(self::$vars));
         Plugin::triggerEvent('view.repeating_block');
 
-        foreach ($records as $_id) {
+        foreach ($records as $model) {
             Plugin::triggerEvent('view.repeating_block_loop');
             include($block);
         }

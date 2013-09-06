@@ -1,11 +1,13 @@
 <?php
 
-class Category {
+class SubscriptionService {
 
     public $found;
     private $db;
-    protected static $table = 'categories';
-    protected static $id_name = 'cat_id';
+    protected static $table = 'subscriptions';
+    protected static $id_name = 'sub_id';
+
+
 
     /**
      * Delete a record
@@ -14,7 +16,7 @@ class Category {
      */
     static function Delete ($id) {
         $db = Database::GetInstance();
-        Plugin::Trigger ('category.delete');
+        Plugin::Trigger ('subscription.delete');
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }

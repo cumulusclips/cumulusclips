@@ -1,6 +1,6 @@
 <?php
 
-class Video {
+class VideoService {
 
     public $found;
     private $db;
@@ -8,6 +8,12 @@ class Video {
     protected static $id_name = 'video_id';
     protected $_config;
     
+    static function getUrl(Video $video)
+    {
+        return HOST . '/videos/' . $video->videoId . '/' . Functions::createSlug($video->title);
+    }
+    
+
     
 
 

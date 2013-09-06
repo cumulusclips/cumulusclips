@@ -22,9 +22,10 @@ class App {
      * @param string $path [optional] Path to the class' directory. Defaults to site LIB directory
      * @return void Includes the requested class into memory if not already loaded
      */
-    static function LoadClass ($class, $path = LIB) {
+    static function LoadClass ($class, $path = '') {
         if (!class_exists ($class)) {
-            include ($path . "/$class.php");
+            $path .= (!empty($path)) ? '/' : '';
+            include ($path . "$class.php");
         }
     }
 

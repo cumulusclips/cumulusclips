@@ -51,7 +51,7 @@ else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['feature'], 'featured' => 0))) {
         $video = new Video ($_GET['feature']);
-        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!in_array($video->status, array('new', 'processing', 'pendingConversion'))) {
             $video->Update (array ('featured' => 1));
             $message = 'Video has been featured';
             $message_type = 'success';
@@ -67,7 +67,7 @@ else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
         $video = new Video ($_GET['unfeature']);
-        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!in_array($video->status, array('new', 'processing', 'pendingConversion'))) {
             $video->Update (array ('featured' => 0));
             $message = 'Video has been unfeatured';
             $message_type = 'success';
@@ -83,7 +83,7 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['approve']))) {
         $video = new Video ($_GET['approve']);
-        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!in_array($video->status, array('new', 'processing', 'pendingConversion'))) {
             $video->Approve ('approve');
             $message = 'Video has been approved and is now available';
             $message_type = 'success';
@@ -99,7 +99,7 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['unban']))) {
         $video = new Video ($_GET['unban']);
-        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!in_array($video->status, array('new', 'processing', 'pendingConversion'))) {
             $video->Approve ('approve');
             $message = 'Video has been unbanned';
             $message_type = 'success';
@@ -115,7 +115,7 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
     // Validate video id
     if (Video::Exist (array ('video_id' => $_GET['ban']))) {
         $video = new Video ($_GET['ban']);
-        if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+        if (!in_array($video->status, array('new', 'processing', 'pendingConversion'))) {
             $video->Update (array ('status' => 'banned'));
             Flag::FlagDecision ($video->video_id, 'video', true);
             $message = 'Video has been banned';

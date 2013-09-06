@@ -1,6 +1,6 @@
 <?php
 
-class Rating {
+class RatingService {
 
     public $found;
     private $db;

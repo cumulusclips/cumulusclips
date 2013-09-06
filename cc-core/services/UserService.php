@@ -1,6 +1,6 @@
 <?php
 
-class User {
+class UserService {
 
     public $found;
     private $db;
@@ -348,8 +348,8 @@ class User {
      * Retrieve URL to current user's avatar
      * @return string URL to user's uploaded avatar or default theme avatar if none is set
      */
-    public function getAvatarUrl()
+    public function getAvatarUrl($user)
     {
-        return (empty($this->avatar)) ? View::GetFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$this->avatar";
+        return (empty($user->avatar)) ? View::GetFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$user->avatar";
     }
 }

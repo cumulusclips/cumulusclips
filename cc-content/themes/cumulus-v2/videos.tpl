@@ -14,9 +14,8 @@
     <div id="category_options">
         <p class="big"><?=Language::GetText('category')?></p>
         <ul>
-        <?php foreach ($category_list as $cat_id): ?>
-            <?php $category = new Category ($cat_id); ?>
-            <li><a href="<?=HOST?>/videos/<?=$category->slug?>/" title="<?=$category->cat_name?>"><?=$category->cat_name?></a></li>
+        <?php foreach ($category_list as $category): ?>
+            <li><a href="<?=HOST?>/videos/<?=$category->slug?>/" title="<?=$category->name?>"><?=$category->name?></a></li>
         <?php endforeach; ?>
         </ul>
     </div>

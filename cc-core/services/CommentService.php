@@ -1,6 +1,6 @@
 <?php
 
-class Comment {
+class CommentService {
 
     public $found;
     private $db;

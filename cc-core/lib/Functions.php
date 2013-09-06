@@ -1,6 +1,15 @@
 <?php
 
 class Functions {
+    
+    static function flattenArray($array, $key = 0)
+    {
+        $newArray = array();
+        foreach ($array as $child) {
+            $newArray[] = $child[$key];
+        }
+        return $newArray;
+    }
 
     /**
      * Create a slug based on given string

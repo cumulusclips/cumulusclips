@@ -1,6 +1,6 @@
 <?php
 
-class Privacy {
+class PrivacyService {
 
     public $found;
     private $db;

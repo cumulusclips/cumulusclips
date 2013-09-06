@@ -1,7 +1,5 @@
 <?php
 
-App::LoadClass ('PHPMailer');
-
 class Mail {
 
     private $config;

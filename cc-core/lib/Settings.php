@@ -27,10 +27,10 @@ class Settings
         // Retrieve all settings from DB and store in object
         $db = Registry::get('db');
         $query = "SELECT * FROM " . DB_PREFIX . self::$table;
-        $results = $db->fetchAll($query, array(), PDO::FETCH_OBJ);
+        $results = $db->basicQuery($query);
         foreach ($results as $row) {
-            $field = $row->name;
-            self::$settings->$field = $row->value;
+            $field = $row['name'];
+            self::$settings->$field = $row['value'];
         }
     }
 
