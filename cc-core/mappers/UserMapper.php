@@ -14,11 +14,31 @@ class UserMapper
         }
     }
     
-    public function getUserByUser($username)
+    public function getUserByUsername($username)
     {
         $db = Registry::get('db');
         $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE username = :username';
         $dbResults = $db->fetchRow($query, array(':username' => $username));
+        if ($db->rowCount() == 1) {
+            return $this->_map($dbResults);
+        } else {
+            return false;
+        }
+    }
+    
+    public function getUserByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {

@@ -14,6 +14,26 @@ class VideoMapper
         }
     }
     
+    public function getVideoByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
+        if ($db->rowCount() == 1) {
+            return $this->_map($dbResults);
+        } else {
+            return false;
+        }
+    }
+    
     public function getVideoByFilename($filename)
     {
         $db = Registry::get('db');
@@ -50,7 +70,7 @@ class VideoMapper
         $video->userId = $dbResults['user_id'];
         $video->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $video->duration = $dbResults['duration'];
-        $video->status = ($dbResults['status'] == 1) ? true : false;
+        $video->status = $dbResults['status'];
         $video->views = $dbResults['views'];
         $video->originalExtension = $dbResults['original_extension'];
         $video->featured = ($dbResults['featured'] == 1) ? true : false;
@@ -71,7 +91,7 @@ class VideoMapper
             Plugin::triggerEvent('video.update', $video);
             $query = 'UPDATE ' . DB_PREFIX . 'videos SET';
             $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, category_id = :categoryId, user_id = :userId, date_created = :dateCreated, duration = :duration, status = :status, views = :views, original_extension = :originalExtension, featured = :featured, gated = :gated, released = :released, disable_embed = :disableEmbed, private = :private, private_url = :privateUrl';
-            $query .= ' WHERE videoId = :videoId';
+            $query .= ' WHERE video_id = :videoId';
             $bindParams = array(
                 ':videoId' => $video->videoId,
                 ':filename' => $video->filename,

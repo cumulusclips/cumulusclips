@@ -58,4 +58,13 @@ class SubscriptionMapper
         Plugin::triggerEvent('video.save', $subscriptionId);
         return $subscriptionId;
     }
+    
+    
+    public function isSubscribed($subscribingUser, $subscribedMember)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'subscriptions WHERE user_id = :user AND member = :member';
+        $db->fetchRow($query, array(':user' => $subscribingUser, ':member' =>$subscribedMember));
+        return ($db->rowCount() == 1) ? true : false;
+    }
 }

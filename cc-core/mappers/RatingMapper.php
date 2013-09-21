@@ -61,4 +61,43 @@ class RatingMapper
         Plugin::triggerEvent('video.save', $ratingId);
         return $ratingId;
     }
+    
+    /**
+     * Retrieve total number of like ratings for a video
+     * @param integer $videoId Video to retrieve likes for
+     * @return integer Returns total likes
+     */
+    public function getLikeCount($videoId)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings WHERE video_id = $videoId AND rating = 1";
+        $count = $db->fetchRow($query);
+        return $count['count'];
+    }
+
+    /**
+     * Retrieve total number of dislike ratings for a video
+     * @param integer $videoId Video to retrieve dislikes for
+     * @return integer Returns total dislikes
+     */
+    public function getDislikeCount($videoId)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings WHERE video_id = $videoId AND rating = 0";
+        $count = $db->fetchRow($query);
+        return $count['count'];
+    }
+
+    /**
+     * Retrieve total number of ratings for a video
+     * @param integer $videoId Video to retrieve rating count for
+     * @return integer Returns total number of ratings
+     */
+    public function getRatingCount($videoId)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings WHERE video_id = $videoId";
+        $count = $db->fetchRow($query);
+        return $count['count'];
+    }
 }

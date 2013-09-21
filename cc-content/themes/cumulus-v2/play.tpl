@@ -1,5 +1,5 @@
 <?php
-View::AddMeta('videoId', $video->video_id);
+View::AddMeta('videoId', $video->videoId);
 View::AddCss('jscrollpane.css');
 View::AddJs('jscrollpane.plugin.js');
 View::AddJs('mousewheel.plugin.js');
@@ -59,17 +59,17 @@ View::SetLayout('full');
         <a href="" data-block="about" title="<?=Language::GetText('about')?>"><?=Language::GetText('about')?></a>
         <a href="" data-block="share" title="<?=Language::GetText('share')?>"><?=Language::GetText('share')?></a>
         <a href="" data-block="add" title="<?=Language::GetText('add')?>"><?=Language::GetText('add')?></a>
-        <a href="" class="flag" data-type="video" data-id="<?=$video->video_id?>" title="<?=Language::GetText('flag')?>"><?=Language::GetText('flag')?></a>
+        <a href="" class="flag" data-type="video" data-id="<?=$video->videoId?>" title="<?=Language::GetText('flag')?>"><?=Language::GetText('flag')?></a>
     </div>
     <!-- END Action Buttons -->
 
 
     <div id="about" class="tab_block">
-        <img width="65" height="65" src="<?=$member->getAvatarUrl()?>" alt="<?=$member->username?>" />
+        <img width="65" height="65" src="<?=UserService::getAvatarUrl($member)?>" alt="<?=$member->username?>" />
         <div>
-            <a href="" class="button_small subscribe" title="<?=Language::GetText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->user_id?>"><?=Language::GetText($subscribe_text)?></a>
+            <a href="" class="button_small subscribe" title="<?=Language::GetText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->userId?>"><?=Language::GetText($subscribe_text)?></a>
             <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
-            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=Functions::DateFormat('m/d/Y',$video->date_created)?></p>
+            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=Functions::DateFormat('m/d/Y',$video->dateCreated)?></p>
             <p><strong><?=Language::GetText('tags')?>:</strong>
                 <?php foreach ($video->tags as $value): ?>
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
@@ -96,7 +96,7 @@ View::SetLayout('full');
             <a class="google" href="" onClick="window.open('https://plus.google.com/share?url=http://demo.cumulusclips.org/test.php','mywindow','width=600,height=600');return false;">Share on Google+</a>
         </div>
         
-        <?php if ($video->disable_embed == '0' && $video->gated == '0' && $video->private == '0'): ?>
+        <?php if ($video->disableEmbed == '0' && $video->gated == '0' && $video->private == '0'): ?>
             <!-- EMBED CODE -->
             <div>
                 <p class="big"><?=Language::GetText('embed')?></p>
@@ -170,7 +170,7 @@ View::SetLayout('full');
                 <label><?=Language::GetText('comments')?></label>
                 <textarea class="text" rows="4" cols="50" name="comments">Comments</textarea>
 
-                <input type="hidden" name="video_id" value="<?=$video->video_id?>" />
+                <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
                 <input type="hidden" name="block" value="comment" />
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
@@ -282,7 +282,7 @@ View::SetLayout('full');
     <!-- BEGIN RELATED VIDEOS -->
     <div class="related_videos">
         <p class="large"><?=Language::GetText('suggestions_header')?></p>
-        <?php if ($db->Count ($result_related) > 0): ?>
+        <?php if (count($result_related) > 0): ?>
 
             <div class="video_list">
             <?php while ($row = $db->FetchObj ($result_related)): ?>
