@@ -22,7 +22,7 @@ class Database
             $this->_connection = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             return $this->_connection;
         } catch (Exception $exception) {
-            exit();
+            exit('CC-ERROR-200 CumulusClips has encountered an error and cannot continue.');
         }
     }
 
