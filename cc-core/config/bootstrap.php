@@ -22,7 +22,7 @@ $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/lib';
 $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/models';
 $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/mappers';
 $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/services';
-if (!set_include_path($includePath)) exit('CC-ERROR-100 Host does not allow custom include paths.');
+if (!set_include_path($includePath)) exit('CC-ERROR-100 CumulusClips has encountered an error and cannot continue.');
 spl_autoload_register(array('App', 'LoadClass'));
 
 // Checks
