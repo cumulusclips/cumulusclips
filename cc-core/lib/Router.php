@@ -54,8 +54,11 @@ class Router
         
         // Strip path part of base URL and query string from Apache request uri
         $urlParts = parse_url(HOST);
-        $urlParts['path'] = (!empty($urlParts['path'])) ? $urlParts['path'] : '/';
-        $requestUri = preg_replace('#' . $urlParts['path'] . '|\?.*$#', '', $_SERVER['REQUEST_URI']);
+        if (!empty($urlParts['path'])) {
+            $requestUri = preg_replace('#' . $urlParts['path'] . '|\?.*$#', '', $_SERVER['REQUEST_URI']);
+        } else {
+            $requestUri = $_SERVER['REQUEST_URI'];
+        }
 
         // Go through all routes to test if it matches current URI
         foreach ($routes as $route) {

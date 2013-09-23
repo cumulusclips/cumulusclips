@@ -100,4 +100,20 @@ class CommentMapper
         Plugin::triggerEvent('video.save', $commentId);
         return $commentId;
     }
+    
+    public function getMultipleCommentsById(array $commentIds)
+    {
+        $commentList = array();
+        if (empty($commentIds)) return $commentList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($commentIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE comment_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $commentIds);
+
+        foreach($result as $commentRecord) {
+            $commentList[] = $this->_map($commentRecord);
+        }
+        return $commentList;
+    }
 }

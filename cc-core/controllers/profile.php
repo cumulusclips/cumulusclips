@@ -12,7 +12,7 @@ if (View::$vars->logged_in) {
 
 $success = NULL;
 $errors = NULL;
-$sub_id = NULL;
+$subscriptionId = NULL;
 
 // Verify Member was supplied
 $userMapper = new UserMapper();
@@ -31,7 +31,7 @@ if ($user) {
     App::Throw404();
 }
 
-### Check if user is subscribed
+// Check if user is subscribed
 if (View::$vars->logged_in) {
     $subscriptionMapper = new SubscriptionMapper();
     View::$vars->subscribe_text = $subscriptionMapper->isSubscribed(View::$vars->user->userId, View::$vars->member->userId) ? 'unsubscribe' : 'subscribe';
@@ -39,32 +39,27 @@ if (View::$vars->logged_in) {
     View::$vars->subscribe_text = 'subscribe';
 }
 
-### Count subscription
-$query = "SELECT COUNT(sub_id) as count FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->member->user_id;
+// Count subscription
+$query = "SELECT COUNT(subscription_id) as count FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->member->userId;
 $countResult = $db->fetchRow($query);
 View::$vars->sub_count = $countResult['count'];
 
-
-
-
-### Retrieve video list
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->user_id . " AND status = 'approved' AND private = '0' LIMIT 6";
+// Retrieve member's video list
+$videoMapper = new VideoMapper();
+$videoMapper->getMultipleVideosById($videoIds);
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->userId . " AND status = 'approved' AND private = '0' LIMIT 6";
 Plugin::Trigger ('profile.load_recent_videos');
-$result = $db->fetchAll($query);
-View::$vars->result_videos = array();
-while ($video = $db->FetchObj ($result)) {
-    View::$vars->result_videos[] = $video->video_id;
-}
+$memberVideosResults = $db->fetchAll($query);
+View::$vars->result_videos = $videoMapper->getMultipleVideosById(
+    Functions::flattenArray($memberVideosResults, 'video_id')
+);
 
+// Update Member's profile view count
+View::$vars->member->views++;
+$videoMapper->save(View::$vars->member);
 
-### Update Member view count
-$data = array ('views' => View::$vars->member->views+1);
-View::$vars->member->Update ($data);
-
-
-
-### Retrieve latest comments by user
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = " . View::$vars->member->user_id . "  ORDER BY comment_id DESC LIMIT 10";
+// Retrieve latest comments by user
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = " . View::$vars->member->userId . "  ORDER BY comment_id DESC LIMIT 10";
 Plugin::Trigger ('profile.load_comments');
 $result_comments = $db->Query ($query);
 View::$vars->comment_list = array();
