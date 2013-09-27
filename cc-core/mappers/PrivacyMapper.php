@@ -13,6 +13,18 @@ class PrivacyMapper
             return false;
         }
     }
+    
+    public function getPrivacyByUser($userId)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'privacy WHERE user_id = :userId';
+        $dbResults = $db->fetchRow($query, array(':userId' => $userId));
+        if ($db->rowCount() == 1) {
+            return $this->_map($dbResults);
+        } else {
+            return false;
+        }
+    }
 
     protected function _map($dbResults)
     {

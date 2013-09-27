@@ -1,36 +1,22 @@
 <?php
 
-class UserService {
-
+class UserService
+{
     public $found;
     private $db;
     protected static $table = 'users';
     protected static $id_name = 'user_id';
-
-
-
 
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
      * @return void Record is deleted from database
      */
-    static function Delete ($id) {
-
-        App::LoadClass ('Privacy');
-        App::LoadClass ('Avatar');
-        App::LoadClass ('Video');
-        App::LoadClass ('Subscription');
-        App::LoadClass ('Rating');
-        App::LoadClass ('Flag');
-        App::LoadClass ('Favorite');
-        App::LoadClass ('Comment');
-        App::LoadClass ('Post');
-        App::LoadClass ('Message');
-
+    public static function delete($id)
+    {
         $db = Database::GetInstance();
         $user = new self ($id);
-        Plugin::Trigger ('user.delete');
+        Plugin::triggerEvent('user.delete');
 
         // Delete Avatar
         if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
@@ -89,46 +75,39 @@ class UserService {
         // Delete User
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
-
     }
-
-
-
 
     /**
      * Get video count Method
      * @return integer Returns the number of approved videos uploaded by the user
      */
-    private function GetVideoCount() {
+    private function getVideoCount()
+    {
         $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $this->user_id AND status = 'approved'";
         $result = $this->db->Query ($query);
         $row = $this->db->FetchRow ($result);
         return $row[0];
     }
     
-    
-
-
     /**
      * Generate and save a new password for user
      * @return string Returns user's new password
      */
-    public function ResetPassword() {
+    public function resetPassword()
+    {
         $password = Functions::Random (10,true);
         $data = array ('password' => md5 ($password));
-        Plugin::Trigger ('user.reset_password');
+        Plugin::triggerEvent('user.reset_password');
         $this->Update ($data);
         return $password;
     }
 	
-	
-
-
     /**
      * Generate a unique random string for a user account activation token
      * @return string Random user account activation token
      */
-    static function CreateToken() {
+    public static function createToken()
+    {
         $db = Database::GetInstance();
         do {
             $token = Functions::Random(40);
@@ -137,58 +116,49 @@ class UserService {
         return $token;
     }
     
-    
-
-
     /**
      * Login a user
      * @param string $username Username of user to login
      * @param string $password Password of user to login
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
-    static function Login ($username, $password) {
+    public static function login($username, $password)
+    {
         $id = self::Exist (array ('username' => $username, 'password' => md5 ($password), 'status' => 'active'));
         if ($id) {
             $_SESSION['user_id'] = $id;
             $user = new self ($id);
             $user->Update (array ('last_login' => date ('Y-m-d H:i:s')));
-            Plugin::Trigger ('user.login');
+            Plugin::triggerEvent('user.login');
             return true;
         } else {
             return false;
         }
     }
 
-
-
-
     /**
      *  Log a user out of website
      * @return void
      */
-    static function Logout() {
+    public static function logout()
+    {
         unset ($_SESSION['user_id']);
-        Plugin::Trigger ('user.logout');
+        Plugin::triggerEvent('user.logout');
     }
-
-
-
 
     /**
      * Check if user is logged in, with optional redirect
      * @param string $redirect_location optional Location to redirect user if login check fails
      * @return boolean|integer Returns logged in users' ID if user is logged, boolean false otherwise
      */
-    static function LoginCheck() {
+    public static function loginCheck()
+    {
         if (!empty ($_SESSION['user_id']) && self::Exist (array ('user_id' => $_SESSION['user_id']))) {
             return $_SESSION['user_id'];
         } else {
             return false;
         }
     }
-
-
-
 
     /**
      * Check if a user has a given permission
@@ -197,8 +167,8 @@ class UserService {
      * @param mixed $user_to_check (optional) User object or ID of user to check permissions for. If null, logged in user is used
      * @return boolean Returns true if user's role has permission, false otherwise
      */
-    static function CheckPermissions ($permission, $user_to_check = null) {
-
+    public static function checkPermissions($permission, $user_to_check = null)
+    {
         global $config;
         
         // Retrieve user information
@@ -219,19 +189,15 @@ class UserService {
         } else {
             return false;
         }
-
     }
-
-
-
 
     /**
      * Change the status of a user's content
      * @param string $status The new status being assigned to the user's content
      * @return void User's related records are updated to the new status
      */
-    public function UpdateContentStatus ($status) {
-
+    public function updateContentStatus($status)
+    {
         switch ($status) {
             case 'new':
             case 'banned':
@@ -256,32 +222,26 @@ class UserService {
                 $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
                 $this->db->Query ($query);
                 break;
-
         }
-
     }
-
-
-
 
     /**
      * Make a user visible to the public and notify admin of registration
-     * @global object $config Site configuration settings
+     * @param User $user User to get updated
      * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
      * @return void User is activated, and admin alerted. If approval is
      * required user is marked pending and placed in queue
      */
-    public function Approve ($action) {
-
-        global $config;
+    public function approve($user, $action)
+    {
         $send_alert = false;
-        Plugin::Trigger ('user.before_approve');
+        $userMapper = new UserMapper();
+        Plugin::triggerEvent('user.before_approve');
 
-        
         // 1) Admin created user in Admin Panel
         // 2) User signed up & activated
         // 3) User is being approved by admin for first time
-        if ((in_array ($action, array ('create','activate'))) || $action == 'approve' && $this->released == 0) {
+        if ((in_array ($action, array ('create','activate'))) || $action == 'approve' && $user->released == 0) {
 
             // User is activating account, but approval is required
             if ($action == 'activate' && Settings::Get ('auto_approve_users') == '0') {
@@ -292,9 +252,9 @@ class UserService {
                 $body = 'A new member has registered and is awaiting admin approval.';
 
                 // Set Pending
-                $this->Update (array ('status' => 'pending'));
-                Plugin::Trigger ('user.approve_required');
-
+                $user->status = 'pending';
+                $userMapper->save($user);
+                Plugin::triggerEvent('user.approve_required');
             } else {
 
                 // Send Admin Alert
@@ -305,43 +265,43 @@ class UserService {
                 }
 
                 // Activate & Release
-                $this->Update (array ('status' => 'active', 'released' => 1));
+                $user->status = 'active';
+                $user->released = 1;
+                $userMapper->save($user);
 
                 // Update user's anonymous comments IF/APP
-                $query = "UPDATE " . DB_PREFIX . "comments SET user_id = $this->user_id WHERE email = '$this->email'";
-                $this->db->Query ($query);
+                $query = "UPDATE " . DB_PREFIX . "comments SET user_id = ? WHERE email = ?";
+                Registry::get('db')->query($query, array($user->userId, $user->email));
 
                 // Send Welcome email
                 if ($action == 'approve') {
                     App::LoadClass ('Mail');
                     $mail = new Mail();
-                    $mail->LoadTemplate ('account_approved', array ('sitename' => $config->sitename));
+                    $mail->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
                     $mail->Send ($this->email);
                 }
 
-                Plugin::Trigger ('user.release');
-
+                Plugin::triggerEvent('user.release');
             }
 
         // User is being re-approved
-        } else if ($action == 'approve' && $this->released != 0) {
+        } else if ($action == 'approve' && $user->released != 0) {
             // Activate User
-            $this->Update (array ('status' => 'active'));
-            Plugin::Trigger ('user.reapprove');
+            $user->status = 'active';
+            $userMapper->save($user);
+            Plugin::triggerEvent('user.reapprove');
         }
-
 
         // Send admin alert
         if ($send_alert) {
             $body .= "\n\n=======================================================\n";
-            $body .= "Username: $this->username\n";
-            $body .= "Profile URL: " . HOST . "/members/$this->username/\n";
+            $body .= "Username: $user->username\n";
+            $body .= "Profile URL: " . HOST . "/members/$user->username/\n";
             $body .= "=======================================================";
             App::Alert ($subject, $body);
         }
 
-        Plugin::Trigger ('user.approve');
-
+        Plugin::triggerEvent('user.approve');
     }
     
     /**

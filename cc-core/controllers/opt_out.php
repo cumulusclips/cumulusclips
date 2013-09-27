@@ -1,29 +1,27 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('opt_out');
-Plugin::Trigger ('opt_out.start');
+View::InitView('opt_out');
+Plugin::triggerEvent('opt_out.start');
 
 View::$vars->logged_in = UserService::LoginCheck();
+$userMapper = new UserMapper();
 if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
     $userMapper->getUserById(View::$vars->logged_in);
 }
 
 ### Verify user actually unsubscribed
-if (isset ($_GET['email'])) {
+if (isset($_GET['email'])) {
 
-    $data = array ('email' => $_GET['email']);
-    $id = User::Exist ($data);
-    if ($id) {
-        $privacy = Privacy::LoadByUser ($id);
-        $data = array (
-            'new_video'         => 'no',
-            'new_message'       => 'no',
-            'video_comment'     => 'no'
-        );
-        Plugin::Trigger ('opt_out.opt_out');
-        $privacy->Update ($data);
+    $user = $userMapper->getUserByCustom(array('email' => $_GET['email']));
+    if ($user) {
+        $privacyMapper = new PrivacyMapper();
+        $privacy = Privacy::getPrivacyByUser($user->userId);
+        $privacy->newVideo = false;
+        $privacy->newMessage = false;
+        $privacy->videoComment = false;
+        $privacyMapper->save($privacy);
+        Plugin::triggerEvent('opt_out.opt_out');
     } else {
         App::Throw404();
     }
@@ -32,7 +30,6 @@ if (isset ($_GET['email'])) {
     App::Throw404();
 }
 
-
 // Output Page
-Plugin::Trigger ('opt_out.before_render');
+Plugin::triggerEvent('opt_out.before_render');
 View::Render ('opt_out.tpl');
