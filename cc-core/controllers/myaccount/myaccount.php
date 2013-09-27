@@ -1,14 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('myaccount');
 Plugin::Trigger ('myaccount.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->new_messages = NULL;
 View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('username' => View::$vars->user->username));
@@ -26,5 +21,3 @@ if ($db->Count($result) > 0) {
 // Output Page
 Plugin::Trigger ('myaccount.before_render');
 View::Render ('myaccount/myaccount.tpl');
-
-?>

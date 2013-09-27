@@ -1,16 +1,15 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Mail');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('register');
 Plugin::Trigger ('register.start');
-View::$vars->logged_in = User::LoginCheck();
-Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
+
+View::$vars->logged_in = UserService::LoginCheck();
+if (View::$vars->logged_in) {
+    $userMapper = new UserMapper();
+    $userMapper->getUserById(View::$vars->logged_in);
+}
+
 $resp = NULL;
 $pass1 = NULL;
 $pass2 = NULL;
@@ -109,5 +108,3 @@ if (isset ($_POST['submitted'])) {
 // Output Page
 Plugin::Trigger ('register.before_render');
 View::Render ('register.tpl');
-
-?>

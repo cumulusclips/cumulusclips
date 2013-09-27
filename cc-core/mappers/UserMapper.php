@@ -76,8 +76,8 @@ class UserMapper
             // Update
             Plugin::triggerEvent('video.update', $user);
             $query = 'UPDATE ' . DB_PREFIX . 'users SET';
-            $query .= ' username = :username, email = :email, password = :password, status = :status, role = :role, date_created = :dateCreated, first_name = :firstName, last_name = :lastName, about_me = :aboutMe, website = :website, confirm_code = :confirmCode, views = :views, last_login = :lastLogin, avatar = :avatar, :released';
-            $query .= ' WHERE userId = :userId';
+            $query .= ' username = :username, email = :email, password = :password, status = :status, role = :role, date_created = :dateCreated, first_name = :firstName, last_name = :lastName, about_me = :aboutMe, website = :website, confirm_code = :confirmCode, views = :views, last_login = :lastLogin, avatar = :avatar, released = :released';
+            $query .= ' WHERE user_id = :userId';
             $bindParams = array(
                 ':userId' => $user->userId,
                 ':username' => $user->username,
@@ -94,13 +94,13 @@ class UserMapper
                 ':views' => (isset($user->views)) ? $user->views : 0,
                 ':lastLogin' => (!empty($user->lastLogin)) ? date(DATE_FORMAT, strtotime($user->lastLogin)) : null,
                 ':avatar' => (!empty($user->avatar)) ? $user->avatar : null,
-                ':released' => (isset($user->released) && $user->released === true) ? 1 : 0,
+                ':released' => (isset($user->released) && $user->released === true) ? 1 : 0
             );
         } else {
             // Create
             Plugin::triggerEvent('video.create', $user);
             $query = 'INSERT INTO ' . DB_PREFIX . 'users';
-            $query .= ' (username, email, password, status, role, date_created, first_name, last_name, about_me, website, confirm_code, views, last_login, avatar, :released)';
+            $query .= ' (username, email, password, status, role, date_created, first_name, last_name, about_me, website, confirm_code, views, last_login, avatar, released)';
             $query .= ' VALUES (:username, :email, :password, :status, :role, :dateCreated, :firstName, :lastName, :aboutMe, :website, :confirmCode, :views, :lastLogin, :avatar, :released)';
             $bindParams = array(
                 ':username' => $user->username,

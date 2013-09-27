@@ -1,15 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('upload');
 Plugin::Trigger ('upload.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 App::EnableUploadsCheck();
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->categories = NULL;
@@ -122,5 +116,3 @@ if (isset ($_POST['submitted'])) {
 // Output page
 Plugin::Trigger ('upload.before_render');
 View::Render ('myaccount/upload.tpl');
-
-?>

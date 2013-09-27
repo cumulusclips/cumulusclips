@@ -1,18 +1,15 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Rating');
-App::LoadClass ('Pagination');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('search');
 Plugin::Trigger ('search.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
+
+View::$vars->logged_in = UserService::LoginCheck();
+if (View::$vars->logged_in) {
+    $userMapper = new UserMapper();
+    $userMapper->getUserById(View::$vars->logged_in);
+}
+
 $keyword = NULL;
 View::$vars->cleaned = NULL;
 $url = HOST . '/search';
@@ -77,5 +74,3 @@ while ($video = $db->FetchObj ($result)) View::$vars->search_videos[] = $video->
 // Output Page
 Plugin::Trigger ('search.before_render');
 View::Render ('search.tpl');
-
-?>

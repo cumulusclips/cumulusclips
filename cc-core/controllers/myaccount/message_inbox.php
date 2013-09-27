@@ -1,16 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Message');
-App::LoadClass ('Pagination');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('message_inbox');
 Plugin::Trigger ('message_inbox.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 20;
 $url = HOST . '/myaccount/message/inbox';
@@ -83,5 +76,3 @@ View::$vars->result = $db->Query ($query);
 // Output page
 Plugin::Trigger ('message_inbox.before_render');
 View::Render ('myaccount/message_inbox.tpl');
-
-?>

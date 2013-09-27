@@ -1,15 +1,15 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('contact');
 Plugin::Trigger ('contact.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
+
+View::$vars->logged_in = UserService::LoginCheck();
+if (View::$vars->logged_in) {
+    $userMapper = new UserMapper();
+    $userMapper->getUserById(View::$vars->logged_in);
+}
+
 View::$vars->Errors = array();
 View::$vars->name = null;
 View::$vars->email = null;
@@ -77,5 +77,3 @@ if (isset ($_POST['submitted'])) {
 // Output Page
 Plugin::Trigger ('contact.before_render');
 View::Render ('contact.tpl');
-
-?>

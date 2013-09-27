@@ -1,19 +1,14 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Privacy');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('opt_out');
 Plugin::Trigger ('opt_out.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
 
-
-
+View::$vars->logged_in = UserService::LoginCheck();
+if (View::$vars->logged_in) {
+    $userMapper = new UserMapper();
+    $userMapper->getUserById(View::$vars->logged_in);
+}
 
 ### Verify user actually unsubscribed
 if (isset ($_GET['email'])) {
@@ -41,5 +36,3 @@ if (isset ($_GET['email'])) {
 // Output Page
 Plugin::Trigger ('opt_out.before_render');
 View::Render ('opt_out.tpl');
-
-?>

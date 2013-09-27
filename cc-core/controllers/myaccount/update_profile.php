@@ -1,14 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('update_profile');
 Plugin::Trigger ('update_profile.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->Errors = array();
 View::$vars->message = null;

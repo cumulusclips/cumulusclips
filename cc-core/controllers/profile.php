@@ -10,10 +10,6 @@ if (View::$vars->logged_in) {
     $userMapper->getUserById(View::$vars->logged_in);
 }
 
-$success = NULL;
-$errors = NULL;
-$subscriptionId = NULL;
-
 // Verify Member was supplied
 $userMapper = new UserMapper();
 if (!empty($_GET['username'])) {
@@ -46,7 +42,6 @@ View::$vars->sub_count = $countResult['count'];
 
 // Retrieve member's video list
 $videoMapper = new VideoMapper();
-$videoMapper->getMultipleVideosById($videoIds);
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->member->userId . " AND status = 'approved' AND private = '0' LIMIT 6";
 Plugin::Trigger ('profile.load_recent_videos');
 $memberVideosResults = $db->fetchAll($query);
@@ -56,17 +51,16 @@ View::$vars->result_videos = $videoMapper->getMultipleVideosById(
 
 // Update Member's profile view count
 View::$vars->member->views++;
-$videoMapper->save(View::$vars->member);
+$userMapper->save(View::$vars->member);
 
 // Retrieve latest comments by user
+$commentMapper = new CommentMapper();
 $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = " . View::$vars->member->userId . "  ORDER BY comment_id DESC LIMIT 10";
 Plugin::Trigger ('profile.load_comments');
-$result_comments = $db->Query ($query);
-View::$vars->comment_list = array();
-while ($row = $db->FetchObj ($result_comments)) {
-    View::$vars->comment_list[] = $row->comment_id;
-}
-
+$memberCommentsResults = $db->fetchAll($query);
+View::$vars->comment_list = $commentMapper->getMultipleCommentsById(
+    Functions::flattenArray($memberCommentsResults, 'comment_id')
+);
 
 // Output Page
 Plugin::Trigger ('profile.before_render');

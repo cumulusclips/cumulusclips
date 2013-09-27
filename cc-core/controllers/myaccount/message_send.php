@@ -1,17 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Message');
-App::LoadClass ('Privacy');
-App::LoadClass ('Mail');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('message_send');
 Plugin::Trigger ('message_send.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->to = NULL;
 View::$vars->subject = NULL;
@@ -145,5 +137,3 @@ if (isset ($_POST['submitted'])) {
 // Output page
 Plugin::Trigger ('message_send.before_render');
 View::Render ('myaccount/message_send.tpl');
-
-?>

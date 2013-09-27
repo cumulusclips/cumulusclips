@@ -1,18 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Pagination');
-App::LoadClass ('Rating');
-App::LoadClass ('Favorite');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('myfavorites');
 Plugin::Trigger ('myfavorites.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/myfavorites';
@@ -57,5 +48,3 @@ View::$vars->result = $db->Query ($query);
 // Output page
 Plugin::Trigger ('myfavorites.before_render');
 View::Render ('myaccount/myfavorites.tpl');
-
-?>

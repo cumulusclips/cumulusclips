@@ -1,16 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (dirname (__FILE__))) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Subscription');
-App::LoadClass ('Pagination');
-
-
 // Establish page variables, objects, arrays, etc
 View::InitView ('subscriptions');
 Plugin::Trigger ('subscriptions.start');
-Functions::RedirectIf (View::$vars->logged_in = User::LoginCheck(), HOST . '/login/');
+Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/subscriptions';
@@ -62,5 +55,3 @@ View::$vars->result = $db->Query ($query);
 // Output page
 Plugin::Trigger ('subscriptions.before_render');
 View::Render ('myaccount/subscriptions.tpl');
-
-?>
