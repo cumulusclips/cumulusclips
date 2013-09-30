@@ -1,6 +1,6 @@
 <?php
 
-class FlagMapper
+class FlagMapper extends MapperAbstract
 {
     public function getFlagById($flagId)
     {

@@ -1,6 +1,6 @@
 <?php
 
-class UserMapper
+class UserMapper extends MapperAbstract
 {
     public function getUserById($userId)
     {
@@ -53,7 +53,7 @@ class UserMapper
         $user->username = $dbResults['username'];
         $user->email = $dbResults['email'];
         $user->password = $dbResults['password'];
-        $user->status = ($dbResults['status'] == 1) ? true : false;
+        $user->status = $dbResults['status'];
         $user->role = $dbResults['role'];
         $user->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $user->firstName = $dbResults['first_name'];

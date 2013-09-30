@@ -1,6 +1,6 @@
 <?php
 
-class CategoryMapper
+class CategoryMapper extends MapperAbstract
 {
     public function getCategoryById($categoryId)
     {

@@ -1,14 +1,11 @@
 <?php
 
-class CommentService {
-
+class CommentService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'comments';
     protected static $id_name = 'comment_id';
-
-
-
 
     /**
      * Delete a record
@@ -21,9 +18,6 @@ class CommentService {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
-
-
-
 
     /**
      * Make a comment visible to the public and notify user of new comment
@@ -115,5 +109,4 @@ class CommentService {
         Plugin::Trigger ('comment.approve');
 
     }
-
 }

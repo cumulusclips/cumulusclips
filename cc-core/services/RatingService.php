@@ -1,13 +1,11 @@
 <?php
 
-class RatingService {
-
+class RatingService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'ratings';
     protected static $id_name = 'rating_id';
-
-
 
     /**
      * Delete a record
@@ -20,8 +18,6 @@ class RatingService {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
-
-
 
     /**
      * Rate a video based on like / dislike

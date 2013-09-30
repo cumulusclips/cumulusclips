@@ -1,6 +1,6 @@
 <?php
 
-class PrivacyService
+class PrivacyService extends ServiceAbstract
 {
     public $found;
     private $db;

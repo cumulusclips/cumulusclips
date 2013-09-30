@@ -1,6 +1,6 @@
 <?php
 
-class PlaylistMapper
+class PlaylistMapper extends MapperAbstract
 {
     public function getPlaylistById($playlistId)
     {

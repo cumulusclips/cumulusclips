@@ -1,6 +1,6 @@
 <?php
 
-class VideoMapper
+class VideoMapper extends MapperAbstract
 {
     public function getVideoById($videoId)
     {

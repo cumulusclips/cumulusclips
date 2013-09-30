@@ -6,7 +6,7 @@
     <?php foreach ($userResults as $member): ?>
         <div>
             <p class="avatar"><a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>">
-                <img src="<?=UserService::getAvatarUrl($member)?>" alt="<?=$member->username?>" />
+                <img src="<?=View::getService('User')->getAvatarUrl($member)?>" alt="<?=$member->username?>" />
             </a></p>
             <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff($member->username,18)?></a>
             <p><strong><?=Language::GetText('joined')?>: </strong><?=Functions::DateFormat('m/d/Y',$member->dateCreated)?></p>

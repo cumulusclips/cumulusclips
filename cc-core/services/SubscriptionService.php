@@ -1,13 +1,11 @@
 <?php
 
-class SubscriptionService {
-
+class SubscriptionService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'subscriptions';
     protected static $id_name = 'sub_id';
-
-
 
     /**
      * Delete a record
@@ -20,5 +18,4 @@ class SubscriptionService {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
-
 }

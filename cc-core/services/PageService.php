@@ -1,7 +1,7 @@
 <?php
 
-class PageService {
-
+class PageService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'pages';
@@ -27,9 +27,6 @@ class PageService {
         'language'
     );
 
-
-
-
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -41,9 +38,6 @@ class PageService {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
-
-    
-    
     
     /**
      * Check if slug is reserved by system
@@ -53,9 +47,6 @@ class PageService {
     static function IsReserved ($slug) {
         return in_array ($slug, self::$reserved);
     }
-
-
-
 
     /**
      * Check if slug is available
@@ -71,5 +62,4 @@ class PageService {
         }
         return $slug_check;
     }
-
 }

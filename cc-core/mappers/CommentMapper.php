@@ -1,6 +1,6 @@
 <?php
 
-class CommentMapper
+class CommentMapper extends MapperAbstract
 {
     public function getCommentById($commentId)
     {

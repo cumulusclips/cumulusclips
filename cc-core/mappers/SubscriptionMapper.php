@@ -1,6 +1,6 @@
 <?php
 
-class SubscriptionMapper
+class SubscriptionMapper extends MapperAbstract
 {
     public function getSubscriptionById($subscriptionId)
     {

@@ -1,13 +1,11 @@
 <?php
 
-class FavoriteService {
-
+class FavoriteService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'favorites';
     protected static $id_name = 'fav_id';
-
-
 
     /**
      * Delete a record
@@ -20,5 +18,4 @@ class FavoriteService {
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
     }
-
 }

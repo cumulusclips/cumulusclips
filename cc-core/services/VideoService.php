@@ -1,7 +1,7 @@
 <?php
 
-class VideoService {
-
+class VideoService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'videos';

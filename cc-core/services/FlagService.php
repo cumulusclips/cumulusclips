@@ -1,14 +1,11 @@
 <?php
 
-class FlagService {
-
+class FlagService extends ServiceAbstract
+{
     public $found;
     private $db;
     protected static $table = 'flags';
     protected static $id_name = 'flag_id';
-
-
-
 
     /**
      * Delete a record
@@ -22,9 +19,6 @@ class FlagService {
         $db->Query ($query);
     }
 
-
-
-
     /**
      * Perform flag related action on a record
      * @param integer $id The id of the record being updated
@@ -33,7 +27,6 @@ class FlagService {
      * @return void All flags raised against record are updated
      */
     static function FlagDecision ($id, $type, $decision) {
-
         $db = Database::GetInstance();
         if ($decision) {
             // Content is being banned - Update flag requests
@@ -44,7 +37,5 @@ class FlagService {
             $query = "UPDATE " . DB_PREFIX . "flags SET status = 'declined' WHERE type = '$type' AND id = $id";
             $db->Query ($query);
         } 
-
     }
-
 }

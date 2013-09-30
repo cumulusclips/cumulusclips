@@ -1,6 +1,6 @@
 <?php
 
-class MessageMapper
+class MessageMapper extends MapperAbstract
 {
     public function getMessageById($messageId)
     {

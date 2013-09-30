@@ -1,6 +1,6 @@
 <?php
 
-class RatingMapper
+class RatingMapper extends MapperAbstract
 {
     public function getRatingById($ratingId)
     {

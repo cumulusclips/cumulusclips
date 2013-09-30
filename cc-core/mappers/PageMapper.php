@@ -1,6 +1,6 @@
 <?php
 
-class PageMapper
+class PageMapper extends MapperAbstract
 {
     public function getPageById($pageId)
     {

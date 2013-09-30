@@ -239,7 +239,7 @@ class View
     public static function writeJs()
     {
         // Add theme preview JS
-	if (PREVIEW_THEME) {
+        if (PREVIEW_THEME) {
             $js_theme_preview = '<script type="text/javascript">';
             $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . PREVIEW_THEME . "';";
             $js_theme_preview .= '</script>';
@@ -247,7 +247,7 @@ class View
         }
 
         // Add language preview JS
-	if (PREVIEW_LANG) {
+        if (PREVIEW_LANG) {
             $js_lang_preview = '<script type="text/javascript">';
             $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
             $js_lang_preview .= '</script>';
@@ -292,5 +292,27 @@ class View
                 echo $_value, "\n";
             }
         }
+    }
+
+    /**
+     * Retrieve instance of service of a given domain
+     * @param string $service Name of domain service to instanciate
+     * @return ServiceAbstract Returns instance of given service class
+     */
+    public static function getService($service)
+    {
+        $class = $service . 'Service';
+        return new $class;
+    }
+
+    /**
+     * Retrieve instance of model mapper for a given domain
+     * @param string $mapper Name of domain model mapper to instanciate
+     * @return MapperAbstract Returns instance of given domain mapper class
+     */
+    public static function getMapper($mapper)
+    {
+        $class = $mapper . 'Mapper';
+        return new $class;
     }
 }

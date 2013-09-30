@@ -1,6 +1,6 @@
 <?php
 
-class PrivacyMapper
+class PrivacyMapper extends MapperAbstract
 {
     public function getPrivacyById($privacyId)
     {

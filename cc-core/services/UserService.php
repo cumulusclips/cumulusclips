@@ -1,6 +1,6 @@
 <?php
 
-class UserService
+class UserService extends ServiceAbstract
 {
     public $found;
     private $db;

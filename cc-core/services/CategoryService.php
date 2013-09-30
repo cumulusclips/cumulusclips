@@ -1,6 +1,6 @@
 <?php
 
-class CategoryService
+class CategoryService extends ServiceAbstract
 {
     public $found;
     private $db;
