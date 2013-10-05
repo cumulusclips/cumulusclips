@@ -2,17 +2,12 @@
 
 class UserService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'users';
-    protected static $id_name = 'user_id';
-
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
      * @return void Record is deleted from database
      */
-    public static function delete($id)
+    public function delete($id)
     {
         $db = Database::GetInstance();
         $user = new self ($id);
@@ -106,13 +101,15 @@ class UserService extends ServiceAbstract
      * Generate a unique random string for a user account activation token
      * @return string Random user account activation token
      */
-    public static function createToken()
+    public function createToken()
     {
-        $db = Database::GetInstance();
+        $userMapper = new UserMapper();
         do {
             $token = Functions::Random(40);
-            if (!self::Exist (array ('confirm_code' => $token))) $token_available = true;
-        } while (empty ($token_available));
+            if ($userMapper->getUserByCustom(array('confirm_code' => $token))) {
+                $token_available = true;
+            }
+        } while (empty($token_available));
         return $token;
     }
     
@@ -122,7 +119,7 @@ class UserService extends ServiceAbstract
      * @param string $password Password of user to login
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
-    public static function login($username, $password)
+    public function login($username, $password)
     {
         $id = self::Exist (array ('username' => $username, 'password' => md5 ($password), 'status' => 'active'));
         if ($id) {
@@ -140,7 +137,7 @@ class UserService extends ServiceAbstract
      *  Log a user out of website
      * @return void
      */
-    public static function logout()
+    public function logout()
     {
         unset ($_SESSION['user_id']);
         Plugin::triggerEvent('user.logout');
@@ -151,7 +148,7 @@ class UserService extends ServiceAbstract
      * @param string $redirect_location optional Location to redirect user if login check fails
      * @return boolean|integer Returns logged in users' ID if user is logged, boolean false otherwise
      */
-    public static function loginCheck()
+    public function loginCheck()
     {
         if (!empty ($_SESSION['user_id']) && self::Exist (array ('user_id' => $_SESSION['user_id']))) {
             return $_SESSION['user_id'];
@@ -162,14 +159,13 @@ class UserService extends ServiceAbstract
 
     /**
      * Check if a user has a given permission
-     * @global object $config Site configuration settings
      * @param string $permission Name of permission to check
      * @param mixed $user_to_check (optional) User object or ID of user to check permissions for. If null, logged in user is used
      * @return boolean Returns true if user's role has permission, false otherwise
      */
-    public static function checkPermissions($permission, $user_to_check = null)
+    public function checkPermissions($permission, $user_to_check = null)
     {
-        global $config;
+        $config = Registry::get('config');
         
         // Retrieve user information
         if (!empty ($user_to_check) && is_object ($user_to_check) && get_class ($user_to_check) == __CLASS__) {
@@ -306,6 +302,7 @@ class UserService extends ServiceAbstract
     
     /**
      * Retrieve URL to current user's avatar
+     * @param User Instance of user who's avatar is wanted
      * @return string URL to user's uploaded avatar or default theme avatar if none is set
      */
     public function getAvatarUrl($user)

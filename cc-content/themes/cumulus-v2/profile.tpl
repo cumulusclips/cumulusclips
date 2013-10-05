@@ -4,23 +4,23 @@
 
 <!-- BEGIN Member Avatar/Profile Information -->
 <div id="profile_avatar">
-    <img src="<?=View::getService('User')->getAvatarUrl()?>" alt="<?=$member->username?>" />
-    <p><a class="button_small subscribe" data-user="<?=$member->user_id?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
+    <img src="<?=View::getService('User')->getAvatarUrl($member)?>" alt="<?=$member->username?>" />
+    <p><a class="button_small subscribe" data-user="<?=$member->userId?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
 </div>
 <div id="profile_info">
     <p>
         <a href="<?=HOST?>/myaccount/message/send/<?=$member->username?>/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a>&nbsp;&nbsp;&nbsp;
-        <a class="flag" data-type="member" data-id="<?=$member->user_id?>" href="" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
+        <a class="flag" data-type="member" data-id="<?=$member->userId?>" href="" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
         <a href="<?=HOST?>/feed/<?=$member->username?>/" title="<?=Language::GetText('member_rss')?>"><?=Language::GetText('member_rss')?></a>
     </p>
-    <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=Functions::DateFormat('m/d/Y',$member->date_created)?></p>
+    <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=Functions::DateFormat('m/d/Y',$member->dateCreated)?></p>
     <p><strong><?=Language::GetText('profile_views')?>:</strong>&nbsp; <?=$member->views?></p>
     <p><strong><?=Language::GetText('subscribers')?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></p>
     <?php if (!empty ($member->website)): ?>
         <p><strong><?=Language::GetText('website')?>:</strong>&nbsp; 
         <a href="<?=$member->website?>" target="_blank" rel="nofollow"><?=Functions::CutOff ($member->website, 40);?></a></p>
     <?php endif; ?>
-    <p><?=nl2br($member->about_me)?></p>
+    <p><?=nl2br($member->aboutMe)?></p>
 </div>
 <!-- END Member Avatar/Profile Information -->
 
