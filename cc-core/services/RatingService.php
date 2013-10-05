@@ -2,11 +2,6 @@
 
 class RatingService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'ratings';
-    protected static $id_name = 'rating_id';
-
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -70,7 +65,7 @@ class RatingService extends ServiceAbstract
      * @param integer $videoId Video to retrieve rating for
      * @return integer Returns average rating (5 Highest, 0 Lowest or none)
      */
-    static function GetFiveScaleRating($videoId)
+    public function getFiveScaleRating($videoId)
     {
         $ratingMapper = new RatingMapper();
         $count = $ratingMapper->getRatingCount($videoId);

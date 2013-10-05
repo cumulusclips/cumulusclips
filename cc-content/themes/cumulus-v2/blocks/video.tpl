@@ -2,7 +2,7 @@
 
 <div class="video">
     <div>
-        <a href="<?=VideoService::getUrl($video)?>/" title="<?=$video->title?>">
+        <a href="<?=View::getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
             <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
         </a>
         <span><?=$video->duration?></span>

@@ -2,21 +2,16 @@
 
 class VideoService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'videos';
-    protected static $id_name = 'video_id';
-    protected $_config;
-    
-    static function getUrl(Video $video)
+    /**
+     * Retrieve the URL to a given video's play page
+     * @param Video $video Instance of video to generate URL for
+     * @return string Returns full URL to video's play page
+     */
+    public function getUrl(Video $video)
     {
         return HOST . '/videos/' . $video->videoId . '/' . Functions::createSlug($video->title);
-    }
+    } 
     
-
-    
-
-
     /**
      * Delete a video
      * @param integer $video_id ID of video to be deleted
@@ -72,9 +67,6 @@ class VideoService extends ServiceAbstract
 
     }
 
-
-
-
     /**
      * Generate a unique random string for a video filename
      * @return string Random video filename
@@ -88,9 +80,6 @@ class VideoService extends ServiceAbstract
         return $filename;
     }
 
-
-
-
     /**
      * Generate a unique random url for accessing a private video
      * @return string URL for private video is returned
@@ -103,9 +92,6 @@ class VideoService extends ServiceAbstract
         } while (empty ($private_available));
         return $private;
     }
-
-
-
 
     /**
      * Make a video visible to the public and notify subscribers of new video

@@ -305,7 +305,7 @@ class UserService extends ServiceAbstract
      * @param User Instance of user who's avatar is wanted
      * @return string URL to user's uploaded avatar or default theme avatar if none is set
      */
-    public function getAvatarUrl($user)
+    public function getAvatarUrl(User $user)
     {
         return (empty($user->avatar)) ? View::GetFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$user->avatar";
     }
