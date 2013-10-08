@@ -38,6 +38,11 @@ class Video
     public $userId;
     
     /**
+     * @var string
+     */
+    public $username;
+    
+    /**
      * @var string 
      */
     public $dateCreated;

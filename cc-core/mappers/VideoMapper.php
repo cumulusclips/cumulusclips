@@ -5,7 +5,7 @@ class VideoMapper extends MapperAbstract
     public function getVideoById($videoId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE video_id = :videoId';
+        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE video_id = :videoId';
         $dbResults = $db->fetchRow($query, array(':videoId' => $videoId));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
@@ -17,7 +17,7 @@ class VideoMapper extends MapperAbstract
     public function getVideoByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE ';
+        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
@@ -37,7 +37,7 @@ class VideoMapper extends MapperAbstract
     public function getVideoByFilename($filename)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE filename = :filename';
+        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE filename = :filename';
         $dbResults = $db->fetchRow($query, array(':filename' => $filename));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
@@ -49,7 +49,7 @@ class VideoMapper extends MapperAbstract
     public function getUserVideos($userId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE user_id = :userId';
+        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE user_id = :userId';
         $dbResults = $db->fetchAll($query, array(':userId' => $userId));
         $userVideos = array();
         foreach($dbResults as $record) {
@@ -68,6 +68,7 @@ class VideoMapper extends MapperAbstract
         $video->tags = explode(', ', $dbResults['tags']);
         $video->categoryId = $dbResults['category_id'];
         $video->userId = $dbResults['user_id'];
+        $video->username = $dbResults['username'];
         $video->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $video->duration = $dbResults['duration'];
         $video->status = $dbResults['status'];
@@ -152,7 +153,7 @@ class VideoMapper extends MapperAbstract
         
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($videoIds), '?'));
-        $sql = 'SELECT * FROM ' . DB_PREFIX . 'videos WHERE video_id IN (' . $inQuery . ')';
+        $sql = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE video_id IN (' . $inQuery . ')';
         $result = $db->fetchAll($sql, $videoIds);
 
         foreach($result as $videoRecord) {
