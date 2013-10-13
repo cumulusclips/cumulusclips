@@ -25,7 +25,7 @@
             <a id="logo" href="<?=HOST?>/" title="CumulusClips - Free Video Sharing CMS, Video Sharing Script, YouTube Clone Script">CumulusClips - Free Video Sharing CMS, Video Sharing Script, YouTube Clone Script</a>
             <div id="header_right">
                 
-            <?php if ($logged_in): ?>
+            <?php if ($loggedInUser): ?>
             
                 <a href="<?=HOST?>/logout/" title="<?=Language::GetText('logout')?>"><?=Language::GetText('logout')?></a>
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>

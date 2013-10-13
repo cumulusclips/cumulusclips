@@ -4,11 +4,9 @@
 View::InitView ('search');
 Plugin::triggerEvent('search.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 $keyword = null;
 View::$vars->cleaned = null;

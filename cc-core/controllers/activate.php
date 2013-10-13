@@ -4,11 +4,10 @@
 View::InitView ('activate');
 Plugin::Trigger ('activate.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-$userMapper = new UserMapper();
-if (View::$vars->logged_in) {
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
+
 Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
 View::$vars->message = null;
 
@@ -16,9 +15,9 @@ View::$vars->message = null;
 if (isset ($_GET['token'])) {
 	
     $token = $_GET['token'];
+    $userMapper = new UserMapper();
     $user = $userMapper->getUserByCustom(array('confirm_code' => $token, 'status' => 'new'));
     if ($user) {
-        $userService = new UserService();
         $userService->approve($user, 'activate');
         if (Settings::Get('auto_approve_users') == 1) {
             View::$vars->message = Language::GetText ('activate_success', array ('host' => HOST));

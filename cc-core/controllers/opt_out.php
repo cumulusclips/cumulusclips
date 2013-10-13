@@ -4,11 +4,9 @@
 View::InitView('opt_out');
 Plugin::triggerEvent('opt_out.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-$userMapper = new UserMapper();
-if (View::$vars->logged_in) {
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 ### Verify user actually unsubscribed
 if (isset($_GET['email'])) {

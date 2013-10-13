@@ -4,11 +4,9 @@
 View::InitView ('play');
 Plugin::Trigger ('play.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
@@ -23,7 +21,7 @@ if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video
     View::$vars->comments_url = HOST . '/videos/' . View::$vars->video->videoId . '/comments';
 
     // Prevent direct access to video to all users except owner
-    if (View::$vars->video->private == '1' && View::$vars->logged_in != View::$vars->video->userId) {
+    if (View::$vars->video->private == '1' && View::$vars->loggedInUser->userId != View::$vars->video->userId) {
         App::Throw404();
     }
 
@@ -48,9 +46,8 @@ View::$vars->meta->description = View::$vars->video->description;
 Plugin::Trigger ('play.load_video');
 
 // Retrieve user data if logged in
-if (View::$vars->logged_in) {
-    View::$vars->user = $userMapper->getUserById(View::$vars->logged_in);
-    $data = array ('member' => View::$vars->video->userId, 'user_id' => View::$vars->user->userId);
+if (View::$vars->loggedInUser) {
+    $data = array ('member' => View::$vars->video->userId, 'user_id' => View::$vars->loggedInUser->userId);
     View::$vars->subscribe_text = (Subscription::Exist ($data)) ? 'unsubscribe' : 'subscribe';
 } else {
     View::$vars->subscribe_text = 'subscribe';

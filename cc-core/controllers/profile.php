@@ -4,11 +4,9 @@
 View::InitView('profile');
 Plugin::triggerEvent('profile.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 // Verify Member was supplied
 $userMapper = new UserMapper();
@@ -28,9 +26,9 @@ if ($user) {
 }
 
 // Check if user is subscribed
-if (View::$vars->logged_in) {
+if (View::$vars->loggedInUser) {
     $subscriptionMapper = new SubscriptionMapper();
-    View::$vars->subscribe_text = $subscriptionMapper->isSubscribed(View::$vars->user->userId, View::$vars->member->userId) ? 'unsubscribe' : 'subscribe';
+    View::$vars->subscribe_text = $subscriptionMapper->isSubscribed(View::$vars->loggedInUser->userId, View::$vars->member->userId) ? 'unsubscribe' : 'subscribe';
 } else {
     View::$vars->subscribe_text = 'subscribe';
 }

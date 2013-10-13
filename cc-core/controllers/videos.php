@@ -4,11 +4,9 @@
 View::InitView('videos');
 Plugin::Trigger('videos.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 $load = array ('most-viewed', 'most-discussed', 'most-rated');
 View::$vars->sub_header = null;

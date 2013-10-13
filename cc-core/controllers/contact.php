@@ -4,11 +4,9 @@
 View::InitView ('contact');
 Plugin::triggerEvent('contact.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 View::$vars->Errors = array();
 View::$vars->name = null;

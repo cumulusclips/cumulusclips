@@ -150,8 +150,9 @@ class UserService extends ServiceAbstract
      */
     public function loginCheck()
     {
-        if (!empty ($_SESSION['user_id']) && self::Exist (array ('user_id' => $_SESSION['user_id']))) {
-            return $_SESSION['user_id'];
+        $userMapper = new UserMapper();
+        if (!empty($_SESSION['loggedInUserId'])) {
+            return $userMapper->getUserById($_SESSION['loggedInUserId']);
         } else {
             return false;
         }

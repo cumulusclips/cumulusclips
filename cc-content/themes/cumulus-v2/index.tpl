@@ -1,7 +1,7 @@
 <?php
 View::AddJs('jcycle.plugin.js');
 View::AddJs('jcycle.js');
-if (!$logged_in) View::AddSidebarBlock('home_login.tpl');
+if (!$loggedInUser) View::AddSidebarBlock('home_login.tpl');
 ?>
 
 

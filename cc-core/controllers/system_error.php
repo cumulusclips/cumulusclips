@@ -4,11 +4,9 @@
 View::InitView('system_error');
 Plugin::Trigger('system_error.start');
 
-View::$vars->logged_in = UserService::LoginCheck();
-if (View::$vars->logged_in) {
-    $userMapper = new UserMapper();
-    $userMapper->getUserById(View::$vars->logged_in);
-}
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 
 // Output Page
 Plugin::Trigger('system_error.before_render');
