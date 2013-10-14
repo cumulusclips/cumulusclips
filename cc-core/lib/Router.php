@@ -43,6 +43,24 @@ class Router
     }
     
     /**
+     * Return the Apache request uri with the site base URL and query string removed
+     * @return string Returns the intended request uri
+     */
+    public function getRequestUri()
+    {
+        // Strip query string from Apache request uri
+        $apacheRequestUri = preg_replace('/\?.*$/', '', $_SERVER['REQUEST_URI']);
+
+        // Strip path part of base URL and query string from Apache request uri
+        $urlParts = parse_url(HOST);
+        if (!empty($urlParts['path'])) {
+            return preg_replace('/^' . $urlParts['path'] . '/', '', $apacheRequestUri);
+        } else {
+            return $apacheRequestUri;
+        }
+    }
+    
+    /**
      * Detect which route matches current request URI, and merge it's pattern
      * matches into $_GET superglobal
      * @return Route 
@@ -51,14 +69,7 @@ class Router
     {
         $matchedRoute = new stdClass();
         $routes = $this->_staticRoutes();
-        
-        // Strip path part of base URL and query string from Apache request uri
-        $urlParts = parse_url(HOST);
-        if (!empty($urlParts['path'])) {
-            $requestUri = preg_replace('#' . $urlParts['path'] . '|\?.*$#', '', $_SERVER['REQUEST_URI']);
-        } else {
-            $requestUri = $_SERVER['REQUEST_URI'];
-        }
+        $requestUri = $this->getRequestUri();
 
         // Go through all routes to test if it matches current URI
         foreach ($routes as $route) {

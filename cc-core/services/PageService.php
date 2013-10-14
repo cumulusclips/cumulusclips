@@ -2,11 +2,7 @@
 
 class PageService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'pages';
-    protected static $id_name = 'page_id';
-    protected static $reserved = array (
+    protected static $_reserved = array (
         'videos',
         'members',
         'myaccount',
@@ -29,13 +25,14 @@ class PageService extends ServiceAbstract
 
     /**
      * Delete a record
-     * @param integer $id ID of record to be deleted
+     * @param integer $pageId ID of record to be deleted
      * @return void Record is deleted from database
      */
-    static function Delete ($id) {
+    public function delete($pageId)
+    {
         $db = Database::GetInstance();
         Plugin::Trigger ('page.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
+        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $pageId";
         $db->Query ($query);
     }
     
@@ -44,8 +41,9 @@ class PageService extends ServiceAbstract
      * @param string $slug The slug to check if reserved
      * @return boolean Returns true if slug is reserved, false otherwise
      */
-    static function IsReserved ($slug) {
-        return in_array ($slug, self::$reserved);
+    public function isReserved($slug)
+    {
+        return in_array ($slug, self::$_reserved);
     }
 
     /**
@@ -53,7 +51,8 @@ class PageService extends ServiceAbstract
      * @param string $slug The slug to check if available
      * @return string Returns available version of requested slug
      */
-    static function GetAvailableSlug ($slug) {
+    public function getAvailableSlug($slug)
+    {
         $count = 1;
         $slug_check = $slug;
         while (self::IsReserved ($slug_check) || self::Exist (array ('slug' => $slug_check))) {
