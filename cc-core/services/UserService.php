@@ -86,14 +86,16 @@ class UserService extends ServiceAbstract
     
     /**
      * Generate and save a new password for user
+     * @param User $user Instance of user to have password reset
      * @return string Returns user's new password
      */
-    public function resetPassword()
+    public function resetPassword($user)
     {
-        $password = Functions::Random (10,true);
-        $data = array ('password' => md5 ($password));
+        $userMapper = new UserMapper();
+        $password = Functions::random(10,true);
+        $user->password = md5($password);
         Plugin::triggerEvent('user.reset_password');
-        $this->Update ($data);
+        $userMapper->save($user);
         return $password;
     }
 	
@@ -121,11 +123,16 @@ class UserService extends ServiceAbstract
      */
     public function login($username, $password)
     {
-        $id = self::Exist (array ('username' => $username, 'password' => md5 ($password), 'status' => 'active'));
-        if ($id) {
-            $_SESSION['user_id'] = $id;
-            $user = new self ($id);
-            $user->Update (array ('last_login' => date ('Y-m-d H:i:s')));
+        $userMapper = new UserMapper();
+        $user = $userMapper->getUserByCustom(array(
+            'username' => $username,
+            'password' => md5($password),
+            'status' => 'active'
+        ));
+        if ($user) {
+            $_SESSION['loggedInUserId'] = $user->userId;
+            $user->lastLogin = date(DATE_FORMAT);
+            $userMapper->save($user);
             Plugin::triggerEvent('user.login');
             return true;
         } else {
@@ -139,7 +146,7 @@ class UserService extends ServiceAbstract
      */
     public function logout()
     {
-        unset ($_SESSION['user_id']);
+        unset ($_SESSION['loggedInUserId']);
         Plugin::triggerEvent('user.logout');
     }
 
@@ -161,20 +168,21 @@ class UserService extends ServiceAbstract
     /**
      * Check if a user has a given permission
      * @param string $permission Name of permission to check
-     * @param mixed $user_to_check (optional) User object or ID of user to check permissions for. If null, logged in user is used
+     * @param mixed $userToCheck (optional) User object or ID of user to check permissions for. If null, logged in user is used
      * @return boolean Returns true if user's role has permission, false otherwise
      */
-    public function checkPermissions($permission, $user_to_check = null)
+    public function checkPermissions($permission, $userToCheck = null)
     {
         $config = Registry::get('config');
         
         // Retrieve user information
-        if (!empty ($user_to_check) && is_object ($user_to_check) && get_class ($user_to_check) == __CLASS__) {
-            $user = $user_to_check;
-        } else if (!empty ($user_to_check)) {
-            $user = new self ($user_to_check);
-        } else if ($logged_in = self::LoginCheck()) {
-            $user = new self ($logged_in);
+        if (!empty($userToCheck) && $userToCheck instanceof User) {
+            $user = $userToCheck;
+        } else if (!empty($userToCheck) && is_numeric($userToCheck)) {
+            $userMapper = new UserMapper();
+            $user = $userMapper->getUserById($userToCheck);
+        } else if ($logged_in = $this->loginCheck()) {
+            $user = $logged_in;
         } else {
             return false;
         }

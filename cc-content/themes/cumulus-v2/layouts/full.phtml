@@ -29,9 +29,9 @@
             
                 <a href="<?=HOST?>/logout/" title="<?=Language::GetText('logout')?>"><?=Language::GetText('logout')?></a>
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
-                <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$user->username?>/"><?=Language::GetText('view_my_profile')?></a>
+                <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$loggedInUser->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
-                <?php if (User::CheckPermissions('admin_panel', $user)): ?>
+                <?php if (View::getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
                     <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
                 <?php endif ?>
 
