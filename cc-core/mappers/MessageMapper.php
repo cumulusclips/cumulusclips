@@ -13,6 +13,47 @@ class MessageMapper extends MapperAbstract
             return false;
         }
     }
+    
+    public function getMessageByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'messages WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
+        if ($db->rowCount() == 1) {
+            return $this->_map($dbResults);
+        } else {
+            return false;
+        }
+    }
+    
+    public function getMultipleMessagesByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'messages WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $recordList = array();
+        foreach ($dbResults as $dbRecord) {
+            $recordList[] = $this->_map($dbRecord);
+        }
+        return $recordList;
+    }
 
     protected function _map($dbResults)
     {
