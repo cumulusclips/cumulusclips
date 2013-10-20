@@ -4,8 +4,9 @@
 View::InitView('myvideos');
 Plugin::triggerEvent('myvideos.start');
 
-// Login check
-View::$vars->loggedInUser = UserService::loginCheck();
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
@@ -15,7 +16,7 @@ View::$vars->message = null;
 $videoMapper = new VideoMapper();
 
 // Delete video if requested
-if (isset($_GET['vid']) && is_numeric($_GET['vid'])) {
+if (!empty($_GET['vid'])) {
     $video = $videoMapper->getVideoByCustom(array(
         'user_id' => View::$vars->loggedInUser->userId,
         'video_id' => $_GET['vid']

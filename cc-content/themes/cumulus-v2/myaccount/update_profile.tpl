@@ -1,48 +1,40 @@
 <?php
-
-View::AddMeta ('uploadify:theme', $config->theme_url);
-View::AddMeta ('uploadify:buttonText', Language::GetText('browse_files_button'));
-View::AddCss ('uploadify.css');
-View::AddJs ('uploadify.plugin.js');
-View::AddJs ('uploadify.js');
-View::SetLayout ('myaccount');
-
+View::AddMeta('uploadify:theme', $config->theme_url);
+View::AddMeta('uploadify:buttonText', Language::GetText('browse_files_button'));
+View::AddCss('uploadify.css');
+View::AddJs('uploadify.plugin.js');
+View::AddJs('uploadify.js');
+View::SetLayout('myaccount');
 ?>
 
 <h1><?=Language::GetText('profile_header')?></h1>
 
 <div class="message <?=$message_type?>"><?=$message?></div>
 
-
-
 <div class="form wide">
     <p class="large"><?=Language::GetText('personal_header')?></p>
     <p><?=Language::GetText('asterisk')?></p>
     <form action="<?=HOST?>/myaccount/profile/" method="post">
         <label class="<?=(isset ($Errors['first_name'])) ? ' error' : ''?>"><?=Language::GetText('first_name')?>:</label>
-        <input class="text" type="text" name="first_name" value="<?=(isset ($data['first_name'])) ? $data['first_name'] : $user->first_name?>" />
+        <input class="text" type="text" name="first_name" value="<?=htmlspecialchars($loggedInUser->firstName)?>" />
 
         <label class="row<?=(isset ($Errors['last_name'])) ? ' error' : ''?>"><?=Language::GetText('last_name')?>:</label>
-        <input class="text" type="text" name="last_name" value="<?=(isset ($data['last_name'])) ? $data['last_name'] : $user->last_name?>" />
+        <input class="text" type="text" name="last_name" value="<?=htmlspecialchars($loggedInUser->lastName)?>" />
 
         <label class="row<?=(isset ($Errors['email'])) ? ' error' : ''?>">*<?=Language::GetText('email')?>:</label>
-        <input class="text" type="text" name="email" value="<?=(isset ($data['email'])) ? $data['email'] : $user->email?>" />
+        <input class="text" type="text" name="email" value="<?=htmlspecialchars($loggedInUser->email)?>" />
 
         <label class="row<?=(isset ($Errors['website'])) ? ' error' : ''?>"><?=Language::GetText('website')?>:</label>
-        <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $user->website?>" />
+        <input class="text" type="text" name="website" value="<?=htmlspecialchars($loggedInUser->website)?>" />
 
         <label class="row<?=(isset ($Errors['about_me'])) ? ' error' : ''?>"><?=Language::GetText('about_me')?>:</label>
-        <textarea class="text" name="about_me" rows="10" cols="45"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
+        <textarea class="text" name="about_me" rows="10" cols="45"><?=htmlspecialchars($loggedInUser->aboutMe)?></textarea>
 
         <input type="hidden" value="yes" name="submitted" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('profile_button')?>" />
     </form>
 </div>
 
-
-
-
-    
 <h1><?=Language::GetText('update_avatar_header')?></h1>
 <div id="update_avatar" class="form">
 

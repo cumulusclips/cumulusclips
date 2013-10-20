@@ -4,8 +4,9 @@
 View::InitView('myaccount');
 Plugin::triggerEvent('myaccount.start');
 
-// Login check
-View::$vars->loggedInUser = UserService::loginCheck();
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
 Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
