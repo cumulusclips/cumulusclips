@@ -14,19 +14,12 @@ class VideoService extends ServiceAbstract
     
     /**
      * Delete a video
-     * @param integer $video_id ID of video to be deleted
+     * @param Video $video Instance of video to be deleted
      * @return void Video is deleted from database and all related files and records are also deleted
      */
-    static function Delete ($video_id) {
-
-        App::LoadClass ('Rating');
-        App::LoadClass ('Flag');
-        App::LoadClass ('Favorite');
-        App::LoadClass ('Comment');
-
-        $db = Database::GetInstance();
-        $video = new self ($video_id);
-        Plugin::Trigger ('video.delete');
+    public function delete(Video $video)
+    {
+        Plugin::triggerEvent('video.delete');
 
         // Delete files
         try {
@@ -39,44 +32,42 @@ class VideoService extends ServiceAbstract
             App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
         }
 
+        $commentService = new CommentService();
+        $commentMapper = new CommentMapper();
+        $comments = $commentMapper->getMultipleCommentsByCustom(array('video_id' => $video->videoId));
+        foreach ($comments as $comment) $commentService->delete($comment);
+        
+        $ratingService = new RatingService();
+        $ratingMapper = new RatingMapper();
+        $ratings = $ratingMapper->getMultipleRatingsByCustom(array('video_id' => $video->videoId));
+        foreach ($ratings as $rating) $ratingService->delete($rating);
+        
+        $favoriteService = new FavoriteService();
+        $favoriteMapper = new FavoriteMapper();
+        $favorites = $favoriteMapper->getMultipleFavoritesByCustom(array('video_id' => $video->videoId));
+        foreach ($favorites as $favorite) $favoriteService->delete($favorite);
+        
+        $flagService = new FlagService();
+        $flagMapper = new FlagMapper();
+        $flags = $flagMapper->getMultipleFlagsByCustom(array('video_id' => $video->videoId));
+        foreach ($flags as $flag) $flagService->delete($flag);
 
-
-        // Delete Comments
-        $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE video_id = $video_id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Comment::Delete ($row->comment_id);
-
-        // Delete Ratings
-        $query = "SELECT rating_id FROM " . DB_PREFIX . "ratings WHERE video_id = $video_id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Rating::Delete ($row->rating_id);
-
-        // Delete Favorites
-        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE video_id = $video_id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
-
-        // Delete Flags
-        $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE id = $video_id AND type = 'video'";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Flag::Delete ($row->flag_id);
-
-        // Delete Video
-        $query = "DELETE FROM " . DB_PREFIX . "videos WHERE video_id = $video_id";
-        $db->Query ($query);
-
+        $videoMapper = new VideoMapper();
+        $videoMapper->delete($video->videoId);
     }
 
     /**
      * Generate a unique random string for a video filename
      * @return string Random video filename
      */
-    static function CreateFilename() {
-        $db = Database::GetInstance();
+    public function createFilename()
+    {
+        $videoMapper = new VideoMapper();
+        $filenameAvailable = null;
         do {
-            $filename = Functions::Random(20);
-            if (!self::Exist (array ('filename' => $filename))) $filename_available = true;
-        } while (empty ($filename_available));
+            $filename = Functions::random(20);
+            if (!$videoMapper->getVideoByCustom(array('filename' => $$filename))) $filenameAvailable = true;
+        } while (empty($filenameAvailable));
         return $filename;
     }
 
@@ -84,12 +75,14 @@ class VideoService extends ServiceAbstract
      * Generate a unique random url for accessing a private video
      * @return string URL for private video is returned
      */
-    static function GeneratePrivate() {
-        $db = Database::GetInstance();
+    public function generatePrivate()
+    {
+        $videoMapper = new VideoMapper();
+        $privateAvailable = null;
         do {
-            $private = Functions::Random(7);
-            if (!self::Exist (array ('private_url' => $private))) $private_available = true;
-        } while (empty ($private_available));
+            $private = Functions::random(7);
+            if (!$videoMapper->getVideoByCustom(array('private_url' => $private))) $privateAvailable = true;
+        } while (empty($privateAvailable));
         return $private;
     }
 
@@ -100,14 +93,14 @@ class VideoService extends ServiceAbstract
      * @return void Video is activated, subscribers are notified, and admin
      * alerted. If approval is required video is marked as pending and placed in queue
      */
-    public function Approve ($action) {
-
+    public function Approve ($action)
+    {
         App::LoadClass ('User');
         App::LoadClass ('Privacy');
         App::LoadClass ('Mail');
         
         $send_alert = false;
-        Plugin::Trigger ('video.before_approve');
+        Plugin::triggerEvent('video.before_approve');
 
 
         // 1) Admin created video in Admin Panel
@@ -125,7 +118,7 @@ class VideoService extends ServiceAbstract
 
                 // Set Pending
                 $this->Update (array ('status' => 'pendingApproval'));
-                Plugin::Trigger ('video.approve_required');
+                Plugin::triggerEvent('video.approve_required');
 
             } else {
 
@@ -162,12 +155,12 @@ class VideoService extends ServiceAbstract
                         $mail = new Mail();
                         $mail->LoadTemplate ('new_video', $replacements);
                         $mail->Send ($subscriber->email);
-                        Plugin::Trigger ('video.notify_subscribers');
+                        Plugin::triggerEvent('video.notify_subscribers');
                     }
 
                 }
 
-                Plugin::Trigger ('video.release');
+                Plugin::triggerEvent('video.release');
 
             }
 
@@ -175,7 +168,7 @@ class VideoService extends ServiceAbstract
         } else if ($action == 'approve' && $this->released != 0) {
             // Approve Video
             $this->Update (array ('status' => 'approved'));
-            Plugin::Trigger ('video.reapprove');
+            Plugin::triggerEvent('video.reapprove');
         }
 
 
@@ -188,7 +181,7 @@ class VideoService extends ServiceAbstract
             App::Alert ($subject, $body);
         }
 
-        Plugin::Trigger ('video.approve');
+        Plugin::triggerEvent('video.approve');
 
     }
     

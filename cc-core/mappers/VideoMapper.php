@@ -4,16 +4,19 @@ class VideoMapper extends MapperAbstract
 {
     public function getVideoById($videoId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE video_id = :videoId';
-        $dbResults = $db->fetchRow($query, array(':videoId' => $videoId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getVideoByCustom(array('video_id' => $videoId));
     }
     
+    public function getVideoByFilename($filename)
+    {
+        return $this->getVideoByCustom(array('filename' => $filename));
+    }
+    
+    public function getUserVideos($userId)
+    {
+        return $this->getMultipleVideosByCustom(array('user_id' => $userId));
+    }
+
     public function getVideoByCustom(array $params)
     {
         $db = Registry::get('db');
@@ -34,28 +37,24 @@ class VideoMapper extends MapperAbstract
         }
     }
     
-    public function getVideoByFilename($filename)
+    public function getMultipleVideosByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE filename = :filename';
-        $dbResults = $db->fetchRow($query, array(':filename' => $filename));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
+        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
         }
-    }
-    
-    public function getUserVideos($userId)
-    {
-        $db = Registry::get('db');
-        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE user_id = :userId';
-        $dbResults = $db->fetchAll($query, array(':userId' => $userId));
-        $userVideos = array();
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $videosList = array();
         foreach($dbResults as $record) {
-            $userVideos[] = $this->_map($record);
+            $videosList[] = $this->_map($record);
         }
-        return $userVideos;
+        return $videosList;
     }
 
     protected function _map($dbResults)
@@ -160,5 +159,12 @@ class VideoMapper extends MapperAbstract
             $videoList[] = $this->_map($videoRecord);
         }
         return $videoList;
+    }
+    
+    public function delete($videoId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'videos WHERE video_id = :videoId';
+        $db->query($query, array(':videoId' => $videoId));
     }
 }

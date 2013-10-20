@@ -1,50 +1,50 @@
 <?php
 
+// Init view
+View::InitView('myvideos');
+Plugin::triggerEvent('myvideos.start');
+
+// Login check
+View::$vars->loggedInUser = UserService::loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+
 // Establish page variables, objects, arrays, etc
-View::InitView ('myvideos');
-Plugin::Trigger ('myvideos.start');
-Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
-View::$vars->user = new User (View::$vars->logged_in);
 $records_per_page = 9;
 $url = HOST . '/myaccount/myvideos';
 View::$vars->message = null;
+$videoMapper = new VideoMapper();
 
-
-
-
-
-/***********************
-Handle Form if submitted
-***********************/
-
-if (isset ($_GET['vid']) && is_numeric ($_GET['vid'])) {
-
-    $data = array ('user_id' => View::$vars->user->user_id, 'video_id' => $_GET['vid']);
-    $video_id = Video::Exist ($data);
-    if ($video_id) {
-        Video::Delete ($video_id);
+// Delete video if requested
+if (isset($_GET['vid']) && is_numeric($_GET['vid'])) {
+    $video = $videoMapper->getVideoByCustom(array(
+        'user_id' => View::$vars->loggedInUser->userId,
+        'video_id' => $_GET['vid']
+    ));
+    if ($video) {
+        $videoService = new VideoService();
+        $videoService->delete($video);
         View::$vars->message = Language::GetText('success_video_deleted');
         View::$vars->message_type = 'success';
-        Plugin::Trigger ('myvideos.delete_video');
+        Plugin::triggerEvent('myvideos.delete_video');
     }
-
 }
 
-
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->user->user_id . " AND status IN ('approved', 'processing', 'pendingConversion', 'pendingApproval') ORDER BY date_created DESC";
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . View::$vars->loggedInUser->userId . " AND status IN ('approved', 'processing', 'pendingConversion', 'pendingApproval') ORDER BY date_created DESC";
+$db->fetchAll($query);
+$total = $db->rowCount();
 
 // Initialize pagination
-View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
+View::$vars->pagination = new Pagination($url, $total, $records_per_page);
 $start_record = View::$vars->pagination->GetStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-View::$vars->result = $db->Query ($query);
-
+$resultVideos = $db->fetchAll($query);
+View::$vars->userVideos = $videoMapper->getMultipleVideosById(
+    Functions::flattenArray($resultVideos, 'video_id')
+);
 
 // Output page
-Plugin::Trigger ('myvideos.before_render');
-View::Render ('myaccount/myvideos.tpl');
+Plugin::triggerEvent('myvideos.before_render');
+View::Render('myaccount/myvideos.tpl');

@@ -92,7 +92,6 @@ class Database
             $fetchMode = $this->_fetchMode;
         }
         $pdoStatement = $this->query($sql, $bindParams);
-        $this->_lastStatement = $pdoStatement;
         return $pdoStatement->fetch($fetchMode);
     }
 
@@ -102,7 +101,6 @@ class Database
             $fetchMode = $this->_fetchMode;
         }
         $pdoStatement = $this->query($sql, $bindParams);
-        $this->_lastStatement = $pdoStatement;
         return $pdoStatement->fetchAll($fetchMode);
     }
     

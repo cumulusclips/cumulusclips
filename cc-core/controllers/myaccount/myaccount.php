@@ -1,10 +1,14 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
+// Init view
 View::InitView('myaccount');
 Plugin::triggerEvent('myaccount.start');
+
+// Login check
 View::$vars->loggedInUser = UserService::loginCheck();
 Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+
+// Establish page variables, objects, arrays, etc
 View::$vars->new_messages = null;
 View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('username' => View::$vars->loggedInUser->username));
 
