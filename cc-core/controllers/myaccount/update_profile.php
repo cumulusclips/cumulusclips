@@ -20,14 +20,14 @@ $_SESSION['upload_key'] = md5(md5(View::$vars->timestamp) . SECRET_KEY);
 if (isset($_POST['submitted'])) {
 
     // Validate First Name
-    if (!empty(View::$vars->user->first_name) && $_POST['first_name'] == '') {
+    if (!empty(View::$vars->loggedInUser->firstName) && $_POST['first_name'] == '') {
         View::$vars->loggedInUser->firstName = '';
     } elseif (!empty($_POST['first_name'])) {
         View::$vars->loggedInUser->firstName = trim($_POST['first_name']);
     }
 
     // Validate Last Name
-    if (!empty(View::$vars->user->last_name) && $_POST['last_name'] == '') {
+    if (!empty(View::$vars->loggedInUser->lastName) && $_POST['last_name'] == '') {
         View::$vars->loggedInUser->lastName = '';
     } elseif (!empty($_POST['last_name'])) {
         View::$vars->loggedInUser->lastName = trim($_POST['last_name']);
@@ -35,7 +35,8 @@ if (isset($_POST['submitted'])) {
 
     // Validate Email
     if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        if (!$userMapper->getUserByCustom(array('email' => $_POST['email']))) {
+        $userCheck = $userMapper->getUserByCustom(array('email' => $_POST['email']));
+        if (!$userCheck || $userCheck->email == View::$vars->loggedInUser->email) {
             View::$vars->loggedInUser->email = $_POST['email'];
         } else {
             View::$vars->Errors['email'] = Language::GetText('error_email_unavailable');
@@ -58,7 +59,7 @@ if (isset($_POST['submitted'])) {
     }
 
     // Validate About Me
-    if (!empty(View::$vars->user->about_me) && $_POST['about_me'] == '') {
+    if (!empty(View::$vars->loggedInUser->aboutMe) && $_POST['about_me'] == '') {
         View::$vars->loggedInUser->aboutMe = '';
     } elseif (!empty($_POST['about_me'])) {
         View::$vars->loggedInUser->aboutMe = trim($_POST['about_me']);

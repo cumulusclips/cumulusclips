@@ -39,7 +39,7 @@ View::SetLayout('myaccount');
 <div id="update_avatar" class="form">
 
     <div class="left">
-        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$user->getAvatarUrl()?>"></span></p>
+        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=View::getService('User')->getAvatarUrl($loggedInUser)?>"></span></p>
         <?=Language::GetText('current_avatar')?><br />
         <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
     </div>

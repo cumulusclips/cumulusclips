@@ -29,12 +29,12 @@ class PrivacyMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $privacy = new Privacy();
-        $privacy->privacyId = $dbResults['privacyId'];
-        $privacy->userId = $dbResults['userId'];
-        $privacy->videoComment = ($dbResults['videoComment'] == 1) ? true : false;
-        $privacy->newMessage = ($dbResults['newMessage'] == 1) ? true : false;
-        $privacy->newVideo = ($dbResults['newVideo'] == 1) ? true : false;
-        $privacy->videoReady = ($dbResults['videoReady'] == 1) ? true : false;
+        $privacy->privacyId = $dbResults['privacy_id'];
+        $privacy->userId = $dbResults['user_id'];
+        $privacy->videoComment = ($dbResults['video_comment'] == 1) ? true : false;
+        $privacy->newMessage = ($dbResults['new_message'] == 1) ? true : false;
+        $privacy->newVideo = ($dbResults['new_video'] == 1) ? true : false;
+        $privacy->videoReady = ($dbResults['video_ready'] == 1) ? true : false;
         return $privacy;
     }
 
@@ -46,8 +46,8 @@ class PrivacyMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $privacy);
             $query = 'UPDATE ' . DB_PREFIX . 'privacy SET';
-            $query .= ' userId = :userId, videoComment = :videoComment, newMessage = :newMessage, newVideo = :newVideo, videoReady = :videoReady';
-            $query .= ' WHERE privacyId = :privacyId';
+            $query .= ' user_id = :userId, video_comment = :videoComment, new_message = :newMessage, new_video = :newVideo, video_ready = :videoReady';
+            $query .= ' WHERE privacy_id = :privacyId';
             $bindParams = array(
                 ':privacyId' => $privacy->privacyId,
                 ':userId' => $privacy->userId,
@@ -60,7 +60,7 @@ class PrivacyMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $privacy);
             $query = 'INSERT INTO ' . DB_PREFIX . 'privacy';
-            $query .= ' (userId, videoComment, newMessage, newVideo, videoReady)';
+            $query .= ' (user_id, video_comment, new_message, new_video, video_ready)';
             $query .= ' VALUES (:userId, :videoComment, :newMessage, :newVideo, :videoReady)';
             $bindParams = array(
                 ':userId' => $privacy->userId,
