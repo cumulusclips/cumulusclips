@@ -1,4 +1,4 @@
-<?php View::SetLayout ('myaccount'); ?>
+<?php View::SetLayout('myaccount'); ?>
 
 <h1><?=Language::GetText('change_password_header')?></h1>
 
@@ -10,10 +10,10 @@
 <div class="form">
     <p><?=Language::GetText('change_password_text')?></p>
     <form action="<?=HOST?>/myaccount/change-password/" method="post">
-        <label class="<?=(isset ($errors['password']) || isset ($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('new_password')?>:</label>
+        <label class="<?=(isset($errors['password']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('new_password')?>:</label>
         <input class="text" type="password" name="password" />
 
-        <label class="<?=(isset ($errors['confirm_password']) || isset ($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('confirm_password')?>:</label>
+        <label class="<?=(isset($errors['confirm_password']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('confirm_password')?>:</label>
         <input class="text" type="password" name="confirm_password" />
 
         <input type="hidden" name="submitted" value="TRUE" />
