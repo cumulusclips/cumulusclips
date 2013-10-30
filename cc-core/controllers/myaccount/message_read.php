@@ -1,33 +1,37 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
+// Init view
 View::InitView ('message_read');
-Plugin::Trigger ('message_read.start');
-Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
-View::$vars->user = new User (View::$vars->logged_in);
+Plugin::triggerEvent('message_read.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
 
+// Establish page variables, objects, arrays, etc
+$messageMapper = new MessageMapper();
 
-### Verify a message was chosen
-if (empty ($_GET['msg']) || !is_numeric ($_GET['msg'])) {
-    App::Throw404();
-}
-
-
-
-### Retrieve message information
-$message_id = trim ($_GET['msg']);
-$data = array ('recipient' => View::$vars->user->user_id, 'message_id' => $message_id);
-$message_id = Message::Exist ($data);
-if ($message_id) {
-    View::$vars->message = new Message ($message_id);
-    $data = array ('status' => 'read');
-    View::$vars->message->Update ($data);
+// Verify a message was chosen
+if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
+    
+    // Retrieve and update message
+    $message = $messageMapper->getMessageByCustom(array(
+        'user_id' => View::$vars->loggedInUser->userId,
+        'message_id' => $_GET['msg']
+    ));
+    if ($message) {
+        $message->status = 'read';
+        $messageMapper->save($message);
+        View::$vars->message = $message;
+    } else {
+        App::Throw404();
+    }
+    
 } else {
     App::Throw404();
 }
 
-
 // Outuput page
-Plugin::Trigger ('message_read.before_render');
+Plugin::triggerEvent('message_read.before_render');
 View::Render ('myaccount/message_read.tpl');

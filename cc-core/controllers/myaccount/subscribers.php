@@ -1,27 +1,35 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
+// Init view
 View::InitView ('subscribers');
-Plugin::Trigger ('subscribers.start');
-Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
-View::$vars->user = new User (View::$vars->logged_in);
+Plugin::triggerEvent('subscribers.start');
+
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+
+// Establish page variables, objects, arrays, etc
 $records_per_page = 9;
 $url = HOST . '/myaccount/subscribers';
 
 // Retrieve total count
-$query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->user->user_id;
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = " . View::$vars->loggedInUser->userId;
+$db->fetchAll($query);
+$total = $db->rowCount();
 
 // Initialize pagination
-View::$vars->pagination = new Pagination ($url, $total, $records_per_page);
-$start_record = View::$vars->pagination->GetStartRecord();
+View::$vars->pagination = new Pagination($url, $total, $records_per_page);
+$start_record = View::$vars->pagination->getStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-View::$vars->result = $db->Query ($query);
-
+$subscriberResults = $db->fetchAll($query);
+$userMapper = new UserMapper();
+View::$vars->subscribers = $userMapper->getMultipleUsersById(
+    Functions::flattenArray($subscriberResults, 'user_id')
+);
 
 // Output page
-Plugin::Trigger ('subscribers.before_render');
-View::Render ('myaccount/subscribers.tpl');
+Plugin::triggerEvent('subscribers.before_render');
+View::Render('myaccount/subscribers.tpl');

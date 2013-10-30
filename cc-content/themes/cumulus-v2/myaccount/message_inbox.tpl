@@ -6,7 +6,7 @@
     <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-<?php if ($db->Count($result) > 0): ?>
+<?php if (count($messages) > 0): ?>
 
     <form action="<?=HOST?>/myaccount/message/inbox/" method="post">
     <table id="inbox">
@@ -20,19 +20,15 @@
             </tr>
         </thead>
         <tbody>
-        <?php while ($row = $db->FetchObj ($result)): ?>
-
-            <?php $message = new Message ($row->message_id); ?>
-
+        <?php foreach ($messages as $message): ?>
             <tr>
-                <td><input type="checkbox" name="delete[]" value="<?=$message->message_id?>" /></td>
+                <td><input type="checkbox" name="delete[]" value="<?=$message->messageId?>" /></td>
                 <td><?=$message->status == 'read' ? Language::GetText('read') : Language::GetText('unread')?></td>
-                <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->message_id?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
+                <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->messageId?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
                 <td><?=$message->username?></td>
-                <td><?=Functions::DateFormat('m/d/Y', $message->date_created)?></td>
+                <td><?=Functions::DateFormat('m/d/Y', $message->dateCreated)?></td>
             </tr>
-
-        <?php endwhile; ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
     <div class="row_btn">

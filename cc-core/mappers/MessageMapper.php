@@ -4,24 +4,21 @@ class MessageMapper extends MapperAbstract
 {
     public function getMessageById($messageId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'messages WHERE messageId = :messageId';
-        $dbResults = $db->fetchRow($query, array(':messageId' => $messageId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getMessageByCustom(array('message_id' => $messageId));
     }
     
     public function getMessageByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'messages WHERE ';
+        $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
+            . 'FROM ' . DB_PREFIX . 'messages '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= "$fieldName = :$fieldName AND ";
+            $query .= DB_PREFIX . "messages.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = rtrim($query, ' AND ');
@@ -37,11 +34,15 @@ class MessageMapper extends MapperAbstract
     public function getMultipleMessagesByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'messages WHERE ';
+        $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
+            . 'FROM ' . DB_PREFIX . 'messages '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= "$fieldName = :$fieldName AND ";
+            $query .= DB_PREFIX . "messages.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = rtrim($query, ' AND ');
@@ -58,13 +59,15 @@ class MessageMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $message = new Message();
-        $message->messageId = $dbResults['messageId'];
-        $message->userId = $dbResults['userId'];
+        $message->messageId = $dbResults['message_id'];
+        $message->userId = $dbResults['user_id'];
+        $message->username = $dbResults['username'];
         $message->recipient = $dbResults['recipient'];
+        $message->recipientUsername = $dbResults['recipient_username'];
         $message->subject = $dbResults['subject'];
         $message->message = $dbResults['message'];
         $message->status = $dbResults['status'];
-        $message->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
+        $message->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         return $message;
     }
 
@@ -76,8 +79,8 @@ class MessageMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $message);
             $query = 'UPDATE ' . DB_PREFIX . 'messages SET';
-            $query .= ' userId = :userId, recipient = :recipient, subject = :subject, message = :message, status = :status, dateCreated = :dateCreated';
-            $query .= ' WHERE messageId = :messageId';
+            $query .= ' user_id = :userId, recipient = :recipient, subject = :subject, message = :message, status = :status, date_created = :dateCreated';
+            $query .= ' WHERE message_id = :messageId';
             $bindParams = array(
                 ':messageId' => $message->messageId,
                 ':userId' => $message->userId,
@@ -91,7 +94,7 @@ class MessageMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $message);
             $query = 'INSERT INTO ' . DB_PREFIX . 'messages';
-            $query .= ' (userId, recipient, subject, message, status, dateCreated)';
+            $query .= ' (user_id, recipient, subject, message, status, date_created)';
             $query .= ' VALUES (:userId, :recipient, :subject, :message, :status, :dateCreated)';
             $bindParams = array(
                 ':userId' => $message->userId,
@@ -107,5 +110,25 @@ class MessageMapper extends MapperAbstract
         $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $messageId);
         return $messageId;
+    }
+    
+    public function getMultipleMessagesById(array $messageIds)
+    {
+        $messageList = array();
+        if (empty($messageIds)) return $messageList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($messageIds), '?'));
+        $sql = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
+            . 'FROM ' . DB_PREFIX . 'messages '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'WHERE message_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $messageIds);
+
+        foreach($result as $messageRecord) {
+            $messageList[] = $this->_map($messageRecord);
+        }
+        return $messageList;
     }
 }

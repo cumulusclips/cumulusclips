@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 
-<?php if ($subscriptions > 0): ?>
+<?php if (count($subscriptions) > 0): ?>
 
     <div class="member_list">
     <?php $userService = View::getService('User'); ?>

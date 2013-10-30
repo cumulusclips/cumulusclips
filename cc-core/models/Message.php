@@ -13,9 +13,19 @@ class Message
     public $userId;
     
     /**
+     * @var string
+     */
+    public $username;
+    
+    /**
      * @var int
      */
     public $recipient;
+    
+    /**
+     * @var string
+     */
+    public $recipientUsername;
     
     /**
      * @var string
