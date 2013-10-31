@@ -1,6 +1,6 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
+// Init view
 View::InitView('index');
 Plugin::Trigger('index.start');
 
