@@ -4,9 +4,22 @@ class RatingMapper extends MapperAbstract
 {
     public function getRatingById($ratingId)
     {
+        return $this->getRatingByCustom(array('rating_id' => $ratingId));
+    }
+    
+    public function getRatingByCustom(array $params)
+    {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'ratings WHERE ratingId = :ratingId';
-        $dbResults = $db->fetchRow($query, array(':ratingId' => $ratingId));
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'ratings WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {
@@ -20,7 +33,7 @@ class RatingMapper extends MapperAbstract
         $rating->ratingId = $dbResults['ratingId'];
         $rating->videoId = $dbResults['videoId'];
         $rating->userId = $dbResults['userId'];
-        $rating->rating = $dbResults['rating'];
+        $rating->rating = ($dbResults['rating'] == '1') ? 1 : 0;
         $rating->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
         return $rating;
     }
@@ -39,19 +52,19 @@ class RatingMapper extends MapperAbstract
                 ':ratingId' => $rating->ratingId,
                 ':videoId' => $rating->videoId,
                 ':userId' => $rating->userId,
-                ':rating' => $rating->rating,
+                ':rating' => (isset($rating->rating) && $rating->rating == 1) ? 1 : 0,
                 ':dateCreated' => date(DATE_FORMAT, strtotime($rating->dateCreated))
             );
         } else {
             // Create
             Plugin::triggerEvent('video.create', $rating);
-            $query = 'INSERT INTO ' . DB_PREFIX . 'ratings';
-            $query .= ' (videoId, userId, rating, dateCreated)';
-            $query .= ' VALUES (:videoId, :userId, :rating, :dateCreated)';
+            $query = 'INSERT INTO ' . DB_PREFIX . 'ratings ';
+            $query .= '(videoId, userId, rating, dateCreated) ';
+            $query .= 'VALUES (:videoId, :userId, :rating, :dateCreated)';
             $bindParams = array(
                 ':videoId' => $rating->videoId,
                 ':userId' => $rating->userId,
-                ':rating' => $rating->rating,
+                ':rating' => (isset($rating->rating) && $rating->rating == 1) ? 1 : 0,
                 ':dateCreated' => gmdate(DATE_FORMAT)
             );
         }

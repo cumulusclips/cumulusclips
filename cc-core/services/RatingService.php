@@ -16,17 +16,15 @@ class RatingService extends ServiceAbstract
 
     /**
      * Rate a video based on like / dislike
-     * @param integer $rating Rating being given (1 = Like / 0 = Dislike)
-     * @param integer $video_id Video being rated
-     * @param integer $user_id User doing the rating
-     * @return boolean Returns boolean true if rating was added, false if user
-     * has already rated video
+     * @param Rating $rating Instance of rating being created
+     * @return boolean Returns true if rating was added, false if user has already rated video
      */
-    static function AddRating ($rating, $video_id, $user_id) {
-        if (!self::Exist (array ('video_id' => $video_id, 'user_id' => $user_id))) {
-            $rating = ($rating == '1') ? 1 : 0;
-            $data = array ('video_id' => $video_id, 'user_id' => $user_id, 'rating' => $rating);
-            self::Create ($data);
+    public function rateVideo(Rating $rating)
+    {
+        $ratingMapper = new RatingMapper();
+        
+        if (!$ratingMapper->getRatingByCustom(array('video_id' => $rating->videoId, 'user_id' => $rating->userId))) {
+            $ratingMapper->save($rating);
             return true;
         } else {
             return false;
@@ -48,12 +46,12 @@ class RatingService extends ServiceAbstract
         $rating->count = $ratingMapper->getRatingCount($videoId);
 
         // Like
-        $like_count = $ratingMapper->getLikeCount ($videoId);
+        $like_count = $ratingMapper->getLikeCount($videoId);
         $rating->likes = $like_count;
         $rating->like_text = Language::GetText('like');
 
         // Dislike
-        $dislike_count = $ratingMapper->getDislikeCount ($videoId);
+        $dislike_count = $ratingMapper->getDislikeCount($videoId);
         $rating->dislikes = $dislike_count;
         $rating->dislike_text = Language::GetText('dislike');
 
