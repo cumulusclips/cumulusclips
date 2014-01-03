@@ -14,10 +14,10 @@
         <p class="hint"><em><?=Language::GetText('members_username')?></em></p>
 
         <label class="<?=(isset ($errors['subject'])) ? 'error' : ''?>"><?=Language::GetText('subject')?>: </label>
-        <input class="text" type="text" name="subject" value="<?=$subject?>" />
+        <input class="text" type="text" name="subject" value="<?=htmlspecialchars($subject)?>" />
 
         <label class="<?=(isset ($errors['message'])) ? 'error' : ''?>"><?=Language::GetText('message')?>: </label>
-        <textarea class="text" name="message" cols="45" rows="10"><?=$msg?></textarea>
+        <textarea class="text" name="message" cols="45" rows="10"><?=htmlspecialchars($msg)?></textarea>
 
         <input type="hidden" name="submitted" value="yes" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('message_send_button')?>" />

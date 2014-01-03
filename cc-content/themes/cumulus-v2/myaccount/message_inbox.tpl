@@ -24,7 +24,7 @@
             <tr>
                 <td><input type="checkbox" name="delete[]" value="<?=$message->messageId?>" /></td>
                 <td><?=$message->status == 'read' ? Language::GetText('read') : Language::GetText('unread')?></td>
-                <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->messageId?>/" title="<?=$message->subject?>"><?=$message->subject?></a></td>
+                <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->messageId?>/" title="<?=htmlspecialchars($message->subject)?>"><?=htmlspecialchars($message->subject)?></a></td>
                 <td><?=$message->username?></td>
                 <td><?=Functions::DateFormat('m/d/Y', $message->dateCreated)?></td>
             </tr>

@@ -17,7 +17,7 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
     
     // Retrieve and update message
     $message = $messageMapper->getMessageByCustom(array(
-        'user_id' => View::$vars->loggedInUser->userId,
+        'recipient' => View::$vars->loggedInUser->userId,
         'message_id' => $_GET['msg']
     ));
     if ($message) {
@@ -27,7 +27,6 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
     } else {
         App::Throw404();
     }
-    
 } else {
     App::Throw404();
 }

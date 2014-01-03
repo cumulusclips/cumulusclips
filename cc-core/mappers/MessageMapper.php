@@ -12,7 +12,7 @@ class MessageMapper extends MapperAbstract
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
             . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
         
@@ -36,7 +36,7 @@ class MessageMapper extends MapperAbstract
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
             . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
         
@@ -87,7 +87,7 @@ class MessageMapper extends MapperAbstract
                 ':recipient' => $message->recipient,
                 ':subject' => $message->subject,
                 ':message' => $message->message,
-                ':status' => $message->status,
+                ':status' => (!empty($message->status)) ? $message->status : 'unread',
                 ':dateCreated' => date(DATE_FORMAT, strtotime($message->dateCreated))
             );
         } else {
@@ -107,7 +107,7 @@ class MessageMapper extends MapperAbstract
         }
             
         $db->query($query, $bindParams);
-        $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastInsertId();
+        $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastId();
         Plugin::triggerEvent('video.save', $messageId);
         return $messageId;
     }
@@ -121,7 +121,7 @@ class MessageMapper extends MapperAbstract
         $inQuery = implode(',', array_fill(0, count($messageIds), '?'));
         $sql = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
             . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.username '
+            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
             . 'WHERE message_id IN (' . $inQuery . ')';
         $result = $db->fetchAll($sql, $messageIds);
@@ -130,5 +130,18 @@ class MessageMapper extends MapperAbstract
             $messageList[] = $this->_map($messageRecord);
         }
         return $messageList;
+    }
+    
+    /**
+     * Delete a message
+     * @param integer $messagId ID of message to be deleted
+     * @return void Record is deleted from database
+     */
+    public function delete($messageId)
+    {
+        $db = Registry::get('db');
+        Plugin::triggerEvent('message.delete');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'messages WHERE message_id = :messageId';
+        $db->query($query, array(':messageId' => $messageId));
     }
 }

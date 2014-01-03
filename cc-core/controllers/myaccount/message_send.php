@@ -65,7 +65,7 @@ if (isset($_POST['submitted'])) {
     // Validate subject field
     if (!empty($_POST['subject'])) {
         $message->subject = trim($_POST['subject']);
-        View::$vars->subject = $message['subject'];
+        View::$vars->subject = $message->subject;
     } else {
         View::$vars->errors['subject'] = Language::GetText('error_subject');
     }
@@ -73,7 +73,7 @@ if (isset($_POST['submitted'])) {
     // Validate message field
     if (!empty($_POST['message'])) {
         $message->message = trim($_POST['message']);
-        View::$vars->msg = $message['message'];
+        View::$vars->msg = $message->message;
     } else {
         View::$vars->errors['message'] = Language::GetText('error_message');
     }
