@@ -11,7 +11,7 @@ View::SetLayout('full');
 
     <h1><?=$video->title?></h1>
     <div class="message"></div>
-    <?php if ($video->gated == '1' && !$logged_in): ?>
+    <?php if ($video->gated && !$loggedInUser): ?>
         <div id="player-gated">
             <img src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" alt="" />
             <div>
@@ -159,7 +159,7 @@ View::SetLayout('full');
         <!-- BEGIN COMMENTS FORM -->
         <div class="form collapsed comments_form">
             <form action="" method="post">
-            <?php if (!$logged_in): ?>
+            <?php if (!$loggedInUser): ?>
                 <label><?=Language::GetText('name')?></label>
                 <input type="text" class="text" value="" name="name" />
 

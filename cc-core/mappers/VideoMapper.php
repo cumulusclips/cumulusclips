@@ -24,7 +24,7 @@ class VideoMapper extends MapperAbstract
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= "$fieldName = :$fieldName AND ";
+            $query .= DB_PREFIX . "videos.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = rtrim($query, ' AND ');
@@ -44,7 +44,7 @@ class VideoMapper extends MapperAbstract
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= "$fieldName = :$fieldName AND ";
+            $query .= DB_PREFIX . "videos.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = rtrim($query, ' AND ');

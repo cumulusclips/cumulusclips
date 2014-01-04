@@ -153,7 +153,7 @@ class UserService extends ServiceAbstract
     /**
      * Check if user is logged in, with optional redirect
      * @param string $redirect_location optional Location to redirect user if login check fails
-     * @return boolean|integer Returns logged in users' ID if user is logged, boolean false otherwise
+     * @return boolean|User Returns instance user if logged in, boolean false otherwise
      */
     public function loginCheck()
     {

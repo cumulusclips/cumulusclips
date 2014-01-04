@@ -1,8 +1,8 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('play');
-Plugin::Trigger ('play.start');
+View::initView('play');
+Plugin::triggerEvent('play.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -10,6 +10,7 @@ View::$vars->loggedInUser = $userService->loginCheck();
 
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
+$videoService = new VideoService();
 View::$vars->tags = null;
 View::$vars->private = null;
 View::$vars->vp8Options = json_decode(Settings::Get('vp8Options'));
@@ -30,7 +31,7 @@ if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video
     View::$vars->private = true;
     View::$vars->comments_url = HOST . '/private/comments/' . View::$vars->video->privateUrl;
 } else if (!empty($_GET['get_private'])) {
-    exit(Video::GeneratePrivate());
+    exit($videoService->generatePrivate());
 } else {
     App::Throw404();
 }
@@ -43,12 +44,12 @@ View::$vars->rating = RatingService::getRating(View::$vars->video->videoId);
 View::$vars->meta->title = View::$vars->video->title;
 View::$vars->meta->keywords = implode (', ',View::$vars->video->tags);
 View::$vars->meta->description = View::$vars->video->description;
-Plugin::Trigger ('play.load_video');
+Plugin::triggerEvent('play.load_video');
 
 // Retrieve user data if logged in
 if (View::$vars->loggedInUser) {
-    $data = array ('member' => View::$vars->video->userId, 'user_id' => View::$vars->loggedInUser->userId);
-    View::$vars->subscribe_text = (Subscription::Exist ($data)) ? 'unsubscribe' : 'subscribe';
+    $subscriptionService = new SubscriptionService();
+    View::$vars->subscribe_text = ($subscriptionService->checkSubscription(View::$vars->loggedInUser->userId, View::$vars->video->userId)) ? 'unsubscribe' : 'subscribe';
 } else {
     View::$vars->subscribe_text = 'subscribe';
 }
@@ -76,19 +77,19 @@ if ($total['total'] > 20) {
     $query = 'SELECT video_id FROM ' . DB_PREFIX . 'videos WHERE (' . $sub_queries . ') AND status = "approved" AND private = "0" AND video_id != :videoId LIMIT 9';
     View::$vars->result_related = $db->fetchAll($query, $replacements);
 }
-Plugin::Trigger ('play.load_suggestions');
+Plugin::triggerEvent('play.load_suggestions');
 
 ### Retrieve comment count
 $query = 'SELECT COUNT(comment_id) as count FROM ' . DB_PREFIX . 'comments WHERE video_id = :videoId AND status = "approved"';
-Plugin::Trigger ('play.comment_count');
+Plugin::triggerEvent('play.comment_count');
 $result_comment_count = $db->fetchRow($query, array(':videoId' => View::$vars->video->videoId));
 View::$vars->comment_count = $result_comment_count['count'];
 
 ### Retrieve comments
 $query = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments WHERE video_id = :videoId AND status = "approved" ORDER BY comment_id DESC LIMIT 0, 5';
-Plugin::Trigger ('play.load_comments');
+Plugin::triggerEvent('play.load_comments');
 View::$vars->comment_list = $db->fetchAll($query, array(':videoId' => View::$vars->video->videoId));
 
 // Output Page
-Plugin::Trigger ('play.before_render');
-View::Render ('play.tpl');
+Plugin::triggerEvent('play.before_render');
+View::render('play.tpl');
