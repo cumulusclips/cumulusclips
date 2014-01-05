@@ -107,7 +107,7 @@ class MessageMapper extends MapperAbstract
         }
             
         $db->query($query, $bindParams);
-        $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastId();
+        $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $messageId);
         return $messageId;
     }

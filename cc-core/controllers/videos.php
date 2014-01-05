@@ -15,12 +15,9 @@ $records_per_page = 9;
 $url = HOST . '/videos';
 
 // Retrieve Categories	
-$categoryMapper = new CategoryMapper();
-$query = "SELECT category_id FROM " . DB_PREFIX . "categories ORDER BY name ASC";
-$categoryResults = $db->fetchAll($query);
-View::$vars->category_list = $categoryMapper->getMultipleCategoriesById(
-    Functions::flattenArray($categoryResults, 'category_id')
-);
+$categoryService = new CategoryService();
+View::$vars->category_list = $categoryService->getCategories();
+
 
 // Prepare for default sorting ('Most Recent Videos')
 View::$vars->sub_header = Language::GetText('most_recent');
@@ -29,6 +26,7 @@ $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved'
 // Retrieve videos
 if (isset($_GET['category']) && preg_match('/[a-z0-9\-]+/i', $_GET['category'])) {
 
+    $categoryMapper = new CategoryMapper();
     $category = $categoryMapper->getCategoryBySlug($_GET['category']);
     if ($category) {
         $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND category_id = $category->categoryId ORDER BY video_id DESC";

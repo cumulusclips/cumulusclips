@@ -8,7 +8,7 @@ define('CONVERSION_LOG', LOG . '/converter.log');
 define('DATABASE_LOG', LOG . '/database.log');
 define('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
 define('CURRENT_VERSION', '1.3.2');
-define('LOG_QUERIES', true);
+define('LOG_QUERIES', false);
 define('DATE_FORMAT', 'Y-m-d H:i:s');
 define('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
 date_default_timezone_set('America/New_York');

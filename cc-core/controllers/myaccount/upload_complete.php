@@ -1,23 +1,25 @@
 <?php
 
+// Init view
+View::initView('upload_complete');
+Plugin::triggerEvent('upload_complete.start');
+
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+
 // Establish page variables, objects, arrays, etc
-View::InitView ('upload_complete');
-Plugin::Trigger ('upload_complete.start');
-Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
 App::EnableUploadsCheck();
-View::$vars->user = new User (View::$vars->logged_in);
 
-
-
-### Verify user completed upload process
-if (isset ($_SESSION['upload'])) {
-    unset ($_SESSION['upload']);
+// Verify user completed upload process
+if (isset($_SESSION['upload'])) {
+    unset($_SESSION['upload']);
 } else {
-    header ('Location: ' . HOST . '/myaccount/upload/video/');
+    header('Location: ' . HOST . '/myaccount/upload/video/');
     exit();
 }
 
-
 // Output page
-Plugin::Trigger ('upload_complete.before_render');
-View::Render ('myaccount/upload_complete.tpl');
+Plugin::triggerEvent('upload_complete.before_render');
+View::render('myaccount/upload_complete.tpl');

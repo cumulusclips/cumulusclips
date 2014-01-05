@@ -60,13 +60,13 @@ class VideoService extends ServiceAbstract
      * Generate a unique random string for a video filename
      * @return string Random video filename
      */
-    public function createFilename()
+    public function generateFilename()
     {
         $videoMapper = new VideoMapper();
         $filenameAvailable = null;
         do {
             $filename = Functions::random(20);
-            if (!$videoMapper->getVideoByCustom(array('filename' => $$filename))) $filenameAvailable = true;
+            if (!$videoMapper->getVideoByCustom(array('filename' => $filename))) $filenameAvailable = true;
         } while (empty($filenameAvailable));
         return $filename;
     }

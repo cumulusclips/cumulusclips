@@ -1,33 +1,33 @@
 <?php
 
+// Init view
+View::initView('upload_video');
+Plugin::triggerEvent('upload_video.start');
+
+// Verify if user is logged in
+$userService = new UserService();
+View::$vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+
 // Establish page variables, objects, arrays, etc
-View::InitView ('upload_video');
-Plugin::Trigger ('upload_video.start');
-Functions::RedirectIf (View::$vars->logged_in = UserService::LoginCheck(), HOST . '/login/');
-
 App::EnableUploadsCheck();
-View::$vars->user = new User (View::$vars->logged_in);
 View::$vars->timestamp = time();
+$videoMapper = new VideoMapper();
 
-
-
-### Verify user entered video information
-if (isset ($_SESSION['upload'])) {
-
-    if (Video::Exist (array ('video_id' => $_SESSION['upload'], 'status' => 'new'))) {
-        $video = new Video ($_SESSION['upload']);
-        $_SESSION['upload_key'] = md5 (md5 (View::$vars->timestamp) . SECRET_KEY);
+// Verify user entered video information
+if (isset($_SESSION['upload'])) {
+    $video = $videoMapper->getVideoById($_SESSION['upload']);
+    if ($video) {
+        $_SESSION['upload_key'] = md5(md5(View::$vars->timestamp) . SECRET_KEY);
     } else {
-        header ('Location: ' . HOST . '/myaccount/upload/');
+        header('Location: ' . HOST . '/myaccount/upload/');
         exit();
     }
-
 } else {
-    header ('Location: ' . HOST . '/myaccount/upload/');
+    header('Location: ' . HOST . '/myaccount/upload/');
     exit();
 }
 
-
 // Output page
-Plugin::Trigger ('upload_video.before_render');
-View::Render ('myaccount/upload_video.tpl');
+Plugin::triggerEvent('upload_video.before_render');
+View::render('myaccount/upload_video.tpl');

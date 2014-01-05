@@ -2,11 +2,6 @@
 
 class CategoryService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'categories';
-    protected static $id_name = 'cat_id';
-
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -18,5 +13,20 @@ class CategoryService extends ServiceAbstract
         Plugin::Trigger('category.delete');
         $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
         $db->Query ($query);
+    }
+    
+    /**
+     * Retrieve list of active categories
+     * @return array Returns a list with the category Ids of active categories 
+     */
+    public function getCategories()
+    {
+        $db = Registry::get('db');
+        $categoryMapper = new CategoryMapper();
+        $query = "SELECT category_id FROM " . DB_PREFIX . "categories ORDER BY name ASC";
+        $categoryResults = $db->fetchAll($query);
+        return $categoryMapper->getMultipleCategoriesById(
+            Functions::flattenArray($categoryResults, 'category_id')
+        );
     }
 }

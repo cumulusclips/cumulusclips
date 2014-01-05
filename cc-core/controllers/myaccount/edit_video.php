@@ -26,9 +26,7 @@ if (!empty($_GET['vid']) && $_GET['vid'] > 0) {
     ));
     
     // Verify video is valid
-    if ($video) {
-        View::$vars->video = $video;
-    } else {
+    if (!$video) {
         header('Location: ' . HOST . '/myaccount/myvideos/');
         exit();
     }
@@ -42,71 +40,71 @@ if (isset($_POST['submitted'])) {
 
     // Validate title
     if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
-        View::$vars->video->title = trim($_POST['title']);
+        $video->title = trim($_POST['title']);
     } else {
         View::$vars->errors['title'] = Language::getText('error_title');
     }
 
     // Validate description
     if (!empty($_POST['description']) && !ctype_space($_POST['description'])) {
-        View::$vars->video->description = trim($_POST['description']);
+        $video->description = trim($_POST['description']);
     } else {
         View::$vars->errors['description'] = Language::getText('error_description');
     }
 
     // Validate tags
     if (!empty($_POST['tags']) && !ctype_space($_POST['tags'])) {
-        View::$vars->video->tags = preg_split('/,\s*/', trim($_POST['tags']));
+        $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
         View::$vars->errors['tags'] = Language::getText('error_tags');
     }
 
     // Validate cat_id
     if (!empty($_POST['cat_id']) && is_numeric($_POST['cat_id'])) {
-        View::$vars->video->categoryId = $_POST['cat_id'];
+        $video->categoryId = $_POST['cat_id'];
     } else {
         View::$vars->errors['cat_id'] = Language::getText('error_category');
     }
 
     // Validate disable embed
     if (!empty($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
-        View::$vars->video->disableEmbed = true;
+        $video->disableEmbed = true;
     } else {
-        View::$vars->video->disableEmbed = false;
+        $video->disableEmbed = false;
     }
 
     // Validate gated
     if (!empty($_POST['gated']) && $_POST['gated'] == '1') {
-        View::$vars->video->gated = true;
+        $video->gated = true;
     } else {
-        View::$vars->video->gated = false;
+        $video->gated = false;
     }
 
     // Validate private
     if (!empty($_POST['private']) && $_POST['private'] == '1') {
         try {
             // Validate private URL
-            if (empty($_POST['private_url'])) throw new Exception('error');
-            if (strlen($_POST['private_url']) != 7) throw new Exception('error');
+            if (empty($_POST['private_url'])) throw new Exception();
+            if (strlen($_POST['private_url']) != 7) throw new Exception();
             $privateVideoCheck = $videoMapper->getVideoByCustom(array('private_url' => $_POST['private_url']));
-            if ($privateVideoCheck && $privateVideoCheck->videoId != View::$vars->video->videoId) {
-                throw new Exception('error');
+            if ($privateVideoCheck && $privateVideoCheck->videoId != $video->videoId) {
+                throw new Exception();
             }
 
             // Set private URL
-            View::$vars->video->private = true;
-            View::$vars->video->privateUrl = trim($_POST['private_url']);
+            $video->private = true;
+            $video->privateUrl = trim($_POST['private_url']);
         } catch (Exception $e) {
             View::$vars->errors['private_url'] = Language::getText('error_private_url');
         }
     } else {
-        View::$vars->video->private = false;
-        View::$vars->video->privateUrl = null;
+        $video->private = false;
+        $video->privateUrl = null;
     }
 
     // Update video if no errors were made
     if (empty (View::$vars->errors)) {
-        $videoMapper->save(View::$vars->video);
+        $videoMapper->save($video);
         View::$vars->message = Language::getText('success_video_updated');
         View::$vars->message_type = 'success';
         Plugin::triggerEvent('edit_video.edit');
@@ -118,13 +116,10 @@ if (isset($_POST['submitted'])) {
 }
 
 // Retrieve Categories	
-$categoryMapper = new CategoryMapper();
-$query = "SELECT category_id FROM " . DB_PREFIX . "categories ORDER BY name ASC";
-$categoryResults = $db->fetchAll($query);
-View::$vars->categoryList = $categoryMapper->getMultipleCategoriesById(
-    Functions::flattenArray($categoryResults, 'category_id')
-);
+$categoryService = new CategoryService();
+View::$vars->categoryList = $categoryService->getCategories();
 
 // Output page
+View::$vars->video = $video;
 Plugin::triggerEvent('edit_video.before_render');
 View::Render ('myaccount/edit_video.tpl');

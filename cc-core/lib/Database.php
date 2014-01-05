@@ -109,7 +109,7 @@ class Database
         return $this->_lastStatement->rowCount();
     }
     
-    public function lastId()
+    public function lastInsertId()
     {
         return $this->_connection->lastInsertId();
     }
