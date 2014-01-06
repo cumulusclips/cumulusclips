@@ -17,14 +17,10 @@ View::$vars->message = null;
 
 // Unsubscribe user if requested
 if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
-    $subscriptionMapper = new SubscriptionMapper();
-    $subscription = $subscriptionMapper->getSubscriptionByCustom(array(
-        'user_id' => View::$vars->loggedInUser->userId,
-        'member' => $_GET['id']
-    ));
-    if ($subscription) {
-        $subscriptionMapper->delete($subscription->subscriptionId);
-        $subscribedUser = $userMapper->getUserById($subscription->member);
+    $subscriptionService = new SubscriptionService();
+    if ($subscriptionService->checkSubscription(View::$vars->loggedInUser->userId, $_GET['id'])) {
+        $subscribedUser = $userMapper->getUserById($_GET['id']);
+        $subscriptionService->unsubscribe(View::$vars->loggedInUser->userId, $subscribedUser->userId);
         View::$vars->message = Language::GetText('success_unsubscribed', array('username' => $subscribedUser->username));
         View::$vars->message_type = 'success';
         Plugin::triggerEvent('subscriptions.unsubscribe');

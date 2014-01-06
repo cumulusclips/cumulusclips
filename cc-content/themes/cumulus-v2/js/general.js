@@ -122,8 +122,8 @@ $(document).ready(function(){
         var data = {video_id: videoId, rating: $(this).data('rating')};
         var callback = function(responseData) {
             if (responseData.result == 1) {
-                $('.left .like').text(responseData.other.likes);
-                $('.left .dislike').text(responseData.other.dislikes);
+                $('.actions .left .like').text(responseData.other.likes);
+                $('.actions .left .dislike').text(responseData.other.dislikes);
             }
             window.scrollTo(0, 0);
         }

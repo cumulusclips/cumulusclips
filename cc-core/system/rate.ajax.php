@@ -1,5 +1,6 @@
 <?php
 
+// Init view
 Plugin::triggerEvent('rate.ajax.start');
 
 // Verify if user is logged in
@@ -38,7 +39,7 @@ $rating->videoId = $video->videoId;
 $rating->userId = $loggedInUser->userId;
 if ($ratingService->rateVideo($rating)) {
     Plugin::triggerEvent('rate.ajax.rate_video');
-    echo json_encode(array('result' => 1, 'msg' => (string) Language::GetText('success_rated'), 'other' => Rating::GetRating ($video->video_id)));
+    echo json_encode(array('result' => 1, 'msg' => (string) Language::GetText('success_rated'), 'other' => $ratingService->getRating($video->videoId)));
     exit();
 } else {
     Plugin::triggerEvent('rate.ajax.rate_video_duplicate');

@@ -1,30 +1,34 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Flag');
-App::LoadClass ('Comment');
-Plugin::Trigger ('flag.ajax.start');
+// Init view
+Plugin::triggerEvent('flag.ajax.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+Plugin::Trigger ('flag.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
-$logged_in = User::LoginCheck();
-if ($logged_in) $user = new User ($logged_in);
-Plugin::Trigger ('flag.ajax.login_check');
+
+
+
+
+
+
+
+
+
 
 
 // Verify valid ID was provided
 if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
 if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'member', 'comment')))  App::Throw404();
 
-
 try {
 
      // Check if user is logged in
-    if (!$logged_in) throw new Exception (Language::GetText ('error_flag_login'));
-
+    if (!$loggedInUser) throw new Exception (Language::GetText ('error_flag_login'));
 
     switch ($_POST['type']) {
 
@@ -61,19 +65,15 @@ try {
             $type = 'Comment';
             Plugin::Trigger ('flag.ajax.flag_comment');
             break;
-            
     }
-
 
     // Verify user doesn't flag thier content
     if ($user->user_id == $member_id) throw new Exception (Language::GetText ('error_flag_own'));
-
 
     // Verify Flag doesn't exist
     $data = array ('type' => $_POST['type'], 'id' => $_POST['id'], 'user_id' => $user->user_id);
     if (Flag::Exist ($data)) throw new Exception (Language::GetText ('error_flag_duplicate'));
     Plugin::Trigger ('flag.ajax.before_flag');
-
 
     // Send admin alert
     if (Settings::Get ('alerts_flags') == '1') {
@@ -91,7 +91,6 @@ try {
         App::Alert ($subject, $body);
     }
 
-
     // Create flag and output message
     Flag::Create ($data);
     Plugin::Trigger ('flag.ajax.flag');
@@ -102,5 +101,3 @@ try {
     echo json_encode (array ('result' => 0, 'msg' => $e->getMessage()));
     exit();
 }
-
-?>

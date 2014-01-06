@@ -30,11 +30,11 @@ class RatingMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $rating = new Rating();
-        $rating->ratingId = $dbResults['ratingId'];
-        $rating->videoId = $dbResults['videoId'];
-        $rating->userId = $dbResults['userId'];
+        $rating->ratingId = $dbResults['rating_id'];
+        $rating->videoId = $dbResults['video_id'];
+        $rating->userId = $dbResults['user_id'];
         $rating->rating = ($dbResults['rating'] == '1') ? 1 : 0;
-        $rating->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
+        $rating->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         return $rating;
     }
 
@@ -46,7 +46,7 @@ class RatingMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $rating);
             $query = 'UPDATE ' . DB_PREFIX . 'ratings SET';
-            $query .= ' videoId = :videoId, userId = :userId, rating = :rating, dateCreated = :dateCreated';
+            $query .= ' video_id = :videoId, user_id = :userId, rating = :rating, date_created = :dateCreated';
             $query .= ' WHERE ratingId = :ratingId';
             $bindParams = array(
                 ':ratingId' => $rating->ratingId,
@@ -59,7 +59,7 @@ class RatingMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $rating);
             $query = 'INSERT INTO ' . DB_PREFIX . 'ratings ';
-            $query .= '(videoId, userId, rating, dateCreated) ';
+            $query .= '(video_id, user_id, rating, date_created) ';
             $query .= 'VALUES (:videoId, :userId, :rating, :dateCreated)';
             $bindParams = array(
                 ':videoId' => $rating->videoId,

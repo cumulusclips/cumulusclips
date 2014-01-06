@@ -74,23 +74,14 @@ class SubscriptionMapper extends MapperAbstract
     
     /**
      * Delete a subscription record
-     * @param int $subscriptionId Id of subscription to be deleted
+     * @param Subscription $subscription Instance of subscription to be deleted
      * @return void Subscription record is deleted from database
      */
-    public function delete($subscriptionId)
+    public function delete(Subscription $subscription)
     {
         Plugin::triggerEvent('subscription.delete');
         $db = Registry::get('db');
         $query = 'DELETE FROM ' . DB_PREFIX . 'subscriptions WHERE subscription_id = :subscriptionId';
-        $db->query($query, array(':subscriptionId' => $subscriptionId));
-    }
-    
-    
-    public function isSubscribed($subscribingUser, $subscribedMember)
-    {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'subscriptions WHERE user_id = :user AND member = :member';
-        $db->fetchRow($query, array(':user' => $subscribingUser, ':member' =>$subscribedMember));
-        return ($db->rowCount() == 1) ? true : false;
+        $db->query($query, array(':subscriptionId' => $subscription->subscriptionId));
     }
 }

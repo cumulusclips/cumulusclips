@@ -27,8 +27,8 @@ if ($user) {
 
 // Check if user is subscribed
 if (View::$vars->loggedInUser) {
-    $subscriptionMapper = new SubscriptionMapper();
-    View::$vars->subscribe_text = $subscriptionMapper->isSubscribed(View::$vars->loggedInUser->userId, View::$vars->member->userId) ? 'unsubscribe' : 'subscribe';
+    $subscriptionService = new SubscriptionService();
+    View::$vars->subscribe_text = $subscriptionService->checkSubscription(View::$vars->loggedInUser->userId, View::$vars->member->userId) ? 'unsubscribe' : 'subscribe';
 } else {
     View::$vars->subscribe_text = 'subscribe';
 }
