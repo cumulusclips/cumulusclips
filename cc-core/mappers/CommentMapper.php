@@ -121,7 +121,7 @@ class CommentMapper extends MapperAbstract
         return $commentId;
     }
     
-    public function getMultipleCommentsById(array $commentIds)
+    public function getCommentsFromList(array $commentIds)
     {
         $commentList = array();
         if (empty($commentIds)) return $commentList;
@@ -135,5 +135,11 @@ class CommentMapper extends MapperAbstract
             $commentList[] = $this->_map($commentRecord);
         }
         return $commentList;
+    }
+    
+    public function delete($commentId)
+    {
+        $db = Registry::get('db');
+        $db->query('DELETE FROM ' . DB_PREFIX . 'comments WHERE comment_id = :commentId', array(':commentId' => $commentId));
     }
 }

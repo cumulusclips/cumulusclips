@@ -3,16 +3,15 @@
 class CommentService extends ServiceAbstract
 {
     /**
-     * Delete a record
-     * @param integer $id ID of record to be deleted
-     * @return void Record is deleted from database
+     * Delete a comment
+     * @param Comment $comment Instance of comment to be deleted
+     * @return void Comment is deleted from system
      */
-    public function delete($id)
+    public function delete(Comment $comment)
     {
-        $db = Database::GetInstance();
+        $commentMapper = $this->_getMapper();
+        $commentMapper->delete($comment->commentId);
         Plugin::triggerEvent('comment.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query);
     }
 
     /**
@@ -99,5 +98,14 @@ class CommentService extends ServiceAbstract
         }
 
         Plugin::triggerEvent('comment.approve');
+    }
+    
+    /**
+     * Retrieve instance of Comment mapper
+     * @return CommentMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new CommentMapper();
     }
 }

@@ -145,7 +145,7 @@ class VideoMapper extends MapperAbstract
         return $videoId;
     }
     
-    public function getMultipleVideosById(array $videoIds)
+    public function getVideosFromList(array $videoIds)
     {
         $videoList = array();
         if (empty($videoIds)) return $videoList;

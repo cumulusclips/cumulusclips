@@ -42,17 +42,17 @@ class VideoService extends ServiceAbstract
         $ratings = $ratingMapper->getMultipleRatingsByCustom(array('video_id' => $video->videoId));
         foreach ($ratings as $rating) $ratingService->delete($rating);
         
-        $favoriteService = new FavoriteService();
-        $favoriteMapper = new FavoriteMapper();
-        $favorites = $favoriteMapper->getMultipleFavoritesByCustom(array('video_id' => $video->videoId));
-        foreach ($favorites as $favorite) $favoriteService->delete($favorite);
+//        $favoriteService = new FavoriteService();
+//        $favoriteMapper = new FavoriteMapper();
+//        $favorites = $favoriteMapper->getMultipleFavoritesByCustom(array('video_id' => $video->videoId));
+//        foreach ($favorites as $favorite) $favoriteService->delete($favorite);
         
         $flagService = new FlagService();
         $flagMapper = new FlagMapper();
-        $flags = $flagMapper->getMultipleFlagsByCustom(array('video_id' => $video->videoId));
+        $flags = $flagMapper->getMultipleFlagsByCustom(array('object_id' => $video->videoId, 'type' => 'video'));
         foreach ($flags as $flag) $flagService->delete($flag);
 
-        $videoMapper = new VideoMapper();
+        $videoMapper = $this->_getMapper();
         $videoMapper->delete($video->videoId);
     }
 

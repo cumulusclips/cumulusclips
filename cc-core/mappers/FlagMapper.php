@@ -5,7 +5,7 @@ class FlagMapper extends MapperAbstract
     public function getFlagById($flagId)
     {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE flagId = :flagId';
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE flag_id = :flagId';
         $dbResults = $db->fetchRow($query, array(':flagId' => $flagId));
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
@@ -13,16 +13,36 @@ class FlagMapper extends MapperAbstract
             return false;
         }
     }
+    
+    public function getMultipleFlagsByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $flagsList = array();
+        foreach($dbResults as $record) {
+            $flagsList[] = $this->_map($record);
+        }
+        return $flagsList;
+    }
 
     protected function _map($dbResults)
     {
         $flag = new Flag();
-        $flag->flagId = $dbResults['flagId'];
-        $flag->objectId = $dbResults['objectId'];
+        $flag->flagId = $dbResults['flag_id'];
+        $flag->objectId = $dbResults['object_id'];
         $flag->type = $dbResults['type'];
-        $flag->userId = $dbResults['userId'];
+        $flag->userId = $dbResults['user_id'];
         $flag->status = $dbResults['status'];
-        $flag->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
+        $flag->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         return $flag;
     }
 
@@ -34,7 +54,7 @@ class FlagMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $flag);
             $query = 'UPDATE ' . DB_PREFIX . 'flags SET';
-            $query .= ' objectId = :objectId, type = :type, userId = :userId, status = :status, dateCreated = :dateCreated';
+            $query .= ' object_id = :objectId, type = :type, user_id = :userId, status = :status, date_created = :dateCreated';
             $query .= ' WHERE flagId = :flagId';
             $bindParams = array(
                 ':flagId' => $flag->flagId,
@@ -48,7 +68,7 @@ class FlagMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $flag);
             $query = 'INSERT INTO ' . DB_PREFIX . 'flags';
-            $query .= ' (objectId, type, userId, status, dateCreated)';
+            $query .= ' (object_id, type, user_id, status, date_created)';
             $query .= ' VALUES (:objectId, :type, :userId, :status, :dateCreated)';
             $bindParams = array(
                 ':objectId' => $flag->objectId,
@@ -63,5 +83,12 @@ class FlagMapper extends MapperAbstract
         $flagId = (!empty($flag->flagId)) ? $flag->flagId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $flagId);
         return $flagId;
+    }
+
+    public function delete($flagId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'flags WHERE flag_id = :flagId';
+        $db->query($query, array(':flagId' => $flagId));
     }
 }

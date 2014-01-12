@@ -3,15 +3,15 @@
 class FlagService extends ServiceAbstract
 {
     /**
-     * Delete a record
-     * @param integer $id ID of record to be deleted
-     * @return void Record is deleted from database
+     * Delete a flag
+     * @param Flag $flag Instance of flage to be deleted
+     * @return void Flag is deleted from system
      */
-    static function Delete ($id) {
-        $db = Database::GetInstance();
+    public function delete(Flag $flag)
+    {
+        $flagMapper = $this->_getMapper();
+        $flagMapper->delete($flag->flagId);
         Plugin::Trigger ('flag.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query);
     }
 
     /**
@@ -33,5 +33,14 @@ class FlagService extends ServiceAbstract
             $query = "UPDATE " . DB_PREFIX . "flags SET status = 'declined' WHERE type = '$type' AND id = $id";
             $db->Query ($query);
         } 
+    }
+    
+    /**
+     * Retrieve instance of Flag mapper
+     * @return FlagMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new FlagMapper();
     }
 }

@@ -26,6 +26,26 @@ class RatingMapper extends MapperAbstract
             return false;
         }
     }
+    
+    public function getMultipleRatingsByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'ratings WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $ratingsList = array();
+        foreach($dbResults as $record) {
+            $ratingsList[] = $this->_map($record);
+        }
+        return $ratingsList;
+    }
 
     protected function _map($dbResults)
     {
@@ -112,5 +132,12 @@ class RatingMapper extends MapperAbstract
         $query = "SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings WHERE video_id = $videoId";
         $count = $db->fetchRow($query);
         return $count['count'];
+    }
+    
+    public function delete($ratingId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'ratings WHERE rating_id = :ratingId';
+        $db->query($query, array(':ratingId' => $ratingId));
     }
 }

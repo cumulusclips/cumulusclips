@@ -3,15 +3,15 @@
 class RatingService extends ServiceAbstract
 {
     /**
-     * Delete a record
-     * @param integer $id ID of record to be deleted
-     * @return void Record is deleted from database
+     * Delete a rating
+     * @param Rating $rating Instance of rating to be deleted
+     * @return void Rating is deleted from system
      */
-    static function Delete ($id) {
-        $db = Database::GetInstance();
+    public function delete(Rating $rating)
+    {
+        $ratingMapper = $this->_getMapper();
+        $ratingMapper->delete($rating->ratingId);
         Plugin::Trigger ('rating.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query);
     }
 
     /**
@@ -21,8 +21,7 @@ class RatingService extends ServiceAbstract
      */
     public function rateVideo(Rating $rating)
     {
-        $ratingMapper = new RatingMapper();
-        
+        $ratingMapper = $this->_getMapper();
         if (!$ratingMapper->getRatingByCustom(array('video_id' => $rating->videoId, 'user_id' => $rating->userId))) {
             $ratingMapper->save($rating);
             return true;
@@ -39,7 +38,7 @@ class RatingService extends ServiceAbstract
      */
     static function getRating($videoId)
     {
-        $ratingMapper = new RatingMapper();
+        $ratingMapper = $this->_getMapper();
         $rating = new stdClass();
 
         // Total
@@ -65,11 +64,20 @@ class RatingService extends ServiceAbstract
      */
     public function getFiveScaleRating($videoId)
     {
-        $ratingMapper = new RatingMapper();
+        $ratingMapper = $this->_getMapper();
         $count = $ratingMapper->getRatingCount($videoId);
         if ($count == 0) return 0;
         $vote_total = $ratingMapper->getLikeCount($videoId)*5;
         $average = $vote_total/$count;
         return floor($average);
+    }
+    
+    /**
+     * Retrieve instance of Rating mapper
+     * @return RatingMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new RatingMapper();
     }
 }
