@@ -1,12 +1,6 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('Video');
-
-
 if (!isset ($_POST['submitted']) || $_POST['submitted'] != 'true') App::Throw404();
-
 
 // Validate starting record
 if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
@@ -15,31 +9,24 @@ if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
     $start = 0;
 }
 
-
 // Validate block output format
 $block = (isset ($_POST['block'])) ? $_POST['block'] . '.tpl' : null;
 
-
 // Retrieve video list
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT $start, 20";
-$videos = array();
-$result = $db->Query ($query);
-while ($video = $db->FetchObj ($result)) $videos[] = $video->video_id;
-
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT :start, 20";
+$videoMapper = new VideoMapper();
+$videoResults = $db->fetchAll($query, array(':start' => $start));
+$videoList = $videoMapper->getVideosFromList(Functions::flattenArray($videoResults, 'video_id'));
 
 // Output video list in requested format
 if ($block) {
-
     View::InitView();
     ob_start();
-    View::RepeatingBlock ($block, $videos);
+    View::RepeatingBlock ($block, $videoList);
     $output = ob_get_contents();
     ob_end_clean();
-
 } else {
-    $output = json_encode ($videos);
+    $output = json_encode ($videoList);
 }
 
 echo $output;
-
-?>
