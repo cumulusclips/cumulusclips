@@ -1,5 +1,3 @@
-<?php View::Header(); ?>
-
 <div id="search">
 
     <!-- BEGIN SEARCH FORM -->
@@ -12,9 +10,8 @@
     </div>
     <!-- END SEARCH FORM -->
 
-
     <h1><?=Language::GetText('search_header')?></h1>
-    <?php if (isset ($count)): ?>
+    <?php if (!empty($count)): ?>
 
         <p><strong><?=Language::GetText('results_for')?>: </strong><?=$keyword?></p>
 
@@ -28,7 +25,7 @@
 
             <!-- BEGIN SEARCH RESULTS -->
             <div class="list">
-                <?php View::RepeatingBlock ('video.tpl', $search_videos); ?>
+                <?php View::RepeatingBlock ('video.tpl', $searchVideos); ?>
 
                 <?php if ($count > 20): ?>
                     <div id="load-more">
@@ -62,7 +59,4 @@
         <!-- END SEARCH PAGE -->
 
     <?php endif; ?>
-
 </div>
-
-<?php View::Footer(); ?>

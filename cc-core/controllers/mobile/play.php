@@ -1,7 +1,7 @@
 <?php
 
 // Init view
-View::initView('mobile_play');
+View::initView('mobile_play', true);
 Plugin::triggerEvent('mobile_play.start');
 
 // Verify if user is logged in

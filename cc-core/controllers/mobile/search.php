@@ -1,7 +1,7 @@
 <?php
 
 // Init view
-View::initView('mobile_search');
+View::initView('mobile_search', true);
 Plugin::triggerEvent('mobile_search.start');
 
 // Verify if user is logged in
@@ -23,7 +23,7 @@ if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
     // Retrieve search result video list
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT 20";
     $videoResults = $db->fetchAll($query, array(':keyword' => $keyword));
-    View::$vars->search_videos = $videoMapper->getVideosFromList(
+    View::$vars->searchVideos = $videoMapper->getVideosFromList(
         Functions::flattenArray($videoResults, 'video_id')
     );
 }

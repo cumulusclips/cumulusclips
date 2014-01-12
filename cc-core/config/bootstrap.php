@@ -51,15 +51,12 @@ $config->video_size_limit = Settings::Get('video_size_limit');
 $config->accepted_video_formats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
 $config->accepted_avatar_formats = array('png', 'jpeg', 'jpg', 'gif');
 $config->pagination_page_limit = Settings::Get('pagination_page_limit');
-$config->theme_default = 'cumulus';
-$config->theme_url_default = HOST . '/cc-content/themes/cumulus';
-$config->theme_path_default = THEMES_DIR . '/cumulus';
-
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->vp8Url = HOST . '/cc-content/uploads/vp8';
 $config->mobile_url = HOST . '/cc-content/uploads/mobile';
 $config->thumb_url = HOST . '/cc-content/uploads/thumbs';
+Registry::set('config', $config);
 
 // Start session
 if (!headers_sent() && session_id() == '') @session_start();
@@ -67,15 +64,6 @@ if (!headers_sent() && session_id() == '') @session_start();
 // Initialize plugin system
 Plugin::init();
 Plugin::triggerEvent('app.start');
-
-// Define Theme settings
-$theme = App::CurrentTheme();
-$theme = Plugin::triggerFilter('app.before_set_theme', $theme);
-define('THEME', HOST . '/cc-content/themes/' . $theme);
-define('THEME_PATH', THEMES_DIR . '/' . $theme);
-$config->theme_url = HOST . '/cc-content/themes/' . $theme;
-$config->theme_path = THEMES_DIR . '/' . $theme;
-Registry::set('config', $config);
 
 // Load language
 Language::LoadLangPack(App::CurrentLang());

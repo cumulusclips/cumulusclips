@@ -1,9 +1,6 @@
-<?php View::Header(); ?>
-
 <div id="videos">
-    
     <h1><?=Language::GetText('videos_header')?></h1>
-    <?php if (!empty ($count)): ?>
+    <?php if (!empty($count)): ?>
 
         <div class="list">
             <?php View::RepeatingBlock('video.tpl', $videos); ?>
@@ -29,7 +26,4 @@
     <?php else: ?>
         <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
     <?php endif; ?>
-    
 </div>
-
-<?php View::Footer(); ?>

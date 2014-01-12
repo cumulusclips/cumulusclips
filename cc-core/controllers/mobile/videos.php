@@ -1,7 +1,7 @@
 <?php
 
 // Init view
-View::initView('mobile_videos');
+View::initView('mobile_videos', true);
 Plugin::triggerEvent('mobile_videos.start');
 
 // Verify if user is logged in

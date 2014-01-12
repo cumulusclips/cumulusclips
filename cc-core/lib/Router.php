@@ -397,7 +397,7 @@ class Router
         ));
         
         $routes['mobilePlay'] = new Route(array(
-            'path' => 'm/v/([0-9+])',
+            'path' => 'm/v/([0-9]+)',
             'location' => 'cc-core/controllers/mobile/play.php',
             'mappings' => array('vid')
         ));

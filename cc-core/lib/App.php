@@ -145,20 +145,16 @@ class App {
 
     /**
      * Determine which theme should be used
+     * @param boolean $isMobile Whether or not the platform being loaded is mobile
      * @return string Theme to be used
      */
-    static function CurrentTheme() {
-
-        $preview_theme = false;
-
+    public static function currentTheme($isMobile = false)
+    {
         // Determine active theme
-        if (isset ($_GET['mobile'])) {
-            $active_theme = Settings::Get ('active_mobile_theme');
-        } else {
-            $active_theme = Settings::Get ('active_theme');
-        }
+        $active_theme = ($isMobile) ? Settings::get('active_mobile_theme') : Settings::get('active_theme');
 
         // Check if 'Preview' theme was provided
+        $preview_theme = false;
         if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
             $active_theme = $_GET['preview_theme'];
             $preview_theme = $_GET['preview_theme'];
@@ -166,7 +162,6 @@ class App {
 
         define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
-        
     }
 
 

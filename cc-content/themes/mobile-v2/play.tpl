@@ -3,12 +3,10 @@
 View::AddCss ('video-js.css');
 View::AddJs ('video.js');
 View::AddJs ('play.js');
-View::Header();
 
 ?>
 
 <div id="play">
-
     <div class="block">
         
         <h1><?=$video->title?></h1>
@@ -27,13 +25,9 @@ View::Header();
             </video>
         </div>
 
-
         <p><strong><?=Language::GetText('duration')?>: </strong><?=$video->duration?></p>
         <p><strong><?=Language::GetText('by')?>: </strong><?=$video->username?></p>
         <p><strong><?=Language::GetText('description')?>: </strong><?=$video->description?></p>
                 
     </div>
-
 </div>
-
-<?php View::Footer(); ?>

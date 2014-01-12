@@ -12,7 +12,7 @@ class View
      * @param string $page [optional] Page whose information to load
      * @return void View is initialized
      */
-    public static function initView($page = null)
+    public static function initView($page = null, $isMobile = null)
     {
         self::$vars = new stdClass();
         self::$vars->db = Registry::get('db');
@@ -21,6 +21,15 @@ class View
         self::$options = new stdClass();
         self::$options->layout = 'default';
         self::$options->blocks = array();
+        
+        // Define theme configuration
+        $theme = App::currentTheme($isMobile);
+        $theme = Plugin::triggerFilter('app.before_set_theme', $theme);
+        define('THEME', HOST . '/cc-content/themes/' . $theme);
+        define('THEME_PATH', THEMES_DIR . '/' . $theme);
+        self::$vars->config->theme = $theme;
+        self::$vars->config->theme_url = HOST . '/cc-content/themes/' . $theme;
+        self::$vars->config->theme_path = THEMES_DIR . '/' . $theme; 
 
         // Load page's meta information into memory for use in templates
         if ($page) {
