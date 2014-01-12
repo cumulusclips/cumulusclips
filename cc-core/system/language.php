@@ -1,9 +1,5 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-
-
 // Node requested from language file
 if (isset($_GET['action']) && $_GET['action'] == 'get') {
 
@@ -18,7 +14,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'get') {
         echo $string ? $string : '';
         exit();
     }
-
 
 // Language change requested
 } else if (isset($_GET['action']) && $_GET['action'] == 'set') {
@@ -37,9 +32,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'get') {
         header ('Location: ' . HOST . '/');
         exit();
     }
-
 } else {
     App::Throw404();
 }
-
-?>

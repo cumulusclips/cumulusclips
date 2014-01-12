@@ -101,7 +101,7 @@ View::SetLayout('full');
             <div>
                 <p class="big"><?=Language::GetText('embed')?></p>
                 <p><?=Language::GetText('embed_text')?></p>
-                <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->video_id?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+                <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->videoId?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
             </div>
         <?php endif; ?>
     </div>

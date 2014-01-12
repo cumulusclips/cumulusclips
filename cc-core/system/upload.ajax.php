@@ -6,19 +6,15 @@ Plugin::triggerEvent('upload.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+$loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
 $videoMapper = new VideoMapper();
 
 // Retrieve video information
-if (!isset ($_POST['token'], $_POST['timestamp'])) App::Throw404();
-
-session_write_close();
-session_id($_POST['token']);
-session_start();
+if (!isset ($_POST['timestamp'])) App::Throw404();
 
 // Validate upload key
 $upload_key = md5(md5($_POST['timestamp']) . SECRET_KEY);

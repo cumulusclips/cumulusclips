@@ -26,6 +26,26 @@ class SubscriptionMapper extends MapperAbstract
             return false;
         }
     }
+    
+    public function getMultipleSubscriptionsByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'subscriptions WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $subscriptionList = array();
+        foreach($dbResults as $record) {
+            $subscriptionList[] = $this->_map($record);
+        }
+        return $subscriptionList;
+    }
 
     protected function _map($dbResults)
     {

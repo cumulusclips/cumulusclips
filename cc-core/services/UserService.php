@@ -237,7 +237,7 @@ class UserService extends ServiceAbstract
      * @return void User is activated, and admin alerted. If approval is
      * required user is marked pending and placed in queue
      */
-    public function approve($user, $action)
+    public function approve(User $user, $action)
     {
         $send_alert = false;
         $userMapper = new UserMapper();
@@ -317,5 +317,31 @@ class UserService extends ServiceAbstract
     public function getAvatarUrl(User $user)
     {
         return (empty($user->avatar)) ? View::GetFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$user->avatar";
+    }
+    
+    /**
+     * Retrieve a list of users who are subscribed to given member
+     * @param User $member Instance of user whose subscribers will be retrieved
+     * @return array Returns list of User objects 
+     */
+    public function getSubscribedUsers(User $member)
+    {
+        $userMapper = $this->_getMapper();
+        $subscriptionMapper = new SubscriptionMapper();
+        $subscriptionList = $subscriptionMapper->getMultipleSubscriptionsByCustom(array('member' => $member->userId));
+        $userIdList = array();
+        foreach ($subscriptionList as $subscription) {
+            $userIdList[] = $subscription->userId;
+        }
+        return $userMapper->getUsersFromList($userIdList);
+    }
+    
+    /**
+     * Retrieve instance of User mapper
+     * @return UserMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new UserMapper();
     }
 }

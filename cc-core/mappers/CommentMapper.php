@@ -4,9 +4,27 @@ class CommentMapper extends MapperAbstract
 {
     public function getCommentById($commentId)
     {
+        return $this->getCommentByCustom(array('comment_id' => $commentId));
+    }
+    
+    public function getVideoComments($videoId)
+    {
+        return $this->getMultipleCommentByCustom(array('video_id' => $videoId));
+    }
+
+    public function getCommentByCustom(array $params)
+    {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE commentId = :commentId';
-        $dbResults = $db->fetchRow($query, array(':commentId' => $commentId));
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {
@@ -14,22 +32,24 @@ class CommentMapper extends MapperAbstract
         }
     }
     
-    public function getUserComments($user)
+    public function getMultipleCommentsByCustom(array $params)
     {
-        if (is_numeric($user)) {
-            $userField = 'userId';
-        } else {
-            $userField = 'email';
-        }
-        
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE ' . $userField . ' = :userValue';
-        $dbResults = $db->fetchAll($query, array(':userValue' => $user));
-        $commentList = array();
-        foreach ($dbResults as $row) {
-            $commentList[] = $this->_map($row);
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'comments  WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
         }
-        return $commentList;
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $commentsList = array();
+        foreach($dbResults as $record) {
+            $commentsList[] = $this->_map($record);
+        }
+        return $commentsList;
     }
 
     protected function _map($dbResults)

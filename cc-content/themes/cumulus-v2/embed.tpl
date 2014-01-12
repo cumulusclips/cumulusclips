@@ -24,7 +24,7 @@ html, body, .video-unavailable, object, img {
 </style>
 <body>
 
-<?php if ($video && $video->disable_embed == '0'): ?>
+<?php if ($video && $video->disableEmbed == '0'): ?>
 
     <!-- BEGIN VIDEO -->
     <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
@@ -41,8 +41,8 @@ html, body, .video-unavailable, object, img {
     </script>
     <!-- END VIDEO -->
 
-<?php elseif ($video && $video->disable_embed == '1'): ?>
-    <?php $link = HOST . "/videos/$video->video_id/$video->slug/"; ?>
+<?php elseif ($video && $video->disableEmbed == '1'): ?>
+    <?php $link = HOST . "/videos/$video->videoId/$video->slug/"; ?>
     <div class="video-unavailable"><p><?=Language::GetText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename))?></p></div>
 <?php else: ?>
     <div class="video-unavailable"><p><?=Language::GetText('video_unavailable')?></p></div>

@@ -2,11 +2,6 @@
 
 class FlagService extends ServiceAbstract
 {
-    public $found;
-    private $db;
-    protected static $table = 'flags';
-    protected static $id_name = 'flag_id';
-
     /**
      * Delete a record
      * @param integer $id ID of record to be deleted
@@ -26,7 +21,8 @@ class FlagService extends ServiceAbstract
      * @param boolean $decision The action to be performed on the record. True bans, False declines the flag
      * @return void All flags raised against record are updated
      */
-    static function FlagDecision ($id, $type, $decision) {
+    public function FlagDecision ($id, $type, $decision)
+    {
         $db = Database::GetInstance();
         if ($decision) {
             // Content is being banned - Update flag requests

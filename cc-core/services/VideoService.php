@@ -88,124 +88,143 @@ class VideoService extends ServiceAbstract
 
     /**
      * Make a video visible to the public and notify subscribers of new video
-     * @global object $config Site configuration settings
+     * @param Video $video Instance of the video being updated
      * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
      * @return void Video is activated, subscribers are notified, and admin
      * alerted. If approval is required video is marked as pending and placed in queue
      */
-    public function Approve ($action)
+    public function approve(Video $video, $action)
     {
-        App::LoadClass ('User');
-        App::LoadClass ('Privacy');
-        App::LoadClass ('Mail');
-        
         $send_alert = false;
+        $videoMapper = $this->_getMapper();
         Plugin::triggerEvent('video.before_approve');
 
-
-        // 1) Admin created video in Admin Panel
-        // 2) User created video
-        // 3) Video is being approved by admin for first time
-        if ((in_array ($action, array ('create','activate'))) || ($action == 'approve' && $this->released == 0)) {
+        // 1) Video completed encoding
+        // 2) Video is being approved by admin for first time
+        if ($action == 'activate' || ($action == 'approve' && !$video->released)) {
 
             // User uploaded video but needs admin approval
             if ($action == 'activate' && Settings::Get ('auto_approve_videos') == '0') {
-
+                
                 // Send Admin Approval Alert
                 $send_alert = true;
                 $subject = 'New Video Awaiting Approval';
                 $body = 'A new video has been uploaded and is awaiting admin approval.';
 
                 // Set Pending
-                $this->Update (array ('status' => 'pendingApproval'));
+                $video->status = 'pendingApproval';
+                $videoMapper->save($video);
                 Plugin::triggerEvent('video.approve_required');
-
             } else {
 
                 // Send Admin Alert
-                if (in_array ($action, array ('create','activate')) && Settings::Get ('alerts_videos') == '1') {
+                if ($action == 'activate' && Settings::Get ('alerts_videos') == '1') {
                     $send_alert = true;
                     $subject = 'New Video Uploaded';
                     $body = 'A new video has been uploaded.';
                 }
 
                 // Activate & Release
-                $this->Update (array ('status' => 'approved', 'released' => 1));
+                $video->status = 'approved';
+                $video->released = true;
+                $videoMapper->save($video);
                 
                 // Send video owner notification if opted-in
                 $this->_notifyUserVideoIsReady();
 
-                // Send subscribers notification if opted-in
-                $query = "SELECT user_id FROM " . DB_PREFIX . "subscriptions WHERE member = $this->user_id";
-                $result = $this->db->Query ($query);
-                while ($opt = $this->db->FetchObj ($result)) {
-
-                    $subscriber = new User ($opt->user_id);
-                    $privacy = Privacy::LoadByUser ($opt->user_id);
-                    if ($privacy->OptCheck ('new_video')) {
-                        $replacements = array (
-                            'host'      => HOST,
-                            'sitename'  => $this->_config->sitename,
-                            'email'     => $subscriber->email,
-                            'member'    => $this->username,
-                            'title'     => $this->title,
-                            'video_id'  => $this->video_id,
-                            'slug'      => $this->slug
-                        );
-                        $mail = new Mail();
-                        $mail->LoadTemplate ('new_video', $replacements);
-                        $mail->Send ($subscriber->email);
-                        Plugin::triggerEvent('video.notify_subscribers');
-                    }
-
-                }
-
+                // Send subscribers notification of new video
+                $this->_notifySubscribersOfNewVideo($video);
                 Plugin::triggerEvent('video.release');
-
             }
 
         // Video is being re-approved
-        } else if ($action == 'approve' && $this->released != 0) {
+        } else if ($action == 'approve' && $video->released) {
             // Approve Video
-            $this->Update (array ('status' => 'approved'));
+            $video->status = 'approved';
+            $videoMapper->save($video);
             Plugin::triggerEvent('video.reapprove');
         }
-
 
         // Send admin alert
         if ($send_alert) {
             $body .= "\n\n=======================================================\n";
-            $body .= "Title: $this->title\n";
-            $body .= "URL: $this->url\n";
+            $body .= "Title: $video->title\n";
+            $body .= "URL: " . $this->getUrl($video) ."\n";
             $body .= "=======================================================";
             App::Alert ($subject, $body);
         }
 
         Plugin::triggerEvent('video.approve');
-
+    }
+    
+    protected function _notifySubscribersOfNewVideo(Video $video)
+    {
+        $config = Registry::get('config');
+        $userService = new UserService();
+        $privacyService = new PrivacyService();
+        $user = $this->_getVideoUser($video);
+        $subscriberList = $userService->getSubscribedUsers($user);
+        foreach ($subscriberList as $subscriber) {
+            if ($privacyService->OptCheck($subscriber, 'new_video')) {
+                $replacements = array (
+                    'host'      => HOST,
+                    'sitename'  => $config->sitename,
+                    'email'     => $subscriber->email,
+                    'member'    => $subscriber->username,
+                    'title'     => $video->title,
+                    'video_id'  => $video->videoId,
+                    'slug'      => $this->getUrl($video)
+                );
+                $mail = new Mail();
+                $mail->LoadTemplate ('new_video', $replacements);
+                $mail->Send ($subscriber->email);
+                Plugin::triggerEvent('video.notify_subscribers');
+            }
+        }
     }
     
     /**
      * Send video owner notification that video is now available 
      */
-    protected function _notifyUserVideoIsReady()
+    protected function _notifyUserVideoIsReady(Video $video)
     {
-        $user = new User($this->user_id);
-        $privacy = Privacy::LoadByUser($this->user_id);
-        if ($privacy->OptCheck('videoReady')) {
+        $config = Registry::get('config');
+        $user = $this->_getVideoUser($video);
+        $privacyService = new PrivacyService();
+        if ($privacyService->optCheck($user, 'videoReady')) {
             $replacements = array(
                 'host'      => HOST,
-                'sitename'  => $this->_config->sitename,
+                'sitename'  => $config->sitename,
                 'email'     => $user->email,
-                'member'    => $this->username,
-                'title'     => $this->title,
-                'video_id'  => $this->video_id,
-                'slug'      => $this->slug
+                'member'    => $user->username,
+                'title'     => $video->title,
+                'video_id'  => $video->videoId,
+                'slug'      => $this->getUrl($video)
             );
             $mail = new Mail();
             $mail->LoadTemplate('VideoReady', $replacements);
             $mail->Send($user->email);
-            Plugin::trigger('video.notifyUserVideoIsReady', $this);
+            Plugin::trigger('video.notifyUserVideoIsReady', $video);
         }
+    }
+    
+    /**
+     * Retrieve instance of Video mapper
+     * @return VideoMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new VideoMapper();
+    }
+    
+    /**
+     * Retrieve user who owns given video
+     * @param Video $video
+     * @return User Returns instance of user 
+     */
+    protected function _getVideoUser(Video $video)
+    {
+        $userMapper = new UserMapper();
+        return $userMapper->getUserById($video->userId);
     }
 }

@@ -9,57 +9,41 @@ $loggedInUser = $userService->loginCheck();
 Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
 Plugin::Trigger ('flag.ajax.login_check');
 
-// Establish page variables, objects, arrays, etc
-
-
-
-
-
-
-
-
-
-
-
 // Verify valid ID was provided
 if (empty ($_POST['id']) || !is_numeric ($_POST['id']))  App::Throw404();
 if (empty ($_POST['type']) || !in_array ($_POST['type'], array ('video', 'member', 'comment')))  App::Throw404();
 
 try {
-
      // Check if user is logged in
     if (!$loggedInUser) throw new Exception (Language::GetText ('error_flag_login'));
 
     switch ($_POST['type']) {
-
         case 'video':
-            $id = Video::Exist (array ('video_id' => $_POST['id'], 'status' => 'approved'));
-            if (!$id) App::Throw404();
-            $video = new Video ($_POST['id']);
-            $member_id = $video->user_id;
+            $videoMapper = new VideoMapper();
+            $video = $videoMapper->getVideoByCustom(array('video_id' => $_POST['id'], 'status' => 'approved'));
+            if (!$video) App::Throw404();
+            $member_id = $video->userId;
             $url = $video->url;
             $name = "Title: $video->title";
             $type = 'Video';
             Plugin::Trigger ('flag.ajax.flag_video');
             break;
-
         case 'member':
-            $id = User::Exist (array ('user_id' => $_POST['id'], 'status' => 'active'));
-            if (!$id) App::Throw404();
-            $member = new User ($id);
-            $member_id = $id;
+            $userMapper = new UserMapper();
+            $member = $userMapper->getUserByCustom(array('user_id' => $_POST['id'], 'status' => 'active'));
+            if (!$member) App::Throw404();
+            $member_id = $member->userId;
             $url = HOST . "/members/$member->username/";
             $name = "Username: $user->username";
             $type = 'Member';
             Plugin::Trigger ('flag.ajax.flag_user');
             break;
-
         case 'comment':
-            $id = Comment::Exist (array ('comment_id' => $_POST['id'], 'status' => 'approved'));
-            if (!$id) App::Throw404();
-            $comment = new Comment ($_POST['id']);
-            $member_id = $comment->user_id;
-            $video = new Video ($comment->video_id);
+            $commentMapper = new CommentMapper();
+            $comment = $commentMapper->getCommentByCustom(array('comment_id' => $_POST['id'], 'status' => 'approved'));
+            if (!$comment) App::Throw404();
+            $member_id = $comment->userId;
+            $video = new Video ($comment->videoId);
             $url = $video->url;
             $name = "Comments: $comment->comments";
             $type = 'Comment';
@@ -68,10 +52,10 @@ try {
     }
 
     // Verify user doesn't flag thier content
-    if ($user->user_id == $member_id) throw new Exception (Language::GetText ('error_flag_own'));
+    if ($loggedInUser->userId == $member_id) throw new Exception (Language::GetText ('error_flag_own'));
 
     // Verify Flag doesn't exist
-    $data = array ('type' => $_POST['type'], 'id' => $_POST['id'], 'user_id' => $user->user_id);
+    $data = array ('type' => $_POST['type'], 'id' => $_POST['id'], 'user_id' => $loggedInUser->userId);
     if (Flag::Exist ($data)) throw new Exception (Language::GetText ('error_flag_duplicate'));
     Plugin::Trigger ('flag.ajax.before_flag');
 
@@ -96,7 +80,6 @@ try {
     Plugin::Trigger ('flag.ajax.flag');
     echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
     exit();
-
 } catch (Exception $e) {
     echo json_encode (array ('result' => 0, 'msg' => $e->getMessage()));
     exit();

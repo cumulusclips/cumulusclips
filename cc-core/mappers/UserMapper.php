@@ -127,7 +127,7 @@ class UserMapper extends MapperAbstract
         return $userId;
     }
     
-    public function getMultipleUsersById(array $userIds)
+    public function getUsersFromList(array $userIds)
     {
         $userList = array();
         if (empty($userIds)) return $userList;
