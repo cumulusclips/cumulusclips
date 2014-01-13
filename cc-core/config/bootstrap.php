@@ -67,6 +67,3 @@ Plugin::triggerEvent('app.start');
 
 // Load language
 Language::LoadLangPack(App::CurrentLang());
-
-// Check for mobile devices
-App::MobileCheck();

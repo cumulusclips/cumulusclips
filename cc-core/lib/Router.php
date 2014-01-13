@@ -388,23 +388,27 @@ class Router
         
         $routes['mobile'] = new Route(array(
             'path' => 'm',
-            'location' => 'cc-core/controllers/mobile/index.php'
+            'location' => 'cc-core/controllers/mobile/index.php',
+            'mobile' => true
         ));
         
         $routes['mobileBrowseVideos'] = new Route(array(
             'path' => 'm/v',
-            'location' => 'cc-core/controllers/mobile/videos.php'
+            'location' => 'cc-core/controllers/mobile/videos.php',
+            'mobile' => true
         ));
         
         $routes['mobilePlay'] = new Route(array(
             'path' => 'm/v/([0-9]+)',
             'location' => 'cc-core/controllers/mobile/play.php',
-            'mappings' => array('vid')
+            'mappings' => array('vid'),
+            'mobile' => true
         ));
         
         $routes['mobileSearch'] = new Route(array(
             'path' => 'm/s',
-            'location' => 'cc-core/controllers/mobile/search.php'
+            'location' => 'cc-core/controllers/mobile/search.php',
+            'mobile' => true
         ));
         
         
@@ -500,12 +504,14 @@ class Router
 
         $routes['ajaxMobileLoadMoreVideos'] = new Route(array(
             'path' => 'actions/mobile-videos',
-            'location' => 'cc-core/system/mobile_videos.ajax.php'
+            'location' => 'cc-core/system/mobile_videos.ajax.php',
+            'mobile' => true
         ));
 
         $routes['ajaxMobileLoadMoreSearch'] = new Route(array(
             'path' => 'actions/mobile-search',
-            'location' => 'cc-core/system/mobile_search.ajax.php'
+            'location' => 'cc-core/system/mobile_search.ajax.php',
+            'mobile' => true
         ));
 
         return Plugin::triggerFilter('router.getRoutes', $routes);

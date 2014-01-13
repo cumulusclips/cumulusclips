@@ -118,54 +118,28 @@ class App {
      * detected via it's user agent header they will be sent to the mobile version
      * of the site unless they're already viewing the mobile site or have opted
      * out from it.
+     * @param Route $route Current route requested
      */
-    static function MobileCheck() {
-
+    public static function mobileCheck(Route $route)
+    {
         // Verify if user opted-out from Mobile site
         if (isset ($_GET['nomobile'])) {
             setcookie ('nomobile', md5('nomobile'), time()+3600*24*3);
         }
 
-        // Check for mobile devices and if has opted out from mobile site
+        // Redirect to mobile if user hasn't opted out from mobile site
         $agent = '/ip(ad|hone|od)|android/i';
-        if (isset ($_SERVER['HTTP_USER_AGENT']) && preg_match ($agent, $_SERVER['HTTP_USER_AGENT']) && !isset ($_COOKIE['nomobile']) && !isset ($_GET['nomobile'])) {
-
-            // Verify user isn't already viewing mobile site
-            if (!isset ($_GET['mobile'])) {
-                header ("Location: " . MOBILE_HOST . "/");
-                exit();
-            }
-
+        if (
+            isset($_SERVER['HTTP_USER_AGENT'])
+            && preg_match($agent, $_SERVER['HTTP_USER_AGENT'])
+            && !isset($_COOKIE['nomobile'])
+            && !isset($_GET['nomobile'])
+            && !$route->mobile
+        ) {
+            header ("Location: " . MOBILE_HOST . "/");
+            exit();
         }
-
     }
-
-
-
-
-    /**
-     * Determine which theme should be used
-     * @param boolean $isMobile Whether or not the platform being loaded is mobile
-     * @return string Theme to be used
-     */
-    public static function currentTheme($isMobile = false)
-    {
-        // Determine active theme
-        $active_theme = ($isMobile) ? Settings::get('active_mobile_theme') : Settings::get('active_theme');
-
-        // Check if 'Preview' theme was provided
-        $preview_theme = false;
-        if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
-            $active_theme = $_GET['preview_theme'];
-            $preview_theme = $_GET['preview_theme'];
-        }
-
-        define ('PREVIEW_THEME', $preview_theme);
-        return $active_theme;
-    }
-
-
-
 
     /**
      * Determine which language should be used

@@ -25,6 +25,11 @@ class Route
     public $mappings = null;
     
     /**
+     * @var boolean Whether or not the route is intended for mobile devices 
+     */
+    public $mobile = null;
+    
+    /**
      * Create a new URL route for loading a given controller based on the request URI
      * @param array $options (optional)
      * @throws Exception If mappings option is invalid
@@ -44,6 +49,10 @@ class Route
             if (!empty($options['mappings'])) {
                 if (!is_array($options['mappings'])) throw new Exception('Invalid mappings property in route');
                 $this->mappings = $options['mappings'];
+            }
+            
+            if (isset($options['mobile']) && is_bool($options['mobile'])) {
+                $this->mobile = $options['mobile'];
             }
         }
     }
