@@ -25,7 +25,7 @@
 
             <!-- BEGIN SEARCH RESULTS -->
             <div class="list">
-                <?php $view->RepeatingBlock ('video.tpl', $searchVideos); ?>
+                <?php $this->RepeatingBlock ('video.tpl', $searchVideos); ?>
 
                 <?php if ($count > 20): ?>
                     <div id="load-more">

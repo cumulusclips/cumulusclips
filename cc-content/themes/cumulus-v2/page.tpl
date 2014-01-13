@@ -1,4 +1,4 @@
-<?php $view->SetLayout ($page->layout); ?>
+<?php $this->SetLayout ($page->layout); ?>
 
 <h1><?=$page->title?></h1>
 

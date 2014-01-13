@@ -1,4 +1,4 @@
-<?php $view->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('privacy_settings_header')?></h1>
 

@@ -1,4 +1,4 @@
-<?php $view->SetLayout('myaccount'); ?>
+<?php $this->SetLayout('myaccount'); ?>
 
 <h1><?=Language::GetText('change_password_header')?></h1>
 

@@ -43,7 +43,7 @@ $videoMapper = new VideoMapper();
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $view->vars->member->userId . " AND status = 'approved' AND private = '0' LIMIT 6";
 Plugin::triggerEvent('profile.load_recent_videos');
 $memberVideosResults = $db->fetchAll($query);
-$view->vars->result_videos = $videoMapper->getMultipleVideosById(
+$view->vars->result_videos = $videoMapper->getVideosFromList(
     Functions::flattenArray($memberVideosResults, 'video_id')
 );
 
@@ -56,7 +56,7 @@ $commentMapper = new CommentMapper();
 $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = " . $view->vars->member->userId . "  ORDER BY comment_id DESC LIMIT 10";
 Plugin::triggerEvent('profile.load_comments');
 $memberCommentsResults = $db->fetchAll($query);
-$view->vars->comment_list = $commentMapper->getMultipleCommentsById(
+$view->vars->comment_list = $commentMapper->getCommentsFromList(
     Functions::flattenArray($memberCommentsResults, 'comment_id')
 );
 

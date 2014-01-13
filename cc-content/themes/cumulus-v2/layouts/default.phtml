@@ -4,16 +4,16 @@
 <title><?=$meta->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseUrl" content="<?=HOST?>" />
-<?php $view->writeMeta(); ?>
+<?php $this->writeMeta(); ?>
 <?php Plugin::triggerEvent('theme.head'); ?>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/reset.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/main.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/pages.css" />
-<?php $view->writeCSS(); ?>
+<?php $this->writeCSS(); ?>
 
 </head>
-<body class="<?=$view->cssHooks()?>">
+<body class="<?=$this->cssHooks()?>">
 <?php Plugin::triggerEvent('theme.body'); ?>
     
 <!-- BEGIN WRAPPER -->
@@ -31,7 +31,7 @@
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
                 <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$loggedInUser->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
-                <?php if ($view->getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
+                <?php if ($this->getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
                     <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
                 <?php endif ?>
 
@@ -49,19 +49,19 @@
     </div>
     <!-- END HEADER -->
     
-    <?php $view->block('header_nav.tpl'); ?>
+    <?php $this->block('header_nav.tpl'); ?>
     
     <!-- BEGIN MAIN CONTAINER -->
     <div id="retainer">
         <div id="main">
             <div class="left">
                 
-                <?=$view->body()?>
+                <?=$this->body()?>
                 
             </div>
             <div class="right">
-                <?php $view->writeSidebarBlocks(); ?>
-                <?php $view->block('ad300.tpl'); ?>
+                <?php $this->writeSidebarBlocks(); ?>
+                <?php $this->block('ad300.tpl'); ?>
             </div>
         </div>
     </div>
@@ -70,11 +70,11 @@
 </div>
 <!-- END WRAPPER -->
     
-<?php $view->block('footer_nav.tpl'); ?>
+<?php $this->block('footer_nav.tpl'); ?>
 
 <script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=$config->theme_url?>/js/general.js"></script>
-<?php $view->writeJs(); ?>
+<?php $this->writeJs(); ?>
 
 </body>
 </html>

@@ -36,7 +36,7 @@ class RatingService extends ServiceAbstract
      * @return object Returns stdClass object with properties for (dis)like
      * counts & text, and total ratings
      */
-    static function getRating($videoId)
+    public function getRating($videoId)
     {
         $ratingMapper = $this->_getMapper();
         $rating = new stdClass();

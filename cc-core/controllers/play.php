@@ -11,6 +11,7 @@ $view->vars->loggedInUser = $userService->loginCheck();
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
+$ratingService = new RatingService();
 $view->vars->tags = null;
 $view->vars->private = null;
 $view->vars->vp8Options = json_decode(Settings::Get('vp8Options'));
@@ -40,7 +41,7 @@ if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video
 $view->vars->member = $userMapper->getUserById($view->vars->video->userId);
 $view->vars->video->views++;
 $videoMapper->save($view->vars->video);
-$view->vars->rating = RatingService::getRating($view->vars->video->videoId);
+$view->vars->rating = $ratingService->getRating($view->vars->video->videoId);
 $view->vars->meta->title = $view->vars->video->title;
 $view->vars->meta->keywords = implode (', ',$view->vars->video->tags);
 $view->vars->meta->description = $view->vars->video->description;

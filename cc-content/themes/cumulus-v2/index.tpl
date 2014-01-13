@@ -1,7 +1,7 @@
 <?php
-$view->AddJs('jcycle.plugin.js');
-$view->AddJs('jcycle.js');
-if (!$loggedInUser) $view->AddSidebarBlock('home_login.tpl');
+$this->AddJs('jcycle.plugin.js');
+$this->AddJs('jcycle.js');
+if (!$loggedInUser) $this->AddSidebarBlock('home_login.tpl');
 ?>
 
 
@@ -78,7 +78,7 @@ if (!$loggedInUser) $view->AddSidebarBlock('home_login.tpl');
 
     <div class="videos_list">
         <?php if (!empty ($recent_videos)): ?>
-            <?php $view->RepeatingBlock('video.tpl', $recent_videos); ?>
+            <?php $this->RepeatingBlock('video.tpl', $recent_videos); ?>
         <?php else: ?>
             <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
         <?php endif; ?>

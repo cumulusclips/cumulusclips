@@ -24,7 +24,7 @@ $start_record = $view->vars->pagination->GetStartRecord();
 $userMapper = new UserMapper();
 $query .= " LIMIT $start_record, $records_per_page";
 $userResults = $db->fetchAll($query);
-$view->vars->userResults = $userMapper->getMultipleUsersById(
+$view->vars->userResults = $userMapper->getUsersFromList(
     Functions::flattenArray($userResults, 'user_id')
 );
 

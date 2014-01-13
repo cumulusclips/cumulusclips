@@ -61,7 +61,7 @@ $start_record = $view->vars->pagination->GetStartRecord();
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
 $messageResults = $db->fetchAll($query);
-$view->vars->messages = $messageMapper->getMultipleMessagesById(
+$view->vars->messages = $messageMapper->getMessagesFromList(
     Functions::flattenArray($messageResults, 'message_id')
 );
 

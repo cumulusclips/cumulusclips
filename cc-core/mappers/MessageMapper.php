@@ -112,7 +112,7 @@ class MessageMapper extends MapperAbstract
         return $messageId;
     }
     
-    public function getMultipleMessagesById(array $messageIds)
+    public function getMessagesFromList(array $messageIds)
     {
         $messageList = array();
         if (empty($messageIds)) return $messageList;

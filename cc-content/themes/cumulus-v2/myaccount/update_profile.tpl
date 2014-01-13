@@ -1,10 +1,10 @@
 <?php
-$view->AddMeta('uploadify:theme', $config->theme_url);
-$view->AddMeta('uploadify:buttonText', Language::GetText('browse_files_button'));
-$view->AddCss('uploadify.css');
-$view->AddJs('uploadify.plugin.js');
-$view->AddJs('uploadify.js');
-$view->SetLayout('myaccount');
+$this->AddMeta('uploadify:theme', $config->theme_url);
+$this->AddMeta('uploadify:buttonText', Language::GetText('browse_files_button'));
+$this->AddCss('uploadify.css');
+$this->AddJs('uploadify.plugin.js');
+$this->AddJs('uploadify.js');
+$this->SetLayout('myaccount');
 ?>
 
 <h1><?=Language::GetText('profile_header')?></h1>
@@ -39,7 +39,7 @@ $view->SetLayout('myaccount');
 <div id="update_avatar" class="form">
 
     <div class="left">
-        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$view->getService('User')->getAvatarUrl($loggedInUser)?>"></span></p>
+        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$this->getService('User')->getAvatarUrl($loggedInUser)?>"></span></p>
         <?=Language::GetText('current_avatar')?><br />
         <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
     </div>

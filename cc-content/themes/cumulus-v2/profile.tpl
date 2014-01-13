@@ -4,7 +4,7 @@
 
 <!-- BEGIN Member Avatar/Profile Information -->
 <div id="profile_avatar">
-    <img src="<?=$view->getService('User')->getAvatarUrl($member)?>" alt="<?=$member->username?>" />
+    <img src="<?=$this->getService('User')->getAvatarUrl($member)?>" alt="<?=$member->username?>" />
     <p><a class="button_small subscribe" data-user="<?=$member->userId?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
 </div>
 <div id="profile_info">
@@ -35,7 +35,7 @@
     <p class="large"><?=Language::GetText('videos')?></p>
     <?php if (count($result_videos) >= 1): ?>
         <div class="videos_list">
-            <?php $view->RepeatingBlock('video.tpl', $result_videos) ?>
+            <?php $this->RepeatingBlock('video.tpl', $result_videos) ?>
         </div>
     <?php else: ?>
         <p><strong><?=Language::GetText('no_member_videos')?></strong></p>

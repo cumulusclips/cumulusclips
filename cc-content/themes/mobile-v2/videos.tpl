@@ -3,7 +3,7 @@
     <?php if (!empty($count)): ?>
 
         <div class="list">
-            <?php $view->RepeatingBlock('video.tpl', $videos); ?>
+            <?php $this->RepeatingBlock('video.tpl', $videos); ?>
 
             <?php if ($count > 20): ?>
                 <div id="load-more">

@@ -1,4 +1,4 @@
-<?php $view->AddJs ('username.js'); ?>
+<?php $this->AddJs ('username.js'); ?>
 
 <h1><?=Language::GetText('register_header')?></h1>
 

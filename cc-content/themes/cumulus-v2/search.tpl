@@ -7,13 +7,13 @@
     <?php foreach ($search_videos as $video): ?>
         <div class="video">
             <div>
-                <a href="<?=$view->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
+                <a href="<?=$this->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
                     <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
                 </a>
                 <span><?=$video->duration?></span>
             </div>
             <div>
-                <p class="big"><a href="<?=$view->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
+                <p class="big"><a href="<?=$this->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
                 <p class="small">
                     <strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$video->username?>/" title="<?=$video->username?>"><?=$video->username?></a>,
                     <strong><?=Language::GetText('views')?>:</strong> <?=$video->views?>

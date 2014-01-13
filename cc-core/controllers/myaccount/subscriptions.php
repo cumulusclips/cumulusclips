@@ -39,7 +39,7 @@ $start_record = $view->vars->pagination->getStartRecord();
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
 $subscriptionResults = $db->fetchAll($query);
-$view->vars->subscriptions = $userMapper->getMultipleUsersById(
+$view->vars->subscriptions = $userMapper->getUsersFromList(
     Functions::flattenArray($subscriptionResults, 'member')
 );
 

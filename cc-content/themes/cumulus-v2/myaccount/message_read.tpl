@@ -1,4 +1,4 @@
-<?php $view->SetLayout('myaccount'); ?>
+<?php $this->SetLayout('myaccount'); ?>
 
 <h1><?=Language::GetText('message_read_header')?></h1>
 <div id="message_display">

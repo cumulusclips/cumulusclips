@@ -56,7 +56,7 @@ $query .= " LIMIT $start_record, $records_per_page";
 Plugin::triggerEvent('search.search');
 $searchResult = $db->fetchAll($query, array(':keyword' => $keyword));
 $videoMapper = new VideoMapper();
-$view->vars->search_videos = $videoMapper->getMultipleVideosById(
+$view->vars->search_videos = $videoMapper->getVideosFromList(
     Functions::flattenArray($searchResult, 'video_id')
 );
 

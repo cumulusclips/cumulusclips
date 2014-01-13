@@ -1,4 +1,4 @@
-<?php $view->setLayout('myaccount'); ?>
+<?php $this->setLayout('myaccount'); ?>
 
 <h1><?=Language::getText('upload_header')?></h1>
 

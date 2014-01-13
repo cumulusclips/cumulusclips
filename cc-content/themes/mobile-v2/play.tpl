@@ -1,8 +1,8 @@
 <?php
 
-$view->AddCss ('video-js.css');
-$view->AddJs ('video.js');
-$view->AddJs ('play.js');
+$this->AddCss ('video-js.css');
+$this->AddJs ('video.js');
+$this->AddJs ('play.js');
 
 ?>
 
