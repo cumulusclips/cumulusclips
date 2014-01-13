@@ -1,4 +1,4 @@
-<?php View::setLayout('myaccount'); ?>
+<?php $view->setLayout('myaccount'); ?>
 
 <h1><?=Language::getText('myvideos_header')?></h1>
         
@@ -17,12 +17,12 @@
                 <p><strong><?=Language::getText($video->status)?></strong> - <?=$video->title?></p>
             <?php else: ?>
                 <div>
-                    <a href="<?=View::getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
+                    <a href="<?=$view->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
                         <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
                     </a>
                     <span><?=$video->duration?></span>
                 </div>
-                <p><a href="<?=View::getService('Video')->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
+                <p><a href="<?=$view->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
             <?php endif; ?>
             <p class="actions small">
                 <a href="<?=HOST?>/myaccount/editvideo/<?=$video->videoId?>/" title="<?=Language::getText('edit_video')?>"><span><?=Language::getText('edit_video')?></span></a>

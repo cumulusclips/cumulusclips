@@ -5,7 +5,7 @@
         <?php if (!empty($featuredVideos)): ?>
 
             <div class="list">
-                <?php View::RepeatingBlock('video.tpl', $featuredVideos); ?>
+                <?php $view->RepeatingBlock('video.tpl', $featuredVideos); ?>
             </div>
 
         <?php else: ?>
@@ -19,7 +19,7 @@
     <?php if (!empty($recentVideos)): ?>
 
         <div class="list">
-            <?php View::RepeatingBlock ('video.tpl', $recentVideos); ?>
+            <?php $view->RepeatingBlock ('video.tpl', $recentVideos); ?>
         </div>
 
     <?php else: ?>

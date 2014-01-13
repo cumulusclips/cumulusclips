@@ -1,4 +1,4 @@
-<?php View::SetLayout ('myaccount'); ?>
+<?php $view->SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('subscriptions_header')?></h1>
 
@@ -10,7 +10,7 @@
 <?php if (count($subscriptions) > 0): ?>
 
     <div class="member_list">
-    <?php $userService = View::getService('User'); ?>
+    <?php $userService = $view->getService('User'); ?>
     <?php foreach ($subscriptions as $subscription): ?>
         <div>
             <p><a href="<?=HOST?>/members/<?=$subscription->username?>/" title="<?=$subscription->username?>"><img src="<?=$userService->getAvatarUrl($subscription)?>" alt="<?=$subscription->username?>" /></a></p>

@@ -1,4 +1,4 @@
-<?php View::setLayout('myaccount'); ?>
+<?php $view->setLayout('myaccount'); ?>
 
 <h1><?=Language::getText('update_video_header')?></h1>
 

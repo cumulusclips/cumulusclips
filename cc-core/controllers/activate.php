@@ -1,15 +1,15 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('activate');
+$view->InitView ('activate');
 Plugin::Trigger ('activate.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
+$view->vars->loggedInUser = $userService->loginCheck();
 
-Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
-View::$vars->message = null;
+Functions::RedirectIf (!$view->vars->logged_in, HOST . '/myaccount/');
+$view->vars->message = null;
 
 ### Verify token was provided
 if (isset ($_GET['token'])) {
@@ -20,16 +20,16 @@ if (isset ($_GET['token'])) {
     if ($user) {
         $userService->approve($user, 'activate');
         if (Settings::Get('auto_approve_users') == 1) {
-            View::$vars->message = Language::GetText ('activate_success', array ('host' => HOST));
+            $view->vars->message = Language::GetText ('activate_success', array ('host' => HOST));
             $_SESSION['user_id'] = $user->userId;
         } else {
-            View::$vars->message = Language::GetText ('activate_approve');
+            $view->vars->message = Language::GetText ('activate_approve');
         }
-        View::$vars->message_type = 'success';
+        $view->vars->message_type = 'success';
         Plugin::Trigger ('activate.activate');
     } else {
-        View::$vars->message = Language::GetText ('activate_error', array ('host' => HOST));
-        View::$vars->message_type = 'error';
+        $view->vars->message = Language::GetText ('activate_error', array ('host' => HOST));
+        $view->vars->message_type = 'error';
     }
 	
 } else {
@@ -38,4 +38,4 @@ if (isset ($_GET['token'])) {
 
 // Output Page
 Plugin::Trigger ('activate.before_render');
-View::Render ('activate.tpl');
+$view->Render ('activate.tpl');

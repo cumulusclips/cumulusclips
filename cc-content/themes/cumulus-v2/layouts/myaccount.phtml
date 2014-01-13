@@ -4,16 +4,16 @@
 <title><?=$meta->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseUrl" content="<?=HOST?>" />
-<?php View::writeMeta(); ?>
+<?php $view->writeMeta(); ?>
 <?php Plugin::triggerEvent('theme.head'); ?>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/reset.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/main.css" />
 <link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/myaccount.css" />
-<?php View::writeCSS(); ?>
+<?php $view->writeCSS(); ?>
 
 </head>
-<body class="<?=View::cssHooks()?>">
+<body class="<?=$view->cssHooks()?>">
 <?php Plugin::triggerEvent('theme.body'); ?>
     
 <!-- BEGIN WRAPPER -->
@@ -31,7 +31,7 @@
                 <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
                 <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$loggedInUser->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
-                <?php if (View::getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
+                <?php if ($view->getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
                     <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
                 <?php endif ?>
 
@@ -49,7 +49,7 @@
     </div>
     <!-- END HEADER -->
     
-    <?php View::block('header_nav.tpl'); ?>
+    <?php $view->block('header_nav.tpl'); ?>
     
     <!-- BEGIN MAIN CONTAINER -->
     <div id="retainer">
@@ -81,14 +81,14 @@
                         <li><a href="<?php echo HOST; ?>/myaccount/message/send/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a></li>
                     </ul>
                 </div>
-                <?php View::writeSidebarBlocks(); ?>
+                <?php $view->writeSidebarBlocks(); ?>
             </div>
             <!-- END SIDEBAR -->
 
             <!-- BEGIN CONTENT -->
             <div class="right">
 
-                <?=View::body()?>
+                <?=$view->body()?>
                 
             </div>
         </div>
@@ -98,11 +98,11 @@
 </div>
 <!-- END WRAPPER -->
     
-<?php View::block('footer_nav.tpl'); ?>
+<?php $view->block('footer_nav.tpl'); ?>
 
 <script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=$config->theme_url?>/js/general.js"></script>
-<?php View::writeJs(); ?>
+<?php $view->writeJs(); ?>
 
 </body>
 </html>

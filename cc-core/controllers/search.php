@@ -1,30 +1,30 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('search');
+$view->InitView ('search');
 Plugin::triggerEvent('search.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
+$view->vars->loggedInUser = $userService->loginCheck();
 
 $keyword = null;
-View::$vars->cleaned = null;
+$view->vars->cleaned = null;
 $url = HOST . '/search';
 $query_string = array();
 $records_per_page = 9;
 
 // Verify a keyword was given
 if (isset ($_POST['submitted_search'])) {
-    View::$vars->cleaned = htmlspecialchars($_POST['keyword']);
+    $view->vars->cleaned = htmlspecialchars($_POST['keyword']);
     $keyword = $_POST['keyword'];
 } elseif (isset ($_GET['keyword'])) {
-    View::$vars->cleaned = htmlspecialchars($_GET['keyword']);
+    $view->vars->cleaned = htmlspecialchars($_GET['keyword']);
     $keyword = $_GET['keyword'];
 }
 
-$query_string['keyword'] = View::$vars->cleaned;
-View::$vars->meta->title = Functions::Replace (View::$vars->meta->title, array ('keyword' => View::$vars->cleaned));
+$query_string['keyword'] = $view->vars->cleaned;
+$view->vars->meta->title = Functions::Replace ($view->vars->meta->title, array ('keyword' => $view->vars->cleaned));
 
 // Retrieve count of all videos
 $query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
@@ -48,18 +48,18 @@ Plugin::triggerEvent('search.search_count');
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-View::$vars->pagination = new Pagination ($url, $count, $records_per_page);
-$start_record = View::$vars->pagination->GetStartRecord();
+$view->vars->pagination = new Pagination ($url, $count, $records_per_page);
+$start_record = $view->vars->pagination->GetStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
 Plugin::triggerEvent('search.search');
 $searchResult = $db->fetchAll($query, array(':keyword' => $keyword));
 $videoMapper = new VideoMapper();
-View::$vars->search_videos = $videoMapper->getMultipleVideosById(
+$view->vars->search_videos = $videoMapper->getMultipleVideosById(
     Functions::flattenArray($searchResult, 'video_id')
 );
 
 // Output Page
 Plugin::triggerEvent('search.before_render');
-View::Render ('search.tpl');
+$view->Render ('search.tpl');

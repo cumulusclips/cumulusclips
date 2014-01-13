@@ -1,4 +1,4 @@
-<?php View::SetLayout ('myaccount'); ?>
+<?php $view->SetLayout ('myaccount'); ?>
 
 <h1><?=Language::GetText('myfavorites_header')?></h1>
         

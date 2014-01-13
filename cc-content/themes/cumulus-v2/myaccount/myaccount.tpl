@@ -1,11 +1,11 @@
-<?php View::SetLayout ('myaccount'); ?>
+<?php $view->SetLayout ('myaccount'); ?>
 
 <div id="myaccount">
     <p class="large"><?=Language::GetText('myaccount_header')?> - <?=$loggedInUser->username?></p>
 
     <div class="left">
         <div>
-            <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=View::getService('User')->getAvatarUrl($loggedInUser)?>" /></span></div>
+            <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=$view->getService('User')->getAvatarUrl($loggedInUser)?>" /></span></div>
             <a href="<?=HOST?>/myaccount/profile/#update_avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
         <p><strong><?=Language::GetText('joined')?>:</strong> <?=Functions::DateFormat('m/d/Y',$loggedInUser->dateCreated)?></p>

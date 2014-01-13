@@ -1,27 +1,27 @@
 <?php
 
 // Init view
-View::initView('edit_video');
+$view->initView('edit_video');
 Plugin::triggerEvent('edit_video.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
-View::$vars->privateUrl = $videoService->generatePrivate();
-View::$vars->errors = array();
-View::$vars->message = null;
+$view->vars->privateUrl = $videoService->generatePrivate();
+$view->vars->errors = array();
+$view->vars->message = null;
 
 // Verify a video was provided
 if (!empty($_GET['vid']) && $_GET['vid'] > 0) {
 
     // Retrieve video information
     $video = $videoMapper->getVideoByCustom(array(
-        'user_id' => View::$vars->loggedInUser->userId,
+        'user_id' => $view->vars->loggedInUser->userId,
         'video_id' => $_GET['vid']
     ));
     
@@ -42,28 +42,28 @@ if (isset($_POST['submitted'])) {
     if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
         $video->title = trim($_POST['title']);
     } else {
-        View::$vars->errors['title'] = Language::getText('error_title');
+        $view->vars->errors['title'] = Language::getText('error_title');
     }
 
     // Validate description
     if (!empty($_POST['description']) && !ctype_space($_POST['description'])) {
         $video->description = trim($_POST['description']);
     } else {
-        View::$vars->errors['description'] = Language::getText('error_description');
+        $view->vars->errors['description'] = Language::getText('error_description');
     }
 
     // Validate tags
     if (!empty($_POST['tags']) && !ctype_space($_POST['tags'])) {
         $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
-        View::$vars->errors['tags'] = Language::getText('error_tags');
+        $view->vars->errors['tags'] = Language::getText('error_tags');
     }
 
     // Validate cat_id
     if (!empty($_POST['cat_id']) && is_numeric($_POST['cat_id'])) {
         $video->categoryId = $_POST['cat_id'];
     } else {
-        View::$vars->errors['cat_id'] = Language::getText('error_category');
+        $view->vars->errors['cat_id'] = Language::getText('error_category');
     }
 
     // Validate disable embed
@@ -95,7 +95,7 @@ if (isset($_POST['submitted'])) {
             $video->private = true;
             $video->privateUrl = trim($_POST['private_url']);
         } catch (Exception $e) {
-            View::$vars->errors['private_url'] = Language::getText('error_private_url');
+            $view->vars->errors['private_url'] = Language::getText('error_private_url');
         }
     } else {
         $video->private = false;
@@ -103,23 +103,23 @@ if (isset($_POST['submitted'])) {
     }
 
     // Update video if no errors were made
-    if (empty (View::$vars->errors)) {
+    if (empty ($view->vars->errors)) {
         $videoMapper->save($video);
-        View::$vars->message = Language::getText('success_video_updated');
-        View::$vars->message_type = 'success';
+        $view->vars->message = Language::getText('success_video_updated');
+        $view->vars->message_type = 'success';
         Plugin::triggerEvent('edit_video.edit');
     } else {
-        View::$vars->message = Language::getText('errors_below');
-        View::$vars->message .= '<br /><br /> - ' . implode('<br /> - ', View::$vars->errors);
-        View::$vars->message_type = 'errors';
+        $view->vars->message = Language::getText('errors_below');
+        $view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $view->vars->errors);
+        $view->vars->message_type = 'errors';
     }
 }
 
 // Retrieve Categories	
 $categoryService = new CategoryService();
-View::$vars->categoryList = $categoryService->getCategories();
+$view->vars->categoryList = $categoryService->getCategories();
 
 // Output page
-View::$vars->video = $video;
+$view->vars->video = $video;
 Plugin::triggerEvent('edit_video.before_render');
-View::Render ('myaccount/edit_video.tpl');
+$view->Render ('myaccount/edit_video.tpl');

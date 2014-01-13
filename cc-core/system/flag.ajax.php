@@ -6,7 +6,7 @@ Plugin::triggerEvent('flag.ajax.start');
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 Plugin::Trigger ('flag.ajax.login_check');
 
 // Verify valid ID was provided

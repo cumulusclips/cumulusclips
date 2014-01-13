@@ -20,9 +20,9 @@ $videoList = $videoMapper->getVideosFromList(Functions::flattenArray($videoResul
 
 // Output video list in requested format
 if ($block) {
-    View::InitView();
+    $view->InitView();
     ob_start();
-    View::RepeatingBlock ($block, $videoList);
+    $view->RepeatingBlock ($block, $videoList);
     $output = ob_get_contents();
     ob_end_clean();
 } else {

@@ -1,24 +1,24 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('login');
+$view->InitView ('login');
 Plugin::triggerEvent('login.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf(!View::$vars->loggedInUser, HOST . '/myaccount/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::redirectIf(!$view->vars->loggedInUser, HOST . '/myaccount/');
 
-View::$vars->username = null;
-View::$vars->password = null;
-View::$vars->message = null;
-View::$vars->message_type = null;
-View::$vars->login_submit = null;
-View::$vars->forgot_submit = null;
+$view->vars->username = null;
+$view->vars->password = null;
+$view->vars->message = null;
+$view->vars->message_type = null;
+$view->vars->login_submit = null;
+$view->vars->forgot_submit = null;
 
 // User Requested forgot password
 if (isset ($_GET['action']) && $_GET['action'] == 'forgot') {
-    View::$vars->forgot_submit = true;
+    $view->vars->forgot_submit = true;
 }
 
 /*****************************
@@ -28,40 +28,40 @@ Handle login form if submitted
 if (isset ($_POST['submitted_login'])) {
 
 	
-    View::$vars->login_submit = true;
+    $view->vars->login_submit = true;
 
     // validate username
     if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
-        View::$vars->username = trim($_POST['username']);
+        $view->vars->username = trim($_POST['username']);
     }
 
     // validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        View::$vars->password = $_POST['password'];
+        $view->vars->password = $_POST['password'];
     }
 	
     // login if no errors were found
-    if (View::$vars->username && View::$vars->password) {
+    if ($view->vars->username && $view->vars->password) {
 
-        if ($userService->login(View::$vars->username, View::$vars->password)) {
+        if ($userService->login($view->vars->username, $view->vars->password)) {
 
             if (isset ($_POST['remember']) && $_POST['remember'] == 'true') {
-                setcookie ('username',View::$vars->username,time()+60*60*24*9999,'/','',0);
-                setcookie ('password',View::$vars->password,time()+60*60*24*9999,'/','',0);
+                setcookie ('username',$view->vars->username,time()+60*60*24*9999,'/','',0);
+                setcookie ('password',$view->vars->password,time()+60*60*24*9999,'/','',0);
                 Plugin::triggerEvent('login.remember_me');
             }
             Plugin::triggerEvent('login.login');
             header ('Location: ' . HOST . '/myaccount/');
 
         } else {
-            View::$vars->message = Language::GetText('error_invalid_login');
-            View::$vars->message_type = 'errors';
-            View::$vars->login_submit = null;
+            $view->vars->message = Language::GetText('error_invalid_login');
+            $view->vars->message_type = 'errors';
+            $view->vars->login_submit = null;
         }
 
     } else {
-        View::$vars->message = Language::GetText('error_general');
-        View::$vars->message_type = 'errors';
+        $view->vars->message = Language::GetText('error_general');
+        $view->vars->message_type = 'errors';
     }
 }
 
@@ -71,7 +71,7 @@ Handle forgot login form
 
 if (isset ($_POST['submitted_forgot'])) {
 	
-    View::$vars->forgot_submit = true;
+    $view->vars->forgot_submit = true;
 
     // validate email
     $string = '/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+[a-z0-9]{2,4}$/i';
@@ -81,9 +81,9 @@ if (isset ($_POST['submitted_forgot'])) {
         $user = $userMapper->getUserByCustom(array('email' => $_POST['email'], 'status' => 'active'));
         if ($user) {
             $new_password = $userService->resetPassword($user);
-            View::$vars->message = Language::GetText('success_login_sent');
-            View::$vars->message_type = 'success';
-            View::$vars->forgot_submit = null;
+            $view->vars->message = Language::GetText('success_login_sent');
+            $view->vars->message_type = 'success';
+            $view->vars->forgot_submit = null;
 
             $replacements = array (
                 'sitename'  => $config->sitename,
@@ -95,16 +95,16 @@ if (isset ($_POST['submitted_forgot'])) {
             $mail->Send ($user->email);
             Plugin::triggerEvent('login.password_reset');
         } else {
-            View::$vars->message = Language::GetText('error_no_users_email');
-            View::$vars->message_type = 'errors';
+            $view->vars->message = Language::GetText('error_no_users_email');
+            $view->vars->message_type = 'errors';
         }
 
     } else {
-        View::$vars->message = Language::GetText('error_email');
-        View::$vars->message_type = 'errors';
+        $view->vars->message = Language::GetText('error_email');
+        $view->vars->message_type = 'errors';
     }
 }
 
 // Output Page
 Plugin::triggerEvent('login.before_render');
-View::Render ('login.tpl');
+$view->Render ('login.tpl');

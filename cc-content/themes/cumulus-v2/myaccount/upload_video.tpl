@@ -1,10 +1,10 @@
 <?php
-View::addMeta('uploadify:theme', $config->theme_url);
-View::addMeta('uploadify:buttonText', Language::getText('browse_files_button'));
-View::addCss('uploadify.css');
-View::addJs('uploadify.plugin.js');
-View::addJs('uploadify.js');
-View::setLayout('myaccount');
+$view->addMeta('uploadify:theme', $config->theme_url);
+$view->addMeta('uploadify:buttonText', Language::getText('browse_files_button'));
+$view->addCss('uploadify.css');
+$view->addJs('uploadify.plugin.js');
+$view->addJs('uploadify.js');
+$view->setLayout('myaccount');
 ?>
 
 <h1><?=Language::getText('upload_video_header')?></h1>

@@ -1,13 +1,13 @@
 <?php
 
 // Init view
-View::InitView ('message_read');
+$view->InitView ('message_read');
 Plugin::triggerEvent('message_read.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $messageMapper = new MessageMapper();
@@ -17,13 +17,13 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
     
     // Retrieve and update message
     $message = $messageMapper->getMessageByCustom(array(
-        'recipient' => View::$vars->loggedInUser->userId,
+        'recipient' => $view->vars->loggedInUser->userId,
         'message_id' => $_GET['msg']
     ));
     if ($message) {
         $message->status = 'read';
         $messageMapper->save($message);
-        View::$vars->message = $message;
+        $view->vars->message = $message;
     } else {
         App::Throw404();
     }
@@ -33,4 +33,4 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
 
 // Outuput page
 Plugin::triggerEvent('message_read.before_render');
-View::Render ('myaccount/message_read.tpl');
+$view->Render ('myaccount/message_read.tpl');

@@ -1,9 +1,9 @@
 <?php
-View::AddMeta('videoId', $video->videoId);
-View::AddCss('jscrollpane.css');
-View::AddJs('jscrollpane.plugin.js');
-View::AddJs('mousewheel.plugin.js');
-View::SetLayout('full');
+$view->AddMeta('videoId', $video->videoId);
+$view->AddCss('jscrollpane.css');
+$view->AddJs('jscrollpane.plugin.js');
+$view->AddJs('mousewheel.plugin.js');
+$view->SetLayout('full');
 ?>
 
 
@@ -257,7 +257,7 @@ View::SetLayout('full');
             
         <?php if ($comment_count > 0): ?>
             <!-- BEGIN COMMENT BLOCKS -->
-            <?php View::RepeatingBlock ('comment.tpl', $comment_list); ?>
+            <?php $view->RepeatingBlock ('comment.tpl', $comment_list); ?>
             <!-- END COMMENT BLOCKS -->
         <?php endif; ?>
         </div>
@@ -276,7 +276,7 @@ View::SetLayout('full');
 <!-- BEGIN PLAY RIGHT -->
 <div class="right">
     
-    <?php View::Block ('ad300.tpl'); ?>
+    <?php $view->Block ('ad300.tpl'); ?>
 
     
     <!-- BEGIN RELATED VIDEOS -->

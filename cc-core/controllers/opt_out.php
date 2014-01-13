@@ -1,12 +1,12 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-View::InitView('opt_out');
+$view->InitView('opt_out');
 Plugin::triggerEvent('opt_out.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
+$view->vars->loggedInUser = $userService->loginCheck();
 
 ### Verify user actually unsubscribed
 if (isset($_GET['email'])) {
@@ -30,4 +30,4 @@ if (isset($_GET['email'])) {
 
 // Output Page
 Plugin::triggerEvent('opt_out.before_render');
-View::Render ('opt_out.tpl');
+$view->Render ('opt_out.tpl');

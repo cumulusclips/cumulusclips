@@ -1,19 +1,19 @@
 <?php
 
 // Init view
-View::initView('mobile_index', true);
+$view->initView('mobile_index', true);
 Plugin::triggerEvent('mobile_index.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
+$view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
-View::$vars->meta->title = Language::GetText ('mobile_heading', array ('sitename' => $config->sitename));
+$view->vars->meta->title = Language::GetText ('mobile_heading', array ('sitename' => $config->sitename));
 
 // Retrieve Featured Video
-View::$vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
+$view->vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
     'status' => 'approved',
     'featured' => '1',
     'private' => '0',
@@ -23,10 +23,10 @@ View::$vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
 // Retrieve Recent Videos
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' ORDER BY video_id DESC LIMIT 3";
 $recentResults = $db->fetchAll($query);
-View::$vars->recentVideos = $videoMapper->getVideosFromList(
+$view->vars->recentVideos = $videoMapper->getVideosFromList(
     Functions::flattenArray($recentResults, 'video_id')
 );
 
 // Output Page
 Plugin::Trigger ('mobile_index.before_render');
-View::Render ('index.tpl');
+$view->Render ('index.tpl');

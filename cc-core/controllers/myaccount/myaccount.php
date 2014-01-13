@@ -1,26 +1,26 @@
 <?php
 
 // Init view
-View::InitView('myaccount');
+$view->InitView('myaccount');
 Plugin::triggerEvent('myaccount.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
-View::$vars->new_messages = null;
-View::$vars->meta->title = Functions::Replace(View::$vars->meta->title, array ('username' => View::$vars->loggedInUser->username));
+$view->vars->new_messages = null;
+$view->vars->meta->title = Functions::Replace($view->vars->meta->title, array ('username' => $view->vars->loggedInUser->username));
 
 // Check for unread messages
 $messageMapper = new MessageMapper();
 $userMessages = $messageMapper->getMultipleMessagesByCustom(array(
-    'recipient' => View::$vars->loggedInUser->userId,
+    'recipient' => $view->vars->loggedInUser->userId,
     'status' => 'unread'
 ));
-View::$vars->unreadMessageCount = count($userMessages);
+$view->vars->unreadMessageCount = count($userMessages);
 
 // Output Page
 Plugin::triggerEvent('myaccount.before_render');
-View::Render('myaccount/myaccount.tpl');
+$view->Render('myaccount/myaccount.tpl');

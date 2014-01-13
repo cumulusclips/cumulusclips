@@ -1,4 +1,4 @@
-<?php View::SetLayout ($page->layout); ?>
+<?php $view->SetLayout ($page->layout); ?>
 
 <h1><?=$page->title?></h1>
 

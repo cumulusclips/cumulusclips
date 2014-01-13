@@ -87,9 +87,9 @@ if (isset($_POST['submitted'])) {
         // Retrieve formatted new comment
         if (Settings::Get('auto_approve_comments') == 1) {
             if ($block) {
-                View::InitView();
+                $view->InitView();
                 ob_start();
-                View::RepeatingBlock ($block, array($newComment->commentId));
+                $view->RepeatingBlock ($block, array($newComment->commentId));
                 $output = ob_get_contents();
                 ob_end_clean();
             } else {

@@ -5,8 +5,8 @@ Plugin::triggerEvent('username.ajax.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(!View::$vars->loggedInUser, HOST . '/login/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf(!$view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();

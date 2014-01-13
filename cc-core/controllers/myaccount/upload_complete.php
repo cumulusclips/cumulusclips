@@ -1,13 +1,13 @@
 <?php
 
 // Init view
-View::initView('upload_complete');
+$view->initView('upload_complete');
 Plugin::triggerEvent('upload_complete.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(View::$vars->loggedInUser, HOST . '/login/');
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
@@ -22,4 +22,4 @@ if (isset($_SESSION['upload'])) {
 
 // Output page
 Plugin::triggerEvent('upload_complete.before_render');
-View::render('myaccount/upload_complete.tpl');
+$view->render('myaccount/upload_complete.tpl');

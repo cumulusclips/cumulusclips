@@ -1,12 +1,12 @@
 <?php
 
 // Init view
-View::initView('mobile_play', true);
+$view->initView('mobile_play', true);
 Plugin::triggerEvent('mobile_play.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-View::$vars->loggedInUser = $userService->loginCheck();
+$view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
@@ -24,9 +24,9 @@ $video = $videoMapper->getVideoByCustom(array(
 if (!$video) App::Throw404();
 
 // Retrieve video
-View::$vars->video = $video;
-View::$vars->meta->title = $video->title;
+$view->vars->video = $video;
+$view->vars->meta->title = $video->title;
 
 // Output Page
 Plugin::Trigger ('mobile_play.before_render');
-View::Render ('play.tpl');
+$view->Render ('play.tpl');

@@ -1,7 +1,7 @@
 <?php
 
 // Init view
-View::initView('upload');
+$view->initView('upload');
 Plugin::triggerEvent('upload.start');
 
 // Verify if user is logged in

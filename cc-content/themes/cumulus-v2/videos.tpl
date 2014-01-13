@@ -24,7 +24,7 @@
 
 <?php if (!empty ($browse_videos)): ?>
     <div class="videos_list">
-        <?php View::RepeatingBlock('video.tpl', $browse_videos); ?>
+        <?php $view->RepeatingBlock('video.tpl', $browse_videos); ?>
     </div>
     <?=$pagination->Paginate()?>
 <?php else: ?>
