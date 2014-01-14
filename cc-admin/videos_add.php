@@ -1,15 +1,19 @@
 <?php
 
-// Include required files
+// Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass('User');
-App::LoadClass('Video');
+
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
+App::EnableUploadsCheck();
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User($logged_in);
-Functions::RedirectIf(User::CheckPermissions('admin_panel', $admin), HOST . '/myaccount/');
-App::EnableUploadsCheck();
+$videoMapper = new VideoMapper();
+$videoService = new VideoService();
+$video = new Video();
 $page_title = 'Add Video';
 $categories = array();
 $data = array();
@@ -20,16 +24,16 @@ $php_path = Settings::Get('php');
 $admin_js[] = ADMIN . '/extras/uploadify/uploadify.plugin.js';
 $admin_js[] = ADMIN . '/js/uploadify.js';
 $admin_css[] = ADMIN . '/extras/uploadify/uploadify.css';
-$private_url = Video::GeneratePrivate();
+$private_url = $videoService->generatePrivate();
 $tempFile = null;
 $videoUploadMessage = null;
 $originalVideoName = null;
 
 // Retrieve Category names
-$query = "SELECT cat_id, cat_name FROM " . DB_PREFIX . "categories";
-$result = $db->Query($query);
-while ($row = $db->FetchObj($result)) {
-    $categories[$row->cat_id] = $row->cat_name;
+$query = "SELECT category_id, name FROM " . DB_PREFIX . "categories";
+$result = $db->fetchAll($query);
+foreach ($result as $row) {
+    $categories[$row['category_id']] = $row['name'];
 }
 
 // Handle form if submitted
@@ -46,72 +50,72 @@ if (isset($_POST['submitted'])) {
 
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space($_POST['title'])) {
-        $data['title'] = trim($_POST['title']);
+        $video->title = trim($_POST['title']);
     } else {
         $errors['title'] = 'Invalid title';
     }
 
     // Validate description
     if (!empty($_POST['description']) && !ctype_space($_POST['description'])) {
-        $data['description'] = trim ($_POST['description']);
+        $video->description = trim ($_POST['description']);
     } else {
         $errors['description'] = 'Invalid description';
     }
 
     // Validate tags
     if (!empty($_POST['tags']) && !ctype_space($_POST['tags'])) {
-        $data['tags'] = trim($_POST['tags']);
+        $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
         $errors['tags'] = 'Invalid tags';
     }
 
     // Validate cat_id
     if (!empty($_POST['cat_id']) && is_numeric($_POST['cat_id'])) {
-        $data['cat_id'] = $_POST['cat_id'];
+        $video->categoryId = $_POST['cat_id'];
     } else {
         $errors['cat_id'] = 'Invalid category';
     }
 
     // Validate disable embed
     if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
-        $data['disable_embed'] = '1';
+        $video->disableEmbed = true;
     } else {
-        $data['disable_embed'] = '0';
+        $video->disableEmbed = false;
     }
 
     // Validate gated
     if (!empty($_POST['gated']) && $_POST['gated'] == '1') {
-        $data['gated'] = '1';
+        $video->gated = true;
     } else {
-        $data['gated'] = '0';
+        $video->gated = false;
     }
 
     // Validate private
     if (!empty($_POST['private']) && $_POST['private'] == '1') {
-        $data['private'] = '1';
-        if (!empty($_POST['private_url']) && strlen($_POST['private_url']) == 7 && !Video::Exist(array('private_url' => $_POST['private_url']))) {
-            $data['private_url'] = trim($_POST['private_url']);
-            $private_url = $data['private_url'];
+        $video->private = true;
+        if (!empty($_POST['private_url']) && strlen($_POST['private_url']) == 7 && !$videoMapper->getVideoByCustom(array('private_url' => $_POST['private_url']))) {
+            $video->privateUrl = trim($_POST['private_url']);
+            $private_url = $video->privateUrl;
         } else {
             $errors['private_url'] = 'Invalid private URL';
         }
     } else {
-        $data['private'] = '0';
+        $video->private = false;
     }
 
     // Update video if no errors were made
     if (empty($errors)) {
 
         // Create record
-        $data['user_id'] = $admin->user_id;
-        $data['original_extension'] = Functions::GetExtension($tempFile);
-        $data['filename'] = basename($tempFile, '.' . $data['original_extension']);
-        $data['status'] = 'pending conversion';
-        $id = Video::Create($data);
+        $video->userId = $adminUser->userId;
+        $video->originalExtension = Functions::GetExtension($tempFile);
+        $video->filename = basename($tempFile, '.' . $video->originalExtension);
+        $video->status = 'pendingConversion';
+        $videoId = $videoMapper->save($video);
 
         // Begin encoding
         $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
-        $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $id . '" >> ' .  $cmd_output . ' &';
+        $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
         exec($converter_cmd);
 
         // Output message
@@ -170,44 +174,44 @@ include('header.php');
             
             <div class="row <?=(isset($errors['title'])) ? 'error' : ''?>">
                 <label>Title:</label>
-                <input class="text" type="text" name="title" value="<?=(isset($data['title'])) ? htmlspecialchars($data['title']) : ''?>" />
+                <input class="text" type="text" name="title" value="<?=(!empty($video->title)) ? htmlspecialchars($video->title) : ''?>" />
             </div>
 
             <div class="row <?=(isset($errors['description'])) ? 'error' : ''?>">
                 <label>Description:</label>
-                <textarea rows="7" cols="50" class="text" name="description"><?=(isset($data['description'])) ? htmlspecialchars($data['description']) : ''?></textarea>
+                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty($video->description)) ? htmlspecialchars($video->description) : ''?></textarea>
             </div>
 
             <div class="row <?=(isset($errors['tags'])) ? 'error' : ''?>">
                 <label>Tags:</label>
-                <input class="text" type="text" name="tags" value="<?=(isset($data['tags'])) ? htmlspecialchars($data['tags']) : ''?>" /> (Comma Delimited)
+                <input class="text" type="text" name="tags" value="<?=(!empty($video->tags)) ? htmlspecialchars(implode(', ', $video->tags)) : ''?>" /> (Comma Delimited)
             </div>
 
             <div class="row <?=(isset($errors['cat_id'])) ? 'error' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
                 <?php foreach ($categories as $cat_id => $cat_name): ?>
-                    <option value="<?=$cat_id?>" <?=(isset($data['cat_id']) && $data['cat_id'] == $cat_id) ? '' : 'selected="selected"'?>><?=$cat_name?></option>
+                    <option value="<?=$cat_id?>" <?=(!empty($video->categoryId) && $video->categoryId == $cat_id) ? '' : 'selected="selected"'?>><?=$cat_name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="row-shift">
-                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty($errors) && !empty($data['disable_embed'])) ? 'checked="checked"' : ''?> />
+                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty($video->disableEmbed)) ? 'checked="checked"' : ''?> />
                 <label for="disable-embed">Disable Embed</label> <em>(Video cannot be embedded on third party sites)</em>
             </div>
 
             <div class="row-shift">
-                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty($errors) && !empty($data['gated'])) ? 'checked="checked"' : ''?> />
+                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty($video->gated)) ? 'checked="checked"' : ''?> />
                 <label for="gated-video">Gated</label> <em>(Video can only be viewed by members who are logged in)</em>
             </div>
 
             <div class="row-shift">
-                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty($errors) && !empty($data['private'])) ? 'checked="checked"' : ''?> />
+                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty($errors) && !empty($video->private)) ? 'checked="checked"' : ''?> />
                 <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
             </div>
 
-            <div id="private-url" class="row <?=(isset($errors['private_url'])) ? 'error' : ''?> <?=(!empty($errors) && !empty($data['private'])) ? '' : 'hide'?>">
+            <div id="private-url" class="row <?=(isset($errors['private_url'])) ? 'error' : ''?> <?=(!empty($video->private)) ? '' : 'hide'?>">
                 <label>Private URL:</label>
                 <?=HOST?>/private/videos/<span><?=$private_url?></span>/
                 <input type="hidden" name="private_url" value="<?=$private_url?>" />

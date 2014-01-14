@@ -1,30 +1,29 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Flag');
+// Init view
+$view->initView('edit_video');
+Plugin::triggerEvent('edit_video.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$videoMapper = new VideoMapper();
+$videoService = new VideoService();
 $page_title = 'Edit Video';
-$private_url = Video::GeneratePrivate();
+$private_url = $videoService->generatePrivate();
 $categories = array();
 $data = array();
 $errors = array();
 $message = null;
 
-
-
 // Retrieve Category names
-$query = "SELECT cat_id, cat_name FROM " . DB_PREFIX . "categories";
-$result = $db->Query ($query);
-while ($row = $db->FetchObj ($result)) {
-    $categories[$row->cat_id] = $row->cat_name;
+$query = "SELECT category_id, name FROM " . DB_PREFIX . "categories";
+$result = $db->fetchAll($query);
+foreach ($result as $row) {
+    $categories[$row['category_id']] = $row['name'];
 }
 
 
@@ -39,16 +38,15 @@ if (!empty ($_SESSION['list_page'])) {
 
 
 ### Verify a video was provided
-if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
+if (!empty($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] > 0) {
 
     ### Retrieve video information
-    $video = new Video ($_GET['id']);
-    if ($video->private == '1') $private_url = $video->private_url;
-    if (!$video->found || !in_array($video->status, array('approved', 'processing', 'pendingConversion', 'pendingApproval', 'banned'))) {
+    $video = $videoMapper->getVideoById($_GET['id']);
+    if (!$video || !in_array($video->status, array('approved', 'processing', 'pendingConversion', 'pendingApproval', 'banned'))) {
         header ('Location: ' . ADMIN . '/videos.php');
         exit();
     }
-
+    if ($video->private) $private_url = $video->privateUrl;
 } else {
     header ('Location: ' . ADMIN . '/videos.php');
     exit();
@@ -66,7 +64,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
-        $data['title'] = htmlspecialchars (trim ($_POST['title']));
+        $video->title = trim($_POST['title']);
     } else {
         $errors['title'] = 'Invalid title';
     }
@@ -74,7 +72,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate description
     if (!empty ($_POST['description']) && !ctype_space ($_POST['description'])) {
-        $data['description'] = htmlspecialchars (trim ($_POST['description']));
+        $video->description = trim ($_POST['description']);
     } else {
         $errors['description'] = 'Invalid description';
     }
@@ -82,7 +80,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate tags
     if (!empty ($_POST['tags']) && !ctype_space ($_POST['tags'])) {
-        $data['tags'] = htmlspecialchars (trim ($_POST['tags']));
+        $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
         $errors['tags'] = 'Invalid tags';
     }
@@ -90,7 +88,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate cat_id
     if (!empty ($_POST['cat_id']) && is_numeric ($_POST['cat_id'])) {
-        $data['cat_id'] = $_POST['cat_id'];
+        $video->categoryId = $_POST['cat_id'];
     } else {
         $errors['cat_id'] = 'Invalid category';
     }
@@ -98,23 +96,23 @@ if (isset ($_POST['submitted'])) {
 
     // Validate disable embed
     if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
-        $data['disable_embed'] = '1';
+        $video->disableEmbed = true;
     } else {
-        $data['disable_embed'] = '0';
+        $video->disableEmbed = false;
     }
 
 
     // Validate gated
     if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
-        $data['gated'] = '1';
+        $video->gated = true;
     } else {
-        $data['gated'] = '0';
+        $video->gated = false;
     }
 
 
     // Validate private
     if (!empty ($_POST['private']) && $_POST['private'] == '1') {
-        $data['private'] = '1';
+        $video->private = true;
 
         try {
 
@@ -197,15 +195,15 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" method="post">
+        <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" method="post">
 
             <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
                 <?php if (!in_array($video->status, array('processing', 'pendingConversion'))): ?>
                     <select name="status" class="dropdown">
-                        <option value="approved"<?=(isset ($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                        <option value="pendingApproval"<?=(isset ($data['status']) && $data['status'] == 'pendingApproval') || (!isset ($data['status']) && $video->status == 'pendingApproval')?' selected="selected"':''?>>Pending</option>
-                        <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                        <option value="approved"<?=(isset ($video->status) && $video->status == 'approved') || (!isset ($video->status) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                        <option value="pendingApproval"<?=(isset ($video->status) && $video->status == 'pendingApproval') || (!isset ($video->status) && $video->status == 'pendingApproval')?' selected="selected"':''?>>Pending</option>
+                        <option value="banned"<?=(isset ($video->status) && $video->status == 'banned') || (!isset ($video->status) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
                     </select>
                 <?php else: ?>
                     <?=($video->status == 'processing') ? 'Processing' : 'Pending Conversion'?>
@@ -215,49 +213,49 @@ include ('header.php');
 
             <div class="row<?=(isset ($errors['title'])) ? ' error' : ''?>">
                 <label>Title:</label>
-                <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($data['title'])) ? $data['title'] : $video->title?>" />
+                <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($video->title)) ? $video->title : $video->title?>" />
             </div>
 
             <div class="row<?=(isset ($errors['description'])) ? ' error' : ''?>">
                 <label>Description:</label>
-                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($errors) && isset ($data['description'])) ? $data['description'] : $video->description?></textarea>
+                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($errors) && isset ($video->description)) ? $video->description : $video->description?></textarea>
             </div>
 
             <div class="row<?=(isset ($errors['tags'])) ? ' error' : ''?>">
                 <label>Tags:</label>
-                <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($data['tags'])) ? $data['tags'] : implode (', ', $video->tags)?>" /> (Comma Delimited)
+                <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($video->tags)) ? $video->tags : implode (', ', $video->tags)?>" /> (Comma Delimited)
             </div>
 
             <div class="row<?=(isset ($errors['cat_id'])) ? ' error' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
                 <?php foreach ($categories as $cat_id => $cat_name): ?>
-                    <option value="<?=$cat_id?>"<?=(isset ($data['cat_id']) && $data['cat_id'] == $cat_id) || (!isset ($data['cat_id']) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
+                    <option value="<?=$cat_id?>"<?=(isset ($video->categoryd) && $video->cat_id == $cat_id) || (!isset ($video->cat_id) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="row-shift">
-                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors)) ? ($data['disable_embed'] == '1' ? 'checked="checked"' : '') : ($video->disable_embed == '1' ? 'checked="checked"' : '')?> />
+                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors)) ? ($video->disableEmbed ? 'checked="checked"' : '') : ($video->disableEmbed ? 'checked="checked"' : '')?> />
                 <label for="disable-embed">Disable Embed</label> <em>(Video cannot be embedded on third party sites)</em>
             </div>
 
             <div class="row-shift">
-                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors)) ? ($data['gated'] == '1' ? 'checked="checked"' : '') : ($video->gated == '1' ? 'checked="checked"' : '')?> />
+                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors)) ? ($video->gated ? 'checked="checked"' : '') : ($video->gated ? 'checked="checked"' : '')?> />
                 <label for="gated-video">Gated</label> <em>(Video can only be viewed by members who are logged in)</em>
             </div>
 
             <div class="row-shift">
-                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors)) ? ($data['private'] == '1' ? 'checked="checked"' : '') : ($video->private == '1' ? 'checked="checked"' : '')?> />
+                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors)) ? ($video->private ? 'checked="checked"' : '') : ($video->private ? 'checked="checked"' : '')?> />
                 <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
             </div>
 
-            <div id="private-url" class="row <?=(!empty ($errors)) ? ($data['private'] == '1' ? '' : 'hide') : ($video->private == '1' ? '' : 'hide')?>">
+            <div id="private-url" class="row <?=(!empty ($errors)) ? ($video->private ? '' : 'hide') : ($video->private ? '' : 'hide')?>">
 
                 <label <?=(isset ($errors['private_url'])) ? 'class="error"' : ''?>>Private URL:</label>
-                <?=HOST?>/private/videos/<span><?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?></span>/
+                <?=HOST?>/private/videos/<span><?=(!empty ($errors) && !empty ($video->privateUrl)) ? $video->privateUrl : $private_url?></span>/
 
-                <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($data['private_url'])) ? $data['private_url'] : $private_url?>" />
+                <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($video->privateUrl)) ? $video->privateUrl : $private_url?>" />
                 <a href="" class="small">Regenerate</a>
             </div>
 
