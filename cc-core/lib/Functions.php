@@ -47,8 +47,8 @@ class Functions {
      * @return void If condition evaluates to empty value user is redirected, nothing otherwise
      */
     static function RedirectIf ($condition, $redirect) {
-        if (PREVIEW_LANG) $redirect = Functions::AppendQueryString ($redirect, array ('preview_lang' => PREVIEW_LANG));
-        if (PREVIEW_THEME) $redirect = Functions::AppendQueryString ($redirect, array ('preview_theme' => PREVIEW_THEME));
+        if (defined('PREVIEW_LANG') && PREVIEW_LANG) $redirect = Functions::AppendQueryString ($redirect, array ('preview_lang' => PREVIEW_LANG));
+        if (defined('PREVIEW_THEME') && PREVIEW_THEME) $redirect = Functions::AppendQueryString ($redirect, array ('preview_theme' => PREVIEW_THEME));
         if (empty ($condition)) {
             header ("Location: $redirect");
             exit();

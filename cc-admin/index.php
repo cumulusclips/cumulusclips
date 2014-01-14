@@ -1,17 +1,17 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $page_title = 'CumulusClips Admin Panel - Dashboard';
 $first_run = null;
-
 
 // Execute post install / first run operations
 if (isset ($_GET['first_run']) && file_exists (DOC_ROOT . '/cc-install')) {
@@ -20,10 +20,8 @@ if (isset ($_GET['first_run']) && file_exists (DOC_ROOT . '/cc-install')) {
     $first_run = true;
 }
 
-
 // Retrieve news from mothership
 if (isset ($_POST['news'])) {
-    
     $curl_handle = curl_init();
     curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/news/');
     curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
@@ -32,29 +30,26 @@ if (isset ($_POST['news'])) {
     curl_close ($curl_handle);
     $news = (!empty ($news)) ? $news : '<strong>Nothing to report.</strong>';
     exit ($news);
-    
 }
 
 // Retrieve Video totals
-$result_videos = $db->Query ("SELECT COUNT(video_id) as count FROM " . DB_PREFIX . "videos WHERE status = 'approved'");
-$videos = $db->FetchObj ($result_videos);
+$result_videos = $db->fetchRow("SELECT COUNT(video_id) as count FROM " . DB_PREFIX . "videos WHERE status = 'approved'");
+$videos = $result_videos['count'];
 
 // Retrieve User totals
-$result_users = $db->Query ("SELECT COUNT(user_id) as count FROM " . DB_PREFIX . "users WHERE status = 'active'");
-$members = $db->FetchObj ($result_users);
+$result_users = $db->fetchRow("SELECT COUNT(user_id) as count FROM " . DB_PREFIX . "users WHERE status = 'active'");
+$members = $result_users['count'];
 
 // Retrieve Comment totals
-$result_comments = $db->Query ("SELECT COUNT(comment_id) as count FROM " . DB_PREFIX . "comments WHERE status = 'approved'");
-$comments = $db->FetchObj ($result_comments);
+$result_comments = $db->fetchRow("SELECT COUNT(comment_id) as count FROM " . DB_PREFIX . "comments WHERE status = 'approved'");
+$comments = $result_comments['count'];
 
 // Retrieve Rating totals
-$result_ratings = $db->Query ("SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings");
-$ratings = $db->FetchObj ($result_ratings);
-
+$result_ratings = $db->fetchRow("SELECT COUNT(rating_id) as count FROM " . DB_PREFIX . "ratings");
+$ratings = $result_ratings['count'];
 
 // Output Header
 include ('header.php');
-
 ?>
 
 <div id="dashboard">
@@ -82,10 +77,10 @@ include ('header.php');
 
     <div class="block">
         <h2>Totals Report</h2>
-        <p><strong>Videos: </strong><?=$videos->count?></p>
-        <p><strong>Members: </strong><?=$members->count?></p>
-        <p><strong>Comments: </strong><?=$comments->count?></p>
-        <p><strong>Ratings: </strong><?=$ratings->count?></p>
+        <p><strong>Videos: </strong><?=$videos?></p>
+        <p><strong>Members: </strong><?=$members?></p>
+        <p><strong>Comments: </strong><?=$comments?></p>
+        <p><strong>Ratings: </strong><?=$ratings?></p>
     </div>
 
 </div>
