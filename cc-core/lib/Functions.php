@@ -1,12 +1,20 @@
 <?php
 
-class Functions {
-    
-    static function flattenArray($array, $key = 0)
+class Functions
+{
+    /**
+     * Return the values from a single column in the input array
+     * Used for PHP versions prior to PHP 5.5
+     * @see http://us2.php.net/manual/en/function.array-column.php
+     * @param array $array A multi-dimensional array (record set) from which to pull a column of values.
+     * @param mixed $columnKey The column of values to return.
+     * @return array Returns an array of values representing a single column from the input array.
+     */
+    static function arrayColumn(array $array, $columnKey = 0)
     {
         $newArray = array();
         foreach ($array as $child) {
-            $newArray[] = $child[$key];
+            $newArray[] = $child[$columnKey];
         }
         return $newArray;
     }

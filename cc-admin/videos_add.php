@@ -30,11 +30,8 @@ $videoUploadMessage = null;
 $originalVideoName = null;
 
 // Retrieve Category names
-$query = "SELECT category_id, name FROM " . DB_PREFIX . "categories";
-$result = $db->fetchAll($query);
-foreach ($result as $row) {
-    $categories[$row['category_id']] = $row['name'];
-}
+$categoryService = new CategoryService();
+$categories = $categoryService->getCategories();
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
@@ -190,8 +187,8 @@ include('header.php');
             <div class="row <?=(isset($errors['cat_id'])) ? 'error' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
-                <?php foreach ($categories as $cat_id => $cat_name): ?>
-                    <option value="<?=$cat_id?>" <?=(!empty($video->categoryId) && $video->categoryId == $cat_id) ? '' : 'selected="selected"'?>><?=$cat_name?></option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?=$category->categoryId?>" <?=(!empty($video->categoryId) && $video->categoryId == $category->categoryId) ? '' : 'selected="selected"'?>><?=$category->name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>

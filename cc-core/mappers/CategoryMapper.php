@@ -4,21 +4,27 @@ class CategoryMapper extends MapperAbstract
 {
     public function getCategoryById($categoryId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE category_id = :categoryId';
-        $dbResults = $db->fetchRow($query, array(':categoryId' => $categoryId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getCategoryByCustom(array('category_id' => $categoryId));
     }
     
     public function getCategoryBySlug($slug)
     {
+        return $this->getCategoryByCustom(array('slug' => $slug));
+    }
+
+    public function getCategoryByCustom(array $params)
+    {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE slug = :slug';
-        $dbResults = $db->fetchRow($query, array(':slug' => $slug));
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {
@@ -68,7 +74,7 @@ class CategoryMapper extends MapperAbstract
         return $categoryId;
     }
     
-    public function getMultipleCategoriesById(array $categoryIds)
+    public function getCategoriesFromList(array $categoryIds)
     {
         $categoryList = array();
         if (empty($categoryIds)) return $categoryList;
@@ -79,8 +85,22 @@ class CategoryMapper extends MapperAbstract
         $result = $db->fetchAll($sql, $categoryIds);
 
         foreach($result as $categoryRecord) {
-            $categoryList[] = $this->_map($categoryRecord);
+            $category = $this->_map($categoryRecord);
+            $categoryList[$category->categoryId] = $category;
         }
         return $categoryList;
+    }
+    
+    /**
+     * Delete a category
+     * @param integer $categoryId ID of category to be deleted
+     * @return void Category is deleted from system
+     */
+    public function delete($categoryId)
+    {
+        $db = Database::GetInstance();
+        Plugin::Trigger('category.delete');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'categories WHERE category_id = :categoryId';
+        $db->query($query, array(':categoryId' => $categoryId));
     }
 }

@@ -24,12 +24,8 @@ $admin_js[] = ADMIN . '/js/fancybox.js';
 
 
 // Retrieve Category names
-$query = "SELECT category_id, name FROM " . DB_PREFIX . "categories";
-$result = $db->fetchAll($query);
-foreach ($result as $row) {
-    $categories[$row['category_id']] = $row['name'];
-}
-
+$categoryService = new CategoryService();
+$categories = $categoryService->getCategories();
 
 
 ### Handle "Delete" video if requested
