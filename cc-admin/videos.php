@@ -49,7 +49,7 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'feature' => 0, 'status' => 'approved'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'featured' => 0, 'status' => 'approved'));
     if ($video) {
         $video->featured = true;
         $videoMapper->save($video);
@@ -63,8 +63,8 @@ else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
 else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'feature' => 1, 'status' => 'approved'));
-    if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'featured' => 1, 'status' => 'approved'));
+    if ($video) {
         $video->featured = false;
         $videoMapper->save($video);
         $message = 'Video has been unfeatured';

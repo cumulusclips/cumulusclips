@@ -16,10 +16,9 @@ class FlagService extends ServiceAbstract
 
     /**
      * Perform flag related action on a record
-     * @param Video|User|Comment $object The id of the record being updated
-     * @param string $type Type of record being updated. Possible values are: video, user, comment
+     * @param Video|User|Comment $object Instance of the content being decided on
      * @param boolean $decision The action to be performed on the record. True bans, False declines the flag
-     * @return void All flags raised against record are updated
+     * @return void All flags raised against content are updated
      */
     public function FlagDecision ($object, $decision)
     {

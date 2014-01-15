@@ -165,7 +165,7 @@ class VideoService extends ServiceAbstract
         $user = $this->_getVideoUser($video);
         $subscriberList = $userService->getSubscribedUsers($user);
         foreach ($subscriberList as $subscriber) {
-            if ($privacyService->OptCheck($subscriber, Privacy::NEW_VIDEO)) {
+            if ($privacyService->optCheck($subscriber, Privacy::NEW_VIDEO)) {
                 $replacements = array (
                     'host'      => HOST,
                     'sitename'  => $config->sitename,
