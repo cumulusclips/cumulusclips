@@ -67,7 +67,7 @@ include ('header.php');
                     <?php endforeach; ?>
                 </select>
                 <input type="submit" value="View Log" class="button" />
-                <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge Logs</a>
+                <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge All Logs</a>
             </form>
         <?php else: ?>
             <p>No log files available.</p>

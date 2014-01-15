@@ -1,14 +1,16 @@
 <?php
 
-// Include required files
+// Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass('User');
-App::LoadClass('Video');
 
-// Load main session and validate theme
-Functions::RedirectIf($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User($logged_in);
-Functions::RedirectIf(User::CheckPermissions('admin_panel', $admin), HOST . '/myaccount/');
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
+
+// Establish page variables, objects, arrays, etc
+$videoService = new VideoService();
 
 // Verify post params are valid
 if (empty($_POST['uploadType']) || !in_array($_POST['uploadType'], array('addon', 'video'))) {
@@ -22,7 +24,7 @@ try {
         $filesize = $config->video_size_limit;
         $extensionList = $config->accepted_video_formats;
         $temp = UPLOAD_PATH . '/temp';
-        $fileName = Video::CreateFilename() . '.';
+        $fileName = $videoService->generateFilename() . '.';
         $createDir = false;
     } else {
         $filesize = 1024*1024*100;

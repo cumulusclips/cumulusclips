@@ -16,23 +16,30 @@ class FlagService extends ServiceAbstract
 
     /**
      * Perform flag related action on a record
-     * @param integer $id The id of the record being updated
+     * @param Video|User|Comment $object The id of the record being updated
      * @param string $type Type of record being updated. Possible values are: video, user, comment
      * @param boolean $decision The action to be performed on the record. True bans, False declines the flag
      * @return void All flags raised against record are updated
      */
-    public function FlagDecision ($id, $type, $decision)
+    public function FlagDecision ($object, $decision)
     {
-        $db = Database::GetInstance();
-        if ($decision) {
-            // Content is being banned - Update flag requests
-            $query = "UPDATE " . DB_PREFIX . "flags SET status = 'approved' WHERE type = '$type' AND id = $id";
-            $db->Query ($query);
+        if ($object instanceof Video) {
+            $type = 'video';
+            $id = $object->videoId;
+        } else if ($object instanceof User) {
+            $type = 'user';
+            $id = $object->userId;
+        } else if ($object instanceof Comment) {
+            $type = 'comment';
+            $id = $object->commentId;
         } else {
-            // Ban request is declined - Update flag requests
-            $query = "UPDATE " . DB_PREFIX . "flags SET status = 'declined' WHERE type = '$type' AND id = $id";
-            $db->Query ($query);
-        } 
+            throw new Exception('Unknown content type');
+        }
+        
+        $db = Registry::get('db');
+        $status = ($decision) ? 'approved' : 'declined';
+        $query = "UPDATE " . DB_PREFIX . "flags SET status = '$status' WHERE type = '$type' AND object_id = $id";
+        $db->query($query);
     }
     
     /**

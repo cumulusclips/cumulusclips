@@ -66,7 +66,7 @@ class CommentService extends ServiceAbstract
                 $privacyService = new PrivacyService();
                 $userMapper = new UserMapper();
                 $user = $userMapper->getUserById($video->userId);
-                if ($comment->userId != $video->userId && $privacyService->OptCheck($user, 'videoComment')) {
+                if ($comment->userId != $video->userId && $privacyService->OptCheck($user, Privacy::VIDEO_COMMENT)) {
                     $replacements = array (
                         'host'      => HOST,
                         'sitename'  => $config->sitename,

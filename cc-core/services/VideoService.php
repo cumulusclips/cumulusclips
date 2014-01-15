@@ -130,7 +130,7 @@ class VideoService extends ServiceAbstract
                 $videoMapper->save($video);
                 
                 // Send video owner notification if opted-in
-                $this->_notifyUserVideoIsReady();
+                $this->_notifyUserVideoIsReady($video);
 
                 // Send subscribers notification of new video
                 $this->_notifySubscribersOfNewVideo($video);
@@ -165,7 +165,7 @@ class VideoService extends ServiceAbstract
         $user = $this->_getVideoUser($video);
         $subscriberList = $userService->getSubscribedUsers($user);
         foreach ($subscriberList as $subscriber) {
-            if ($privacyService->OptCheck($subscriber, 'new_video')) {
+            if ($privacyService->OptCheck($subscriber, Privacy::NEW_VIDEO)) {
                 $replacements = array (
                     'host'      => HOST,
                     'sitename'  => $config->sitename,
@@ -191,7 +191,7 @@ class VideoService extends ServiceAbstract
         $config = Registry::get('config');
         $user = $this->_getVideoUser($video);
         $privacyService = new PrivacyService();
-        if ($privacyService->optCheck($user, 'videoReady')) {
+        if ($privacyService->optCheck($user, Privacy::VIDEO_READY)) {
             $replacements = array(
                 'host'      => HOST,
                 'sitename'  => $config->sitename,

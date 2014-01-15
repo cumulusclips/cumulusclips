@@ -108,7 +108,7 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
         $video->status = 'banned';
         $videoMapper->save($video);
         $flagService = new FlagService();
-        $flagService->flagDecision($video, 'video', true);
+        $flagService->flagDecision($video, true);
         $message = 'Video has been banned';
         $message_type = 'success';
     }

@@ -124,7 +124,7 @@ if (isset($_POST['submitted'])) {
         $originalVideoName = null;
         $message = 'Video has been created.';
         $message_type = 'success';
-        unset($data);
+        $video = null;
         
     } else {
         $message = 'The following errors were found. Please correct them and try again.';

@@ -89,7 +89,7 @@ if (isset($_POST['submitted'])) {
 
         // Send recipient email notification if opted-in
         $privacyService = new PrivacyService();
-        if ($privacyService->optCheck($recipient, 'newMessage')) {
+        if ($privacyService->optCheck($recipient, Privacy::NEW_MESSAGE)) {
             $replacements = array (
                 'host'      => HOST,
                 'sitename'  => $config->sitename,

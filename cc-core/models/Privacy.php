@@ -2,6 +2,11 @@
 
 class Privacy
 {
+    const NEW_VIDEO = 'new_video';
+    const VIDEO_COMMENT = 'video_comment';
+    const NEW_MESSAGE = 'new_message';
+    const VIDEO_READY = 'video_ready';
+
     /**
      * @var int
      */
