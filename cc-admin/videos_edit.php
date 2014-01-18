@@ -1,13 +1,13 @@
 <?php
 
-// Init view
-$view->initView('edit_video');
-Plugin::triggerEvent('edit_video.start');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
@@ -20,11 +20,8 @@ $errors = array();
 $message = null;
 
 // Retrieve Category names
-$query = "SELECT category_id, name FROM " . DB_PREFIX . "categories";
-$result = $db->fetchAll($query);
-foreach ($result as $row) {
-    $categories[$row['category_id']] = $row['name'];
-}
+$categoryService = new CategoryService();
+$categories = $categoryService->getCategories();
 
 
 
@@ -119,28 +116,27 @@ if (isset ($_POST['submitted'])) {
             // Validate private URL
             if (empty ($_POST['private_url'])) throw new Exception ('error');
             if (strlen ($_POST['private_url']) != 7) throw new Exception ('error');
-            $vid = Video::Exist (array ('private_url' => $_POST['private_url']));
-            if ($vid && $vid != $video->video_id) throw new Exception ('error');
+            $duplicateVideo = $videoMapper->getVideoByCustom(array('private_url' => $_POST['private_url']));
+            if ($duplicateVideo && $duplicateVideo->videoId != $video->videoId) throw new Exception ('error');
 
             // Set private URL
-            $data['private_url'] = htmlspecialchars (trim ($_POST['private_url']));
-            $private_url = $data['private_url'];
+            $video->privateUrl = trim($_POST['private_url']);
+            $private_url = $video->privateUrl;
 
         } catch (Exception $e) {
             $errors['private_url'] = 'Invalid private URL';
         }
 
     } else {
-        $data['private'] = '0';
-        $data['private_url'] = '';
-        $private_url = Video::GeneratePrivate();
+        $video->private = false;
+        $video->privateUrl = null;
     }
 
 
     // Validate status
     if (!in_array($video->status, array('processing', 'pendingConversion'))) {
         if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-            $data['status'] = htmlspecialchars (trim ($_POST['status']));
+            $video->status = $newStatus = trim ($_POST['status']);
         } else {
             $errors['status'] = 'Invalid status';
         }
@@ -151,21 +147,22 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Perform addional actions based on status change
-        if (isset($data['status']) && $data['status'] != $video->status) {
+        if (isset($newStatus) && $newStatus != $video->status) {
 
             // Handle "Approve" action
-            if ($data['status'] == 'approved') {
-                $video->Approve ('approve');
+            if ($newStatus == 'approved') {
+                $videoService->Approve ('approve');
             }
 
             // Handle "Ban" action
-            else if ($data['status'] == 'banned') {
-                Flag::FlagDecision ($video->video_id, 'video', true);
+            else if ($newStatus == 'banned') {
+                $flagService = new FlagService();
+                $flagService->flagDecision($video, true);
             }
 
         }
 
-        $video->Update ($data);
+        $videoMapper->save($video);
         $message = 'Video has been updated.';
         $message_type = 'success';
     } else {
@@ -213,49 +210,49 @@ include ('header.php');
 
             <div class="row<?=(isset ($errors['title'])) ? ' error' : ''?>">
                 <label>Title:</label>
-                <input class="text" type="text" name="title" value="<?=(!empty ($errors) && isset ($video->title)) ? $video->title : $video->title?>" />
+                <input class="text" type="text" name="title" value="<?=htmlspecialchars($video->title)?>" />
             </div>
 
             <div class="row<?=(isset ($errors['description'])) ? ' error' : ''?>">
                 <label>Description:</label>
-                <textarea rows="7" cols="50" class="text" name="description"><?=(!empty ($errors) && isset ($video->description)) ? $video->description : $video->description?></textarea>
+                <textarea rows="7" cols="50" class="text" name="description"><?=htmlspecialchars($video->description)?></textarea>
             </div>
 
             <div class="row<?=(isset ($errors['tags'])) ? ' error' : ''?>">
                 <label>Tags:</label>
-                <input class="text" type="text" name="tags" value="<?=(!empty ($errors) && isset ($video->tags)) ? $video->tags : implode (', ', $video->tags)?>" /> (Comma Delimited)
+                <input class="text" type="text" name="tags" value="<?=htmlspecialchars(implode (', ', $video->tags))?>" /> (Comma Delimited)
             </div>
 
             <div class="row<?=(isset ($errors['cat_id'])) ? ' error' : ''?>">
                 <label>Category:</label>
                 <select class="dropdown" name="cat_id">
-                <?php foreach ($categories as $cat_id => $cat_name): ?>
-                    <option value="<?=$cat_id?>"<?=(isset ($video->categoryd) && $video->cat_id == $cat_id) || (!isset ($video->cat_id) && $video->cat_id == $cat_id) ? ' selected="selected"' : ''?>><?=$cat_name?></option>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?=$category->categoryId?>"<?=($video->categoryId == $category->categoryId) ? ' selected="selected"' : ''?>><?=$category->name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="row-shift">
-                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=(!empty ($errors)) ? ($video->disableEmbed ? 'checked="checked"' : '') : ($video->disableEmbed ? 'checked="checked"' : '')?> />
+                <input id="disable-embed" type="checkbox" name="disable_embed" value="1" <?=$video->disableEmbed ? 'checked="checked"' : ''?> />
                 <label for="disable-embed">Disable Embed</label> <em>(Video cannot be embedded on third party sites)</em>
             </div>
 
             <div class="row-shift">
-                <input id="gated-video" type="checkbox" name="gated" value="1" <?=(!empty ($errors)) ? ($video->gated ? 'checked="checked"' : '') : ($video->gated ? 'checked="checked"' : '')?> />
+                <input id="gated-video" type="checkbox" name="gated" value="1" <?=$video->gated ? 'checked="checked"' : ''?> />
                 <label for="gated-video">Gated</label> <em>(Video can only be viewed by members who are logged in)</em>
             </div>
 
             <div class="row-shift">
-                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty ($errors)) ? ($video->private ? 'checked="checked"' : '') : ($video->private ? 'checked="checked"' : '')?> />
+                <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=$video->private ? 'checked="checked"' : ''?> />
                 <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
             </div>
 
-            <div id="private-url" class="row <?=(!empty ($errors)) ? ($video->private ? '' : 'hide') : ($video->private ? '' : 'hide')?>">
+            <div id="private-url" class="row <?=$video->private ? '' : 'hide'?>">
 
                 <label <?=(isset ($errors['private_url'])) ? 'class="error"' : ''?>>Private URL:</label>
-                <?=HOST?>/private/videos/<span><?=(!empty ($errors) && !empty ($video->privateUrl)) ? $video->privateUrl : $private_url?></span>/
+                <?=HOST?>/private/videos/<span><?=(!empty ($video->privateUrl)) ? $video->privateUrl : $private_url?></span>/
 
-                <input type="hidden" name="private_url" value="<?=(!empty ($errors) && !empty ($video->privateUrl)) ? $video->privateUrl : $private_url?>" />
+                <input type="hidden" name="private_url" value="<?=(!empty ($video->privateUrl)) ? $video->privateUrl : $private_url?>" />
                 <a href="" class="small">Regenerate</a>
             </div>
 
