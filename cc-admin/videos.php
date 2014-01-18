@@ -175,7 +175,7 @@ $_SESSION['list_page'] = $pagination->GetURL();
 $query .= " LIMIT $start_record, $records_per_page";
 $videoResults = $db->fetchAll($query, $queryParams);
 $videoList = $videoMapper->getVideosFromList(
-    Functions::flattenArray($videoResults, 'video_id')
+    Functions::arrayColumn($videoResults, 'video_id')
 );
 
 

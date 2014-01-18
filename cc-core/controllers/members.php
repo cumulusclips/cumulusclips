@@ -25,7 +25,7 @@ $userMapper = new UserMapper();
 $query .= " LIMIT $start_record, $records_per_page";
 $userResults = $db->fetchAll($query);
 $view->vars->userResults = $userMapper->getUsersFromList(
-    Functions::flattenArray($userResults, 'user_id')
+    Functions::arrayColumn($userResults, 'user_id')
 );
 
 // Output Page

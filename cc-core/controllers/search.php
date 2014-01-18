@@ -57,7 +57,7 @@ Plugin::triggerEvent('search.search');
 $searchResult = $db->fetchAll($query, array(':keyword' => $keyword));
 $videoMapper = new VideoMapper();
 $view->vars->search_videos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($searchResult, 'video_id')
+    Functions::arrayColumn($searchResult, 'video_id')
 );
 
 // Output Page

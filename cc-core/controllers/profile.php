@@ -44,7 +44,7 @@ $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $view
 Plugin::triggerEvent('profile.load_recent_videos');
 $memberVideosResults = $db->fetchAll($query);
 $view->vars->result_videos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($memberVideosResults, 'video_id')
+    Functions::arrayColumn($memberVideosResults, 'video_id')
 );
 
 // Update Member's profile view count
@@ -57,7 +57,7 @@ $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = " . $
 Plugin::triggerEvent('profile.load_comments');
 $memberCommentsResults = $db->fetchAll($query);
 $view->vars->comment_list = $commentMapper->getCommentsFromList(
-    Functions::flattenArray($memberCommentsResults, 'comment_id')
+    Functions::arrayColumn($memberCommentsResults, 'comment_id')
 );
 
 // Output Page

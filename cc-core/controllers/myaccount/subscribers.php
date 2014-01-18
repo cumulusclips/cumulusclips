@@ -27,7 +27,7 @@ $query .= " LIMIT $start_record, $records_per_page";
 $subscriberResults = $db->fetchAll($query);
 $userMapper = new UserMapper();
 $view->vars->subscribers = $userMapper->getUsersFromList(
-    Functions::flattenArray($subscriberResults, 'user_id')
+    Functions::arrayColumn($subscriberResults, 'user_id')
 );
 
 // Output page

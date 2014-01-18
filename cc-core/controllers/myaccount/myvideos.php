@@ -43,7 +43,7 @@ $start_record = $view->vars->pagination->GetStartRecord();
 $query .= " LIMIT $start_record, $records_per_page";
 $resultVideos = $db->fetchAll($query);
 $view->vars->userVideos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($resultVideos, 'video_id')
+    Functions::arrayColumn($resultVideos, 'video_id')
 );
 
 // Output page

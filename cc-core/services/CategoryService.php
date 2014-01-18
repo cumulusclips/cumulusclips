@@ -13,7 +13,7 @@ class CategoryService extends ServiceAbstract
         $query = "SELECT category_id FROM " . DB_PREFIX . "categories ORDER BY name ASC";
         $categoryResults = $db->fetchAll($query);
         return $categoryMapper->getCategoriesFromList(
-            Functions::flattenArray($categoryResults, 'category_id')
+            Functions::arrayColumn($categoryResults, 'category_id')
         );
     }
 }

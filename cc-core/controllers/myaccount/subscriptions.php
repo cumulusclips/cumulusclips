@@ -40,7 +40,7 @@ $start_record = $view->vars->pagination->getStartRecord();
 $query .= " LIMIT $start_record, $records_per_page";
 $subscriptionResults = $db->fetchAll($query);
 $view->vars->subscriptions = $userMapper->getUsersFromList(
-    Functions::flattenArray($subscriptionResults, 'member')
+    Functions::arrayColumn($subscriptionResults, 'member')
 );
 
 // Output page

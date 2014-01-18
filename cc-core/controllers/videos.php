@@ -68,7 +68,7 @@ $videoMapper = new VideoMapper();
 $query .= " LIMIT $start_record, $records_per_page";
 $result = $db->fetchAll($query);
 $view->vars->browse_videos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($result, 'video_id')
+    Functions::arrayColumn($result, 'video_id')
 );
 
 // Output Page

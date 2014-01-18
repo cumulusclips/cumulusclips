@@ -24,7 +24,7 @@ $view->vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' ORDER BY video_id DESC LIMIT 3";
 $recentResults = $db->fetchAll($query);
 $view->vars->recentVideos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($recentResults, 'video_id')
+    Functions::arrayColumn($recentResults, 'video_id')
 );
 
 // Output Page

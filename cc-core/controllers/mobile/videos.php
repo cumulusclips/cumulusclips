@@ -21,7 +21,7 @@ $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved'
 $view->vars->videos = array();
 $videoResults = $db->fetchAll($query);
 $view->vars->videos = $videoMapper->getVideosFromList(
-    Functions::flattenArray($videoResults, 'video_id')
+    Functions::arrayColumn($videoResults, 'video_id')
 );
 
 // Output Page

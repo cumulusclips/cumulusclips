@@ -24,7 +24,7 @@ if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT 20";
     $videoResults = $db->fetchAll($query, array(':keyword' => $keyword));
     $view->vars->searchVideos = $videoMapper->getVideosFromList(
-        Functions::flattenArray($videoResults, 'video_id')
+        Functions::arrayColumn($videoResults, 'video_id')
     );
 }
 

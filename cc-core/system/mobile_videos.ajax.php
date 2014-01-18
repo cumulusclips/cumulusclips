@@ -16,7 +16,7 @@ $block = (isset ($_POST['block'])) ? $_POST['block'] . '.tpl' : null;
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT :start, 20";
 $videoMapper = new VideoMapper();
 $videoResults = $db->fetchAll($query, array(':start' => $start));
-$videoList = $videoMapper->getVideosFromList(Functions::flattenArray($videoResults, 'video_id'));
+$videoList = $videoMapper->getVideosFromList(Functions::arrayColumn($videoResults, 'video_id'));
 
 // Output video list in requested format
 if ($block) {

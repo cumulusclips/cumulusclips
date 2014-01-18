@@ -18,7 +18,7 @@ $keyword = $trim($_POST['keyword']);
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT :start, 20";
 $videoResults = $db->fetchAll($query, array(':keyword' => $keyword, ':start' => $start));
 $videoMapper = new VideoMapper();
-$videoList = $videoMapper->getVideosFromList(Functions::flattenArray($videoResults, 'video_id'));
+$videoList = $videoMapper->getVideosFromList(Functions::arrayColumn($videoResults, 'video_id'));
 
 // Output video list in requested format
 if ($block) {
