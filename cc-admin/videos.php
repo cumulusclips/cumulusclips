@@ -280,7 +280,7 @@ include ('header.php');
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
-                        <td class="category"><?=$categories[$video->categoryId]?></td>
+                        <td class="category"><?=$categories[$video->categoryId]->name?></td>
                         <td><?=$video->username?></td>
                         <td><?=Functions::DateFormat('m/d/Y',$video->dateCreated)?></td>
                     </tr>

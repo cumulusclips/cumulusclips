@@ -98,7 +98,7 @@ class CategoryMapper extends MapperAbstract
      */
     public function delete($categoryId)
     {
-        $db = Database::GetInstance();
+        $db = Registry::get('db');
         Plugin::Trigger('category.delete');
         $query = 'DELETE FROM ' . DB_PREFIX . 'categories WHERE category_id = :categoryId';
         $db->query($query, array(':categoryId' => $categoryId));

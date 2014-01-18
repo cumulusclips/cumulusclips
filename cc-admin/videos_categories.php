@@ -37,7 +37,7 @@ if (isset ($_POST['submitted_add'])) {
         $category->slug = Functions::CreateSlug (trim ($_POST['cat_name']));
         $category->name = trim($_POST['cat_name']);
         
-        if ($categoryMapper->getCategoryBySlug($data['slug'])) {
+        if ($categoryMapper->getCategoryBySlug($category->slug)) {
             throw new Exception ('Category name or slug already exists. Please note that in the slug special characters are replaced by hyphens.');
         }
 
@@ -125,7 +125,7 @@ if (isset ($_POST['submitted_edit'])) {
 $query = "SELECT " . DB_PREFIX . "categories.category_id, name, COUNT(video_id) AS video_count ";
 $query .= "FROM " . DB_PREFIX . "categories LEFT JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "categories.category_id = " . DB_PREFIX . "videos.category_id ";
 $query .= "GROUP BY " . DB_PREFIX . "categories.category_id ORDER BY name asc";
-$categories = $db->fetchAll($query, PDO::FETCH_OBJ);
+$categories = $db->fetchAll($query, array(), PDO::FETCH_OBJ);
 
 
 // Output Header
@@ -184,7 +184,7 @@ include ('header.php');
 
     <?php else: ?>
         <div class="block">
-            <p><strong><?=$categories[0]->cat_name?></strong> (<?=$categories[0]->video_count?> videos)</p>
+            <p><strong><?=$categories[0]->name?></strong> (<?=$categories[0]->video_count?> videos)</p>
         </div>
     <?php endif; ?>
 
