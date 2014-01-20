@@ -101,6 +101,23 @@ class CommentService extends ServiceAbstract
     }
     
     /**
+     * Retrieve avatar image to display for a comment's author
+     * @param Comment $comment Instance of comment to find avatar for
+     * @return string Returns URL to avatar image of comment's author, if any, or default avatar image
+     */
+    public function getCommentAvatar(Comment $comment)
+    {
+        if (empty($comment->userId)) {
+            return View::getView()->getFallbackUrl('images/avatar.gif');
+        } else {
+            $userService = new UserService();
+            $userMapper = new UserMapper();
+            $user = $userMapper->getUserById($comment->userId);
+            return $userService->getAvatarUrl($user);
+        }
+    }
+    
+    /**
      * Retrieve instance of Comment mapper
      * @return CommentMapper Mapper is returned
      */

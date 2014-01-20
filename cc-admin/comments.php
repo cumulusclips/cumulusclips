@@ -1,18 +1,18 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Comment');
-App::LoadClass ('Video');
-App::LoadClass ('Flag');
-App::LoadClass ('Pagination');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$commentMapper = new CommentMapper();
+$commentService = new CommentService();
+$videoMapper = new VideoMapper();
 $records_per_page = 9;
 $url = ADMIN . '/comments.php';
 $query_string = array();
@@ -22,11 +22,12 @@ $sub_header = null;
 
 
 ### Handle "Delete" action
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
+if (!empty ($_GET['delete']) && is_numeric ($_GET['delete']) && $_GET['delete'] > 0) {
 
     // Validate id
-    if (Comment::Exist (array ('comment_id' => $_GET['delete']))) {
-        Comment::Delete ($_GET['delete']);
+    $comment = $commentMapper->getCommentById($_GET['delete']);
+    if ($comment) {
+        $commentService->delete($comment);
         $message = 'Comment has been deleted';
         $message_type = 'success';
     }
@@ -35,12 +36,12 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
 
 ### Handle "Approve" action
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
+else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve']) && $_GET['approve'] > 0) {
 
     // Validate id
-    $comment = new Comment ($_GET['approve']);
-    if ($comment->found) {
-        $comment->Approve ('approve');
+    $comment = $commentMapper->getCommentById($_GET['approve']);
+    if ($comment) {
+        $commentService->approve($comment, 'approve');
         $message = 'Comment has been approved';
         $message_type = 'success';
     }
@@ -49,12 +50,12 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 
 
 ### Handle "Unban" action
-else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
+else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban']) && $_GET['unban'] > 0) {
 
     // Validate id
-    $comment = new Comment ($_GET['unban']);
-    if ($comment->found) {
-        $comment->Approve ('approve');
+    $comment = $commentMapper->getCommentById($_GET['unban']);
+    if ($comment) {
+        $comment->approve($comment, 'approve');
         $message = 'Comment has been unbanned';
         $message_type = 'success';
     }
@@ -63,13 +64,15 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
 
 ### Handle "Ban" action
-else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban']) && $_GET['ban'] > 0) {
 
     // Validate id
-    $comment = new Comment ($_GET['ban']);
-    if ($comment->found) {
-        $comment->Update (array ('status' => 'banned'));
-        Flag::FlagDecision ($comment->comment_id, 'comment', true);
+    $comment = $commentMapper->getCommentById($_GET['ban']);
+    if ($comment) {
+        $comment->status = 'banned';
+        $commentMapper->save($comment);
+        $flagService = new FlagService();
+        $flagService->flagDecision($comment, true);
         $message = 'Comment has been banned';
         $message_type = 'success';
     }
@@ -100,7 +103,8 @@ switch ($status) {
         break;
 
 }
-$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$status'";
+$query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = :status";
+$queryParams = array(':status' => $status);
 
 
 
@@ -108,16 +112,18 @@ $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = '$stat
 ### Handle Search Records Form
 if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
-    $like = $db->Escape (trim ($_POST['search']));
+    $like = trim ($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " AND comments LIKE '%$like%'";
+    $query .= " AND comments LIKE :like";
+    $queryParams[':like'] = "%$like%";
     $sub_header = "Search Results for: <em>$like</em>";
 
 } else if (!empty ($_GET['search'])) {
 
-    $like = $db->Escape (trim ($_GET['search']));
+    $like = trim ($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " AND comments LIKE '%$like%'";
+    $query .= " AND comments LIKE :like";
+    $queryParams[':like'] = "%$like%";
     $sub_header = "Search Results for: <em>$like</em>";
 
 }
@@ -127,8 +133,8 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 // Retrieve total count
 $query .= " ORDER BY comment_id DESC";
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$db->Query ($query, $queryParams);
+$total = $db->rowCount();
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
@@ -138,7 +144,10 @@ $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$result = $db->Query ($query);
+$commentResults = $db->fetchAll($query, $queryParams);
+$commentList = $commentMapper->getCommentsFromList(
+    Functions::arrayColumn($commentResults, 'comment_id')
+);
 
 
 // Output Header
@@ -191,38 +200,38 @@ include ('header.php');
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($row = $db->FetchObj ($result)): ?>
+                <?php foreach ($commentList as $comment): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $comment = new Comment ($row->comment_id); ?>
-                    <?php $video = new Video ($comment->video_id); ?>
+                    <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
+                    <?php $user = $userMapper->getUserById($comment->userId); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <img src="<?=$comment->avatar_url?>" height="80" width="80" />
-                            <p class="poster"><?=($comment->user_id==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
+                            <img src="<?=$commentService->getCommentAvatar($comment)?>" height="80" width="80" />
+                            <p class="poster"><?=($comment->userId==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
                         </td>
                         <td class="comments-text">
                             <?=Functions::CutOff ($comment->comments_display, 150)?>
                             <div class="record-actions invisible">
-                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>">Edit</a>
+                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->comment_id)?>">Ban</a>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->commentId)?>">Ban</a>
                                 <?php elseif ($status == 'pending'): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$comment->comment_id)?>">Approve</a>
+                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$comment->commentId)?>">Approve</a>
                                 <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$comment->comment_id)?>">Unban</a>
+                                    <a href="<?=$pagination->GetURL('unban='.$comment->commentId)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->comment_id)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td><a href="<?=$video->url?>/"><?=$video->title?></a></td>
                         <td><?=Functions::DateFormat('m/d/Y',$comment->date_created)?></td>
                     </tr>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
