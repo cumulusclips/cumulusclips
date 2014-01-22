@@ -4,21 +4,26 @@ class PrivacyMapper extends MapperAbstract
 {
     public function getPrivacyById($privacyId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'privacy WHERE privacyId = :privacyId';
-        $dbResults = $db->fetchRow($query, array(':privacyId' => $privacyId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getPrivacyByCustom(array('privacy_id' => $privacyId));
     }
     
     public function getPrivacyByUser($userId)
     {
+        return $this->getPrivacyByCustom(array('user_id' => $userId));
+    }
+    
+    public function getPrivacyByCustom(array $params)
+    {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'privacy WHERE user_id = :userId';
-        $dbResults = $db->fetchRow($query, array(':userId' => $userId));
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'privacy WHERE ';
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        
+        $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {
@@ -75,5 +80,17 @@ class PrivacyMapper extends MapperAbstract
         $privacyId = (!empty($privacy->privacyId)) ? $privacy->privacyId : $db->lastInsertId();
         Plugin::triggerEvent('video.save', $privacyId);
         return $privacyId;
+    }
+    
+    /**
+     * Delete a privacy record
+     * @param integer $privacyId Id of privacy record to be deleted
+     * @return void Record is deleted from system
+     */
+    public function delete($privacyId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'privacy WHERE privacy_id = :privacyId';
+        $db->query($query, array(':privacyId' => $privacyId));
     }
 }

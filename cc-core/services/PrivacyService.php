@@ -3,16 +3,15 @@
 class PrivacyService extends ServiceAbstract
 {
     /**
-     * Delete a record
-     * @param integer $id ID of record to be deleted
-     * @return void Record is deleted from database
+     * Delete a privacy entry
+     * @param Privacy $privacy Instance of privacy entry to be deleted
+     * @return void Privacy entry is deleted from system
      */
-    public static function delete($id)
+    public static function delete(Privacy $privacy)
     {
-        $db = Database::GetInstance();
         Plugin::Trigger ('privacy.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query);
+        $privacyMapper = $this->_getMapper();
+        $privacyMapper->delete($privacy->privacyId);
     }
 
     /**
@@ -26,5 +25,14 @@ class PrivacyService extends ServiceAbstract
         $privacyMapper = new PrivacyMapper();
         $privacy = $privacyMapper->getPrivacyByUser($user->userId);
         return ($privacy->$messageType === true);
+    }
+    
+    /**
+     * Retrieve instance of Privacy mapper
+     * @return PrivacyMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new PrivacyMapper();
     }
 }

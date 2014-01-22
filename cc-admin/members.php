@@ -1,16 +1,16 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Flag');
-App::LoadClass ('Pagination');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$userMapper = new UserMapper();
 $records_per_page = 9;
 $url = ADMIN . '/members.php';
 $query_string = array();
@@ -23,8 +23,9 @@ $sub_header = null;
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate id
-    if (User::Exist (array ('user_id' => $_GET['delete']))) {
-        User::Delete ($_GET['delete']);
+    $user = $userMapper->getUserById($_GET['delete']);
+    if ($user) {
+        $userService->delete($user);
         $message = 'Member has been deleted';
         $message_type = 'success';
     }
@@ -36,10 +37,10 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 
     // Validate id
-    $user = new User ($_GET['activate']);
-    if ($user->found) {
-        $user->UpdateContentStatus ('active');
-        $user->Approve ('approve');
+    $user = $userMapper->getUserById($_GET['activate']);
+    if ($user) {
+        $userService->updateContentStatus($user, 'active');
+        $userService->approve($user, 'approve');
         $message = 'Member has been activated';
         $message_type = 'success';
     }
@@ -51,10 +52,10 @@ else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
 else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 
     // Validate id
-    $user = new User ($_GET['unban']);
-    if ($user->found) {
-        $user->UpdateContentStatus ('active');
-        $user->Approve ('approve');
+    $user = $userMapper->getUserById($_GET['unban']);
+    if ($user) {
+        $userService->updateContentStatus($user, 'active');
+        $userService->approve($user, 'approve');
         $message = 'Member has been unbanned';
         $message_type = 'success';
     }
@@ -66,11 +67,13 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
 else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate id
-    $user = new User ($_GET['ban']);
-    if ($user->found) {
-        $user->Update (array ('status' => 'banned'));
-        $user->UpdateContentStatus ('banned');
-        Flag::FlagDecision($user->user_id, 'user', true);
+    $user = $userMapper->getUserById($_GET['ban']);
+    if ($user) {
+        $user->status = 'banned';
+        $userMapper->save($user);
+        $userService->updateContentStatus($user, 'banned');
+        $flagService = new FlagService();
+        $flagService->flagDecision($user, true);
         $message = 'Member has been banned';
         $message_type = 'success';
     }
@@ -106,23 +109,26 @@ switch ($status) {
         break;
 
 }
-$query = "SELECT user_id FROM " . DB_PREFIX . "users WHERE status = '$status'";
+$query = 'SELECT user_id FROM ' . DB_PREFIX . 'users WHERE status = :status';
+$queryParams = array(':status' => $status);
 
 
 
 // Handle Search Member Form
 if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
-    $like = $db->Escape (trim ($_POST['search']));
+    $like = trim($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " AND username LIKE '%$like%'";
+    $query .= ' AND username LIKE :like';
+    $queryParams[':like'] = "%$like%";
     $sub_header = "Search Results for: <em>$like</em>";
 
 } else if (!empty ($_GET['search'])) {
 
-    $like = $db->Escape (trim ($_GET['search']));
+    $like = trim($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " AND username LIKE '%$like%'";
+    $query .= ' AND username LIKE :like';
+    $queryParams[':like'] = "%$like%";
     $sub_header = "Search Results for: <em>$like</em>";
 
 }
@@ -131,8 +137,8 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 // Retrieve total count
 $query .= " ORDER BY user_id DESC";
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$db->fetchAll($query, $queryParams);
+$total = $db->rowCount();
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
@@ -142,7 +148,8 @@ $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$result = $db->Query ($query);
+$userResults = $db->fetchAll($query, $queryParams);
+$users = $userMapper->getUsersFromList(Functions::arrayColumn($userResults, 'user_id'));
 
 
 // Output Header
@@ -195,42 +202,41 @@ include ('header.php');
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($row = $db->FetchObj ($result)): ?>
+                <?php foreach ($users as $user): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $user = new User ($row->user_id); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
+                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
                             <div class="record-actions invisible">
 
                                 <?php if ($status == 'active'): ?>
                                     <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
                                 <?php endif; ?>
 
-                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>">Edit</a>
+                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
 
                                 <?php if ($status == 'active'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$user->user_id)?>">Ban</a>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$user->userId)?>">Ban</a>
                                 <?php endif; ?>
 
                                 <?php if (in_array ($status, array ('new', 'pending'))): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('activate='.$user->user_id)?>">Activate</a>
+                                    <a class="approve" href="<?=$pagination->GetURL('activate='.$user->userId)?>">Activate</a>
                                 <?php endif; ?>
                                     
                                 <?php if ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$user->user_id)?>">Unban</a>
+                                    <a href="<?=$pagination->GetURL('unban='.$user->userId)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->user_id)?>" data-confirm="You're about to delete this member and their content. This cannot be undone. Do you want to proceed?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->userId)?>" data-confirm="You're about to delete this member and their content. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td><?=$user->email?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$user->date_created)?></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$user->dateCreated)?></td>
                     </tr>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

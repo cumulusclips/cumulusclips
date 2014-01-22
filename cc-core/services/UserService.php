@@ -3,73 +3,67 @@
 class UserService extends ServiceAbstract
 {
     /**
-     * Delete a record
-     * @param integer $id ID of record to be deleted
-     * @return void Record is deleted from database
+     * Delete a user
+     * @param User $user Instance of user to be deleted
+     * @return void User is deleted from system
      */
-    public function delete($id)
+    public function delete(User $user)
     {
-        $db = Database::GetInstance();
-        $user = new self ($id);
         Plugin::triggerEvent('user.delete');
 
         // Delete Avatar
         if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
 
-        // Delete Privacy Record
-        $privacy_id = Privacy::Exist (array ('user_id' => $id));
-        Privacy::Delete ($privacy_id);
-
-
-
         // Delete Comments
-        $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Comment::Delete ($row->comment_id);
+        $commentService = new CommentService();
+        $commentMapper = new CommentMapper();
+        $comments = $commentMapper->getMultipleCommentsByCustom(array('user_id' => $user->userId));
+        foreach ($comments as $comment) $commentService->delete($comment);
 
         // Delete Ratings
-        $query = "SELECT rating_id FROM " . DB_PREFIX . "ratings WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Rating::Delete ($row->rating_id);
+        $ratingService = new RatingService();
+        $ratingMapper = new RatingMapper();
+        $ratings = $ratingMapper->getMultipleRatingsByCustom(array('user_id' => $user->userId));
+        foreach ($ratings as $rating) $ratingService->delete($rating);
 
         // Delete Favorites
-        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
+//        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
+//        $result = $db->Query ($query);
+//        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
 
         // Delete Flags
-        $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE id = $id AND type = 'user'";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Flag::Delete ($row->flag_id);
+        $flagService = new FlagService();
+        $flagMapper = new FlagMapper();
+        $flags = $flagMapper->getMultipleFlagsByCustom(array('user_id' => $user->userId));
+        foreach ($flags as $flag) $flagService->delete($flag);
 
         // Delete Subscriptions
-        $query = "SELECT sub_id FROM " . DB_PREFIX . "subscriptions WHERE user_id = $id OR member = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Subscription::Delete ($row->sub_id);
-
-        // Delete Posts
-        $query = "SELECT post_id FROM " . DB_PREFIX . "posts WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Post::Delete ($row->post_id);
+        $subscriptionService = new SubscriptionService();
+        $subscriptionMapper = new SubscriptionMapper();
+        $subscriptions = $subscriptionMapper->getMultipleSubscriptionsByCustom(array('user_id' => $user->userId));
+        foreach ($subscriptions as $subscription) $subscriptionService->delete($subscription);
 
         // Delete Messages
-        $query = "SELECT message_id FROM " . DB_PREFIX . "messages WHERE user_id = $id OR recipient = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Message::Delete ($row->message_id);
+        $messageService = new MessageService();
+        $messageMapper = new MessageMapper();
+        $messages = $messageMapper->getMultipleMessagesByCustom(array('user_id' => $user->userId));
+        foreach ($messages as $message) $messageService->delete($message);
 
         // Delete Videos
-        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Video::Delete ($row->video_id);
+        $videoService = new VideoService();
+        $videoMapper = new VideoMapper();
+        $videos = $videoMapper->getMultipleVideosByCustom(array('user_id' => $user->userId));
+        foreach ($videos as $video) $videoService->delete($video);
 
         // Delete Privacy
-        $query = "SELECT privacy_id FROM " . DB_PREFIX . "privacy WHERE user_id = $id";
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) Privacy::Delete ($row->privacy_id);
+        $privacyService = new PrivacyService();
+        $privacyMapper = new PrivacyMapper();
+        $privacy = $privacyMapper->getPrivacyByUser($user->userId);
+        $privacyService->delete($privacy);
 
         // Delete User
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $id";
-        $db->Query ($query);
+        $userMapper = $this->_getMapper();
+        $userMapper->delete($user->userId);
     }
 
     /**
@@ -198,13 +192,13 @@ class UserService extends ServiceAbstract
 
     /**
      * Change the status of a user's content
+     * @param User $user Instance of user who's content is getting updated
      * @param string $status The new status being assigned to the user's content
      * @return void User's related records are updated to the new status
      */
-    public function updateContentStatus($status)
+    public function updateContentStatus(User $user, $status)
     {
         switch ($status) {
-            case 'new':
             case 'banned':
             case 'pending':
 
@@ -271,7 +265,7 @@ class UserService extends ServiceAbstract
 
                 // Activate & Release
                 $user->status = 'active';
-                $user->released = 1;
+                $user->released = true;
                 $userMapper->save($user);
 
                 // Update user's anonymous comments IF/APP
@@ -283,14 +277,14 @@ class UserService extends ServiceAbstract
                     App::LoadClass ('Mail');
                     $mail = new Mail();
                     $mail->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
-                    $mail->Send ($this->email);
+                    $mail->Send ($user->email);
                 }
 
                 Plugin::triggerEvent('user.release');
             }
 
         // User is being re-approved
-        } else if ($action == 'approve' && $user->released != 0) {
+        } else if ($action == 'approve' && $user->released) {
             // Activate User
             $user->status = 'active';
             $userMapper->save($user);
