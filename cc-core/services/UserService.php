@@ -198,28 +198,29 @@ class UserService extends ServiceAbstract
      */
     public function updateContentStatus(User $user, $status)
     {
+        $db = Registry::get('db');
         switch ($status) {
             case 'banned':
             case 'pending':
 
                 // Set user's videos to 'User Not Available'
-                $query = "UPDATE " . DB_PREFIX . "videos SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
-                $this->db->Query ($query);
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = CONCAT('user not available - ',status) WHERE user_id = :userId AND status NOT LIKE 'user not available - %'";
+                $db->Query ($query, array(':userId' => $user->userId));
 
                 // Set user's comments to 'User Not Available'
-                $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = $this->user_id AND status NOT LIKE 'user not available - %'";
-                $this->db->Query ($query);
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = CONCAT('user not available - ',status) WHERE user_id = :userId AND status NOT LIKE 'user not available - %'";
+                $db->Query ($query, array(':userId' => $user->userId));
                 break;
 
             case 'active':
 
                 // Restore user's videos IF/APP
-                $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
-                $this->db->Query ($query);
+                $query = "UPDATE " . DB_PREFIX . "videos SET status = REPLACE(status,'user not available - ','') WHERE user_id = :userId";
+                $db->Query ($query, array(':userId' => $user->userId));
 
                 // Restore user's comments IF/APP
-                $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = $this->user_id";
-                $this->db->Query ($query);
+                $query = "UPDATE " . DB_PREFIX . "comments SET status = REPLACE(status,'user not available - ','') WHERE user_id = :userId";
+                $db->Query ($query, array(':userId' => $user->userId));
                 break;
         }
     }

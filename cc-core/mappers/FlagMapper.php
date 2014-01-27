@@ -84,6 +84,23 @@ class FlagMapper extends MapperAbstract
         Plugin::triggerEvent('video.save', $flagId);
         return $flagId;
     }
+    
+    
+    public function getFlagsFromList(array $flagIds)
+    {
+        $flagList = array();
+        if (empty($flagIds)) return $flagList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($flagIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE flag_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $flagIds);
+
+        foreach($result as $flagRecord) {
+            $flagList[] = $this->_map($flagRecord);
+        }
+        return $flagList;
+    }
 
     public function delete($flagId)
     {
