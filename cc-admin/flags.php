@@ -11,7 +11,6 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 
 // Establish page variables, objects, arrays, etc
 $commentMapper = new CommentMapper();
-$commentService = new CommentService();
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
 $userMapper = new UserMapper();
@@ -25,7 +24,7 @@ $message = null;
 
 
 // Verify content type was provided
-if (!empty ($_GET['status']) && in_array ($_GET['status'], array ('video', 'member', 'comment'))) {
+if (!empty ($_GET['status']) && in_array ($_GET['status'], array ('video', 'user', 'comment'))) {
     $type = $_GET['status'];
 } else {
     $type = 'video';
@@ -50,7 +49,7 @@ if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
             }
             break;
 
-        case 'member':
+        case 'user':
             $user = $userMapper->getUserById($_GET['ban']);
             if ($user) {
                 $user->status = 'banned';
@@ -87,8 +86,8 @@ else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
             $contentObject = $videoMapper->getVideoById($_GET['dismiss']);
             break;
 
-        case 'member':
-            $user = $userMapper->getUserById($_GET['dismiss']);
+        case 'user':
+            $contentObject = $userMapper->getUserById($_GET['dismiss']);
             break;
 
         case 'comment':
@@ -109,9 +108,9 @@ else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
 ### Determine which type (account status) of members to display
 switch ($type) {
 
-    case 'member':
-        $query_string['status'] = 'member';
-        $header = 'Flagged Members';
+    case 'user':
+        $query_string['status'] = 'user';
+        $header = 'Flagged Member';
         $page_title = 'Flagged Members';
         break;
     case 'video':
@@ -165,7 +164,7 @@ include ('header.php');
             Jump To:
             <select name="status" data-jump="<?=ADMIN?>/flags.php">
                 <option <?=($type == 'video') ? 'selected="selected"' : ''?>value="video">Videos</option>
-                <option <?=($type == 'member') ? 'selected="selected"' : ''?>value="member">Members</option>
+                <option <?=($type == 'user') ? 'selected="selected"' : ''?>value="user">Members</option>
                 <option <?=($type == 'comment') ? 'selected="selected"' : ''?>value="comment">Comments</option>
             </select>
         </div>
@@ -192,7 +191,7 @@ include ('header.php');
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
 
-                            <?php if ($type == 'member'): ?>
+                            <?php if ($type == 'user'): ?>
 
                                 <?php $user = $userMapper->getUserById($flag->objectId); ?>
                                 <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
@@ -219,8 +218,8 @@ include ('header.php');
 
                             <?php endif; ?>
 
-                                <a href="<?=$pagination->GetURL('dismiss='.$flag->flagId)?>">Dismiss Flag</a>
-                                <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->flagId)?>">Ban</a>
+                                <a href="<?=$pagination->GetURL('dismiss='.$flag->objectId)?>">Dismiss Flag</a>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->objectId)?>">Ban</a>
                             </div>
                         </td>
                         <td><?=$reporter->username?></td>

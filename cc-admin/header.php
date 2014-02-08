@@ -64,7 +64,7 @@
             <h3 class="flags"><span>Flags</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/flags.php?status=video">Flagged Videos</a></p>
-                <p><a href="<?=ADMIN?>/flags.php?status=member">Flagged Members</a></p>
+                <p><a href="<?=ADMIN?>/flags.php?status=user">Flagged Members</a></p>
                 <p><a href="<?=ADMIN?>/flags.php?status=comment">Flagged Comments</a></p>
             </div>
         </div>

@@ -4,9 +4,22 @@ class FlagMapper extends MapperAbstract
 {
     public function getFlagById($flagId)
     {
+        return $this->getFlagByCustom(array('flag_id' => $flagId));
+    }
+
+    public function getFlagByCustom(array $params)
+    {
         $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE flag_id = :flagId';
-        $dbResults = $db->fetchRow($query, array(':flagId' => $flagId));
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'flags WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchRow($query, $queryParams);
+        
         if ($db->rowCount() == 1) {
             return $this->_map($dbResults);
         } else {

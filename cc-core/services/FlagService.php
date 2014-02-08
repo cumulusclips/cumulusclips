@@ -20,7 +20,7 @@ class FlagService extends ServiceAbstract
      * @param boolean $decision The action to be performed on the record. True bans, False declines the flag
      * @return void All flags raised against content are updated
      */
-    public function FlagDecision ($object, $decision)
+    public function flagDecision ($object, $decision)
     {
         if ($object instanceof Video) {
             $type = 'video';
