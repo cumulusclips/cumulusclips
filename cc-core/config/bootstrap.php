@@ -56,6 +56,9 @@ $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->vp8Url = HOST . '/cc-content/uploads/vp8';
 $config->mobile_url = HOST . '/cc-content/uploads/mobile';
 $config->thumb_url = HOST . '/cc-content/uploads/thumbs';
+$config->theme_default = 'default';
+$config->theme_url_default = HOST . '/cc-content/themes/default';
+$config->theme_path_default = THEMES_DIR . '/default';
 Registry::set('config', $config);
 
 // Start session

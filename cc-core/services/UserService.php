@@ -311,7 +311,7 @@ class UserService extends ServiceAbstract
      */
     public function getAvatarUrl(User $user)
     {
-        return (empty($user->avatar)) ? View::getView()->getFallbackUrl('images/avatar.gif') : HOST . "/cc-content/uploads/avatars/$user->avatar";
+        return (!empty($user->avatar)) ? HOST . "/cc-content/uploads/avatars/$user->avatar" : false;
     }
     
     /**

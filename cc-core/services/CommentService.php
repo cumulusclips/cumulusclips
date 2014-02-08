@@ -26,6 +26,7 @@ class CommentService extends ServiceAbstract
         $config = Registry::get('config');
         $send_alert = false;
         $videoMapper = new VideoMapper();
+        $videoService = new VideoService();
         $commentMapper = new CommentMapper();
         $video = $videoMapper->getVideoById($comment->videoId);
         Plugin::triggerEvent('comment.before_approve');
@@ -91,7 +92,7 @@ class CommentService extends ServiceAbstract
         if ($send_alert) {
             $body .= "\n\n=======================================================\n";
             $body .= "Author: $comment->name\n";
-            $body .= "Video URL: $video->url/\n";
+            $body .= 'Video URL: ' . $videoService->getUrl($video) . "/\n";
             $body .= "Comments: $comment->comments\n";
             $body .= "=======================================================";
             App::Alert($subject, $body);
@@ -108,7 +109,7 @@ class CommentService extends ServiceAbstract
     public function getCommentAvatar(Comment $comment)
     {
         if (empty($comment->userId)) {
-            return View::getView()->getFallbackUrl('images/avatar.gif');
+            return false;
         } else {
             $userService = new UserService();
             $userMapper = new UserMapper();

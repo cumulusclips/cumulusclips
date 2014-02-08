@@ -12,7 +12,9 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $commentMapper = new CommentMapper();
 $commentService = new CommentService();
+$userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
+$videoService = new VideoService();
 $records_per_page = 9;
 $url = ADMIN . '/comments.php';
 $query_string = array();
@@ -208,11 +210,12 @@ include ('header.php');
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <img src="<?=$commentService->getCommentAvatar($comment)?>" height="80" width="80" />
+                            <?php $avatar = $commentService->getCommentAvatar($comment); ?>
+                            <img src="<?=($avatar) ? $avatar : $config->theme_url_default . '/images/avatar.gif'?>" height="80" width="80" />
                             <p class="poster"><?=($comment->userId==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
                         </td>
                         <td class="comments-text">
-                            <?=Functions::CutOff ($comment->comments_display, 150)?>
+                            <?=Functions::CutOff (htmlspecialchars($comment->comments), 150)?>
                             <div class="record-actions invisible">
                                 <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
 
@@ -227,8 +230,8 @@ include ('header.php');
                                 <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
-                        <td><a href="<?=$video->url?>/"><?=$video->title?></a></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$comment->date_created)?></td>
+                        <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
+                        <td><?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?></td>
                     </tr>
 
                 <?php endforeach; ?>

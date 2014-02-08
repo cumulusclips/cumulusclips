@@ -55,17 +55,17 @@ class CommentMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $comment = new Comment();
-        $comment->commentId = $dbResults['commentId'];
-        $comment->userId = $dbResults['userId'];
-        $comment->videoId = $dbResults['videoId'];
+        $comment->commentId = $dbResults['comment_id'];
+        $comment->userId = $dbResults['user_id'];
+        $comment->videoId = $dbResults['video_id'];
         $comment->comments = $dbResults['comments'];
-        $comment->dateCreated = date(DATE_FORMAT, strtotime($dbResults['dateCreated']));
+        $comment->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $comment->status = $dbResults['status'];
         $comment->email = $dbResults['email'];
         $comment->name = $dbResults['name'];
         $comment->website = $dbResults['website'];
         $comment->ip = $dbResults['ip'];
-        $comment->userAgent = $dbResults['userAgent'];
+        $comment->userAgent = $dbResults['user_agent'];
         $comment->released = ($dbResults['released'] == 1) ? true : false;
         return $comment;
     }
@@ -78,11 +78,11 @@ class CommentMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $comment);
             $query = 'UPDATE ' . DB_PREFIX . 'comments SET';
-            $query .= ' userId = :userId, videoId = :videoId, comments = :comments, dateCreated = :dateCreated, status = :status, email = :email, name = :name, website = :website, ip = :ip, userAgent = :userAgent, released = :released';
-            $query .= ' WHERE commentId = :commentId';
+            $query .= ' user_id = :userId, video_id = :videoId, comments = :comments, date_created = :dateCreated, status = :status, email = :email, name = :name, website = :website, ip = :ip, user_agent = :userAgent, released = :released';
+            $query .= ' WHERE comment_id = :commentId';
             $bindParams = array(
                 ':commentId' => $comment->commentId,
-                ':userId' => (!empty($comment->userId)) ? $comment->userId : null,
+                ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
                 ':videoId' => $comment->videoId,
                 ':comments' => $comment->comments,
                 ':dateCreated' => date(DATE_FORMAT, strtotime($comment->dateCreated)),
@@ -98,10 +98,10 @@ class CommentMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $comment);
             $query = 'INSERT INTO ' . DB_PREFIX . 'comments';
-            $query .= ' (userId, videoId, comments, dateCreated, status, email, name, website, ip, userAgent, released)';
+            $query .= ' (user_id, video_id, comments, date_created, status, email, name, website, ip, user_agent, released)';
             $query .= ' VALUES (:userId, :videoId, :comments, :dateCreated, :status, :email, :name, :website, :ip, :userAgent, :released)';
             $bindParams = array(
-                ':userId' => (!empty($comment->userId)) ? $comment->userId : null,
+                ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
                 ':videoId' => $comment->videoId,
                 ':comments' => $comment->comments,
                 ':dateCreated' => gmdate(DATE_FORMAT),

@@ -21,13 +21,15 @@ class View
         $this->options->js = array();
         
         // Define theme configuration
-        $theme = $this->_currentTheme(Registry::get('route')->mobile);
+        try {
+            $isMobile = Registry::get('route')->mobile;
+        } catch (Exception $e) {
+            $isMobile = false;
+        }
+        $theme = $this->_currentTheme($isMobile);
         $themeFiltered = Plugin::triggerFilter('app.before_set_theme', $theme);
         define('THEME', HOST . '/cc-content/themes/' . $themeFiltered);
         define('THEME_PATH', THEMES_DIR . '/' . $themeFiltered);
-        $this->vars->config->theme_default = 'cumulus';
-        $this->vars->config->theme_url_default = HOST . '/cc-content/themes/cumulus';
-        $this->vars->config->theme_path_default = THEMES_DIR . '/cumulus';
         $this->vars->config->theme = $themeFiltered;
         $this->vars->config->theme_url = HOST . '/cc-content/themes/' . $themeFiltered;
         $this->vars->config->theme_path = THEMES_DIR . '/' . $themeFiltered; 
