@@ -28,12 +28,11 @@ class PageService extends ServiceAbstract
      * @param integer $pageId ID of record to be deleted
      * @return void Record is deleted from database
      */
-    public function delete($pageId)
+    public function delete(Page $page)
     {
-        $db = Database::GetInstance();
+        $pageMapper = new PageMapper();
+        $pageMapper->delete($page->pageId);
         Plugin::Trigger ('page.delete');
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE " . self::$id_name . " = $pageId";
-        $db->Query ($query);
     }
     
     /**
@@ -53,12 +52,22 @@ class PageService extends ServiceAbstract
      */
     public function getAvailableSlug($slug)
     {
-        $count = 1;
+        $count = 0;
         $slug_check = $slug;
-        while (self::IsReserved ($slug_check) || self::Exist (array ('slug' => $slug_check))) {
+        $pageMapper = $this->_getMapper();
+        while (self::IsReserved ($slug_check) || $pageMapper->getPageBySlug($slug_check)) {
             $count++;
             $slug_check = "$slug-$count";
         }
         return $slug_check;
+    }
+    
+    /**
+     * Retrieve instance of Page mapper
+     * @return PageMapper Mapper is returned
+     */
+    protected function _getMapper()
+    {
+        return new PageMapper();
     }
 }

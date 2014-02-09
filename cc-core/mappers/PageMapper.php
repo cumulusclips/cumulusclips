@@ -4,26 +4,12 @@ class PageMapper extends MapperAbstract
 {
     public function getPageById($pageId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'pages WHERE page_id = :pageId';
-        $dbResults = $db->fetchRow($query, array(':pageId' => $pageId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getPageByCustom(array('page_id' => $pageId));
     }
     
     public function getPageBySlug($slug)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'pages WHERE slug = :slug';
-        $dbResults = $db->fetchRow($query, array(':slug' => $slug));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getPageByCustom(array('slug' => $slug));
     }
     
     public function getPageByCustom(array $params)
@@ -98,5 +84,29 @@ class PageMapper extends MapperAbstract
         $pageId = (!empty($page->pageId)) ? $page->pageId : $db->lastInsertId();
         Plugin::triggerEvent('page.save', $pageId);
         return $pageId;
+    }
+    
+    
+    public function getPagesFromList(array $pageIds)
+    {
+        $pageList = array();
+        if (empty($pageIds)) return $pageList;
+        
+        $db = Registry::get('db');
+        $inQuery = implode(',', array_fill(0, count($pageIds), '?'));
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'pages WHERE page_id IN (' . $inQuery . ')';
+        $result = $db->fetchAll($sql, $pageIds);
+
+        foreach($result as $pageRecord) {
+            $pageList[] = $this->_map($pageRecord);
+        }
+        return $pageList;
+    }
+    
+    public function delete($pageId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'pages WHERE page_id = :pageId';
+        $db->query($query, array(':pageId' => $pageId));
     }
 }

@@ -1,15 +1,18 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Page');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$pageMapper = new PageMapper();
+$pageService = new PageService();
+$view = View::getView();
 $data = array();
 $errors = array();
 $message = null;
@@ -32,8 +35,8 @@ if (!empty ($_SESSION['list_page'])) {
 
 // Validate & load requested record
 if (!empty ($_GET['id']) && is_numeric ($_GET['id'])) {
-    $page = new Page ($_GET['id']);
-    if (!$page->found) header ("Location: " . ADMIN . '/pages.php');
+    $page = $pageMapper->getPageById($_GET['id']);
+    if (!$page) header ("Location: " . ADMIN . '/pages.php');
 } else {
     header ("Location: " . ADMIN . '/pages.php');
 }
@@ -41,8 +44,8 @@ if (!empty ($_GET['id']) && is_numeric ($_GET['id'])) {
 
 
 // Retrieve list of available layouts
-foreach (glob (THEME_PATH . '/layouts/*.header.tpl') as $filename) {
-    $layouts[] = basename ($filename, '.header.tpl');
+foreach (glob (THEME_PATH . '/layouts/*.phtml') as $filename) {
+    $layouts[] = basename ($filename, '.phtml');
 }
 
 
@@ -57,7 +60,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate layout
     if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
-        $data['layout'] = $_POST['layout'];
+        $page->layout = $_POST['layout'];
     } else {
         $errors['layout'] = "You didn't provide a valid layout";
     }
@@ -65,7 +68,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate status
     if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
-        $data['status'] = $_POST['status'];
+        $page->status = $_POST['status'];
     } else {
         $errors['status'] = "You didn't provide a valid status";
     }
@@ -73,7 +76,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
-        $data['title'] = htmlspecialchars (trim ($_POST['title']));
+        $page->title = trim ($_POST['title']);
     } else {
         $errors['title'] = "You didn't enter a valid title";
     }
@@ -82,8 +85,8 @@ if (isset ($_POST['submitted'])) {
     // Validate slug
     if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
-        if ($slug == $page->slug || (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug)))) {
-            $data['slug'] = $slug;
+        if ($slug == $page->slug || (!$pageService->isReserved ($slug) && !$pageMapper->getPageBySlug($slug))) {
+            $page->slug = $slug;
         } else {
             $errors['slug'] = "URL is not available";
         }
@@ -94,7 +97,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate content
     if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
-        $data['content'] = trim ($_POST['content']);
+        $page->content = trim ($_POST['content']);
     } else {
         $data['content'] = '';
     }
@@ -102,7 +105,7 @@ if (isset ($_POST['submitted'])) {
 
     // Update record if no errors were found
     if (empty ($errors)) {
-        $page->Update ($data);
+        $pageMapper->save($page);
         $message = 'Page has been updated';
         $message_type = 'success';
     } else {
@@ -132,11 +135,11 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">
+        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
 
             <div class="row <?=(isset ($errors['title'])) ? 'error' : '' ?>">
                 <label>*Title:</label>
-                <input class="text" type="text" name="title" value="<?=$page->title?>" />
+                <input id="page-title" class="text" type="text" name="title" value="<?=$page->title?>" />
             </div>
 
             <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'error' : '' ?>">
@@ -187,8 +190,9 @@ include ('header.php');
             </div>
 
             <div class="row-shift">
+                <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
                 <input type="hidden" name="submitted" value="TRUE" />
-                <a href="<?=HOST?>/page/?preview=<?=$page->page_id?>" class="button preview" target="_ccsite">Preview</a>
+                <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
                 <input type="submit" class="button" value="Update Page" />
             </div>
             

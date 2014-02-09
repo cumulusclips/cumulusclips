@@ -52,12 +52,15 @@ $(document).ready(function(){
 
         // Page title is empty
         if ($.trim($(this).val()) == '') return emptyCallback();
+        
+        // Retrieve id of current page if any
+        var pageId = ($('input[name="pageId"]').val() != '') ? $('input[name="pageId"]').val() : 0;
 
         // Submit page title for AJAX validation
         $.ajax({
             url         : baseURL + '/cc-admin/pages_slug.php',
             type        : 'POST',
-            data        : {page_id:0,action:'title',title:$(this).val()},
+            data        : {page_id:pageId,action:'title',title:$(this).val()},
             dataType    : 'json',
             success     : function(data, textStatus, jqXHR){
 
@@ -93,12 +96,15 @@ $(document).ready(function(){
 
         // Custom slug is empty
         if ($.trim(editField.val()) == '') return emptyCallback();
+        
+        // Retrieve id of current page if any
+        var pageId = ($('input[name="pageId"]').val() != '') ? $('input[name="pageId"]').val() : 0;
 
         // Submit custom slug for AJAX validation
         $.ajax({
             url         : baseURL + '/cc-admin/pages_slug.php',
             type        : 'POST',
-            data        : {page_id:0,action:'slug',slug:editField.val()},
+            data        : {page_id:pageId,action:'slug',slug:editField.val()},
             dataType    : 'json',
             success     : function(data, textStatus, jqXHR){
 
