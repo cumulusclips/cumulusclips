@@ -1,20 +1,23 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Page');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$pageMapper = new PageMapper();
+$pageService = new PageService();
+$view = View::getView();
+$page = new Page();
 $data = array();
 $errors = array();
 $message = null;
 $page_title = 'Add New Page';
-$page = null;
 $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
@@ -31,8 +34,8 @@ if (!empty ($_SESSION['list_page'])) {
 
 
 // Retrieve list of available layouts
-foreach (glob (THEME_PATH . '/layouts/*.header.tpl') as $filename) {
-    $layouts[] = basename ($filename, '.header.tpl');
+foreach (glob (THEME_PATH . '/layouts/*.phtml') as $filename) {
+    $layouts[] = basename ($filename, '.phtml');
 }
 
 
@@ -47,7 +50,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate layout
     if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
-        $data['layout'] = $_POST['layout'];
+        $page->layout = $_POST['layout'];
     } else {
         $errors['layout'] = "You didn't provide a valid layout";
     }
@@ -55,7 +58,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate status
     if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
-        $data['status'] = $_POST['status'];
+        $page->status = $_POST['status'];
     } else {
         $errors['status'] = "You didn't provide a valid status";
     }
@@ -63,7 +66,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate title
     if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
-        $data['title'] = htmlspecialchars (trim ($_POST['title']));
+        $page->title = trim ($_POST['title']);
     } else {
         $errors['title'] = "You didn't enter a valid title";
     }
@@ -72,8 +75,8 @@ if (isset ($_POST['submitted'])) {
     // Validate slug
     if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
-        if (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug))) {
-            $data['slug'] = $slug;
+        if (!$pageService->isReserved($slug) && !$pageMapper->getPageBySlug($slug)) {
+            $page->slug = $slug;
         } else {
             $errors['slug'] = "URL is not available";
         }
@@ -84,15 +87,16 @@ if (isset ($_POST['submitted'])) {
 
     // Validate content
     if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
-        $data['content'] = trim ($_POST['content']);
+        $page->content = trim ($_POST['content']);
     } else {
-        $data['content'] = '';
+        $page->content = '';
     }
 
 
     // Create page if no errors were found
     if (empty ($errors)) {
-        $page_id = Page::Create ($data);
+        $pageMapper->save($page);
+        $page = new Page();
         $message = 'Page has been created';
         $message_type = 'success';
     } else {
@@ -156,7 +160,7 @@ include ('header.php');
 
             <div class="row">
                 <label>Content:</label>
-                <textarea class="text tinymce" name="content" rows="7" cols="50"></textarea>
+                <textarea class="text tinymce" name="content" rows="7" cols="50"><?=(!empty($page->content)) ? $page->content : ''?></textarea>
             </div>
 
             <div class="row">

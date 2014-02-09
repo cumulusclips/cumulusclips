@@ -58,7 +58,7 @@ class PageMapper extends MapperAbstract
             $bindParams = array(
                 ':pageId' => $page->pageId,
                 ':title' => $page->title,
-                ':content' => (!empty($page->content)) ? $page->content : null,
+                ':content' => (!empty($page->content)) ? $page->content : '',
                 ':slug' => $page->slug,
                 ':layout' => $page->layout,
                 ':status' => $page->status,
@@ -72,7 +72,7 @@ class PageMapper extends MapperAbstract
             $query .= ' VALUES (:title, :content, :slug, :layout, :status, :dateCreated)';
             $bindParams = array(
                 ':title' => $page->title,
-                ':content' => (!empty($page->content)) ? $page->content : null,
+                ':content' => (!empty($page->content)) ? $page->content : '',
                 ':slug' => $page->slug,
                 ':layout' => $page->layout,
                 ':status' => (!empty($page->status)) ? $page->status : 'draft',

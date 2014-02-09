@@ -11,6 +11,7 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 
 // Establish page variables, objects, arrays, etc
 $pageMapper = new PageMapper();
+$pageService = new PageService();
 $records_per_page = 9;
 $url = ADMIN . '/pages.php';
 $query_string = array();
@@ -25,7 +26,7 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     // Validate id
     $page = $pageMapper->getPageById($_GET['delete']);
     if ($page) {
-        $pageMapper->delete($page->pageId);
+        $pageService->delete($page);
         $message = 'Page has been deleted';
         $message_type = 'success';
     }
