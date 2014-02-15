@@ -44,7 +44,7 @@ if (isset ($_POST['submitted'])) {
     // Validate base_url
     $pattern = '/^https?:\/\/[a-z0-9][a-z0-9\.\-]+.*$/i';
     if (!empty ($_POST['base_url']) && preg_match ($pattern, $_POST['base_url'])) {
-        $data['base_url'] = htmlspecialchars(rtrim($_POST['base_url']), '/');
+        $data['base_url'] = htmlspecialchars(rtrim($_POST['base_url'], '/'));
     } else {
         $errors['base_url'] = 'Invalid base url';
     }

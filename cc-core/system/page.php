@@ -8,12 +8,10 @@ Plugin::triggerEvent('page.start');
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
-$page_id = null;
-
 $pageMapper = new PageMapper();
 if (!empty($_GET['preview']) && is_numeric($_GET['preview'])) {
     // Parse preview request
-    $page_id = $pageMapper->getPageById($_GET['preview']);
+    $page = $pageMapper->getPageById($_GET['preview']);
 } else {
     // Parse the URI request
     $page = $pageMapper->getPageByCustom(array('slug' => trim($router->getRequestUri(), '/'), 'status' => 'published'));
