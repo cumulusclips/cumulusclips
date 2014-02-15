@@ -8,7 +8,7 @@ class App {
      * @return void 404 page is output to buffer
      */
     static function Throw404() {
-        global $config;
+        $view = View::getView();
         include_once (DOC_ROOT . '/cc-core/controllers/system_404.php');
         exit();
     }

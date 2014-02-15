@@ -10,6 +10,7 @@ $view->vars->loggedInUser = $userService->loginCheck();
 
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
+$commentMapper = new CommentMapper();
 $videoService = new VideoService();
 $ratingService = new RatingService();
 $view->vars->tags = null;
@@ -89,7 +90,10 @@ $view->vars->comment_count = $result_comment_count['count'];
 ### Retrieve comments
 $query = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments WHERE video_id = :videoId AND status = "approved" ORDER BY comment_id DESC LIMIT 0, 5';
 Plugin::triggerEvent('play.load_comments');
-$view->vars->comment_list = $db->fetchAll($query, array(':videoId' => $view->vars->video->videoId));
+$resultComments = $db->fetchAll($query, array(':videoId' => $view->vars->video->videoId));
+$view->vars->commentList = $commentMapper->getCommentsFromList(
+    Functions::arrayColumn($resultComments, 'comment_id')
+);
 
 // Output Page
 Plugin::triggerEvent('play.before_render');

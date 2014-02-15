@@ -8,7 +8,8 @@ if ($comment->userId == 0) {
 ?>
 
 <div>
-    <img width="60" height="60" alt="<?=$comment->name?>" src="<?=$comment->avatar_url?>" />
+    <?php $avatar = $this->getService('Comment')->getCommentAvatar($comment); ?>
+    <img width="60" height="60" alt="<?=$comment->name?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" />
     <div>
         <p>
             <span><?=$name?> <?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?></span>

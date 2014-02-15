@@ -182,85 +182,11 @@ $this->SetLayout('full');
         
         <!-- BEGIN COMMENTS LIST -->
         <div class="comments_list">
-<!--            
-            <div>
-                <img src="<?=$config->theme_url?>/images/avatar.gif" width="60" height="60" />
-                <div>
-                    <p>
-                        <span><a href="">Mariano Duncan</a> 12/15/2012</span>
-                        <span>
-                            <a href=""><?=Language::GetText('reply')?></a>
-                            <a href=""><?=Language::GetText('report_abuse')?></a>
-                        </span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et sapien vel purus molestie sagittis et ut sem. Sed consectetur, nunc a malesuada auctor, eros dolor rutrum augue, in ornare nisi augue eget arcu. Curabitur risus enim, fermentum ac aliquam vitae, gravida in ante.</p>
-                </div>
-            </div>
-            
-            <div class="child">
-                <img src="<?=$config->theme_url?>/images/avatar.gif" width="60" height="60" />
-                <div>
-                    <p>
-                        <span><a href="">Mariano Duncan</a> 12/15/2012</span>
-                        <span><?=Language::GetText('reply_to')?> <a href="">Mariano Duncan</a></span>
-                        <span>
-                            <a href=""><?=Language::GetText('reply')?></a>
-                            <a href=""><?=Language::GetText('report_abuse')?></a>
-                        </span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et sapien vel purus molestie sagittis et ut sem. Sed consectetur, nunc a malesuada auctor, eros dolor rutrum augue, in ornare nisi augue eget arcu. Curabitur risus enim, fermentum ac aliquam vitae, gravida in ante.</p>
-                </div>
-            </div>
-            
-            <div class="child">
-                <img src="<?=$config->theme_url?>/images/avatar.gif" width="60" height="60" />
-                <div>
-                    <p>
-                        <span><a href="">Mariano Duncan</a> 12/15/2012</span>
-                        <span><?=Language::GetText('reply_to')?> <a href="">Mariano Duncan</a></span>
-                        <span>
-                            <a href=""><?=Language::GetText('reply')?></a>
-                            <a href=""><?=Language::GetText('report_abuse')?></a>
-                        </span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et sapien vel purus molestie sagittis et ut sem. Sed consectetur, nunc a malesuada auctor, eros dolor rutrum augue, in ornare nisi augue eget arcu. Curabitur risus enim, fermentum ac aliquam vitae, gravida in ante.</p>
-                </div>
-            </div>
-            
-            <div class="grandchild">
-                <img src="<?=$config->theme_url?>/images/avatar.gif" width="60" height="60" />
-                <div>
-                    <p>
-                        <span><a href="">Mariano Duncan</a> 12/15/2012</span>
-                        <span><?=Language::GetText('reply_to')?> <a href="">Mariano Duncan</a></span>
-                        <span>
-                            <a href=""><?=Language::GetText('reply')?></a>
-                            <a href=""><?=Language::GetText('report_abuse')?></a>
-                        </span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et sapien vel purus molestie sagittis et ut sem. Sed consectetur, nunc a malesuada auctor, eros dolor rutrum augue, in ornare nisi augue eget arcu. Curabitur risus enim, fermentum ac aliquam vitae, gravida in ante.</p>
-                </div>
-            </div>
-            
-            <div>
-                <img src="<?=$config->theme_url?>/images/avatar.gif" width="60" height="60" />
-                <div>
-                    <p>
-                        <span><a href="">Mariano Duncan</a> 12/15/2012</span>
-                        <span>
-                            <a href=""><?=Language::GetText('reply')?></a>
-                            <a href=""><?=Language::GetText('report_abuse')?></a>
-                        </span>
-                    </p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et sapien vel purus molestie sagittis et ut sem. Sed consectetur, nunc a malesuada auctor, eros dolor rutrum augue, in ornare nisi augue eget arcu. Curabitur risus enim, fermentum ac aliquam vitae, gravida in ante.</p>
-                </div>
-            </div>-->
-            
-        <?php if ($comment_count > 0): ?>
-            <!-- BEGIN COMMENT BLOCKS -->
-            <?php $this->RepeatingBlock ('comment.tpl', $comment_list); ?>
-            <!-- END COMMENT BLOCKS -->
-        <?php endif; ?>
+            <?php if ($comment_count > 0): ?>
+                <!-- BEGIN COMMENT BLOCKS -->
+                <?php $this->RepeatingBlock ('comment.tpl', $commentList); ?>
+                <!-- END COMMENT BLOCKS -->
+            <?php endif; ?>
         </div>
         <!-- END COMMENTS LIST -->
         
