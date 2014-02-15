@@ -437,12 +437,6 @@ class Router
             'mappings' => array('action', 'language')
         ));
 
-        $routes['feed'] = new Route(array(
-            'path' => 'feed/([a-z0-9]+)',
-            'location' => 'cc-core/system/feed.php',
-            'mappings' => array('username')
-        ));
-
         $routes['videoSitemap'] = new Route(array(
             'path' => 'video-sitemap\.xml',
             'location' => 'cc-core/system/video_sitemap.php'
