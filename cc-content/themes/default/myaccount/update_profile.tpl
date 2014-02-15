@@ -39,7 +39,8 @@ $this->SetLayout('myaccount');
 <div id="update_avatar" class="form">
 
     <div class="left">
-        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=$this->getService('User')->getAvatarUrl($loggedInUser)?>"></span></p>
+        <?php $avatar = $this->getService('User')->getAvatarUrl($loggedInUser); ?>
+        <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>"></span></p>
         <?=Language::GetText('current_avatar')?><br />
         <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
     </div>

@@ -65,7 +65,8 @@ $this->SetLayout('full');
 
 
     <div id="about" class="tab_block">
-        <img width="65" height="65" src="<?=UserService::getAvatarUrl($member)?>" alt="<?=$member->username?>" />
+        <?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
+        <img width="65" height="65" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
         <div>
             <a href="" class="button_small subscribe" title="<?=Language::GetText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->userId?>"><?=Language::GetText($subscribe_text)?></a>
             <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>

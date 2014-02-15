@@ -5,7 +5,8 @@
 
     <div class="left">
         <div>
-            <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=$this->getService('User')->getAvatarUrl($loggedInUser)?>" /></span></div>
+            <?php $avatar = $this->getService('User')->getAvatarUrl($loggedInUser); ?>
+            <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" /></span></div>
             <a href="<?=HOST?>/myaccount/profile/#update_avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
         <p><strong><?=Language::GetText('joined')?>:</strong> <?=Functions::DateFormat('m/d/Y',$loggedInUser->dateCreated)?></p>

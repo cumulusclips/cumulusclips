@@ -4,7 +4,8 @@
 
 <!-- BEGIN Member Avatar/Profile Information -->
 <div id="profile_avatar">
-    <img src="<?=$this->getService('User')->getAvatarUrl($member)?>" alt="<?=$member->username?>" />
+    <?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
+    <img src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
     <p><a class="button_small subscribe" data-user="<?=$member->userId?>" data-type="<?=$subscribe_text?>" href=""><?=Language::GetText($subscribe_text)?></a></p>
 </div>
 <div id="profile_info">

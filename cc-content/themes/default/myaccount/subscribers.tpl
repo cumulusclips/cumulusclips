@@ -4,10 +4,10 @@
 
 <?php if (count($subscribers) >= 1): ?>
     <div class="member_list">
-    <?php $userService = $this->getService('User'); ?>
     <?php foreach ($subscribers as $subscriber): ?>
         <div>
-            <p><a href="<?=HOST?>/members/<?=$subscriber->username?>/" title="<?=$subscriber->username?>"><img class="picture" src="<?=$userService->getAvatarUrl($subscriber)?>" alt="<?=$subscriber->username?>" /></a></p>
+            <?php $avatar = $this->getService('User')->getAvatarUrl($subscriber); ?>
+            <p><a href="<?=HOST?>/members/<?=$subscriber->username?>/" title="<?=$subscriber->username?>"><img class="picture" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" alt="<?=$subscriber->username?>" /></a></p>
             <p><a href="<?=HOST?>/members/<?=$subscriber->username?>/" title="<?=$subscriber->username?>"><?=Functions::CutOff ($subscriber->username,18)?></a></p>
         </div>
     <?php endforeach; ?>
