@@ -471,9 +471,9 @@ class Router
             'location' => 'cc-core/system/flag.ajax.php'
         ));
 
-        $routes['ajaxFavorite'] = new Route(array(
-            'path' => 'actions/favorite',
-            'location' => 'cc-core/system/favorite.ajax.php'
+        $routes['ajaxPlaylist'] = new Route(array(
+            'path' => 'actions/playlist',
+            'location' => 'cc-core/system/playlist.ajax.php'
         ));
 
         $routes['ajaxSubscribe'] = new Route(array(
