@@ -14,7 +14,13 @@ class Functions
     {
         $newArray = array();
         foreach ($array as $child) {
-            $newArray[] = $child[$columnKey];
+            if (is_array($child)) {
+                $newArray[] = $child[$columnKey];
+            } else if (is_object($child)) {
+                $newArray[] = $child->$columnKey;
+            } else {
+                throw new Exception('Invalid child data type passed to arrayColumn');
+            }
         }
         return $newArray;
     }

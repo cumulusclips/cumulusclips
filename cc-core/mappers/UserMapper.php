@@ -4,26 +4,12 @@ class UserMapper extends MapperAbstract
 {
     public function getUserById($userId)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE user_id = :userId';
-        $dbResults = $db->fetchRow($query, array(':userId' => $userId));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getUserByCustom(array('user_id' => $userId));
     }
     
     public function getUserByUsername($username)
     {
-        $db = Registry::get('db');
-        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE username = :username';
-        $dbResults = $db->fetchRow($query, array(':username' => $username));
-        if ($db->rowCount() == 1) {
-            return $this->_map($dbResults);
-        } else {
-            return false;
-        }
+        return $this->getUserByCustom(array('username' => $username));
     }
     
     public function getUserByCustom(array $params)
@@ -44,6 +30,26 @@ class UserMapper extends MapperAbstract
         } else {
             return false;
         }
+    }
+    
+    public function getMultipleUsersByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = rtrim($query, ' AND ');
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $userList = array();
+        foreach($dbResults as $record) {
+            $userList[] = $this->_map($record);
+        }
+        return $userList;
     }
 
     protected function _map($dbResults)
