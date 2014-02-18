@@ -17,7 +17,7 @@ class RatingMapper extends MapperAbstract
             $query .= "$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
-        $query = rtrim($query, ' AND ');
+        $query = preg_replace('/\sAND\s$/', '', $query);
         
         $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
@@ -37,7 +37,7 @@ class RatingMapper extends MapperAbstract
             $query .= "$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
-        $query = rtrim($query, ' AND ');
+        $query = preg_replace('/\sAND\s$/', '', $query);
         $dbResults = $db->fetchAll($query, $queryParams);
         
         $ratingsList = array();

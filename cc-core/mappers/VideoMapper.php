@@ -27,7 +27,7 @@ class VideoMapper extends MapperAbstract
             $query .= DB_PREFIX . "videos.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
-        $query = rtrim($query, ' AND ');
+        $query = preg_replace('/\sAND\s$/', '', $query);
         
         $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() == 1) {
@@ -47,7 +47,7 @@ class VideoMapper extends MapperAbstract
             $query .= DB_PREFIX . "videos.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
-        $query = rtrim($query, ' AND ');
+        $query = preg_replace('/\sAND\s$/', '', $query);
         $dbResults = $db->fetchAll($query, $queryParams);
         
         $videosList = array();
