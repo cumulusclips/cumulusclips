@@ -30,7 +30,7 @@ class VideoMapper extends MapperAbstract
         $query = preg_replace('/\sAND\s$/', '', $query);
         
         $dbResults = $db->fetchRow($query, $queryParams);
-        if ($db->rowCount() == 1) {
+        if ($db->rowCount() > 0) {
             return $this->_map($dbResults);
         } else {
             return false;
