@@ -28,6 +28,20 @@ class PlaylistService extends ServiceAbstract
         ));
     }
     
+    public function getPlaylistName(Playlist $playlist)
+    {
+        switch ($playlist->type) {
+            case 'favorites':
+                return Language::GetText('favorites');
+            case 'watch_later':
+                return Language::GetText('watch_later');
+            case 'playlist':
+                return $playlist->name;
+            default:
+                throw new Exception('Invalid playlist name');
+        }
+    }
+    
     /**
      * Retrieve instance of Playlist mapper
      * @return PlaylistMapper Mapper is returned

@@ -77,7 +77,7 @@ class PlaylistMapper extends MapperAbstract
             $query .= ' WHERE playlist_id = :playlistId';
             $bindParams = array(
                 ':playlistId' => $playlist->playlistId,
-                ':name' => $playlist->name,
+                ':name' => (!empty($playlist->name)) ? $playlist->name : null,
                 ':userId' => $playlist->userId,
                 ':type' => $playlist->type,
                 ':public' => (isset($playlist->public) && $playlist->public === true) ? 1 : 0,
@@ -90,9 +90,9 @@ class PlaylistMapper extends MapperAbstract
             $query .= ' (name, user_id, type, public, date_created)';
             $query .= ' VALUES (:name, :userId, :type, :public, :dateCreated)';
             $bindParams = array(
-                ':name' => $playlist->name,
+                ':name' => (!empty($playlist->name)) ? $playlist->name : null,
                 ':userId' => $playlist->userId,
-                ':type' => (!empty($playlist->type)) ? $playlist->type : 'list',
+                ':type' => (!empty($playlist->type)) ? $playlist->type : 'playlist',
                 ':public' => (isset($playlist->public) && $playlist->public === true) ? 1 : 0,
                 ':dateCreated' => gmdate(DATE_FORMAT)
             );

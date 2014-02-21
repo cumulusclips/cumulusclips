@@ -371,9 +371,10 @@
         <error_flag_login>You must login to report inappropriate content.</error_flag_login>
         <error_flag_own>You can't flag your own content.</error_flag_own>
         <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
-        <error_favorite_login>You must login to add videos to your favorites.</error_favorite_login>
+        <error_playlist_login>You must login to add videos to your playlists.</error_playlist_login>
         <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
-        <error_favorite_duplicate>This video is already in your favorites.</error_favorite_duplicate>
+        <error_playlist_duplicate>This video is already in this list.</error_playlist_duplicate>
+        <error_playlist_name>Invalid playlist name</error_playlist_name>
         <error_subscribe_login>You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>You can't subscribe to yourself.</error_subscribe_own>
         <error_subscribe_duplicate>You have already subscribed to this member.</error_subscribe_duplicate>
@@ -398,7 +399,8 @@
         <success_rated>Rating has been submitted.</success_rated>
         <success_unsubscribed>You have been unsubscribed from {USERNAME}.</success_unsubscribed>
         <success_subscribed>You are now subscribed to {USERNAME}.</success_subscribed>
-        <success_favorite_added>Video has been added to your favorites.</success_favorite_added>
+        <success_playlist_added>Video has been added to {LIST_NAME}.</success_playlist_added>
+        <success_playlist_created>Playlist has been created.</success_playlist_created>
         <success_flag>Thank you for reporting this. We will look into this immediately.</success_flag>
         <success_status_updated>Your status update has been posted.</success_status_updated>
         <success_comment_posted>Your comment has been posted.</success_comment_posted>
