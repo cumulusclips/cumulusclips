@@ -58,7 +58,7 @@ $this->SetLayout('full');
     <div class="tabs">
         <a href="" data-block="about" title="<?=Language::GetText('about')?>"><?=Language::GetText('about')?></a>
         <a href="" data-block="share" title="<?=Language::GetText('share')?>"><?=Language::GetText('share')?></a>
-        <a href="" data-block="add" title="<?=Language::GetText('add')?>"><?=Language::GetText('add')?></a>
+        <a href="" data-block="addToPlaylist" title="<?=Language::GetText('add')?>"><?=Language::GetText('add')?></a>
         <a href="" class="flag" data-type="video" data-id="<?=$video->videoId?>" title="<?=Language::GetText('flag')?>"><?=Language::GetText('flag')?></a>
     </div>
     <!-- END Action Buttons -->
@@ -108,19 +108,26 @@ $this->SetLayout('full');
     </div>
 
    
-    <div id="add" class="tab_block" >
+    <div id="addToPlaylist" class="tab_block" >
         <div>
             <p class="big"><?=Language::GetText('add_to')?></p>
-            <div>
-                <ul>
-                    <li><a href=""><?=Language::GetText('favorites')?></a></li>
-                    <li><a class="added" href=""><?=Language::GetText('watch_later')?></a></li>
-                    <li><strong><?=Language::GetText('playlists')?></strong></li>
-                    <li><a href="">Free Videos (3)</a></li>
-                    <li><a href="">Instructional Videos (17)</a></li>
-                    <li><a href="">Paid Membership Videos (21)</a></li>
-                </ul>
-            </div>
+            <?php if ($loggedInUser): ?>
+                <div>
+                    <ul>
+                        <?php $playlistService = $this->getService('Playlist'); ?>
+                        <li><a data-playlist_id="<?=$favoritesList->playlistId?>" class="<?=($playlistService->checkListing($video, $favoritesList)) ? 'added' : ''?>" href=""><?=Language::GetText('favorites')?></a></li>
+                        <li><a data-playlist_id="<?=$watchLaterList->playlistId?>" class="<?=($playlistService->checkListing($video, $watchLaterList)) ? 'added' : ''?>" href=""><?=Language::GetText('watch_later')?></a></li>
+                        <?php if (count($userPlaylists) > 0): ?>
+                            <li><strong><?=Language::GetText('playlists')?></strong></li>
+                            <?php foreach ($userPlaylists as $playlist): ?>
+                                <li><a data-playlist_id="<?=$playlist->playlistId?>" class="<?=($playlistService->checkListing($video, $playlist)) ? 'added' : ''?>" href=""><?=$playlist->name?> (<?=count($playlist->entries)?>)</a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <p><?=Language::GetText('playlist_login', array('host' => HOST))?></p>
+            <?php endif; ?>
         </div>
         <div>
             <p class="big"><?=Language::GetText('create_new_playlist')?></p>
@@ -130,10 +137,12 @@ $this->SetLayout('full');
                     <input type="text" name="playlist_name" />
                     <label><?=Language::GetText('visibility')?></label>
                     <select name="playlist_visibility">
-                        <option><?=Language::GetText('public')?></option>
-                        <option><?=Language::GetText('private')?></option>
+                        <option value="public"><?=Language::GetText('public')?></option>
+                        <option value="private"><?=Language::GetText('private')?></option>
                     </select>
-                    <input class="button" type="button" value="<?=Language::GetText('create_playlist_button')?>" />
+                    <input type="hidden" name="action" value="create" />
+                    <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
+                    <input class="button" type="submit" value="<?=Language::GetText('create_playlist_button')?>" />
                 </form>
             </div>
         </div>

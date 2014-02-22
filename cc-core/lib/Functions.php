@@ -10,7 +10,7 @@ class Functions
      * @param mixed $columnKey The column of values to return.
      * @return array Returns an array of values representing a single column from the input array.
      */
-    static function arrayColumn(array $array, $columnKey = 0)
+    public static function arrayColumn(array $array, $columnKey = 0)
     {
         $newArray = array();
         foreach ($array as $child) {
@@ -30,14 +30,12 @@ class Functions
      * @param string $string
      * @return string URL/Slug version of string
      */
-    static function CreateSlug ($string) {
+    public static function createSlug($string)
+    {
         $slug = strtolower (preg_replace ('/[^a-z0-9]+/i', '-', $string));
         $slug = preg_replace ('/^-|-$/', '', $slug);
         return $slug;
     }
-
-
-
 
     /**
      * Extract the file extension of the given file
@@ -45,14 +43,12 @@ class Functions
      * @return string|boolean The file extension if one is present, boolean false
      * if none is found.
      */
-    static function GetExtension ($filename) {
+    public static function getExtension($filename)
+    {
         if (!strrpos ($filename, '.')) return false;
         $filename_sections = explode ('.', $filename);
         return array_pop ($filename_sections);
     }
-
-
-
 
     /**
      * Redirect user if based on a condition's value
@@ -60,7 +56,8 @@ class Functions
      * @param string $redirect Location to send user if condition evaluates to empty
      * @return void If condition evaluates to empty value user is redirected, nothing otherwise
      */
-    static function RedirectIf ($condition, $redirect) {
+    public static function redirectIf($condition, $redirect)
+    {
         if (defined('PREVIEW_LANG') && PREVIEW_LANG) $redirect = Functions::AppendQueryString ($redirect, array ('preview_lang' => PREVIEW_LANG));
         if (defined('PREVIEW_THEME') && PREVIEW_THEME) $redirect = Functions::AppendQueryString ($redirect, array ('preview_theme' => PREVIEW_THEME));
         if (empty ($condition)) {
@@ -69,17 +66,14 @@ class Functions
         }
     }
 
-
-
-
     /**
      * Generate a string of random characters, numbers, and special characters
      * @param integer $length of string to be returned
      * @param boolean $special Whether or not to allow special characters
      * @return string String of random characters
      */
-    static function Random ($length, $special = NULL) {
-
+    public static function random($length, $special = null)
+    {
         $string = '';
         $upper = range ('A','Z');
         $lower = range ('a','z');
@@ -102,16 +96,13 @@ class Functions
         return $string;
     }
 
-
-
-
     /**
      * Format video duration into seconds
      * @param string $duration in hh:mm:ss or mm:ss format
      * @return integer Total seconds
      */
-    static function DurationInSeconds ($duration) {
-
+    public static function durationInSeconds($duration)
+    {
         if (eregi ('^[0-9]{2}:[0-9]{2}:[0-9]{2}$', $duration)) {
 
             $total = 0;
@@ -135,12 +126,8 @@ class Functions
         } else {
             return FALSE;
         }
-
     }
     
-    
-
-
     /**
      * Truncate a string at desired length
      * @param string $string String to be truncated
@@ -148,19 +135,15 @@ class Functions
      * @return string Returns truncated string with '...' appended to the end.
      * If string is shorter than max length then original string is returned.
      */
-    static function CutOff ($string, $max_length) {
-
+    public static function cutOff($string, $max_length)
+    {
         if (strlen ($string) > $max_length) {
             $short = $max_length - 3;
             return substr ($string,0,$short) . '...';
         } else {
             return $string;
         }
-
     }
-
-
-
 
     /**
      * Determine elapsed time string for given timestamp
@@ -168,8 +151,8 @@ class Functions
      * @return string Amount of time passed since given timestamp. If elapsed
      * time is greater than 24 hours, then just return the date is returned
      */
-    static function TimeSince ($time_to_check) {
-
+    public static function timeSince($time_to_check)
+    {
         // Time vars
         $day = 86400;
         $hour = 3600;
@@ -214,11 +197,7 @@ class Functions
             // Time elapsed is 1 Day or greater
             return date('M d, Y', $time_to_check);
         }
-
     }
-
-
-
 
     /**
      * Search and replace placeholders with strings
@@ -229,8 +208,8 @@ class Functions
      * variable is a link, the value from the array is treated as the URL for the href attribute
      * @return string The given string is returned with replacements made to it
      */
-    static function Replace ($string, $replace) {
-
+    public static function replace($string, $replace)
+    {
         // Loop through and execute replacements
         foreach ($replace as $_key => $_value) {
 
@@ -252,18 +231,15 @@ class Functions
         }   // END replacements
 
         return $string;
-
     }
-
-
-
 
     /**
      * Check admin settings cookie to see if sidebar panel is open
      * @param string $panel The panel to be checked if openned or not
      * @return boolean Returns true if panel is open, false otherwise
      */
-    static function IsPanelOpen ($panel) {
+    public static function isPanelOpen($panel)
+    {
         if (!empty ($_COOKIE['cc_admin_settings'])) {
             parse_str ($_COOKIE['cc_admin_settings'], $settings);
             if (!empty ($settings[$panel]) && $settings[$panel] == '1') {
@@ -273,15 +249,13 @@ class Functions
         return false;
     }
 
-
-
-
     /**
      * Output loaded JS files to browser for the admin panel
      * @global array $admin_js List of JS file to be printed
      * @return mixed All JS file entries are printed with javascript tags
      */
-    static function AdminOutputJS() {
+    public static function adminOutputJS()
+    {
         global $admin_js;
         if (!isset ($admin_js)) return false;
         foreach ($admin_js as $file) {
@@ -289,15 +263,12 @@ class Functions
         }
     }
 
-
-
-
     /**
      * Output loaded meta tags to browser for the admin panel
      * @global array $admin_meta List of meta tags to be printed
      * @return mixed All meta tag entries are printed in the document head
      */
-    static function AdminOutputMeta() {
+    public static function AdminOutputMeta() {
         global $admin_meta;
         if (!isset ($admin_meta)) return false;
         foreach ($admin_meta as $name => $content) {
@@ -305,15 +276,13 @@ class Functions
         }
     }
 
-
-
-
     /**
      * Output loaded CSS files to browser for the admin panel
      * @global array $admin_css List of CSS files to be printed
      * @return mixed All CSS file entries are printed in document head
      */
-    static function AdminOutputCss() {
+    public static function adminOutputCss()
+    {
         global $admin_css;
         if (!isset ($admin_css)) return false;
         foreach ($admin_css as $file) {
@@ -321,27 +290,22 @@ class Functions
         }
     }
 
-
-
-
     /**
      * Convert the given system version into a integer from a formatted string
      * @param string $version Formatted string of a system version
      * @return integer Returns three digit numerical version of the system version
      */
-    static function NumerizeVersion ($version) {
+    public static function numerizeVersion($version)
+    {
         return (int) str_pad (str_replace ('.', '', $version), 3, '0');
     }
-
-
-
 
     /**
      * "Phone home" to check if updates are available
      * @return object|boolean Returns update object if its available, false otherwise
      */
-    static function UpdateCheck() {
-        
+    public static function updateCheck()
+    {
         $version = self::NumerizeVersion (CURRENT_VERSION);
         $client = urlencode ($_SERVER['REMOTE_ADDR']);
         $system = urlencode ($_SERVER['SERVER_ADDR']);
@@ -356,18 +320,15 @@ class Functions
 
         $json = json_decode ($update);
         return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;
-        
     }
-
-
-
 
     /**
      * Validate a given theme name
      * @param string $theme_name The name of the theme to validate
      * @return boolean Returns true if theme is valid false otherwise
      */
-    static function ValidTheme ($theme_name) {
+    public static function validTheme($theme_name)
+    {
         if (!empty ($theme_name) && file_exists (THEMES_DIR . "/$theme_name/theme.xml")) {
             return true;
         } else {
@@ -375,17 +336,14 @@ class Functions
         }
     }
 
-
-
-
     /**
      * Append query string parameters to a URL
      * @param string $url The original URL
      * @param array $query Query string parameters in Key/Value pairs
      * @return string Returns the URL with the query string appended to it
      */
-    static function AppendQueryString ($url, $query) {
-
+    public static function appendQueryString($url, $query)
+    {
         // Break URL into parts
         $parts = parse_url ($url);
 
@@ -401,11 +359,7 @@ class Functions
         }
 
         return $url;
-
     }
-
-
-
 
     /**
      * Retrieve list of supported video types in a requested formats
@@ -413,7 +367,8 @@ class Functions
      * @param string $output_format [optional] Format to output the list of supported video types
      * @return string|array Returns list of supported video types in requested format
      */
-    static function GetVideoTypes ($output_format = 'array') {
+    public static function getVideoTypes($output_format = 'array')
+    {
         global $config;
         $type = array();
         $type['array'] = $config->accepted_video_formats;
@@ -426,9 +381,6 @@ class Functions
         return $type[$output_format];
     }
 
-
-
-
     /**
      * Format given date into the format provided
      * Works exactly like PHP date(), only that it can format any given date rather than current date
@@ -436,12 +388,10 @@ class Functions
      * @param string $format Format to apply to the date. See PHP date() for formatting options
      * @return string Returns the formated date
      */
-    static function DateFormat ($format, $date) {
+    public static function dateFormat($format, $date)
+    {
         return date ($format, strtotime ($date));
     }
-
-    
-
 
     /**
      * Converts a GMT/UTC date into local time
@@ -449,12 +399,10 @@ class Functions
      * @param string $format Format to output time in. See PHP date() for formatting options
      * @return string Returns date string formatted by given format
      */
-    static function GmtToLocal ($date_time, $format = 'Y-m-d G:i:s') {
+    public static function gmtToLocal($date_time, $format = 'Y-m-d G:i:s')
+    {
         $date = new DateTime ( $date_time , new DateTimeZone('UTC') );
         $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
         return $date->format ($format);
     }
-    
 }
-
-?>

@@ -409,69 +409,69 @@ PLAY VIDEO
     padding: 5px;
 }
 
-#add {
+#addToPlaylist {
     overflow: hidden;
 }
 
-#add > div:first-child {
+#addToPlaylist > div:first-child {
     width: 225px;
     float: left;
 }
 
-#add > div:first-child > div {
+#addToPlaylist > div:first-child > div {
     border: 1px solid #CCC;
     width: 213px;
     padding-left: 10px;
     height: 150px;
 }
 
-#add .jspVerticalBar {
+#addToPlaylist .jspVerticalBar {
     width: 12px;
 }
 
-#add .jspTrack {
+#addToPlaylist .jspTrack {
     background-color: #D2D2D2;
 }
 
-#add .jspDrag {
+#addToPlaylist .jspDrag {
     background-color: #555;
     border-radius: 10px;
 }
 
-#add li {
+#addToPlaylist li {
     line-height: 24px;
 }
 
-#add li strong {
+#addToPlaylist li strong {
     padding-left: 20px;
 }
 
-#add a {
+#addToPlaylist li a {
     color: #555;
     padding-left: 20px;
     font-weight: normal;
     background: url('../images/icon_add.png') no-repeat 0 2px;
 }
 
-#add a:hover {
+#addToPlaylist li a:hover {
     text-decoration: none;
 }
 
-#add .added {
+#addToPlaylist .added {
     background-image: url('../images/icon_added.png');
 }
 
-#add > div:last-child {
+#addToPlaylist > div:last-child {
     float: right;
     width: 270px;
 }
 
-#add .form {
+#addToPlaylist .form {
     width: 250px;
     padding: 10px;
 }
 
-#add select, #add input[type="text"] {
+#addToPlaylist select, #addToPlaylist input[type="text"] {
     height: 30px;
     margin-bottom: 20px;
 }

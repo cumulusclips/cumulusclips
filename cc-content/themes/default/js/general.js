@@ -72,12 +72,37 @@ $(document).ready(function(){
     });
 
 
-    // Attach favorite action to favorite links / buttons
-    $('.favorite').click(function(){
-        var url = baseUrl+'/actions/favorite/';
-        var data = {video_id: videoId};
-        executeAction(url, data);
+    // Add video to playlist on play page
+    $('#addToPlaylist li a').click(function(){
+        var link = $(this);
+        var url = baseUrl+'/actions/playlist/';
+        var data = {
+            action: 'add',
+            video_id: videoId,
+            playlist_id: $(this).data('playlist_id'),
+            action: 'add'
+        };
+        var callback = function(addToPlaylistResponse){
+            var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
+            link.text(newNameAndCount);
+            link.addClass('added');
+        };
+        executeAction(url, data, callback);
         return false;
+    });
+    
+    // Create new playlist on play page
+    $('#addToPlaylist form').submit(function(event){
+        var createPlaylistForm = $(this);
+        var data = $(this).serialize();
+        var url = baseUrl+'/actions/playlist/';
+        var callback = function(createPlaylistResponse){
+            $('#addToPlaylist ul').append('<li><a data-playlist_id="' + createPlaylistResponse.other.playlistId + '" class="added" href="">' + createPlaylistResponse.other.name + ' (' + createPlaylistResponse.other.count + ')</a></li>');
+            createPlaylistForm.find('input[type="text"]').val('');
+            createPlaylistForm.find('select').val('public');
+        };
+        executeAction(url, data, callback);
+        event.preventDefault();
     });
 
 

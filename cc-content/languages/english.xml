@@ -136,6 +136,7 @@
         <favorites>Favorites</favorites>
         <watch_later>Watch Later</watch_later>
         <playlists>Playlists</playlists>
+        <playlist_login><![CDATA[You must <a href="{HOST}/login/">login</a> to add videos to your playlists.]]></playlist_login>
         <create_new_playlist>Create New Playlist</create_new_playlist>
         <playlist_name>Playlist Name</playlist_name>
         <visibility>Visibility</visibility>
@@ -371,7 +372,6 @@
         <error_flag_login>You must login to report inappropriate content.</error_flag_login>
         <error_flag_own>You can't flag your own content.</error_flag_own>
         <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
-        <error_playlist_login>You must login to add videos to your playlists.</error_playlist_login>
         <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
         <error_playlist_duplicate>This video is already in this list.</error_playlist_duplicate>
         <error_playlist_name>Invalid playlist name</error_playlist_name>

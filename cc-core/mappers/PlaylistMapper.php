@@ -7,6 +7,11 @@ class PlaylistMapper extends MapperAbstract
         return $this->getPlaylistByCustom(array('playlist_id' => $playlistId));
     }
     
+    public function getUserPlaylists($userId)
+    {
+        return $this->getMultiplePlaylistsByCustom(array('user_id' => $userId));
+    }
+    
     public function getPlaylistByCustom(array $params)
     {
         $db = Registry::get('db');

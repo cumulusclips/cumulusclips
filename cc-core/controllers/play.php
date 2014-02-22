@@ -11,6 +11,7 @@ $view->vars->loggedInUser = $userService->loginCheck();
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
+$playlistMapper = new PlaylistMapper();
 $videoService = new VideoService();
 $ratingService = new RatingService();
 $view->vars->tags = null;
@@ -54,6 +55,26 @@ if ($view->vars->loggedInUser) {
     $view->vars->subscribe_text = ($subscriptionService->checkSubscription($view->vars->loggedInUser->userId, $view->vars->video->userId)) ? 'unsubscribe' : 'subscribe';
 } else {
     $view->vars->subscribe_text = 'subscribe';
+}
+
+// Retrieve user's playlists
+if ($view->vars->loggedInUser) {
+    $userLists = $playlistMapper->getUserPlaylists($view->vars->loggedInUser->userId);
+    $view->vars->userPlaylists = array();
+    foreach ($userLists as $list) {
+        switch ($list->type)
+        {
+            case 'playlist':
+                $view->vars->userPlaylists[] = $list;
+                break;
+            case 'favorites':
+                $view->vars->favoritesList = $list;
+                break;
+            case 'watch_later':
+                $view->vars->watchLaterList = $list;
+                break;
+        }
+    }
 }
 
 // Retrieve count of all videos
