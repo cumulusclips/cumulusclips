@@ -65,7 +65,7 @@ if ($total['total'] > 20) {
     // Use FULLTEXT query
     $search_terms = $view->vars->video->title . ' ' . implode (' ', $view->vars->video->tags);
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST (:searchTerms) AND status = 'approved' AND private = '0' AND video_id != :videoId LIMIT 9";
-    $view->vars->result_related = $db->fetchAll($query, array(':searchTerms' => $search_terms, ':videoId' => $view->vars->video->video_id));
+    $relatedVideosResults = $db->fetchAll($query, array(':searchTerms' => $search_terms, ':videoId' => $view->vars->video->video_id));
 } else {
     // Use LIKE query
     $replacements = array(':videoId' => $view->vars->video->videoId);
@@ -77,8 +77,11 @@ if ($total['total'] > 20) {
 
     $sub_queries = implode(' OR ', $sub_queries);
     $query = 'SELECT video_id FROM ' . DB_PREFIX . 'videos WHERE (' . $sub_queries . ') AND status = "approved" AND private = "0" AND video_id != :videoId LIMIT 9';
-    $view->vars->result_related = $db->fetchAll($query, $replacements);
+    $relatedVideosResults = $db->fetchAll($query, $replacements);
 }
+$view->vars->relatedVideos = $videoMapper->getVideosFromList(
+    Functions::arrayColumn($relatedVideosResults, 'video_id')
+);
 Plugin::triggerEvent('play.load_suggestions');
 
 ### Retrieve comment count

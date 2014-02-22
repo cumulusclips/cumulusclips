@@ -209,25 +209,25 @@ $this->SetLayout('full');
     <!-- BEGIN RELATED VIDEOS -->
     <div class="related_videos">
         <p class="large"><?=Language::GetText('suggestions_header')?></p>
-        <?php if (count($result_related) > 0): ?>
+        <?php if (count($relatedVideos) > 0): ?>
 
             <div class="video_list">
-            <?php while ($row = $db->FetchObj ($result_related)): ?>
-                <?php $related_video = new Video ($row->video_id); ?>
+            <?php $videoService = $this->getService('Video'); ?>
+            <?php foreach ($relatedVideos as $relatedVideo): ?>
                 <div class="video_medium">
                     <div>
-                        <a href="<?=$related_video->url?>/" title="<?=$related_video->title?>">
-                            <img width="125" height="70" src="<?=$config->thumb_url?>/<?=$related_video->filename?>.jpg" />
+                        <a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>">
+                            <img width="125" height="70" src="<?=$config->thumb_url?>/<?=$relatedVideo->filename?>.jpg" />
                         </a>
-                        <span><?=$related_video->duration?></span>
+                        <span><?=$relatedVideo->duration?></span>
                     </div>
                     <div>
-                        <p><a href="<?=$related_video->url?>/" title="<?=$related_video->title?>"><?=$related_video->title?></a></p>
-                        <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$related_video->username?>/" title="<?=$related_video->username?>"><?=$related_video->username?></a></p>
-                        <p><strong><?=Language::GetText('views')?>:</strong> <?=$related_video->views?></p>
+                        <p><a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>"><?=$relatedVideo->title?></a></p>
+                        <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$relatedVideo->username?>/" title="<?=$relatedVideo->username?>"><?=$relatedVideo->username?></a></p>
+                        <p><strong><?=Language::GetText('views')?>:</strong> <?=$relatedVideo->views?></p>
                     </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
             </div>
 
         <?php else: ?>
