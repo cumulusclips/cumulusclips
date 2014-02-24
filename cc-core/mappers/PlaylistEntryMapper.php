@@ -42,7 +42,7 @@ class PlaylistEntryMapper extends MapperAbstract
         
         $playlistEntryList = array();
         foreach($dbResults as $record) {
-            $playlistEntryList[] = $this->_map($record);
+            $playlistEntryList[$record['playlist_entry_id']] = $this->_map($record);
         }
         return $playlistEntryList;
     }
@@ -105,5 +105,12 @@ class PlaylistEntryMapper extends MapperAbstract
             $playlistEntryList[] = $this->_map($playlistEntryRecord);
         }
         return $playlistEntryList;
+    }
+    
+    public function delete($playlistEntryId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'playlist_entries WHERE playlist_entry_id = :playlistEntryId';
+        $db->query($query, array(':playlistEntryId' => $playlistEntryId));
     }
 }

@@ -245,13 +245,52 @@ MY VIDEOS
     float: left;
 }
 
-.myvideos #main > .right,
-.myfavorites #main > .right {
+.myvideos #main > .right {
     width: 605px;
 }
 
 .videos_list .right {
     float: right;
+}
+
+
+
+
+
+/********
+PLAYLISTS
+********/
+
+.playlist .actions .right {
+    float: right;
+}
+
+#createNewPlaylist {
+    display: none;
+}
+
+.playlists .playlists_list {
+    margin-top: 15px;
+}
+
+.playlists_form {
+    width: auto;
+}
+
+.playlists_form .field {
+    width: 250px;
+    float: left;
+    margin-right: 10px;
+}
+
+.playlists_form input[type="text"],
+.playlists_form select {
+    margin-bottom: 15px;
+}
+
+.playlists_form .button {
+    clear: both;
+    float: none;
 }
 
 

@@ -128,6 +128,13 @@ class PlaylistMapper extends MapperAbstract
         return $playlistList;
     }
     
+    public function delete($playlistId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'playlists WHERE playlist_id = :playlistId';
+        $db->query($query, array(':playlistId' => $playlistId));
+    }
+    
     protected function _getPlaylistEntryMapper()
     {
         return new PlaylistEntryMapper();

@@ -212,7 +212,7 @@
         <manage_media>Manage Media</manage_media>
         <upload_video>Upload a Video</upload_video>
         <my_videos>My Videos</my_videos>
-        <my_favorite_videos>My Favorite Videos</my_favorite_videos>
+        <my_playlists>My Playlists</my_playlists>
         <account_settings>Account Settings</account_settings>
         <update_profile>Update Member Profile</update_profile>
         <privacy_settings>Privacy Settings</privacy_settings>
@@ -235,11 +235,21 @@
         <pendingConversion>Pending Conversion</pendingConversion>
         <processing>Processing</processing>
         <pendingApproval>Pending Approval</pendingApproval>
+        
+        <!-- My Account / Playlists Page -->
+        <playlists_header>My Playlists</playlists_header>
+        <delete_playlist>Delete Playlist</delete_playlist>
+        <edit_playlist>Edit Playlist</edit_playlist>
+        <no_playlists>You haven't created any playlists yet.</no_playlists>
 
-        <!-- My Account / My Favorite Videos Page -->
-        <myfavorites_header>My Favorite Videos</myfavorites_header>
-        <no_favorites>You haven't added any videos to your favorites yet.</no_favorites>
-        <remove_favorite>Remove from Favorites</remove_favorite>
+        <!-- My Account / Playlist Edit Page -->
+        <playlists_edit_header>Edit Playlist</playlists_edit_header>
+        <back_to_playlists>Back to playlists</back_to_playlists>
+        <update_playlist_header>Update Playlist Details</update_playlist_header>
+        <update_playlist_button>Update Playlist</update_playlist_button>
+        <playlist_videos>Playlist Videos</playlist_videos>
+        <no_videos_playlist>Playlist doesn't contain any videos yet.</no_videos_playlist>
+        <remove_playlist_video>Remove from playlist</remove_playlist_video>
 
         <!-- My Account / Edit Profile Page -->
         <profile_header>Update Profile</profile_header>
@@ -343,7 +353,8 @@
         <error_invalid_login>Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
         <error_no_users_email>No users were found with that email! Please try again.</error_no_users_email>
         
-        <confirm_remove_favorite>Video will be removed from your favorites. Do you want to proceed?</confirm_remove_favorite>
+        <confirm_delete_playlist>Playlist will be deleted. Do you want to proceed?</confirm_delete_playlist>
+        <confirm_remove_playlist_video>Video will be removed from your playlist. Do you want to proceed?</confirm_remove_playlist_video>
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
 
@@ -399,8 +410,6 @@
         <success_rated>Rating has been submitted.</success_rated>
         <success_unsubscribed>You have been unsubscribed from {USERNAME}.</success_unsubscribed>
         <success_subscribed>You are now subscribed to {USERNAME}.</success_subscribed>
-        <success_playlist_added>Video has been added to {LIST_NAME}.</success_playlist_added>
-        <success_playlist_created>Playlist has been created.</success_playlist_created>
         <success_flag>Thank you for reporting this. We will look into this immediately.</success_flag>
         <success_status_updated>Your status update has been posted.</success_status_updated>
         <success_comment_posted>Your comment has been posted.</success_comment_posted>
@@ -410,7 +419,11 @@
         <success_login_sent>We have sent you your login information. Please check your email.</success_login_sent>
         <success_video_updated>Video has been updated.</success_video_updated>
         <success_video_deleted>Video has been deleted.</success_video_deleted>
-        <success_favorite_removed>Video has been removed from your favorites.</success_favorite_removed>
+        <success_playlist_added>Video has been added to {LIST_NAME}.</success_playlist_added>
+        <success_playlist_created>Playlist has been created.</success_playlist_created>
+        <success_playlist_updated>Playlist has been updated.</success_playlist_updated>
+        <success_playlist_video_removed>Video has been removed from your playlist.</success_playlist_video_removed>
+        <success_playlist_deleted>Playlist has been deleted.</success_playlist_deleted>
         <success_profile_updated>Your profile has been successfully updated.</success_profile_updated>
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
         <success_password_updated>Your password has been updated.</success_password_updated>
@@ -557,6 +570,18 @@
             <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
             <description>View all of this member's favorite videos.</description>
         </myfavorites>
+
+        <playlists>
+            <title>My Playlists</title>
+            <keywords>My Playlists, Playlist</keywords>
+            <description>View all my playlists.</description>
+        </playlists>
+
+        <playlists_edit>
+            <title>Edit Playlist: {PLAYLIST_NAME}</title>
+            <keywords>Playlist Videos, Videos, Playlist, Edit</keywords>
+            <description>Update playlist, and view all videos in playlist.</description>
+        </playlists_edit>
 
         <update_profile>
             <title>Update Profile</title>

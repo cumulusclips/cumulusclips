@@ -10,6 +10,18 @@ class PlaylistService extends ServiceAbstract
         return $videoMapper->getVideosFromList($videoIds);
     }
     
+    public function getPlaylistThumbnails(Playlist $playlist)
+    {
+        $config = Registry::get('config');
+        $videoIds = Functions::arrayColumn(array_slice($playlist->entries, 0, 3), 'videoId');
+        $videoMapper = new VideoMapper();
+        $thumbnailList = array();
+        foreach ($videoMapper->getVideosFromList($videoIds) as $video) {
+            $thumbnailList[] = $config->thumb_url . '/' . $video->filename . '.jpg';
+        }
+        return $thumbnailList;
+    }
+    
     public function addVideoToPlaylist(Video $video, Playlist $playlist)
     {
         $playlistEntryMapper = new PlaylistEntryMapper();
@@ -40,6 +52,31 @@ class PlaylistService extends ServiceAbstract
             default:
                 throw new Exception('Invalid playlist name');
         }
+    }
+    
+    public function delete(Playlist $playlist)
+    {
+        // Delete all playlist entries
+        $playlistEntryMapper = new PlaylistEntryMapper();
+        foreach ($playlist->entries as $playlistEntry) {
+            $playlistEntryMapper->delete($playlistEntry->playlistEntryId);
+        }
+        
+        // Delete playlist
+        $playlistMapper = $this->_getMapper();
+        $playlistMapper->delete($playlist->playlistId);
+    }
+    
+    public function deleteVideo(Video $video, Playlist $playlist)
+    {
+        $playlistEntryMapper = new PlaylistEntryMapper();
+        $playlistEntry = $playlistEntryMapper->getPlaylistEntryByCustom(array(
+            'playlist_id' => $playlist->playlistId,
+            'video_id' => $video->videoId
+        ));      
+        $playlistEntryMapper->delete($playlistEntry->playlistEntryId);
+        unset($playlist->entries[$playlistEntry->playlistEntryId]);
+        return $playlist;
     }
     
     /**

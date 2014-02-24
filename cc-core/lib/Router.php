@@ -277,21 +277,15 @@ class Router
             'mappings' => array('vid')
         ));
 
-        $routes['myaccountMyFavorites'] = new Route(array(
-            'path' => 'myaccount/myfavorites',
-            'location' => 'cc-core/controllers/myaccount/myfavorites.php'
+        $routes['myaccountPlaylists'] = new Route(array(
+            'path' => 'myaccount/playlists',
+            'location' => 'cc-core/controllers/myaccount/playlists.php'
         ));
 
-        $routes['myaccountMyFavoritesDelete'] = new Route(array(
-            'path' => 'myaccount/myfavorites/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/myfavorites.php',
-            'mappings' => array('vid')
-        ));
-
-        $routes['myaccountMyFavoritesPaginated'] = new Route(array(
-            'path' => 'myaccount/myfavorites/page/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/myfavorites.php',
-            'mappings' => array('page')
+        $routes['myaccountPlaylistsEdit'] = new Route(array(
+            'path' => 'myaccount/playlists/edit/([0-9]+)',
+            'location' => 'cc-core/controllers/myaccount/playlists_edit.php',
+            'mappings' => array('playlist_id')
         ));
 
         $routes['myaccountUpdateProfile'] = new Route(array(
