@@ -8,12 +8,12 @@ class CategoryService extends ServiceAbstract
      */
     public function getCategories()
     {
-        $db = Registry::get('db');
         $categoryMapper = new CategoryMapper();
-        $query = "SELECT category_id FROM " . DB_PREFIX . "categories ORDER BY name ASC";
-        $categoryResults = $db->fetchAll($query);
-        return $categoryMapper->getCategoriesFromList(
-            Functions::arrayColumn($categoryResults, 'category_id')
-        );
+        $categories = $categoryMapper->getMultipleCategoriesByCustom(array('true' => true));
+        $categoryList = array();
+        foreach ($categories as $category) {
+            $categoryList[$category->categoryId] = $category;
+        }
+        return $categoryList;
     }
 }

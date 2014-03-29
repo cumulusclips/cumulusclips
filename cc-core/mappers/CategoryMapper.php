@@ -31,6 +31,26 @@ class CategoryMapper extends MapperAbstract
             return false;
         }
     }
+    
+    public function getMultipleCategoriesByCustom(array $params)
+    {
+        $db = Registry::get('db');
+        $query = 'SELECT * FROM ' . DB_PREFIX . 'categories WHERE ';
+        
+        $queryParams = array();
+        foreach ($params as $fieldName => $value) {
+            $query .= "$fieldName = :$fieldName AND ";
+            $queryParams[":$fieldName"] = $value;
+        }
+        $query = preg_replace('/\sAND\s$/', '', $query);
+        $dbResults = $db->fetchAll($query, $queryParams);
+        
+        $categoryList = array();
+        foreach($dbResults as $record) {
+            $categoryList[] = $this->_map($record);
+        }
+        return $categoryList;
+    }
 
     protected function _map($dbResults)
     {
@@ -85,8 +105,7 @@ class CategoryMapper extends MapperAbstract
         $result = $db->fetchAll($sql, $categoryIds);
 
         foreach($result as $categoryRecord) {
-            $category = $this->_map($categoryRecord);
-            $categoryList[$category->categoryId] = $category;
+            $categoryList[] = $this->_map($categoryRecord);
         }
         return $categoryList;
     }
