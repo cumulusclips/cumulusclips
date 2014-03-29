@@ -413,7 +413,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nUpdating video information...") : null;
 
     // Update database with new video status information
-    $video->duration = $duration[0];
+    $video->duration = Functions::formatDuration($duration[0]);
     Plugin::Trigger ('encode.before_update');
     $videoMapper->save($video);
     Plugin::Trigger ('encode.update');

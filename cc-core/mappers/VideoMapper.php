@@ -69,7 +69,7 @@ class VideoMapper extends MapperAbstract
         $video->userId = $dbResults['user_id'];
         $video->username = $dbResults['username'];
         $video->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
-        $video->duration = $dbResults['duration'];
+        $video->duration = Functions::formatDuration($dbResults['duration']);
         $video->status = $dbResults['status'];
         $video->views = $dbResults['views'];
         $video->originalExtension = $dbResults['original_extension'];

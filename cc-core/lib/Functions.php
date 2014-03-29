@@ -103,29 +103,9 @@ class Functions
      */
     public static function durationInSeconds($duration)
     {
-        if (eregi ('^[0-9]{2}:[0-9]{2}:[0-9]{2}$', $duration)) {
-
-            $total = 0;
-            $hours = (int) substr ($duration, 0, 2);
-            $minutes = (int) substr ($duration, 3, 2);
-            $seconds = (int) substr ($duration, -2);
-            $total += $hours*3600;
-            $total += $minutes*60;
-            $total += $seconds;
-            return $total;
-
-        } elseif (eregi ('^[0-9]{2}:[0-9]{2}$', $duration)) {
-
-            $total = 0;
-            $minutes = (int) substr ($duration, 0, 2);
-            $seconds = (int) substr ($duration, -2);
-            $total += $minutes*60;
-            $total += $seconds;
-            return $total;
-
-        } else {
-            return FALSE;
-        }
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $duration);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        return $hours * 3600 + $minutes * 60 + $seconds;
     }
     
     /**
@@ -147,56 +127,32 @@ class Functions
 
     /**
      * Determine elapsed time string for given timestamp
-     * @param integer $time_to_check Timestamp to check elapsed time for
+     * @param integer $timestamp Timestamp to check elapsed time for
      * @return string Amount of time passed since given timestamp. If elapsed
      * time is greater than 24 hours, then just return the date is returned
      */
-    public static function timeSince($time_to_check)
+    public static function timeSince($timestamp)
     {
-        // Time vars
-        $day = 86400;
-        $hour = 3600;
-        $minute = 60;
+        $secondsSinse = time()-$timestamp;
+        $tokens = array (
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        );
 
-        // Calculate elapsed time
-        $seconds_since = time()-$time_to_check;
-
-
-        // Detect if elapsed time is greater than 1 day
-        if ($seconds_since < $day) {
-
-            // Detect if elapsed time is greater than 1 hour
-            if ($seconds_since < $hour) {
-
-                // Detect if elapsed time is greater than 1 minute
-                if ($seconds_since < $minute) {
-
-                    // Time elapsed is less than 1 Minute
-                    $plural = $seconds_since == 1 ? '' : 's';
-                    return "$seconds_since  second$plural ago";
-
-                } else {
-
-                    // Time elapse is 1 Minute or greater
-                    $minutes_diff = floor($seconds_since/$minute);
-                    $plural = $minutes_diff == 1 ? '' : 's';
-                    return "$minutes_diff minute$plural ago";
-
-                }
-
+        foreach ($tokens as $unit => $text) {
+            if ($secondsSinse < $unit) continue;
+            $numberOfUnits = floor($secondsSinse / $unit);
+            if ($text == 'second') {
+                return 'Just now';
             } else {
-
-                // Time elapsed is 1 Hour or greater
-                $hours_diff = floor($seconds_since/$hour);
-                $plural = $hours_diff == 1 ? '' : 's';
-                return  "$hours_diff hour$plural ago";
-
+                return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '') . ' ago';
             }
-
-        } else {
-            // Time elapsed is 1 Day or greater
-            return date('M d, Y', $time_to_check);
-        }
+        } 
     }
 
     /**
@@ -404,5 +360,17 @@ class Functions
         $date = new DateTime ( $date_time , new DateTimeZone('UTC') );
         $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
         return $date->format ($format);
+    }
+    
+    public static function formatDuration($duration)
+    {
+        $newDuration = ltrim($duration, '0:');
+        if (strlen($newDuration) == 2) {
+            return '0:' . $newDuration;
+        } else if (strlen($newDuration) == 1) {
+            return '0:0' . $newDuration;
+        } else {
+            return $newDuration;
+        }
     }
 }
