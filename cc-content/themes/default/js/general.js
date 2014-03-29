@@ -207,12 +207,25 @@ $(document).ready(function(){
     
     // Scrollbar for Play page 'Add Video To' widget
     if ($('.play').length > 0) {
-        $('#add > div:first-child > div').jScrollPane();
-        $('#add').on('tabToggled',function(){
+        $('#addToPlaylist > div:first-child > div').jScrollPane();
+        $('#addToPlaylist').on('tabToggled',function(){
             if ($(this).css('display') == 'block') {
-                api = $('#add > div:first-child > div').data('jsp');
+                api = $('#addToPlaylist > div:first-child > div').data('jsp');
                 api.reinitialise();
             }
+        });
+        
+        // Attach scrollbar to playlist widget if viewing a playlist
+        if ($('#playlistVideos .videos_list').length > 0) {
+            $('#playlistVideos .videos_list').jScrollPane();
+            var playlistScrollApi = $('#playlistVideos .videos_list').data('jsp');
+            var activePlaylistVideo = $('#playlistVideos .videos_list .active');
+            playlistScrollApi.scrollTo(0, activePlaylistVideo.index()*76);
+        }
+        
+        // Make entire playlist video tile clickable
+        $('#playlistVideos .video_small').click(function(){
+            location = $(this).find('div > a').attr('href');
         });
     }
 

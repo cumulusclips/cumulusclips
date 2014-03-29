@@ -6,10 +6,10 @@ $this->AddJs('mousewheel.plugin.js');
 $this->SetLayout('full');
 ?>
 
+<h1><?=$video->title?></h1>
 
 <div class="left">
 
-    <h1><?=$video->title?></h1>
     <div class="message"></div>
     <?php if ($video->gated && !$loggedInUser): ?>
         <div id="player-gated">
@@ -119,8 +119,8 @@ $this->SetLayout('full');
                         <li><a data-playlist_id="<?=$watchLaterList->playlistId?>" class="<?=($playlistService->checkListing($video, $watchLaterList)) ? 'added' : ''?>" href=""><?=Language::GetText('watch_later')?></a></li>
                         <?php if (count($userPlaylists) > 0): ?>
                             <li><strong><?=Language::GetText('playlists')?></strong></li>
-                            <?php foreach ($userPlaylists as $playlist): ?>
-                                <li><a data-playlist_id="<?=$playlist->playlistId?>" class="<?=($playlistService->checkListing($video, $playlist)) ? 'added' : ''?>" href=""><?=$playlist->name?> (<?=count($playlist->entries)?>)</a></li>
+                            <?php foreach ($userPlaylists as $userPlaylist): ?>
+                                <li><a data-playlist_id="<?=$userPlaylist->playlistId?>" class="<?=($playlistService->checkListing($video, $userPlaylist)) ? 'added' : ''?>" href=""><?=$userPlaylist->name?> (<?=count($userPlaylist->entries)?>)</a></li>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>
@@ -211,6 +211,36 @@ $this->SetLayout('full');
 
 <!-- BEGIN PLAY RIGHT -->
 <div class="right">
+    
+    <?php if ($playlist): ?>
+        <div id="playlistVideos">
+            <header>
+                <p class="big"><?=$this->getService('Playlist')->getPlaylistName($playlist)?></p>
+                <?php $playlistAuthor = $this->getMapper('User')->getUserById($playlist->userId); ?>
+                <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$playlistAuthor->username?>/"><?=$playlistAuthor->username?></a></p>
+            </header>
+            
+            <div class="videos_list">
+            <?php $videoService = $this->getService('Video'); ?>
+            <?php foreach ($playlistVideos as $playlistVideo): ?>
+                
+                <div class="video_small <?=($playlistVideo->videoId == $video->videoId) ? 'active' : ''?>">
+                    <div>
+                        <a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>">
+                            <img width="100" height="56" src="<?=$config->thumb_url?>/<?=$playlistVideo->filename?>.jpg" />
+                        </a>
+                        <span><?=$playlistVideo->duration?></span>
+                    </div>
+                    <div>
+                        <p><a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>"><?=$playlistVideo->title?></a></p>
+                        <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$playlistVideo->username?>/" title="<?=$playlistVideo->username?>"><?=$playlistVideo->username?></a></p>
+                        <p><strong><?=Language::GetText('views')?>:</strong> <?=$playlistVideo->views?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
     
     <?php $this->Block ('ad300.tpl'); ?>
 

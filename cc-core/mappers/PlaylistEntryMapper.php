@@ -42,7 +42,7 @@ class PlaylistEntryMapper extends MapperAbstract
         
         $playlistEntryList = array();
         foreach($dbResults as $record) {
-            $playlistEntryList[$record['playlist_entry_id']] = $this->_map($record);
+            $playlistEntryList[] = $this->_map($record);
         }
         return $playlistEntryList;
     }

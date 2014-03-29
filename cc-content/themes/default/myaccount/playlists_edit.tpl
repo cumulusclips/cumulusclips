@@ -41,14 +41,14 @@
         <?php $videoService = $this->getService('Video'); ?>
         <div class="video">
             <div>
-                <a href="<?=$videoService->getUrl($video)?>/" title="<?=$video->title?>">
+                <a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>">
                     <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
                 </a>
                 <span><?=$video->duration?></span>
             </div>
-            <p><a href="<?=$videoService->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
+            <p><a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>"><?=$video->title?></a></p>
             <p class="actions small">
-                <a class="confirm" data-node="confirm_remove_playlist_video" href="<?=HOST?>/myaccount/playlists/view/<?=$playlist->playlistId?>/?remove=<?=$video->videoId?>" title="<?=Language::GetText('remove_playlist_video')?>"><span><?=Language::GetText('remove_playlist_video')?></span></a>
+                <a class="confirm" data-node="confirm_remove_playlist_video" href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/?remove=<?=$video->videoId?>" title="<?=Language::GetText('remove_playlist_video')?>"><span><?=Language::GetText('remove_playlist_video')?></span></a>
             </p>
         </div>
     <?php endforeach; ?>

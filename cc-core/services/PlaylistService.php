@@ -2,7 +2,18 @@
 
 class PlaylistService extends ServiceAbstract
 {
-    
+    public function getUrl(Playlist $playlist)
+    {
+        if (!empty($playlist->entries)) {
+            $videoMapper = new VideoMapper();
+            $videoService = new VideoService();
+            $firstVideo = $videoMapper->getVideoById($playlist->entries[0]->videoId);
+            return $videoService->getUrl($firstVideo) . '/?playlist=' . $playlist->playlistId;
+        } else {
+            return false;
+        }
+    }
+
     public function getPlaylistVideos(Playlist $playlist)
     {
         $videoIds = Functions::arrayColumn($playlist->entries, 'videoId');
@@ -69,13 +80,15 @@ class PlaylistService extends ServiceAbstract
     
     public function deleteVideo(Video $video, Playlist $playlist)
     {
+        if (!$this->checkListing($video, $playlist)) throw new Exception('Video not found in playlist');
         $playlistEntryMapper = new PlaylistEntryMapper();
         $playlistEntry = $playlistEntryMapper->getPlaylistEntryByCustom(array(
             'playlist_id' => $playlist->playlistId,
             'video_id' => $video->videoId
         ));      
         $playlistEntryMapper->delete($playlistEntry->playlistEntryId);
-        unset($playlist->entries[$playlistEntry->playlistEntryId]);
+        $key = array_search($playlistEntry, $playlist->entries);
+        unset($playlist->entries[$key]);
         return $playlist;
     }
     

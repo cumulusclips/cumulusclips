@@ -16,6 +16,8 @@ $videoService = new VideoService();
 $ratingService = new RatingService();
 $view->vars->tags = null;
 $view->vars->private = null;
+$view->vars->playlist = null;
+$view->vars->playlistVideos = null;
 $view->vars->vp8Options = json_decode(Settings::Get('vp8Options'));
 
 // Validate requested video
@@ -74,6 +76,20 @@ if ($view->vars->loggedInUser) {
                 $view->vars->watchLaterList = $list;
                 break;
         }
+    }
+}
+
+// Load playlist videos if applicable
+if (!empty($_GET['playlist'])) {
+    $playlistService = new PlaylistService();
+    $playlist = $playlistMapper->getPlaylistById($_GET['playlist']);
+    if (
+        $playlist
+        && ($playlist->public || ($view->vars->loggedInUser && $view->vars->loggedInUser->userId == $playlist->userId))
+        && $playlistService->checkListing($video, $playlist)
+    ) {
+        $view->vars->playlist = $playlist;
+        $view->vars->playlistVideos = $playlistService->getPlaylistVideos($playlist);
     }
 }
 

@@ -281,6 +281,21 @@ SEARCH RESULTS
 PLAY VIDEO
 *********/
 
+.play #main .right {
+    overflow: hidden;
+    float: none;
+}
+
+.play #main .right > p:first-child {
+    margin-top: 0;
+}
+
+.play h1 {
+    width: 600px;
+    float: left;
+    padding-right: 330px;
+}
+
 #player {
     background-color: #000;
     width: 600px;
@@ -588,6 +603,92 @@ PLAY VIDEO
 .comments_list > div > div p:first-child span:last-child a:last-child {
     margin-left: 10px;
     color: #900;
+}
+
+
+/** PLAYLIST VIDEOS **/
+
+#playlistVideos {
+    background-color: #222;
+    width: 300px;
+    color: #FFF;
+    margin-bottom: 20px;
+    height: 337px;
+}
+
+#playlistVideos .jspVerticalBar {
+    width: 11px;
+}
+
+#playlistVideos .jspTrack {
+    background-color: #555;
+}
+
+#playlistVideos .jspDrag {
+    background-color: #333;
+    border-radius: 10px;
+}
+
+#playlistVideos .jspPane {
+    width: 290px !important;
+}
+
+#playlistVideos header {
+    padding: 10px 15px;
+    height: 35px;
+    background-color: #1a1a1a;
+}
+
+#playlistVideos .big {
+    margin-top: 0;
+    color: #FFF;
+}
+
+#playlistVideos .big + p {
+    font-size: 10px;
+    margin-bottom: 0;
+}
+
+#playlistVideos .videos_list {
+    overflow: auto;
+    height: 282px;
+}
+
+#playlistVideos a {
+    color: #0066cc;
+}
+
+#playlistVideos .video_small {
+    overflow: hidden;
+    margin-right: 0;
+    float: none;
+    width: 270px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+#playlistVideos .video_small:hover,
+#playlistVideos .active {
+    background-color: #444;
+}
+
+#playlistVideos .video_small div:first-child {
+    float: left;
+    margin-right: 10px;
+}
+
+#playlistVideos .video_small div:first-child + div {
+    float: left;
+    width: 154px;
+}
+
+#playlistVideos .video_small p:first-child {
+    margin-top: 0;
+}
+
+#playlistVideos .video_small p:first-child + p,
+#playlistVideos .video_small p:first-child + p + p {
+    font-size: 10px;
 }
 
 

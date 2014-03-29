@@ -16,7 +16,7 @@
             <div class="thumbnails">
                 <?php $thumbnails = $playlistService->getPlaylistThumbnails($favoritesList); ?>
                 <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                <?php if (count($favoritesList->entries) >= 3): ?>
+                <?php if (count($favoritesList->entries) >= 2): ?>
                     <div>
                         <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
                             <img width="65" height="36" src="<?=$imgUrl?>" />
@@ -24,10 +24,11 @@
                     </div>
                 <?php endif; ?>
             </div>
+            <p><a href="<?=$playlistService->getUrl($favoritesList)?>"><?=Language::GetText('favorites')?></a></p>
         <?php else: ?>
             <img src="<?=THEME?>/images/playlist_placeholder.png" />
+            <p><?=Language::GetText('favorites')?></p>
         <?php endif; ?>
-        <p><a href="<?=HOST?>/myaccount/playlists/edit/<?=$favoritesList->playlistId?>/"><?=Language::GetText('favorites')?></a></p>
         <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($favoritesList->entries)?></p>
         <p class="actions small">
             <a href="<?=HOST?>/myaccount/playlists/edit/<?=$favoritesList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
@@ -40,7 +41,7 @@
             <div class="thumbnails">
                 <?php $thumbnails = $playlistService->getPlaylistThumbnails($watchLaterList); ?>
                 <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                <?php if (count($watchLaterList->entries) >= 3): ?>
+                <?php if (count($watchLaterList->entries) >= 2): ?>
                     <div>
                         <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
                             <img width="65" height="36" src="<?=$imgUrl?>" />
@@ -48,10 +49,11 @@
                     </div>
                 <?php endif; ?>
             </div>
+            <p><a href="<?=$playlistService->getUrl($watchLaterList)?>"><?=Language::GetText('watch_later')?></a></p>
         <?php else: ?>
             <img src="<?=THEME?>/images/playlist_placeholder.png" />
+            <p><?=Language::GetText('watch_later')?></p>
         <?php endif; ?>
-        <p><a href="<?=HOST?>/myaccount/playlists/edit/<?=$watchLaterList->playlistId?>/"><?=Language::GetText('watch_later')?></a></p>
         <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($watchLaterList->entries)?></p>
         <p class="actions small">
             <a href="<?=HOST?>/myaccount/playlists/edit/<?=$watchLaterList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
@@ -95,7 +97,7 @@
                 <div class="thumbnails">
                     <?php $thumbnails = $playlistService->getPlaylistThumbnails($playlist); ?>
                     <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                    <?php if (count($playlist->entries) >= 3): ?>
+                    <?php if (count($playlist->entries) >= 2): ?>
                         <div>
                             <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
                                 <img width="65" height="36" src="<?=$imgUrl?>" />
@@ -103,10 +105,11 @@
                         </div>
                     <?php endif; ?>
                 </div>
+                <p><a href="<?=$playlistService->getUrl($playlist)?>"><?=$playlist->name?></a></p>
             <?php else: ?>
                 <img src="<?=THEME?>/images/playlist_placeholder.png" />
+                <p><?=$playlist->name?></p>
             <?php endif; ?>
-            <p><a href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/"><?=$playlist->name?></a></p>
             <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($playlist->entries)?></p>
             <p class="actions small">
                 <a href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
