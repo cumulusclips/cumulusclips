@@ -21,6 +21,13 @@ class PlaylistService extends ServiceAbstract
         return $videoMapper->getVideosFromList($videoIds);
     }
     
+    public function getUserSpecialPlaylist(User $user, $type)
+    {
+        if (!in_array($type, array('watch_later', 'favorites'))) throw new Exception('Unknown special playlist type.');
+        $playlistMapper = $this->_getMapper();
+        return $playlistMapper->getPlaylistByCustom(array('user_id' => $user->userId, 'type' => $type));
+    }
+    
     public function getPlaylistThumbnails(Playlist $playlist)
     {
         $config = Registry::get('config');

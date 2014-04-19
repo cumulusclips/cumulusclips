@@ -40,11 +40,13 @@
     <?php foreach ($videoList as $video): ?>
         <?php $videoService = $this->getService('Video'); ?>
         <div class="video">
-            <div>
+            <div class="thumbnail">
                 <a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>">
                     <img width="165" height="92" src="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" />
                 </a>
-                <span><?=$video->duration?></span>
+                <?php $playlistId = ($loggedInUser) ? $playlistService->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                <span class="watchLater"><a data-video="<?=$video->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></span>
+                <span class="duration"><?=$video->duration?></span>
             </div>
             <p><a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>"><?=$video->title?></a></p>
             <p class="actions small">

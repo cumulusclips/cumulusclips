@@ -20,7 +20,7 @@ if (!$video) App::Throw404();
 
 // Verify user is logged in
 if (!$loggedInUser) {
-    echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('playlist_login', array('host' => HOST))));
+    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('playlist_login', array('host' => HOST)), 'other' => array('status' => 'LOGIN')));
     exit();
 }
 
@@ -38,14 +38,15 @@ if ($_POST['action'] == 'add') {
         $playlistService->addVideoToPlaylist($video, $playlist);
         Plugin::Trigger ('favorite.ajax.favorite_video');
         $playlistName = $playlistService->getPlaylistName($playlist);
+        $message = (!empty($_POST['shortText'])) ? 'success_playlist_added_short' : 'success_playlist_added';
         echo json_encode (array (
             'result' => 1,
-            'msg' => (string) Language::GetText('success_playlist_added', array('list_name' => $playlistName)),
+            'message' => (string) Language::GetText($message, array('list_name' => $playlistName)),
             'other' => array('count' => count($playlist->entries)+1)
         ));
         exit();
     } else {
-        echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_playlist_duplicate')));
+        echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('error_playlist_duplicate'), 'other' => array('status' => 'DUPLICATE')));
         exit();
     }
     
@@ -58,7 +59,7 @@ if ($_POST['action'] == 'add') {
     if (!empty($_POST['playlist_name'])) {
         $playlist->name = trim($_POST['playlist_name']);
     } else {
-        echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_playlist_name')));
+        echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('error_playlist_name'), 'other' => array('status' => 'DATA')));
         exit();
     }
     
@@ -74,7 +75,7 @@ if ($_POST['action'] == 'add') {
     $playlistService->addVideoToPlaylist($video, $newPlaylist);
     echo json_encode (array (
         'result' => 1,
-        'msg' => (string) Language::GetText('success_playlist_created'),
+        'message' => (string) Language::GetText('success_playlist_created'),
         'other' => array('name' => $newPlaylist->name, 'count' => 1, 'playlistId' => $playlistId)));
     exit();
 }

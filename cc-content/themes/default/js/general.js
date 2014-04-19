@@ -79,8 +79,7 @@ $(document).ready(function(){
         var data = {
             action: 'add',
             video_id: videoId,
-            playlist_id: $(this).data('playlist_id'),
-            action: 'add'
+            playlist_id: $(this).data('playlist_id')
         };
         var callback = function(addToPlaylistResponse){
             var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
@@ -207,10 +206,11 @@ $(document).ready(function(){
     
     // Scrollbar for Play page 'Add Video To' widget
     if ($('.play').length > 0) {
-        $('#addToPlaylist > div:first-child > div').jScrollPane();
+        var scrollableList = $('#addToPlaylist > div:first-child > div');
+        scrollableList.jScrollPane();
         $('#addToPlaylist').on('tabToggled',function(){
-            if ($(this).css('display') == 'block') {
-                api = $('#addToPlaylist > div:first-child > div').data('jsp');
+            if ($(this).css('display') == 'block' && scrollableList.length > 0) {
+                api = scrollableList.data('jsp');
                 api.reinitialise();
             }
         });
@@ -228,6 +228,52 @@ $(document).ready(function(){
             location = $(this).find('div > a').attr('href');
         });
     }
+
+
+    // Add to Watch Later actions
+    $('.video .watchLater a').on('click', function(event){
+        event.stopPropagation();
+        event.preventDefault();
+        
+        var video = $(this).parents('.video');
+        var url = baseUrl+'/actions/playlist/';
+        var data = {
+            action: 'add',
+            shortText: true,
+            video_id: $(this).data('video'),
+            playlist_id: $(this).data('playlist')
+        };
+        
+        // Make call to API to attempt to add video to playlist
+        $.ajax({
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            url: url,
+            success: function(responseData, textStatus, jqXHR){
+                console.log(responseData);
+                // Append message to video thumbnail
+                var resultMessage = $('<div></div>')
+                    .addClass('message')
+                    .html('<p>' + responseData.message + '</p>');
+                video.find('.thumbnail').append(resultMessage);
+                
+                // Style message according to add results
+                if (responseData.result === 1) {
+                    resultMessage.addClass('success');
+                } else {
+                    if (responseData.other.status === 'DUPLICATE') resultMessage.addClass('errors');
+                }
+
+                // FadeIn message, pause, then fadeOut and remove
+                resultMessage.fadeIn(function(){
+                    setTimeout(function(){
+                        resultMessage.fadeOut(function(){resultMessage.remove();});
+                    }, 2000);
+                });
+            }
+        });
+    });
 
 }); // END jQuery
 
@@ -276,7 +322,7 @@ function executeAction(url, data, callback)
         dataType    : 'json',
         url         : url,
         success     : function(responseData, textStatus, jqXHR){
-            displayMessage(responseData.result, responseData.msg);
+            displayMessage(responseData.result, responseData.message);
             if (typeof callback != 'undefined') callback(responseData, textStatus, jqXHR);
         }
     });

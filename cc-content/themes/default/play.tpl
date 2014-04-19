@@ -109,43 +109,44 @@ $this->SetLayout('full');
 
    
     <div id="addToPlaylist" class="tab_block" >
-        <div>
-            <p class="big"><?=Language::GetText('add_to')?></p>
-            <?php if ($loggedInUser): ?>
-                <div>
-                    <ul>
-                        <?php $playlistService = $this->getService('Playlist'); ?>
-                        <li><a data-playlist_id="<?=$favoritesList->playlistId?>" class="<?=($playlistService->checkListing($video, $favoritesList)) ? 'added' : ''?>" href=""><?=Language::GetText('favorites')?></a></li>
-                        <li><a data-playlist_id="<?=$watchLaterList->playlistId?>" class="<?=($playlistService->checkListing($video, $watchLaterList)) ? 'added' : ''?>" href=""><?=Language::GetText('watch_later')?></a></li>
-                        <?php if (count($userPlaylists) > 0): ?>
-                            <li><strong><?=Language::GetText('playlists')?></strong></li>
-                            <?php foreach ($userPlaylists as $userPlaylist): ?>
-                                <li><a data-playlist_id="<?=$userPlaylist->playlistId?>" class="<?=($playlistService->checkListing($video, $userPlaylist)) ? 'added' : ''?>" href=""><?=$userPlaylist->name?> (<?=count($userPlaylist->entries)?>)</a></li>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </ul>
-                </div>
-            <?php else: ?>
-                <p><?=Language::GetText('playlist_login', array('host' => HOST))?></p>
-            <?php endif; ?>
-        </div>
-        <div>
-            <p class="big"><?=Language::GetText('create_new_playlist')?></p>
-            <div class="form">
-                <form>
-                    <label><?=Language::GetText('playlist_name')?></label>
-                    <input type="text" name="playlist_name" />
-                    <label><?=Language::GetText('visibility')?></label>
-                    <select name="playlist_visibility">
-                        <option value="public"><?=Language::GetText('public')?></option>
-                        <option value="private"><?=Language::GetText('private')?></option>
-                    </select>
-                    <input type="hidden" name="action" value="create" />
-                    <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
-                    <input class="button" type="submit" value="<?=Language::GetText('create_playlist_button')?>" />
-                </form>
+        <?php if ($loggedInUser): ?>
+            <div>
+                <p class="big"><?=Language::GetText('add_to')?></p>
+                    <div>
+                        <ul>
+                            <?php $playlistService = $this->getService('Playlist'); ?>
+                            <li><a data-playlist_id="<?=$favoritesList->playlistId?>" class="<?=($playlistService->checkListing($video, $favoritesList)) ? 'added' : ''?>" href=""><?=Language::GetText('favorites')?></a></li>
+                            <li><a data-playlist_id="<?=$watchLaterList->playlistId?>" class="<?=($playlistService->checkListing($video, $watchLaterList)) ? 'added' : ''?>" href=""><?=Language::GetText('watch_later')?></a></li>
+                            <?php if (count($userPlaylists) > 0): ?>
+                                <li><strong><?=Language::GetText('playlists')?></strong></li>
+                                <?php foreach ($userPlaylists as $userPlaylist): ?>
+                                    <li><a data-playlist_id="<?=$userPlaylist->playlistId?>" class="<?=($playlistService->checkListing($video, $userPlaylist)) ? 'added' : ''?>" href=""><?=$userPlaylist->name?> (<?=count($userPlaylist->entries)?>)</a></li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
             </div>
-        </div>
+            <div>
+                <p class="big"><?=Language::GetText('create_new_playlist')?></p>
+                <div class="form">
+                    <form>
+                        <label><?=Language::GetText('playlist_name')?></label>
+                        <input type="text" name="playlist_name" />
+                        <label><?=Language::GetText('visibility')?></label>
+                        <select name="playlist_visibility">
+                            <option value="public"><?=Language::GetText('public')?></option>
+                            <option value="private"><?=Language::GetText('private')?></option>
+                        </select>
+                        <input type="hidden" name="action" value="create" />
+                        <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
+                        <input class="button" type="submit" value="<?=Language::GetText('create_playlist_button')?>" />
+                    </form>
+                </div>
+            </div>
+        <?php else: ?>
+            <p class="big"><?=Language::GetText('add_to')?></p>
+            <p><?=Language::GetText('playlist_login', array('host' => HOST))?></p>
+        <?php endif; ?>
     </div>
 
 
@@ -224,12 +225,14 @@ $this->SetLayout('full');
             <?php $videoService = $this->getService('Video'); ?>
             <?php foreach ($playlistVideos as $playlistVideo): ?>
                 
-                <div class="video_small <?=($playlistVideo->videoId == $video->videoId) ? 'active' : ''?>">
-                    <div>
+                <div class="video video_small <?=($playlistVideo->videoId == $video->videoId) ? 'active' : ''?>">
+                    <div class="thumbnail">
                         <a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>">
                             <img width="100" height="56" src="<?=$config->thumb_url?>/<?=$playlistVideo->filename?>.jpg" />
                         </a>
-                        <span><?=$playlistVideo->duration?></span>
+                        <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                        <span class="watchLater"><a data-video="<?=$playlistVideo->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></span>
+                        <span class="duration"><?=$playlistVideo->duration?></span>
                     </div>
                     <div>
                         <p><a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>"><?=$playlistVideo->title?></a></p>
@@ -253,12 +256,14 @@ $this->SetLayout('full');
             <div class="video_list">
             <?php $videoService = $this->getService('Video'); ?>
             <?php foreach ($relatedVideos as $relatedVideo): ?>
-                <div class="video_medium">
-                    <div>
+                <div class="video video_medium">
+                    <div class="thumbnail">
                         <a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>">
                             <img width="125" height="70" src="<?=$config->thumb_url?>/<?=$relatedVideo->filename?>.jpg" />
                         </a>
-                        <span><?=$relatedVideo->duration?></span>
+                        <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                        <span class="watchLater"><a data-video="<?=$relatedVideo->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></span>
+                        <span class="duration"><?=$relatedVideo->duration?></span>
                     </div>
                     <div>
                         <p><a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>"><?=$relatedVideo->title?></a></p>

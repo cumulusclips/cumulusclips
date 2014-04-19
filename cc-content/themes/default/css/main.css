@@ -429,30 +429,23 @@ a.button, a.button_small {
     margin-bottom: 20px;
 }
 
-.video > div,
-.video_medium > div,
-.video_small > div {
+.video .thumbnail {
     position: relative;
-}
-
-.video > div {
     width: 165px;
     height: 92px;
 }
 
-.video_medium > div {
+.video_medium .thumbnail {
     width: 125px;
     height: 70px;
 }
 
-.video_small > div {
+.video_small .thumbnail {
     width: 100px;
     height: 56px;
 }
 
-.video > div span,
-.video_medium > div span,
-.video_small > div span {
+.video .thumbnail span {
     right: 0;
     bottom: 0;
     position: absolute;
@@ -460,17 +453,114 @@ a.button, a.button_small {
     color: #FFF;
 }
 
-.video > div span {
+.video .duration {
     font-size: 11px;
     padding: 3px;
 }
 
-.video_medium > div span,
-.video_small > div span {
+.video_medium .duration,
+.video_small .duration {
     font-size: 10px;
     padding: 2px;
 }
 
+.video .watchLater {
+    display :none;
+}
+
+.video .watchLater:hover {
+    background: #999;
+}
+
+.video .watchLater a {
+    padding: 4px;
+    display: block;
+    width: 16px;
+    height: 13px;
+    text-indent: -9999px;
+    background: url('../images/icon_watch_later.png') no-repeat 4px 4px;
+}
+
+.video .thumbnail:hover .watchLater {
+    display: block;
+}
+
+.video .thumbnail:hover .duration {
+    display: none;
+}
+
+.video .message {
+    background: url('../images/screen.png') repeat;
+    width: 145px;
+    height: 72px;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    border: none;
+    font-weight: normal;
+    margin: 0;
+}
+
+.video_medium .message {
+    width: 115px;
+    height: 60px;
+}
+
+.video_small .message {
+    width: 90px;
+    height: 46px;
+}
+
+.video_medium .message,
+.video_small .message {
+    padding: 5px;
+    font-size: 10px;
+}
+
+.video .message a {
+    color: #2f94fa;
+}
+
+.video .success {
+    color: #7dd865;
+    display: none;
+}
+
+.video .success p {
+    background: url('../images/icon_watch_later_success.png') no-repeat center top;
+    padding-top: 55px;
+    text-align: center;
+    margin: 0;
+}
+
+.video_medium .success p {
+    background: url('../images/icon_watch_later_success_small.png') no-repeat center 10px;
+    padding-top: 40px;
+}
+
+.video_small .success p {
+    background: url('../images/icon_watch_later_success_small.png') no-repeat center 2px;
+    padding-top: 30px;
+}
+
+.video .errors {
+    display: none;
+    color: #f05959;
+}
+
+.video .errors p {
+    background: url('../images/icon_watch_later_error.png') no-repeat 0 1px;
+    padding-left: 15px;
+    margin: 0;
+}
+
+.video_medium .errors p,
+.video_small .errors p {
+    background: url('../images/icon_watch_later_error_small.png') no-repeat 0 2px;
+    padding-left: 12px;
+}
 
 
 
