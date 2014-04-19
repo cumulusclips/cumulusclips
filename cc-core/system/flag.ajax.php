@@ -91,9 +91,9 @@ try {
     // Create flag and output message
     $flagMapper->save($flag);
     Plugin::Trigger ('flag.ajax.flag');
-    echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_flag')));
+    echo json_encode (array ('result' => 1, 'message' => (string) Language::GetText('success_flag')));
     exit();
 } catch (Exception $e) {
-    echo json_encode (array ('result' => 0, 'msg' => $e->getMessage()));
+    echo json_encode (array ('result' => 0, 'message' => $e->getMessage()));
     exit();
 }

@@ -67,7 +67,7 @@ try {
     Plugin::Trigger ('update_profile.update_avatar');
 
     // Output success message
-    exit (json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('success_avatar_updated'), 'other' => $userService->getAvatarUrl($loggedInUser))));
+    exit (json_encode (array ('result' => 1, 'message' => (string) Language::GetText('success_avatar_updated'), 'other' => $userService->getAvatarUrl($loggedInUser))));
 } catch (Exception $e) {
-    exit (json_encode (array ('result' => 0, 'msg' => $e->getMessage())));
+    exit (json_encode (array ('result' => 0, 'message' => $e->getMessage())));
 }

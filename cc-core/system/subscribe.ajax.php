@@ -34,13 +34,13 @@ switch ($_POST['type']) {
 
         // Verify user is logged in
         if (!$loggedInUser) {
-            echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_login')));
+            echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_subscribe_login')));
             exit();
         }
 
         // Check if user is subscribing to himself
         if ($loggedInUser->userId == $member->userId) {
-            echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_own')));
+            echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_subscribe_own')));
             exit();
         }
 
@@ -48,10 +48,10 @@ switch ($_POST['type']) {
         if (!$subscriptionService->checkSubscription($loggedInUser->userId, $member->userId)) {
             $subscriptionService->subscribe($loggedInUser->userId, $member->userId);
             Plugin::Trigger ('subscribe.ajax.subscribe');
-            echo json_encode(array('result' => 1, 'msg' => (string) Language::GetText('success_subscribed', array('username' => $member->username)), 'other' => (string) Language::GetText('unsubscribe')));
+            echo json_encode(array('result' => 1, 'message' => (string) Language::GetText('success_subscribed', array('username' => $member->username)), 'other' => (string) Language::GetText('unsubscribe')));
             exit();
         } else {
-            echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_duplicate')));
+            echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_subscribe_duplicate')));
             exit();
         }
 
@@ -60,7 +60,7 @@ switch ($_POST['type']) {
 
         // Verify user is logged in
         if (!$loggedInUser) {
-            echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_login')));
+            echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_subscribe_login')));
             exit();
         }
 
@@ -68,10 +68,10 @@ switch ($_POST['type']) {
         if ($subscriptionService->checkSubscription($loggedInUser->userId, $member->userId)) {
             $subscriptionService->unsubscribe($loggedInUser->userId, $member->userId);
             Plugin::Trigger('subscribe.ajax.unsubscribe');
-            echo json_encode(array('result' => 1, 'msg' => (string) Language::GetText('success_unsubscribed', array('username' => $member->username)), 'other' => (string) Language::GetText('subscribe')));
+            echo json_encode(array('result' => 1, 'message' => (string) Language::GetText('success_unsubscribed', array('username' => $member->username)), 'other' => (string) Language::GetText('subscribe')));
             exit();
         } else {
-            echo json_encode(array('result' => 0, 'msg' => (string) Language::GetText('error_subscribe_noexist')));
+            echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_subscribe_noexist')));
             exit();
         }
 }

@@ -14,10 +14,10 @@ $userMapper = new UserMapper();
 // Check if username is in use
 if (!empty($_POST['username']) && strlen($_POST['username']) >= 4) {
     if ($userMapper->getUserByUsername($_POST['username'])) {
-        echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('error_username_unavailable')));
+        echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('error_username_unavailable')));
     } else {
-        echo json_encode (array ('result' => 1, 'msg' => (string) Language::GetText('username_available')));
+        echo json_encode (array ('result' => 1, 'message' => (string) Language::GetText('username_available')));
     }
 } else {
-    echo json_encode (array ('result' => 0, 'msg' => (string) Language::GetText('username_minimum')));
+    echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('username_minimum')));
 }

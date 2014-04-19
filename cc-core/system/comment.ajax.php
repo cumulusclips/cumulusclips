@@ -102,13 +102,13 @@ if (isset($_POST['submitted'])) {
             $other = array('auto_approve' => 0, 'output' => '');
         }
 
-        echo json_encode(array('result' => 1, 'msg' => $message, 'other' => $other));
+        echo json_encode(array('result' => 1, 'message' => $message, 'other' => $other));
         Plugin::triggerEvent('comment.ajax.post_comment');
         exit();
     } else {
         $error_msg = Language::GetText('errors_below');
         $error_msg .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        echo json_encode(array('result' => 0, 'msg' => $error_msg));
+        echo json_encode(array('result' => 0, 'message' => $error_msg));
         exit();
     }
 }
