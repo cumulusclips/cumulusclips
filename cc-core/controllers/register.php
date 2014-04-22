@@ -7,14 +7,12 @@ Plugin::Trigger ('register.start');
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
-
-$resp = NULL;
-$pass1 = NULL;
-$pass2 = NULL;
+Functions::RedirectIf(!$view->vars->loggedInUser, HOST . '/myaccount/');
+$password = null;
 $view->vars->message = null;
 $view->vars->data = array ();
 $view->vars->errors = array();
-
+$token = null;
 
 
 
@@ -22,54 +20,60 @@ $view->vars->errors = array();
 Handle form if submitted
 ***********************/
 
-if (isset ($_POST['submitted'])) {
-
-    // Validate Username
-    if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
-        if (!User::Exist (array ('username' => $_POST['username']))) {
-            $view->vars->data['username'] = htmlspecialchars (trim ($_POST['username']));
+if (isset($_GET['submitted'])) {
+    
+    if (!empty($_SESSION['formToken'])) {
+        
+        // Retrieve token from original rendering
+        $token = $_SESSION['formToken'];
+        
+        // Validate Username
+        $usernameField = md5($token . 'username');
+        if (!empty($_POST[$usernameField]) && preg_match('/[a-z0-9]+/i', $_POST[$usernameField])) {
+            if (!User::Exist(array('username' => $_POST[$usernameField]))) {
+                $view->vars->data['username'] = $_POST[$usernameField];
+            } else {
+                $view->vars->errors['username'] = Language::GetText('error_username_unavailable');
+            }
         } else {
-            $view->vars->errors['username'] = Language::GetText('error_username_unavailable');
-        }
-    } else {
-        $view->vars->errors['username'] = Language::GetText('error_username');
-    }
-
-
-    // Validate password
-    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $password_first = trim ($_POST['password']);
-    } else {
-        $view->vars->errors['password'] = Language::GetText('error_password');
-    }
-
-
-    // Validate password confirm
-    if (!empty ($_POST['password_confirm']) && !ctype_space ($_POST['password'])) {
-
-        if (isset ($password_first) && $password_first == $_POST['password_confirm']) {
-            $view->vars->data['password'] = trim ($_POST['password']);
-        } else {
-            $view->vars->errors['match'] = Language::GetText('error_password_match');
+            $view->vars->errors['username'] = Language::GetText('error_username');
         }
 
-    } else {
-        $view->vars->errors['password_confirm'] = Language::GetText('error_password_confirm');
-    }
-
-
-    // Validate email
-    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        if (!User::Exist (array ('email' => $_POST['email']))) {
-            $view->vars->data['email'] = htmlspecialchars (trim ($_POST['email']));
+        // Validate password
+        $passwordField = md5($token . 'password');
+        if (!empty($_POST[$passwordField])) {
+            $password = trim($_POST[$passwordField]);
         } else {
-            $view->vars->errors['email'] = Language::GetText('error_email_unavailable');
+            $view->vars->errors['password'] = Language::GetText('error_password');
         }
+
+        // Validate password confirm
+        $confirmField = md5($token . 'confirm');
+        if (!empty($_POST[$confirmField])) {
+            if (isset($password) && $password == $_POST[$confirmField]) {
+                $view->vars->data['password'] = $password;
+            } else {
+                $view->vars->errors['match'] = Language::GetText('error_password_match');
+            }
+        } else {
+            $view->vars->errors['password_confirm'] = Language::GetText('error_password_confirm');
+        }
+
+        // Validate email
+        $emailField = md5($token . 'email');
+        if (!empty($_POST[$emailField]) && preg_match('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST[$emailField])) {
+            if (!User::Exist(array('email' => $_POST[$emailField]))) {
+                $view->vars->data['email'] = trim($_POST[$emailField]);
+            } else {
+                $view->vars->errors['email'] = Language::GetText('error_email_unavailable');
+            }
+        } else {
+            $view->vars->errors['email'] = Language::GetText('error_email');
+        }   
+        
     } else {
-        $view->vars->errors['email'] = Language::GetText('error_email');
+        $view->vars->errors['token'] = 'Invalid security token';
     }
-
-
 
     ### Create user if no errors were found
     if (empty ($view->vars->errors)) {
@@ -102,6 +106,13 @@ if (isset ($_POST['submitted'])) {
 
 }
 
+// Generate new form token
+$token = md5(uniqid(rand(), true));
+$view->vars->usernameField = md5($token . 'username');
+$view->vars->passwordField = md5($token . 'password');
+$view->vars->confirmField = md5($token . 'confirm');
+$view->vars->emailField = md5($token . 'email');
+$_SESSION['formToken'] = $token;
 
 // Output Page
 Plugin::Trigger ('register.before_render');
