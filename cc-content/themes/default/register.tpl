@@ -12,20 +12,21 @@
 
     <form action="<?=HOST?>/register/" method="post">
         <label class="<?=(isset ($errors['email'])) ? 'error' : ''?>"><?=Language::GetText('email')?>:</label>
-        <input name="<?=$emailField?>" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
+        <input name="email" type="text" class="text" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : ''?>" />
 
         <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>"><?=Language::GetText('username')?>:</label>
-        <input name="<?=$usernameField?>" type="text" class="text" id="username" value="<?=(isset ($errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
+        <input name="username" type="text" class="text" id="username" value="<?=(isset ($errors, $data['username'])) ? $data['username']:''?>" maxlength="30" />
         <p id="status"></p>
         <p class="hint"><?=Language::GetText('username_req')?></p>
 
         <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('password')?>:</label>
-        <input name="<?=$passwordField?>" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
+        <input name="password" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
 
         <label class="<?=(isset ($errors['password_confirm']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::GetText('confirm_password')?>:</label>
-        <input name="<?=$confirmField?>" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
+        <input name="confirm" type="password" class="text" value="<?=(isset ($errors, $data['password'])) ? $data['password']:''?>" />
 
         <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="token" value="<?=$token?>" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('register_button')?>" />
     </form>
 
