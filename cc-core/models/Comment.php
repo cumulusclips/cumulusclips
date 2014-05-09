@@ -18,6 +18,11 @@ class Comment
     public $videoId;
     
     /**
+     *@var int 
+     */
+    public $parentId;
+    
+    /**
      * @var string
      */
     public $comments;

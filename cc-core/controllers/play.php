@@ -121,19 +121,11 @@ $view->vars->relatedVideos = $videoMapper->getVideosFromList(
 );
 Plugin::triggerEvent('play.load_suggestions');
 
-### Retrieve comment count
-$query = 'SELECT COUNT(comment_id) as count FROM ' . DB_PREFIX . 'comments WHERE video_id = :videoId AND status = "approved"';
-Plugin::triggerEvent('play.comment_count');
-$result_comment_count = $db->fetchRow($query, array(':videoId' => $view->vars->video->videoId));
-$view->vars->comment_count = $result_comment_count['count'];
-
-### Retrieve comments
-$query = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments WHERE video_id = :videoId AND status = "approved" ORDER BY comment_id DESC LIMIT 0, 5';
-Plugin::triggerEvent('play.load_comments');
-$resultComments = $db->fetchAll($query, array(':videoId' => $view->vars->video->videoId));
-$view->vars->commentList = $commentMapper->getCommentsFromList(
-    Functions::arrayColumn($resultComments, 'comment_id')
-);
+// Retrieve comments
+$commentService = new CommentService();
+$commentMapper = new CommentMapper();
+$view->vars->commentCount = $commentMapper->getVideoCommentCount($video->videoId);
+$view->vars->commentList = $commentService->getVideoComments($video, 5);
 
 // Output Page
 Plugin::triggerEvent('play.before_render');

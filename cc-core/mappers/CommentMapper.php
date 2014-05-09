@@ -58,6 +58,7 @@ class CommentMapper extends MapperAbstract
         $comment->commentId = $dbResults['comment_id'];
         $comment->userId = $dbResults['user_id'];
         $comment->videoId = $dbResults['video_id'];
+        $comment->parentId = $dbResults['parent_id'];
         $comment->comments = $dbResults['comments'];
         $comment->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $comment->status = $dbResults['status'];
@@ -78,12 +79,13 @@ class CommentMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $comment);
             $query = 'UPDATE ' . DB_PREFIX . 'comments SET';
-            $query .= ' user_id = :userId, video_id = :videoId, comments = :comments, date_created = :dateCreated, status = :status, email = :email, name = :name, website = :website, ip = :ip, user_agent = :userAgent, released = :released';
+            $query .= ' user_id = :userId, video_id = :videoId, parent_id = :parentId, comments = :comments, date_created = :dateCreated, status = :status, email = :email, name = :name, website = :website, ip = :ip, user_agent = :userAgent, released = :released';
             $query .= ' WHERE comment_id = :commentId';
             $bindParams = array(
                 ':commentId' => $comment->commentId,
                 ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
                 ':videoId' => $comment->videoId,
+                ':parentId' => (!empty($comment->parentId)) ? $comment->parentId : 0,
                 ':comments' => $comment->comments,
                 ':dateCreated' => date(DATE_FORMAT, strtotime($comment->dateCreated)),
                 ':status' => $comment->status,
@@ -98,11 +100,12 @@ class CommentMapper extends MapperAbstract
             // Create
             Plugin::triggerEvent('video.create', $comment);
             $query = 'INSERT INTO ' . DB_PREFIX . 'comments';
-            $query .= ' (user_id, video_id, comments, date_created, status, email, name, website, ip, user_agent, released)';
-            $query .= ' VALUES (:userId, :videoId, :comments, :dateCreated, :status, :email, :name, :website, :ip, :userAgent, :released)';
+            $query .= ' (user_id, video_id, parent_id, comments, date_created, status, email, name, website, ip, user_agent, released)';
+            $query .= ' VALUES (:userId, :videoId, :parentId, :comments, :dateCreated, :status, :email, :name, :website, :ip, :userAgent, :released)';
             $bindParams = array(
                 ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
                 ':videoId' => $comment->videoId,
+                ':parentId' => (!empty($comment->parentId)) ? $comment->parentId : 0,
                 ':comments' => $comment->comments,
                 ':dateCreated' => gmdate(DATE_FORMAT),
                 ':status' => (!empty($comment->status)) ? $comment->status : 'new',
@@ -141,5 +144,34 @@ class CommentMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $db->query('DELETE FROM ' . DB_PREFIX . 'comments WHERE comment_id = :commentId', array(':commentId' => $commentId));
+    }
+
+    public function getCommentIds($videoId, $limit, $parentCommentId = 0, $offsetCommentId = 0)
+    {
+        $db = Registry::get('db');
+        $sql = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments ';
+        $where = 'video_id = :videoId AND parent_id = :parentId';
+        
+        $params = array(
+            ':videoId' => $videoId,
+            ':parentId' => $parentCommentId
+        );
+        
+        if (!empty($offsetCommentId)) {
+            $params[':offsetId'] = $offsetCommentId;
+            $where .= ' AND comment_id > :offsetId';
+        }
+        
+        $sql .= 'WHERE ' . $where . ' LIMIT ' . (int) $limit;
+        $result = $db->fetchAll($sql, $params);
+        return Functions::arrayColumn($result, 'comment_id');
+    }
+    
+    public function getVideoCommentCount($videoId)
+    {
+        $db = Registry::get('db');
+        $sql = 'SELECT COUNT(comment_id) AS count FROM ' . DB_PREFIX . 'comments WHERE video_id = ? AND status = "approved"';
+        $result = $db->fetchRow($sql, array($videoId));
+        return $result['count'];
     }
 }

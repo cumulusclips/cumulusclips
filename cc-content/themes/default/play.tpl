@@ -154,7 +154,7 @@ $this->SetLayout('full');
     <div id="comments">
         <p class="large"><?=Language::GetText('comments_header')?></p>
         <div class="totals">
-            <p><?=$comment_count?> <?=Language::GetText('comments_total')?></p>
+            <p><?=$commentCount?> <?=Language::GetText('comments_total')?></p>
             <p class="pagination">
                 <span>1</span>
                 <a href="">2</a>
@@ -192,7 +192,7 @@ $this->SetLayout('full');
         
         <!-- BEGIN COMMENTS LIST -->
         <div class="comments_list">
-            <?php if ($comment_count > 0): ?>
+            <?php if ($commentCount > 0): ?>
                 <!-- BEGIN COMMENT BLOCKS -->
                 <?php $this->RepeatingBlock ('comment.tpl', $commentList); ?>
                 <!-- END COMMENT BLOCKS -->
