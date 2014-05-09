@@ -194,7 +194,29 @@ $this->SetLayout('full');
         <div class="comments_list">
             <?php if ($commentCount > 0): ?>
                 <!-- BEGIN COMMENT BLOCKS -->
-                <?php $this->RepeatingBlock ('comment.tpl', $commentList); ?>
+                <?php foreach ($commentList as $comment): ?>
+                    <div class="comment">
+                        <?php $avatar = $this->getService('Comment')->getCommentAvatar($comment); ?>
+                        <img width="60" height="60" alt="<?=$comment->name?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" />
+                        <div>
+                            <p>
+                                <span>
+                                    <?php if ($comment->userId == 0): ?>
+                                        <?=$comment->name?>
+                                    <?php else: ?>
+                                        <a href="<?=$comment->website?>" title="<?=$comment->name?>"><?=$comment->name?></a>
+                                    <?php endif; ?>
+                                    <?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?>
+                                </span>
+                                <span>
+                                    <a href=""><?=Language::GetText('reply')?></a>
+                                    <a class="flag" data-type="comment" data-id="<?=$comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
+                                </span>
+                            </p>
+                            <p><?=nl2br($comment->comments)?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
                 <!-- END COMMENT BLOCKS -->
             <?php endif; ?>
         </div>

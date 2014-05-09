@@ -50,11 +50,6 @@ class Comment
     /**
      * @var string
      */
-    public $website;
-    
-    /**
-     * @var string
-     */
     public $ip;
     
     /**
