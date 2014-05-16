@@ -542,65 +542,58 @@ PLAY VIDEO
     float: left;
 }
 
-#comments .pagination {
-    float: right;
-}
-
-#comments .pagination a,
-#comments .pagination span {
-    margin-left: 7px;
-}
-
-.comments_list > div {
+.comment {
     overflow: hidden;
-    margin: 20px 0 0;
+    margin: 40px 0 0;
 }
 
-.comments_list > div img {
+.comment img {
     float: left;
 }
 
-.comments_list > div > div {
+.comment > div {
     margin-left: 10px;
     width: 525px;
     float: left;
 }
 
-.comments_list .child {
-    margin-left: 65px;
+.comments_list .commentIndent {
+    margin-left: 70px;
 }
 
-.comments_list .child > div {
-    width: 465px;
+.comments_list  .commentIndent > div {
+    width: 460px;
 }
 
-.comments_list .grandchild {
-    margin-left: 130px;
+.comments_list  .commentIndentDouble {
+    margin-left: 140px;
 }
 
-.comments_list .grandchild > div {
-    width: 400px;
+.comments_list .commentIndentDouble > div {
+    width: 390px;
 }
 
-.comments_list > div > div p:first-child {
+.comment > div p:first-child {
     margin-top: 0;
     overflow: hidden;
 }
 
-.comments_list > div > div p:first-child,
-.comments_list > div > div p:first-child + p + p {
+.comment .commentAuthor,
+.comment .commentDate,
+.comment .commentReply,
+.comment .commentAction {
     font-size: 10px;
 }
 
-.comments_list > div > div p:first-child span:first-child + span {
+.comment .commentReply {
     margin-left: 15px;
 }
 
-.comments_list > div > div p:first-child span:last-child {
+.comment .commentAction {
     float: right;
 }
 
-.comments_list > div > div p:first-child span:last-child a:last-child {
+.comment .commentAction a:last-child {
     margin-left: 10px;
     color: #900;
 }

@@ -61,4 +61,14 @@ class Comment
      * @var boolean
      */
     public $released;
+
+    /**
+     * @var User
+     */
+    public $author;
+    
+    /**
+     * @var Comment 
+     */
+    public $parentComment;
 }

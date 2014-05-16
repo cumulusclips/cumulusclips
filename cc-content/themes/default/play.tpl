@@ -1,5 +1,8 @@
 <?php
-$this->AddMeta('videoId', $video->videoId);
+$this->addMeta('videoId', $video->videoId);
+$this->addMeta('commentCount', $commentCount);
+$this->addMeta('theme', THEME);
+if ($lastCommentId = getCommentLoadMoreOffset($commentList)) $this->addMeta('lastCommentId', $lastCommentId);
 $this->AddCss('jscrollpane.css');
 $this->AddJs('jscrollpane.plugin.js');
 $this->AddJs('mousewheel.plugin.js');
@@ -70,7 +73,7 @@ $this->SetLayout('full');
         <div>
             <a href="" class="button_small subscribe" title="<?=Language::GetText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->userId?>"><?=Language::GetText($subscribe_text)?></a>
             <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
-            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=Functions::DateFormat('m/d/Y',$video->dateCreated)?></p>
+            <p><strong><?=Language::GetText('date_uploaded')?>:</strong> <?=date('m/d/Y', strtotime($video->dateCreated))?></p>
             <p><strong><?=Language::GetText('tags')?>:</strong>
                 <?php foreach ($video->tags as $value): ?>
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
@@ -155,15 +158,6 @@ $this->SetLayout('full');
         <p class="large"><?=Language::GetText('comments_header')?></p>
         <div class="totals">
             <p><?=$commentCount?> <?=Language::GetText('comments_total')?></p>
-            <p class="pagination">
-                <span>1</span>
-                <a href="">2</a>
-                <a href="">3</a>
-                <a href="">4</a>
-                <a href="">5</a>
-                <a href="">6</a>
-                <a href="">Next &raquo;</a>
-            </p>
         </div>
         
         
@@ -193,22 +187,27 @@ $this->SetLayout('full');
         <!-- BEGIN COMMENTS LIST -->
         <div class="comments_list">
             <?php if ($commentCount > 0): ?>
-                <!-- BEGIN COMMENT BLOCKS -->
+            
+                <a id="loadMoreComments" href="" class="button"><?=Language::GetText('load_more')?></a>
+            
+                <?php $commentTree = null; ?>
+                <?php $commentService = $this->getService('Comment'); ?>
+            
                 <?php foreach ($commentList as $comment): ?>
-                    <div class="comment">
-                        <?php $avatar = $this->getService('Comment')->getCommentAvatar($comment); ?>
+                    <?php $commentTree = getCommentTree($commentTree, $comment); ?>
+                    <?php $commentIndentClass = getCommentIndentClass($commentTree, $comment); ?>
+                    
+                    <div class="comment <?=$commentIndentClass?>" data-comment="<?=$comment->commentId?>">
+                        <?php $avatar = $commentService->getCommentAvatar($comment); ?>
                         <img width="60" height="60" alt="<?=$comment->name?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" />
                         <div>
                             <p>
-                                <span>
-                                    <?php if ($comment->userId == 0): ?>
-                                        <?=$comment->name?>
-                                    <?php else: ?>
-                                        <a href="<?=$comment->website?>" title="<?=$comment->name?>"><?=$comment->name?></a>
-                                    <?php endif; ?>
-                                    <?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?>
-                                </span>
-                                <span>
+                                <span class="commentAuthor"><?=getCommentAuthorText($comment)?></span>
+                                <span class="commentDate"><?=date('m/d/Y', strtotime($comment->dateCreated))?></span>
+                                <?php if ($comment->parentId != 0): ?>
+                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <?=getCommentAuthorText($comment->parentComment)?></span>
+                                <?php endif; ?>
+                                <span class="commentAction">
                                     <a href=""><?=Language::GetText('reply')?></a>
                                     <a class="flag" data-type="comment" data-id="<?=$comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
                                 </span>
@@ -217,7 +216,6 @@ $this->SetLayout('full');
                         </div>
                     </div>
                 <?php endforeach; ?>
-                <!-- END COMMENT BLOCKS -->
             <?php endif; ?>
         </div>
         <!-- END COMMENTS LIST -->

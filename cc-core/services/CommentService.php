@@ -132,9 +132,19 @@ class CommentService extends ServiceAbstract
         $commentMapper = $this->_getMapper();
         $comments = $commentMapper->getCommentsFromList($commentList);
         foreach ($comments as $comment) {
+            // Retrieve comment's author
+            $comment->author = $this->getCommentAuthor($comment);
+            
+            // Retrieve parent comment if any
+            if ($comment->parentId != 0) {
+                $parentComment = $commentMapper->getCommentById($comment->parentId);
+                $parentComment->author = $this->getCommentAuthor($parentComment);
+                $comment->parentComment = $parentComment;
+            }
             $key = array_search($comment->commentId, $commentList);
             $output[$key] = $comment;
         }
+        ksort($output);
         return $output;
     }
     
@@ -188,7 +198,22 @@ class CommentService extends ServiceAbstract
         }
         return $chain;
     }
-    
+
+    /**
+     * Retrieve author of a comment 
+     * @param Comment $comment Comment to retrieve author for
+     * @return User|boolean Returns instance of User for comment's author, boolean false in n/a
+     */
+    public function getCommentAuthor(Comment $comment)
+    {
+        if ($comment->userId != 0) {
+            $userMapper = new UserMapper();
+            return $userMapper->getUserById($comment->userId);
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Retrieve instance of Comment mapper
      * @return CommentMapper Mapper is returned

@@ -485,6 +485,11 @@ class Router
             'location' => 'cc-core/system/comment.ajax.php'
         ));
 
+        $routes['ajaxCommentGet'] = new Route(array(
+            'path' => 'actions/comments/get',
+            'location' => 'cc-core/system/comment.get.ajax.php'
+        ));
+
         $routes['ajaxPost'] = new Route(array(
             'path' => 'actions/post',
             'location' => 'cc-core/system/post.ajax.php'

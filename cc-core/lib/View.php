@@ -31,8 +31,12 @@ class View
         define('THEME', HOST . '/cc-content/themes/' . $themeFiltered);
         define('THEME_PATH', THEMES_DIR . '/' . $themeFiltered);
         $this->vars->config->theme = $themeFiltered;
-        $this->vars->config->theme_url = HOST . '/cc-content/themes/' . $themeFiltered;
-        $this->vars->config->theme_path = THEMES_DIR . '/' . $themeFiltered; 
+        $this->vars->config->theme_url = THEME;
+        $this->vars->config->theme_path = THEME_PATH;
+        
+        // Load view helper
+        $viewHelper = $this->getFallbackPath('helper.php');
+        if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
         self::$_view = $this;
     }
     

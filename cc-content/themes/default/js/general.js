@@ -1,6 +1,9 @@
 // Global vars
-var baseUrl = $('meta[name="baseUrl"]').attr('content');
-var videoId = $('meta[name="videoId"]').attr('content');
+var cumulusClips = {};
+cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
+cumulusClips.themeUrl = $('meta[name="theme"]').attr('content');
+cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
+
 
 $(document).ready(function(){
 
@@ -75,7 +78,7 @@ $(document).ready(function(){
     // Add video to playlist on play page
     $('#addToPlaylist li a').click(function(){
         var link = $(this);
-        var url = baseUrl+'/actions/playlist/';
+        var url = cumulusClips.baseUrl+'/actions/playlist/';
         var data = {
             action: 'add',
             video_id: videoId,
@@ -94,7 +97,7 @@ $(document).ready(function(){
     $('#addToPlaylist form').submit(function(event){
         var createPlaylistForm = $(this);
         var data = $(this).serialize();
-        var url = baseUrl+'/actions/playlist/';
+        var url = cumulusClips.baseUrl+'/actions/playlist/';
         var callback = function(createPlaylistResponse){
             $('#addToPlaylist ul').append('<li><a data-playlist_id="' + createPlaylistResponse.other.playlistId + '" class="added" href="">' + createPlaylistResponse.other.name + ' (' + createPlaylistResponse.other.count + ')</a></li>');
             createPlaylistForm.find('input[type="text"]').val('');
@@ -107,7 +110,7 @@ $(document).ready(function(){
 
     // Attach flag action to flag links / buttons
     $('.flag').click(function(){
-        var url = baseUrl+'/actions/flag/';
+        var url = cumulusClips.baseUrl+'/actions/flag/';
         var data = {type: $(this).data('type'), id: $(this).data('id')};
         executeAction(url, data);
         window.scrollTo(0, 0);
@@ -118,7 +121,7 @@ $(document).ready(function(){
     // Attach Subscribe & Unsubscribe action to buttons
     $('.subscribe').click(function(){
         var subscribeType = $(this).data('type');
-        var url = baseUrl+'/actions/subscribe/';
+        var url = cumulusClips.baseUrl+'/actions/subscribe/';
         var data = {type: subscribeType, user: $(this).data('user')};
         var subscribeButton = $(this);
 
@@ -142,7 +145,7 @@ $(document).ready(function(){
 
     // Attach rating action to like & dislike links
     $('.rating').click(function(){
-        var url = baseUrl+'/actions/rate/';
+        var url = cumulusClips.baseUrl+'/actions/rate/';
         var data = {video_id: videoId, rating: $(this).data('rating')};
         var callback = function(responseData) {
             if (responseData.result == 1) {
@@ -158,7 +161,7 @@ $(document).ready(function(){
 
     // Attach comment action to comment forms
     $('#comments form').submit(function(){
-        var url = baseUrl+'/actions/comment/';
+        var url = cumulusClips.baseUrl+'/actions/comment/';
         var callback = function(responseData) {
             $('#comments form').find('input[type="text"], textarea').val('');
             if (responseData.other.auto_approve == 1) {
@@ -172,8 +175,14 @@ $(document).ready(function(){
 
 
     // Expand collapsed comment form was activated
-    $('#comments form textarea').focus(function(){
-        $(this).val('').parents('.form').removeClass('collapsed');
+    $('.comments_form').focusin(function(){
+        $(this).removeClass('collapsed');
+    });
+    
+    $('.comments_form').focusout(function(){
+        if ($(this).find('textarea').val() === '') {
+            $(this).addClass('collapsed');
+        }
     });
     
     
@@ -190,11 +199,71 @@ $(document).ready(function(){
 //    });
 
 
+
+
+//1
+//	5
+//		8
+//		9
+//	12
+//		13
+//	14
+//2
+//	6
+//3
+//	7
+//4
+//10
+//11
+
+// parentId = 0
+    // commentTree = commentId
+
+// else
+    // commentTree = comment w/o commentIndent && w/o commentIndentDouble
+
+
+
+
+
+    if ($('.play').length > 0) {
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.replyText = responseData;}, 'reply');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.reportAbuseText = responseData;}, 'report_abuse');
+        $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentTemplate = responseData;});
+    }
+    
+    $('#loadMoreComments').click(function(event){
+        var lastCommentId = $('meta[name="lastCommentId"]').attr('content');
+        var commentCount = $('meta[name="commentCount"]').attr('content');
+        var data = {videoId:cumulusClips.videoId, lastCommentId:lastCommentId, limit: 5};
+        $.ajax({
+            type        : 'get',
+            data        : data,
+            dataType    : 'json',
+            url         : cumulusClips.baseUrl + '/actions/comments/get/',
+            success     : function(responseData, textStatus, jqXHR){
+                var lastCommentKey = responseData.other.comments.length-1;
+                $('meta[name="lastCommentId"]').attr('content', responseData.other.comments[lastCommentKey].commentId);
+                console.log(responseData);
+                
+                $.each(responseData.other.comments, function(key, comment){
+                    // Retrieve current comment tree
+                    var currentCommentTree = $('.comments_list .comment:not(.commentIndent, .commentIndentDouble)').last().data('comment');
+                    var commentElement = buildComment(cumulusClips.commentTemplate, currentCommentTree, comment);
+                    $('.comments_list').append(commentElement);
+                });
+            }
+        });
+        event.preventDefault();
+    });
+
+
     // Regenerate Private URL
     $('#private_url a').click(function(){
         $.ajax({
             type    : 'get',
-            url     : baseUrl + '/private/get/',
+            url     : cumulusClips.baseUrl + '/private/get/',
             success : function(responseData, textStatus, jqXHR) {
                 $('#private_url span').text(responseData);
                 $('#private_url input').val(responseData);
@@ -236,7 +305,7 @@ $(document).ready(function(){
         event.preventDefault();
         
         var video = $(this).parents('.video');
-        var url = baseUrl+'/actions/playlist/';
+        var url = cumulusClips.baseUrl+'/actions/playlist/';
         var data = {
             action: 'add',
             shortText: true,
@@ -251,7 +320,6 @@ $(document).ready(function(){
             dataType: 'json',
             url: url,
             success: function(responseData, textStatus, jqXHR){
-                console.log(responseData);
                 // Append message to video thumbnail
                 var resultMessage = $('<div></div>')
                     .addClass('message')
@@ -297,7 +365,7 @@ function getText(callback, node, replacements)
 {
     $.ajax({
         type        : 'POST',
-        url         : baseUrl+'/language/get/',
+        url         : cumulusClips.baseUrl+'/language/get/',
         data        : {node:node, replacements:replacements},
         success     : callback
     });
@@ -346,4 +414,73 @@ function displayMessage(result, message)
     $('.message').html(message);
     $('.message').removeClass(existingClass);
     $('.message').addClass(cssClass);
+}
+
+function buildComment(commentTemplate, currentCommentTree, commentData)
+{
+    var comment = $(commentTemplate);
+    comment.attr('data-comment', commentData.commentId);
+    comment.find('> div p:last-child').text(commentData.comments);
+    
+    // Set comment avatar
+    if (commentData.author !== null && commentData.author.avatar !== null) {
+        comment.find('img').attr('src', cumulusClips.baseUrl + '/cc-uploads/avatars/' + commentData.author.avatar + '.jpg');
+    } else {
+        comment.find('img').attr('src', cumulusClips.themeUrl + '/images/avatar.gif');
+    }
+    
+    // Set comment author
+    if (commentData.userId !== '0') {
+        var author = commentData.author;
+        comment.find('.commentAuthor').html(
+            $('<a>')
+                .attr('href', cumulusClips.baseUrl + '/members/' + author.username)
+                .text(author.username)
+        );
+    } else {
+        comment.find('commentAuthor').text(commentData.name);
+    }
+    
+    // Set comment date
+    var commentDate = new Date(commentData.dateCreated);
+    monthPadding = (String(commentDate.getMonth()+1).length === 1) ? '0' : '';
+    datePadding = (String(commentDate.getDate()).length === 1) ? '0' : '';
+    comment.find('.commentDate').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
+    
+    // Set comment indentation
+    var commentIndentClass;
+    if (commentData.parentId === '0') {
+        commentIndentClass = '';
+    } else if (commentData.parentId == currentCommentTree) {
+        commentIndentClass = 'commentIndent';
+    } else {
+        commentIndentClass = 'commentIndentDouble';
+    }
+    comment.addClass(commentIndentClass);
+    
+    // Set comment links
+    comment.find('.commentAction a:first-child').text(cumulusClips.replyText);
+    comment.find('.flag')
+        .text(cumulusClips.reportAbuseText)
+        .attr('data-id', commentData.commentId);
+     
+    // Set reply to text if apl.
+    if (commentData.parentId !== '0') {
+        comment.find('.commentReply').text(cumulusClips.replyToText + ' ');
+        // Determine parent comment author's text
+        var parentCommentAuthorText;
+        if (commentData.parentComment.userId !== '0') {
+            var parentCommentAuthor = commentData.parentComment.author;
+            parentCommentAuthorText = $('<a>')
+                .attr('href', cumulusClips.baseUrl + '/members/' + parentCommentAuthor.username)
+                .text(parentCommentAuthor.username);
+            comment.find('.commentReply').append(parentCommentAuthorText);
+        } else {
+            comment.find('.commentReply').append(commentData.parentComment.name);
+        }
+    } else {
+        comment.find('.commentReply').remove();
+    }
+    
+    return comment;
 }

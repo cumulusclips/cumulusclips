@@ -1,0 +1,42 @@
+<?php
+
+Plugin::triggerEvent('comment.ajax.start');
+
+// Verify if user is logged in
+$userService = new UserService();
+$loggedInUser = $userService->loginCheck();
+Plugin::triggerEvent('comment.ajax.login_check');
+
+// Establish page variables, objects, arrays, etc
+$errors = array();
+$data = array();
+$videoMapper = new VideoMapper();
+$commentService = new CommentService();
+$limit = 5;
+$lastCommentId = 0;
+
+// Verify a video was selected
+if (!empty($_GET['videoId'])) {
+    $video = $videoMapper->getVideoById($_GET['videoId']);
+} else {
+    App::Throw404();
+}
+
+// Check if video is valid
+if (!$video || $video->status != 'approved') {
+    App::Throw404();
+}
+
+// Validate comment limit
+if (!empty($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0) {
+    $limit = $_GET['limit'];
+}
+
+// Validate comment id offset
+if (!empty($_GET['lastCommentId']) && is_numeric($_GET['lastCommentId']) && $_GET['limit'] > 0) {
+    $lastCommentId = $_GET['lastCommentId'];
+}
+
+$commentList = $commentService->getVideoComments($video, $limit, $lastCommentId);
+echo json_encode(array('result' => 1, 'message' => '', 'other' => array('comments' => $commentList)));
+exit();
