@@ -85,7 +85,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($view->vars-
     } catch (Exception $exception) {
         App::Alert('Error during Avatar Reset', $exception->getMessage());
     }
-    $view->vars->loggedInUser->avatar = '';
+    $view->vars->loggedInUser->avatar = null;
     $userMapper->save($view->vars->loggedInUser);
     $view->vars->message = Language::GetText('success_avatar_reset');
     $view->vars->message_type = 'success';

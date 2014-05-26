@@ -69,7 +69,7 @@ class UserMapper extends MapperAbstract
         $user->confirmCode = $dbResults['confirm_code'];
         $user->views = $dbResults['views'];
         $user->lastLogin = date(DATE_FORMAT, strtotime($dbResults['last_login']));
-        $user->avatar = $dbResults['avatar'];
+        $user->avatar = (!empty($dbResults['avatar'])) ? $dbResults['avatar'] : null;
         $user->released = ($dbResults['released'] == 1) ? true : false;
         return $user;
     }

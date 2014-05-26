@@ -63,12 +63,7 @@ class Comment
     public $released;
 
     /**
-     * @var User
+     * @var User User who authored comment, if registered. Not automatically populated.
      */
     public $author;
-    
-    /**
-     * @var Comment 
-     */
-    public $parentComment;
 }

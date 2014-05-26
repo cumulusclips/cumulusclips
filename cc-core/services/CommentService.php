@@ -109,7 +109,7 @@ class CommentService extends ServiceAbstract
     public function getCommentAvatar(Comment $comment)
     {
         if (empty($comment->userId)) {
-            return false;
+            return null;
         } else {
             $userService = new UserService();
             $userMapper = new UserMapper();
@@ -119,84 +119,21 @@ class CommentService extends ServiceAbstract
     }
     
     /**
-     * Retrieve subset of a video's comments
+     * Retrieve subset of a video's comments and the comment's author
      * @param Video $video Video for which to retrieve comments
      * @param int $limit Amount of comments to retrieve
      * @param int $offset Comment Id of comment to use as a starting point (will return succeeding comments, not including this one)
      * @return array Returns list of Comments
      */
-    public function getVideoComments(Video $video, $limit, $offsetId = 0)
+    public function getVideoComments(Video $video, $limit, $offsetId = null)
     {
-        $output = array();
-        $commentList = $this->getCommentChain($video->videoId, $limit, $offsetId);
         $commentMapper = $this->_getMapper();
-        $comments = $commentMapper->getCommentsFromList($commentList);
-        foreach ($comments as $comment) {
-            // Retrieve comment's author
+        $commentList = $commentMapper->getVideoComments($video->videoId, $limit, $offsetId);
+        // Retrieve comment's author
+        foreach ($commentList as $comment) {
             $comment->author = $this->getCommentAuthor($comment);
-            
-            // Retrieve parent comment if any
-            if ($comment->parentId != 0) {
-                $parentComment = $commentMapper->getCommentById($comment->parentId);
-                $parentComment->author = $this->getCommentAuthor($parentComment);
-                $comment->parentComment = $parentComment;
-            }
-            $key = array_search($comment->commentId, $commentList);
-            $output[$key] = $comment;
         }
-        ksort($output);
-        return $output;
-    }
-    
-    public function getCommentChain($videoId, $limit, $offsetId = 0, $chain = array())
-    {
-        $commentMapper = $this->_getMapper();
-        
-        // Get children of starting comment
-        // recursive trickle down - stop when no more children or limit is reached
-        $chain = $this->getChildCommentChain($videoId, $limit, $offsetId, $chain);
-        
-        // Root chain requested (Above would have retrieved all neccessary comments)
-        if ($offsetId == 0) return $chain;
-        
-        // Get sibblings of starting comment
-        $startingPointComment = $commentMapper->getCommentById($offsetId);
-        if (!$startingPointComment) throw new Exception('Offset comment not found');
-        $startingPointParentId = $startingPointComment->parentId;
-        $results = $commentMapper->getCommentIds($videoId, $limit, $startingPointParentId, $offsetId);
-        foreach ($results as $sibblingId) {
-            if (count($chain) == $limit) return $chain;
-            $chain[] = $sibblingId;
-            // Get children of starting comment's sibblings (nephews)
-            $chain = $this->getChildCommentChain($videoId, $limit, $sibblingId, $chain);
-        }
-            
-        // Find sibbling of parent comment (uncles)
-        if ($startingPointParentId != 0) {
-            $parentComment = $commentMapper->getCommentById($startingPointParentId);
-            $results = $commentMapper->getCommentIds($videoId, $limit, $parentComment->parentId, $parentComment->commentId);
-            foreach ($results as $uncleId) {
-                if (count($chain) == $limit) return $chain;
-                $chain[] = $uncleId;
-                // Get children of parent comment's sibblings (cousins, 2nd cousings, etc.)
-                // recursive bubble up - stop when no more comments or limit is reached
-                $chain = $this->getCommentChain($videoId, $limit, $uncleId, $chain);
-            }
-        }
-        return $chain;
-    }
-    
-    public function getChildCommentChain($videoId, $limit, $parentId, $chain = array())
-    {
-        $commentMapper = $this->_getMapper();
-        $results = $commentMapper->getCommentIds($videoId, $limit, $parentId);
-        foreach ($results as $childId) {
-            if (count($chain) == $limit) break;
-            $chain[] = $childId;
-            // Trickle down to find all all children, grandchildren, etc.
-            $chain = $this->getChildCommentChain($videoId, $limit, $childId, $chain);
-        }
-        return $chain;
+        return $commentList;
     }
 
     /**
@@ -210,7 +147,7 @@ class CommentService extends ServiceAbstract
             $userMapper = new UserMapper();
             return $userMapper->getUserById($comment->userId);
         } else {
-            return false;
+            return null;
         }
     }
 

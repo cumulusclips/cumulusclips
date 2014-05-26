@@ -33,7 +33,7 @@ if (!empty($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0) 
 }
 
 // Validate comment id offset
-if (!empty($_GET['lastCommentId']) && is_numeric($_GET['lastCommentId']) && $_GET['limit'] > 0) {
+if (!empty($_GET['lastCommentId']) && is_numeric($_GET['lastCommentId']) && $_GET['lastCommentId'] > 0) {
     $lastCommentId = $_GET['lastCommentId'];
 }
 

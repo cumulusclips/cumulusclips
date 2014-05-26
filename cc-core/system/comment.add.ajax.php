@@ -83,32 +83,23 @@ if (isset($_POST['submitted'])) {
         $newComment = $commentMapper->getCommentById($commentId);
         $commentService = new CommentService();
         $commentService->approve($newComment, 'create');
+        $newComment->author = $commentService->getCommentAuthor($newComment);
 
         // Retrieve formatted new comment
         if (Settings::Get('auto_approve_comments') == 1) {
-            if ($block) {
-                $view = View::getView();
-                ob_start();
-                $view->RepeatingBlock ($block, array($newComment->commentId));
-                $output = ob_get_contents();
-                ob_end_clean();
-            } else {
-                $output = $newComment;
-            }
             $message = (string) Language::GetText('success_comment_posted');
-            $other = array('auto_approve' => 1, 'output' => $output);
+            $other = array('autoApprove' => true, 'comment' => $newComment);
         } else {
             $message = (string) Language::GetText('success_comment_approve');
-            $other = array('auto_approve' => 0, 'output' => '');
+            $other = array('autoApprove' => false);
         }
-
-        echo json_encode(array('result' => 1, 'message' => $message, 'other' => $other));
+        echo json_encode(array('result' => true, 'message' => $message, 'other' => $other));
         Plugin::triggerEvent('comment.ajax.post_comment');
         exit();
     } else {
         $error_msg = Language::GetText('errors_below');
         $error_msg .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        echo json_encode(array('result' => 0, 'message' => $error_msg));
+        echo json_encode(array('result' => false, 'message' => $error_msg));
         exit();
     }
 }

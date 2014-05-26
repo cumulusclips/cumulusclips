@@ -7,7 +7,7 @@ class CommentMapper extends MapperAbstract
         return $this->getCommentByCustom(array('comment_id' => $commentId));
     }
     
-    public function getVideoComments($videoId)
+    public function getVideoCommentsById($videoId)
     {
         return $this->getMultipleCommentByCustom(array('video_id' => $videoId));
     }
@@ -143,16 +143,14 @@ class CommentMapper extends MapperAbstract
         $db->query('DELETE FROM ' . DB_PREFIX . 'comments WHERE comment_id = :commentId', array(':commentId' => $commentId));
     }
 
-    public function getCommentIds($videoId, $limit, $parentCommentId = 0, $offsetCommentId = 0)
+    public function getVideoComments($videoId, $limit, $offsetCommentId = null)
     {
         $db = Registry::get('db');
-        $sql = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments ';
-        $where = 'video_id = :videoId AND parent_id = :parentId';
+        $commentList = array();
+        $sql = 'SELECT * FROM ' . DB_PREFIX . 'comments ';
+        $where = 'video_id = :videoId';
         
-        $params = array(
-            ':videoId' => $videoId,
-            ':parentId' => $parentCommentId
-        );
+        $params = array(':videoId' => $videoId);
         
         if (!empty($offsetCommentId)) {
             $params[':offsetId'] = $offsetCommentId;
@@ -161,7 +159,10 @@ class CommentMapper extends MapperAbstract
         
         $sql .= 'WHERE ' . $where . ' LIMIT ' . (int) $limit;
         $result = $db->fetchAll($sql, $params);
-        return Functions::arrayColumn($result, 'comment_id');
+        foreach($result as $commentRecord) {
+            $commentList[] = $this->_map($commentRecord);
+        }
+        return $commentList;
     }
     
     public function getVideoCommentCount($videoId)

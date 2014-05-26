@@ -1,6 +1,6 @@
 <?php
 
-function getCommentLoadMoreOffset(array $commentList)
+function getLastCommentId(array $commentList)
 {
     if (count($commentList) > 0) {
         $lastComment = array_pop($commentList);
@@ -10,34 +10,12 @@ function getCommentLoadMoreOffset(array $commentList)
     }
 }
 
-function getCommentTree($currentCommentTree, Comment $comment)
-{
-    if ($comment->parentId == 0) {
-        return $comment->commentId;
-    } else {
-        return $currentCommentTree;
-    }  
-}
-
-function getCommentIndentClass($currentCommentTree, Comment $comment)
-{
-    if ($comment->parentId == 0) {
-        return '';
-    } else if ($comment->parentId == $currentCommentTree) {
-        return 'commentIndent';
-    } else {
-        return 'commentIndentDouble';
-    }
-}
-
 function getCommentAuthorText(Comment $comment)
 {
     if ($comment->userId == 0) {
         return $comment->name;
     } else {
-        $userMapper = new UserMapper();
-        $author = $userMapper->getUserById($comment->userId);
-        return '<a href="' . getUserProfileLink($author) . '">' . $author->username . '</a>';
+        return '<a href="' . getUserProfileLink($comment->author) . '">' . $comment->author->username . '</a>';
     }
 }
 

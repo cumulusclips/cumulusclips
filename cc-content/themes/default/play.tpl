@@ -1,8 +1,6 @@
 <?php
 $this->addMeta('videoId', $video->videoId);
-$this->addMeta('commentCount', $commentCount);
 $this->addMeta('theme', THEME);
-if ($lastCommentId = getCommentLoadMoreOffset($commentList)) $this->addMeta('lastCommentId', $lastCommentId);
 $this->AddCss('jscrollpane.css');
 $this->AddJs('jscrollpane.plugin.js');
 $this->AddJs('mousewheel.plugin.js');
@@ -157,7 +155,7 @@ $this->SetLayout('full');
     <div id="comments">
         <p class="large"><?=Language::GetText('comments_header')?></p>
         <div class="totals">
-            <p><?=$commentCount?> <?=Language::GetText('comments_total')?></p>
+            <p><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
         </div>
         
         
@@ -173,7 +171,7 @@ $this->SetLayout('full');
             <?php endif; ?>
 
                 <label><?=Language::GetText('comments')?></label>
-                <textarea class="text" rows="4" cols="50" name="comments">Comments</textarea>
+                <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
 
                 <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
                 <input type="hidden" name="block" value="comment" />
@@ -185,28 +183,17 @@ $this->SetLayout('full');
         
         
         <!-- BEGIN COMMENTS LIST -->
-        <div class="comments_list">
+        <div class="commentList">
             <?php if ($commentCount > 0): ?>
-            
-                <a id="loadMoreComments" href="" class="button"><?=Language::GetText('load_more')?></a>
-            
-                <?php $commentTree = null; ?>
                 <?php $commentService = $this->getService('Comment'); ?>
-            
                 <?php foreach ($commentList as $comment): ?>
-                    <?php $commentTree = getCommentTree($commentTree, $comment); ?>
-                    <?php $commentIndentClass = getCommentIndentClass($commentTree, $comment); ?>
-                    
-                    <div class="comment <?=$commentIndentClass?>" data-comment="<?=$comment->commentId?>">
+                    <div class="comment" data-comment="<?=$comment->commentId?>">
                         <?php $avatar = $commentService->getCommentAvatar($comment); ?>
                         <img width="60" height="60" alt="<?=$comment->name?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" />
                         <div>
                             <p>
                                 <span class="commentAuthor"><?=getCommentAuthorText($comment)?></span>
                                 <span class="commentDate"><?=date('m/d/Y', strtotime($comment->dateCreated))?></span>
-                                <?php if ($comment->parentId != 0): ?>
-                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <?=getCommentAuthorText($comment->parentComment)?></span>
-                                <?php endif; ?>
                                 <span class="commentAction">
                                     <a href=""><?=Language::GetText('reply')?></a>
                                     <a class="flag" data-type="comment" data-id="<?=$comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
@@ -219,6 +206,12 @@ $this->SetLayout('full');
             <?php endif; ?>
         </div>
         <!-- END COMMENTS LIST -->
+        
+        <?php if ($commentCount > 5): ?>
+            <div class="loadMoreComments">
+                <a href="" class="button" data-loading_text="<?=Language::GetText('loading')?>"><?=Language::GetText('load_more')?></a>
+            </div>
+        <?php endif; ?>
         
     </div>
     <!-- END COMMENTS SECTION -->

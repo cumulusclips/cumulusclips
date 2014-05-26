@@ -14,7 +14,6 @@ $(document).ready(function(){
             $(this).val('');
         }
     });
-
     // Default text Blur
     $('.defaultText').blur(function(){
         if ($(this).val() == '') {
@@ -26,7 +25,6 @@ $(document).ready(function(){
 
     // Tabs Show/Hide Block
     $('.tabs a').click(function(){
-        
         // Skip for non show/hide tabs
         if ($(this).data('block') == 'undefined') return false;
         
@@ -49,7 +47,6 @@ $(document).ready(function(){
 
     // Show/Hide Block
     $('.showhide').click(function(){
-
         // Retrieve and toggle targeted block
         var block = $(this).data('block');
         $('#'+block).toggle();
@@ -61,7 +58,6 @@ $(document).ready(function(){
 
     // Attach confirm popup to confirm action links
     $('.confirm').click(function() {
-        
         // Code to execute once string is retrieved
         var location = $(this).attr('href')
         var callback = function(confirmString){
@@ -72,39 +68,6 @@ $(document).ready(function(){
         // Retrieve confirm string
         getText(callback, $(this).data('node'), $(this).data('replacements'));
         return false;
-    });
-
-
-    // Add video to playlist on play page
-    $('#addToPlaylist li a').click(function(){
-        var link = $(this);
-        var url = cumulusClips.baseUrl+'/actions/playlist/';
-        var data = {
-            action: 'add',
-            video_id: videoId,
-            playlist_id: $(this).data('playlist_id')
-        };
-        var callback = function(addToPlaylistResponse){
-            var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
-            link.text(newNameAndCount);
-            link.addClass('added');
-        };
-        executeAction(url, data, callback);
-        return false;
-    });
-    
-    // Create new playlist on play page
-    $('#addToPlaylist form').submit(function(event){
-        var createPlaylistForm = $(this);
-        var data = $(this).serialize();
-        var url = cumulusClips.baseUrl+'/actions/playlist/';
-        var callback = function(createPlaylistResponse){
-            $('#addToPlaylist ul').append('<li><a data-playlist_id="' + createPlaylistResponse.other.playlistId + '" class="added" href="">' + createPlaylistResponse.other.name + ' (' + createPlaylistResponse.other.count + ')</a></li>');
-            createPlaylistForm.find('input[type="text"]').val('');
-            createPlaylistForm.find('select').val('public');
-        };
-        executeAction(url, data, callback);
-        event.preventDefault();
     });
 
 
@@ -159,104 +122,175 @@ $(document).ready(function(){
     });
 
 
-    // Attach comment action to comment forms
-    $('#comments form').submit(function(){
-        var url = cumulusClips.baseUrl+'/actions/comment/';
-        var callback = function(responseData) {
-            $('#comments form').find('input[type="text"], textarea').val('');
-            if (responseData.other.auto_approve == 1) {
-                $('#comments .comments_list').prepend(responseData.other.output);
-            }
-            window.scrollTo(0, 0);
-        }
-        executeAction(url, $(this).serialize(), callback);
-        return false;
-    });
-
-
-    // Expand collapsed comment form was activated
-    $('.comments_form').focusin(function(){
-        $(this).removeClass('collapsed');
-    });
-    
-    $('.comments_form').focusout(function(){
-        if ($(this).find('textarea').val() === '') {
-            $(this).addClass('collapsed');
-        }
-    });
-    
-    
-//    $('.play_comments_form textarea, .play_comments_form input').blur(function(){
-//        var formContainer = $('.play_comments_form');
-//        var textArea = formContainer.find('textarea');
-//        if (
-//            formContainer.find('input[type="text"]').val() == ''
-//            && textArea.val() == ''
-//        ) {
-//            formContainer.addClass('collapsed');
-//            textArea.val(textArea.prev().text());
-//        }
-//    });
-
-
-
-
-//1
-//	5
-//		8
-//		9
-//	12
-//		13
-//	14
-//2
-//	6
-//3
-//	7
-//4
-//10
-//11
-
-// parentId = 0
-    // commentTree = commentId
-
-// else
-    // commentTree = comment w/o commentIndent && w/o commentIndentDouble
-
-
-
-
-
+    // Play Video Page
     if ($('.play').length > 0) {
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyText = responseData;}, 'reply');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.reportAbuseText = responseData;}, 'report_abuse');
         $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentTemplate = responseData;});
-    }
-    
-    $('#loadMoreComments').click(function(event){
-        var lastCommentId = $('meta[name="lastCommentId"]').attr('content');
-        var commentCount = $('meta[name="commentCount"]').attr('content');
-        var data = {videoId:cumulusClips.videoId, lastCommentId:lastCommentId, limit: 5};
-        $.ajax({
-            type        : 'get',
-            data        : data,
-            dataType    : 'json',
-            url         : cumulusClips.baseUrl + '/actions/comments/get/',
-            success     : function(responseData, textStatus, jqXHR){
-                var lastCommentKey = responseData.other.comments.length-1;
-                $('meta[name="lastCommentId"]').attr('content', responseData.other.comments[lastCommentKey].commentId);
-                console.log(responseData);
-                
-                $.each(responseData.other.comments, function(key, comment){
-                    // Retrieve current comment tree
-                    var currentCommentTree = $('.comments_list .comment:not(.commentIndent, .commentIndentDouble)').last().data('comment');
-                    var commentElement = buildComment(cumulusClips.commentTemplate, currentCommentTree, comment);
-                    $('.comments_list').append(commentElement);
-                });
+        cumulusClips.lastCommentId = $('.commentList > div:last-child').data('comment');
+        cumulusClips.commentCount = Number($('#comments .totals span').text());
+        cumulusClips.loadMoreComments = (cumulusClips.commentCount > 5) ? true : false;
+
+
+        // Scrollbar for 'Add Video To' widget
+        var scrollableList = $('#addToPlaylist > div:first-child > div');
+        scrollableList.jScrollPane();
+        $('#addToPlaylist').on('tabToggled',function(){
+            if ($(this).css('display') == 'block' && scrollableList.length > 0) {
+                api = scrollableList.data('jsp');
+                api.reinitialise();
             }
         });
-        event.preventDefault();
-    });
+
+
+        // Attach scrollbar to playlist widget if viewing a playlist
+        if ($('#playlistVideos .videos_list').length > 0) {
+            $('#playlistVideos .videos_list').jScrollPane();
+            var playlistScrollApi = $('#playlistVideos .videos_list').data('jsp');
+            var activePlaylistVideo = $('#playlistVideos .videos_list .active');
+            playlistScrollApi.scrollTo(0, activePlaylistVideo.index()*76);
+        }
+
+
+        // Make entire playlist video tile clickable
+        $('#playlistVideos .video_small').click(function(){
+            location = $(this).find('div > a').attr('href');
+        });
+
+
+        // Add video to playlist on play page
+        $('#addToPlaylist li a').click(function(){
+            var link = $(this);
+            var url = cumulusClips.baseUrl+'/actions/playlist/';
+            var data = {
+                action: 'add',
+                video_id: videoId,
+                playlist_id: $(this).data('playlist_id')
+            };
+            var callback = function(addToPlaylistResponse){
+                var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
+                link.text(newNameAndCount);
+                link.addClass('added');
+            };
+            executeAction(url, data, callback);
+            return false;
+        });
+
+
+        // Create new playlist on play page
+        $('#addToPlaylist form').submit(function(event){
+            var createPlaylistForm = $(this);
+            var data = $(this).serialize();
+            var url = cumulusClips.baseUrl+'/actions/playlist/';
+            var callback = function(createPlaylistResponse){
+                $('#addToPlaylist ul').append('<li><a data-playlist_id="' + createPlaylistResponse.other.playlistId + '" class="added" href="">' + createPlaylistResponse.other.name + ' (' + createPlaylistResponse.other.count + ')</a></li>');
+                createPlaylistForm.find('input[type="text"]').val('');
+                createPlaylistForm.find('select').val('public');
+            };
+            executeAction(url, data, callback);
+            event.preventDefault();
+        });
+
+
+        // Attach comment action to comment forms
+        $('#comments form').submit(function(){
+            var url = cumulusClips.baseUrl+'/actions/comment/add/';
+            var callback = function(responseData) {
+                if (responseData.result === true) {
+                    // Reset comment form
+                    $('#comments form').addClass('collapsed').find('input[type="text"]').val('');
+                    var commentField = $('#comments form').find('textarea');
+                    commentField.val(commentField.attr('title'));
+
+                    // Append new comment if auto-approve comments is on
+                    if (responseData.other.autoApprove === true) {
+                        var newComment = buildComment(cumulusClips.commentTemplate, responseData.other.comment);
+                        $('#comments .commentList').append(newComment);
+                    }
+                }
+                window.scrollTo(0, 0);
+            }
+            executeAction(url, $(this).serialize(), callback);
+            return false;
+        });
+
+
+        // Expand collapsed comment form was activated
+        $('.comments_form').focusin(function(){
+            if ($(this).hasClass('collapsed')) {
+                $(this).removeClass('collapsed');
+                $(this).find('textarea').val('');
+            }
+        });
+
+        // Collapse comment form when empty and deactivated
+        $(document).on('click', function(event){
+            var clickedElement = $(event.target);
+            if (clickedElement.parents('.comments_form').length === 0) {
+                // Verify comment text fields aren't empty
+                var commentsForm = $('.comments_form');
+                var commentTextFields = commentsForm.find('input[type="text"]');
+                var collapseForm = true;
+                for (var i = 0; i < commentTextFields.length; i++) {
+                    var textField = commentTextFields[i];
+                    if ($(textField).val() !== '') {
+                        collapseForm = false;
+                        break;
+                    }
+                }
+
+                // Verify comment field isn't empty
+                var commentField = commentsForm.find('textarea');
+                if (commentField.val() !== '') collapseForm = false;
+
+                // Collapse form if form is empty
+                if (collapseForm) {
+                    commentsForm.addClass('collapsed');
+                    commentField.val(commentField.attr('title'));
+                }
+            }
+        });
+
+
+        // Load more comments
+        $('.loadMoreComments a').on('click', function(event){
+            // Verify that more comments are available
+            if (cumulusClips.loadMoreComments) {
+                var data = {videoId:cumulusClips.videoId, lastCommentId:cumulusClips.lastCommentId, limit: 5};
+                var loadingText = $(this).data('loading_text');
+                var loadMoreText = $(this).text();
+                $(this).text(loadingText);
+                // Retrieve subsequent comments
+                $.ajax({
+                    type        : 'get',
+                    data        : data,
+                    dataType    : 'json',
+                    url         : cumulusClips.baseUrl + '/actions/comments/get/',
+                    success     : function(responseData, textStatus, jqXHR){
+                        var lastCommentKey = responseData.other.comments.length-1;
+                        cumulusClips.lastCommentId = responseData.other.comments[lastCommentKey].commentId;
+                        // Loop through comment data set, inject into comment template and append to list
+                        $.each(responseData.other.comments, function(key, comment){
+                            $('.commentList').find('div[data-comment="' + comment.commentId + '"]').remove();
+                            var commentElement = buildComment(cumulusClips.commentTemplate, comment);
+                            $('.commentList').append(commentElement);
+                        });
+
+                        // Hide load more button if no more comments are available
+                        if ($('.commentList .comment').length < cumulusClips.commentCount) {
+                            cumulusClips.loadMoreComments = true;
+                            $('.loadMoreComments a').text(loadMoreText);
+                        } else {
+                            cumulusClips.loadMoreComments = false;
+                            $('.loadMoreComments').remove();
+                        }
+                    }
+                });
+            }
+            event.preventDefault();
+        });
+    }   // END Play Video page
 
 
     // Regenerate Private URL
@@ -271,32 +305,6 @@ $(document).ready(function(){
         });
         return false;
     });
-    
-    
-    // Scrollbar for Play page 'Add Video To' widget
-    if ($('.play').length > 0) {
-        var scrollableList = $('#addToPlaylist > div:first-child > div');
-        scrollableList.jScrollPane();
-        $('#addToPlaylist').on('tabToggled',function(){
-            if ($(this).css('display') == 'block' && scrollableList.length > 0) {
-                api = scrollableList.data('jsp');
-                api.reinitialise();
-            }
-        });
-        
-        // Attach scrollbar to playlist widget if viewing a playlist
-        if ($('#playlistVideos .videos_list').length > 0) {
-            $('#playlistVideos .videos_list').jScrollPane();
-            var playlistScrollApi = $('#playlistVideos .videos_list').data('jsp');
-            var activePlaylistVideo = $('#playlistVideos .videos_list .active');
-            playlistScrollApi.scrollTo(0, activePlaylistVideo.index()*76);
-        }
-        
-        // Make entire playlist video tile clickable
-        $('#playlistVideos .video_small').click(function(){
-            location = $(this).find('div > a').attr('href');
-        });
-    }
 
 
     // Add to Watch Later actions
@@ -371,9 +379,6 @@ function getText(callback, node, replacements)
     });
 }
 
-
-
-
 /**
  * Send AJAX request to the action's server handler script
  * @param string url Location of the action's server handler script
@@ -396,9 +401,6 @@ function executeAction(url, data, callback)
     });
 }
 
-
-
-
 /**
  * Display message sent from the server handler script for page actions
  * @param boolean result The result of the requested action (1 = Success, 0 = Error)
@@ -408,7 +410,7 @@ function executeAction(url, data, callback)
  */
 function displayMessage(result, message)
 {
-    var cssClass = (result == 1) ? 'success' : 'errors';
+    var cssClass = (result === true) ? 'success' : 'errors';
     var existingClass = ($('.message').hasClass('success')) ? 'success' : 'errors';
     $('.message').show();
     $('.message').html(message);
@@ -416,11 +418,16 @@ function displayMessage(result, message)
     $('.message').addClass(cssClass);
 }
 
-function buildComment(commentTemplate, currentCommentTree, commentData)
+/**
+ * Generates comment card to be appended to comment list on play page
+ * @param string commentTemplate The HTML template of the comment card
+ * @param object commentData The Comment object for the comment being appended
+ * @return object the jQuery object of the filled comment card
+ */
+function buildComment(commentTemplate, commentData)
 {
     var comment = $(commentTemplate);
     comment.attr('data-comment', commentData.commentId);
-    comment.find('> div p:last-child').text(commentData.comments);
     
     // Set comment avatar
     if (commentData.author !== null && commentData.author.avatar !== null) {
@@ -438,7 +445,7 @@ function buildComment(commentTemplate, currentCommentTree, commentData)
                 .text(author.username)
         );
     } else {
-        comment.find('commentAuthor').text(commentData.name);
+        comment.find('.commentAuthor').text(commentData.name);
     }
     
     // Set comment date
@@ -447,40 +454,28 @@ function buildComment(commentTemplate, currentCommentTree, commentData)
     datePadding = (String(commentDate.getDate()).length === 1) ? '0' : '';
     comment.find('.commentDate').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
     
-    // Set comment indentation
-    var commentIndentClass;
-    if (commentData.parentId === '0') {
-        commentIndentClass = '';
-    } else if (commentData.parentId == currentCommentTree) {
-        commentIndentClass = 'commentIndent';
-    } else {
-        commentIndentClass = 'commentIndentDouble';
-    }
-    comment.addClass(commentIndentClass);
-    
     // Set comment links
     comment.find('.commentAction a:first-child').text(cumulusClips.replyText);
     comment.find('.flag')
         .text(cumulusClips.reportAbuseText)
         .attr('data-id', commentData.commentId);
-     
-    // Set reply to text if apl.
-    if (commentData.parentId !== '0') {
-        comment.find('.commentReply').text(cumulusClips.replyToText + ' ');
-        // Determine parent comment author's text
-        var parentCommentAuthorText;
-        if (commentData.parentComment.userId !== '0') {
-            var parentCommentAuthor = commentData.parentComment.author;
-            parentCommentAuthorText = $('<a>')
-                .attr('href', cumulusClips.baseUrl + '/members/' + parentCommentAuthor.username)
-                .text(parentCommentAuthor.username);
-            comment.find('.commentReply').append(parentCommentAuthorText);
-        } else {
-            comment.find('.commentReply').append(commentData.parentComment.name);
-        }
-    } else {
-        comment.find('.commentReply').remove();
+ 
+    // Set comments
+    commentData.comments = commentData.comments.replace(/</g, '&lt;');
+    commentData.comments = commentData.comments.replace(/>/g, '&gt;');
+    comment.find('> div p:last-child').text(commentData.comments);
+    var cleanComments = comment.find('> div p:last-child').text();
+    var replyMatches = cleanComments.match(/@user:([a-z0-9]+)/i);
+    if (replyMatches) {
+        var replyLinkContainer = $('<div/>');
+        var replyLink = $('<a>')
+            .attr('href', cumulusClips.baseUrl + '/members/' + replyMatches[1])
+            .attr('title', cumulusClips.replyToText)
+            .text('@' + replyMatches[1]);
+        replyLinkContainer.append(replyLink);
+        cleanComments = cleanComments.replace(/@user:[a-z0-9]+/i, replyLinkContainer.html());
     }
+    comment.find('> div p:last-child').html(cleanComments.replace(/\r\n|\n|\r/g, '<br>'));
     
     return comment;
 }
