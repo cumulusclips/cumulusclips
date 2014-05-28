@@ -445,6 +445,11 @@ class Router
         
         /** AJAX Routes **/
 
+        $routes['ajaxSearchSuggest'] = new Route(array(
+            'path' => 'search/suggest',
+            'location' => 'cc-core/system/search.suggest.ajax.php'
+        ));
+
         $routes['ajaxAvatarUpload'] = new Route(array(
             'path' => 'myaccount/upload/avatar',
             'location' => 'cc-core/system/avatar.ajax.php'
