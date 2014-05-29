@@ -160,7 +160,7 @@ $this->SetLayout('full');
         
         
         <!-- BEGIN COMMENTS FORM -->
-        <div class="form collapsed comments_form">
+        <div class="form collapsed commentForm">
             <form action="" method="post">
             <?php if (!$loggedInUser): ?>
                 <label><?=Language::GetText('name')?></label>
@@ -169,13 +169,17 @@ $this->SetLayout('full');
                 <label><?=Language::GetText('email')?></label>
                 <input type="text" class="text" value="" name="email" />
             <?php endif; ?>
-
-                <label><?=Language::GetText('comments')?></label>
-                <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
-
+                
+                <div class="commentContainer">
+                    <label><?=Language::GetText('comments')?></label>
+                    <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
+                </div>
+                
+                <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
                 <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
                 <input type="hidden" name="block" value="comment" />
                 <input type="hidden" name="submitted" value="TRUE" />
+                <input type="hidden" name="parentCommentId" value="" />
                 <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
             </form>
         </div>

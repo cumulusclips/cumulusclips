@@ -494,12 +494,18 @@ PLAY VIDEO
 
 /** COMMENTS FORM **/
 
-.comments_form {
+.commentForm {
     width: 550px;
     overflow: hidden;
 }
 
-.comments_form textarea {
+.commentForm .cancel {
+    display: block;
+    margin-top: 10px;
+    float: left;
+}
+
+.commentForm textarea {
     font-family: arial, helvetica, sans-serif;
     color: #555;
     width: 530px;
@@ -507,19 +513,17 @@ PLAY VIDEO
     padding: 10px;
 }
 
-.comments_form textarea.customText {
-}
-
-.comments_form input[type="text"] {
+.commentForm input[type="text"] {
     width: 300px;
 }
 
-.play .collapsed label,
-.play .collapsed input[type="text"] {
+.commentForm.collapsed label,
+.commentForm.collapsed .cancel,
+.commentForm.collapsed input[type="text"] {
     display: none;
 }
 
-.play .collapsed textarea {
+.commentForm.collapsed textarea {
     color: #999;
     font-style: italic;
     float: left;
@@ -528,6 +532,27 @@ PLAY VIDEO
     height: 35px;
     margin: 0;
     padding: 0 10px;
+}
+
+.commentReplyForm {
+    margin-top: 15px;
+}
+
+.commentReplyForm textarea {
+    position: relative;
+    padding-top: 35px;
+    height: 75px;
+}
+
+.commentReplyForm .commentContainer {
+    position: relative;
+}
+
+.commentReplyForm .commentContainer span {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    z-index: 1;
 }
 
 

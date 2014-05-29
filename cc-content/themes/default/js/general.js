@@ -194,14 +194,19 @@ $(document).ready(function(){
 
 
         // Attach comment action to comment forms
-        $('#comments form').submit(function(){
+        $('#comments').on('submit', 'form', function(){
             var url = cumulusClips.baseUrl+'/actions/comment/add/';
+            var commentForm = $(this).parent();
             var callback = function(responseData) {
                 if (responseData.result === true) {
                     // Reset comment form
-                    $('#comments form').addClass('collapsed').find('input[type="text"]').val('');
-                    var commentField = $('#comments form').find('textarea');
-                    commentField.val(commentField.attr('title'));
+                    if (commentForm.hasClass('commentReplyForm')) {
+                        commentForm.remove();
+                    } else {
+                        commentForm.addClass('collapsed').find('input[type="text"]').val('');
+                        var commentField = commentForm.find('textarea');
+                        commentField.val(commentField.attr('title'));
+                    }
 
                     // Append new comment if auto-approve comments is on
                     if (responseData.other.autoApprove === true) {
@@ -217,39 +222,39 @@ $(document).ready(function(){
 
 
         // Expand collapsed comment form was activated
-        $('.comments_form').focusin(function(){
-            if ($(this).hasClass('collapsed')) {
-                $(this).removeClass('collapsed');
-                $(this).find('textarea').val('');
-            }
+        $('.commentForm.collapsed').focusin(function(){
+            $(this).removeClass('collapsed');
+            $(this).find('textarea').val('');
         });
 
-        // Collapse comment form when empty and deactivated
-        $(document).on('click', function(event){
-            var clickedElement = $(event.target);
-            if (clickedElement.parents('.comments_form').length === 0) {
-                // Verify comment text fields aren't empty
-                var commentsForm = $('.comments_form');
-                var commentTextFields = commentsForm.find('input[type="text"]');
-                var collapseForm = true;
-                for (var i = 0; i < commentTextFields.length; i++) {
-                    var textField = commentTextFields[i];
-                    if ($(textField).val() !== '') {
-                        collapseForm = false;
-                        break;
-                    }
-                }
 
-                // Verify comment field isn't empty
-                var commentField = commentsForm.find('textarea');
-                if (commentField.val() !== '') collapseForm = false;
-
-                // Collapse form if form is empty
-                if (collapseForm) {
-                    commentsForm.addClass('collapsed');
-                    commentField.val(commentField.attr('title'));
-                }
+        // Handle user cancelling comment form
+        $('#comments').on('click', '.commentForm .cancel',  function(event){
+            // Remove if reply form, collapse otherwise
+            var commentForm = $(this).parents('.commentForm');
+            if (commentForm.hasClass('commentReplyForm')) {
+                commentForm.remove();
+            } else {
+                var commentField = commentForm.find('textarea');
+                commentForm.addClass('collapsed');
+                commentField.val(commentField.attr('title'));
             }
+            event.preventDefault();
+        });
+
+
+        // Handle reply to comment action
+        $('#comments').on('click', '.commentAction > a:first-child', function(event){
+            var parentComment = $(this).parents('.comment');
+            var replyForm = $('.commentForm').clone();
+            replyForm.addClass('commentReplyForm');
+            parentComment.after(replyForm);
+            replyForm.removeClass('collapsed');
+            replyForm.find('input[name="parentCommentId"]').val(parentComment.data('comment'));
+            replyForm.find('textarea').focus().val('');
+            var replyAuthorText = $('<span/>').text('@' + parentComment.find('.commentAuthor').text());
+            replyForm.find('.commentContainer').prepend(replyAuthorText);
+            event.preventDefault();
         });
 
 
