@@ -154,9 +154,7 @@ $this->SetLayout('full');
     <!-- BEGIN COMMENTS SECTION -->
     <div id="comments">
         <p class="large"><?=Language::GetText('comments_header')?></p>
-        <div class="totals">
-            <p><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
-        </div>
+        <p class="totals"><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
         
         
         <!-- BEGIN COMMENTS FORM -->
