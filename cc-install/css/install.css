@@ -1,0 +1,350 @@
+html, body {
+    height:100%;
+    background-color:#ebebeb;
+}
+
+body {
+    background:url(../images/background.png) no-repeat;
+    font-family:arial, helvetica, sans-serif;
+    font-size:12px;
+    color:#666;
+}
+
+#wrapper {
+    margin-bottom: -86px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+}
+
+#header {
+    background-image:url(../images/header-background.png);
+    background-repeat:repeat-x;
+    height:71px;
+    overflow:hidden;
+    margin-bottom:15px;
+}
+
+#sub-header {
+    width:960px;
+    margin:0 auto;
+}
+
+#logo {
+    background-image:url(../images/install-logo.png);
+    display:block;
+    width:315px;
+    height:27px;
+    text-indent:-5000px;
+    float:left;
+    margin:15px 20px;
+}
+
+#header-menu {
+    color:#FFF;
+    float:right;
+    margin:22px 30px;
+}
+
+#sidebar {
+    float:left;
+    width:200px;
+    margin:0 0 0 15px;
+}
+
+#container {
+    width:960px;
+    margin:0 auto;
+}
+
+#main {
+    margin-left:270px;
+    margin-right:25px;
+}
+
+#footer-spacer {
+    height:86px;
+    clear:both;
+}
+
+#footer {
+    background-image:url(../images/footer-background.png);
+    background-repeat:repeat-x;
+    margin-top:25px;
+    height:61px;
+}
+
+#sub-footer {
+    width:960px;
+    margin:0 auto;
+}
+
+#footer-left {
+    background:url(../images/footer-logo.png) no-repeat center center;
+    display:block;
+    width:79px;
+    height:61px;
+    text-indent:-500px;
+    float:left;
+    margin-left:20px;
+}
+
+#footer-right {
+    float:right;
+    color:#FFF;
+    line-height:61px;
+    margin-right:25px;
+}
+
+
+
+
+
+/*************
+SIDEBAR STYLES
+*************/
+
+#sidebar p {
+    padding:10px 0 10px 30px;
+    color:#BBB;
+}
+
+#welcome .welcome,
+#requirements .requirements,
+#ftp .ftp,
+#database .database,
+#site-details .site-details
+{
+    font-weight:bold;
+    color:#666;
+}
+
+.welcome-done #sidebar .welcome,
+.requirements-done #sidebar .requirements,
+.ftp-done #sidebar .ftp,
+.database-done #sidebar .database,
+.site-details-done #sidebar .site-details
+{
+    background:url('../images/accept.png') no-repeat 4px 9px;
+    color:#060;
+}
+
+
+
+
+
+
+
+/**********
+LINK STYLES
+**********/
+
+a, a.big, a.large, a.huge {
+    color:#023e7b;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+a:hover {
+    text-decoration:underline;
+}
+
+#header-menu a {
+    color:#FFF;
+}
+
+#footer-right a {
+    color:#FFF;
+}
+
+a.button {
+    padding:0 10px;
+    display:inline-block;
+}
+
+.mask-link { margin-left:5px; }
+
+
+
+
+
+/**********
+FONT STYLES
+**********/
+
+strong { font-weight:bold; }
+
+p {
+    padding:5px 0;
+    line-height:15px;
+}
+
+h1, h2, h3, .big, .large, .huge {
+    font-weight:bold;
+    color:#333;
+}
+
+h1, .huge { font-size:20px; }
+h2, .large { font-size:16px; }
+h3, .big { font-size:14px; }
+
+.errors, .delete { color:#C00; }
+
+em { font-style: italic; }
+
+
+
+
+
+/**********
+MISC STYLES
+**********/
+
+.clear { clear:both; }
+
+.block {
+    margin-top:15px;
+    background-color:#FFF;
+    border:3px solid #CCC;
+    border-radius:10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    padding:10px;
+}
+
+.success {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    border:solid 3px #C6D880;
+    background-color: #E6EFC2;
+    color: #264409;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+
+.error {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    border:solid 3px #FBC2C4;
+    background-color: #FBE3E4;
+    color: #8a1f11;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+}
+
+.notice {
+    font-weight:bold;
+    padding:15px;
+    margin-top:15px;
+    background-color: #FFF6BF;
+    border:solid 3px #FFD324;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    color: #514721;
+}
+
+
+
+
+
+
+/********************
+FORM & MESSAGE STYLES
+********************/
+
+.row {
+    overflow:hidden;
+    margin-bottom:15px;
+}
+
+.row-shift {
+    margin-left:140px;
+    margin-bottom:15px;
+    line-height:15px;
+}
+
+.row label {
+    float:left;
+    text-align:right;
+    margin-right:15px;
+    width:125px;
+    font-weight:bold;
+}
+
+#connection-method label {
+    float:none;
+    text-align:left;
+    margin-right:25px;
+    margin-left:5px;
+    width:auto;
+}
+
+.text {
+    border:1px solid #CCC;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
+    padding:5px;
+    width:300px;
+}
+
+.button {
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    background: url("../images/button-background.png") repeat-x right center;
+    border:none;
+    color: #FFF;
+    padding: 0 10px 3px;
+    *padding:0;
+    height:28px;
+    font:bold 14px/28px arial,helvetica,sans-serif;
+    cursor:pointer;
+}
+
+
+
+
+
+/***************
+INSTALLER STYLES
+***************/
+
+#requirements table {
+    margin-top:10px;
+    margin-bottom:25px;
+}
+
+#requirements td {
+    border-collapse:collapse;
+    border:1px solid #CCC;
+    vertical-align:middle;
+    padding:3px 5px;
+    line-height:16px;
+}
+
+#requirements .server-setting {
+    width:150px;
+}
+
+.more-info-content {
+    display:none;
+}
+
+.tip {
+    font-size:12px;
+    line-height:16px;
+}
+
+.why {
+    background:url('../images/help.png') no-repeat 0 -1px;
+    padding-left:19px;
+}
