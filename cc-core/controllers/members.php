@@ -1,7 +1,5 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView ('members');
 Plugin::Trigger ('members.start');
 
 // Verify if user is logged in
@@ -28,6 +26,4 @@ $view->vars->userResults = $userMapper->getUsersFromList(
     Functions::arrayColumn($userResults, 'user_id')
 );
 
-// Output Page
 Plugin::Trigger ('members.before_render');
-$view->Render ('members.tpl');

@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('change_password');
 Plugin::triggerEvent('change_password.start');
 
 // Verify if user is logged in
@@ -56,6 +54,4 @@ if ((isset($_POST['submitted']))) {
     }
 }
 
-// Output page
 Plugin::triggerEvent('change_password.before_render');
-$view->Render('myaccount/change_password.tpl');

@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('mobile_index', true);
 Plugin::triggerEvent('mobile_index.start');
 
 // Verify if user is logged in
@@ -27,6 +25,4 @@ $view->vars->recentVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentResults, 'video_id')
 );
 
-// Output Page
 Plugin::Trigger ('mobile_index.before_render');
-$view->Render ('index.tpl');

@@ -1,12 +1,11 @@
 <?php
 
-Plugin::triggerEvent('login.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf(!$view->vars->loggedInUser, HOST . '/myaccount/');
+Functions::redirectIf(!$view->vars->loggedInUser, HOST . '/m/');
 
+// Establish page variables, objects, arrays, etc
 $view->vars->username = null;
 $view->vars->password = null;
 $view->vars->message = null;
@@ -46,9 +45,7 @@ if (isset ($_POST['submitted_login'])) {
             if (isset ($_POST['remember']) && $_POST['remember'] == 'true') {
                 setcookie ('username',$view->vars->username,time()+60*60*24*9999,'/','',0);
                 setcookie ('password',$view->vars->password,time()+60*60*24*9999,'/','',0);
-                Plugin::triggerEvent('login.remember_me');
             }
-            Plugin::triggerEvent('login.login');
             header ('Location: ' . HOST . '/myaccount/');
 
         } else {
@@ -91,7 +88,6 @@ if (isset ($_POST['submitted_forgot'])) {
             $mail = new Mail();
             $mail->LoadTemplate ('forgot_password', $replacements);
             $mail->Send ($user->email);
-            Plugin::triggerEvent('login.password_reset');
         } else {
             $view->vars->message = Language::GetText('error_no_users_email');
             $view->vars->message_type = 'errors';
@@ -102,5 +98,3 @@ if (isset ($_POST['submitted_forgot'])) {
         $view->vars->message_type = 'errors';
     }
 }
-
-Plugin::triggerEvent('login.before_render');

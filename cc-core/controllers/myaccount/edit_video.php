@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('edit_video');
 Plugin::triggerEvent('edit_video.start');
 
 // Verify if user is logged in
@@ -119,7 +117,5 @@ if (isset($_POST['submitted'])) {
 $categoryService = new CategoryService();
 $view->vars->categoryList = $categoryService->getCategories();
 
-// Output page
 $view->vars->video = $video;
 Plugin::triggerEvent('edit_video.before_render');
-$view->Render ('myaccount/edit_video.tpl');

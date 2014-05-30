@@ -15,3 +15,6 @@ Registry::set('view', $view);
 
 // Execute requested script
 include(DOC_ROOT . '/' . $route->location);
+
+// Render page
+$view->render();

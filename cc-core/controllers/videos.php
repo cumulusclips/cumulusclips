@@ -1,13 +1,12 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView('videos');
 Plugin::Trigger('videos.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
+// Establish page variables, objects, arrays, etc
 $load = array ('most-viewed', 'most-discussed', 'most-rated');
 $view->vars->sub_header = null;
 $view->vars->category_list = array();
@@ -71,7 +70,5 @@ $view->vars->browse_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($result, 'video_id')
 );
 
-// Output Page
 $view->vars->meta->title = $view->vars->meta->title . ' ' . $view->vars->sub_header;
 Plugin::Trigger('videos.before_render');
-$view->Render('videos.tpl');

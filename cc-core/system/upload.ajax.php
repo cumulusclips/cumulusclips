@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('upload');
 Plugin::triggerEvent('upload.start');
 
 // Verify if user is logged in
@@ -12,6 +10,7 @@ Functions::RedirectIf($loggedInUser, HOST . '/login/');
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
 $videoMapper = new VideoMapper();
+$view->disableView = true;
 
 // Retrieve video information
 if (!isset ($_POST['timestamp'])) App::Throw404();

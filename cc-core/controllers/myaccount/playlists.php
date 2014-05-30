@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('playlists');
 Plugin::triggerEvent('edit_video.start');
 
 // Verify if user is logged in
@@ -71,6 +69,4 @@ foreach ($userLists as $playlist) {
     }
 }
 
-// Output page
 Plugin::Trigger ('myfavorites.before_render');
-$view->Render ('myaccount/playlists.tpl');

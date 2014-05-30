@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('upload_complete');
 Plugin::triggerEvent('upload_complete.start');
 
 // Verify if user is logged in
@@ -20,6 +18,4 @@ if (isset($_SESSION['upload'])) {
     exit();
 }
 
-// Output page
 Plugin::triggerEvent('upload_complete.before_render');
-$view->render('myaccount/upload_complete.tpl');

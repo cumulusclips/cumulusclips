@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('mobile_play', true);
 Plugin::triggerEvent('mobile_play.start');
 
 // Verify if user is logged in
@@ -27,6 +25,4 @@ if (!$video) App::Throw404();
 $view->vars->video = $video;
 $view->vars->meta->title = $video->title;
 
-// Output Page
 Plugin::Trigger ('mobile_play.before_render');
-$view->Render ('play.tpl');

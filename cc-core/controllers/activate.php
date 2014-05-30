@@ -1,13 +1,12 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView ('activate');
 Plugin::Trigger ('activate.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
+// Establish page variables, objects, arrays, etc
 Functions::RedirectIf (!$view->vars->logged_in, HOST . '/myaccount/');
 $view->vars->message = null;
 
@@ -36,6 +35,4 @@ if (isset ($_GET['token'])) {
     App::Throw404();
 }
 
-// Output Page
 Plugin::Trigger ('activate.before_render');
-$view->Render ('activate.tpl');

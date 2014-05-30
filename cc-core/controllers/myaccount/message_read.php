@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('message_read');
 Plugin::triggerEvent('message_read.start');
 
 // Verify if user is logged in
@@ -31,6 +29,4 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
     App::Throw404();
 }
 
-// Outuput page
 Plugin::triggerEvent('message_read.before_render');
-$view->Render ('myaccount/message_read.tpl');

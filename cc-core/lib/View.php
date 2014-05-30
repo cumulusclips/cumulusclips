@@ -7,6 +7,7 @@ class View
     public $vars;
     protected $_body;
     protected static $_view;
+    public $disableView = false;
     
     public function __construct()
     {
@@ -15,6 +16,7 @@ class View
         $this->vars->config = Registry::get('config');
 
         $this->options = new stdClass();
+        $this->options->themeFile = null;
         $this->options->layout = 'default';
         $this->options->blocks = array();
         $this->options->css = array();
@@ -38,22 +40,6 @@ class View
         $viewHelper = $this->getFallbackPath('helper.php');
         if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
         self::$_view = $this;
-    }
-    
-    /**
-     * Initialize view and set template & layout properties
-     * @param string $page [optional] Page whose information to load
-     * @return void View is initialized
-     */
-    public function initView($page = null)
-    {
-        // Load page's meta information into memory for use in templates
-        if ($page) {
-            $this->options->page = $page;
-            $this->vars->meta = Language::GetMeta($page);
-            if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
-        }
-        Plugin::triggerEvent('view.init');
     }
     
     /**
@@ -93,24 +79,56 @@ class View
     }
     
     /**
-     * Output the given view to the browser
-     * @param string $view Path of the view to be output, relative to theme root
+     * Generate a page name from a given controller script
+     * @param string $controllerPath Path to convert into a page name
+     * @return string Page name is returned
+     */
+    public function getPageFromController($controllerPath)
+    {
+        $patterns = array(
+            '/cc\-core\/controllers\/?/',
+            '/\//',
+            '/\.php/'
+        );
+        $replacements = array(
+            '',
+            '_',
+            ''
+        );
+        return preg_replace($patterns, $replacements, $controllerPath);
+    }
+    
+    /**
+     * Output to the browser the view corresponding to the requested script
      * @return mixed View is output to browser
      */
-    public function render($view)
+    public function render()
     {
-        Plugin::triggerEvent('view.render', $view);
-        $this->options->view = $this->getFallbackPath($view);
-        extract(get_object_vars($this->vars));
-        
-        // Catch output of body
-        ob_start();
-        include($this->options->view);
-        $this->_body = ob_get_contents();
-        ob_end_clean();
-        
-        // Output layout of page
-        include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
+        if (!$this->disableView) {
+            // Retrieve page
+            $route = Registry::get('route');
+            $this->options->page = $this->getPageFromController($route->location);
+            
+            // Retrieve meta data
+            $this->vars->meta = Language::GetMeta($this->options->page);
+            if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;  
+            
+            // Retrieve theme file
+            if (empty($this->options->themeFile)) {
+                $this->options->themeFile = $this->getFallbackPath($this->options->page . '.tpl');
+                if ($this->options->themeFile === false) throw new Exception('Missing theme file');
+            }
+            extract(get_object_vars($this->vars));
+            
+            // Catch output of body
+            ob_start();
+            include($this->options->themeFile);
+            $this->_body = ob_get_contents();
+            ob_end_clean();
+
+            // Output layout of page
+            include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
+        }
     }
     
     /**

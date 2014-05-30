@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView('update_profile');
 Plugin::triggerEvent('update_profile.start');
 
 // Verify if user is logged in
@@ -92,6 +90,4 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($view->vars-
     Plugin::triggerEvent('update_profile.avatar_reset');
 }
 
-// Output page
 Plugin::triggerEvent('update_profile.before_render');
-$view->Render('myaccount/update_profile.tpl');

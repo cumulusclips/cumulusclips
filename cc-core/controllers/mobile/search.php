@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('mobile_search', true);
 Plugin::triggerEvent('mobile_search.start');
 
 // Verify if user is logged in
@@ -28,6 +26,4 @@ if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
     );
 }
 
-// Output Page
 Plugin::Trigger ('mobile_search.before_render');
-$view->Render ('search.tpl');

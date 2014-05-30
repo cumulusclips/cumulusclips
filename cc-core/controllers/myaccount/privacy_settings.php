@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('privacy_settings');
 Plugin::triggerEvent('privacy_settings.start');
 
 // Verify if user is logged in
@@ -58,6 +56,4 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-// Output page
 Plugin::triggerEvent('privacy_settings.before_render');
-$view->Render ('myaccount/privacy_settings.tpl');

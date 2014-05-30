@@ -1,7 +1,5 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView('opt_out');
 Plugin::triggerEvent('opt_out.start');
 
 // Verify if user is logged in
@@ -28,6 +26,4 @@ if (isset($_GET['email'])) {
     App::Throw404();
 }
 
-// Output Page
 Plugin::triggerEvent('opt_out.before_render');
-$view->Render ('opt_out.tpl');

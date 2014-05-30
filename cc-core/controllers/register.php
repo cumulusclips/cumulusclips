@@ -1,13 +1,13 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView ('register');
 Plugin::Trigger ('register.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 Functions::RedirectIf(!$view->vars->loggedInUser, HOST . '/myaccount/');
+
+// Establish page variables, objects, arrays, etc
 $password = null;
 $view->vars->message = null;
 $view->vars->data = array ();
@@ -107,6 +107,4 @@ $token = md5(uniqid(rand(), true));
 $view->vars->token = $token;
 $_SESSION['formToken'] = $token;
 
-// Output Page
 Plugin::Trigger ('register.before_render');
-$view->Render ('register.tpl');

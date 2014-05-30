@@ -1,13 +1,12 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->initView('play');
 Plugin::triggerEvent('play.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
+// Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
@@ -127,6 +126,4 @@ $commentMapper = new CommentMapper();
 $view->vars->commentCount = $commentMapper->getVideoCommentCount($video->videoId);
 $view->vars->commentCardList = $commentService->getVideoComments($video, 5);
 
-// Output Page
 Plugin::triggerEvent('play.before_render');
-$view->render('play.tpl');

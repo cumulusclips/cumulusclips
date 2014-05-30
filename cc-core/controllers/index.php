@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView('index');
 Plugin::Trigger('index.start');
 
 // Verify if user is logged in
@@ -23,6 +21,4 @@ $view->vars->recent_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentVideosResults, 'video_id')
 );
 
-// Output Page
 Plugin::Trigger('index.before_render');
-$view->Render('index.tpl');

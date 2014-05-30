@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('upload');
 Plugin::triggerEvent('upload.start');
 
 // Verify if user is logged in
@@ -104,7 +102,5 @@ if (isset ($_POST['submitted'])) {
     }
 }
 
-// Output page
 $view->vars->video = $video;
 Plugin::triggerEvent('upload.before_render');
-$view->render('myaccount/upload.tpl');

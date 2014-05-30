@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView('myaccount');
 Plugin::triggerEvent('myaccount.start');
 
 // Verify if user is logged in
@@ -21,6 +19,4 @@ $userMessages = $messageMapper->getMultipleMessagesByCustom(array(
 ));
 $view->vars->unreadMessageCount = count($userMessages);
 
-// Output Page
 Plugin::triggerEvent('myaccount.before_render');
-$view->Render('myaccount/myaccount.tpl');

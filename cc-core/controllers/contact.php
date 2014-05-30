@@ -1,13 +1,12 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView ('contact');
 Plugin::triggerEvent('contact.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
+// Establish page variables, objects, arrays, etc
 $view->vars->Errors = array();
 $view->vars->name = null;
 $view->vars->email = null;
@@ -61,6 +60,4 @@ if (isset ($_POST['submitted'])) {
     }
 }
 
-// Output Page
 Plugin::triggerEvent('contact.before_render');
-$view->Render ('contact.tpl');

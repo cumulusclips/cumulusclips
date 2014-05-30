@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('mobile_videos', true);
 Plugin::triggerEvent('mobile_videos.start');
 
 // Verify if user is logged in
@@ -24,6 +22,4 @@ $view->vars->videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($videoResults, 'video_id')
 );
 
-// Output Page
 Plugin::Trigger ('mobile_videos.before_render');
-$view->Render ('videos.tpl');

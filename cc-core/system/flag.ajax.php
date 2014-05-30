@@ -1,11 +1,12 @@
 <?php
 
-// Init view
 Plugin::triggerEvent('flag.ajax.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
+
+$view->disableView = true;
 Plugin::Trigger ('flag.ajax.login_check');
 $flagMapper = new FlagMapper();
 $flag = new Flag();

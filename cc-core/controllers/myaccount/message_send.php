@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('message_send');
 Plugin::triggerEvent('message_send.start');
 
 // Verify if user is logged in
@@ -110,6 +108,4 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-// Output page
 Plugin::triggerEvent('message_send.before_render');
-$view->Render ('myaccount/message_send.tpl');

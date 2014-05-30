@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('playlists_edit');
 Plugin::triggerEvent('edit_video.start');
 
 // Verify if user is logged in
@@ -68,6 +66,4 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
 $view->vars->meta->title = Functions::Replace($view->vars->meta->title, array ('playlist_name' => $playlistService->getPlaylistName($view->vars->playlist)));
 $view->vars->videoList = $playlistService->getPlaylistVideos($view->vars->playlist);
 
-// Output page
 Plugin::Trigger ('myfavorites.before_render');
-$view->Render ('myaccount/playlists_edit.tpl');

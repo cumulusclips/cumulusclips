@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView('subscriptions');
 Plugin::triggerEvent('subscriptions.start');
 
 // Verify if user is logged in
@@ -43,6 +41,4 @@ $view->vars->subscriptions = $userMapper->getUsersFromList(
     Functions::arrayColumn($subscriptionResults, 'member')
 );
 
-// Output page
 Plugin::triggerEvent('subscriptions.before_render');
-$view->Render('myaccount/subscriptions.tpl');

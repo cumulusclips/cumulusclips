@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView ('message_inbox');
 Plugin::triggerEvent('message_inbox.start');
 
 // Verify if user is logged in
@@ -65,6 +63,4 @@ $view->vars->messages = $messageMapper->getMessagesFromList(
     Functions::arrayColumn($messageResults, 'message_id')
 );
 
-// Output page
 Plugin::triggerEvent('message_inbox.before_render');
-$view->Render('myaccount/message_inbox.tpl');

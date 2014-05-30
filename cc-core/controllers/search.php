@@ -1,13 +1,12 @@
 <?php
 
-// Establish page variables, objects, arrays, etc
-$view->InitView ('search');
 Plugin::triggerEvent('search.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $view->vars->loggedInUser = $userService->loginCheck();
 
+// Establish page variables, objects, arrays, etc
 $keyword = null;
 $view->vars->cleaned = null;
 $url = HOST . '/search';
@@ -60,6 +59,4 @@ $view->vars->search_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($searchResult, 'video_id')
 );
 
-// Output Page
 Plugin::triggerEvent('search.before_render');
-$view->Render ('search.tpl');

@@ -1,6 +1,5 @@
 <?php
 
-// Init view
 Plugin::triggerEvent('subscribe.ajax.start');
 
 // Verify if user is logged in
@@ -9,6 +8,7 @@ $loggedInUser = $userService->loginCheck();
 Plugin::Trigger ('subscribe.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
+$view->disableView = true;
 $userMapper = new UserMapper();
 $subscriptionService = new SubscriptionService();
 

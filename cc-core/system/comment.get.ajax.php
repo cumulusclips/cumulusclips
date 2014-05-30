@@ -8,6 +8,7 @@ $loggedInUser = $userService->loginCheck();
 Plugin::triggerEvent('comment.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
+$view->disableView = true;
 $errors = array();
 $data = array();
 $videoMapper = new VideoMapper();

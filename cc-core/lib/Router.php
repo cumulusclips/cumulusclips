@@ -405,6 +405,19 @@ class Router
             'mobile' => true
         ));
         
+        $routes['mobileLogin'] = new Route(array(
+            'path' => 'm/l',
+            'location' => 'cc-core/controllers/mobile/login.php',
+            'mobile' => true
+        ));
+        
+        $routes['mobileUser'] = new Route(array(
+            'path' => 'm/u/([a-z0-9]+)',
+            'location' => 'cc-core/controllers/mobile/user.php',
+            'mappings' => array('username'),
+            'mobile' => true
+        ));
+        
         
         /** System Routes **/
         

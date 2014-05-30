@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->initView('upload_video');
 Plugin::triggerEvent('upload_video.start');
 
 // Verify if user is logged in
@@ -28,6 +26,4 @@ if (isset($_SESSION['upload'])) {
     exit();
 }
 
-// Output page
 Plugin::triggerEvent('upload_video.before_render');
-$view->render('myaccount/upload_video.tpl');

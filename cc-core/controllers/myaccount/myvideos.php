@@ -1,7 +1,5 @@
 <?php
 
-// Init view
-$view->InitView('myvideos');
 Plugin::triggerEvent('myvideos.start');
 
 // Verify if user is logged in
@@ -46,6 +44,4 @@ $view->vars->userVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($resultVideos, 'video_id')
 );
 
-// Output page
 Plugin::triggerEvent('myvideos.before_render');
-$view->Render('myaccount/myvideos.tpl');
