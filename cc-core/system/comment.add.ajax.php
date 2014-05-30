@@ -14,8 +14,8 @@ $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
 
 // Verify a video was selected
-if (!empty($_POST['video_id'])) {
-    $video = $videoMapper->getVideoById($_POST['video_id']);
+if (!empty($_POST['videoId'])) {
+    $video = $videoMapper->getVideoById($_POST['videoId']);
 } else {
     App::Throw404();
 }
@@ -60,6 +60,11 @@ if (isset($_POST['submitted'])) {
         }
     }
 
+    // Validate parent comment
+    if (!empty($_POST['parentCommentId'])) {
+        $comment->parentId = trim($_POST['parentCommentId']);
+    }
+
     // Validate comments
     if (!empty($_POST['comments'])) {
         $comment->comments = trim($_POST['comments']);
@@ -83,12 +88,12 @@ if (isset($_POST['submitted'])) {
         $newComment = $commentMapper->getCommentById($commentId);
         $commentService = new CommentService();
         $commentService->approve($newComment, 'create');
-        $newComment->author = $commentService->getCommentAuthor($newComment);
+        $newCommentCard = $commentService->getCommentCard($newComment);
 
         // Retrieve formatted new comment
         if (Settings::Get('auto_approve_comments') == 1) {
             $message = (string) Language::GetText('success_comment_posted');
-            $other = array('autoApprove' => true, 'comment' => $newComment);
+            $other = array('autoApprove' => true, 'commentCard' => $newCommentCard);
         } else {
             $message = (string) Language::GetText('success_comment_approve');
             $other = array('autoApprove' => false);

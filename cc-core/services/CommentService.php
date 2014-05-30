@@ -102,38 +102,111 @@ class CommentService extends ServiceAbstract
     }
     
     /**
+     * Generate a comment card for a given comment
+     * @param Comment $comment The comment to generate the comment card for
+     * @return CommentCard Returns comment card for given comment
+     */
+    public function getCommentCard(Comment $comment)
+    {
+        $commentMapper = $this->_getMapper();
+        $commentCard = new CommentCard();
+        $commentCard->comment = $comment;
+        $commentCard->author = $this->getCommentAuthor($comment);
+        $commentCard->avatar = $this->getCommentAvatar($comment);
+
+        // Retrieve parent comment if any
+        if ($comment->parentId != 0) {
+            $commentCard->parentComment = $commentMapper->getCommentById($comment->parentId);
+            $commentCard->parentAuthor = $this->getCommentAuthor($commentCard->parentComment);
+        }
+        return $commentCard;
+    }
+
+    /**
+     * Retrieve subset of a video's comments
+     * @param Video $video Video for which to retrieve comments
+     * @param int $limit Amount of comments to retrieve
+     * @param int $offset Comment Id of comment to use as a starting point (will return succeeding comments, not including this one)
+     * @return array Returns list of CommentsCards
+     */
+    public function getVideoComments(Video $video, $limit, $offsetId = 0)
+    {
+        $commentCards = array();
+        $commentList = $this->_getCommentThread($video->videoId, $limit, $offsetId);
+        $commentMapper = $this->_getMapper();
+        foreach ($commentList as $commentId) {
+            $comment = $commentMapper->getCommentById($commentId);
+            $commentCards[] = $this->getCommentCard($comment);
+        }
+        return $commentCards;
+    }
+
+    protected function _getCommentThread($videoId, $limit, $offsetId = 0, $thread = array())
+    {
+        $commentMapper = $this->_getMapper();
+
+        // Get children of starting comment
+        // recursive trickle down - stop when no more children or limit is reached
+        $thread = $this->_getChildCommentThread($videoId, $limit, $offsetId, $thread);
+
+        // Root thread requested (Above would have retrieved all neccessary comments)
+        if ($offsetId == 0) return $thread;
+
+        // Get sibblings of starting comment
+        $startingPointComment = $commentMapper->getCommentById($offsetId);
+        if (!$startingPointComment) throw new Exception('Offset comment not found');
+        $startingPointParentId = $startingPointComment->parentId;
+        $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $startingPointParentId, $offsetId);
+        foreach ($results as $sibblingId) {
+            if (count($thread) == $limit) return $thread;
+            $thread[] = $sibblingId;
+            // Get children of starting comment's sibblings (nephews)
+            $thread = $this->_getChildCommentThread($videoId, $limit, $sibblingId, $thread);
+        }
+
+        // Find sibbling of parent comment (uncles)
+        if ($startingPointParentId != 0) {
+            $parentComment = $commentMapper->getCommentById($startingPointParentId);
+            $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $parentComment->parentId, $parentComment->commentId);
+            foreach ($results as $uncleId) {
+                if (count($thread) == $limit) return $thread;
+                $thread[] = $uncleId;
+                // Get children of parent comment's sibblings (cousins, 2nd cousings, etc.)
+                // recursive bubble up - stop when no more comments or limit is reached
+                $thread = $this->_getCommentThread($videoId, $limit, $uncleId, $thread);
+            }
+        }
+        return $thread;
+    }
+
+    protected function _getChildCommentThread($videoId, $limit, $parentId, $thread = array())
+    {
+        $commentMapper = $this->_getMapper();
+        $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $parentId);
+        foreach ($results as $childId) {
+            if (count($thread) == $limit) break;
+            $thread[] = $childId;
+            // Trickle down to find all all children, grandchildren, etc.
+            $thread = $this->_getChildCommentThread($videoId, $limit, $childId, $thread);
+        }
+        return $thread;
+    }
+
+    /**
      * Retrieve avatar image to display for a comment's author
      * @param Comment $comment Instance of comment to find avatar for
      * @return string Returns URL to avatar image of comment's author, if any, or default avatar image
      */
     public function getCommentAvatar(Comment $comment)
     {
-        if (empty($comment->userId)) {
-            return null;
-        } else {
+        if (!empty($comment->userId)) {
             $userService = new UserService();
             $userMapper = new UserMapper();
             $user = $userMapper->getUserById($comment->userId);
             return $userService->getAvatarUrl($user);
+        } else {
+            return null;
         }
-    }
-    
-    /**
-     * Retrieve subset of a video's comments and the comment's author
-     * @param Video $video Video for which to retrieve comments
-     * @param int $limit Amount of comments to retrieve
-     * @param int $offset Comment Id of comment to use as a starting point (will return succeeding comments, not including this one)
-     * @return array Returns list of Comments
-     */
-    public function getVideoComments(Video $video, $limit, $offsetId = null)
-    {
-        $commentMapper = $this->_getMapper();
-        $commentList = $commentMapper->getVideoComments($video->videoId, $limit, $offsetId);
-        // Retrieve comment's author
-        foreach ($commentList as $comment) {
-            $comment->author = $this->getCommentAuthor($comment);
-        }
-        return $commentList;
     }
 
     /**
@@ -143,7 +216,7 @@ class CommentService extends ServiceAbstract
      */
     public function getCommentAuthor(Comment $comment)
     {
-        if ($comment->userId != 0) {
+        if (!empty($comment->userId)) {
             $userMapper = new UserMapper();
             return $userMapper->getUserById($comment->userId);
         } else {

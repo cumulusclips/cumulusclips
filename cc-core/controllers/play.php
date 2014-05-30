@@ -125,7 +125,7 @@ Plugin::triggerEvent('play.load_suggestions');
 $commentService = new CommentService();
 $commentMapper = new CommentMapper();
 $view->vars->commentCount = $commentMapper->getVideoCommentCount($video->videoId);
-$view->vars->commentList = $commentService->getVideoComments($video, 5);
+$view->vars->commentCardList = $commentService->getVideoComments($video, 5);
 
 // Output Page
 Plugin::triggerEvent('play.before_render');

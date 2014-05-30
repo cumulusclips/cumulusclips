@@ -168,14 +168,11 @@ $this->SetLayout('full');
                 <input type="text" class="text" value="" name="email" />
             <?php endif; ?>
                 
-                <div class="commentContainer">
-                    <label><?=Language::GetText('comments')?></label>
-                    <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
-                </div>
+                <label><?=Language::GetText('comments')?></label>
+                <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
                 
                 <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
-                <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
-                <input type="hidden" name="block" value="comment" />
+                <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
                 <input type="hidden" name="submitted" value="TRUE" />
                 <input type="hidden" name="parentCommentId" value="" />
                 <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
@@ -187,23 +184,32 @@ $this->SetLayout('full');
         <!-- BEGIN COMMENTS LIST -->
         <div class="commentList">
             <?php if ($commentCount > 0): ?>
-                <?php $commentService = $this->getService('Comment'); ?>
-                <?php foreach ($commentList as $comment): ?>
-                    <div class="comment" data-comment="<?=$comment->commentId?>">
-                        <?php $avatar = $commentService->getCommentAvatar($comment); ?>
-                        <img width="60" height="60" alt="<?=$comment->name?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" />
+            
+                <?php $commentThread = 0; ?>
+            
+                <?php foreach ($commentCardList as $commentCard): ?>
+            
+                    <?php $commentThread = getCommentThread($commentThread, $commentCard->comment); ?>
+                    <?php $commentIndentClass = getCommentIndentClass($commentThread, $commentCard->comment); ?>
+            
+                    <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
+                        <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />
                         <div>
                             <p>
-                                <span class="commentAuthor"><?=getCommentAuthorText($comment)?></span>
-                                <span class="commentDate"><?=date('m/d/Y', strtotime($comment->dateCreated))?></span>
+                                <span class="commentAuthor"><?=getCommentAuthorText($commentCard->comment, $commentCard->author)?></span>
+                                <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
+                                <?php if ($commentCard->comment->parentId != 0): ?>
+                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <?=getCommentAuthorText($commentCard->parentComment, $commentCard->parentAuthor)?></span>
+                                <?php endif; ?>
                                 <span class="commentAction">
-                                    <a href=""><?=Language::GetText('reply')?></a>
-                                    <a class="flag" data-type="comment" data-id="<?=$comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
+                                    <a class="reply" href=""><?=Language::GetText('reply')?></a>
+                                    <a class="flag" data-type="comment" data-id="<?=$commentCard->comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
                                 </span>
                             </p>
-                            <p><?=nl2br($comment->comments)?></p>
+                            <p><?=nl2br($commentCard->comment->comments)?></p>
                         </div>
                     </div>
+            
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

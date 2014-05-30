@@ -37,6 +37,6 @@ if (!empty($_GET['lastCommentId']) && is_numeric($_GET['lastCommentId']) && $_GE
     $lastCommentId = $_GET['lastCommentId'];
 }
 
-$commentList = $commentService->getVideoComments($video, $limit, $lastCommentId);
-echo json_encode(array('result' => 1, 'message' => '', 'other' => array('comments' => $commentList)));
+$commentCardList = $commentService->getVideoComments($video, $limit, $lastCommentId);
+echo json_encode(array('result' => 1, 'message' => '', 'other' => array('commentCardList' => $commentCardList)));
 exit();

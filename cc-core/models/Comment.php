@@ -61,9 +61,4 @@ class Comment
      * @var boolean
      */
     public $released;
-
-    /**
-     * @var User User who authored comment, if registered. Not automatically populated.
-     */
-    public $author;
 }

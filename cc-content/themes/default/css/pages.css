@@ -538,24 +538,6 @@ PLAY VIDEO
     margin-top: 15px;
 }
 
-.commentReplyForm textarea {
-    position: relative;
-    padding-top: 35px;
-    height: 75px;
-}
-
-.commentReplyForm .commentContainer {
-    position: relative;
-}
-
-.commentReplyForm .commentContainer span {
-    position: absolute;
-    top: 30px;
-    left: 10px;
-    z-index: 1;
-}
-
-
 
 /** COMMENTS **/
 
@@ -570,17 +552,8 @@ PLAY VIDEO
     margin: 5px 0 10px;
 }
 
-#comments .totals p:first-child {
-    float: left;
-}
-
 .commentList > div:first-child {
     margin-top: 20px;
-}
-
-#comments .loadMoreComments {
-    margin-top: 20px;
-    text-align: center;
 }
 
 .comment {
@@ -588,13 +561,29 @@ PLAY VIDEO
     margin: 40px 0 0;
 }
 
-.comment img {
-    float: left;
-}
-
 .comment > div {
     margin-left: 10px;
     width: 525px;
+    float: left;
+}
+
+.commentList .commentIndent {
+    margin-left: 70px;
+}
+
+.commentList .commentIndent > div {
+    width: 460px;
+}
+
+.commentList .commentIndentDouble {
+    margin-left: 140px;
+}
+
+.commentList .commentIndentDouble > div {
+    width: 390px;
+}
+
+.comment img {
     float: left;
 }
 
@@ -604,9 +593,14 @@ PLAY VIDEO
 }
 
 .comment .commentAuthor,
+.comment .commentReply,
 .comment .commentDate,
 .comment .commentAction {
     font-size: 10px;
+}
+
+.comment .commentReply {
+    margin-left: 15px;
 }
 
 .comment .commentDate {
@@ -617,9 +611,14 @@ PLAY VIDEO
     float: right;
 }
 
-.comment .commentAction a:last-child {
+.comment .flag {
     margin-left: 10px;
     color: #900;
+}
+
+#comments .loadMoreComments {
+    margin-top: 20px;
+    text-align: center;
 }
 
 
