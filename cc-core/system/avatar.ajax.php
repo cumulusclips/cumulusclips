@@ -1,7 +1,7 @@
 <?php
 
 Plugin::triggerEvent('upload.start');
-$view->disableView = true;
+$this->view->disableView = true;
 
 // Verify if user is logged in
 $userService = new UserService();

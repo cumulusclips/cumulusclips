@@ -13,6 +13,7 @@ if (!empty ($_POST['start']) && is_numeric ($_POST['start'])) {
 $block = (isset ($_POST['block'])) ? $_POST['block'] . '.tpl' : null;
 
 // Retrieve video list
+$db = Registry::get('db');
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' ORDER BY video_id DESC LIMIT :start, 20";
 $videoMapper = new VideoMapper();
 $videoResults = $db->fetchAll($query, array(':start' => $start));
@@ -20,9 +21,9 @@ $videoList = $videoMapper->getVideosFromList(Functions::arrayColumn($videoResult
 
 // Output video list in requested format
 if ($block) {
-    $view->InitView();
+    $this->view->InitView();
     ob_start();
-    $view->RepeatingBlock ($block, $videoList);
+    $this->view->RepeatingBlock ($block, $videoList);
     $output = ob_get_contents();
     ob_end_clean();
 } else {

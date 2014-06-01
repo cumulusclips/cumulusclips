@@ -4,15 +4,15 @@ Plugin::triggerEvent('contact.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
-$view->vars->Errors = array();
-$view->vars->name = null;
-$view->vars->email = null;
-$view->vars->feedback = null;
-$view->vars->message = null;
-$view->vars->message_type = null;
+$this->view->vars->Errors = array();
+$this->view->vars->name = null;
+$this->view->vars->email = null;
+$this->view->vars->feedback = null;
+$this->view->vars->message = null;
+$this->view->vars->message_type = null;
 
 /***********************
 Handle form if submitted
@@ -22,41 +22,41 @@ if (isset ($_POST['submitted'])) {
 	
     // Validate name
     if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
-        $view->vars->name = trim ($_POST['name']);
+        $this->view->vars->name = trim ($_POST['name']);
     } else {
-        $view->vars->Errors['name'] = Language::GetText('error_name');
+        $this->view->vars->Errors['name'] = Language::GetText('error_name');
     }
 
     // Validate email
     $string = '/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i';
     if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ($string, $_POST['email'])) {
-        $view->vars->email = trim ($_POST['email']);
+        $this->view->vars->email = trim ($_POST['email']);
     } else {
-        $view->vars->Errors['email'] = Language::GetText('error_email');
+        $this->view->vars->Errors['email'] = Language::GetText('error_email');
     }
 
     // Validate feedback
     if (!empty ($_POST['feedback']) && !ctype_space ($_POST['feedback'])) {
-        $view->vars->feedback = trim ($_POST['feedback']);
+        $this->view->vars->feedback = trim ($_POST['feedback']);
     } else {
-        $view->vars->Errors['feedback'] = Language::GetText('error_message');
+        $this->view->vars->Errors['feedback'] = Language::GetText('error_message');
     }
 
     // Send email if no errors
-    if (empty ($view->vars->Errors)) {
+    if (empty ($this->view->vars->Errors)) {
         $subject = 'Message received From ' . $config->sitename;
-        $Msg = "Name: " . $view->vars->name . "\n";
-        $Msg .= "E-mail: " . $view->vars->email . "\n";
-        $Msg .= "Message:\n" . $view->vars->feedback;
+        $Msg = "Name: " . $this->view->vars->name . "\n";
+        $Msg .= "E-mail: " . $this->view->vars->email . "\n";
+        $Msg .= "Message:\n" . $this->view->vars->feedback;
         App::Alert ($subject, $Msg);
         Plugin::triggerEvent('contact.send');
 
-        $view->vars->message_type = 'success';
-        $view->vars->message = Language::GetText('success_contact_sent');
+        $this->view->vars->message_type = 'success';
+        $this->view->vars->message = Language::GetText('success_contact_sent');
     } else {
-        $view->vars->message_type = 'errors';
-        $view->vars->message = Language::GetText('errors_below');
-        $view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $view->vars->Errors);
+        $this->view->vars->message_type = 'errors';
+        $this->view->vars->message = Language::GetText('errors_below');
+        $this->view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $this->view->vars->Errors);
     }
 }
 

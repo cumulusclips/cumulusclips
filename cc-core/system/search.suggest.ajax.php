@@ -1,6 +1,6 @@
 <?php
 
-$view->disableView = true;
+$this->view->disableView = true;
 $keyword = null;
 $suggestLimit = 9;
 
@@ -12,6 +12,7 @@ if (!empty($_GET['term'])) {
 }
 
 // Retrieve count of all videos
+$db = Registry::get('db');
 $query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $resultTotal = $db->fetchRow($query);
 

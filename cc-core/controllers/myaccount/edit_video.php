@@ -4,22 +4,22 @@ Plugin::triggerEvent('edit_video.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
+$this->view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
-$view->vars->privateUrl = $videoService->generatePrivate();
-$view->vars->errors = array();
-$view->vars->message = null;
+$this->view->vars->privateUrl = $videoService->generatePrivate();
+$this->view->vars->errors = array();
+$this->view->vars->message = null;
 
 // Verify a video was provided
 if (!empty($_GET['vid']) && $_GET['vid'] > 0) {
 
     // Retrieve video information
     $video = $videoMapper->getVideoByCustom(array(
-        'user_id' => $view->vars->loggedInUser->userId,
+        'user_id' => $this->view->vars->loggedInUser->userId,
         'video_id' => $_GET['vid']
     ));
     
@@ -40,28 +40,28 @@ if (isset($_POST['submitted'])) {
     if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
         $video->title = trim($_POST['title']);
     } else {
-        $view->vars->errors['title'] = Language::getText('error_title');
+        $this->view->vars->errors['title'] = Language::getText('error_title');
     }
 
     // Validate description
     if (!empty($_POST['description']) && !ctype_space($_POST['description'])) {
         $video->description = trim($_POST['description']);
     } else {
-        $view->vars->errors['description'] = Language::getText('error_description');
+        $this->view->vars->errors['description'] = Language::getText('error_description');
     }
 
     // Validate tags
     if (!empty($_POST['tags']) && !ctype_space($_POST['tags'])) {
         $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
-        $view->vars->errors['tags'] = Language::getText('error_tags');
+        $this->view->vars->errors['tags'] = Language::getText('error_tags');
     }
 
     // Validate cat_id
     if (!empty($_POST['cat_id']) && is_numeric($_POST['cat_id'])) {
         $video->categoryId = $_POST['cat_id'];
     } else {
-        $view->vars->errors['cat_id'] = Language::getText('error_category');
+        $this->view->vars->errors['cat_id'] = Language::getText('error_category');
     }
 
     // Validate disable embed
@@ -93,7 +93,7 @@ if (isset($_POST['submitted'])) {
             $video->private = true;
             $video->privateUrl = trim($_POST['private_url']);
         } catch (Exception $e) {
-            $view->vars->errors['private_url'] = Language::getText('error_private_url');
+            $this->view->vars->errors['private_url'] = Language::getText('error_private_url');
         }
     } else {
         $video->private = false;
@@ -101,21 +101,21 @@ if (isset($_POST['submitted'])) {
     }
 
     // Update video if no errors were made
-    if (empty ($view->vars->errors)) {
+    if (empty ($this->view->vars->errors)) {
         $videoMapper->save($video);
-        $view->vars->message = Language::getText('success_video_updated');
-        $view->vars->message_type = 'success';
+        $this->view->vars->message = Language::getText('success_video_updated');
+        $this->view->vars->message_type = 'success';
         Plugin::triggerEvent('edit_video.edit');
     } else {
-        $view->vars->message = Language::getText('errors_below');
-        $view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $view->vars->errors);
-        $view->vars->message_type = 'errors';
+        $this->view->vars->message = Language::getText('errors_below');
+        $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);
+        $this->view->vars->message_type = 'errors';
     }
 }
 
 // Retrieve Categories	
 $categoryService = new CategoryService();
-$view->vars->categoryList = $categoryService->getCategories();
+$this->view->vars->categoryList = $categoryService->getCategories();
 
-$view->vars->video = $video;
+$this->view->vars->video = $video;
 Plugin::triggerEvent('edit_video.before_render');

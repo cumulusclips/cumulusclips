@@ -4,24 +4,24 @@ Plugin::triggerEvent('upload.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
+$this->view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
-$view->vars->categories = null;
-$view->vars->data = array();
-$view->vars->errors = array();
-$view->vars->message = null;
+$this->view->vars->categories = null;
+$this->view->vars->data = array();
+$this->view->vars->errors = array();
+$this->view->vars->message = null;
 $videoService = new VideoService();
 $videoMapper = new VideoMapper();
 $video = new Video();
-$view->vars->privateUrl = $videoService->generatePrivate();
+$this->view->vars->privateUrl = $videoService->generatePrivate();
 unset($_SESSION['upload']);
 
 // Retrieve Categories	
 $categoryService = new CategoryService();
-$view->vars->categoryList = $categoryService->getCategories();
+$this->view->vars->categoryList = $categoryService->getCategories();
 
 // Handle upload form if submitted
 if (isset ($_POST['submitted'])) {
@@ -30,28 +30,28 @@ if (isset ($_POST['submitted'])) {
     if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
         $video->title = trim($_POST['title']);
     } else {
-        $view->vars->errors['title'] = Language::getText('error_title');
+        $this->view->vars->errors['title'] = Language::getText('error_title');
     }
 
     // Validate Description
     if (!empty($_POST['description']) && !ctype_space($_POST['description'])) {
         $video->description = trim($_POST['description']);
     } else {
-        $view->vars->errors['description'] = Language::getText('error_description');
+        $this->view->vars->errors['description'] = Language::getText('error_description');
     }
 
     // Validate Tags
     if (!empty($_POST['tags']) && !ctype_space($_POST['tags'])) {
         $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
     } else {
-        $view->vars->errors['tags'] = Language::getText('error_tags');
+        $this->view->vars->errors['tags'] = Language::getText('error_tags');
     }
 
     // Validate Category
     if (!empty($_POST['cat_id']) && is_numeric($_POST['cat_id'])) {
         $video->categoryId = $_POST['cat_id'];
     } else {
-        $view->vars->errors['cat_id'] = Language::getText('error_category');
+        $this->view->vars->errors['cat_id'] = Language::getText('error_category');
     }
 
     // Validate disable embed
@@ -80,15 +80,15 @@ if (isset ($_POST['submitted'])) {
             $video->private = true;
             $video->privateUrl = trim($_POST['private_url']);
         } catch (Exception $e) {
-            $view->vars->errors['private_url'] = Language::getText('error_private_url');
+            $this->view->vars->errors['private_url'] = Language::getText('error_private_url');
         }
     } else {
         $video->private = false;
     }
 
     // Validate Video Upload last (only if other fields were valid)
-    if (empty($view->vars->errors)) {
-        $video->userId = $view->vars->loggedInUser->userId;
+    if (empty($this->view->vars->errors)) {
+        $video->userId = $this->view->vars->loggedInUser->userId;
         $video->filename = $videoService->generateFilename();
         $video->status = 'new';
         $_SESSION['upload'] = $videoMapper->save($video);
@@ -96,11 +96,11 @@ if (isset ($_POST['submitted'])) {
         header('Location: ' . HOST . '/myaccount/upload/video/');
         exit();
     } else {
-        $view->vars->message = Language::getText('errors_below');
-        $view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $view->vars->errors);
-        $view->vars->message_type = 'errors';
+        $this->view->vars->message = Language::getText('errors_below');
+        $this->view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $this->view->vars->errors);
+        $this->view->vars->message_type = 'errors';
     }
 }
 
-$view->vars->video = $video;
+$this->view->vars->video = $video;
 Plugin::triggerEvent('upload.before_render');

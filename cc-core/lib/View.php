@@ -79,11 +79,11 @@ class View
     }
     
     /**
-     * Generate a page name from a given controller script
-     * @param string $controllerPath Path to convert into a page name
+     * Generate a page name from a route's location path
+     * @param Route $route Route to extract location from
      * @return string Page name is returned
      */
-    public function getPageFromController($controllerPath)
+    protected function _getPageFromRoute(Route $route)
     {
         $patterns = array(
             '/cc\-core\/controllers\/?/',
@@ -95,7 +95,18 @@ class View
             '_',
             ''
         );
-        return preg_replace($patterns, $replacements, $controllerPath);
+        return preg_replace($patterns, $replacements, $route->location);
+    }
+    
+    public function loadPage()
+    {
+        // Retrieve page
+        $route = Registry::get('route');
+        $this->options->page = (!empty($route->name)) ? $route->name : $this->_getPageFromRoute($route);
+
+        // Retrieve meta data
+        $this->vars->meta = Language::GetMeta($this->options->page);
+        if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename; 
     }
     
     /**
@@ -105,14 +116,6 @@ class View
     public function render()
     {
         if (!$this->disableView) {
-            // Retrieve page
-            $route = Registry::get('route');
-            $this->options->page = $this->getPageFromController($route->location);
-            
-            // Retrieve meta data
-            $this->vars->meta = Language::GetMeta($this->options->page);
-            if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;  
-            
             // Retrieve theme file
             if (empty($this->options->themeFile)) {
                 $this->options->themeFile = $this->getFallbackPath($this->options->page . '.tpl');

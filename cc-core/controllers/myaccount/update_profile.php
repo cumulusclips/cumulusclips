@@ -4,43 +4,43 @@ Plugin::triggerEvent('update_profile.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
+$this->view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
-$view->vars->Errors = array();
-$view->vars->message = null;
-$view->vars->timestamp = time();
-$_SESSION['upload_key'] = md5(md5($view->vars->timestamp) . SECRET_KEY);
+$this->view->vars->Errors = array();
+$this->view->vars->message = null;
+$this->view->vars->timestamp = time();
+$_SESSION['upload_key'] = md5(md5($this->view->vars->timestamp) . SECRET_KEY);
 
 // Update profile if requested
 if (isset($_POST['submitted'])) {
 
     // Validate First Name
-    if (!empty($view->vars->loggedInUser->firstName) && $_POST['first_name'] == '') {
-        $view->vars->loggedInUser->firstName = '';
+    if (!empty($this->view->vars->loggedInUser->firstName) && $_POST['first_name'] == '') {
+        $this->view->vars->loggedInUser->firstName = '';
     } elseif (!empty($_POST['first_name'])) {
-        $view->vars->loggedInUser->firstName = trim($_POST['first_name']);
+        $this->view->vars->loggedInUser->firstName = trim($_POST['first_name']);
     }
 
     // Validate Last Name
-    if (!empty($view->vars->loggedInUser->lastName) && $_POST['last_name'] == '') {
-        $view->vars->loggedInUser->lastName = '';
+    if (!empty($this->view->vars->loggedInUser->lastName) && $_POST['last_name'] == '') {
+        $this->view->vars->loggedInUser->lastName = '';
     } elseif (!empty($_POST['last_name'])) {
-        $view->vars->loggedInUser->lastName = trim($_POST['last_name']);
+        $this->view->vars->loggedInUser->lastName = trim($_POST['last_name']);
     }
 
     // Validate Email
     if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
         $userCheck = $userMapper->getUserByCustom(array('email' => $_POST['email']));
-        if (!$userCheck || $userCheck->email == $view->vars->loggedInUser->email) {
-            $view->vars->loggedInUser->email = $_POST['email'];
+        if (!$userCheck || $userCheck->email == $this->view->vars->loggedInUser->email) {
+            $this->view->vars->loggedInUser->email = $_POST['email'];
         } else {
-            $view->vars->Errors['email'] = Language::GetText('error_email_unavailable');
+            $this->view->vars->Errors['email'] = Language::GetText('error_email_unavailable');
         }
     } else {
-        $view->vars->Errors['email'] = Language::GetText('error_email');
+        $this->view->vars->Errors['email'] = Language::GetText('error_email');
     }
 
     // Validate Website
@@ -48,45 +48,45 @@ if (isset($_POST['submitted'])) {
         $website = $_POST['website'];
         if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
             $website = (empty($matches[1]) ? 'http://' : '') . $website;
-            $view->vars->loggedInUser->website = trim($website);
+            $this->view->vars->loggedInUser->website = trim($website);
         } else {
-            $view->vars->errors['website'] = Language::GetText('error_website_invalid');
+            $this->view->vars->errors['website'] = Language::GetText('error_website_invalid');
         }
     } else {
-        $view->vars->loggedInUser->website = '';
+        $this->view->vars->loggedInUser->website = '';
     }
 
     // Validate About Me
-    if (!empty($view->vars->loggedInUser->aboutMe) && $_POST['about_me'] == '') {
-        $view->vars->loggedInUser->aboutMe = '';
+    if (!empty($this->view->vars->loggedInUser->aboutMe) && $_POST['about_me'] == '') {
+        $this->view->vars->loggedInUser->aboutMe = '';
     } elseif (!empty($_POST['about_me'])) {
-        $view->vars->loggedInUser->aboutMe = trim($_POST['about_me']);
+        $this->view->vars->loggedInUser->aboutMe = trim($_POST['about_me']);
     }
 
     // Update User if no errors were found
-    if (empty ($view->vars->Errors)) {
-        $view->vars->message = Language::GetText('success_profile_updated');
-        $view->vars->message_type = 'success';
-        $userMapper->save($view->vars->loggedInUser);
+    if (empty ($this->view->vars->Errors)) {
+        $this->view->vars->message = Language::GetText('success_profile_updated');
+        $this->view->vars->message_type = 'success';
+        $userMapper->save($this->view->vars->loggedInUser);
         Plugin::triggerEvent('update_profile.update_profile');
     } else {
-        $view->vars->message = Language::GetText('errors_below');
-        $view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $view->vars->Errors);
-        $view->vars->message_type = 'errors';
+        $this->view->vars->message = Language::GetText('errors_below');
+        $this->view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $this->view->vars->Errors);
+        $this->view->vars->message_type = 'errors';
     }
 }
 
 // Reset avatar if requested
-if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($view->vars->loggedInUser->avatar)) {
+if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view->vars->loggedInUser->avatar)) {
     try {
-        Filesystem::delete(UPLOAD_PATH . '/avatars/' . $view->vars->loggedInUser->avatar);
+        Filesystem::delete(UPLOAD_PATH . '/avatars/' . $this->view->vars->loggedInUser->avatar);
     } catch (Exception $exception) {
         App::Alert('Error during Avatar Reset', $exception->getMessage());
     }
-    $view->vars->loggedInUser->avatar = null;
-    $userMapper->save($view->vars->loggedInUser);
-    $view->vars->message = Language::GetText('success_avatar_reset');
-    $view->vars->message_type = 'success';
+    $this->view->vars->loggedInUser->avatar = null;
+    $userMapper->save($this->view->vars->loggedInUser);
+    $this->view->vars->message = Language::GetText('success_avatar_reset');
+    $this->view->vars->message_type = 'success';
     Plugin::triggerEvent('update_profile.avatar_reset');
 }
 

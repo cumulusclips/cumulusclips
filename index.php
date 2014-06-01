@@ -13,8 +13,9 @@ Registry::set('route', $route);
 $view = new View();
 Registry::set('view', $view);
 
-// Execute requested script
-include(DOC_ROOT . '/' . $route->location);
+// Init controller and execute requested script
+$controller = new Controller();
+$controller->dispatch($route);
 
 // Render page
 $view->render();

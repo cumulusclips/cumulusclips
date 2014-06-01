@@ -4,7 +4,7 @@ Plugin::triggerEvent('opt_out.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
 ### Verify user actually unsubscribed
 if (isset($_GET['email'])) {

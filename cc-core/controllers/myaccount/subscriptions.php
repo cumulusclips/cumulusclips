@@ -4,40 +4,41 @@ Plugin::triggerEvent('subscriptions.start');
 
 // Verify if user is logged in
 $userService = new UserService();
-$view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($view->vars->loggedInUser, HOST . '/login/');
+$this->view->vars->loggedInUser = $userService->loginCheck();
+Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
 $records_per_page = 9;
 $url = HOST . '/myaccount/subscriptions';
-$view->vars->message = null;
+$this->view->vars->message = null;
+$db = Registry::get('db');
 
 // Unsubscribe user if requested
 if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
     $subscriptionService = new SubscriptionService();
-    if ($subscriptionService->checkSubscription($view->vars->loggedInUser->userId, $_GET['id'])) {
+    if ($subscriptionService->checkSubscription($this->view->vars->loggedInUser->userId, $_GET['id'])) {
         $subscribedUser = $userMapper->getUserById($_GET['id']);
-        $subscriptionService->unsubscribe($view->vars->loggedInUser->userId, $subscribedUser->userId);
-        $view->vars->message = Language::GetText('success_unsubscribed', array('username' => $subscribedUser->username));
-        $view->vars->message_type = 'success';
+        $subscriptionService->unsubscribe($this->view->vars->loggedInUser->userId, $subscribedUser->userId);
+        $this->view->vars->message = Language::GetText('success_unsubscribed', array('username' => $subscribedUser->username));
+        $this->view->vars->message_type = 'success';
         Plugin::triggerEvent('subscriptions.unsubscribe');
     }
 }
 
 // Retrieve total count
-$query = "SELECT member FROM " . DB_PREFIX . "subscriptions WHERE user_id = " . $view->vars->loggedInUser->userId;
+$query = "SELECT member FROM " . DB_PREFIX . "subscriptions WHERE user_id = " . $this->view->vars->loggedInUser->userId;
 $db->fetchAll($query);
 $total = $db->rowCount();
 
 // Initialize pagination
-$view->vars->pagination = new Pagination($url, $total, $records_per_page);
-$start_record = $view->vars->pagination->getStartRecord();
+$this->view->vars->pagination = new Pagination($url, $total, $records_per_page);
+$start_record = $this->view->vars->pagination->getStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
 $subscriptionResults = $db->fetchAll($query);
-$view->vars->subscriptions = $userMapper->getUsersFromList(
+$this->view->vars->subscriptions = $userMapper->getUsersFromList(
     Functions::arrayColumn($subscriptionResults, 'member')
 );
 

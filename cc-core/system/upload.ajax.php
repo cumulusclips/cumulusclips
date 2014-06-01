@@ -10,7 +10,7 @@ Functions::RedirectIf($loggedInUser, HOST . '/login/');
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
 $videoMapper = new VideoMapper();
-$view->disableView = true;
+$this->view->disableView = true;
 
 // Retrieve video information
 if (!isset ($_POST['timestamp'])) App::Throw404();

@@ -7,6 +7,7 @@ $xml_header = '<?xml version="1.0" encoding="UTF-8"?>';
 $limit = 45000;
 
 // Count number of video xml files
+$db = Registry::get('db');
 $query = "SELECT COUNT(video_id) AS total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $row = $db->fetchRow($query);
 if ($row['total'] > $limit) {
