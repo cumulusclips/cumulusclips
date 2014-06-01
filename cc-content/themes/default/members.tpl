@@ -10,7 +10,7 @@
                 <img src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
             </a></p>
             <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=Functions::CutOff($member->username,18)?></a>
-            <p><strong><?=Language::GetText('joined')?>: </strong><?=Functions::DateFormat('m/d/Y',$member->dateCreated)?></p>
+            <p><strong><?=Language::GetText('joined')?>: </strong><?=date('m/d/Y', strtotime($member->dateCreated))?></p>
             <p><strong><?=Language::GetText('videos')?>: </strong><?=$userMapper->getVideoCount($member->userId)?></p>
         </div>
     <?php endforeach; ?>

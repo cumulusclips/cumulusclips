@@ -11,7 +11,6 @@ class Controller
 
     public function dispatch(Route $route)
     {
-        $this->view->loadPage();
         include(DOC_ROOT . '/' . $route->location);
     }
 }

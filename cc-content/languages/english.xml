@@ -530,107 +530,107 @@
             <description>A system error has occurred.</description>
         </system_error>
 
-        <myaccount>
+        <myaccount_myaccount>
             <title>Welcome - {USERNAME}</title>
             <keywords>Welcome</keywords>
             <description>Welcome</description>
-        </myaccount>
+        </myaccount_myaccount>
 
-        <upload>
+        <myaccount_upload>
             <title>Upload Step 1 - Video Information</title>
             <keywords>Upload Video, Step 1, Video Information</keywords>
             <description>Upload Step 1 - Video Information.</description>
-        </upload>
+        </myaccount_upload>
 
-        <upload_video>
+        <myaccount_upload_video>
             <title>Upload Step 2 - Upload Video</title>
             <keywords>Upload Video, Step 2</keywords>
             <description>Upload Step 2 - Upload Video.</description>
-        </upload_video>
+        </myaccount_upload_video>
 
-        <upload_complete>
+        <myaccount_upload_complete>
             <title>Upload Step 3 - Upload Complete!</title>
             <keywords>Upload Video, Step 3, Upload Complete</keywords>
             <description>Upload Step 3 - Upload Complete!</description>
-        </upload_complete>
+        </myaccount_upload_complete>
 
-        <edit_video>
+        <myaccount_edit_video>
             <title>Edit Video</title>
             <keywords>Edit Video, Video Information</keywords>
             <description>Edit video information.</description>
-        </edit_video>
+        </myaccount_edit_video>
 
-        <myvideos>
+        <myaccount_myvideos>
             <title>My Videos</title>
             <keywords>My Videos, Videos</keywords>
             <description>View all videos uploaded by this member.</description>
-        </myvideos>
+        </myaccount_myvideos>
 
-        <myfavorites>
+        <myaccount_myfavorites>
             <title>My Favorite Videos</title>
             <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
             <description>View all of this member's favorite videos.</description>
-        </myfavorites>
+        </myaccount_myfavorites>
 
-        <playlists>
+        <myaccount_playlists>
             <title>My Playlists</title>
             <keywords>My Playlists, Playlist</keywords>
             <description>View all my playlists.</description>
-        </playlists>
+        </myaccount_playlists>
 
-        <playlists_edit>
+        <myaccount_playlists_edit>
             <title>Edit Playlist: {PLAYLIST_NAME}</title>
             <keywords>Playlist Videos, Videos, Playlist, Edit</keywords>
             <description>Update playlist, and view all videos in playlist.</description>
-        </playlists_edit>
+        </myaccount_playlists_edit>
 
-        <update_profile>
+        <myaccount_update_profile>
             <title>Update Profile</title>
             <keywords>Update profile, profile</keywords>
             <description>Update user profile information.</description>
-        </update_profile>
+        </myaccount_update_profile>
 
-        <privacy_settings>
+        <myaccount_privacy_settings>
             <title>Privacy Settings</title>
             <keywords>Privacy Settings, Update Privacy Settings</keywords>
             <description>Update privacy settings.</description>
-        </privacy_settings>
+        </myaccount_privacy_settings>
 
-        <change_password>
+        <myaccount_change_password>
             <title>Change Password</title>
             <keywords>Change Password, Password, Update Password</keywords>
             <description>Change account password.</description>
-        </change_password>
+        </myaccount_change_password>
 
-        <subscriptions>
+        <myaccount_subscriptions>
             <title>My Subscriptions</title>
             <keywords>Subscriptions, Member Subscriptions</keywords>
             <description>View all users member is subscribed to.</description>
-        </subscriptions>
+        </myaccount_subscriptions>
 
-        <subscribers>
+        <myaccount_subscribers>
             <title>My Subscribers</title>
             <keywords>Subscribers, Subscribing Members</keywords>
             <description>View all members that are subscribed to this member.</description>
-        </subscribers>
+        </myaccount_subscribers>
 
-        <message_inbox>
+        <myaccount_message_inbox>
             <title>Message Inbox</title>
             <keywords>Message Inbox, Message, Inbox</keywords>
             <description>View all messages.</description>
-        </message_inbox>
+        </myaccount_message_inbox>
 
-        <message_read>
+        <myaccount_message_read>
             <title>Read Message</title>
             <keywords>Read Message, Message</keywords>
             <description>Read a message.</description>
-        </message_read>
+        </myaccount_message_read>
 
-        <message_send>
+        <myaccount_message_send>
             <title>Send a Message</title>
             <keywords>Send Message, Message</keywords>
             <description>Send another member a message.</description>
-        </message_send>
+        </myaccount_message_send>
 
 
         <mobile_videos>

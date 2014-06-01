@@ -9,8 +9,8 @@
             <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" /></span></div>
             <a href="<?=HOST?>/myaccount/profile/#update_avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
-        <p><strong><?=Language::GetText('joined')?>:</strong> <?=Functions::DateFormat('m/d/Y',$loggedInUser->dateCreated)?></p>
-        <p><strong><?=Language::GetText('last_login')?>:</strong> <?=Functions::DateFormat('m/d/Y',$loggedInUser->lastLogin)?></p>
+        <p><strong><?=Language::GetText('joined')?>:</strong> <?=date('m/d/Y', strtotime($loggedInUser->dateCreated))?></p>
+        <p><strong><?=Language::GetText('last_login')?>:</strong> <?=date('m/d/Y', strtotime($loggedInUser->lastLogin))?></p>
         <p><strong><?=Language::GetText('profile_views')?>:</strong> <?=$loggedInUser->views?></p>
     </div>
 

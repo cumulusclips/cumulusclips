@@ -13,7 +13,7 @@
         <a href="<?=HOST?>/myaccount/message/send/<?=$member->username?>/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a>&nbsp;&nbsp;&nbsp;
         <a class="flag" data-type="user" data-id="<?=$member->userId?>" href="" title="<?=Language::GetText('report_abuse')?>"><?=Language::GetText('report_abuse')?></a>&nbsp;&nbsp;&nbsp;
     </p>
-    <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=Functions::DateFormat('m/d/Y',$member->dateCreated)?></p>
+    <p><strong><?=Language::GetText('joined')?>:</strong>&nbsp; <?=date('m/d/Y', strtotime($member->dateCreated))?></p>
     <p><strong><?=Language::GetText('profile_views')?>:</strong>&nbsp; <?=$member->views?></p>
     <p><strong><?=Language::GetText('subscribers')?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></p>
     <?php if (!empty ($member->website)): ?>

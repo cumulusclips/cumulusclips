@@ -8,6 +8,7 @@ class View
     protected $_body;
     protected static $_view;
     public $disableView = false;
+    protected $_route;
     
     public function __construct()
     {
@@ -21,6 +22,7 @@ class View
         $this->options->blocks = array();
         $this->options->css = array();
         $this->options->js = array();
+        $this->_route = Registry::get('route');
         
         // Define theme configuration
         try {
@@ -35,6 +37,13 @@ class View
         $this->vars->config->theme = $themeFiltered;
         $this->vars->config->theme_url = THEME;
         $this->vars->config->theme_path = THEME_PATH;
+        
+        // Retrieve page
+        $this->options->page = (!empty($this->_route->name)) ? $this->_route->name : $this->_getPageFromRoute($this->_route);
+
+        // Retrieve meta data
+        $this->vars->meta = Language::GetMeta($this->options->page);
+        if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
         
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
@@ -86,9 +95,9 @@ class View
     protected function _getPageFromRoute(Route $route)
     {
         $patterns = array(
-            '/cc\-core\/controllers\/?/',
+            '/cc\-core\/controllers\//i',
             '/\//',
-            '/\.php/'
+            '/\.php$/i'
         );
         $replacements = array(
             '',
@@ -98,15 +107,22 @@ class View
         return preg_replace($patterns, $replacements, $route->location);
     }
     
-    public function loadPage()
+    /**
+     * Generate a theme file from a route's location path
+     * @param Route $route Route to extract location from
+     * @return string Theme file is returned
+     */ 
+    protected function _getThemeFileFromRoute(Route $route)
     {
-        // Retrieve page
-        $route = Registry::get('route');
-        $this->options->page = (!empty($route->name)) ? $route->name : $this->_getPageFromRoute($route);
-
-        // Retrieve meta data
-        $this->vars->meta = Language::GetMeta($this->options->page);
-        if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename; 
+        $patterns = array(
+            '/cc\-core\/controllers\//i',
+            '/\.php$/i'
+        );
+        $replacements = array(
+            '',
+            '.tpl'
+        );
+        return preg_replace($patterns, $replacements, $route->location);
     }
     
     /**
@@ -118,7 +134,8 @@ class View
         if (!$this->disableView) {
             // Retrieve theme file
             if (empty($this->options->themeFile)) {
-                $this->options->themeFile = $this->getFallbackPath($this->options->page . '.tpl');
+                $themeFileName = $this->_getThemeFileFromRoute($this->_route);
+                $this->options->themeFile = $this->getFallbackPath($themeFileName);
                 if ($this->options->themeFile === false) throw new Exception('Missing theme file');
             }
             extract(get_object_vars($this->vars));
