@@ -12,6 +12,7 @@ $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
 $playlistMapper = new PlaylistMapper();
+$commentService = new CommentService();
 $videoService = new VideoService();
 $ratingService = new RatingService();
 $this->view->vars->tags = null;
@@ -122,8 +123,6 @@ $this->view->vars->relatedVideos = $videoMapper->getVideosFromList(
 Plugin::triggerEvent('play.load_suggestions');
 
 // Retrieve comments
-$commentService = new CommentService();
-$commentMapper = new CommentMapper();
 $this->view->vars->commentCount = $commentMapper->getVideoCommentCount($video->videoId);
 $this->view->vars->commentCardList = $commentService->getVideoComments($video, 5);
 

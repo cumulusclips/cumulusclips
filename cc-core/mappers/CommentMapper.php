@@ -62,10 +62,6 @@ class CommentMapper extends MapperAbstract
         $comment->comments = $dbResults['comments'];
         $comment->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $comment->status = $dbResults['status'];
-        $comment->email = $dbResults['email'];
-        $comment->name = $dbResults['name'];
-        $comment->ip = $dbResults['ip'];
-        $comment->userAgent = $dbResults['user_agent'];
         $comment->released = ($dbResults['released'] == 1) ? true : false;
         return $comment;
     }
@@ -78,39 +74,31 @@ class CommentMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $comment);
             $query = 'UPDATE ' . DB_PREFIX . 'comments SET';
-            $query .= ' user_id = :userId, video_id = :videoId, parent_id = :parentId, comments = :comments, date_created = :dateCreated, status = :status, email = :email, name = :name, ip = :ip, user_agent = :userAgent, released = :released';
+            $query .= ' user_id = :userId, video_id = :videoId, parent_id = :parentId, comments = :comments, date_created = :dateCreated, status = :status, released = :released';
             $query .= ' WHERE comment_id = :commentId';
             $bindParams = array(
                 ':commentId' => $comment->commentId,
-                ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
+                ':userId' => $comment->userId,
                 ':videoId' => $comment->videoId,
                 ':parentId' => (!empty($comment->parentId)) ? $comment->parentId : 0,
                 ':comments' => $comment->comments,
                 ':dateCreated' => date(DATE_FORMAT, strtotime($comment->dateCreated)),
                 ':status' => $comment->status,
-                ':email' => (!empty($comment->email)) ? $comment->email : null,
-                ':name' => (!empty($comment->name)) ? $comment->name : null,
-                ':ip' => (!empty($comment->ip)) ? $comment->ip : null,
-                ':userAgent' => (!empty($comment->userAgent)) ? $comment->userAgent : null,
                 ':released' => (isset($comment->released) && $comment->released === true) ? 1 : 0,
             );
         } else {
             // Create
             Plugin::triggerEvent('video.create', $comment);
             $query = 'INSERT INTO ' . DB_PREFIX . 'comments';
-            $query .= ' (user_id, video_id, parent_id, comments, date_created, status, email, name, ip, user_agent, released)';
-            $query .= ' VALUES (:userId, :videoId, :parentId, :comments, :dateCreated, :status, :email, :name, :ip, :userAgent, :released)';
+            $query .= ' (user_id, video_id, parent_id, comments, date_created, status, released)';
+            $query .= ' VALUES (:userId, :videoId, :parentId, :comments, :dateCreated, :status, :released)';
             $bindParams = array(
-                ':userId' => (!empty($comment->userId)) ? $comment->userId : 0,
+                ':userId' => $comment->userId,
                 ':videoId' => $comment->videoId,
                 ':parentId' => (!empty($comment->parentId)) ? $comment->parentId : 0,
                 ':comments' => $comment->comments,
                 ':dateCreated' => gmdate(DATE_FORMAT),
                 ':status' => (!empty($comment->status)) ? $comment->status : 'new',
-                ':email' => (!empty($comment->email)) ? $comment->email : null,
-                ':name' => (!empty($comment->name)) ? $comment->name : null,
-                ':ip' => (!empty($comment->ip)) ? $comment->ip : null,
-                ':userAgent' => (!empty($comment->userAgent)) ? $comment->userAgent : null,
                 ':released' => (isset($comment->released) && $comment->released === true) ? 1 : 0,
             );
         }

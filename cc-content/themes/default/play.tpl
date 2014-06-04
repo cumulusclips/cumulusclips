@@ -160,20 +160,11 @@ $this->SetLayout('full');
         <!-- BEGIN COMMENTS FORM -->
         <div class="form collapsed commentForm">
             <form action="" method="post">
-            <?php if (!$loggedInUser): ?>
-                <label><?=Language::GetText('name')?></label>
-                <input type="text" class="text" value="" name="name" />
-
-                <label><?=Language::GetText('email')?></label>
-                <input type="text" class="text" value="" name="email" />
-            <?php endif; ?>
-                
                 <label><?=Language::GetText('comments')?></label>
                 <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
                 
                 <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
                 <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
-                <input type="hidden" name="submitted" value="TRUE" />
                 <input type="hidden" name="parentCommentId" value="" />
                 <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
             </form>
@@ -196,7 +187,7 @@ $this->SetLayout('full');
                         <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />
                         <div>
                             <p>
-                                <span class="commentAuthor"><?=getCommentAuthorText($commentCard->comment, $commentCard->author)?></span>
+                                <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>
                                 <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
                                 <?php if ($commentCard->comment->parentId != 0): ?>
                                     <span class="commentReply"><?=Language::GetText('reply_to')?> <?=getCommentAuthorText($commentCard->parentComment, $commentCard->parentAuthor)?></span>

@@ -473,15 +473,9 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     }
     
     // Set comment author
-    if (commentCardData.author !== null) {
-        commentCard.find('.commentAuthor').html(
-            $('<a>')
-                .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.author.username)
-                .text(commentCardData.author.username)
-        );
-    } else {
-        commentCard.find('.commentAuthor').text(commentCardData.comment.name);
-    }
+    commentCard.find('.commentAuthor a')
+        .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.author.username)
+        .text(commentCardData.author.username);
     
     // Set comment date
     var commentDate = new Date(commentCardData.comment.dateCreated);
@@ -500,14 +494,10 @@ function buildCommentCard(commentCardTemplate, commentCardData)
         commentCard.find('.commentReply').text(cumulusClips.replyToText + ' ');
         // Determine parent comment author's text
         var parentCommentAuthorText;
-        if (commentCardData.parentAuthor !== null) {
-            parentCommentAuthorText = $('<a>')
-                .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.parentAuthor.username)
-                .text(commentCardData.parentAuthor.username);
-            commentCard.find('.commentReply').append(parentCommentAuthorText);
-        } else {
-            commentCard.find('.commentReply').append(commentCardData.parentComment.name);
-        }
+        parentCommentAuthorText = $('<a>')
+            .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.parentAuthor.username)
+            .text(commentCardData.parentAuthor.username);
+        commentCard.find('.commentReply').append(parentCommentAuthorText);
     } else {
         commentCard.find('.commentReply').remove();
     }
@@ -528,7 +518,6 @@ function buildCommentCard(commentCardTemplate, commentCardData)
 function resetCommentForm(commentForm)
 {
     commentForm.addClass('collapsed');
-    commentForm.find('input[type="text"]').val('');
     var commentField = commentForm.find('textarea');
     commentField.val(commentField.attr('title'));
 }

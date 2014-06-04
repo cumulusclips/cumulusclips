@@ -38,26 +38,6 @@ class Comment
     public $status;
     
     /**
-     * @var string
-     */
-    public $email;
-    
-    /**
-     * @var string
-     */
-    public $name;
-    
-    /**
-     * @var string
-     */
-    public $ip;
-    
-    /**
-     * @var string
-     */
-    public $userAgent;
-    
-    /**
      * @var boolean
      */
     public $released;

@@ -2,15 +2,8 @@
 
 Plugin::triggerEvent('comment.ajax.start');
 
-// Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
-Plugin::triggerEvent('comment.ajax.login_check');
-
 // Establish page variables, objects, arrays, etc
 $this->view->disableView = true;
-$errors = array();
-$data = array();
 $videoMapper = new VideoMapper();
 $commentService = new CommentService();
 $limit = 5;

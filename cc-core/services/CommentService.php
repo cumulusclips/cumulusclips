@@ -83,23 +83,19 @@ class CommentService extends ServiceAbstract
                 // Send notification to parent comment author if this was a reply
                 if ($comment->parentId) {
                     $parentComment = $commentMapper->getCommentById($comment->parentId);
+                    $parentAuthor = $this->getCommentAuthor($parentComment);
                     
-                    // Verify parent comment author was a registered user
-                    if ($parentComment->userId) {
-                        $parentAuthor = $userMapper->getUserById($parentComment->userId);
-                    
-                        // Verify parent comment author is opted-in and not replying to himself
-                        if ($parentAuthor->userId && $comment->userId != $parentComment->userId && $privacyService->OptCheck($parentAuthor, Privacy::COMMENT_REPLY)) {
-                            $replacements = array (
-                                'host'      => HOST,
-                                'sitename'  => $config->sitename,
-                                'email'     => $parentAuthor->email,
-                                'title'     => $video->title
-                            );
-                            $mail = new Mail();
-                            $mail->LoadTemplate('comment_reply', $replacements);
-                            $mail->Send($parentAuthor->email);
-                        }
+                    // Verify parent comment author is opted-in and not replying to himself
+                    if ($comment->userId != $parentComment->userId && $privacyService->OptCheck($parentAuthor, Privacy::COMMENT_REPLY)) {
+                        $replacements = array (
+                            'host'      => HOST,
+                            'sitename'  => $config->sitename,
+                            'email'     => $parentAuthor->email,
+                            'title'     => $video->title
+                        );
+                        $mail = new Mail();
+                        $mail->LoadTemplate('comment_reply', $replacements);
+                        $mail->Send($parentAuthor->email);
                     }
                 }
 
@@ -225,33 +221,25 @@ class CommentService extends ServiceAbstract
     /**
      * Retrieve avatar image to display for a comment's author
      * @param Comment $comment Instance of comment to find avatar for
-     * @return string Returns URL to avatar image of comment's author, if any, or default avatar image
+     * @return string|null Returns URL to avatar image of comment's author, or null if user doesn't have an avatar set
      */
     public function getCommentAvatar(Comment $comment)
     {
-        if (!empty($comment->userId)) {
-            $userService = new UserService();
-            $userMapper = new UserMapper();
-            $user = $userMapper->getUserById($comment->userId);
-            return $userService->getAvatarUrl($user);
-        } else {
-            return null;
-        }
+        $userService = new UserService();
+        $userMapper = new UserMapper();
+        $user = $userMapper->getUserById($comment->userId);
+        return $userService->getAvatarUrl($user);
     }
 
     /**
      * Retrieve author of a comment 
      * @param Comment $comment Comment to retrieve author for
-     * @return User|boolean Returns instance of User for comment's author, boolean false in n/a
+     * @return User Returns instance of User for comment's author
      */
     public function getCommentAuthor(Comment $comment)
     {
-        if (!empty($comment->userId)) {
-            $userMapper = new UserMapper();
-            return $userMapper->getUserById($comment->userId);
-        } else {
-            return null;
-        }
+        $userMapper = new UserMapper();
+        return $userMapper->getUserById($comment->userId);
     }
 
     /**
