@@ -55,10 +55,10 @@ class CommentMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $comment = new Comment();
-        $comment->commentId = $dbResults['comment_id'];
-        $comment->userId = $dbResults['user_id'];
-        $comment->videoId = $dbResults['video_id'];
-        $comment->parentId = $dbResults['parent_id'];
+        $comment->commentId = (int) $dbResults['comment_id'];
+        $comment->userId = (int) $dbResults['user_id'];
+        $comment->videoId = (int) $dbResults['video_id'];
+        $comment->parentId = (int) $dbResults['parent_id'];
         $comment->comments = $dbResults['comments'];
         $comment->dateCreated = date(DATE_FORMAT, strtotime($dbResults['date_created']));
         $comment->status = $dbResults['status'];

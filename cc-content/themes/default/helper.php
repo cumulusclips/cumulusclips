@@ -20,16 +20,6 @@ function getCommentIndentClass($currentCommentThread, Comment $comment)
     }
 }
 
-function getLastCommentId(array $commentList)
-{
-    if (count($commentList) > 0) {
-        $lastComment = array_pop($commentList);
-        return $lastComment->commentId;
-    } else {
-        return false;
-    }
-}
-
 function getCommentAuthorText(Comment $comment, User $author = null)
 {
     if ($comment->userId == 0) {

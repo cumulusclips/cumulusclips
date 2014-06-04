@@ -80,6 +80,29 @@ class CommentService extends ServiceAbstract
                     Plugin::triggerEvent('comment.notify_member');
                 }
 
+                // Send notification to parent comment author if this was a reply
+                if ($comment->parentId) {
+                    $parentComment = $commentMapper->getCommentById($comment->parentId);
+                    
+                    // Verify parent comment author was a registered user
+                    if ($parentComment->userId) {
+                        $parentAuthor = $userMapper->getUserById($parentComment->userId);
+                    
+                        // Verify parent comment author is opted-in and not replying to himself
+                        if ($parentAuthor->userId && $comment->userId != $parentComment->userId && $privacyService->OptCheck($parentAuthor, Privacy::COMMENT_REPLY)) {
+                            $replacements = array (
+                                'host'      => HOST,
+                                'sitename'  => $config->sitename,
+                                'email'     => $parentAuthor->email,
+                                'title'     => $video->title
+                            );
+                            $mail = new Mail();
+                            $mail->LoadTemplate('comment_reply', $replacements);
+                            $mail->Send($parentAuthor->email);
+                        }
+                    }
+                }
+
                 Plugin::triggerEvent('comment.release');
             }
 
@@ -163,17 +186,24 @@ class CommentService extends ServiceAbstract
             // Get children of starting comment's sibblings (nephews)
             $thread = $this->_getChildCommentThread($videoId, $limit, $sibblingId, $thread);
         }
-
-        // Find sibbling of parent comment (uncles)
+        
+        // Verify we're not at the root of the thread
         if ($startingPointParentId != 0) {
-            $parentComment = $commentMapper->getCommentById($startingPointParentId);
-            $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $parentComment->parentId, $parentComment->commentId);
-            foreach ($results as $uncleId) {
+            
+            // Find sibblings of parent comment(uncles)
+            // Recursively bubble up - stop when no more comments or limit is reached
+            $bubbleUpParentId = $startingPointParentId;
+            while ($bubbleUpParentId != 0) {
+                $parentComment = $commentMapper->getCommentById($bubbleUpParentId);
+                $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $parentComment->parentId, $parentComment->commentId);
+                foreach ($results as $uncleId) {
+                    if (count($thread) == $limit) return $thread;
+                    $thread[] = $uncleId;
+                    // Get children of parent comment's sibblings (cousins, 2nd cousings, etc.)
+                    $thread = $this->_getCommentThread($videoId, $limit, $uncleId, $thread);
+                }
                 if (count($thread) == $limit) return $thread;
-                $thread[] = $uncleId;
-                // Get children of parent comment's sibblings (cousins, 2nd cousings, etc.)
-                // recursive bubble up - stop when no more comments or limit is reached
-                $thread = $this->_getCommentThread($videoId, $limit, $uncleId, $thread);
+                $bubbleUpParentId = $parentComment->parentId;
             }
         }
         return $thread;

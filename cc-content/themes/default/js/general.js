@@ -203,21 +203,28 @@ $(document).ready(function(){
                     if (commentForm.hasClass('commentReplyForm')) {
                         commentForm.remove();
                     } else {
-                        commentForm.addClass('collapsed').find('input[type="text"]').val('');
-                        var commentField = commentForm.find('textarea');
-                        commentField.val(commentField.attr('title'));
+                        resetCommentForm(commentForm);
                     }
 
                     // Append new comment if auto-approve comments is on
                     if (responseData.other.autoApprove === true) {
-                        cumulusClips.currentCommentThread = ($('.commentList .comment').length === 0) ? 0 : $('.commentList .comment:not(.commentIndent, .commentIndentDouble)').last().data('comment');
                         var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, responseData.other.commentCard);
                         var commentCard = responseData.other.commentCard;
-                        if (commentCard.comment.parentId !== '0') {
+                        
+                        // Append comment to list
+                        if (commentCard.comment.parentId !== 0) {
                             var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
+                            // Determine indent class
+                            var indentClass;
+                            if (!parentComment.hasClass('commentIndentDouble') && !parentComment.hasClass('commentIndent')) {
+                                indentClass = 'commentIndent';
+                            } else {
+                                indentClass = 'commentIndentDouble';
+                            }
+                            commentCardElement.addClass(indentClass);
                             parentComment.after(commentCardElement)
                         } else {
-                            $('#comments .commentList').append(commentCardElement);
+                            $('.commentList').append(commentCardElement);
                         }
                     }
                 }
@@ -231,8 +238,9 @@ $(document).ready(function(){
         // Expand collapsed comment form was activated
         $('#comments .commentForm').focusin(function(){
             if ($(this).hasClass('collapsed')) {
+                $('.commentReplyForm').remove();
                 $(this).removeClass('collapsed');
-                $(this).find('textarea').val('');
+                $(this).find('textarea').focus().val('');
             }
         });
 
@@ -244,9 +252,7 @@ $(document).ready(function(){
             if (commentForm.hasClass('commentReplyForm')) {
                 commentForm.remove();
             } else {
-                var commentField = commentForm.find('textarea');
-                commentForm.addClass('collapsed');
-                commentField.val(commentField.attr('title'));
+                resetCommentForm(commentForm);
             }
             event.preventDefault();
         });
@@ -254,9 +260,11 @@ $(document).ready(function(){
 
         // Handle reply to comment action
         $('#comments').on('click', '.commentAction .reply', function(event){
+            var commentForm = $('#comments > .commentForm');
+            resetCommentForm(commentForm);
             $('.commentReplyForm').remove();
             var parentComment = $(this).parents('.comment');
-            var replyForm = $('.commentForm').clone();
+            var replyForm = commentForm.clone();
             replyForm.addClass('commentReplyForm');
             parentComment.after(replyForm);
             replyForm.removeClass('collapsed');
@@ -282,13 +290,27 @@ $(document).ready(function(){
                     url         : cumulusClips.baseUrl + '/actions/comments/get/',
                     success     : function(responseData, textStatus, jqXHR){
                         var lastCommentKey = responseData.other.commentCardList.length-1;
-                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].commentId;
+                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;
                         // Loop through comment data set, inject into comment template and append to list
                         $.each(responseData.other.commentCardList, function(key, commentCard){
-                            cumulusClips.currentCommentThread = $('.commentList .comment:not(.commentIndent, .commentIndentDouble)').last().data('comment');
                             $('.commentList').find('div[data-comment="' + commentCard.comment.commentId + '"]').remove();
                             var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, commentCard);
-                            $('.commentList').append(commentCardElement);
+                            
+                            // Append comment to list
+                            if (commentCard.comment.parentId !== 0) {
+                                var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
+                                // Determine indent class
+                                var indentClass;
+                                if (!parentComment.hasClass('commentIndentDouble') && !parentComment.hasClass('commentIndent')) {
+                                    indentClass = 'commentIndent';
+                                } else {
+                                    indentClass = 'commentIndentDouble';
+                                }
+                                commentCardElement.addClass(indentClass);
+                                parentComment.after(commentCardElement)
+                            } else {
+                                $('.commentList').append(commentCardElement);
+                            }
                         });
 
                         // Hide load more button if no more comments are available
@@ -445,7 +467,7 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     
     // Set comment avatar
     if (commentCardData.avatar !== null) {
-        commentCard.find('img').attr('src', cumulusClips.baseUrl + '/cc-uploads/avatars/' + commentCardData.avatar + '.jpg');
+        commentCard.find('img').attr('src', commentCardData.avatar);
     } else {
         commentCard.find('img').attr('src', cumulusClips.themeUrl + '/images/avatar.gif');
     }
@@ -454,8 +476,8 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     if (commentCardData.author !== null) {
         commentCard.find('.commentAuthor').html(
             $('<a>')
-                .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.comment.author.username)
-                .text(commentCardData.comment.author.username)
+                .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.author.username)
+                .text(commentCardData.author.username)
         );
     } else {
         commentCard.find('.commentAuthor').text(commentCardData.comment.name);
@@ -473,9 +495,8 @@ function buildCommentCard(commentCardTemplate, commentCardData)
         .text(cumulusClips.reportAbuseText)
         .attr('data-id', commentCardData.comment.commentId);
         
-        
     // Set reply to text if apl.
-    if (commentCardData.comment.parentId !== '0') {
+    if (commentCardData.comment.parentId !== 0) {
         commentCard.find('.commentReply').text(cumulusClips.replyToText + ' ');
         // Determine parent comment author's text
         var parentCommentAuthorText;
@@ -490,17 +511,6 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     } else {
         commentCard.find('.commentReply').remove();
     }
-
-    // Set comment indentation
-    var commentIndentClass;
-    if (commentCardData.comment.parentId === '0') {
-        commentIndentClass = '';
-    } else if (Number(commentCardData.comment.parentId) === cumulusClips.currentCommentThread) {
-        commentIndentClass = 'commentIndent';
-    } else {
-        commentIndentClass = 'commentIndentDouble';
-    }
-    commentCard.addClass(commentIndentClass);
  
     // Set comment text
     commentCardData.comment.comments = commentCardData.comment.comments.replace(/</g, '&lt;');
@@ -508,4 +518,17 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     commentCard.find('> div p:last-child').html(commentCardData.comment.comments.replace(/\r\n|\n|\r/g, '<br>'));
     
     return commentCard;
+}
+
+/**
+ * Resets the main comment form to it's default state
+ * @param object commentForm jQuery object for the comment form
+ * @return void Form is reset
+ */
+function resetCommentForm(commentForm)
+{
+    commentForm.addClass('collapsed');
+    commentForm.find('input[type="text"]').val('');
+    var commentField = commentForm.find('textarea');
+    commentField.val(commentField.attr('title'));
 }
