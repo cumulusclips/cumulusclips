@@ -154,62 +154,70 @@ $this->SetLayout('full');
     <!-- BEGIN COMMENTS SECTION -->
     <div id="comments">
         <p class="large"><?=Language::GetText('comments_header')?></p>
-        <p class="totals"><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
         
-        
-        <!-- BEGIN COMMENTS FORM -->
-        <div class="form collapsed commentForm">
-            <form action="" method="post">
-                <label><?=Language::GetText('comments')?></label>
-                <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
-                
-                <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
-                <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
-                <input type="hidden" name="parentCommentId" value="" />
-                <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
-            </form>
-        </div>
-        <!-- END COMMENTS FORM -->
-        
-        
-        <!-- BEGIN COMMENTS LIST -->
-        <div class="commentList">
-            <?php if ($commentCount > 0): ?>
-            
-                <?php $commentThread = 0; ?>
-            
-                <?php foreach ($commentCardList as $commentCard): ?>
-            
-                    <?php $commentThread = getCommentThread($commentThread, $commentCard->comment); ?>
-                    <?php $commentIndentClass = getCommentIndentClass($commentThread, $commentCard->comment); ?>
-            
-                    <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
-                        <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />
-                        <div>
-                            <p>
-                                <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>
-                                <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
-                                <?php if ($commentCard->comment->parentId != 0): ?>
-                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <a href="<?=getUserProfileLink($commentCard->parentAuthor)?>"><?=$commentCard->parentAuthor->username?></a></span>
-                                <?php endif; ?>
-                                <span class="commentAction">
-                                    <a class="reply" href=""><?=Language::GetText('reply')?></a>
-                                    <a class="flag" data-type="comment" data-id="<?=$commentCard->comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
-                                </span>
-                            </p>
-                            <p><?=nl2br($commentCard->comment->comments)?></p>
-                        </div>
-                    </div>
-            
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-        <!-- END COMMENTS LIST -->
-        
-        <?php if ($commentCount > 5): ?>
-            <div class="loadMoreComments">
-                <a href="" class="button" data-loading_text="<?=Language::GetText('loading')?>"><?=Language::GetText('load_more')?></a>
+        <?php if ($video->commentsClosed): ?>
+            <p><?=Language::GetText('commentsClosed')?></p>
+        <?php else: ?>
+            <p class="totals"><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
+
+
+            <!-- BEGIN COMMENTS FORM -->
+            <div class="form collapsed commentForm">
+                <form action="" method="post">
+                    <label><?=Language::GetText('comments')?></label>
+                    <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
+
+                    <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
+                    <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
+                    <input type="hidden" name="parentCommentId" value="" />
+                    <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
+                </form>
             </div>
+            <!-- END COMMENTS FORM -->
+
+
+            <!-- BEGIN COMMENTS LIST -->
+            <div class="commentList">
+                <?php if ($commentCount > 0): ?>
+
+                    <?php $commentThread = 0; ?>
+
+                    <?php foreach ($commentCardList as $commentCard): ?>
+
+                        <?php $commentThread = getCommentThread($commentThread, $commentCard->comment); ?>
+                        <?php $commentIndentClass = getCommentIndentClass($commentThread, $commentCard->comment); ?>
+
+                        <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
+                            <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />
+                            <div>
+                                <p>
+                                    <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>
+                                    <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
+                                    <?php if ($commentCard->comment->parentId != 0): ?>
+                                        <span class="commentReply"><?=Language::GetText('reply_to')?> <a href="<?=getUserProfileLink($commentCard->parentAuthor)?>"><?=$commentCard->parentAuthor->username?></a></span>
+                                    <?php endif; ?>
+                                    <span class="commentAction">
+                                        <a class="reply" href=""><?=Language::GetText('reply')?></a>
+                                        <a class="flag" data-type="comment" data-id="<?=$commentCard->comment->commentId?>" href=""><?=Language::GetText('report_abuse')?></a>
+                                    </span>
+                                </p>
+                                <p><?=nl2br($commentCard->comment->comments)?></p>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p><?=Language::GetText('noComments')?></p>
+                <?php endif; ?>
+            </div>
+            <!-- END COMMENTS LIST -->
+
+            <?php if ($commentCount > 5): ?>
+                <div class="loadMoreComments">
+                    <a href="" class="button" data-loading_text="<?=Language::GetText('loading')?>"><?=Language::GetText('load_more')?></a>
+                </div>
+            <?php endif; ?>
+            
         <?php endif; ?>
         
     </div>

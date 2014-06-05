@@ -45,6 +45,13 @@ if (isset($_POST['submitted'])) {
         $this->view->vars->errors['video_ready'] = TRUE;
     }
 
+    // Validate Comment Reply
+    if (isset($_POST['commentReply']) && in_array($_POST['commentReply'], array('0','1'))) {
+        $this->view->vars->privacy->commentReply = (boolean) $_POST['commentReply'];
+    } else {
+        $this->view->vars->errors['commentReply'] = TRUE;
+    }
+
     if (empty($this->view->vars->errors)) {
         $privacyMapper->save($this->view->vars->privacy);
         $this->view->vars->message = Language::GetText('success_privacy_updated');

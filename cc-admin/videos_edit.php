@@ -132,6 +132,12 @@ if (isset ($_POST['submitted'])) {
         $video->privateUrl = null;
     }
 
+    // Validate close comments
+    if (!empty ($_POST['closeComments']) && $_POST['closeComments'] == '1') {
+        $video->commentsClosed = true;
+    } else {
+        $video->commentsClosed = false;
+    }
 
     // Validate status
     if (!in_array($video->status, array('processing', 'pendingConversion'))) {
@@ -254,6 +260,11 @@ include ('header.php');
 
                 <input type="hidden" name="private_url" value="<?=(!empty ($video->privateUrl)) ? $video->privateUrl : $private_url?>" />
                 <a href="" class="small">Regenerate</a>
+            </div>
+
+            <div class="row-shift">
+                <input id="closeComments" type="checkbox" name="closeComments" value="1" <?=$video->commentsClosed ? 'checked="checked"' : ''?> />
+                <label for="closeComments">Close Comments</label> <em>(Allow comments to be posted to video)</em>
             </div>
 
             <div class="row-shift">

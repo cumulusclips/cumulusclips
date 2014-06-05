@@ -153,11 +153,11 @@
         <optional>Optional</optional>
         <comments>Comments</comments>
         <reply_to>Reply to</reply_to>
-        <comments_closed>Comments for this video are closed.</comments_closed>
-        <comments_login><![CDATA[
+        <commentsClosed>Comments for this video are closed.</commentsClosed>
+        <commentsLogin><![CDATA[
             <a href="{LOGIN_LINK}">Sign In</a> or <a href="{REGISTER_LINK}">Register</a> to post comments.
-        ]]></comments_login>
-        <no_comments>No comments posted yet.</no_comments>
+        ]]></commentsLogin>
+        <noComments>No comments posted yet.</noComments>
         <comments_button>Post Comment</comments_button>
         <suggestions_header>Suggestions</suggestions_header>
         <no_suggestions>No suggestions could be made.</no_suggestions>
@@ -280,6 +280,7 @@
         <alert_video>Inform me of new videos by members subscribed to</alert_video>
         <alert_message>E-mail me when I receive a message</alert_message>
         <alertVideoReady>Notify me when my uploaded video is done processing and is available</alertVideoReady>
+        <alertCommentReply>Notify me when someone replies to one of my comments</alertCommentReply>
         <privacy_settings_button>Update Privacy</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->
@@ -336,6 +337,8 @@
         <private_description>Video can only be viewed by you or anyone with the private URL below</private_description>
         <private_url>Private URL</private_url>
         <regenerate>Regenerate</regenerate>
+        <closeComments>Close Comments</closeComments>
+        <closeCommentsDescription>Allow comments to be posted to video</closeCommentsDescription>
         <submit_button>Submit</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->

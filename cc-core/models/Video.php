@@ -96,4 +96,9 @@ class Video
      * @var string 
      */
     public $privateUrl;
+    
+    /**
+     * @var boolean
+     */
+    public $commentsClosed;
 }

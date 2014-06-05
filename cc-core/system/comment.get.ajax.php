@@ -17,7 +17,7 @@ if (!empty($_GET['videoId'])) {
 }
 
 // Check if video is valid
-if (!$video || $video->status != 'approved') {
+if (!$video || $video->status != 'approved' || $video->commentsClosed) {
     App::Throw404();
 }
 

@@ -79,6 +79,7 @@ class VideoMapper extends MapperAbstract
         $video->disableEmbed = ($dbResults['disable_embed'] == 1) ? true : false;
         $video->private = ($dbResults['private'] == 1) ? true : false;
         $video->privateUrl = $dbResults['private_url'];
+        $video->commentsClosed = ($dbResults['comments_closed'] == 1) ? true : false;
         return $video;
     }
 
@@ -90,7 +91,7 @@ class VideoMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $video);
             $query = 'UPDATE ' . DB_PREFIX . 'videos SET';
-            $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, category_id = :categoryId, user_id = :userId, date_created = :dateCreated, duration = :duration, status = :status, views = :views, original_extension = :originalExtension, featured = :featured, gated = :gated, released = :released, disable_embed = :disableEmbed, private = :private, private_url = :privateUrl';
+            $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, category_id = :categoryId, user_id = :userId, date_created = :dateCreated, duration = :duration, status = :status, views = :views, original_extension = :originalExtension, featured = :featured, gated = :gated, released = :released, disable_embed = :disableEmbed, private = :private, private_url = :privateUrl, comments_closed = :commentsClosed';
             $query .= ' WHERE video_id = :videoId';
             $bindParams = array(
                 ':videoId' => $video->videoId,
@@ -111,13 +112,14 @@ class VideoMapper extends MapperAbstract
                 ':disableEmbed' => (isset($video->disableEmbed) && $video->disableEmbed === true) ? 1 : 0,
                 ':private' => (isset($video->private) && $video->private === true) ? 1 : 0,
                 ':privateUrl' => (!empty($video->privateUrl)) ? $video->privateUrl : null,
+                ':commentsClosed' => (isset($video->commentsClosed) && $video->commentsClosed === true) ? 1 : 0
             );
         } else {
             // Create
             Plugin::triggerEvent('video.create', $video);
             $query = 'INSERT INTO ' . DB_PREFIX . 'videos';
-            $query .= ' (filename, title, description, tags, category_id, user_id, date_created, duration, status, views, original_extension, featured, gated, released, disable_embed, private, private_url)';
-            $query .= ' VALUES (:filename, :title, :description, :tags, :categoryId, :userId, :dateCreated, :duration, :status, :views, :originalExtension, :featured, :gated, :released, :disableEmbed, :private, :privateUrl)';
+            $query .= ' (filename, title, description, tags, category_id, user_id, date_created, duration, status, views, original_extension, featured, gated, released, disable_embed, private, private_url, comments_closed)';
+            $query .= ' VALUES (:filename, :title, :description, :tags, :categoryId, :userId, :dateCreated, :duration, :status, :views, :originalExtension, :featured, :gated, :released, :disableEmbed, :private, :privateUrl, :commentsClosed)';
             $bindParams = array(
                 ':filename' => $video->filename,
                 ':title' => $video->title,
@@ -136,6 +138,7 @@ class VideoMapper extends MapperAbstract
                 ':disableEmbed' => (isset($video->disableEmbed) && $video->disableEmbed === true) ? 1 : 0,
                 ':private' => (isset($video->private) && $video->private === true) ? 1 : 0,
                 ':privateUrl' => (!empty($video->privateUrl)) ? $video->privateUrl : null,
+                ':commentsClosed' => (isset($video->commentsClosed) && $video->commentsClosed === true) ? 1 : 0
             );
         }
 

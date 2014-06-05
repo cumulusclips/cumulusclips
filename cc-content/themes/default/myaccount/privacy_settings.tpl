@@ -33,6 +33,12 @@
             <option value="0"<?=(!$privacy->videoReady) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
         </select>
 
+        <label><?=Language::GetText('alertCommentReply')?>:</label>
+        <select class="dropdown" size="1" name="commentReply">
+            <option value="1"<?=($privacy->commentReply) ? ' selected="selected"' : ''?>><?=Language::GetText('yes')?></option>
+            <option value="0"<?=(!$privacy->commentReply) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
+        </select>
+
         <input type="hidden" name="submitted" value="TRUE" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('privacy_settings_button')?>" />
     </form>

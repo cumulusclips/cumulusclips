@@ -80,7 +80,7 @@ class CommentService extends ServiceAbstract
                     Plugin::triggerEvent('comment.notify_member');
                 }
 
-                // Send notification to parent comment author if this was a reply
+                // Notify comment author of reply to their comment if apl.
                 if ($comment->parentId) {
                     $parentComment = $commentMapper->getCommentById($comment->parentId);
                     $parentAuthor = $this->getCommentAuthor($parentComment);
@@ -91,7 +91,9 @@ class CommentService extends ServiceAbstract
                             'host'      => HOST,
                             'sitename'  => $config->sitename,
                             'email'     => $parentAuthor->email,
-                            'title'     => $video->title
+                            'title'     => $video->title,
+                            'videoUrl'  => $videoService->getUrl($video),
+                            'comments'  => $comment->comments
                         );
                         $mail = new Mail();
                         $mail->LoadTemplate('comment_reply', $replacements);

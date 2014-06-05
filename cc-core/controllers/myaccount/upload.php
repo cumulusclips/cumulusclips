@@ -86,6 +86,13 @@ if (isset ($_POST['submitted'])) {
         $video->private = false;
     }
 
+    // Validate close comments
+    if (!empty($_POST['closeComments']) && $_POST['closeComments'] == '1') {
+        $video->commentsClosed = true;
+    } else {
+        $video->commentsClosed = false;
+    }
+
     // Validate Video Upload last (only if other fields were valid)
     if (empty($this->view->vars->errors)) {
         $video->userId = $this->view->vars->loggedInUser->userId;

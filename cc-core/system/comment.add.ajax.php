@@ -19,7 +19,7 @@ if (!empty($_POST['videoId'])) {
     $video = $videoMapper->getVideoById($_POST['videoId']);
     
     // Check if video is valid
-    if (!$video || $video->status != 'approved') App::Throw404();
+    if (!$video || $video->status != 'approved' || $video->commentsClosed) App::Throw404();
     
     $comment->videoId = $video->videoId;
 } else {

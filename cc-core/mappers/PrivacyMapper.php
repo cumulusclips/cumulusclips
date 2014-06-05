@@ -40,6 +40,7 @@ class PrivacyMapper extends MapperAbstract
         $privacy->newMessage = ($dbResults['new_message'] == 1) ? true : false;
         $privacy->newVideo = ($dbResults['new_video'] == 1) ? true : false;
         $privacy->videoReady = ($dbResults['video_ready'] == 1) ? true : false;
+        $privacy->commentReply = ($dbResults['comment_reply'] == 1) ? true : false;
         return $privacy;
     }
 
@@ -51,7 +52,7 @@ class PrivacyMapper extends MapperAbstract
             // Update
             Plugin::triggerEvent('video.update', $privacy);
             $query = 'UPDATE ' . DB_PREFIX . 'privacy SET';
-            $query .= ' user_id = :userId, video_comment = :videoComment, new_message = :newMessage, new_video = :newVideo, video_ready = :videoReady';
+            $query .= ' user_id = :userId, video_comment = :videoComment, new_message = :newMessage, new_video = :newVideo, video_ready = :videoReady, comment_reply = :commentReply';
             $query .= ' WHERE privacy_id = :privacyId';
             $bindParams = array(
                 ':privacyId' => $privacy->privacyId,
@@ -60,19 +61,21 @@ class PrivacyMapper extends MapperAbstract
                 ':newMessage' => (isset($privacy->newMessage) && $privacy->newMessage === true) ? 1 : 0,
                 ':newVideo' => (isset($privacy->newVideo) && $privacy->newVideo === true) ? 1 : 0,
                 ':videoReady' => (isset($privacy->videoReady) && $privacy->videoReady === true) ? 1 : 0,
+                ':commentReply' => (isset($privacy->commentReply) && $privacy->commentReply === true) ? 1 : 0
             );
         } else {
             // Create
             Plugin::triggerEvent('video.create', $privacy);
             $query = 'INSERT INTO ' . DB_PREFIX . 'privacy';
-            $query .= ' (user_id, video_comment, new_message, new_video, video_ready)';
-            $query .= ' VALUES (:userId, :videoComment, :newMessage, :newVideo, :videoReady)';
+            $query .= ' (user_id, video_comment, new_message, new_video, video_ready, comment_reply)';
+            $query .= ' VALUES (:userId, :videoComment, :newMessage, :newVideo, :videoReady, :commentReply)';
             $bindParams = array(
                 ':userId' => $privacy->userId,
                 ':videoComment' => (isset($privacy->videoComment) && $privacy->videoComment === true) ? 1 : 0,
                 ':newMessage' => (isset($privacy->newMessage) && $privacy->newMessage === true) ? 1 : 0,
                 ':newVideo' => (isset($privacy->newVideo) && $privacy->newVideo === true) ? 1 : 0,
                 ':videoReady' => (isset($privacy->videoReady) && $privacy->videoReady === true) ? 1 : 0,
+                ':commentReply' => (isset($privacy->commentReply) && $privacy->commentReply === true) ? 1 : 0
             );
         }
             

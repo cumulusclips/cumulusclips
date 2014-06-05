@@ -100,6 +100,13 @@ if (isset($_POST['submitted'])) {
         $video->privateUrl = null;
     }
 
+    // Validate close comments
+    if (!empty($_POST['closeComments']) && $_POST['closeComments'] == '1') {
+        $video->commentsClosed = true;
+    } else {
+        $video->commentsClosed = false;
+    }
+
     // Update video if no errors were made
     if (empty ($this->view->vars->errors)) {
         $videoMapper->save($video);

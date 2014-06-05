@@ -6,6 +6,7 @@ class Privacy
     const VIDEO_COMMENT = 'videoComment';
     const NEW_MESSAGE = 'newMessage';
     const VIDEO_READY = 'videoReady';
+    const COMMENT_REPLY = 'commentReply';
 
     /**
      * @var int
@@ -36,4 +37,9 @@ class Privacy
      * @var boolean
      */
     public $videoReady;
+    
+    /**
+     * @var boolean
+     */
+    public $commentReply;
 }

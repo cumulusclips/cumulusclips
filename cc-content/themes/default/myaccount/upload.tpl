@@ -41,6 +41,9 @@
             <a href="" class="small"><?=Language::getText('regenerate')?></a>
         </p>
 
+        <input id="closeComments" type="checkbox" name="closeComments" value="1" <?=(!empty($video->commentsClosed)) ? 'checked="checked"' : ''?> />
+        <label for="closeComments"><?=Language::getText('closeComments')?></label> <em>(<?=Language::getText('closeCommentsDescription')?>)</em><br>
+
         <input type="hidden" name="submitted" value="TRUE" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('submit_button')?>" />
     </form>
