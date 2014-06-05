@@ -238,9 +238,13 @@ $(document).ready(function(){
         // Expand collapsed comment form was activated
         $('#comments .commentForm').focusin(function(){
             if ($(this).hasClass('collapsed')) {
+                var commentForm = $(this);
                 $('.commentReplyForm').remove();
-                $(this).removeClass('collapsed');
-                $(this).find('textarea').focus().val('');
+                commentForm.removeClass('collapsed');
+                commentForm.find('textarea').val('');
+                setTimeout(function(){
+                    commentForm.find('textarea').blur().focus();
+                },100);
             }
         });
 

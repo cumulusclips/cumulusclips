@@ -190,7 +190,7 @@ $this->SetLayout('full');
                                 <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>
                                 <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
                                 <?php if ($commentCard->comment->parentId != 0): ?>
-                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <?=getCommentAuthorText($commentCard->parentComment, $commentCard->parentAuthor)?></span>
+                                    <span class="commentReply"><?=Language::GetText('reply_to')?> <a href="<?=getUserProfileLink($commentCard->parentAuthor)?>"><?=$commentCard->parentAuthor->username?></a></span>
                                 <?php endif; ?>
                                 <span class="commentAction">
                                     <a class="reply" href=""><?=Language::GetText('reply')?></a>
