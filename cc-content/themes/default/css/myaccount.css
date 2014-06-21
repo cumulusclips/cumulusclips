@@ -115,23 +115,23 @@ MY ACCOUNT HOME
 UPLOAD VIDEO
 ***********/
 
-.upload .wide,
-.edit_video .wide {
+.myaccount_upload .wide,
+.myaccount_edit_video .wide {
     width: 470px;
 }
 
-.upload .wide input[type="text"],
-.edit_video .wide input[type="text"] {
+.myaccount_upload .wide input[type="text"],
+.myaccount_edit_video .wide input[type="text"] {
     width: 260px;
 }
 
-.upload select,
-.edit_video select {
+.myaccount_upload select,
+.myaccount_edit_video select {
     width: 280px;
 }
 
-.upload textarea,
-.edit_video textarea {
+.myaccount_upload textarea,
+.myaccount_edit_video textarea {
     width: 450px;
     margin-bottom: 22px;
 }
@@ -156,19 +156,19 @@ input[type="checkbox"] + label + em + br {
 }
 
 #private_url {
-    margin: 5px 0 0 20px;
+    margin: 5px 0 5px 20px;
 }
 
 #private_url a {
     margin-left:15px;
 }
 
-.upload .form input[type="submit"],
-.edit_video .form input[type="submit"] {
+.myaccount_upload .form input[type="submit"],
+.myaccount_edit_video .form input[type="submit"] {
     margin-top: 15px;
 }
 
-.upload_video #main form {
+.myaccount_upload_video #main form {
     margin-top: 15px;
 }
 
@@ -245,7 +245,7 @@ MY VIDEOS
     float: left;
 }
 
-.myvideos #main > .right {
+.myaccount_myvideos #main > .right {
     width: 605px;
 }
 

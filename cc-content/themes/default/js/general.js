@@ -211,6 +211,12 @@ $(document).ready(function(){
                         var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, responseData.other.commentCard);
                         var commentCard = responseData.other.commentCard;
                         
+                        // Remove 'no comments' message if this is first comment
+                        $('.commentList > p:first-child').remove();
+                        
+                        // Update comment count text
+                        $('#comments .totals span').text(responseData.other.commentCount);
+                        
                         // Append comment to list
                         if (commentCard.comment.parentId !== 0) {
                             var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
@@ -294,7 +300,7 @@ $(document).ready(function(){
                     url         : cumulusClips.baseUrl + '/actions/comments/get/',
                     success     : function(responseData, textStatus, jqXHR){
                         var lastCommentKey = responseData.other.commentCardList.length-1;
-                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;
+                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;                    
                         // Loop through comment data set, inject into comment template and append to list
                         $.each(responseData.other.commentCardList, function(key, commentCard){
                             $('.commentList').find('div[data-comment="' + commentCard.comment.commentId + '"]').remove();

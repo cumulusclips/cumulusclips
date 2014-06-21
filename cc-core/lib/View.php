@@ -39,7 +39,7 @@ class View
         $this->vars->config->theme_path = THEME_PATH;
         
         // Retrieve page
-        $this->options->page = (!empty($this->_route->name)) ? $this->_route->name : $this->_getPageFromRoute($this->_route);
+        $this->options->page = $this->_getPageFromRoute($this->_route);
 
         // Retrieve meta data
         $this->vars->meta = Language::GetMeta($this->options->page);
@@ -88,9 +88,9 @@ class View
     }
     
     /**
-     * Generate a page name from a route's location path
-     * @param Route $route Route to extract location from
-     * @return string Page name is returned
+     * Retrieve or generate a page name from a route
+     * @param Route $route Route to get page name for
+     * @return string Returns Route's page name in route if it exists, generated based on path otherwise 
      */
     protected function _getPageFromRoute(Route $route)
     {
@@ -104,7 +104,7 @@ class View
             '_',
             ''
         );
-        return preg_replace($patterns, $replacements, $route->location);
+        return (!empty($route->name)) ? $route->name : preg_replace($patterns, $replacements, $route->location);
     }
     
     /**

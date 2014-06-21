@@ -112,7 +112,7 @@ class CommentService extends ServiceAbstract
         // Send admin alert
         if ($send_alert) {
             $body .= "\n\n=======================================================\n";
-            $body .= "Author: $comment->name\n";
+            $body .= 'Author: ' . $this->getCommentAuthor($comment)->username . "\n";
             $body .= 'Video URL: ' . $videoService->getUrl($video) . "/\n";
             $body .= "Comments: $comment->comments\n";
             $body .= "=======================================================";

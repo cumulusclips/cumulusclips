@@ -153,27 +153,31 @@ $this->SetLayout('full');
 
     <!-- BEGIN COMMENTS SECTION -->
     <div id="comments">
+        
         <p class="large"><?=Language::GetText('comments_header')?></p>
         
         <?php if ($video->commentsClosed): ?>
-            <p><?=Language::GetText('commentsClosed')?></p>
+            <p class="commentMessage"><?=Language::GetText('commentsClosed')?></p>
         <?php else: ?>
             <p class="totals"><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
 
+            <?php if ($loggedInUser): ?>
+                <!-- BEGIN COMMENTS FORM -->
+                <div class="form collapsed commentForm">
+                    <form action="" method="post">
+                        <label><?=Language::GetText('comments')?></label>
+                        <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
 
-            <!-- BEGIN COMMENTS FORM -->
-            <div class="form collapsed commentForm">
-                <form action="" method="post">
-                    <label><?=Language::GetText('comments')?></label>
-                    <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::GetText('comments')?>"><?=Language::GetText('comments')?></textarea>
-
-                    <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
-                    <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
-                    <input type="hidden" name="parentCommentId" value="" />
-                    <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
-                </form>
-            </div>
-            <!-- END COMMENTS FORM -->
+                        <a class="cancel" href=""><?=Language::GetText('cancel')?></a>
+                        <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
+                        <input type="hidden" name="parentCommentId" value="" />
+                        <input class="button" type="submit" name="button" value="<?=Language::GetText('comments_button')?>" />
+                    </form>
+                </div>
+                <!-- END COMMENTS FORM -->
+            <?php else: ?>
+                <p class="commentMessage"><?=Language::GetText('commentsLogin', array('login_link' => HOST . '/login/', 'register_link' => HOST . '/register/'))?></p>
+            <?php endif; ?>
 
 
             <!-- BEGIN COMMENTS LIST -->
@@ -207,7 +211,7 @@ $this->SetLayout('full');
 
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p><?=Language::GetText('noComments')?></p>
+                    <p><?=Language::GetText('no_comments')?></p>
                 <?php endif; ?>
             </div>
             <!-- END COMMENTS LIST -->

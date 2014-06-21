@@ -153,11 +153,10 @@
         <optional>Optional</optional>
         <comments>Comments</comments>
         <reply_to>Reply to</reply_to>
-        <commentsClosed>Comments for this video are closed.</commentsClosed>
+        <commentsClosed>Comments are closed for this video.</commentsClosed>
         <commentsLogin><![CDATA[
             <a href="{LOGIN_LINK}">Sign In</a> or <a href="{REGISTER_LINK}">Register</a> to post comments.
         ]]></commentsLogin>
-        <noComments>No comments posted yet.</noComments>
         <comments_button>Post Comment</comments_button>
         <suggestions_header>Suggestions</suggestions_header>
         <no_suggestions>No suggestions could be made.</no_suggestions>
@@ -385,7 +384,7 @@
         <error_tags>Invalid tags</error_tags>
         <error_category>Invalid category</error_category>
         <error_name>Invalid name</error_name>
-        <error_comment_login>You must login to post comments.</error_comment_login>
+        <errorCommentLogin>You must login to post comments.</errorCommentLogin>
         <error_comment>Invalid comment</error_comment>
         <error_private_url>Invalid private url</error_private_url>
         <error_status_update>Invalid status update</error_status_update>

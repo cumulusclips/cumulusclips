@@ -30,7 +30,7 @@ if (!empty($_POST['videoId'])) {
 if ($loggedInUser) {
     $comment->userId = $loggedInUser->userId;
 } else {
-    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('comment_login')));
+    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('errorCommentLogin')));
     exit();
 }
 
@@ -59,7 +59,11 @@ if (empty($errors)) {
     // Retrieve formatted new comment
     if (Settings::Get('auto_approve_comments') == 1) {
         $message = (string) Language::GetText('success_comment_posted');
-        $other = array('autoApprove' => true, 'commentCard' => $newCommentCard);
+        $other = array(
+            'autoApprove' => true,
+            'commentCard' => $newCommentCard,
+            'commentCount' => $commentMapper->getVideoCommentCount($newComment->videoId)
+        );
     } else {
         $message = (string) Language::GetText('success_comment_approve');
         $other = array('autoApprove' => false);

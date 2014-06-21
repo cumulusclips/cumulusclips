@@ -345,7 +345,6 @@ PLAY VIDEO
 }
 
 
-
 /** TAB BLOCKS **/
 
 .play .tab_block {
@@ -543,7 +542,7 @@ PLAY VIDEO
 
 #comments .large {
     float: left;
-    margin: 0;
+    margin: 0 0 8px;
 }
 
 #comments .totals {
@@ -552,8 +551,21 @@ PLAY VIDEO
     margin: 5px 0 10px;
 }
 
-.commentList > div:first-child {
+#comments .commentMessage {
+    clear: both;
+    margin-top: 8px;
+}
+
+.commentList {
     margin-top: 20px;
+}
+
+.commentList > p:first-child {
+    margin-top: 10px;
+}
+
+.commentList > div:first-child {
+    margin-top: 0;
 }
 
 .comment {

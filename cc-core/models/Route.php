@@ -30,6 +30,12 @@ class Route
     public $mobile = null;
     
     /**
+     * @var string Page name given for route. When provided this becomes the CSS
+     * selector name for the given page 
+     */
+    public $name = null;
+    
+    /**
      * Create a new URL route for loading a given controller based on the request URI
      * @param array $options (optional)
      * @throws Exception If mappings option is invalid
