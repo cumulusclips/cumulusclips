@@ -1,6 +1,7 @@
 <?php
 $this->addMeta('videoId', $video->videoId);
 $this->addMeta('theme', THEME);
+$this->addMeta('loggedIn', (boolean) $loggedInUser);
 $this->AddCss('jscrollpane.css');
 $this->AddJs('jscrollpane.plugin.js');
 $this->AddJs('mousewheel.plugin.js');

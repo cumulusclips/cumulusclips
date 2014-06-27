@@ -3,6 +3,7 @@ var cumulusClips = {};
 cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
 cumulusClips.themeUrl = $('meta[name="theme"]').attr('content');
 cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
+cumulusClips.loggedIn = $('meta[name="loggedIn"]').attr('content');
 
 
 $(document).ready(function(){
@@ -127,6 +128,7 @@ $(document).ready(function(){
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyText = responseData;}, 'reply');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.reportAbuseText = responseData;}, 'report_abuse');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.logginToPostText = responseData;}, 'errorCommentLogin');
         $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentCardTemplate = responseData;});
         cumulusClips.lastCommentId = $('.commentList > div:last-child').data('comment');
         cumulusClips.commentCount = Number($('#comments .totals span').text());
@@ -270,16 +272,21 @@ $(document).ready(function(){
 
         // Handle reply to comment action
         $('#comments').on('click', '.commentAction .reply', function(event){
-            var commentForm = $('#comments > .commentForm');
-            resetCommentForm(commentForm);
-            $('.commentReplyForm').remove();
-            var parentComment = $(this).parents('.comment');
-            var replyForm = commentForm.clone();
-            replyForm.addClass('commentReplyForm');
-            parentComment.after(replyForm);
-            replyForm.removeClass('collapsed');
-            replyForm.find('input[name="parentCommentId"]').val(parentComment.data('comment'));
-            replyForm.find('textarea').focus().val('');
+            // Verify user is logged in
+            if (cumulusClips.loggedIn === '1') {
+                var commentForm = $('#comments > .commentForm');
+                resetCommentForm(commentForm);
+                $('.commentReplyForm').remove();
+                var parentComment = $(this).parents('.comment');
+                var replyForm = commentForm.clone();
+                replyForm.addClass('commentReplyForm');
+                parentComment.after(replyForm);
+                replyForm.removeClass('collapsed');
+                replyForm.find('input[name="parentCommentId"]').val(parentComment.data('comment'));
+                replyForm.find('textarea').focus().val('');
+            } else {
+                displayMessage(false, cumulusClips.logginToPostText);
+            }
             event.preventDefault();
         });
 
@@ -306,7 +313,7 @@ $(document).ready(function(){
                             $('.commentList').find('div[data-comment="' + commentCard.comment.commentId + '"]').remove();
                             var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, commentCard);
                             
-                            // Append comment to list
+                            // Determine indentation
                             if (commentCard.comment.parentId !== 0) {
                                 var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
                                 // Determine indent class
@@ -317,10 +324,10 @@ $(document).ready(function(){
                                     indentClass = 'commentIndentDouble';
                                 }
                                 commentCardElement.addClass(indentClass);
-                                parentComment.after(commentCardElement)
-                            } else {
-                                $('.commentList').append(commentCardElement);
                             }
+                            
+                            // Append comment to list
+                            $('.commentList').append(commentCardElement);
                         });
 
                         // Hide load more button if no more comments are available

@@ -9,6 +9,10 @@ $loggedInUser = $userService->loginCheck();
 $this->view->disableView = true;
 Plugin::Trigger ('flag.ajax.login_check');
 $flagMapper = new FlagMapper();
+$videoMapper = new VideoMapper();
+$userMapper = new UserMapper();
+$commentMapper = new CommentMapper();
+$videoService = new VideoService();
 $flag = new Flag();
 
 // Verify valid ID was provided
@@ -22,8 +26,6 @@ try {
 
     switch ($_POST['type']) {
         case 'video':
-            $videoMapper = new VideoMapper();
-            $videoService = new VideoService();
             $video = $videoMapper->getVideoByCustom(array('video_id' => $_POST['id'], 'status' => 'approved'));
             if (!$video) App::Throw404();
             $contentOwnerUserId = $video->userId;
@@ -35,7 +37,6 @@ try {
             Plugin::Trigger ('flag.ajax.flag_video');
             break;
         case 'user':
-            $userMapper = new UserMapper();
             $user = $userMapper->getUserByCustom(array('user_id' => $_POST['id'], 'status' => 'active'));
             if (!$user) App::Throw404();
             $contentOwnerUserId = $user->userId;
@@ -47,11 +48,9 @@ try {
             Plugin::Trigger ('flag.ajax.flag_user');
             break;
         case 'comment':
-            $commentMapper = new CommentMapper();
             $comment = $commentMapper->getCommentByCustom(array('comment_id' => $_POST['id'], 'status' => 'approved'));
             if (!$comment) App::Throw404();
             $contentOwnerUserId = $comment->userId;
-            $videoService = new VideoService();
             $url = $videoService->getUrl($videoMapper->getVideoById($comment->videoId));
             $name = "Comments: $comment->comments";
             $type = 'Comment';
@@ -92,9 +91,9 @@ try {
     // Create flag and output message
     $flagMapper->save($flag);
     Plugin::Trigger ('flag.ajax.flag');
-    echo json_encode (array ('result' => 1, 'message' => (string) Language::GetText('success_flag')));
+    echo json_encode (array ('result' => true, 'message' => (string) Language::GetText('success_flag')));
     exit();
 } catch (Exception $e) {
-    echo json_encode (array ('result' => 0, 'message' => $e->getMessage()));
+    echo json_encode (array ('result' => false, 'message' => $e->getMessage()));
     exit();
 }
