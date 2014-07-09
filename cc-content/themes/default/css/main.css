@@ -128,8 +128,40 @@ HEADER
     color: #555;
 }
 
+#header form {
+    position: relative;
+}
+
+.ui-autocomplete {
+    position: absolute;
+    top: 35px !important;
+    width: 248px !important;
+    background-color: #FFF;
+    z-index: 99;
+    border: 1px solid #C1C1C1;
+    text-align: left;
+}
+
+.ui-autocomplete li {
+    padding: 5px;
+    color: #555;
+}
+
+.ui-autocomplete .ui-state-focus,
+.ui-autocomplete li:hover {
+    color: #FFF;
+    background-color: #1d8dff;
+}
+
+.ui-autocomplete li:hover {
+    cursor: pointer;
+}
+
+span[role="status"] {
+    display: none;
+}
+
 #header_right {
-    overflow: hidden;
     float: right;
     text-align: right;
 }

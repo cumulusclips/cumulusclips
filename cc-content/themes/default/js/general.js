@@ -22,6 +22,12 @@ $(document).ready(function(){
             $(this).val($(this).attr('title'));
         }
     });
+    
+    // Search Auto-Complete
+    $('#header form input[type="text"]').autocomplete({
+        source: cumulusClips.baseUrl + '/search/suggest/',
+        appendTo: '#header form'
+    });
 
 
     // Tabs Show/Hide Block
