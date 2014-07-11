@@ -8,8 +8,11 @@ class App {
      * @return void 404 page is output to buffer
      */
     static function Throw404() {
-        $view = View::getView();
-        include_once (DOC_ROOT . '/cc-core/controllers/system_404.php');
+        $controller = Registry::get('controller');
+        $view = Registry::get('view');
+        $router = new Router();
+        $controller->dispatch($router->getStaticRoute('system404'));
+        $view->render();
         exit();
     }
 

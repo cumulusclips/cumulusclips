@@ -89,6 +89,16 @@ class Router
         return $matchedRoute->route;   
     }
     
+    public function getStaticRoute($routeName)
+    {
+        $routes = $this->_staticRoutes();
+        if (isset($routes[$routeName])) {
+            return $routes[$routeName];
+        } else {
+            throw new Exception('Unknown Static Route');
+        }
+    }
+    
     /**
      * Retrieve static built-in routes
      * @return array List of static routes
@@ -421,8 +431,13 @@ class Router
         
         /** System Routes **/
         
+        $routes['system404'] = new Route(array(
+            'path' => 'not-found',
+            'location' => 'cc-core/controllers/system_404.php'
+        ));
+        
         $routes['systemError'] = new Route(array(
-            'path' => 'system\-error',
+            'path' => 'system-error',
             'location' => 'cc-core/controllers/system_error.php'
         ));
                 
@@ -457,6 +472,16 @@ class Router
         
         
         /** AJAX Routes **/
+
+        $routes['ajaxMemberVideos'] = new Route(array(
+            'path' => 'members/videos',
+            'location' => 'cc-core/system/member.videos.ajax.php'
+        ));
+
+        $routes['ajaxMemberPlaylists'] = new Route(array(
+            'path' => 'members/playlists',
+            'location' => 'cc-core/system/member.playlists.ajax.php'
+        ));
 
         $routes['ajaxSearchSuggest'] = new Route(array(
             'path' => 'search/suggest',
