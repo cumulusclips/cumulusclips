@@ -1,11 +1,11 @@
 <?php
 
 // Establish page variables, objects, arrays, etc
-$this->view->InitView();
 Plugin::triggerEvent('page.start');
 
 // Verify if user is logged in
 $userService = new UserService();
+$router = new Router();
 $this->view->vars->loggedInUser = $userService->loginCheck();
 
 $pageMapper = new PageMapper();
@@ -30,4 +30,3 @@ if ($page) {
 
 // Output Page
 Plugin::triggerEvent('page.before_render');
-$this->view->Render ('page.tpl');

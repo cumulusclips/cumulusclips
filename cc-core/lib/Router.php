@@ -88,7 +88,13 @@ class Router
         
         return $matchedRoute->route;   
     }
-    
+
+    /**
+     * Retrieve a static route
+     * @param string $routeName The static route being requested
+     * @return Route Returns the requested static route
+     * @throws Exception If requested route does not exist
+     */
     public function getStaticRoute($routeName)
     {
         $routes = $this->_staticRoutes();
@@ -98,7 +104,7 @@ class Router
             throw new Exception('Unknown Static Route');
         }
     }
-    
+
     /**
      * Retrieve static built-in routes
      * @return array List of static routes

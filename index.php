@@ -15,6 +15,7 @@ Registry::set('view', $view);
 
 // Init controller and execute requested script
 $controller = new Controller();
+Registry::set('controller', $controller);
 $controller->dispatch($route);
 
 // Render page

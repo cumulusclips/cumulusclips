@@ -5,9 +5,9 @@ class View
     // Object Properties
     public $options;
     public $vars;
+    public $disableView = false;
     protected $_body;
     protected static $_view;
-    public $disableView = false;
     protected $_route;
     
     public function __construct()
@@ -22,7 +22,6 @@ class View
         $this->options->blocks = array();
         $this->options->css = array();
         $this->options->js = array();
-        $this->_route = Registry::get('route');
         
         // Define theme configuration
         try {
@@ -38,17 +37,22 @@ class View
         $this->vars->config->theme_url = THEME;
         $this->vars->config->theme_path = THEME_PATH;
         
+        // Load view helper
+        $viewHelper = $this->getFallbackPath('helper.php');
+        if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
+        self::$_view = $this;
+    }
+    
+    public function load(Route $route)
+    {
+        $this->_route = $route;
+        
         // Retrieve page
         $this->options->page = $this->_getPageFromRoute($this->_route);
 
         // Retrieve meta data
         $this->vars->meta = Language::GetMeta($this->options->page);
         if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
-        
-        // Load view helper
-        $viewHelper = $this->getFallbackPath('helper.php');
-        if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
-        self::$_view = $this;
     }
     
     /**
