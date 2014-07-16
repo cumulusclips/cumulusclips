@@ -481,72 +481,72 @@ class Router
 
         $routes['ajaxMemberVideos'] = new Route(array(
             'path' => 'members/videos',
-            'location' => 'cc-core/system/member.videos.ajax.php'
+            'location' => 'cc-core/controllers/ajax/member.videos.ajax.php'
         ));
 
         $routes['ajaxMemberPlaylists'] = new Route(array(
             'path' => 'members/playlists',
-            'location' => 'cc-core/system/member.playlists.ajax.php'
+            'location' => 'cc-core/controllers/ajax/member.playlists.ajax.php'
         ));
 
         $routes['ajaxSearchSuggest'] = new Route(array(
             'path' => 'search/suggest',
-            'location' => 'cc-core/system/search.suggest.ajax.php'
+            'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php'
         ));
 
         $routes['ajaxAvatarUpload'] = new Route(array(
             'path' => 'myaccount/upload/avatar',
-            'location' => 'cc-core/system/avatar.ajax.php'
+            'location' => 'cc-core/controllers/ajax/avatar.ajax.php'
         ));
 
         $routes['ajaxVideoUpload'] = new Route(array(
             'path' => 'myaccount/upload/validate',
-            'location' => 'cc-core/system/upload.ajax.php'
+            'location' => 'cc-core/controllers/ajax/upload.ajax.php'
         ));
 
         $routes['ajaxUsernameExists'] = new Route(array(
             'path' => 'actions/username',
-            'location' => 'cc-core/system/username.ajax.php'
+            'location' => 'cc-core/controllers/ajax/username.ajax.php'
         ));
 
         $routes['ajaxFlag'] = new Route(array(
             'path' => 'actions/flag',
-            'location' => 'cc-core/system/flag.ajax.php'
+            'location' => 'cc-core/controllers/ajax/flag.ajax.php'
         ));
 
         $routes['ajaxPlaylist'] = new Route(array(
             'path' => 'actions/playlist',
-            'location' => 'cc-core/system/playlist.ajax.php'
+            'location' => 'cc-core/controllers/ajax/playlist.ajax.php'
         ));
 
         $routes['ajaxSubscribe'] = new Route(array(
             'path' => 'actions/subscribe',
-            'location' => 'cc-core/system/subscribe.ajax.php'
+            'location' => 'cc-core/controllers/ajax/subscribe.ajax.php'
         ));
 
         $routes['ajaxRate'] = new Route(array(
             'path' => 'actions/rate',
-            'location' => 'cc-core/system/rate.ajax.php'
+            'location' => 'cc-core/controllers/ajax/rate.ajax.php'
         ));
 
         $routes['ajaxCommentAdd'] = new Route(array(
             'path' => 'actions/comment/add',
-            'location' => 'cc-core/system/comment.add.ajax.php'
+            'location' => 'cc-core/controllers/ajax/comment.add.ajax.php'
         ));
 
         $routes['ajaxCommentGet'] = new Route(array(
             'path' => 'actions/comments/get',
-            'location' => 'cc-core/system/comment.get.ajax.php'
+            'location' => 'cc-core/controllers/ajax/comment.get.ajax.php'
         ));
 
         $routes['ajaxPost'] = new Route(array(
             'path' => 'actions/post',
-            'location' => 'cc-core/system/post.ajax.php'
+            'location' => 'cc-core/controllers/ajax/post.ajax.php'
         ));
 
         $routes['ajaxMobileLoadMoreVideos'] = new Route(array(
             'path' => 'actions/mobile-videos',
-            'location' => 'cc-core/system/mobile_videos.ajax.php',
+            'location' => 'cc-core/controllers/ajax/mobile_videos.ajax.php',
             'mobile' => true
         ));
 
