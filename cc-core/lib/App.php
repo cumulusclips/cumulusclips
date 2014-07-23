@@ -12,6 +12,7 @@ class App {
         $view = Registry::get('view');
         $router = new Router();
         $controller->dispatch($router->getStaticRoute('system404'));
+        $view->disableView = false;
         $view->render();
         exit();
     }

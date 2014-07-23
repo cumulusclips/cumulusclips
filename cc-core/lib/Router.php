@@ -62,7 +62,8 @@ class Router
     
     /**
      * Detect which route matches current request URI, and merge it's pattern
-     * matches into $_GET superglobal
+     * matches into $_GET superglobal. URI is compared to ALL routes, and the
+     * last matching route is used.
      * @return Route 
      */
     public function getRoute()
