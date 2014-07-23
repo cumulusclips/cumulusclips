@@ -30,5 +30,5 @@ class Playlist
     /**
      * @var string 
      */
-    public $dateCreate;
+    public $dateCreated;
 }

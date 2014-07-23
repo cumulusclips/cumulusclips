@@ -20,5 +20,5 @@ class PlaylistEntry
     /**
      * @var string 
      */
-    public $dateCreate;
+    public $dateCreated;
 }
