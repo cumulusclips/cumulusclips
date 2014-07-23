@@ -14,7 +14,7 @@
     <div class="playlist">
         <?php if (count($favoritesList->entries) > 0): ?>
             <div class="thumbnails">
-                <?php $thumbnails = $playlistService->getPlaylistThumbnails($favoritesList); ?>
+                <?php $thumbnails = getPlaylistThumbnails($favoritesList); ?>
                 <img width="165" height="92" src="<?=$thumbnails[0]?>" />
                 <?php if (count($favoritesList->entries) >= 2): ?>
                     <div>
@@ -39,7 +39,7 @@
     <div class="playlist">
         <?php if (count($watchLaterList->entries) > 0): ?>
             <div class="thumbnails">
-                <?php $thumbnails = $playlistService->getPlaylistThumbnails($watchLaterList); ?>
+                <?php $thumbnails = getPlaylistThumbnails($watchLaterList); ?>
                 <img width="165" height="92" src="<?=$thumbnails[0]?>" />
                 <?php if (count($watchLaterList->entries) >= 2): ?>
                     <div>
@@ -95,7 +95,7 @@
         <div class="playlist">
             <?php if (count($playlist->entries) > 0): ?>
                 <div class="thumbnails">
-                    <?php $thumbnails = $playlistService->getPlaylistThumbnails($playlist); ?>
+                    <?php $thumbnails = getPlaylistThumbnails($playlist); ?>
                     <img width="165" height="92" src="<?=$thumbnails[0]?>" />
                     <?php if (count($playlist->entries) >= 2): ?>
                         <div>

@@ -28,18 +28,6 @@ class PlaylistService extends ServiceAbstract
         return $playlistMapper->getPlaylistByCustom(array('user_id' => $user->userId, 'type' => $type));
     }
     
-    public function getPlaylistThumbnails(Playlist $playlist)
-    {
-        $config = Registry::get('config');
-        $videoIds = Functions::arrayColumn(array_slice($playlist->entries, 0, 3), 'videoId');
-        $videoMapper = new VideoMapper();
-        $thumbnailList = array();
-        foreach ($videoMapper->getVideosFromList($videoIds) as $video) {
-            $thumbnailList[] = $config->thumb_url . '/' . $video->filename . '.jpg';
-        }
-        return $thumbnailList;
-    }
-    
     public function addVideoToPlaylist(Video $video, Playlist $playlist)
     {
         $playlistEntryMapper = new PlaylistEntryMapper();
@@ -65,10 +53,8 @@ class PlaylistService extends ServiceAbstract
                 return Language::GetText('favorites');
             case 'watch_later':
                 return Language::GetText('watch_later');
-            case 'playlist':
-                return $playlist->name;
             default:
-                throw new Exception('Invalid playlist name');
+                return $playlist->name;
         }
     }
     
