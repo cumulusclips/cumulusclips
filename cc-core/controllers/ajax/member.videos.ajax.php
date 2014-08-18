@@ -3,8 +3,9 @@
 $this->view->disableView = true;
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
+$videoService = new VideoService();
 $limit = 8;
-$start = 9;
+$start = 0;
 
 // Verify a user was selected
 if (!empty($_GET['userId'])) {
@@ -14,7 +15,7 @@ if (!empty($_GET['userId'])) {
 }
 
 // Check if user is valid
-if (!$user || $user->status != 'approved') {
+if (!$user || $user->status != 'active') {
     App::Throw404();
 }
 
@@ -30,11 +31,10 @@ if (!empty($_GET['start']) && is_numeric($_GET['start'])) {
 
 // Retrieve video list
 $db = Registry::get('db');
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' and user_id = :userId ORDER BY date_created DESC LIMIT :start, $limit";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' and user_id = :userId ORDER BY date_created DESC LIMIT $start, $limit";
 $videoResults = $db->fetchAll($query, array(
-    ':userId' => $user->userId,
-    ':start' => $start
+    ':userId' => $user->userId
 ));
 
 $videoList = $videoMapper->getVideosFromList(Functions::arrayColumn($videoResults, 'video_id'));
-echo json_encode($videoList);
+echo json_encode(array('result' => 1, 'message' => '', 'other' => array('videoList' => $videoList)));

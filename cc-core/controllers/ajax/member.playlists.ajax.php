@@ -4,7 +4,7 @@ $this->view->disableView = true;
 $userMapper = new UserMapper();
 $playlistMapper = new PlaylistMapper();
 $limit = 8;
-$start = 9;
+$start = 0;
 
 // Verify a user was selected
 if (!empty($_GET['userId'])) {
@@ -14,7 +14,7 @@ if (!empty($_GET['userId'])) {
 }
 
 // Check if user is valid
-if (!$user || $user->status != 'approved') {
+if (!$user || $user->status != 'active') {
     App::Throw404();
 }
 
@@ -30,10 +30,9 @@ if (!empty($_GET['start']) && is_numeric($_GET['start'])) {
 
 // Retrieve playlists
 $db = Registry::get('db');
-$query = "SELECT playlist_id FROM " . DB_PREFIX . "playlists WHERE public = 1 and type = 'playlist' and user_id = :userId ORDER BY date_created DESC LIMIT :start, $limit";
+$query = "SELECT playlist_id FROM " . DB_PREFIX . "playlists WHERE public = 1 and type = 'playlist' and user_id = :userId ORDER BY date_created DESC LIMIT $start, $limit";
 $playlistResults = $db->fetchAll($query, array(
-    ':userId' => $user->userId,
-    ':start' => $start
+    ':userId' => $user->userId
 ));
 
 $playlistList = $playlistMapper->getPlaylistsFromList(Functions::arrayColumn($playlistResults, 'playlist_id'));
