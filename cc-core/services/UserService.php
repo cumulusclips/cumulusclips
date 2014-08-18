@@ -68,14 +68,28 @@ class UserService extends ServiceAbstract
 
     /**
      * Get video count Method
+     * @param User $user User to retrieve video count for
      * @return integer Returns the number of approved videos uploaded by the user
      */
-    private function getVideoCount()
+    public function getVideoCount(User $user)
     {
-        $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE user_id = $this->user_id AND status = 'approved'";
-        $result = $this->db->Query ($query);
-        $row = $this->db->FetchRow ($result);
-        return $row[0];
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(video_id) as count FROM " . DB_PREFIX . "videos WHERE user_id = $user->userId AND status = 'approved'";
+        $row = $db->fetchRow($query);
+        return (int) $row['count'];
+    }
+    
+    /**
+     * Get video count Method
+     * @param User $user User to retrieve playlist count for
+     * @return integer Returns the number of playlists by the user
+     */
+    public function getPlaylistCount(User $user)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(playlist_id) as count FROM " . DB_PREFIX . "playlists WHERE user_id = $user->userId AND type NOT IN ('watch_later', 'favorites')";
+        $row = $db->fetchRow($query);
+        return (int) $row['count'];
     }
     
     /**
