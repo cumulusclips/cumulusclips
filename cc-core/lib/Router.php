@@ -557,6 +557,20 @@ class Router
             'mobile' => true
         ));
 
+
+        /** API Routes **/
+
+        $routes['apiGetVideo'] = new Route(array(
+            'path' => 'api/video/([0-9]+)',
+            'location' => 'cc-core/controllers/api/video.get.php',
+            'mappings' => array('videoId')
+        ));
+
+        $routes['apiGetVideoList'] = new Route(array(
+            'path' => 'api/video/list',
+            'location' => 'cc-core/controllers/api/video_list.get.php'
+        ));
+
         return Plugin::triggerFilter('router.getRoutes', $routes);
     }
 }
