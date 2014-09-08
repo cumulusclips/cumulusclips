@@ -4,7 +4,7 @@ $this->view->disableView = true;
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
-$limit = 8;
+$limit = 9;
 $start = 0;
 
 // Verify a user was selected

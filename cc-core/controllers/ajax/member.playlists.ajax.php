@@ -3,7 +3,7 @@
 $this->view->disableView = true;
 $userMapper = new UserMapper();
 $playlistMapper = new PlaylistMapper();
-$limit = 8;
+$limit = 9;
 $start = 0;
 
 // Verify a user was selected
@@ -36,4 +36,7 @@ $playlistResults = $db->fetchAll($query, array(
 ));
 
 $playlistList = $playlistMapper->getPlaylistsFromList(Functions::arrayColumn($playlistResults, 'playlist_id'));
-echo json_encode($playlistList);
+$apiResponse = new ApiResponse();
+$apiResponse->result = true;
+$apiResponse->data = array('playlistList' => $playlistList);
+echo json_encode($apiResponse);

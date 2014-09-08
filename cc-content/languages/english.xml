@@ -112,12 +112,7 @@
         <view_all_videos>View all Videos</view_all_videos>
         <no_member_videos>Member currently has no videos.</no_member_videos>
         <no_member_playlists>Member currently has no playlists.</no_member_playlists>
-        <no_member_activity>Member has no recent activity.</no_member_activity>
-        <activity>Activity</activity>
-        <member_commented_video>{MEMBER} commented on a video</member_commented_video>
-        <member_favorited_video>{MEMBER} added a video to Favorites</member_favorited_video>
-        <member_liked_video>{MEMBER} liked a video</member_liked_video>
-        <video>Video</video>
+        <watch_all>Watch All</watch_all>
 
         <!-- Member Videos Page -->
         <videos_by>Videos By</videos_by>

@@ -1,3 +1,10 @@
+<?php
+$this->addMeta('videoCount', $videoCount);
+$this->addMeta('playlistCount', $playlistCount);
+$this->addMeta('thumbUrl', $config->thumb_url);
+if (!empty($watchLaterPlaylistId)) $this->addMeta('watchLaterPlaylistId', $watchLaterPlaylistId);
+?>
+
 <h1><?=$member->username?></h1>
 
 <div class="message"></div>
@@ -25,18 +32,20 @@
 <!-- END Member Avatar/Profile Information -->
 
 <div class="tabs keepOne">
-    <a href="" data-block="member_videos" title="<?=Language::GetText('videos')?>"><?=Language::GetText('videos')?></a>
-    <a href="" data-block="member_playlists" title="<?=Language::GetText('playlists')?>"><?=Language::GetText('playlists')?></a>
-    <a href="" data-block="member_activity" title="<?=Language::GetText('activity')?>"><?=Language::GetText('activity')?></a>
+    <a href="" data-block="member-videos" title="<?=Language::GetText('videos')?>"><?=Language::GetText('videos')?></a>
+    <a href="" data-block="member-playlists" title="<?=Language::GetText('playlists')?>"><?=Language::GetText('playlists')?></a>
 </div>
 
 <!-- BEGIN Member's Videos -->
-<div id="member_videos" class="tab_block" style="display:block;">
+<div id="member-videos" class="tab_block" style="display:block;">
     <p class="large"><?=Language::GetText('videos')?></p>
-    <?php if (count($result_videos) >= 1): ?>
+    <?php if ($videoCount > 0): ?>
         <div class="videos_list">
-            <?php $this->RepeatingBlock('video.tpl', $result_videos) ?>
+            <?php $this->RepeatingBlock('video.tpl', $videoList) ?>
         </div>
+        <?php if ($videoCount > 9): ?>
+            <p><a href="" data-user="<?=$member->userId?>" data-limit="9" class="button_small loadMore"><?=Language::GetText('load_more')?></a></p>
+        <?php endif ?>
     <?php else: ?>
         <p><strong><?=Language::GetText('no_member_videos')?></strong></p>
     <?php endif; ?>
@@ -44,15 +53,33 @@
 <!-- END Member's Videos -->
 
 <!-- BEGIN Member's Playlists -->
-<div id="member_playlists" class="tab_block">
+<div id="member-playlists" class="tab_block">
     <p class="large"><?=Language::GetText('playlists')?></p>
-    <p><strong><?=Language::GetText('no_member_playlists')?></strong></p>
+    <?php if ($playlistCount > 0): ?>
+        <div class="playlist-list">
+            <?php $playlistService = new PlaylistService(); ?>
+            <?php foreach ($playlist_list as $playlist): ?>
+                <div class="playlist <?=(empty($playlist->entries)) ? 'playlist-empty' : ''?>">
+                    <?php if (!empty($playlist->entries)): ?>
+                        <a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>">
+                            <img width="165" height="92" src="<?=getPlaylistThumbnail($playlist)?>" />
+                            <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
+                            <span class="watch-all">Watch<br>All</span>
+                        </a>
+                        <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>"><?=$playlist->name?></a></p>
+                    <?php else: ?>
+                        <img src="<?=THEME?>/images/playlist_placeholder.png" />
+                        <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
+                        <p class="title"><?=$playlist->name?></p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($playlistCount > 9): ?>
+            <p><a href="" data-user="<?=$member->userId?>" data-limit="9" class="button_small loadMore"><?=Language::GetText('load_more')?></a></p>
+        <?php endif ?>
+    <?php else: ?>
+        <p><strong><?=Language::GetText('no_member_playlists')?></strong></p>
+    <?php endif; ?>
 </div>
 <!-- END Member's Playlists -->
-
-<!-- BEGIN Member's Activity -->
-<div id="member_activity" class="tab_block">
-    <p class="large"><?=Language::GetText('activity')?></p>
-    <p><strong><?=Language::GetText('no_member_activity')?></strong></p>
-</div>
-<!-- END Member's Activity -->

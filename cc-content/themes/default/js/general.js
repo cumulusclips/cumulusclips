@@ -1,8 +1,7 @@
 // Global vars
 var cumulusClips = {};
 cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
-cumulusClips.themeUrl = $('meta[name="theme"]').attr('content');
-cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
+cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
 cumulusClips.loggedIn = $('meta[name="loggedIn"]').attr('content');
 
 
@@ -129,6 +128,107 @@ $(document).ready(function(){
     });
 
 
+    if ($('.profile').length > 0) {
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.videosText = responseData;}, 'videos');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.watchAllText = responseData;}, 'watch_all');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.watchLaterText = responseData;}, 'watch_later');
+        $.get(cumulusClips.themeUrl + '/blocks/video.html', function(responseData, textStatus, jqXHR){cumulusClips.videoCardTemplate = responseData;});
+        $.get(cumulusClips.themeUrl + '/blocks/playlist.html', function(responseData, textStatus, jqXHR){cumulusClips.playlistCardTemplate = responseData;});
+        cumulusClips.thumbUrl = $('meta[name="thumbUrl"]').attr('content');
+        cumulusClips.videoCount = Number($('meta[name="videoCount"]').attr('content'));
+        cumulusClips.playlistCount = Number($('meta[name="playlistCount"]').attr('content'));
+        cumulusClips.watchLaterPlaylistId = $('meta[name="watchLaterPlaylistId"]').attr('content');
+        
+        // Load More Videos
+        $('#member-videos .loadMore').click(function(event){
+            event.preventDefault();
+            var loadMoreButton = $(this);
+            var userId = loadMoreButton.data('user');
+            var retrieveOffset = $('#member-videos .video').length;
+            var retrieveLimit = Number(loadMoreButton.data('limit'));
+            $.ajax({
+                url: cumulusClips.baseUrl + '/members/videos',
+                data: {userId: userId, start: retrieveOffset, limit: retrieveLimit},
+                dataType: 'json',
+                success: function(responseData, textStatus, jqXHR){
+                    // Append video cards
+                    $.each(responseData.other.videoList, function(index, value){
+                        var videoCard = buildVideoCard(cumulusClips.videoCardTemplate, value);
+                        $('.videos_list').append(videoCard);
+                    });
+                    
+                    // Remove load more button
+                    if ($('#member-videos .video').length === cumulusClips.videoCount) {
+                        loadMoreButton.remove();
+                    }
+                }
+            });
+        });
+        
+        // Load More Playlists
+        $('#member-playlists .loadMore').click(function(event){
+            event.preventDefault();
+            var loadMoreButton = $(this);
+            var userId = loadMoreButton.data('user');
+            var retrieveOffset = $('#member-playlists .playlist').length;
+            var retrieveLimit = Number(loadMoreButton.data('limit'));
+            
+            // Retrieve next set of user's playlists
+            $.ajax({
+                url: cumulusClips.baseUrl + '/members/playlists',
+                data: {userId: userId, start: retrieveOffset, limit: retrieveLimit},
+                dataType: 'json',
+                success: function(playlistResponseData, textStatus, jqXHR){
+                    
+                    // Determine if playlist thumbnails are needed
+                    var thumbnailVideos = [];
+                    $.each(playlistResponseData.data.playlistList, function(index, playlist){
+                        if (playlist.entries.length > 0 && thumbnailVideos.indexOf(playlist.entries[0].videoId) === -1) {
+                            thumbnailVideos.push(playlist.entries[0].videoId);
+                        }
+                    });
+                    
+                    // Append playlist cards to list (callback)
+                    var playlistAppendCallback = function(playlistList, videoList) {
+                        $.each(playlistList, function(index, playlist){
+                            $.each(videoList, function(index, video){
+                                if (playlist.entries.length > 0 && playlist.entries[0].videoId === video.videoId) {
+                                    playlist.entries[0].video = video;
+                                }
+                            });
+                            var playlistCard = buildPlaylistCard(cumulusClips.playlistCardTemplate, playlist);
+                            $('.playlist-list').append(playlistCard);
+                        });
+                        
+                        // Remove load more button
+                        if ($('#member-playlists .playlist').length === cumulusClips.playlistCount) {
+                            loadMoreButton.remove();
+                        }
+                    }
+                    
+                    // Retrieve playlist thumbnails if applicable
+                    if (thumbnailVideos.length !== 0) {
+                        $.ajax({
+                            url: cumulusClips.baseUrl + '/api/video/list/',
+                            type: 'get',
+                            data: {list: thumbnailVideos.join(',')},
+                            dataType: 'json',
+                            success: function(videoResponseData, textStatus, jqXHR)
+                            {
+                                playlistAppendCallback(playlistResponseData.data.playlistList, videoResponseData.data);
+                            }
+                        });
+                    } else {
+                        playlistAppendCallback(playlistResponseData.data.playlistList, []);
+                    }
+                }
+            });
+        });
+    }
+        
+
+
+
     // Play Video Page
     if ($('.play').length > 0) {
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
@@ -139,6 +239,7 @@ $(document).ready(function(){
         cumulusClips.lastCommentId = $('.commentList > div:last-child').data('comment');
         cumulusClips.commentCount = Number($('#comments .totals span').text());
         cumulusClips.loadMoreComments = (cumulusClips.commentCount > 5) ? true : false;
+        cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
 
 
         // Scrollbar for 'Add Video To' widget
@@ -173,7 +274,7 @@ $(document).ready(function(){
             var url = cumulusClips.baseUrl+'/actions/playlist/';
             var data = {
                 action: 'add',
-                video_id: videoId,
+                video_id: cumulusClips.videoId,
                 playlist_id: $(this).data('playlist_id')
             };
             var callback = function(addToPlaylistResponse){
@@ -367,7 +468,7 @@ $(document).ready(function(){
 
 
     // Add to Watch Later actions
-    $('.video .watchLater a').on('click', function(event){
+    $('.videos_list').on('click', '.video .watchLater a', function(event){
         event.stopPropagation();
         event.preventDefault();
         
@@ -543,4 +644,56 @@ function resetCommentForm(commentForm)
     commentForm.addClass('collapsed');
     var commentField = commentForm.find('textarea');
     commentField.val(commentField.attr('title'));
+}
+
+function buildVideoCard(videoCardTemplate, videoData)
+{
+    var videoCard = $(videoCardTemplate);
+    var url = getVideoUrl(videoData);
+    videoCard.find('img').attr('src', cumulusClips.thumbUrl + '/' + videoData.filename + '.jpg');
+    videoCard.find('.duration').text(videoData.duration);
+    videoCard.find('p a, .thumbnail > a').attr('title', videoData.title).attr('href', url);
+    videoCard.find('p a').text(videoData.title);
+    videoCard.find('.watchLater a')
+        .attr('data-playlist', cumulusClips.watchLaterPlaylistId)
+        .attr('data-video', videoData.videoId)
+        .attr('title', cumulusClips.watchLaterText);
+    return videoCard;
+}
+
+function getVideoUrl(video)
+{
+    var url = cumulusClips.baseUrl;
+    url += '/videos/' + video.videoId + '/';
+    url += generateSlug(video.title) + '/';
+    return url;
+}
+
+function generateSlug(string)
+{
+    var slug = string.replace(/[^a-z0-9]+/ig, '-');
+    slug = slug.replace(/^-|-$/g, '').toLowerCase();
+    return slug;
+}
+
+function buildPlaylistCard(playlistCardTemplate, playlist)
+{
+    var playlistCard = $(playlistCardTemplate);
+    if (playlist.entries.length === 0) {
+        playlistCard.addClass('playlist-empty');
+        playlistCard.find('a').remove();
+        playlistCard.find('img').attr('src', cumulusClips.themeUrl + '/images/playlist_placeholder.png');
+        playlistCard.find('.title').text(playlist.name);
+    } else {
+        playlistCard.find('.watch-all').text(cumulusClips.watchAllText);
+        playlistCard.find('> .video-count').remove();
+        playlistCard.find('> img').remove();
+        playlistCard.find('img').attr('src', cumulusClips.thumbUrl + '/' + playlist.entries[0].video.filename + '.jpg');
+        playlistCard.find('.title a').text(playlist.name);
+        playlistCard.find('a')
+            .attr('href', getVideoUrl(playlist.entries[0].video) + '?playlist=' + playlist.playlistId)
+            .attr('title', playlist.name);
+    }
+    playlistCard.find('.video-count').html(playlist.entries.length + '<br>' + cumulusClips.videosText);
+    return playlistCard;
 }

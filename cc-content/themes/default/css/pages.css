@@ -212,16 +212,10 @@ PROFILE
     margin: 0 0 15px;
 }
 
-
-
-
-
-/**************
-MEMBER ACTIVITY
-**************/
-
-.member_videos h1 + p {
-    margin-bottom: 15px;
+#member-videos .videos_list + p,
+#member-playlists .playlist-list + p {
+    text-align: center;
+    margin-top: 20px;
 }
 
 
