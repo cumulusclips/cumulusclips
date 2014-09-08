@@ -8,58 +8,45 @@
 <?php endif; ?>
     
     
-<div class="playlist_list">
+<div class="playlist-list">
         
     <!-- Begin Favorites -->
-    <div class="playlist">
-        <?php if (count($favoritesList->entries) > 0): ?>
-            <div class="thumbnails">
-                <?php $thumbnails = getPlaylistThumbnails($favoritesList); ?>
-                <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                <?php if (count($favoritesList->entries) >= 2): ?>
-                    <div>
-                        <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
-                            <img width="65" height="36" src="<?=$imgUrl?>" />
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <p><a href="<?=$playlistService->getUrl($favoritesList)?>"><?=Language::GetText('favorites')?></a></p>
+    <div class="playlist <?=(empty($favoritesList->entries)) ? 'playlist-empty' : ''?>">
+        <?php if (!empty($favoritesList->entries)): ?>
+            <a href="<?=$playlistService->getUrl($favoritesList)?>" title="<?=Language::GetText('favorites')?>">
+                <img width="165" height="92" src="<?=getPlaylistThumbnail($favoritesList)?>" />
+                <span class="video-count"><?=count($favoritesList->entries)?><br><?=Language::GetText('videos')?></span>
+                <span class="watch-all">Watch<br>All</span>
+            </a>
+            <p class="title"><a href="<?=$playlistService->getUrl($favoritesList)?>" title="<?=Language::GetText('favorites')?>"><?=Language::GetText('favorites')?></a></p>
         <?php else: ?>
             <img src="<?=THEME?>/images/playlist_placeholder.png" />
-            <p><?=Language::GetText('favorites')?></p>
+            <span class="video-count"><?=count($favoritesList->entries)?><br><?=Language::GetText('videos')?></span>
+            <p class="title"><?=Language::GetText('favorites')?></p>
         <?php endif; ?>
-        <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($favoritesList->entries)?></p>
         <p class="actions small">
             <a href="<?=HOST?>/myaccount/playlists/edit/<?=$favoritesList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
         </p>
     </div>
     
     <!-- Begin Watch Later -->
-    <div class="playlist">
-        <?php if (count($watchLaterList->entries) > 0): ?>
-            <div class="thumbnails">
-                <?php $thumbnails = getPlaylistThumbnails($watchLaterList); ?>
-                <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                <?php if (count($watchLaterList->entries) >= 2): ?>
-                    <div>
-                        <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
-                            <img width="65" height="36" src="<?=$imgUrl?>" />
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <p><a href="<?=$playlistService->getUrl($watchLaterList)?>"><?=Language::GetText('watch_later')?></a></p>
+    <div class="playlist <?=(empty($watchLaterList->entries)) ? 'playlist-empty' : ''?>">
+        <?php if (!empty($watchLaterList->entries)): ?>
+            <a href="<?=$playlistService->getUrl($watchLaterList)?>" title="<?=Language::GetText('watch_later')?>">
+                <img width="165" height="92" src="<?=getPlaylistThumbnail($watchLaterList)?>" />
+                <span class="video-count"><?=count($watchLaterList->entries)?><br><?=Language::GetText('videos')?></span>
+                <span class="watch-all">Watch<br>All</span>
+            </a>
+            <p class="title"><a href="<?=$playlistService->getUrl($watchLaterList)?>" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></p>
         <?php else: ?>
             <img src="<?=THEME?>/images/playlist_placeholder.png" />
-            <p><?=Language::GetText('watch_later')?></p>
+            <span class="video-count"><?=count($watchLaterList->entries)?><br><?=Language::GetText('videos')?></span>
+            <p class="title"><?=Language::GetText('watch_later')?></p>
         <?php endif; ?>
-        <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($watchLaterList->entries)?></p>
         <p class="actions small">
             <a href="<?=HOST?>/myaccount/playlists/edit/<?=$watchLaterList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
         </p>
     </div>
-    
 </div>
  
 <h2><?=Language::GetText('playlists')?></h2>
@@ -90,27 +77,21 @@
 
 <?php if (count($userPlaylists) > 0): ?>
 
-    <div class="playlists_list">
+    <div class="playlist-list">
     <?php foreach ($userPlaylists as $playlist): ?>
-        <div class="playlist">
-            <?php if (count($playlist->entries) > 0): ?>
-                <div class="thumbnails">
-                    <?php $thumbnails = getPlaylistThumbnails($playlist); ?>
-                    <img width="165" height="92" src="<?=$thumbnails[0]?>" />
-                    <?php if (count($playlist->entries) >= 2): ?>
-                        <div>
-                            <?php foreach (array_slice($thumbnails, 1) as $imgUrl): ?>
-                                <img width="65" height="36" src="<?=$imgUrl?>" />
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                <p><a href="<?=$playlistService->getUrl($playlist)?>"><?=$playlist->name?></a></p>
+        <div class="playlist <?=(empty($playlist->entries)) ? 'playlist-empty' : ''?>">
+            <?php if (!empty($playlist->entries)): ?>
+                <a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>">
+                    <img width="165" height="92" src="<?=getPlaylistThumbnail($playlist)?>" />
+                    <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
+                    <span class="watch-all">Watch<br>All</span>
+                </a>
+                <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>"><?=$playlist->name?></a></p>
             <?php else: ?>
                 <img src="<?=THEME?>/images/playlist_placeholder.png" />
-                <p><?=$playlist->name?></p>
+                <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
+                <p class="title"><?=$playlist->name?></p>
             <?php endif; ?>
-            <p class="small"><strong><?=Language::GetText('videos')?>:</strong> <?=count($playlist->entries)?></p>
             <p class="actions small">
                 <a href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
                 <a class="right confirm" data-node="confirm_delete_playlist" href="<?=HOST?>/myaccount/playlists/?remove=<?=$playlist->playlistId?>" title="<?=Language::GetText('delete_playlist')?>"><?=Language::GetText('delete_playlist')?></a>

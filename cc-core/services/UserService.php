@@ -80,14 +80,14 @@ class UserService extends ServiceAbstract
     }
     
     /**
-     * Get video count Method
+     * Get count of a member's public non-special playlists
      * @param User $user User to retrieve playlist count for
      * @return integer Returns the number of playlists by the user
      */
     public function getPlaylistCount(User $user)
     {
         $db = Registry::get('db');
-        $query = "SELECT COUNT(playlist_id) as count FROM " . DB_PREFIX . "playlists WHERE user_id = $user->userId AND type NOT IN ('watch_later', 'favorites')";
+        $query = "SELECT COUNT(playlist_id) as count FROM " . DB_PREFIX . "playlists WHERE user_id = $user->userId AND public = 1 AND type NOT IN ('watch_later', 'favorites')";
         $row = $db->fetchRow($query);
         return (int) $row['count'];
     }

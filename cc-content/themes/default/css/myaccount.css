@@ -265,11 +265,15 @@ PLAYLISTS
     float: right;
 }
 
+.playlist-list + h2 {
+    margin-top: 20px;
+}
+
 #createNewPlaylist {
     display: none;
 }
 
-.playlists .playlists_list {
+.myaccount_playlists .playlist-list {
     margin-top: 15px;
 }
 

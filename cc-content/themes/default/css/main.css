@@ -599,43 +599,55 @@ a.button, a.button_small {
 
 /** PLAYLISTS **/
 
-.playlists_list {
-    overflow: hidden;
+.playlist-list {
+    margin-bottom: -20px;
 }
 
 .playlist {
-    margin-left: 20px;
+    width: 165px;
+    margin-left: 47px;
+    margin-bottom: 20px;
     display: inline-block;
     vertical-align: top;
+    position: relative;
 }
 
-.playlist:first-child {
+.playlist:nth-child(3n+1) {
     margin-left: 0;
 }
 
-.playlist .thumbnails {
-    position: relative;
-    width: 167px;
-    height: 94px;
-}
-
-.playlist .thumbnails img {
-    border: 1px solid #d2d2d2;
-}
-
-.playlist .thumbnails div {
-    position: absolute;
-    top: 1px;
-    left:89px;
-    background-color:rgba(0, 0, 0, 0.5);
-    width: 77px;
-    height: 92px;
-}
-
-.playlist .thumbnails div img {
+.playlist img {
     display: block;
-    margin: 5px auto;
 }
+
+.playlist span {
+    width: 60px;
+    height: 67px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: url('../images/screen.png') repeat 0 0;
+    color: #ddd;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    padding: 25px 5px 0 5px;
+}
+
+.playlist .watch-all,
+.playlist a:hover .video-count {
+    display: none;
+}
+
+.playlist a:hover .watch-all {
+    display: block;
+}
+
+.playlist-empty a:hover .video-count {
+    display: block;
+}
+
 
 
 
