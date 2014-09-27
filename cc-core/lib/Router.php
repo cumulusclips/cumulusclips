@@ -117,7 +117,7 @@ class Router
         // Catch all route
         $routes['pages'] = new Route(array(
             'path' => '.*',
-            'location' => 'cc-core/system/page.php'
+            'location' => 'cc-core/controllers/page.php'
         ));
         
         
@@ -553,7 +553,7 @@ class Router
 
         $routes['ajaxMobileLoadMoreSearch'] = new Route(array(
             'path' => 'actions/mobile-search',
-            'location' => 'cc-core/system/mobile_search.ajax.php',
+            'location' => 'cc-core/controllers/ajax/mobile_search.ajax.php',
             'mobile' => true
         ));
 
