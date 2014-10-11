@@ -50,7 +50,7 @@
     </div>
     <!-- END HEADER -->
     
-    <?php $this->block('header_nav.tpl'); ?>
+    <?php $this->block('header_nav.phtml'); ?>
     
     <!-- BEGIN MAIN CONTAINER -->
     <div id="retainer">
@@ -62,7 +62,7 @@
             </div>
             <div class="right">
                 <?php $this->writeSidebarBlocks(); ?>
-                <?php $this->block('ad300.tpl'); ?>
+                <?php $this->block('ad300.phtml'); ?>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
 </div>
 <!-- END WRAPPER -->
     
-<?php $this->block('footer_nav.tpl'); ?>
+<?php $this->block('footer_nav.phtml'); ?>
 
 <script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=$config->theme_url?>/js/jquery-ui.min.js"></script>

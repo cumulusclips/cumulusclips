@@ -124,7 +124,7 @@ class View
         );
         $replacements = array(
             '',
-            '.tpl'
+            '.phtml'
         );
         return preg_replace($patterns, $replacements, $route->location);
     }
@@ -182,14 +182,14 @@ class View
     
     /**
      * Output a custom block to the browser
-     * @param string $tpl_file Name of the block to be output
+     * @param string $viewFile Name of the block to be output
      * @return mixed Block is output to browser
      */
-    public function block($tpl_file)
+    public function block($viewFile)
     {
         // Detect correct block path
-        $request_block = $this->getFallbackPath("blocks/$tpl_file");
-        $block = ($request_block) ? $request_block : $tpl_file;
+        $request_block = $this->getFallbackPath("blocks/$viewFile");
+        $block = ($request_block) ? $request_block : $viewFile;
 
         extract(get_object_vars($this->vars));
         Plugin::triggerEvent('view.block');
@@ -198,15 +198,15 @@ class View
     
     /**
      * Repeat output of a block based on list of records
-     * @param string $tpl_file Name of the block to be repeated
+     * @param string $viewFile Name of the block to be repeated
      * @param array $records List of records to loop through
      * @return mixed The given block is output according to the number entries in the list
      */
-    public function repeatingBlock($tpl_file, $records)
+    public function repeatingBlock($viewFile, $records)
     {
         // Detect correct block path
-        $request_block = $this->getFallbackPath("blocks/$tpl_file");
-        $block = ($request_block) ? $request_block : $tpl_file;
+        $request_block = $this->getFallbackPath("blocks/$viewFile");
+        $block = ($request_block) ? $request_block : $viewFile;
         
         extract(get_object_vars($this->vars));
         Plugin::triggerEvent('view.repeating_block');
@@ -219,12 +219,12 @@ class View
     
     /**
      * Add specified block to sidebar queue for later output
-     * @param string $tpl_file The block to be loaded into the sidebar queue
+     * @param string $viewFile The block to be loaded into the sidebar queue
      * @return void Block is queued for later output
      */
-    public function addSidebarBlock($tpl_file)
+    public function addSidebarBlock($viewFile)
     {
-        $this->options->blocks[] = $tpl_file;
+        $this->options->blocks[] = $viewFile;
         Plugin::triggerEvent('view.add_sidebar_block');
     }
     

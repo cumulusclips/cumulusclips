@@ -41,7 +41,7 @@ if (!empty($watchLaterPlaylistId)) $this->addMeta('watchLaterPlaylistId', $watch
     <p class="large"><?=Language::GetText('videos')?></p>
     <?php if ($videoCount > 0): ?>
         <div class="videos_list">
-            <?php $this->RepeatingBlock('video.tpl', $videoList) ?>
+            <?php $this->RepeatingBlock('video.phtml', $videoList) ?>
         </div>
         <?php if ($videoCount > 9): ?>
             <p><a href="" data-user="<?=$member->userId?>" data-limit="9" class="button_small loadMore"><?=Language::GetText('load_more')?></a></p>
