@@ -11,6 +11,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 $userMapper = new UserMapper();
 $this->view->vars->Errors = array();
 $this->view->vars->message = null;
+$this->view->config = Registry::get('config');
 $this->view->vars->timestamp = time();
 $_SESSION['upload_key'] = md5(md5($this->view->vars->timestamp) . SECRET_KEY);
 

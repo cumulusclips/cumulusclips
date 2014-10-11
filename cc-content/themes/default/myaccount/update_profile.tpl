@@ -1,9 +1,8 @@
 <?php
-$this->AddMeta('uploadify:theme', $config->theme_url);
-$this->AddMeta('uploadify:buttonText', Language::GetText('browse_files_button'));
-$this->AddCss('uploadify.css');
-$this->AddJs('uploadify.plugin.js');
-$this->AddJs('uploadify.js');
+$this->addJs('fileupload.jquery-ui.widget.js');
+//$this->addJs('fileupload.iframe-transport');
+$this->addJs('fileupload.plugin.js');
+$this->addJs('fileupload.js');
 $this->SetLayout('myaccount');
 ?>
 
@@ -47,15 +46,16 @@ $this->SetLayout('myaccount');
 
     <div class="right">
         <?=Language::GetText('update_avatar_text')?>
-        <form name="uploadify" action="<?=HOST?>/myaccount/upload/avatar/">
-            <input id="upload" type="file" name="upload" />
+        <form name="upload" action="<?=HOST?>/myaccount/upload/avatar/">
+            <div id="upload-select-file" class="button">
+                <span><?=Language::getText('browse_files_button')?></span>
+                <input id="upload" type="file" name="upload" />
+            </div>
             <input id="upload_button" class="button" type="button" value="<?=Language::GetText('update_avatar_button')?>" />
-            <input type="hidden" name="uploadLimit" id="uploadLimit" value="<?=1024*30?>" />
-            <input type="hidden" name="uploadTimestamp" id="uploadTimestamp" value="<?=$timestamp?>" />
-            <input type="hidden" name="uploadToken" id="uploadToken" value="<?=session_id()?>" />
-            <input type="hidden" name="fileTypes" id="fileTypes" value="<?=htmlspecialchars(json_encode($config->accepted_avatar_formats))?>" />
-            <input type="hidden" name="uploadType" id="uploadType" value="avatar" />
-            <input type="hidden" name="debugUpload" id="debugUpload" value="<?=(isset($_GET['debugUpload']) ? 'true' : 'false')?>" />
+            <input type="hidden" name="timestamp" value="<?=$timestamp?>" />
+            <input type="hidden" name="upload-limit" id="upload-limit" value="<?=1024*30?>" />
+            <input type="hidden" name="file-types" id="file-types" value="<?=htmlspecialchars(json_encode($config->accepted_avatar_formats))?>" />
+            <input type="hidden" name="upload-type" id="upload-type" value="avatar" />
 
             <div id="upload_status">
                 <div class="title"></div>

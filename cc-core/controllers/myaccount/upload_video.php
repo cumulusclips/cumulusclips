@@ -14,9 +14,9 @@ $videoMapper = new VideoMapper();
 
 // Verify user entered video information
 if (isset($_SESSION['upload'])) {
-    $video = $videoMapper->getVideoById($_SESSION['upload']);
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_SESSION['upload']));//, 'status' => 'new'));
     if ($video) {
-        $_SESSION['upload_key'] = md5(md5($this->view->vars->timestamp) . SECRET_KEY);
+        $this->view->video = $video;
     } else {
         header('Location: ' . HOST . '/myaccount/upload/');
         exit();

@@ -26,7 +26,7 @@
         <yes>Yes</yes>
         <no>No</no>
         <quick_links>Quick Links</quick_links>
-        <uploadify_supported_formats>Supported Formats</uploadify_supported_formats>
+        <upload_supported_formats>Supported Formats</upload_supported_formats>
         <video_feed>Video Feed</video_feed>
 
         <!-- Mobile -->
@@ -398,14 +398,14 @@
         <error_rate_duplicate>You have already rated this video.</error_rate_duplicate>
         
 
-        <error_uploadify_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_uploadify_filesize>
-        <error_uploadify_system><![CDATA[
+        <error_upload_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_upload_filesize>
+        <error_upload_system><![CDATA[
             Errors were encountered during the processing of your file, and it cannot be uploaded at this time.
             We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue.
             If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.
-        ]]></error_uploadify_system>
-        <error_uploadify_extension>Your file is not in one of the accepted file formats. Please try again.</error_uploadify_extension>
-        <error_uploadify_empty>No file was uploaded. Please try again.</error_uploadify_empty>
+        ]]></error_upload_system>
+        <error_upload_extension>Your file is not in one of the accepted file formats. Please try again.</error_upload_extension>
+        <error_upload_empty>No file was uploaded. Please try again.</error_upload_empty>
 
 
         <success_avatar_reset>Your avatar has been reset.</success_avatar_reset>

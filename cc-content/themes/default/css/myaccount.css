@@ -111,9 +111,9 @@ MY ACCOUNT HOME
 
 
 
-/***********
-UPLOAD VIDEO
-***********/
+/************
+UPLOAD - INFO
+************/
 
 .myaccount_upload .wide,
 .myaccount_edit_video .wide {
@@ -168,19 +168,35 @@ input[type="checkbox"] + label + em + br {
     margin-top: 15px;
 }
 
-.myaccount_upload_video #main form {
+
+
+
+
+/*************
+UPLOAD - VIDEO
+*************/
+
+.myaccount_upload_video form[name="upload"] {
     margin-top: 15px;
 }
 
-.uploadify-button {
-    text-align: center;
-    width: 150px;
-    padding: 0;
+#upload-select-file {
+    float: left;
+    margin-right: 15px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
 }
 
-.uploadify {
-    float: left;
-    margin-right: 5px;
+#upload-select-file input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
 }
 
 #upload_status {
@@ -348,7 +364,7 @@ UPDATE PROFILE
     margin-top: 15px;
 }
 
-#update_avatar .button {
+#upload-select-file + .button {
     float: none;
 }
 
