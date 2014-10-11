@@ -1,0 +1,40 @@
+<!-- BEGIN HEADER -->
+<div id="header">
+    <div id="sub_header">
+        <a id="logo" href="<?=HOST?>/" title="CumulusClips - Free Video Sharing CMS, Video Sharing Script, YouTube Clone Script">CumulusClips - Free Video Sharing CMS, Video Sharing Script, YouTube Clone Script</a>
+        <div id="header_right">
+
+        <?php if ($loggedInUser): ?>
+
+            <a href="<?=HOST?>/logout/" title="<?=Language::GetText('logout')?>"><?=Language::GetText('logout')?></a>
+            <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
+            <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$loggedInUser->username?>/"><?=Language::GetText('view_my_profile')?></a>
+
+            <?php if ($this->getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
+                <a href="<?=HOST?>/cc-admin/" title="<?=Language::GetText('admin_panel')?>"><?=Language::GetText('admin_panel')?></a>
+            <?php endif ?>
+
+        <?php else: ?>
+            <a href="<?=HOST?>/login/" title="<?=Language::GetText('login')?>"><?=Language::GetText('login')?></a>
+            <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
+        <?php endif; ?>       
+
+            <form action="<?=HOST?>/search/" method="post">
+                <input class="defaultText" title="<?=Language::GetText('search_text')?>" type="text" name="keyword" value="<?=Language::GetText('search_text')?>" />
+                <input type="hidden" name="submitted_search" value="TRUE" />
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END HEADER -->
+
+
+<!-- BEGIN NAV -->
+<div id="nav">
+    <div id="sub_nav">
+        <a href="<?=HOST?>/videos/"><?=Language::GetText('videos')?></a>
+        <a href="<?=HOST?>/members/"><?=Language::GetText('members')?></a>
+        <a href="<?=HOST?>/myaccount/upload/"><?=Language::GetText('upload')?></a>
+    </div>
+</div>
+<!-- END NAV -->
