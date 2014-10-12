@@ -15,7 +15,7 @@
         <login>Login</login>
         <register>Sign Up Free</register>
         <logout>Logout</logout>
-        <myaccount>My Account</myaccount>
+        <account>My Account</account>
         <view_my_profile>View My Profile</view_my_profile>
         <admin_panel>Admin Panel</admin_panel>
         <videos>Videos</videos>
@@ -184,7 +184,7 @@
         <!-- Activate Account Page -->
         <activate_header>Activate your Account</activate_header>
         <activate_success><![CDATA[
-        Thank you! Your account is now active. <a href="{HOST}/myaccount/">Go to My Account</a>
+        Thank you! Your account is now active. <a href="{HOST}/account/">Go to My Account</a>
         ]]></activate_success>
         <activate_approve>Thank you! Your account is now active, however it still needs to be approved by a member of our team before you can login. We will notify you once this is complete.</activate_approve>
         <activate_error><![CDATA[
@@ -203,7 +203,7 @@
         <system_error_text>We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
 
         <!-- My Account / Home Page -->
-        <myaccount_header>Welcome</myaccount_header>
+        <account_header>Welcome</account_header>
         <last_login>Last Login</last_login>
         <edit_avatar>Edit Avatar</edit_avatar>
         <new_messages>You have new unread messages!</new_messages>
@@ -533,107 +533,107 @@
             <description>A system error has occurred.</description>
         </system_error>
 
-        <myaccount_myaccount>
+        <account_account>
             <title>Welcome - {USERNAME}</title>
             <keywords>Welcome</keywords>
             <description>Welcome</description>
-        </myaccount_myaccount>
+        </account_account>
 
-        <myaccount_upload>
+        <account_upload>
             <title>Upload Step 1 - Video Information</title>
             <keywords>Upload Video, Step 1, Video Information</keywords>
             <description>Upload Step 1 - Video Information.</description>
-        </myaccount_upload>
+        </account_upload>
 
-        <myaccount_upload_video>
+        <account_upload_video>
             <title>Upload Step 2 - Upload Video</title>
             <keywords>Upload Video, Step 2</keywords>
             <description>Upload Step 2 - Upload Video.</description>
-        </myaccount_upload_video>
+        </account_upload_video>
 
-        <myaccount_upload_complete>
+        <account_upload_complete>
             <title>Upload Step 3 - Upload Complete!</title>
             <keywords>Upload Video, Step 3, Upload Complete</keywords>
             <description>Upload Step 3 - Upload Complete!</description>
-        </myaccount_upload_complete>
+        </account_upload_complete>
 
-        <myaccount_edit_video>
+        <account_edit_video>
             <title>Edit Video</title>
             <keywords>Edit Video, Video Information</keywords>
             <description>Edit video information.</description>
-        </myaccount_edit_video>
+        </account_edit_video>
 
-        <myaccount_myvideos>
+        <account_myvideos>
             <title>My Videos</title>
             <keywords>My Videos, Videos</keywords>
             <description>View all videos uploaded by this member.</description>
-        </myaccount_myvideos>
+        </account_myvideos>
 
-        <myaccount_myfavorites>
+        <account_myfavorites>
             <title>My Favorite Videos</title>
             <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
             <description>View all of this member's favorite videos.</description>
-        </myaccount_myfavorites>
+        </account_myfavorites>
 
-        <myaccount_playlists>
+        <account_playlists>
             <title>My Playlists</title>
             <keywords>My Playlists, Playlist</keywords>
             <description>View all my playlists.</description>
-        </myaccount_playlists>
+        </account_playlists>
 
-        <myaccount_playlists_edit>
+        <account_playlists_edit>
             <title>Edit Playlist: {PLAYLIST_NAME}</title>
             <keywords>Playlist Videos, Videos, Playlist, Edit</keywords>
             <description>Update playlist, and view all videos in playlist.</description>
-        </myaccount_playlists_edit>
+        </account_playlists_edit>
 
-        <myaccount_update_profile>
+        <account_update_profile>
             <title>Update Profile</title>
             <keywords>Update profile, profile</keywords>
             <description>Update user profile information.</description>
-        </myaccount_update_profile>
+        </account_update_profile>
 
-        <myaccount_privacy_settings>
+        <account_privacy_settings>
             <title>Privacy Settings</title>
             <keywords>Privacy Settings, Update Privacy Settings</keywords>
             <description>Update privacy settings.</description>
-        </myaccount_privacy_settings>
+        </account_privacy_settings>
 
-        <myaccount_change_password>
+        <account_change_password>
             <title>Change Password</title>
             <keywords>Change Password, Password, Update Password</keywords>
             <description>Change account password.</description>
-        </myaccount_change_password>
+        </account_change_password>
 
-        <myaccount_subscriptions>
+        <account_subscriptions>
             <title>My Subscriptions</title>
             <keywords>Subscriptions, Member Subscriptions</keywords>
             <description>View all users member is subscribed to.</description>
-        </myaccount_subscriptions>
+        </account_subscriptions>
 
-        <myaccount_subscribers>
+        <account_subscribers>
             <title>My Subscribers</title>
             <keywords>Subscribers, Subscribing Members</keywords>
             <description>View all members that are subscribed to this member.</description>
-        </myaccount_subscribers>
+        </account_subscribers>
 
-        <myaccount_message_inbox>
+        <account_message_inbox>
             <title>Message Inbox</title>
             <keywords>Message Inbox, Message, Inbox</keywords>
             <description>View all messages.</description>
-        </myaccount_message_inbox>
+        </account_message_inbox>
 
-        <myaccount_message_read>
+        <account_message_read>
             <title>Read Message</title>
             <keywords>Read Message, Message</keywords>
             <description>Read a message.</description>
-        </myaccount_message_read>
+        </account_message_read>
 
-        <myaccount_message_send>
+        <account_message_send>
             <title>Send a Message</title>
             <keywords>Send Message, Message</keywords>
             <description>Send another member a message.</description>
-        </myaccount_message_send>
+        </account_message_send>
 
 
         <mobile_videos>

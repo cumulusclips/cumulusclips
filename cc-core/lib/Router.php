@@ -249,148 +249,148 @@ class Router
         ));
 
         
-        /** My Account Routes **/
+        /** Account Routes **/
         
-        $routes['myaccount'] = new Route(array(
-            'path' => 'myaccount',
-            'location' => 'cc-core/controllers/myaccount/myaccount.php'
+        $routes['account'] = new Route(array(
+            'path' => 'account',
+            'location' => 'cc-core/controllers/account/account.php'
         ));
 
-        $routes['myaccountUpload'] = new Route(array(
-            'path' => 'myaccount/upload',
-            'location' => 'cc-core/controllers/myaccount/upload.php'
+        $routes['accountUpload'] = new Route(array(
+            'path' => 'account/upload',
+            'location' => 'cc-core/controllers/account/upload.php'
         ));
 
-        $routes['myaccountUploadVideo'] = new Route(array(
-            'path' => 'myaccount/upload/video',
-            'location' => 'cc-core/controllers/myaccount/upload_video.php'
+        $routes['accountUploadVideo'] = new Route(array(
+            'path' => 'account/upload/video',
+            'location' => 'cc-core/controllers/account/upload_video.php'
         ));
 
-        $routes['myaccountUploadComplete'] = new Route(array(
-            'path' => 'myaccount/upload/complete',
-            'location' => 'cc-core/controllers/myaccount/upload_complete.php'
+        $routes['accountUploadComplete'] = new Route(array(
+            'path' => 'account/upload/complete',
+            'location' => 'cc-core/controllers/account/upload_complete.php'
         ));
 
-        $routes['myaccountMyVideos'] = new Route(array(
-            'path' => 'myaccount/myvideos',
-            'location' => 'cc-core/controllers/myaccount/myvideos.php'
+        $routes['accountMyVideos'] = new Route(array(
+            'path' => 'account/myvideos',
+            'location' => 'cc-core/controllers/account/myvideos.php'
         ));
 
-        $routes['myaccountMyVideosDelete'] = new Route(array(
-            'path' => 'myaccount/myvideos/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/myvideos.php',
+        $routes['accountMyVideosDelete'] = new Route(array(
+            'path' => 'account/myvideos/([0-9]+)',
+            'location' => 'cc-core/controllers/account/myvideos.php',
             'mappings' => array('vid')
         ));
 
-        $routes['myaccountMyVideosPaginated'] = new Route(array(
-            'path' => 'myaccount/myvideos/page/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/myvideos.php',
+        $routes['accountMyVideosPaginated'] = new Route(array(
+            'path' => 'account/myvideos/page/([0-9]+)',
+            'location' => 'cc-core/controllers/account/myvideos.php',
             'mappings' => array('page')
         ));
 
-        $routes['myaccountEditVideo'] = new Route(array(
-            'path' => 'myaccount/editvideo/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/edit_video.php',
+        $routes['accountEditVideo'] = new Route(array(
+            'path' => 'account/editvideo/([0-9]+)',
+            'location' => 'cc-core/controllers/account/edit_video.php',
             'mappings' => array('vid')
         ));
 
-        $routes['myaccountPlaylists'] = new Route(array(
-            'path' => 'myaccount/playlists',
-            'location' => 'cc-core/controllers/myaccount/playlists.php'
+        $routes['accountPlaylists'] = new Route(array(
+            'path' => 'account/playlists',
+            'location' => 'cc-core/controllers/account/playlists.php'
         ));
 
-        $routes['myaccountPlaylistsEdit'] = new Route(array(
-            'path' => 'myaccount/playlists/edit/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/playlists_edit.php',
+        $routes['accountPlaylistsEdit'] = new Route(array(
+            'path' => 'account/playlists/edit/([0-9]+)',
+            'location' => 'cc-core/controllers/account/playlists_edit.php',
             'mappings' => array('playlist_id')
         ));
 
-        $routes['myaccountUpdateProfile'] = new Route(array(
-            'path' => 'myaccount/profile',
-            'location' => 'cc-core/controllers/myaccount/update_profile.php'
+        $routes['accountUpdateProfile'] = new Route(array(
+            'path' => 'account/profile',
+            'location' => 'cc-core/controllers/account/update_profile.php'
         ));
 
-        $routes['myaccountResetAvatar'] = new Route(array(
-            'path' => 'myaccount/profile/(reset)',
-            'location' => 'cc-core/controllers/myaccount/update_profile.php',
+        $routes['accountResetAvatar'] = new Route(array(
+            'path' => 'account/profile/(reset)',
+            'location' => 'cc-core/controllers/account/update_profile.php',
             'mappings' => array('action')
         ));
 
-        $routes['myaccountPrivacySettings'] = new Route(array(
-            'path' => 'myaccount/privacy-settings',
-            'location' => 'cc-core/controllers/myaccount/privacy_settings.php'
+        $routes['accountPrivacySettings'] = new Route(array(
+            'path' => 'account/privacy-settings',
+            'location' => 'cc-core/controllers/account/privacy_settings.php'
         ));
 
-        $routes['myaccountChangePassword'] = new Route(array(
-            'path' => 'myaccount/change-password',
-            'location' => 'cc-core/controllers/myaccount/change_password.php'
+        $routes['accountChangePassword'] = new Route(array(
+            'path' => 'account/change-password',
+            'location' => 'cc-core/controllers/account/change_password.php'
         ));
 
-        $routes['myaccountSubscriptions'] = new Route(array(
-            'path' => 'myaccount/subscriptions',
-            'location' => 'cc-core/controllers/myaccount/subscriptions.php'
+        $routes['accountSubscriptions'] = new Route(array(
+            'path' => 'account/subscriptions',
+            'location' => 'cc-core/controllers/account/subscriptions.php'
         ));
 
-        $routes['myaccountSubscriptionsDelete'] = new Route(array(
-            'path' => 'myaccount/subscriptions/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/subscriptions.php',
+        $routes['accountSubscriptionsDelete'] = new Route(array(
+            'path' => 'account/subscriptions/([0-9]+)',
+            'location' => 'cc-core/controllers/account/subscriptions.php',
             'mappings' => array('id')
         ));
 
-        $routes['myaccountSubscriptionsPaginated'] = new Route(array(
-            'path' => 'myaccount/subscriptions/page/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/subscriptions.php',
+        $routes['accountSubscriptionsPaginated'] = new Route(array(
+            'path' => 'account/subscriptions/page/([0-9]+)',
+            'location' => 'cc-core/controllers/account/subscriptions.php',
             'mappings' => array('page')
         ));
 
-        $routes['myaccountSubscribers'] = new Route(array(
-            'path' => 'myaccount/subscribers',
-            'location' => 'cc-core/controllers/myaccount/subscribers.php'
+        $routes['accountSubscribers'] = new Route(array(
+            'path' => 'account/subscribers',
+            'location' => 'cc-core/controllers/account/subscribers.php'
         ));
 
-        $routes['myaccountSubscribersPaginated'] = new Route(array(
-            'path' => 'myaccount/subscribers/page/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/subscribers.php',
+        $routes['accountSubscribersPaginated'] = new Route(array(
+            'path' => 'account/subscribers/page/([0-9]+)',
+            'location' => 'cc-core/controllers/account/subscribers.php',
             'mappings' => array('page')
         ));
 
-        $routes['myaccountInbox'] = new Route(array(
-            'path' => 'myaccount/message/inbox',
-            'location' => 'cc-core/controllers/myaccount/message_inbox.php'
+        $routes['accountInbox'] = new Route(array(
+            'path' => 'account/message/inbox',
+            'location' => 'cc-core/controllers/account/message_inbox.php'
         ));
 
-        $routes['myaccountInboxDelete'] = new Route(array(
-            'path' => 'myaccount/message/inbox/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/message_inbox.php',
+        $routes['accountInboxDelete'] = new Route(array(
+            'path' => 'account/message/inbox/([0-9]+)',
+            'location' => 'cc-core/controllers/account/message_inbox.php',
             'mappings' => array('delete')
         ));
 
-        $routes['myaccountInboxPaginated'] = new Route(array(
-            'path' => 'myaccount/message/inbox/page/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/message_inbox.php',
+        $routes['accountInboxPaginated'] = new Route(array(
+            'path' => 'account/message/inbox/page/([0-9]+)',
+            'location' => 'cc-core/controllers/account/message_inbox.php',
             'mappings' => array('page')
         ));
 
-        $routes['myaccountReadMessage'] = new Route(array(
-            'path' => 'myaccount/message/read/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/message_read.php',
+        $routes['accountReadMessage'] = new Route(array(
+            'path' => 'account/message/read/([0-9]+)',
+            'location' => 'cc-core/controllers/account/message_read.php',
             'mappings' => array('msg')
         ));
 
-        $routes['myaccountSendMessage'] = new Route(array(
-            'path' => 'myaccount/message/send',
-            'location' => 'cc-core/controllers/myaccount/message_send.php'
+        $routes['accountSendMessage'] = new Route(array(
+            'path' => 'account/message/send',
+            'location' => 'cc-core/controllers/account/message_send.php'
         ));
 
-        $routes['myaccountSendMessageUsername'] = new Route(array(
-            'path' => 'myaccount/message/send/([a-z0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/message_send.php',
+        $routes['accountSendMessageUsername'] = new Route(array(
+            'path' => 'account/message/send/([a-z0-9]+)',
+            'location' => 'cc-core/controllers/account/message_send.php',
             'mappings' => array('username')
         ));
 
-        $routes['myaccountSendMessageReply'] = new Route(array(
-            'path' => 'myaccount/message/reply/([0-9]+)',
-            'location' => 'cc-core/controllers/myaccount/message_send.php',
+        $routes['accountSendMessageReply'] = new Route(array(
+            'path' => 'account/message/reply/([0-9]+)',
+            'location' => 'cc-core/controllers/account/message_send.php',
             'mappings' => array('msg')
         ));
         
@@ -496,12 +496,12 @@ class Router
         ));
 
         $routes['ajaxAvatarUpload'] = new Route(array(
-            'path' => 'myaccount/upload/avatar',
+            'path' => 'account/upload/avatar',
             'location' => 'cc-core/controllers/ajax/avatar.ajax.php'
         ));
 
         $routes['ajaxVideoUpload'] = new Route(array(
-            'path' => 'myaccount/upload/validate',
+            'path' => 'account/upload/validate',
             'location' => 'cc-core/controllers/ajax/upload.ajax.php'
         ));
 

@@ -1,6 +1,6 @@
 
 /***********************
-GENERAL MYACCOUNT STYLES
+GENERAL account STYLES
 ***********************/
 
 #main > .right {
@@ -53,7 +53,7 @@ GENERAL MYACCOUNT STYLES
     display:none;
 }
 
-.myaccount .form p:first-child {
+.account .form p:first-child {
     margin-top: 0;
 }
 
@@ -75,32 +75,32 @@ GENERAL MYACCOUNT STYLES
 MY ACCOUNT HOME
 **************/
 
-#myaccount p:first-child {
+#account p:first-child {
     margin-top: -10px;
 }
 
-#myaccount .left {
+#account .left {
     float: left;
 }
 
-#myaccount .left > div {
+#account .left > div {
     margin-bottom: 10px;
 }
 
-#myaccount .right {
+#account .right {
     float: left;
     margin-left: 25px;
 }
 
-#myaccount .right p {
+#account .right p {
     margin: 10px 0;
 }
 
-#myaccount .right p:first-child {
+#account .right p:first-child {
     margin-top: 0;
 }
 
-#myaccount .right p span {
+#account .right p span {
     display: inline-block;
     width: 75px;
     margin-right: 50px;
@@ -115,23 +115,23 @@ MY ACCOUNT HOME
 UPLOAD - INFO
 ************/
 
-.myaccount_upload .wide,
-.myaccount_edit_video .wide {
+.account_upload .wide,
+.account_edit_video .wide {
     width: 470px;
 }
 
-.myaccount_upload .wide input[type="text"],
-.myaccount_edit_video .wide input[type="text"] {
+.account_upload .wide input[type="text"],
+.account_edit_video .wide input[type="text"] {
     width: 260px;
 }
 
-.myaccount_upload select,
-.myaccount_edit_video select {
+.account_upload select,
+.account_edit_video select {
     width: 280px;
 }
 
-.myaccount_upload textarea,
-.myaccount_edit_video textarea {
+.account_upload textarea,
+.account_edit_video textarea {
     width: 450px;
     margin-bottom: 22px;
 }
@@ -163,8 +163,8 @@ input[type="checkbox"] + label + em + br {
     margin-left:15px;
 }
 
-.myaccount_upload .form input[type="submit"],
-.myaccount_edit_video .form input[type="submit"] {
+.account_upload .form input[type="submit"],
+.account_edit_video .form input[type="submit"] {
     margin-top: 15px;
 }
 
@@ -176,7 +176,7 @@ input[type="checkbox"] + label + em + br {
 UPLOAD - VIDEO
 *************/
 
-.myaccount_upload_video form[name="upload"] {
+.account_upload_video form[name="upload"] {
     margin-top: 15px;
 }
 
@@ -261,7 +261,7 @@ MY VIDEOS
     float: left;
 }
 
-.myaccount_myvideos #main > .right {
+.account_myvideos #main > .right {
     width: 605px;
 }
 
@@ -289,7 +289,7 @@ PLAYLISTS
     display: none;
 }
 
-.myaccount_playlists .playlist-list {
+.account_playlists .playlist-list {
     margin-top: 15px;
 }
 

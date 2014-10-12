@@ -7,7 +7,7 @@
         <?php if ($loggedInUser): ?>
 
             <a href="<?=HOST?>/logout/" title="<?=Language::GetText('logout')?>"><?=Language::GetText('logout')?></a>
-            <a href="<?=HOST?>/myaccount/" title="<?=Language::GetText('myaccount')?>"><?=Language::GetText('myaccount')?></a>
+            <a href="<?=HOST?>/account/" title="<?=Language::GetText('account')?>"><?=Language::GetText('account')?></a>
             <a title="<?=Language::GetText('view_my_profile')?>" href="<?=HOST?>/members/<?=$loggedInUser->username?>/"><?=Language::GetText('view_my_profile')?></a>
 
             <?php if ($this->getService('User')->checkPermissions('admin_panel', $loggedInUser)): ?>
@@ -34,7 +34,7 @@
     <div id="sub_nav">
         <a href="<?=HOST?>/videos/"><?=Language::GetText('videos')?></a>
         <a href="<?=HOST?>/members/"><?=Language::GetText('members')?></a>
-        <a href="<?=HOST?>/myaccount/upload/"><?=Language::GetText('upload')?></a>
+        <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
     </div>
 </div>
 <!-- END NAV -->

@@ -79,7 +79,7 @@ $(function(){
                     window.scroll(0,0);
                     $('.avatar img').attr('src', data.result.other);
                 } else {
-                    top.location.href = cumulusClips.baseUrl + '/myaccount/upload/complete/';
+                    top.location.href = cumulusClips.baseUrl + '/account/upload/complete/';
                 }
             } else {
                 resetProgress();
