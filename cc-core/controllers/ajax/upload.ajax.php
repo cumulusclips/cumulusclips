@@ -20,7 +20,7 @@ if (!isset ($_SESSION['upload'])) App::Throw404();
 $video = $videoMapper->getVideoByCustom(array('video_id' => $_SESSION['upload'], 'status' => 'new'));
 Plugin::triggerEvent('upload.ajax.load_video');
 if (!$video) {
-    header('Location: ' . HOST . '/myaccount/upload/');
+    header('Location: ' . HOST . '/account/upload/');
     exit();
 }
 

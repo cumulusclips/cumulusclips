@@ -100,7 +100,7 @@ if (isset ($_POST['submitted'])) {
         $video->status = 'new';
         $_SESSION['upload'] = $videoMapper->save($video);
         Plugin::triggerEvent('upload.create_video');
-        header('Location: ' . HOST . '/myaccount/upload/video/');
+        header('Location: ' . HOST . '/account/upload/video/');
         exit();
     } else {
         $this->view->vars->message = Language::getText('errors_below');

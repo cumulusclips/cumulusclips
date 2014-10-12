@@ -5,7 +5,7 @@ class PageService extends ServiceAbstract
     protected static $_reserved = array (
         'videos',
         'members',
-        'myaccount',
+        'account',
         'contact',
         'system-error',
         'nofound',

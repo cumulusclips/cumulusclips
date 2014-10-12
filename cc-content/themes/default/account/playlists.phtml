@@ -1,4 +1,4 @@
-<?php $this->SetLayout('myaccount'); ?>
+<?php $this->SetLayout('account'); ?>
 <?php $playlistService = $this->getService('Playlist'); ?>
 
 <h1><?=Language::GetText('playlists_header')?></h1>
@@ -25,7 +25,7 @@
             <p class="title"><?=Language::GetText('favorites')?></p>
         <?php endif; ?>
         <p class="actions small">
-            <a href="<?=HOST?>/myaccount/playlists/edit/<?=$favoritesList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
+            <a href="<?=HOST?>/account/playlists/edit/<?=$favoritesList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
         </p>
     </div>
     
@@ -44,7 +44,7 @@
             <p class="title"><?=Language::GetText('watch_later')?></p>
         <?php endif; ?>
         <p class="actions small">
-            <a href="<?=HOST?>/myaccount/playlists/edit/<?=$watchLaterList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
+            <a href="<?=HOST?>/account/playlists/edit/<?=$watchLaterList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
         </p>
     </div>
 </div>
@@ -93,8 +93,8 @@
                 <p class="title"><?=$playlist->name?></p>
             <?php endif; ?>
             <p class="actions small">
-                <a href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
-                <a class="right confirm" data-node="confirm_delete_playlist" href="<?=HOST?>/myaccount/playlists/?remove=<?=$playlist->playlistId?>" title="<?=Language::GetText('delete_playlist')?>"><?=Language::GetText('delete_playlist')?></a>
+                <a href="<?=HOST?>/account/playlists/edit/<?=$playlist->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
+                <a class="right confirm" data-node="confirm_delete_playlist" href="<?=HOST?>/account/playlists/?remove=<?=$playlist->playlistId?>" title="<?=Language::GetText('delete_playlist')?>"><?=Language::GetText('delete_playlist')?></a>
             </p>
         </div>
     <?php endforeach; ?>

@@ -1,4 +1,4 @@
-<?php $this->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('account'); ?>
 
 <h1><?=Language::GetText('privacy_settings_header')?></h1>
 
@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 <div class="form">
-    <form action="<?=HOST?>/myaccount/privacy-settings/" method="post">
+    <form action="<?=HOST?>/account/privacy-settings/" method="post">
 
         <label><?=Language::GetText('alert_comment')?>:</label>
         <select class="dropdown" size="1" name="video_comment">

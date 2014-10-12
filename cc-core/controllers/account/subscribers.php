@@ -9,7 +9,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $records_per_page = 9;
-$url = HOST . '/myaccount/subscribers';
+$url = HOST . '/account/subscribers';
 $db = Registry::get('db');
 
 // Retrieve total count

@@ -7,7 +7,7 @@ $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf (!$this->view->vars->logged_in, HOST . '/myaccount/');
+Functions::RedirectIf (!$this->view->vars->logged_in, HOST . '/account/');
 $this->view->vars->message = null;
 
 ### Verify token was provided

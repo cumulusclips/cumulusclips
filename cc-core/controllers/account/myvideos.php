@@ -9,7 +9,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $records_per_page = 9;
-$url = HOST . '/myaccount/myvideos';
+$url = HOST . '/account/myvideos';
 $this->view->vars->message = null;
 $videoMapper = new VideoMapper();
 $db = Registry::get('db');

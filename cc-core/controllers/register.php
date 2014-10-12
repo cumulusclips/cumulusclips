@@ -5,7 +5,7 @@ Plugin::Trigger ('register.start');
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf(!$this->view->vars->loggedInUser, HOST . '/myaccount/');
+Functions::RedirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $password = null;

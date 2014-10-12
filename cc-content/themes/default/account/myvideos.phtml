@@ -1,4 +1,4 @@
-<?php $this->setLayout('myaccount'); ?>
+<?php $this->setLayout('account'); ?>
 
 <h1><?=Language::getText('myvideos_header')?></h1>
         
@@ -27,8 +27,8 @@
                 <p><a href="<?=$this->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>"><?=$video->title?></a></p>
             <?php endif; ?>
             <p class="actions small">
-                <a href="<?=HOST?>/myaccount/editvideo/<?=$video->videoId?>/" title="<?=Language::getText('edit_video')?>"><span><?=Language::getText('edit_video')?></span></a>
-                <a class="right confirm" data-node="confirm_delete_video" href="<?=HOST?>/myaccount/myvideos/<?=$video->videoId?>/" title="<?=Language::getText('delete_video')?>"><span><?=Language::getText('delete_video')?></span></a>
+                <a href="<?=HOST?>/account/editvideo/<?=$video->videoId?>/" title="<?=Language::getText('edit_video')?>"><span><?=Language::getText('edit_video')?></span></a>
+                <a class="right confirm" data-node="confirm_delete_video" href="<?=HOST?>/account/myvideos/<?=$video->videoId?>/" title="<?=Language::getText('delete_video')?>"><span><?=Language::getText('delete_video')?></span></a>
             </p>
         </div>
 

@@ -46,7 +46,7 @@ if (isset ($_POST['submitted_login'])) {
                 setcookie ('username',$this->view->vars->username,time()+60*60*24*9999,'/','',0);
                 setcookie ('password',$this->view->vars->password,time()+60*60*24*9999,'/','',0);
             }
-            header ('Location: ' . HOST . '/myaccount/');
+            header ('Location: ' . HOST . '/account/');
 
         } else {
             $this->view->vars->message = Language::GetText('error_invalid_login');

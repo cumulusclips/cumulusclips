@@ -1,4 +1,4 @@
-<?php $this->setLayout('myaccount'); ?>
+<?php $this->setLayout('account'); ?>
 
 <h1><?=Language::getText('upload_header')?></h1>
 
@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 <div class="form wide">
-    <form action="<?=HOST?>/myaccount/upload/" method="post">
+    <form action="<?=HOST?>/account/upload/" method="post">
         <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
         <input class="text" type="text" name="title" value="<?=(!empty($video->title)) ? $video->title : ''?>" />
 

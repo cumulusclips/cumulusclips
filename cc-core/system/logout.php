@@ -6,5 +6,5 @@ if ($userService->loginCheck()) {
     $userService->logout(); // Plugin Hook is within method
     header ('Location: ' . HOST . '/');
 } else {
-    header ('Location: ' . HOST . '/myaccount/');
+    header ('Location: ' . HOST . '/account/');
 }

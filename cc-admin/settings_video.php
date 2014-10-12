@@ -7,7 +7,7 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php')
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/myaccount/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $page_title = 'Video Settings';

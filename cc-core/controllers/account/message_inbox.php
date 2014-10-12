@@ -9,7 +9,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $records_per_page = 20;
-$url = HOST . '/myaccount/message/inbox';
+$url = HOST . '/account/message/inbox';
 $this->view->vars->message = null;
 $messageMapper = new MessageMapper();
 $db = Registry::get('db');

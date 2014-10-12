@@ -3,7 +3,7 @@ $this->addJs('fileupload.jquery-ui.widget.js');
 //$this->addJs('fileupload.iframe-transport');
 $this->addJs('fileupload.plugin.js');
 $this->addJs('fileupload.js');
-$this->setLayout('myaccount');
+$this->setLayout('account');
 ?>
 
 <h1><?=Language::getText('upload_video_header')?></h1>
@@ -14,7 +14,7 @@ $this->setLayout('myaccount');
 <p class="big"><?=Language::getText('filesize_limit')?>: <?=round($config->video_size_limit/1048576)?>MB</p>
 <p class="big"><?=Language::getText('upload_supported_formats') . ': ' . implode(', ', $config->accepted_video_formats)?></p>
 
-<form name="upload" action="<?=HOST?>/myaccount/upload/validate/">
+<form name="upload" action="<?=HOST?>/account/upload/validate/">
     <div id="upload-select-file" class="button">
         <span><?=Language::getText('browse_files_button')?></span>
         <input id="upload" type="file" name="upload" />

@@ -1,8 +1,8 @@
-<?php $this->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('account'); ?>
 <?php $playlistService = $this->getService('Playlist'); ?>
 
 <h1><?=Language::GetText('playlists_edit_header')?>: <?=$playlistService->getPlaylistName($playlist)?></h1>
-<p><a href="<?=HOST?>/myaccount/playlists/"><?=Language::GetText('back_to_playlists')?></a></p>
+<p><a href="<?=HOST?>/account/playlists/"><?=Language::GetText('back_to_playlists')?></a></p>
         
 <?php if ($message): ?>
     <div class="message <?=$message_type?>"><?=$message?></div>
@@ -50,7 +50,7 @@
             </div>
             <p><a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>"><?=$video->title?></a></p>
             <p class="actions small">
-                <a class="confirm" data-node="confirm_remove_playlist_video" href="<?=HOST?>/myaccount/playlists/edit/<?=$playlist->playlistId?>/?remove=<?=$video->videoId?>" title="<?=Language::GetText('remove_playlist_video')?>"><span><?=Language::GetText('remove_playlist_video')?></span></a>
+                <a class="confirm" data-node="confirm_remove_playlist_video" href="<?=HOST?>/account/playlists/edit/<?=$playlist->playlistId?>/?remove=<?=$video->videoId?>" title="<?=Language::GetText('remove_playlist_video')?>"><span><?=Language::GetText('remove_playlist_video')?></span></a>
             </p>
         </div>
     <?php endforeach; ?>

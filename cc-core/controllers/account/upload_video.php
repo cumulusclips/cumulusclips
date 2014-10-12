@@ -18,11 +18,11 @@ if (isset($_SESSION['upload'])) {
     if ($video) {
         $this->view->video = $video;
     } else {
-        header('Location: ' . HOST . '/myaccount/upload/');
+        header('Location: ' . HOST . '/account/upload/');
         exit();
     }
 } else {
-    header('Location: ' . HOST . '/myaccount/upload/');
+    header('Location: ' . HOST . '/account/upload/');
     exit();
 }
 

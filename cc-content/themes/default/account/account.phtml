@@ -1,13 +1,13 @@
-<?php $this->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('account'); ?>
 
-<div id="myaccount">
-    <p class="large"><?=Language::GetText('myaccount_header')?> - <?=$loggedInUser->username?></p>
+<div id="account">
+    <p class="large"><?=Language::GetText('account_header')?> - <?=$loggedInUser->username?></p>
 
     <div class="left">
         <div>
             <?php $avatar = $this->getService('User')->getAvatarUrl($loggedInUser); ?>
             <div class="avatar"><span><img alt="<?=$loggedInUser->username?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" /></span></div>
-            <a href="<?=HOST?>/myaccount/profile/#update_avatar"><?=Language::GetText('edit_avatar')?></a>
+            <a href="<?=HOST?>/account/profile/#update_avatar"><?=Language::GetText('edit_avatar')?></a>
         </div>
         <p><strong><?=Language::GetText('joined')?>:</strong> <?=date('m/d/Y', strtotime($loggedInUser->dateCreated))?></p>
         <p><strong><?=Language::GetText('last_login')?>:</strong> <?=date('m/d/Y', strtotime($loggedInUser->lastLogin))?></p>
@@ -20,6 +20,6 @@
         <p><span><?=Language::GetText('email')?></span> <?=$loggedInUser->email?></p>
         <p><span><?=Language::GetText('website')?></span> <?=empty($loggedInUser->website) ? '-' : $loggedInUser->website?></p>
         <p><span><?=Language::GetText('about_me')?></span> <?=empty($loggedInUser->aboutMe) ? '-' : $loggedInUser->aboutMe?></p>
-        <p><a href="<?=HOST?>/myaccount/profile/" title="<?=Language::GetText('update_profile')?>"><?=Language::GetText('update_profile')?></a></p>
+        <p><a href="<?=HOST?>/account/profile/" title="<?=Language::GetText('update_profile')?>"><?=Language::GetText('update_profile')?></a></p>
     </div>
 </div>

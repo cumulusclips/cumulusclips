@@ -14,7 +14,7 @@ App::EnableUploadsCheck();
 if (isset($_SESSION['upload'])) {
     unset($_SESSION['upload']);
 } else {
-    header('Location: ' . HOST . '/myaccount/upload/video/');
+    header('Location: ' . HOST . '/account/upload/video/');
     exit();
 }
 

@@ -20,7 +20,7 @@ if (!empty($_GET['playlist_id']) && is_numeric ($_GET['playlist_id']) && $_GET['
         'playlist_id' => $_GET['playlist_id']
     ));
     if (!$this->view->vars->playlist) {
-        header('Location: ' . HOST . '/myaccount/playlists/');
+        header('Location: ' . HOST . '/account/playlists/');
         exit();
     }
 }

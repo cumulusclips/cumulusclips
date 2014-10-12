@@ -5,7 +5,7 @@ Plugin::triggerEvent('login.start');
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/myaccount/');
+Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 $this->view->vars->username = null;
 $this->view->vars->password = null;
@@ -49,7 +49,7 @@ if (isset ($_POST['submitted_login'])) {
                 Plugin::triggerEvent('login.remember_me');
             }
             Plugin::triggerEvent('login.login');
-            header ('Location: ' . HOST . '/myaccount/');
+            header ('Location: ' . HOST . '/account/');
 
         } else {
             $this->view->vars->message = Language::GetText('error_invalid_login');

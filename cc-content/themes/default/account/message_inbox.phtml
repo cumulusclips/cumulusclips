@@ -1,4 +1,4 @@
-<?php $this->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('account'); ?>
 
 <h1><?=Language::GetText('message_inbox_header')?></h1>
 
@@ -8,7 +8,7 @@
 
 <?php if (count($messages) > 0): ?>
 
-    <form action="<?=HOST?>/myaccount/message/inbox/" method="post">
+    <form action="<?=HOST?>/account/message/inbox/" method="post">
     <table id="inbox">
         <thead>
             <tr>
@@ -24,7 +24,7 @@
             <tr>
                 <td><input type="checkbox" name="delete[]" value="<?=$message->messageId?>" /></td>
                 <td><?=$message->status == 'read' ? Language::GetText('read') : Language::GetText('unread')?></td>
-                <td><a href="<?=HOST?>/myaccount/message/read/<?=$message->messageId?>/" title="<?=htmlspecialchars($message->subject)?>"><?=htmlspecialchars($message->subject)?></a></td>
+                <td><a href="<?=HOST?>/account/message/read/<?=$message->messageId?>/" title="<?=htmlspecialchars($message->subject)?>"><?=htmlspecialchars($message->subject)?></a></td>
                 <td><?=$message->username?></td>
                 <td><?=date('m/d/Y', strtotime($message->dateCreated))?></td>
             </tr>

@@ -1,4 +1,4 @@
-<?php $this->SetLayout ('myaccount'); ?>
+<?php $this->SetLayout ('account'); ?>
 
 <h1><?=Language::GetText('message_send_header')?></h1>
 
@@ -8,7 +8,7 @@
 
 
 <div class="form wide">
-    <form action="<?=HOST?>/myaccount/message/send/" method="post">
+    <form action="<?=HOST?>/account/message/send/" method="post">
         <label class="<?=(isset ($errors['recipient'])) ? 'error' : ''?>"><?=Language::GetText('to')?>: </label>
         <input class="text" type="text" name="to" value="<?=$to?>" />
         <p class="hint"><em><?=Language::GetText('members_username')?></em></p>

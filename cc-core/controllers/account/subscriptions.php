@@ -10,7 +10,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
 $records_per_page = 9;
-$url = HOST . '/myaccount/subscriptions';
+$url = HOST . '/account/subscriptions';
 $this->view->vars->message = null;
 $db = Registry::get('db');
 

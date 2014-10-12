@@ -1,6 +1,6 @@
 <?php
 
-Plugin::triggerEvent('myaccount.start');
+Plugin::triggerEvent('account.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -19,4 +19,4 @@ $userMessages = $messageMapper->getMultipleMessagesByCustom(array(
 ));
 $this->view->vars->unreadMessageCount = count($userMessages);
 
-Plugin::triggerEvent('myaccount.before_render');
+Plugin::triggerEvent('account.before_render');

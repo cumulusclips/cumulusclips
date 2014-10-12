@@ -3,7 +3,7 @@ $this->addJs('fileupload.jquery-ui.widget.js');
 //$this->addJs('fileupload.iframe-transport');
 $this->addJs('fileupload.plugin.js');
 $this->addJs('fileupload.js');
-$this->SetLayout('myaccount');
+$this->SetLayout('account');
 ?>
 
 <h1><?=Language::GetText('profile_header')?></h1>
@@ -13,7 +13,7 @@ $this->SetLayout('myaccount');
 <div class="form wide">
     <p class="large"><?=Language::GetText('personal_header')?></p>
     <p><?=Language::GetText('asterisk')?></p>
-    <form action="<?=HOST?>/myaccount/profile/" method="post">
+    <form action="<?=HOST?>/account/profile/" method="post">
         <label class="<?=(isset ($Errors['first_name'])) ? ' error' : ''?>"><?=Language::GetText('first_name')?>:</label>
         <input class="text" type="text" name="first_name" value="<?=htmlspecialchars($loggedInUser->firstName)?>" />
 
@@ -41,12 +41,12 @@ $this->SetLayout('myaccount');
         <?php $avatar = $this->getService('User')->getAvatarUrl($loggedInUser); ?>
         <p class="avatar"><span><img alt="<?=Language::GetText('current_avatar')?>" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>"></span></p>
         <?=Language::GetText('current_avatar')?><br />
-        <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/myaccount/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
+        <a class="confirm" data-node="confirm_reset_avatar" href="<?=HOST?>/account/profile/reset/"><?=Language::GetText('reset_avatar')?></a>
     </div>
 
     <div class="right">
         <?=Language::GetText('update_avatar_text')?>
-        <form name="upload" action="<?=HOST?>/myaccount/upload/avatar/">
+        <form name="upload" action="<?=HOST?>/account/upload/avatar/">
             <div id="upload-select-file" class="button">
                 <span><?=Language::getText('browse_files_button')?></span>
                 <input id="upload" type="file" name="upload" />
