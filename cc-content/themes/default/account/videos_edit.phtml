@@ -8,8 +8,8 @@
 
 <div class="form wide">
 
-    <p><a href="<?=HOST?>/account/myvideos/"><?=Language::getText('back_to_videos')?></a></p><br />
-    <form action="<?=HOST?>/account/editvideo/<?=$video->videoId?>/" method="post">
+    <p><a href="<?=HOST?>/account/videos/"><?=Language::getText('back_to_videos')?></a></p><br />
+    <form action="<?=HOST?>/account/videos/edit/<?=$video->videoId?>/" method="post">
 
         <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
         <input class="text" type="text" name="title" value="<?=$video->title?>" />

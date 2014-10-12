@@ -227,7 +227,7 @@
         <back_to_videos>Back to videos</back_to_videos>
 
         <!-- My Account / My Videos Page -->
-        <myvideos_header>My Videos</myvideos_header>
+        <my_videos_header>My Videos</my_videos_header>
         <no_user_videos>You haven't uploaded any videos yet.</no_user_videos>
         <edit_video>Edit Video</edit_video>
         <delete_video>Delete Video</delete_video>
@@ -557,23 +557,17 @@
             <description>Upload Step 3 - Upload Complete!</description>
         </account_upload_complete>
 
-        <account_edit_video>
+        <account_videos_edit>
             <title>Edit Video</title>
             <keywords>Edit Video, Video Information</keywords>
             <description>Edit video information.</description>
-        </account_edit_video>
+        </account_videos_edit>
 
-        <account_myvideos>
+        <account_videos>
             <title>My Videos</title>
             <keywords>My Videos, Videos</keywords>
             <description>View all videos uploaded by this member.</description>
-        </account_myvideos>
-
-        <account_myfavorites>
-            <title>My Favorite Videos</title>
-            <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
-            <description>View all of this member's favorite videos.</description>
-        </account_myfavorites>
+        </account_videos>
 
         <account_playlists>
             <title>My Playlists</title>
@@ -634,7 +628,6 @@
             <keywords>Send Message, Message</keywords>
             <description>Send another member a message.</description>
         </account_message_send>
-
 
         <mobile_videos>
             <title>Browse Videos</title>

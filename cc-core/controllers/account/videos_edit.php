@@ -25,11 +25,11 @@ if (!empty($_GET['vid']) && $_GET['vid'] > 0) {
     
     // Verify video is valid
     if (!$video) {
-        header('Location: ' . HOST . '/account/myvideos/');
+        header('Location: ' . HOST . '/account/videos/');
         exit();
     }
 } else {
-    header('Location: ' . HOST . '/account/myvideos/');
+    header('Location: ' . HOST . '/account/videos/');
     exit();
 }
 

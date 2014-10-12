@@ -271,26 +271,26 @@ class Router
             'location' => 'cc-core/controllers/account/upload_complete.php'
         ));
 
-        $routes['accountMyVideos'] = new Route(array(
-            'path' => 'account/myvideos',
-            'location' => 'cc-core/controllers/account/myvideos.php'
+        $routes['accountVideos'] = new Route(array(
+            'path' => 'account/videos',
+            'location' => 'cc-core/controllers/account/videos.php'
         ));
 
-        $routes['accountMyVideosDelete'] = new Route(array(
-            'path' => 'account/myvideos/([0-9]+)',
-            'location' => 'cc-core/controllers/account/myvideos.php',
+        $routes['accountVideosDelete'] = new Route(array(
+            'path' => 'account/videos/([0-9]+)',
+            'location' => 'cc-core/controllers/account/videos.php',
             'mappings' => array('vid')
         ));
 
-        $routes['accountMyVideosPaginated'] = new Route(array(
-            'path' => 'account/myvideos/page/([0-9]+)',
-            'location' => 'cc-core/controllers/account/myvideos.php',
+        $routes['accountVideosPaginated'] = new Route(array(
+            'path' => 'account/videos/page/([0-9]+)',
+            'location' => 'cc-core/controllers/account/videos.php',
             'mappings' => array('page')
         ));
 
-        $routes['accountEditVideo'] = new Route(array(
-            'path' => 'account/editvideo/([0-9]+)',
-            'location' => 'cc-core/controllers/account/edit_video.php',
+        $routes['accountVideosEdit'] = new Route(array(
+            'path' => 'account/videos/edit/([0-9]+)',
+            'location' => 'cc-core/controllers/account/videos_edit.php',
             'mappings' => array('vid')
         ));
 
