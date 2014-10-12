@@ -1,6 +1,6 @@
 <?php
 
-Plugin::triggerEvent('edit_video.start');
+Plugin::triggerEvent('videos_edit.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -112,7 +112,7 @@ if (isset($_POST['submitted'])) {
         $videoMapper->save($video);
         $this->view->vars->message = Language::getText('success_video_updated');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('edit_video.edit');
+        Plugin::triggerEvent('videos_edit.edit');
     } else {
         $this->view->vars->message = Language::getText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);
@@ -125,4 +125,4 @@ $categoryService = new CategoryService();
 $this->view->vars->categoryList = $categoryService->getCategories();
 
 $this->view->vars->video = $video;
-Plugin::triggerEvent('edit_video.before_render');
+Plugin::triggerEvent('videos_edit.before_render');
