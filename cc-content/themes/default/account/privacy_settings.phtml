@@ -27,13 +27,13 @@
             <option value="0"<?=(!$privacy->newMessage) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
         </select>
 
-        <label><?=Language::GetText('alertVideoReady')?>:</label>
+        <label><?=Language::GetText('alert_video_ready')?>:</label>
         <select class="dropdown" size="1" name="video_ready">
             <option value="1"<?=($privacy->videoReady) ? ' selected="selected"' : ''?>><?=Language::GetText('yes')?></option>
             <option value="0"<?=(!$privacy->videoReady) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>
         </select>
 
-        <label><?=Language::GetText('alertCommentReply')?>:</label>
+        <label><?=Language::GetText('alert_comment_reply')?>:</label>
         <select class="dropdown" size="1" name="commentReply">
             <option value="1"<?=($privacy->commentReply) ? ' selected="selected"' : ''?>><?=Language::GetText('yes')?></option>
             <option value="0"<?=(!$privacy->commentReply) ? ' selected="selected"' : ''?>><?=Language::GetText('no')?></option>

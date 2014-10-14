@@ -114,7 +114,7 @@ if (isset($_POST['submitted'])) {
         $video->userId = $adminUser->userId;
         $video->originalExtension = Functions::GetExtension($tempFile);
         $video->filename = basename($tempFile, '.' . $video->originalExtension);
-        $video->status = 'pendingConversion';
+        $video->status = VideoMapper::PENDING_CONVERSION;
         $videoId = $videoMapper->save($video);
 
         // Begin encoding

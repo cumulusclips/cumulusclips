@@ -112,7 +112,7 @@ class VideoService extends ServiceAbstract
                 $body = 'A new video has been uploaded and is awaiting admin approval.';
 
                 // Set Pending
-                $video->status = 'pendingApproval';
+                $video->status = VideoMapper::PENDING_APPROVAL;
                 $videoMapper->save($video);
                 Plugin::triggerEvent('video.approve_required');
             } else {
@@ -204,7 +204,7 @@ class VideoService extends ServiceAbstract
             $mail = new Mail();
             $mail->LoadTemplate('VideoReady', $replacements);
             $mail->Send($user->email);
-            Plugin::trigger('video.notifyUserVideoIsReady', $video);
+            Plugin::trigger('video.notify_user_video_is_ready', $video);
         }
     }
     

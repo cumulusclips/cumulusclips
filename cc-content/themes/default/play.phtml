@@ -158,7 +158,7 @@ $this->SetLayout('full');
         <p class="large"><?=Language::GetText('comments_header')?></p>
         
         <?php if ($video->commentsClosed): ?>
-            <p class="commentMessage"><?=Language::GetText('commentsClosed')?></p>
+            <p class="commentMessage"><?=Language::GetText('comments_closed')?></p>
         <?php else: ?>
             <p class="totals"><span><?=$commentCount?></span> <?=Language::GetText('comments_total')?></p>
 
@@ -177,7 +177,7 @@ $this->SetLayout('full');
                 </div>
                 <!-- END COMMENTS FORM -->
             <?php else: ?>
-                <p class="commentMessage"><?=Language::GetText('commentsLogin', array('login_link' => HOST . '/login/', 'register_link' => HOST . '/register/'))?></p>
+                <p class="commentMessage"><?=Language::GetText('comments_login', array('login_link' => HOST . '/login/', 'register_link' => HOST . '/register/'))?></p>
             <?php endif; ?>
 
 

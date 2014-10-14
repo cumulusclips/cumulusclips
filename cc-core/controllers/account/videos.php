@@ -30,8 +30,14 @@ if (!empty($_GET['vid'])) {
 }
 
 // Retrieve total count
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $this->view->vars->loggedInUser->userId . " AND status IN ('approved', 'processing', 'pendingConversion', 'pendingApproval') ORDER BY date_created DESC";
-$db->fetchAll($query);
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = ? AND status IN (?, ?, ?, ?) ORDER BY date_created DESC";
+$db->fetchAll($query, array(
+    $this->view->vars->loggedInUser->userId,
+    VideoMapper::APPROVED,
+    VideoMapper::PROCESSING,
+    VideoMapper::PENDING_CONVERSION,
+    VideoMapper::PENDING_APPROVAL
+));
 $total = $db->rowCount();
 
 // Initialize pagination

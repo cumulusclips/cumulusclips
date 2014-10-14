@@ -73,7 +73,7 @@ else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
 else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['approve'], 'status' => 'pendingApproval'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['approve'], 'status' => VideoMapper::PENDING_APPROVAL));
     if ($video) {
         $videoService->approve($video, 'approve');
         $message = 'Video has been approved and is now available';
@@ -118,7 +118,7 @@ $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE";
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
     case 'pending':
-        $query .= " status IN ('processing', 'pendingApproval', 'pendingConversion')";
+        $query .= " status IN ('processing', '" . VideoMapper::PENDING_APPROVAL . "', '" . VideoMapper::PENDING_CONVERSION . "')";
         $query_string['status'] = 'pending';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
@@ -247,7 +247,7 @@ include ('header.php');
                             <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="large"><?=$video->title?></a><br />
                             <div class="record-actions">
                                 
-                                <?php if (!in_array($video->status, array('processing', 'pendingConversion'))): ?>
+                                <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
                                     <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
                                 <?php endif; ?>
                                     
@@ -269,7 +269,7 @@ include ('header.php');
                                     <a href="<?=$videoService->getUrl($video)?>/" target="_ccsite">Go to Video</a>
                                 <?php endif; ?>
 
-                                <?php if ($video->status == 'pendingApproval'): ?>
+                                <?php if ($video->status == VideoMapper::PENDING_APPROVAL): ?>
                                     <a class="approve" href="<?=$pagination->GetURL('approve='.$video->videoId)?>">Approve</a>
                                 <?php elseif (in_array ($status, array ('approved','featured'))): ?>
                                     <a class="delete" href="<?=$pagination->GetURL('ban='.$video->videoId)?>">Ban</a>

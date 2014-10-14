@@ -65,7 +65,7 @@ try {
     }
 
     // Update video information
-    $video->status = 'pendingConversion';
+    $video->status = VideoMapper::PENDING_CONVERSION;
     $video->originalExtension = $extension;
     Plugin::triggerEvent('upload.ajax.before_update_video');
     $videoMapper->save($video);

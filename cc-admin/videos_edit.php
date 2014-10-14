@@ -39,7 +39,7 @@ if (!empty($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] > 0) {
 
     ### Retrieve video information
     $video = $videoMapper->getVideoById($_GET['id']);
-    if (!$video || !in_array($video->status, array('approved', 'processing', 'pendingConversion', 'pendingApproval', 'banned'))) {
+    if (!$video || !in_array($video->status, array('approved', 'processing', VideoMapper::PENDING_CONVERSION, VideoMapper::PENDING_APPROVAL, 'banned'))) {
         header ('Location: ' . ADMIN . '/videos.php');
         exit();
     }
@@ -140,7 +140,7 @@ if (isset ($_POST['submitted'])) {
     }
 
     // Validate status
-    if (!in_array($video->status, array('processing', 'pendingConversion'))) {
+    if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))) {
         if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
             $video->status = $newStatus = trim ($_POST['status']);
         } else {
@@ -202,10 +202,10 @@ include ('header.php');
 
             <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
-                <?php if (!in_array($video->status, array('processing', 'pendingConversion'))): ?>
+                <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
                     <select name="status" class="dropdown">
                         <option value="approved"<?=(isset ($video->status) && $video->status == 'approved') || (!isset ($video->status) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                        <option value="pendingApproval"<?=(isset ($video->status) && $video->status == 'pendingApproval') || (!isset ($video->status) && $video->status == 'pendingApproval')?' selected="selected"':''?>>Pending</option>
+                        <option value="pendingApproval"<?=(isset ($video->status) && $video->status == VideoMapper::PENDING_APPROVAL) || (!isset ($video->status) && $video->status == VideoMapper::PENDING_APPROVAL)?' selected="selected"':''?>>Pending</option>
                         <option value="banned"<?=(isset ($video->status) && $video->status == 'banned') || (!isset ($video->status) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
                     </select>
                 <?php else: ?>

@@ -30,7 +30,7 @@ if (!empty($_POST['videoId'])) {
 if ($loggedInUser) {
     $comment->userId = $loggedInUser->userId;
 } else {
-    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('errorCommentLogin')));
+    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('error_comment_login')));
     exit();
 }
 

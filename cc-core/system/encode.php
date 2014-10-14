@@ -31,7 +31,7 @@ try {
 
     // Validate requested video
     
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $video_id, 'status' => 'pendingConversion'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $video_id, 'status' => VideoMapper::PENDING_CONVERSION));
     if (!$video) throw new Exception ("An invalid video was passed to the video encoder.");
 
     // Debug Log
@@ -82,7 +82,7 @@ try {
 
     // Encode raw video to H.264
     $h264Command = "$ffmpeg_path -i $raw_video " . Settings::Get('h264EncodingOptions') . " $h264TempFilePath >> $debug_log 2>&1";
-    $h264Command = Plugin::triggerFilter('encode.beforeH264Encode', $h264Command);
+    $h264Command = Plugin::triggerFilter('encode.before_h264_encode', $h264Command);
 
     // Debug Log
     $log_msg = "\n\n\n\n==================================================================\n";
@@ -95,7 +95,7 @@ try {
 
     // Execute H.264 encoding command
     exec($h264Command);
-    Plugin::triggerEvent('encode.h264Encode');
+    Plugin::triggerEvent('encode.h264_encode');
 
     // Debug Log
     $config->debug_conversion ? App::Log(CONVERSION_LOG, 'Verifying H.264 video was created...') : null;
@@ -134,7 +134,7 @@ try {
 
     // Prepare shift moov atom command
     $h264ShiftMoovAtomCommand = "$qt_faststart_path $h264TempFilePath $h264FilePath >> $debug_log 2>&1";
-    Plugin::triggerFilter('encode.beforeH264ShiftMoovAtom', $h264ShiftMoovAtomCommand);
+    Plugin::triggerFilter('encode.before_h264_shift_moov_atom', $h264ShiftMoovAtomCommand);
 
     // Debug Log
     $log_msg = "\n\n\n\n==================================================================\n";
@@ -147,7 +147,7 @@ try {
 
     // Execute shift moov atom command
     exec($h264ShiftMoovAtomCommand);
-    Plugin::triggerEvent('encode.h264ShiftMoovAtom');
+    Plugin::triggerEvent('encode.h264_shift_moov_atom');
 
     // Debug Log
     $config->debug_conversion ? App::Log(CONVERSION_LOG, 'Verifying final H.264 file was created...') : null;
@@ -175,7 +175,7 @@ try {
 
     // Encode raw video to Theora
     $theoraCommand = "$ffmpeg_path -i $raw_video " . Settings::Get('theoraEncodingOptions') . " $theoraFilePath >> $debug_log 2>&1";
-    $theoraCommand = Plugin::triggerFilter('encode.beforeTheoraEncode', $theoraCommand);
+    $theoraCommand = Plugin::triggerFilter('encode.before_theora_encode', $theoraCommand);
 
     // Debug Log
     $log_msg = "\n\n\n\n==================================================================\n";
@@ -188,7 +188,7 @@ try {
 
     // Execute Theora encoding command
     exec($theoraCommand);
-    Plugin::triggerEvent('encode.theoraEncode');
+    Plugin::triggerEvent('encode.theora_encode');
 
     // Debug Log
     $config->debug_conversion ? App::Log(CONVERSION_LOG, 'Verifying Theora video was created...') : null;
@@ -218,7 +218,7 @@ try {
 
         // Encode raw video to VP8
         $vp8Command = "$ffmpeg_path -i $raw_video " . $vp8Settings->options . " $vp8FilePath >> $debug_log 2>&1";
-        $vp8Command = Plugin::triggerFilter('encode.beforeVp8Encode', $vp8Command);
+        $vp8Command = Plugin::triggerFilter('encode.before_vp8_encode', $vp8Command);
 
         // Debug Log
         $log_msg = "\n\n\n\n==================================================================\n";
@@ -231,7 +231,7 @@ try {
 
         // Execute VP8 encoding command
         exec($vp8Command);
-        Plugin::triggerEvent('encode.vp8Encode');
+        Plugin::triggerEvent('encode.vp8_encode');
 
         // Debug Log
         $config->debug_conversion ? App::Log(CONVERSION_LOG, 'Verifying VP8 video was created...') : null;

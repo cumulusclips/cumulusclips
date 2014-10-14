@@ -2,6 +2,11 @@
 
 class VideoMapper extends MapperAbstract
 {
+    const APPROVED = 'approved';
+    const PROCESSING = 'proccessing';
+    const PENDING_CONVERSION = 'pending_conversion';
+    const PENDING_APPROVAL = 'pending_approval';
+    
     public function getVideoById($videoId)
     {
         return $this->getVideoByCustom(array('video_id' => $videoId));
