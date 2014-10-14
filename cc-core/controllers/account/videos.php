@@ -31,13 +31,14 @@ if (!empty($_GET['vid'])) {
 
 // Retrieve total count
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = ? AND status IN (?, ?, ?, ?) ORDER BY date_created DESC";
-$db->fetchAll($query, array(
+$bindParams = array(
     $this->view->vars->loggedInUser->userId,
     VideoMapper::APPROVED,
     VideoMapper::PROCESSING,
     VideoMapper::PENDING_CONVERSION,
     VideoMapper::PENDING_APPROVAL
-));
+);
+$db->fetchAll($query, $bindParams);
 $total = $db->rowCount();
 
 // Initialize pagination
@@ -46,7 +47,7 @@ $start_record = $this->view->vars->pagination->GetStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$resultVideos = $db->fetchAll($query);
+$resultVideos = $db->fetchAll($query, $bindParams);
 $this->view->vars->userVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($resultVideos, 'video_id')
 );
