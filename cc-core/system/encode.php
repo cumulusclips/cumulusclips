@@ -38,7 +38,7 @@ try {
     $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Establishing variables...') : null;
 
     // Retrieve video information
-    $video->status = 'processing';
+    $video->status = VideoMapper::PROCESSING;
     $videoMapper->save($video);
     $debug_log = LOG . '/' . $video->filename . '.log';
     $raw_video = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension;
