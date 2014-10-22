@@ -205,33 +205,32 @@ include ('header.php');
                 <?php foreach ($commentList as $comment): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
+                    <?php $commentCard = $commentService->getCommentCard($comment); ?>
                     <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
-                    <?php $user = $userMapper->getUserById($comment->userId); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <?php $avatar = $commentService->getCommentAvatar($comment); ?>
-                            <img src="<?=($avatar) ? $avatar : $config->theme_url_default . '/images/avatar.gif'?>" height="80" width="80" />
-                            <p class="poster"><?=($comment->userId==0)?$comment->email:'<a href="' . HOST . '/members/' . $comment->name . '/">' . $comment->name . '</a>'?></p>
+                            <img src="<?=($commentCard->avatar) ? $commentCard->avatar : $config->theme_url_default . '/images/avatar.gif'?>" height="80" width="80" />
+                            <p class="poster"><?=($commentCard->author) ? $commentCard->author->email : '<a href="' . HOST . '/members/' . $commentCard->author->username . '/">' . $commentCard->author>username . '</a>'?></p>
                         </td>
                         <td class="comments-text">
-                            <?=Functions::CutOff (htmlspecialchars($comment->comments), 150)?>
+                            <?=Functions::CutOff (htmlspecialchars($commentCard->comment->comments), 150)?>
                             <div class="record-actions invisible">
-                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
+                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$comment->commentId)?>">Ban</a>
+                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$commentCard->comment->commentId)?>">Ban</a>
                                 <?php elseif ($status == 'pending'): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$comment->commentId)?>">Approve</a>
+                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$commentCard->comment->commentId)?>">Approve</a>
                                 <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$comment->commentId)?>">Unban</a>
+                                    <a href="<?=$pagination->GetURL('unban='.$commentCard->comment->commentId)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$commentCard->comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?></td>
+                        <td><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></td>
                     </tr>
 
                 <?php endforeach; ?>

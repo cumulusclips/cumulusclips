@@ -163,7 +163,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$page->dateCreated)?></td>
+                        <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
                     </tr>
 
                 <?php endforeach; ?>

@@ -282,7 +282,7 @@ include ('header.php');
                         </td>
                         <td class="category"><?=$categories[$video->categoryId]->name?></td>
                         <td><?=$video->username?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$video->dateCreated)?></td>
+                        <td><?=date('m/d/Y', strtotime($video->dateCreated))?></td>
                     </tr>
 
                 <?php endforeach; ?>
