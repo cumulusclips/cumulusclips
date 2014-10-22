@@ -12,7 +12,7 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $pageMapper = new PageMapper();
 $pageService = new PageService();
-$view = View::getView();
+$view = View::getInstance();
 $page = new Page();
 $data = array();
 $errors = array();

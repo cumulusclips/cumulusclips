@@ -23,11 +23,11 @@ $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/models';
 $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/mappers';
 $includePath .= PATH_SEPARATOR . DOC_ROOT . '/cc-core/services';
 if (!set_include_path($includePath)) exit('CC-ERROR-100 CumulusClips has encountered an error and cannot continue.');
-spl_autoload_register(array('App', 'LoadClass'));
+spl_autoload_register(array('App', 'loadClass'));
 
 // Checks
-App::InstallCheck();
-App::MaintCheck();
+App::installCheck();
+App::maintCheck();
 
 // Load DB & FTP credentials
 include_once('config.php');
@@ -35,22 +35,22 @@ include_once('config.php');
 // Retrieve site settings from DB
 $db = new Database();
 Registry::set('db', $db);
-Settings::LoadSettings();
+Settings::loadSettings();
 
 // General Site Settings from DB
-define('HOST', Settings::Get('base_url'));
-define('MOBILE_HOST', Settings::Get('base_url') . '/m');
-define('SECRET_KEY', Settings::Get('secret_key'));
+define('HOST', Settings::get('base_url'));
+define('MOBILE_HOST', Settings::get('base_url') . '/m');
+define('SECRET_KEY', Settings::get('secret_key'));
 
 $config = new stdClass();
-$config->sitename = Settings::Get('sitename');
-$config->roles = unserialize(Settings::Get('roles'));
-$config->enable_uploads = Settings::Get('enable_uploads');
-$config->debug_conversion = Settings::Get('debug_conversion') == '1' ? true : false;
-$config->video_size_limit = Settings::Get('video_size_limit');
+$config->sitename = Settings::get('sitename');
+$config->roles = unserialize(Settings::get('roles'));
+$config->enable_uploads = Settings::get('enable_uploads');
+$config->debug_conversion = Settings::get('debug_conversion') == '1' ? true : false;
+$config->video_size_limit = Settings::get('video_size_limit');
 $config->accepted_video_formats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
 $config->accepted_avatar_formats = array('png', 'jpeg', 'jpg', 'gif');
-$config->pagination_page_limit = Settings::Get('pagination_page_limit');
+$config->pagination_page_limit = Settings::get('pagination_page_limit');
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->vp8Url = HOST . '/cc-content/uploads/vp8';
@@ -69,4 +69,4 @@ Plugin::init();
 Plugin::triggerEvent('app.start');
 
 // Load language
-Language::LoadLangPack(App::CurrentLang());
+Language::loadLangPack(App::currentLang());

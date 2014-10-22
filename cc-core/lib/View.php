@@ -10,6 +10,9 @@ class View
     protected static $_view;
     protected $_route;
     
+    /**
+     * Creates a new view 
+     */
     public function __construct()
     {
         $this->vars = new stdClass();
@@ -22,14 +25,19 @@ class View
         $this->options->blocks = array();
         $this->options->css = array();
         $this->options->js = array();
+    }
+    
+    /**
+     * Prepares view to render a given route
+     * @param Route $route Route to be rendered
+     * @return View Provides fluid interface
+     */
+    public function load(Route $route)
+    {
+        $this->_route = $route;
         
         // Define theme configuration
-        try {
-            $isMobile = Registry::get('route')->mobile;
-        } catch (Exception $e) {
-            $isMobile = false;
-        }
-        $theme = $this->_currentTheme($isMobile);
+        $theme = $this->_currentTheme($this->_route->mobile);
         $themeFiltered = Plugin::triggerFilter('app.before_set_theme', $theme);
         define('THEME', HOST . '/cc-content/themes/' . $themeFiltered);
         define('THEME_PATH', THEMES_DIR . '/' . $themeFiltered);
@@ -40,12 +48,6 @@ class View
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
         if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
-        self::$_view = $this;
-    }
-    
-    public function load(Route $route)
-    {
-        $this->_route = $route;
         
         // Retrieve page
         $this->options->page = $this->_getPageFromRoute($this->_route);
@@ -53,6 +55,8 @@ class View
         // Retrieve meta data
         $this->vars->meta = Language::GetMeta($this->options->page);
         if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
+        
+        return $this;
     }
     
     /**
@@ -383,9 +387,12 @@ class View
      * Retrieve an instance of a view
      * @return View Returns existing view or new one if none has been created
      */
-    public static function getView()
+    public static function getInstance()
     {
-        return (self::$_view instanceof View) ? self::$_view : new View();
+        if (!self::$_view instanceof View) {
+            self::$_view = new View();
+        }
+        return self::$_view;
     }
 
     /**
