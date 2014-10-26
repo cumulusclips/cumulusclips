@@ -579,6 +579,22 @@ function displayMessage(result, message)
 }
 
 /**
+ * Format number of bytes into human readable format
+ * @param int bytes Total number of bytes
+ * @param int precision Accuracy of final round
+ * @return string Returns human readable formatted bytes
+ */
+function formatBytes(bytes, precision)
+{
+    var units = ['b', 'KB', 'MB', 'GB', 'TB'];
+    bytes = Math.max(bytes, 0);
+    var pwr = Math.floor((bytes ? Math.log(bytes) : 0) / Math.log(1024));
+    pwr = Math.min(pwr, units.length - 1);
+    bytes /= Math.pow(1024, pwr);
+    return Math.round(bytes, precision) + units[pwr];
+}
+
+/**
  * Generates comment card HTML to be appended to comment list on play page
  * @param string commentCardTemplate The HTML template of the comment card
  * @param object commentCardData The CommentCard object for the comment being appended

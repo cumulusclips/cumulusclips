@@ -38,7 +38,7 @@ $(function(){
             $('#upload_status').show();
             $('#upload_status .fill').css('width', '0%');
             $('#upload_status .percentage').text('0%');
-            $('#upload_status .title').text(file.name);
+            $('#upload_status .title').text(file.name + ' (' + formatBytes(file.size, 0) + ')');
         },
         progress: function(event, data)
         {
