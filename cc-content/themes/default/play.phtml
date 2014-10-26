@@ -185,12 +185,9 @@ $this->SetLayout('full');
             <div class="commentList">
                 <?php if ($commentCount > 0): ?>
 
-                    <?php $commentThread = 0; ?>
-
                     <?php foreach ($commentCardList as $commentCard): ?>
 
-                        <?php $commentThread = getCommentThread($commentThread, $commentCard->comment); ?>
-                        <?php $commentIndentClass = getCommentIndentClass($commentThread, $commentCard->comment); ?>
+                        <?php $commentIndentClass = getCommentIndentClass($commentCard->comment); ?>
 
                         <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
                             <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />

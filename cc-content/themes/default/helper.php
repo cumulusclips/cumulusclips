@@ -1,30 +1,49 @@
 <?php
 
-function getCommentThread($currentCommentThread, Comment $comment)
+/**
+ * Retrieves the CSS indentation class to use for a comment card
+ * @staticvar array $commentCatalog Internal catalog of generated comment indent classes
+ * @param Comment $comment The comment whose indent class will be retrieved
+ * @return string Returns the name of the CSS indent class
+ */
+function getCommentIndentClass(Comment $comment)
 {
+    static $commentCatalog = array();
+    
+    // Determine which indent class to provide
     if ($comment->parentId == 0) {
-        return $comment->commentId;
+        $indentClass = '';
     } else {
-        return $currentCommentThread;
+        $parentIndentClass = $commentCatalog[$comment->parentId];
+        if ($parentIndentClass == '') {
+            $indentClass = 'commentIndent';
+        } else if ($parentIndentClass == 'commentIndent') {
+            $indentClass = 'commentIndentDouble';
+        } else {
+            $indentClass = 'commentIndentTriple';
+        }
     }
+        
+    // Update comment catalog and return indent class
+    $commentCatalog[$comment->commentId] = $indentClass;
+    return $indentClass;
 }
 
-function getCommentIndentClass($currentCommentThread, Comment $comment)
-{
-    if ($comment->parentId == 0) {
-        return '';
-    } else if ($comment->parentId == $currentCommentThread) {
-        return 'commentIndent';
-    } else {
-        return 'commentIndentDouble';
-    }
-}
-
+/**
+ * Builds full URL to a user's profile
+ * @param User $user User whose profile URL will be generated for
+ * @return string Returns the URL to user's profile 
+ */
 function getUserProfileLink(User $user)
 {
     return HOST . '/members/' . $user->username;
 }
 
+/**
+ * Retrieves full URL to an image to be used as the given playlist's thumbnail
+ * @param Playlist $playlist The playlist to retrieve thumbnail image for
+ * @return string Returns URL to the thumbnail for a playlist's card 
+ */
 function getPlaylistThumbnail(Playlist $playlist)
 {
     $config = Registry::get('config');

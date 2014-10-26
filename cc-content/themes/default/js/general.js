@@ -234,7 +234,7 @@ $(document).ready(function(){
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyText = responseData;}, 'reply');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.reportAbuseText = responseData;}, 'report_abuse');
-        getText(function(responseData, textStatus, jqXHR){cumulusClips.logginToPostText = responseData;}, 'errorCommentLogin');
+        getText(function(responseData, textStatus, jqXHR){cumulusClips.logInToPostText = responseData;}, 'error_comment_login');
         $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentCardTemplate = responseData;});
         cumulusClips.lastCommentId = $('.commentList > div:last-child').data('comment');
         cumulusClips.commentCount = Number($('#comments .totals span').text());
@@ -247,8 +247,8 @@ $(document).ready(function(){
         scrollableList.jScrollPane();
         $('#addToPlaylist').on('tabToggled',function(){
             if ($(this).css('display') == 'block' && scrollableList.length > 0) {
-                api = scrollableList.data('jsp');
-                api.reinitialise();
+                cumulusClips.playlistListApi = scrollableList.data('jsp');
+                cumulusClips.playlistListApi.reinitialise();
             }
         });
 
@@ -269,7 +269,7 @@ $(document).ready(function(){
 
 
         // Add video to playlist on play page
-        $('#addToPlaylist li a').click(function(){
+        $('#addToPlaylist').on('click', 'li a', function(event){
             var link = $(this);
             var url = cumulusClips.baseUrl+'/actions/playlist/';
             var data = {
@@ -278,11 +278,16 @@ $(document).ready(function(){
                 playlist_id: $(this).data('playlist_id')
             };
             var callback = function(addToPlaylistResponse){
-                var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
-                link.text(newNameAndCount);
-                link.addClass('added');
+                if (addToPlaylistResponse.result) {
+                    var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
+                    link.text(newNameAndCount);
+                    link.addClass('added');
+                } else {
+                    window.scrollTo(0, 0);
+                }
             };
             executeAction(url, data, callback);
+            event.preventDefault();
             return false;
         });
 
@@ -294,6 +299,7 @@ $(document).ready(function(){
             var url = cumulusClips.baseUrl+'/actions/playlist/';
             var callback = function(createPlaylistResponse){
                 $('#addToPlaylist ul').append('<li><a data-playlist_id="' + createPlaylistResponse.other.playlistId + '" class="added" href="">' + createPlaylistResponse.other.name + ' (' + createPlaylistResponse.other.count + ')</a></li>');
+                cumulusClips.playlistListApi.reinitialise();
                 createPlaylistForm.find('input[type="text"]').val('');
                 createPlaylistForm.find('select').val('public');
             };
@@ -302,7 +308,7 @@ $(document).ready(function(){
         });
 
 
-        // Attach comment action to comment forms
+        // Submit 'comment form' and attach new comment to thread
         $('#comments').on('submit', 'form', function(){
             var url = cumulusClips.baseUrl+'/actions/comment/add/';
             var commentForm = $(this).parent();
@@ -331,10 +337,12 @@ $(document).ready(function(){
                             var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
                             // Determine indent class
                             var indentClass;
-                            if (!parentComment.hasClass('commentIndentDouble') && !parentComment.hasClass('commentIndent')) {
-                                indentClass = 'commentIndent';
-                            } else {
+                            if (parentComment.hasClass('commentIndentTriple') || parentComment.hasClass('commentIndentDouble')) {
+                                indentClass = 'commentIndentTriple';
+                            } else if (parentComment.hasClass('commentIndent')) {
                                 indentClass = 'commentIndentDouble';
+                            } else {
+                                indentClass = 'commentIndent';
                             }
                             commentCardElement.addClass(indentClass);
                             parentComment.after(commentCardElement)
@@ -392,7 +400,7 @@ $(document).ready(function(){
                 replyForm.find('input[name="parentCommentId"]').val(parentComment.data('comment'));
                 replyForm.find('textarea').focus().val('');
             } else {
-                displayMessage(false, cumulusClips.logginToPostText);
+                displayMessage(false, cumulusClips.logInToPostText);
             }
             event.preventDefault();
         });
@@ -425,10 +433,12 @@ $(document).ready(function(){
                                 var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
                                 // Determine indent class
                                 var indentClass;
-                                if (!parentComment.hasClass('commentIndentDouble') && !parentComment.hasClass('commentIndent')) {
-                                    indentClass = 'commentIndent';
-                                } else {
+                                if (parentComment.hasClass('commentIndentTriple') || parentComment.hasClass('commentIndentDouble')) {
+                                    indentClass = 'commentIndentTriple';
+                                } else if (parentComment.hasClass('commentIndent')) {
                                     indentClass = 'commentIndentDouble';
+                                } else {
+                                    indentClass = 'commentIndent';
                                 }
                                 commentCardElement.addClass(indentClass);
                             }
@@ -662,21 +672,32 @@ function resetCommentForm(commentForm)
     commentField.val(commentField.attr('title'));
 }
 
-function buildVideoCard(videoCardTemplate, videoData)
+/**
+ * Builds a video card from the video card template
+ * @param string videoCardTemplate The HTML template to build the video card
+ * @param object video The video which will be represented by the card
+ * @return object Returns jQuery object Representing the new video card
+ */
+function buildVideoCard(videoCardTemplate, video)
 {
     var videoCard = $(videoCardTemplate);
-    var url = getVideoUrl(videoData);
-    videoCard.find('img').attr('src', cumulusClips.thumbUrl + '/' + videoData.filename + '.jpg');
-    videoCard.find('.duration').text(videoData.duration);
-    videoCard.find('p a, .thumbnail > a').attr('title', videoData.title).attr('href', url);
-    videoCard.find('p a').text(videoData.title);
+    var url = getVideoUrl(video);
+    videoCard.find('img').attr('src', cumulusClips.thumbUrl + '/' + video.filename + '.jpg');
+    videoCard.find('.duration').text(video.duration);
+    videoCard.find('p a, .thumbnail > a').attr('title', video.title).attr('href', url);
+    videoCard.find('p a').text(video.title);
     videoCard.find('.watchLater a')
         .attr('data-playlist', cumulusClips.watchLaterPlaylistId)
-        .attr('data-video', videoData.videoId)
+        .attr('data-video', video.videoId)
         .attr('title', cumulusClips.watchLaterText);
     return videoCard;
 }
 
+/**
+ * Retrieve the full URL to a video
+ * @param object video The video whose URL is being retrieved
+ * @return string Returns the complete URL to given video
+ */
 function getVideoUrl(video)
 {
     var url = cumulusClips.baseUrl;
@@ -685,13 +706,24 @@ function getVideoUrl(video)
     return url;
 }
 
-function generateSlug(string)
+/**
+ * Generate a URL friendly slug from an input string
+ * @param string stringToConvert The string to convert into a URL slug
+ * @return string Returns a string with non alphanum characters converted to hyphens.
+ */
+function generateSlug(stringToConvert)
 {
-    var slug = string.replace(/[^a-z0-9]+/ig, '-');
+    var slug = stringToConvert.replace(/[^a-z0-9]+/ig, '-');
     slug = slug.replace(/^-|-$/g, '').toLowerCase();
     return slug;
 }
 
+/**
+ * Builds a playlist card from the playlist card template
+ * @param string playlistCardTemplate The HTML template to build the playlist card
+ * @param object playlist The playlist which will be represented by the card
+ * @return object Returns jQuery object Representing the new playlist card
+ */
 function buildPlaylistCard(playlistCardTemplate, playlist)
 {
     var playlistCard = $(playlistCardTemplate);

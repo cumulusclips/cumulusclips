@@ -1,11 +1,11 @@
 <?php
 
-Plugin::Trigger ('favorite.ajax.start');
+Plugin::triggerEvent('favorite.ajax.start');
 
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Plugin::Trigger ('favorite.ajax.login_check');
+Plugin::trigger('favorite.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
 $this->view->disableView = true;
@@ -14,39 +14,47 @@ $playlistMapper = new PlaylistMapper();
 $playlistService = new PlaylistService();
 
 // Verify a valid video was provided
-if (empty ($_POST['video_id']) || !is_numeric ($_POST['video_id'])) App::Throw404();
+if (empty($_POST['video_id']) || !is_numeric($_POST['video_id'])) App::throw404();
 $video = $videoMapper->getVideoByCustom(array('video_id' => $_POST['video_id'], 'status' => 'approved'));
-if (!$video) App::Throw404();
+if (!$video) App::throw404();
 
 // Verify user is logged in
 if (!$loggedInUser) {
-    echo json_encode(array('result' => 0, 'message' => (string) Language::GetText('playlist_login', array('host' => HOST)), 'other' => array('status' => 'LOGIN')));
+    echo json_encode(array(
+        'result' => false,
+        'message' => (string) Language::getText('playlist_login', array('host' => HOST)),
+        'other' => array('status' => 'LOGIN')
+    ));
     exit();
 }
 
 // Determine if playlist is being created or added to
-if (empty($_POST['action']) || !in_array($_POST['action'], array('add', 'create'))) App::Throw404();
+if (empty($_POST['action']) || !in_array($_POST['action'], array('add', 'create'))) App::throw404();
 if ($_POST['action'] == 'add') {
     
     // Verify a valid playlist was provided
-    if (empty ($_POST['playlist_id']) || !is_numeric ($_POST['playlist_id'])) App::Throw404();
+    if (empty($_POST['playlist_id']) || !is_numeric($_POST['playlist_id'])) App::Throw404();
     $playlist = $playlistMapper->getPlaylistByCustom(array('playlist_id' => $_POST['playlist_id'], 'user_id' => $loggedInUser->userId));
-    if (!$playlist) App::Throw404();
+    if (!$playlist) App::throw404();
 
     // Add video to playlist if not already in list
     if (!$playlistService->checkListing($video, $playlist)) {
         $playlistService->addVideoToPlaylist($video, $playlist);
-        Plugin::Trigger ('favorite.ajax.favorite_video');
+        Plugin::trigger('favorite.ajax.favorite_video');
         $playlistName = $playlistService->getPlaylistName($playlist);
         $message = (!empty($_POST['shortText'])) ? 'success_playlist_added_short' : 'success_playlist_added';
-        echo json_encode (array (
-            'result' => 1,
-            'message' => (string) Language::GetText($message, array('list_name' => $playlistName)),
+        echo json_encode(array(
+            'result' => true,
+            'message' => (string) Language::getText($message, array('list_name' => $playlistName)),
             'other' => array('count' => count($playlist->entries)+1)
         ));
         exit();
     } else {
-        echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('error_playlist_duplicate'), 'other' => array('status' => 'DUPLICATE')));
+        echo json_encode(array(
+            'result' => false,
+            'message' => (string) Language::GetText('error_playlist_duplicate'),
+            'other' => array('status' => 'DUPLICATE')
+        ));
         exit();
     }
     
@@ -59,7 +67,11 @@ if ($_POST['action'] == 'add') {
     if (!empty($_POST['playlist_name'])) {
         $playlist->name = trim($_POST['playlist_name']);
     } else {
-        echo json_encode (array ('result' => 0, 'message' => (string) Language::GetText('error_playlist_name'), 'other' => array('status' => 'DATA')));
+        echo json_encode(array(
+            'result' => false,
+            'message' => (string) Language::getText('error_playlist_name'),
+            'other' => array('status' => 'DATA')
+        ));
         exit();
     }
     
@@ -74,7 +86,7 @@ if ($_POST['action'] == 'add') {
     $newPlaylist = $playlistMapper->getPlaylistById($playlistId);
     $playlistService->addVideoToPlaylist($video, $newPlaylist);
     echo json_encode (array (
-        'result' => 1,
+        'result' => true,
         'message' => (string) Language::GetText('success_playlist_created'),
         'other' => array('name' => $newPlaylist->name, 'count' => 1, 'playlistId' => $playlistId)));
     exit();

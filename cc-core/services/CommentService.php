@@ -162,6 +162,15 @@ class CommentService extends ServiceAbstract
         return $commentCards;
     }
 
+    /**
+     * Generates a thread of comments from a given point. Traversal is done until no more comments are found or limit is reached
+     * @param int $videoId The video whose comments are being retrieved
+     * @param int $limit The number of comment ids to include in the output thread
+     * @param int $offsetId (optional) The comment id of the starting point within the thread. If not provided, retrieves root comments
+     * @param array $thread (optional) Starting thread of comments which will beadded to. If not provided, the returned thread will be built out from scratch
+     * @return array Returns a thread of comment ids based on limit and starting point rules
+     * @throws Exception Thrown if given starting point is not a valid comment id
+     */
     protected function _getCommentThread($videoId, $limit, $offsetId = 0, $thread = array())
     {
         $commentMapper = $this->_getMapper();
@@ -207,6 +216,14 @@ class CommentService extends ServiceAbstract
         return $thread;
     }
 
+    /**
+     * Retrieves a parent comment's descendant threads. Traversal is done until no more descendants are found or limit is reached
+     * @param int $videoId The video whose comments are being retrieved
+     * @param int $limit The number of comment ids to include in the output thread
+     * @param int $parentId Id of parent comment whose descendant comments are being
+     * @param array $thread (optional) Starting thread of comments which will be added to. If not provided, the returned thread will be built out from scratch
+     * @return array Returns given parent comment's descendants threads
+     */
     protected function _getChildCommentThread($videoId, $limit, $parentId, $thread = array())
     {
         $commentMapper = $this->_getMapper();

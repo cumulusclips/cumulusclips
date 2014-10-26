@@ -28,7 +28,7 @@ class View
     }
     
     /**
-     * Prepares view to render a given route
+     * Loads theme, meta language, and prepares view to render a given route
      * @param Route $route Route to be rendered
      * @return View Provides fluid interface
      */

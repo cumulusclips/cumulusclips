@@ -589,6 +589,14 @@ PLAY VIDEO
     width: 390px;
 }
 
+.commentList .commentIndentTriple {
+    margin-left: 210px;
+}
+
+.commentList .commentIndentTriple > div {
+    width: 320px;
+}
+
 .comment img {
     float: left;
 }
