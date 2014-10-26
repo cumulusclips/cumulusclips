@@ -346,7 +346,7 @@ class Filesystem
     protected static function _open()
     {
         // Set FTP login settings
-        if (defined(FTP_HOST) && defined(FTP_USER) && defined(FTP_PASS) && defined(FTP_PATH) && defined(FTP_SSL)) {
+        if (defined('FTP_HOST') && defined('FTP_USER') && defined('FTP_PASS') && defined('FTP_PATH') && defined('FTP_SSL')) {
             self::$_ftp_hostname = FTP_HOST;
             self::$_ftp_username = FTP_USER;
             self::$_ftp_password = FTP_PASS;
