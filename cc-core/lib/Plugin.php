@@ -16,7 +16,7 @@ class Plugin
      * Add plugin method (code) to specified event in system
      * @deprecated as of v2.0, Use self::attachEvent instead
      */
-    public static function Attach($eventName, $callbackMethod)
+    public static function attach($eventName, $callbackMethod)
     {
         self::attachEvent($eventName, $callbackMethod);
     }
@@ -57,7 +57,7 @@ class Plugin
      * Execute methods (code) attached to specified event
      * @deprecated as of v2.0, use self::triggerEvent instead
      */
-    public static function Trigger($eventName)
+    public static function trigger($eventName)
     {
         self::triggerEvent($eventName);
     }
@@ -104,11 +104,10 @@ class Plugin
     public static function init()
     {
         // Retrieve all active plugins
-        $active_plugins = self::GetEnabledPlugins();
+        $active_plugins = self::getEnabledPlugins();
 
         // Load all active plugins
         foreach ($active_plugins as $plugin) {
-
             // Load plugin
             include_once(DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php");
 
@@ -121,20 +120,18 @@ class Plugin
      * Retrieve a list of valid enabled plugins
      * @return array Returns a list of enabled plugins, any orphaned plugins are disabled
      */
-    public static function GetEnabledPlugins()
+    public static function getEnabledPlugins()
     {
-        $enabled = Settings::Get('enabled_plugins');
+        $enabled = Settings::get('enabled_plugins');
         $enabled = unserialize($enabled);
-
         foreach ($enabled as $key => $plugin) {
             $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
             if (!file_exists($plugin_file)) {
                 unset($enabled[$key]);
             }
         }
-        
         reset($enabled);
-        Settings::Set('enabled_plugins', serialize($enabled));
+        Settings::set('enabled_plugins', serialize($enabled));
         return $enabled;
     }
 
@@ -144,7 +141,7 @@ class Plugin
      * @return object Innstance of stdClass object is returned is developers
      * information
      */
-    public static function GetPluginInfo($plugin)
+    public static function getPluginInfo($plugin)
     {
         return (object) call_user_func(array($plugin, 'Info'));
     }
@@ -156,7 +153,7 @@ class Plugin
      * validity check, if true the plugin is loaded into memory
      * @return boolean Returns true if the plugin is valid, false otherwise
      */
-    public static function ValidPlugin($plugin, $loadPluginFile = true)
+    public static function validPlugin($plugin, $loadPluginFile = true)
     {
         // Check plugin file exists
         $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
@@ -164,7 +161,6 @@ class Plugin
 
         // Perform deeper validity check
         if ($loadPluginFile) {
-
             // Load plugin and check it's info method outputs required data
             include_once($plugin_file);
             if (method_exists($plugin, 'Info')) {
@@ -173,7 +169,6 @@ class Plugin
             } else {
                 return false;
             }
-
         } else {
             return true;
         }

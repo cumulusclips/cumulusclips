@@ -29,7 +29,6 @@ $(function(){
                 return false;
             }
             
-//            $('.message').hide();
             $('#upload_status').show();
             $('#upload_status .fill').css('width', '0%');
             $('#upload_status .percentage').text('0%');
