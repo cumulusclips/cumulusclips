@@ -515,7 +515,12 @@ VIDEO STYLES
 }
 
 .videoUploadComplete {
+    display: none;
     margin: 0 0 15px 115px;
+    background: #d5edf8;
+    color: #205791;
+    border: 2px solid #92cae4;
+    padding: 10px;
 }
 
 
@@ -718,20 +723,24 @@ LOGS STYLES
 FILE UPLOAD STYLES
 *****************/
 
-.uploadify-button {
-    text-align: center;
-    width: 150px;
-    padding: 0;
+#upload-select-file {
+    float: left;
+    margin-right: 15px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 0 10px;
 }
 
-.uploadify {
-    float: left;
-    margin-right: 5px;
-    margin-bottom: 0;
-}
-
-.uploadify-queue {
-    float: left;
+#upload-select-file input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
 }
 
 #upload_status {
@@ -758,7 +767,7 @@ FILE UPLOAD STYLES
     float: left;
     display: block;
     text-indent: -9999px;
-    background: url('../extras/uploadify/cancel.png') no-repeat 0 0;
+    background: url('../images/cancel.png') no-repeat 0 0;
     height: 16px;
     width: 16px;
 }

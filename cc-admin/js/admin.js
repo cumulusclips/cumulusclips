@@ -1,7 +1,8 @@
 // Global vars
-var settings = retrieveSettings();
-var customSlug = false;
-var baseURL = $('meta[name="baseURL"]').attr('content');
+var cumulusClips = {};
+cumulusClips.settings = retrieveSettings();
+cumulusClips.customSlug = false;
+cumulusClips.baseUrl = $('meta[name="baseURL"]').attr('content');
 
 $(document).ready(function(){
 
@@ -11,7 +12,7 @@ $(document).ready(function(){
     $("#sidebar h3").click(function(){
         var name = $(this).attr('class');
         $(this).parent().toggleClass('down-icon');
-        var updatedSetting = (settings[name] == 0) ? 1 : 0;
+        var updatedSetting = (cumulusClips.settings[name] == 0) ? 1 : 0;
         $(this).next().slideToggle('fast');
         updateSettings(name, updatedSetting);
     });
@@ -39,7 +40,7 @@ $(document).ready(function(){
     // Generate and update slug as page title changes
     $('#page-title').change(function(){
 
-        if (customSlug) return false;   // URL has been modified directly
+        if (cumulusClips.customSlug) return false;   // URL has been modified directly
 
         // Callback to execute in case of empty page title or slug
         var emptyCallback = function() {
@@ -58,7 +59,7 @@ $(document).ready(function(){
 
         // Submit page title for AJAX validation
         $.ajax({
-            url         : baseURL + '/cc-admin/pages_slug.php',
+            url         : cumulusClips.baseUrl + '/cc-admin/pages_slug.php',
             type        : 'POST',
             data        : {page_id:pageId,action:'title',title:$(this).val()},
             dataType    : 'json',
@@ -102,7 +103,7 @@ $(document).ready(function(){
 
         // Submit custom slug for AJAX validation
         $.ajax({
-            url         : baseURL + '/cc-admin/pages_slug.php',
+            url         : cumulusClips.baseUrl + '/cc-admin/pages_slug.php',
             type        : 'POST',
             data        : {page_id:pageId,action:'slug',slug:editField.val()},
             dataType    : 'json',
@@ -112,7 +113,7 @@ $(document).ready(function(){
                 if ($.trim(data.msg) == '') return emptyCallback();
 
                 // Return slug is valid, update URL & fields
-                customSlug = true;
+                cumulusClips.customSlug = true;
                 $('#view-slug').show();
                 $('#page-slug span').text(data.msg);
                 $('#page-slug input[name="slug"]').val(data.msg);
@@ -164,7 +165,7 @@ $(document).ready(function(){
             $.ajax({
                 cache       : false,
                 async       : false,
-                url         : baseURL+'/.updates/status',
+                url         : cumulusClips.baseUrl + '/.updates/status',
                 type        : 'GET',
                 success     : function(data, textStatus, jqXHR){
                     $('#updates-in-progress .status').html(data);
@@ -263,7 +264,7 @@ $(document).ready(function(){
     if ($('#dashboard').length == 1) {
         $.ajax({
             'type'      : 'POST',
-            'url'       : baseURL+'/cc-admin/',
+            'url'       : cumulusClips.baseUrl + '/cc-admin/',
             'data'      : {news:'true'},
             'error'     : function(){$('#news div').html('<strong>Nothing to report.</strong>');},
             'success'   : function(data){$('#news div').html(data);}
@@ -294,7 +295,7 @@ $(document).ready(function(){
     $('#private-url a').click(function(){
         $.ajax({
             type    : 'get',
-            url     : baseURL + '/private/get/',
+            url     : cumulusClips.baseUrl + '/private/get/',
             success : function (responseData, textStatus, jqXHR) {
                 $('#private-url span').text(responseData);
                 $('#private-url input').val(responseData);
@@ -304,9 +305,6 @@ $(document).ready(function(){
     });
     
 });
-
-
-
 
 /**
  * Retrieve the admin settings from the settings cookie
@@ -323,9 +321,6 @@ function retrieveSettings(){
     return settings;
 }
 
-
-
-
 /**
  * Update the value of a global admin setting
  * @param string name The name of the setting to be updated
@@ -333,12 +328,54 @@ function retrieveSettings(){
  * @return void Global settings object and cookie are updated
  */
 function updateSettings(name, value){
-    settings[name] = value;
-    $.cookie('cc_admin_settings',$.param(settings));
+    cumulusClips.settings[name] = value;
+    $.cookie('cc_admin_settings',$.param(cumulusClips.settings));
 }
 
+/**
+ * Format number of bytes into human readable format
+ * @param int bytes Total number of bytes
+ * @param int precision Accuracy of final round
+ * @return string Returns human readable formatted bytes
+ */
+function formatBytes(bytes, precision)
+{
+    var units = ['b', 'KB', 'MB', 'GB', 'TB'];
+    bytes = Math.max(bytes, 0);
+    var pwr = Math.floor((bytes ? Math.log(bytes) : 0) / Math.log(1024));
+    pwr = Math.min(pwr, units.length - 1);
+    bytes /= Math.pow(1024, pwr);
+    return Math.round(bytes, precision) + units[pwr];
+}
 
+/**
+ * Display message sent from the server handler script for page actions
+ * @param boolean result The result of the requested action (1 = Success, 0 = Error)
+ * @param string message The textual message for the result of the requested action
+ * @return void Message block is displayed and styled accordingly with message.
+ * If message block is already visible, then it is updated.
+ */
+function displayMessage(result, message)
+{
+    var cssClass = (result == true) ? 'success' : 'errors';
+    var existingClass = ($('.message').hasClass('success')) ? 'success' : 'errors';
+    $('.message').show();
+    $('.message').html(message);
+    $('.message').removeClass(existingClass);
+    $('.message').addClass(cssClass);
+}
 
+/**
+ * Resets progress bar, enables browse button,
+ * clears file title, and hides progress bar
+ */
+function resetProgress()
+{
+    $('#upload_status').hide();
+    $('#upload_status .title').text('');
+    $('#upload_status .fill').css('width', '0%');
+    $('#upload_status .percentage').text('0%');
+}
 
 // Disable text selection on sidebar header links (<= IE8 fix)
 $.fn.disableSelection = function() {

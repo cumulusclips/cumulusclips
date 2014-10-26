@@ -8,7 +8,7 @@ $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
 Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
-App::EnableUploadsCheck();
+App::enableUploadsCheck();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
@@ -20,10 +20,10 @@ $data = array();
 $errors = array();
 $message = null;
 $message_type = null;
-$php_path = Settings::Get('php');
-$admin_js[] = ADMIN . '/extras/uploadify/uploadify.plugin.js';
-$admin_js[] = ADMIN . '/js/uploadify.js';
-$admin_css[] = ADMIN . '/extras/uploadify/uploadify.css';
+$php_path = Settings::get('php');
+$admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
+$admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
+$admin_js[] = ADMIN . '/js/fileupload.js';
 $private_url = $videoService->generatePrivate();
 $tempFile = null;
 $videoUploadMessage = null;
@@ -37,9 +37,9 @@ $categories = $categoryService->getCategories();
 if (isset($_POST['submitted'])) {
 
     // Validate video upload
-    if (!empty($_POST['originalVideoName']) && !empty($_POST['tempFile']) && file_exists($_POST['tempFile'])) {
-        $tempFile = $_POST['tempFile'];
-        $originalVideoName = trim($_POST['originalVideoName']);
+    if (!empty($_POST['original-video-name']) && !empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
+        $tempFile = $_POST['temp-file'];
+        $originalVideoName = trim($_POST['original-video-name']);
         $videoUploadMessage = $originalVideoName . ' - has been uploaded.';
     } else {
         $errors['video'] = 'Invalid video upload';
@@ -109,10 +109,9 @@ if (isset($_POST['submitted'])) {
 
     // Update video if no errors were made
     if (empty($errors)) {
-
         // Create record
         $video->userId = $adminUser->userId;
-        $video->originalExtension = Functions::GetExtension($tempFile);
+        $video->originalExtension = Functions::getExtension($tempFile);
         $video->filename = basename($tempFile, '.' . $video->originalExtension);
         $video->status = VideoMapper::PENDING_CONVERSION;
         $videoId = $videoMapper->save($video);
@@ -150,20 +149,25 @@ include('header.php');
 
     <div class="block">
 
-        <form name="uploadify" action="<?=ADMIN?>/videos_add.php" method="post">
+        <form action="<?=ADMIN?>/videos_add.php" method="post">
 
             <div class="row <?=(isset ($errors['video'])) ? 'error' : ''?>">
                 <label>Video File:</label>
-                <input id="upload" type="file" name="upload" />
+                <div id="upload-select-file" class="button">
+                    <span>Browse</span>
+                    <input id="upload" type="file" name="upload" />
+                </div>
                 <input id="upload_button" class="button" type="button" value="Upload" />
-                <input type="hidden" name="uploadLimit" value="<?=$config->video_size_limit?>" />
-                <input type="hidden" name="fileTypes" value="<?=htmlspecialchars(json_encode($config->accepted_video_formats))?>" />
-                <input type="hidden" name="uploadType" value="video" />
-                <input type="hidden" name="originalVideoName" value="<?=htmlspecialchars($originalVideoName)?>" />
-                <input type="hidden" name="tempFile" value="<?=$tempFile?>" />
+                <input type="hidden" name="upload-limit" value="<?=$config->video_size_limit?>" />
+                <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->accepted_video_formats))?>" />
+                <input type="hidden" name="upload-type" value="video" />
+                <input type="hidden" name="original-video-name" value="<?=htmlspecialchars($originalVideoName)?>" />
+                <input type="hidden" name="temp-file" value="<?=$tempFile?>" />
+                <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
             </div>
             
-            <div class="videoUploadComplete"><?=$videoUploadMessage?></div>
+            <?php $style = ($videoUploadMessage) ? 'display: inline-block;' : ''; ?>
+            <div class="videoUploadComplete" style="<?=$style?>"><?=$videoUploadMessage?></div>
             
             <div id="upload_status">
                 <div class="title"></div>

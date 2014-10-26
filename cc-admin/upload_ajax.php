@@ -6,28 +6,27 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $videoService = new VideoService();
 
 // Verify post params are valid
-if (empty($_POST['uploadType']) || !in_array($_POST['uploadType'], array('addon', 'video'))) {
-    App::Throw404();
+if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], array('addon', 'video'))) {
+    App::throw404();
 }
 
 try {
-    
     // Create vars based on upload type (video | addon)
-    if ($_POST['uploadType'] == 'video') {
-        $filesize = $config->video_size_limit;
+    if ($_POST['upload-type'] == 'video') {
+        $maxFilesize = $config->video_size_limit;
         $extensionList = $config->accepted_video_formats;
         $temp = UPLOAD_PATH . '/temp';
         $fileName = $videoService->generateFilename() . '.';
         $createDir = false;
     } else {
-        $filesize = 1024*1024*100;
+        $maxFilesize = 1024*1024*100;
         $extensionList = array('zip');
         $temp = UPLOAD_PATH . '/temp/.' . session_id();
         $fileName = 'addon' . '.';
@@ -46,12 +45,12 @@ try {
     }
 
     // Validate filesize
-    if ($_FILES['upload']['size'] > $filesize || filesize($_FILES['upload']['tmp_name']) > $filesize) {
+    if ($_FILES['upload']['size'] > $maxFilesize || filesize($_FILES['upload']['tmp_name']) > $maxFilesize) {
         throw new Exception('filesize');
     }
 
     // Validate file extension
-    $extension = Functions::GetExtension($_FILES['upload']['name']);
+    $extension = Functions::getExtension($_FILES['upload']['name']);
     if (!in_array($extension, $extensionList)) throw new Exception('extension');
 
     // Create temp dir
@@ -66,7 +65,6 @@ try {
         App::Alert('Error During Admin File Upload', 'Uploaded file could not be moved from OS temp directory');
         throw new Exception('error');
     }
-
 } catch (Exception $e) {
     exit(json_encode((object) array(
         'result' => false,
@@ -74,7 +72,7 @@ try {
     )));
 }
 
-### Notify Uploadify of success
+// Notify Uploadify of success
 exit(json_encode((object) array(
     'result' => true,
     'message' => 'SUCCESS',
