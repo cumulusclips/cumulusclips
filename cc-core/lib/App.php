@@ -116,9 +116,10 @@ class App
         }
 
         // Redirect to mobile if user hasn't opted out from mobile site
-        $agent = '/ip(ad|hone|od)|android/i';
+        $agent = '/ip(ad|hone|od)|android|Windows Phone/i';
         if (
-            isset($_SERVER['HTTP_USER_AGENT'])
+            (boolean) Settings::get('mobile_site')
+            && isset($_SERVER['HTTP_USER_AGENT'])
             && preg_match($agent, $_SERVER['HTTP_USER_AGENT'])
             && !isset($_COOKIE['nomobile'])
             && !isset($_GET['nomobile'])

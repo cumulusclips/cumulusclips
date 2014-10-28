@@ -17,7 +17,7 @@ if (isset($_GET['token'])) {
     $user = $userMapper->getUserByCustom(array('confirm_code' => $token, 'status' => 'new'));
     if ($user) {
         $userService->approve($user, 'activate');
-        if (Settings::get('auto_approve_users') == 1) {
+        if (Settings::get('auto_approve_users') == '1') {
             $this->view->vars->message = Language::getText('activate_success', array('host' => HOST));
             $_SESSION['user_id'] = $user->userId;
         } else {
@@ -30,7 +30,7 @@ if (isset($_GET['token'])) {
         $this->view->vars->messageType = 'error';
     }
 } else {
-    App::Throw404();
+    App::throw404();
 }
 
 Plugin::trigger('activate.before_render');
