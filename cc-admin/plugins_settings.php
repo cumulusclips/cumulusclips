@@ -9,32 +9,26 @@ $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
 Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
-// Establish page variables, objects, arrays, etc
-$enabled_plugins = Plugin::GetEnabledPlugins();
-
-
 // Validate plugin
-if (!empty ($_GET['plugin']) && Plugin::ValidPlugin ($_GET['plugin'], true)) {
-    $plugin = trim ($_GET['plugin']);
-} else {
+if (empty($_GET['plugin']) || !Plugin::isPluginValid($_GET['plugin'])) {
     App::Throw404();
 }
 
+$plugin = Plugin::getPlugin($_GET['plugin']);
+$page_title = $plugin->name . ' Settings';
 
 // Verify plugin is enabled and has 'Settings'
-if (array_search ($plugin, $enabled_plugins) !== false && method_exists ($plugin, 'Settings')) {
-    $plugin_info = Plugin::GetPluginInfo ($plugin);
-    $page_title = $plugin_info->name . ' Settings';
-} else {
+if (!Plugin::hasSettingsMethod($plugin)) {
     App::Throw404();
 }
 
+// Execute plugin's settings method
+ob_start();
+$plugin->settings();
+$body = ob_get_contents();
+ob_end_clean();
 
 // Output Page
-Plugin::Trigger ("admin.$plugin.before_render");
-include ('header.php');
-call_user_func (array ($plugin, 'Settings'));
-Plugin::Trigger ("admin.$plugin.settings");
-include ('footer.php');
-
-?>
+include('header.php');
+echo $body;
+include('footer.php');

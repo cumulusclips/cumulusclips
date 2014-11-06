@@ -12,121 +12,102 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $message = null;
 $page_title = 'Plugins';
-$plugin_list = array();
-$installed_plugins = unserialize (Settings::Get ('installed_plugins'));
-$enabled_plugins = Plugin::GetEnabledPlugins();
+$pluginList = array();
+$invalidPluginList = array();
+$installedPlugins = Plugin::getInstalledPlugins();
+$enabledPlugins = Plugin::getEnabledPlugins();
 
-
-
-
-### Handle "Delete" plugin if requested
-if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete'])) {
-
-    if (Plugin::ValidPlugin ($_GET['delete'])) {
-
-        // Disable plugin if applicable
-        $key = array_search ($_GET['delete'], $enabled_plugins);
-        if ($key !== false) {
-            unset ($enabled_plugins[$key]);
-            Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
-        }
-
-        // Uninstall plugin
-        $key = array_search ($_GET['delete'], $installed_plugins);
-        if ($key !== false) {
-            if (method_exists ($_GET['delete'], 'Uninstall')) call_user_func (array ($_GET['delete'], 'Uninstall'));
-            unset ($installed_plugins[$key]);
-            Settings::Set ('installed_plugins', serialize ($installed_plugins));
-        }
+// Handle "Uninstall" plugin if requested
+if (!empty($_GET['uninstall'])) {
+    // Validate plugin
+    if (Plugin::isPluginValid($_GET['uninstall']) && Plugin::isPluginInstalled($_GET['uninstall'])) {
+        
+        // Load plugin
+        $pluginName = $_GET['uninstall'];
+        $plugin = Plugin::getPlugin($pluginName); 
+        
+        // Uninstall
+        Plugin::uninstallPlugin($pluginName);
+        $installedPlugins = Plugin::getInstalledPlugins();
+        $enabledPlugins = Plugin::getEnabledPlugins();
 
         // Delete plugin files
-        $plugin_info = Plugin::GetPluginInfo ($_GET['delete']);
-        $message = $plugin_info->name . ' plugin has been deleted';
+        $message = $plugin->name . ' plugin has been uninstalled';
         $message_type = 'success';
         try {
-            Filesystem::delete(DOC_ROOT . '/cc-content/plugins/' . $_GET['delete']);
+            Filesystem::delete(DOC_ROOT . '/cc-content/plugins/' . $pluginName);
         } catch (Exception $e) {
-            $message = $e->getMessage();
+            $message = $plugin->name . ' was uninstalled. However, the following errors occured during removal of plugin files. '
+            . 'They need to be removed manually.<br><br>' . $e->getMessage();
             $message_type = 'errors';
         }
-
     }
-
 }
 
-
-
-
-### Handle "Enable" plugin if requested
-else if (!empty ($_GET['enable']) && !ctype_space ($_GET['enable'])) {
-
-    // Validate plugin
-    if (Plugin::ValidPlugin ($_GET['enable']) && !in_array ($_GET['enable'], $enabled_plugins)) {
-
-        // Install plugin if applicable
-        if (!in_array ($_GET['enable'], $installed_plugins)) {
-            if (method_exists ($_GET['enable'], 'Install')) call_user_func (array ($_GET['enable'], 'Install'));
-            $installed_plugins[] = $_GET['enable'];
-            Settings::Set ('installed_plugins', serialize ($installed_plugins));
-        }
-
-        // Enable plugin
-        $enabled_plugins[] = $_GET['enable'];
-        Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
-
-        // Output message
-        $plugin_info = Plugin::GetPluginInfo ($_GET['enable']);
-        $message = $plugin_info->name . ' has been enabled.';
-        $message_type = 'success';
-    }
-
-}
-
-
-
-
-### Handle "Disable" plugin if requested
-else if (!empty ($_GET['disable']) && !ctype_space ($_GET['disable'])) {
-
-    // Uninstall plugin if applicable
-    $key = array_search ($_GET['disable'], $enabled_plugins);
-    if ($key !== false && Plugin::ValidPlugin ($_GET['disable'])) {
-
-        unset ($enabled_plugins[$key]);
-        Settings::Set ('enabled_plugins', serialize ($enabled_plugins));
-
-        // Output message
-        $plugin_info = Plugin::GetPluginInfo ($_GET['disable']);
-        $message = $plugin_info->name . ' has been disabled.';
-        $message_type = 'success';
-
-    }
-
-}
-
-
-
-
-// Retrieve plugins
-foreach (glob (DOC_ROOT . '/cc-content/plugins/*') as $plugin_path) {
-
-    // Load plugin and retrieve it's info
-    $plugin_name = basename ($plugin_path);
-    include_once ("$plugin_path/$plugin_name.php");
-
-    // Store info for output
-    $plugin = new stdClass();
-    $plugin->filename = $plugin_name;
-    $plugin->info = Plugin::GetPluginInfo ($plugin_name);
-    $plugin->enabled = (in_array ($plugin->filename, $enabled_plugins)) ? true : false;
-    $plugin->settings = (method_exists ($plugin_name, 'settings')) ? true : false;
-    $plugin_list[] = $plugin;
+// Handle "Install" plugin if requested
+elseif (!empty($_GET['install'])) {
     
+    // Validate plugin
+    if (Plugin::isPluginValid($_GET['install']) && !Plugin::isPluginInstalled($_GET['install'])) {
+        
+        // Load plugin
+        $pluginName = $_GET['install'];
+        $plugin = Plugin::getPlugin($pluginName);
+        
+        // Install plugin
+        Plugin::installPlugin($pluginName);
+        $installedPlugins = Plugin::getInstalledPlugins();
+        $enabledPlugins = Plugin::getEnabledPlugins();
+        $message = $plugin->name . ' has been installed.';
+        $message_type = 'success';
+    }
 }
 
+// Handle "Enable" plugin if requested
+elseif (!empty($_GET['enable'])) {
+    // Validate plugin & enable
+    if (Plugin::isPluginValid($_GET['enable'])
+        && Plugin::isPluginInstalled($_GET['enable'])
+        && !Plugin::isPluginEnabled($_GET['enable'])
+    ) {
+        $pluginName = $_GET['enable'];
+        $plugin = Plugin::getPlugin($pluginName);
+        Plugin::enablePlugin($pluginName);
+        $enabledPlugins = Plugin::getEnabledPlugins();
+        $message = $plugin->name . ' has been enabled.';
+        $message_type = 'success';
+    }
+}
+
+// Handle "Disable" plugin if requested
+elseif (!empty($_GET['disable'])) {
+    // Validate plugin & disable
+    if (Plugin::isPluginValid($_GET['disable'])
+        && Plugin::isPluginInstalled($_GET['disable'])
+        && Plugin::isPluginEnabled($_GET['disable'])
+    ) {
+        $pluginName = $_GET['disable'];
+        Plugin::disablePlugin($pluginName);
+        $enabledPlugins = Plugin::getEnabledPlugins();
+        $plugin = Plugin::getPlugin($pluginName);
+        $message = $plugin->name . ' has been disabled.';
+        $message_type = 'success';
+    }
+}
+
+// Retrieve available plugins
+foreach (glob(DOC_ROOT . '/cc-content/plugins/*') as $pluginPath) {
+    $pluginName = basename($pluginPath);
+    if (Plugin::isPluginValid($pluginName)) {
+        $plugin = Plugin::getPlugin($pluginName);
+        $pluginList[] = $plugin;
+    } else {
+        $invalidPluginList[] = $pluginName;
+    }
+}
 
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
@@ -139,43 +120,46 @@ include ('header.php');
     <?php endif; ?>
 
 
-    <?php if (!empty ($plugin_list)): ?>
+    <?php if (!empty($pluginList)): ?>
 
-        <?php foreach ($plugin_list as $plugin): ?>
+        <?php foreach ($pluginList as $plugin): ?>
 
             <div class="block">
 
                 <p>
-                    <strong><?=$plugin->info->name?></strong>
-                    <?php if (!empty ($plugin->info->author)): ?>
-                        by: <?=$plugin->info->author?>
+                    <strong><?=$plugin->name?></strong>
+                    <?php if (!empty($plugin->author)): ?>
+                        by: <?=$plugin->author?>
                     <?php endif; ?>
                 </p>
 
 
-                <?php if (!empty ($plugin->info->version)): ?>
-                <p><strong>Version:</strong> <?=$plugin->info->version?></p>
+                <?php if (!empty($plugin->version)): ?>
+                <p><strong>Version:</strong> <?=$plugin->version?></p>
                 <?php endif; ?>
 
 
-                <?php if (!empty ($plugin->info->notes)): ?>
-                    <p><?=$plugin->info->notes?></p>
+                <?php if (!empty($plugin->description)): ?>
+                    <p><?=$plugin->description?></p>
                 <?php endif; ?>
 
+                <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
+                    <p>
+                        <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
+                            <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->getSystemName()?>">Settings</a> &nbsp;|&nbsp;
+                        <?php endif; ?>
 
-                <p>
-                    <?php if ($plugin->enabled && $plugin->settings): ?>
-                        <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->filename?>">Settings</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <?php endif; ?>
+                        <?php if (Plugin::isPluginEnabled($plugin->getSystemName())): ?>
+                            <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->getSystemName()?>">Disable</a>
+                        <?php else: ?>
+                            <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->getSystemName()?>">Enable</a>
+                        <?php endif; ?>
 
-                    <?php if ($plugin->enabled): ?>
-                        <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->filename?>">Disable</a>
-                    <?php else: ?>
-                        <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->filename?>">Enable</a>
-                    <?php endif; ?>
-
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/plugins.php?delete=<?=$plugin->filename?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall &amp; Delete</a>
-                </p>
+                        &nbsp;|&nbsp; <a href="<?=ADMIN?>/plugins.php?uninstall=<?=$plugin->getSystemName()?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall</a>
+                    </p>
+                <?php else: ?>
+                    <a href="<?=ADMIN?>/plugins.php?install=<?=$plugin->getSystemName()?>">Install</a>
+                <?php endif; ?>
 
             </div>
 

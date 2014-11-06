@@ -274,7 +274,7 @@ class Filesystem
             }
 
             // Delete directory
-            if (self::_canUseNative($dirname)) {
+            if (self::_canUseNative($dirname, true)) {
                 if (!@rmdir($dirname)) throw new Exception("Unable to delete directory ($dirname)");
             } else {
                 self::_open();
@@ -284,7 +284,7 @@ class Filesystem
             }
         } else {
             // Delete file
-            if (self::_canUseNative($filename)) {
+            if (self::_canUseNative($filename, true)) {
                 if (!@unlink($filename)) throw new Exception("Unable to delete file ($filename)");
             } else {
                 self::_open();
