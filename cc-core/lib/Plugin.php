@@ -139,14 +139,14 @@ class Plugin
     public static function isPluginValid($pluginName)
     {
         // Check plugin file exists
-        $plugin_file = DOC_ROOT . "/cc-content/plugins/$pluginName/$pluginName.php";
-        if (!file_exists($plugin_file)) {
+        $pluginFile = DOC_ROOT . "/cc-content/plugins/$pluginName/$pluginName.php";
+        if (!file_exists($pluginFile)) {
             return false;
         }
         
         // Load plugin
-        include_once($plugin_file);
-        if (!class_exists($pluginName)) return false;
+        include_once($pluginFile);
+        if (!class_exists($pluginName, false)) return false;
         $plugin = new $pluginName();
         
         // Verify plugin adheres to plugin API

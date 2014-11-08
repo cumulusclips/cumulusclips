@@ -114,6 +114,11 @@ include('header.php');
 <div id="plugins">
 
     <h1>Plugins</h1>
+    
+
+    <?php foreach($invalidPluginList as $invalidPlugin): ?>
+        <div class="message notice">Plugin "<?=$invalidPlugin?>" is invalid and cannot be loaded.</div>
+    <?php endforeach; ?>
 
     <?php if ($message): ?>
     <div class="message <?=$message_type?>"><?=$message?></div>

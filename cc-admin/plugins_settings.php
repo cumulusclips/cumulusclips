@@ -16,6 +16,8 @@ if (empty($_GET['plugin']) || !Plugin::isPluginValid($_GET['plugin'])) {
 
 $plugin = Plugin::getPlugin($_GET['plugin']);
 $page_title = $plugin->name . ' Settings';
+$admin_meta['plugin'] = $plugin->getSystemName();
+$admin_meta['pluginUrl'] = HOST . '/cc-content/plugins/' . $plugin->getSystemName();
 
 // Verify plugin is enabled and has 'Settings'
 if (!Plugin::hasSettingsMethod($plugin)) {
@@ -30,5 +32,9 @@ ob_end_clean();
 
 // Output Page
 include('header.php');
-echo $body;
-include('footer.php');
+
+?>
+
+<div id="plugin-settings"><?php echo $body; ?></div>
+
+<?php include('footer.php'); ?>

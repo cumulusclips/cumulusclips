@@ -25,17 +25,11 @@ $(document).ready(function(){
         return false;
     });
 
-
-
-
     // Redirect user to requested location when status dropdown is updated
     $('.jump select').change(function(){
         var jumpLoc = $(this).data('jump');
         window.location = jumpLoc+'?status='+$(this).val();
     });
-
-
-
 
     // Generate and update slug as page title changes
     $('#page-title').change(function(){
@@ -79,9 +73,6 @@ $(document).ready(function(){
         
     });
 
-
-
-
     // Validate custom page slug when done editing
     $('#page-slug .done').click(function(){
 
@@ -123,9 +114,6 @@ $(document).ready(function(){
 
     });
 
-
-
-
     // Display edit page slug field
     $('#page-slug .edit').click(function(){
         $('#empty-slug').hide();
@@ -134,9 +122,6 @@ $(document).ready(function(){
         $('#edit-slug input').focus().val($('#page-slug input[name="slug"]').val());
         return false;
     });
-
-
-
 
     // Hide edit slug field & display proper view of slug
     $('#page-slug .cancel').click(function(){
@@ -148,9 +133,6 @@ $(document).ready(function(){
         }
         return false;
     });
-
-
-
 
     // Display update in progress message & status
     $('.begin-update').click(function(){
@@ -175,18 +157,12 @@ $(document).ready(function(){
 
     });
 
-
-
-
     // Append tipsy tooltip on more info links
     $('.more-info').click(function(){return false;});
     $('.more-info').tipsy({
         fade    : true,
         gravity : 's'
     });
-
-
-
 
     // Toggle display of a block via select box change
     $('select[data-toggle]').change(function(){
@@ -196,9 +172,6 @@ $(document).ready(function(){
             duration:0
         });
     });
-
-
-
 
     // Toggle Move Videos / Delete Category Forms
     $('.category-action').click(function(){
@@ -215,9 +188,6 @@ $(document).ready(function(){
         return false;
     });
 
-
-
-
     // Add Show/Hide password link to password fields
     $('.mask').after(function(){
         var name = $(this).attr('name');
@@ -226,11 +196,8 @@ $(document).ready(function(){
         return field+link;
     });
 
-
-
-
     // Toggle password visibility when mask link is clicked
-    $('.mask-link').live('click',function(){
+    $('.row').on('click', '.mask-link', function(){
 
         var name = $(this).data('for');
 
@@ -254,11 +221,7 @@ $(document).ready(function(){
         }
 
         return false;
-
     });
-
-
-
 
     // Load mothership message
     if ($('#dashboard').length == 1) {
@@ -270,9 +233,6 @@ $(document).ready(function(){
             'success'   : function(data){$('#news div').html(data);}
         });
     }
-
-
-
 
     // Show/Hide Block
     $('.showhide').click(function(){
@@ -288,9 +248,6 @@ $(document).ready(function(){
         if ($(this).is('a')) return false;
     });
 
-
-
-
     // Regenerate Private URL
     $('#private-url a').click(function(){
         $.ajax({
@@ -303,7 +260,6 @@ $(document).ready(function(){
         });
         return false;
     });
-    
 });
 
 /**
