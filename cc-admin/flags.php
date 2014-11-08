@@ -1,7 +1,7 @@
 <?php
 
 // Init application
-include_once(dirname(dirname(__FILE__)) . '/cc-core/config/admin.bootstrap.php');
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
 $userService = new UserService();

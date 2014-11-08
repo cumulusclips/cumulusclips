@@ -1,7 +1,7 @@
 <?php
 
 // Init application
-include_once(dirname(__FILE__) . '/cc-core/config/bootstrap.php');
+include_once(dirname(__FILE__) . '/cc-core/system/bootstrap.php');
 
 // Determine requested script
 $router = new Router();

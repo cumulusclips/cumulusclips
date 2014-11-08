@@ -1,11 +1,10 @@
 <?php
-$this->AddJs('jcycle.plugin.js');
-$this->AddJs('jcycle.js');
-if (!$loggedInUser) $this->AddSidebarBlock('home_login.phtml');
+$this->addJs('jcycle.plugin.js');
+$this->addJs('jcycle.js');
+if (!$loggedInUser) $this->addSidebarBlock('home_login.phtml');
 ?>
 
-
-<h1><?=Language::GetText('home_header')?></h1>
+<h1><?=Language::getText('home_header')?></h1>
 
 <!-- BEGIN SLIDESHOW -->
 <div id="slideshow">
@@ -57,8 +56,8 @@ if (!$loggedInUser) $this->AddSidebarBlock('home_login.phtml');
         <div>
             <img src="<?=$config->thumb_url?>/<?=$featuredVideo->filename?>.jpg" />
             <div class="slide-text">
-                <p class="large"><u><?=Language::GetText('featured')?>:</u> <?=$featuredVideo->title?></p>
-                <p><?=Functions::CutOff ($featuredVideo->description, 80)?></p>
+                <p class="large"><u><?=Language::getText('featured')?>:</u> <?=$featuredVideo->title?></p>
+                <p><?=Functions::cutOff($featuredVideo->description, 80)?></p>
                 <a class="button" href="<?=$featured->url?>/">Watch Now</a>
             </div>
         </div>
@@ -78,9 +77,9 @@ if (!$loggedInUser) $this->AddSidebarBlock('home_login.phtml');
 
     <div class="videos_list">
         <?php if (!empty ($recent_videos)): ?>
-            <?php $this->RepeatingBlock('video.phtml', $recent_videos); ?>
+            <?php $this->repeatingBlock('video.phtml', $recent_videos); ?>
         <?php else: ?>
-            <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
+            <div class="block"><strong><?=Language::getText('no_videos')?></strong></div>
         <?php endif; ?>
     </div>
 
