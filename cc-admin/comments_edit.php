@@ -20,99 +20,79 @@ $data = array();
 $errors = array();
 $message = null;
 
-
-
 // Build return to list link
-if (!empty ($_SESSION['list_page'])) {
+if (!empty($_SESSION['list_page'])) {
     $list_page = $_SESSION['list_page'];
 } else {
     $list_page = ADMIN . '/comments.php';
 }
 
+// Verify a record was provided
+if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 
-
-### Verify a record was provided
-if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] > 0) {
-
-    ### Retrieve record information
+    // Retrieve record information
     $comment = $commentMapper->getCommentById($_GET['id']);
     if ($comment) {
         $video = $videoMapper->getVideoById($comment->videoId);
     } else {
-        header ('Location: ' . ADMIN . '/comments.php');
+        header('Location: ' . ADMIN . '/comments.php');
         exit();
     }
-
 } else {
-    header ('Location: ' . ADMIN . '/comments.php');
+    header('Location: ' . ADMIN . '/comments.php');
     exit();
 }
 
-
-
-
-
-/***********************
-Handle form if submitted
-***********************/
-
-if (isset ($_POST['submitted'])) {
-
+// Handle form if submitted
+if (isset($_POST['submitted'])) {
 
     // Validate user fields if anonymous
     if ($comment->userId == 0) {
 
         // Validate Name
-        if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
+        if (!empty($_POST['name']) && !ctype_space($_POST['name'])) {
             $comment->name = trim($_POST['name']);
         } else {
             $errors['name'] = 'Invalid name';
         }
 
-
         // Validate Email
-        if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
+        if (!empty($_POST['email']) && !ctype_space($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
             $comment->email = trim($_POST['email']);
         } else {
             $errors['email'] = 'Invalid email address';
         }
 
-
         // Validate website
-        if (!empty ($comment->website) && empty ($_POST['website'])) {
+        if (!empty($comment->website) && empty($_POST['website'])) {
             $comment->website = null;
-        } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
+        } else if (!empty($_POST['website']) && !ctype_space($_POST['website'])) {
             $website = $_POST['website'];
-            if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+            if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
                 $website = (empty($matches[1])) ? 'http://' . $website : $website;
                 $comment->website = trim ($website);
             } else {
                 $errors['website'] = 'Invalid website';
             }
         }
-
     }   // END VALIDATE ANONYMOUS POSTER FIELDS
 
-
     // Validate status
-    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+    if (!empty($_POST['status']) && !ctype_space($_POST['status'])) {
         $newCommentStatus = trim ($_POST['status']);
     } else {
         $errors['status'] = 'Invalid status';
     }
 
-
     // Validate comments
-    if (!empty ($_POST['comments']) && !ctype_space ($_POST['comments'])) {
+    if (!empty($_POST['comments']) && !ctype_space($_POST['comments'])) {
         $comment->comments = trim ($_POST['comments']);
     } else {
         $errors['comments'] = 'Invalid comments';
     }
 
-
-
     // Update record if no errors were found
-    if (empty ($errors)) {
+    if (empty($errors)) {
 
         // Perform addional actions based on status change
         if ($newCommentStatus != $comment->status) {
@@ -129,24 +109,20 @@ if (isset ($_POST['submitted'])) {
                 $flagService = new FlagService();
                 $flagService->flagDecision($comment, true);
             }
-
         }
 
         $message = 'Comment has been updated';
         $message_type = 'success';
         $commentMapper->save($comment);
-
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+        $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
         $message_type = 'errors';
     }
-
 }
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
@@ -165,37 +141,37 @@ include ('header.php');
 
         <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>" method="post">
 
-            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
                 <label>Status:</label>
                 <select name="status" class="dropdown">
-                    <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset ($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                    <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>
 
             <div class="row"><label>Date Posted:</label>
-                <?=Functions::DateFormat('m/d/Y',$comment->dateCreated)?>
+                <?=date('m/d/Y', strtotime($comment->dateCreated))?>
             </div>
 
             <div class="row">
-                <label>In Response To:</label>
+                <label>Video:</label>
                 <a target="_ccsite" href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a>
             </div>
 
             <?php if ($comment->userId == 0): ?>
 
-                <div class="row<?=(isset ($errors['name'])) ? ' error' : ''?>">
+                <div class="row<?=(isset($errors['name'])) ? ' error' : ''?>">
                     <label>*Name:</label>
                     <input class="text" type="text" name="name" value="<?=htmlspecialchars($comment->name)?>" />
                 </div>
 
-                <div class="row<?=(isset ($errors['email'])) ? ' error' : ''?>">
+                <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
                     <label>*Email:</label>
                     <input class="text" type="text" name="email" value="<?=htmlspecialchars($comment->email)?>" />
                 </div>
 
-                <div class="row<?=(isset ($errors['website'])) ? ' error' : ''?>">
+                <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
                     <label>Website:</label>
                     <input class="text" type="text" name="website" value="<?=htmlspecialchars($comment->website)?>" />
                 </div>
@@ -210,7 +186,7 @@ include ('header.php');
 
             <?php endif; ?>
 
-            <div class="row<?=(isset ($errors['comment'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['comment'])) ? ' error' : ''?>">
                 <label>Comments:</label>
                 <textarea rows="7" cols="50" class="text" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
             </div>
@@ -226,4 +202,4 @@ include ('header.php');
 
 </div>
 
-<?php include ('footer.php'); ?>
+<?php include('footer.php'); ?>

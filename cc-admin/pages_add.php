@@ -22,8 +22,6 @@ $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
 
-
-
 // Build return to list link
 if (!empty ($_SESSION['list_page'])) {
     $list_page = $_SESSION['list_page'];
@@ -31,50 +29,39 @@ if (!empty ($_SESSION['list_page'])) {
     $list_page = ADMIN . '/pages.php';
 }
 
-
-
 // Retrieve list of available layouts
-foreach (glob (THEME_PATH . '/layouts/*.phtml') as $filename) {
+$activeTheme = Settings::get('active_theme');
+foreach (glob(THEMES_DIR . '/' . $activeTheme .'/layouts/*.phtml') as $filename) {
     $layouts[] = basename ($filename, '.phtml');
 }
 
-
-
-
-
-/***********************
-HANDLE FORM IF SUBMITTED
-***********************/
-
-if (isset ($_POST['submitted'])) {
+// HANDLE FORM IF SUBMITTED
+if (isset($_POST['submitted'])) {
 
     // Validate layout
-    if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
+    if (!empty($_POST['layout']) && !ctype_space($_POST['layout'])) {
         $page->layout = $_POST['layout'];
     } else {
         $errors['layout'] = "You didn't provide a valid layout";
     }
 
-
     // Validate status
-    if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
+    if (!empty($_POST['status']) && in_array($_POST['status'], array('published', 'draft'))) {
         $page->status = $_POST['status'];
     } else {
         $errors['status'] = "You didn't provide a valid status";
     }
 
-
     // Validate title
-    if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
+    if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
         $page->title = trim ($_POST['title']);
     } else {
         $errors['title'] = "You didn't enter a valid title";
     }
 
-
     // Validate slug
-    if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
-        $slug = Functions::CreateSlug (trim ($_POST['slug']));
+    if (!empty($_POST['slug']) && !ctype_space($_POST['slug'])) {
+        $slug = Functions::createSlug(trim($_POST['slug']));
         if (!$pageService->isReserved($slug) && !$pageMapper->getPageBySlug($slug)) {
             $page->slug = $slug;
         } else {
@@ -84,29 +71,25 @@ if (isset ($_POST['submitted'])) {
         $errors['slug'] = "You didn't enter a valid URL";
     }
 
-
     // Validate content
-    if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
+    if (!empty($_POST['content']) && !ctype_space($_POST['content'])) {
         $page->content = trim ($_POST['content']);
     } else {
         $page->content = '';
     }
 
-
     // Create page if no errors were found
-    if (empty ($errors)) {
+    if (empty($errors)) {
         $pageMapper->save($page);
         $page = new Page();
         $message = 'Page has been created';
         $message_type = 'success';
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
-        $message .= implode ('<br />- ', $errors);
+        $message .= implode('<br />- ', $errors);
         $message_type = 'errors';
     }
-
 }
-
 
 // Output Header
 include ('header.php');
@@ -128,12 +111,12 @@ include ('header.php');
 
         <form method="post" action="<?=ADMIN?>/pages_add.php">
 
-            <div class="row <?=(isset ($errors['title'])) ? 'error' : '' ?>">
+            <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
                 <label>*Title:</label>
                 <input id="page-title" class="text" type="text" name="title" />
             </div>
 
-            <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'error' : '' ?>">
+            <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
                 
                 <label>*URL:</label>
                 <input type="hidden" name="slug" />

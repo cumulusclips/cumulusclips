@@ -212,7 +212,7 @@ include ('header.php');
                                 <?php $comment = $commentMapper->getCommentById($flag->objectId); ?>
                                 <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
 
-                                <?=$comment->comments_display?>
+                                <?=$comment->comments?>
                                 <div class="record-actions invisible">
                                     <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
 
@@ -223,7 +223,7 @@ include ('header.php');
                             </div>
                         </td>
                         <td><?=$reporter->username?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$flag->dateCreated)?></td>
+                        <td><?=date('m/d/Y', strtotime($flag->dateCreated))?></td>
                     </tr>
 
                 <?php endforeach; ?>
