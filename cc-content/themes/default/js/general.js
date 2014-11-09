@@ -96,7 +96,7 @@ $(document).ready(function(){
 
         // Callback for AJAX call - Update button if the action (subscribe / unsubscribe) was successful
         var callback = function(responseData) {
-            if (responseData.result == 1) {
+            if (responseData.result === true) {
                 subscribeButton.text(responseData.other);
                 if (subscribeType == 'subscribe') {
                     subscribeButton.data('type','unsubscribe');
@@ -111,23 +111,7 @@ $(document).ready(function(){
         return false;
     });
 
-
-    // Attach rating action to like & dislike links
-    $('.rating').click(function(){
-        var url = cumulusClips.baseUrl+'/actions/rate/';
-        var data = {video_id: videoId, rating: $(this).data('rating')};
-        var callback = function(responseData) {
-            if (responseData.result == 1) {
-                $('.actions .left .like').text(responseData.other.likes);
-                $('.actions .left .dislike').text(responseData.other.dislikes);
-            }
-            window.scrollTo(0, 0);
-        }
-        executeAction(url, data, callback);
-        return false;
-    });
-
-
+    // Profile page actions
     if ($('.profile').length > 0) {
         getText(function(responseData, textStatus, jqXHR){cumulusClips.videosText = responseData;}, 'videos');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.watchAllText = responseData;}, 'watch_all');
@@ -241,6 +225,20 @@ $(document).ready(function(){
         cumulusClips.loadMoreComments = (cumulusClips.commentCount > 5) ? true : false;
         cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
 
+        // Attach rating action to like & dislike links
+        $('.rating').click(function(){
+            var url = cumulusClips.baseUrl+'/actions/rate/';
+            var data = {video_id: cumulusClips.videoId, rating: $(this).data('rating')};
+            var callback = function(responseData) {
+                if (responseData.result === true) {
+                    $('.actions .left .like').text(responseData.other.likes);
+                    $('.actions .left .dislike').text(responseData.other.dislikes);
+                }
+                window.scrollTo(0, 0);
+            }
+            executeAction(url, data, callback);
+            return false;
+        });
 
         // Scrollbar for 'Add Video To' widget
         var scrollableList = $('#addToPlaylist > div:first-child > div');
@@ -505,7 +503,7 @@ $(document).ready(function(){
                 video.find('.thumbnail').append(resultMessage);
                 
                 // Style message according to add results
-                if (responseData.result === 1) {
+                if (responseData.result === true) {
                     resultMessage.addClass('success');
                 } else {
                     if (responseData.other.status === 'DUPLICATE') resultMessage.addClass('errors');
@@ -573,7 +571,7 @@ function executeAction(url, data, callback)
 
 /**
  * Display message sent from the server handler script for page actions
- * @param boolean result The result of the requested action (1 = Success, 0 = Error)
+ * @param boolean result The result of the requested action (true = Success, false = Error)
  * @param string message The textual message for the result of the requested action
  * @return void Message block is displayed and styled accordingly with message.
  * If message block is already visible, then it is updated.
