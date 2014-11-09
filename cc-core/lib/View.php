@@ -8,6 +8,9 @@ class View
     protected $_body;
     protected static $_view;
     protected $_route;
+    protected $_js;
+    protected $_css;
+    protected $_blocks;
     
     /**
      * Creates a new view 
@@ -25,9 +28,9 @@ class View
         $this->options->themePath = null;
         $this->options->viewFile = null;
         $this->options->layout = 'default';
-        $this->options->blocks = array();
-        $this->options->css = array();
-        $this->options->js = array();
+        $this->_blocks = array();
+        $this->_css = array();
+        $this->_js = array();
     }
     
     /**
@@ -229,7 +232,7 @@ class View
      */
     public function addSidebarBlock($viewFile)
     {
-        $this->options->blocks[] = $viewFile;
+        $this->_blocks[] = $viewFile;
         Plugin::triggerEvent('view.add_sidebar_block');
     }
     
@@ -240,7 +243,7 @@ class View
     public function writeSidebarBlocks()
     {
         Plugin::triggerEvent('view.write_sidebar_blocks');
-        foreach ($this->options->blocks as $_block) {
+        foreach ($this->_blocks as $_block) {
             Plugin::triggerEvent('view.write_sidebar_blocks_loop');
             $this->block($_block);
         }
@@ -267,7 +270,7 @@ class View
         $request_file = $this->getFallbackUrl("css/$css_name");
         $css_url = ($request_file) ? $request_file : $css_name;
 
-        $this->options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
+        $this->_css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
         Plugin::triggerEvent('view.add_css');
     }
 
@@ -278,8 +281,8 @@ class View
     public function writeCss()
     {
         Plugin::triggerEvent('view.write_css');
-        if (isset($this->options->css)) {
-            foreach ($this->options->css as $_value) {
+        if (isset($this->_css)) {
+            foreach ($this->_css as $_value) {
                 Plugin::triggerEvent('view.write_css_loop');
                 echo $_value, "\n";
             }
@@ -297,7 +300,7 @@ class View
         $request_file = $this->getFallbackUrl("js/$js_name");
         $js_url = ($request_file) ? $request_file : $js_name;
 
-        $this->options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
+        $this->_js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
         Plugin::triggerEvent('view.add_js');
     }
 
@@ -312,7 +315,7 @@ class View
             $js_theme_preview = '<script type="text/javascript">';
             $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . $_GET['preview_theme'] . "';";
             $js_theme_preview .= '</script>';
-            $this->options->js[] = $js_theme_preview;
+            $this->_js[] = $js_theme_preview;
         }
 
         // Add language preview JS
@@ -320,12 +323,12 @@ class View
             $js_lang_preview = '<script type="text/javascript">';
             $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . $_GET['preview_lang'] . "';";
             $js_lang_preview .= '</script>';
-            $this->options->js[] = $js_lang_preview;
+            $this->_js[] = $js_lang_preview;
         }
 
         Plugin::triggerEvent('view.write_js');
-        if (isset($this->options->js)) {
-            foreach ($this->options->js as $_value) {
+        if (isset($this->_js)) {
+            foreach ($this->_js as $_value) {
                 Plugin::triggerEvent('view.write_js_loop');
                 echo $_value, "\n";
             }
@@ -340,7 +343,7 @@ class View
      */
     public function addMeta($meta_name, $meta_content)
     {
-        $this->options->meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
+        $this->_meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
         Plugin::triggerEvent('view.add_meta');
     }
 
@@ -352,11 +355,11 @@ class View
     {
         Plugin::triggerEvent('view.write_meta');
         $this->addMeta('generator', 'CumulusClips');
-        if (!empty($this->vars->meta->keywords)) $this->addMeta('keywords', $this->vars->meta->keywords);
-        if (!empty($this->vars->meta->description)) $this->addMeta('description', $this->vars->meta->description);
+        if (!empty($this->_meta->keywords)) $this->addMeta('keywords', $this->_meta->keywords);
+        if (!empty($this->_meta->description)) $this->addMeta('description', $this->_meta->description);
         
-        if (isset($this->options->meta)) {
-            foreach ($this->options->meta as $_value) {
+        if (isset($this->_meta)) {
+            foreach ($this->_meta as $_value) {
                 Plugin::triggerEvent('view.write_meta_loop');
                 echo $_value, "\n";
             }
