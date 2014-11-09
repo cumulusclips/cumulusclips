@@ -1,6 +1,6 @@
 <?php
 
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $videoMapper = new VideoMapper();
 
 // Verify a video was selected

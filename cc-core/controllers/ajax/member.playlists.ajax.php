@@ -1,6 +1,6 @@
 <?php
 
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $userMapper = new UserMapper();
 $playlistMapper = new PlaylistMapper();
 $limit = 9;

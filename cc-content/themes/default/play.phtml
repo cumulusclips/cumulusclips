@@ -1,6 +1,6 @@
 <?php
 $this->addMeta('videoId', $video->videoId);
-$this->addMeta('theme', THEME);
+$this->addMeta('theme', $this->options->themeUrl);
 $this->addMeta('loggedIn', (boolean) $loggedInUser);
 $this->AddCss('jscrollpane.css');
 $this->AddJs('jscrollpane.plugin.js');
@@ -68,7 +68,7 @@ $this->SetLayout('full');
 
     <div id="about" class="tab_block">
         <?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
-        <img width="65" height="65" src="<?=($avatar) ? $avatar : THEME . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
+        <img width="65" height="65" src="<?=($avatar) ? $avatar : $this->options->themeUrl . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
         <div>
             <a href="" class="button_small subscribe" title="<?=Language::GetText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->userId?>"><?=Language::GetText($subscribe_text)?></a>
             <p><strong><?=Language::GetText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
@@ -190,7 +190,7 @@ $this->SetLayout('full');
                         <?php $commentIndentClass = getCommentIndentClass($commentCard->comment); ?>
 
                         <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
-                            <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : THEME . '/images/avatar.gif'?>" />
+                            <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
                             <div>
                                 <p>
                                     <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>

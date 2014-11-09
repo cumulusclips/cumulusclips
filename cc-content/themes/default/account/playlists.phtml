@@ -20,7 +20,7 @@
             </a>
             <p class="title"><a href="<?=$playlistService->getUrl($favoritesList)?>" title="<?=Language::GetText('favorites')?>"><?=Language::GetText('favorites')?></a></p>
         <?php else: ?>
-            <img src="<?=THEME?>/images/playlist_placeholder.png" />
+            <img src="<?=$this->options->themeUrl?>/images/playlist_placeholder.png" />
             <span class="video-count"><?=count($favoritesList->entries)?><br><?=Language::GetText('videos')?></span>
             <p class="title"><?=Language::GetText('favorites')?></p>
         <?php endif; ?>
@@ -39,7 +39,7 @@
             </a>
             <p class="title"><a href="<?=$playlistService->getUrl($watchLaterList)?>" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></p>
         <?php else: ?>
-            <img src="<?=THEME?>/images/playlist_placeholder.png" />
+            <img src="<?=$this->options->themeUrl?>/images/playlist_placeholder.png" />
             <span class="video-count"><?=count($watchLaterList->entries)?><br><?=Language::GetText('videos')?></span>
             <p class="title"><?=Language::GetText('watch_later')?></p>
         <?php endif; ?>
@@ -88,7 +88,7 @@
                 </a>
                 <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>"><?=$playlist->name?></a></p>
             <?php else: ?>
-                <img src="<?=THEME?>/images/playlist_placeholder.png" />
+                <img src="<?=$this->options->themeUrl?>/images/playlist_placeholder.png" />
                 <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
                 <p class="title"><?=$playlist->name?></p>
             <?php endif; ?>

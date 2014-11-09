@@ -1,7 +1,7 @@
 <?php
 
 Plugin::triggerEvent('rate.ajax.start');
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 
 // Verify if user is logged in
 $userService = new UserService();

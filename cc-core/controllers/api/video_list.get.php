@@ -1,6 +1,6 @@
 <?php
 
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 
 // Verify valid list was provided
 if (!empty($_GET['list']) && preg_match('/^[0-9]+(,[0-9]+)*$/', $_GET['list'])) {

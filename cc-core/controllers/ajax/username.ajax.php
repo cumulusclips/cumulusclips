@@ -9,7 +9,7 @@ $this->view->vars->loggedInUser = $userService->loginCheck();
 Functions::RedirectIf(!$this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $userMapper = new UserMapper();
 
 // Check if username is in use

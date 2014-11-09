@@ -13,7 +13,7 @@
 
         <div class="video">
             <?php if (in_array($video->status, array(VideoMapper::PENDING_CONVERSION, 'processing', VideoMapper::PENDING_APPROVAL))): ?>
-                <div><img width="165" height="92" src="<?=$config->theme_url?>/images/video_construction.png" /></div>
+                <div><img width="165" height="92" src="<?=$this->options->themeUrl?>/images/video_construction.png" /></div>
                 <p><strong><?=Language::getText($video->status)?></strong> - <?=$video->title?></p>
             <?php else: ?>
                 <div class="thumbnail">

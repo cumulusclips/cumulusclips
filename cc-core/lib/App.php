@@ -10,11 +10,9 @@ class App
     public static function throw404()
     {
         $controller = Registry::get('controller');
-        $view = Registry::get('view');
         $router = new Router();
+        $controller->view->options->disableView = false;
         $controller->dispatch($router->getStaticRoute('system404'));
-        $view->disableView = false;
-        $view->render();
         exit();
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $keyword = null;
 $suggestLimit = 9;
 

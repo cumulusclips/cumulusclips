@@ -8,7 +8,7 @@ $loggedInUser = $userService->loginCheck();
 Plugin::trigger('favorite.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $videoMapper = new VideoMapper();
 $playlistMapper = new PlaylistMapper();
 $playlistService = new PlaylistService();

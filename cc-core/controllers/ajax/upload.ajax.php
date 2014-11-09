@@ -10,7 +10,7 @@ Functions::RedirectIf($loggedInUser, HOST . '/login/');
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();
 $videoMapper = new VideoMapper();
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $config = Registry::get('config');
 
 // Retrieve video information

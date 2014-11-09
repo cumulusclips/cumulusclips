@@ -5,7 +5,6 @@ class View
     // Object Properties
     public $options;
     public $vars;
-    public $disableView = false;
     protected $_body;
     protected static $_view;
     protected $_route;
@@ -20,7 +19,11 @@ class View
         $this->vars->config = Registry::get('config');
 
         $this->options = new stdClass();
-        $this->options->themeFile = null;
+        $this->options->disableView = false;
+        $this->options->theme = null;
+        $this->options->themeUrl = null;
+        $this->options->themePath = null;
+        $this->options->viewFile = null;
         $this->options->layout = 'default';
         $this->options->blocks = array();
         $this->options->css = array();
@@ -39,21 +42,19 @@ class View
         // Define theme configuration
         $theme = $this->_currentTheme($this->_route->mobile);
         $themeFiltered = Plugin::triggerFilter('app.before_set_theme', $theme);
-        define('THEME', HOST . '/cc-content/themes/' . $themeFiltered);
-        define('THEME_PATH', THEMES_DIR . '/' . $themeFiltered);
-        $this->vars->config->theme = $themeFiltered;
-        $this->vars->config->theme_url = THEME;
-        $this->vars->config->theme_path = THEME_PATH;
+        $this->options->theme = $themeFiltered;
+        $this->options->themeUrl = HOST . '/cc-content/themes/' . $themeFiltered;
+        $this->options->themePath = THEMES_DIR . '/' . $themeFiltered;
         
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
-        if ($viewHelper && file_exists($viewHelper)) include($viewHelper);
+        if ($viewHelper && file_exists($viewHelper)) include_once($viewHelper);
         
         // Retrieve page
         $this->options->page = $this->_getPageFromRoute($this->_route);
 
         // Retrieve meta data
-        $this->vars->meta = Language::GetMeta($this->options->page);
+        $this->vars->meta = Language::getMeta($this->options->page);
         if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
         
         return $this;
@@ -68,8 +69,8 @@ class View
      */
     public function getFallbackPath($file)
     {
-        if (file_exists($this->vars->config->theme_path . "/$file")) {
-            return $this->vars->config->theme_path . "/$file";
+        if (file_exists($this->options->themePath . "/$file")) {
+            return $this->options->themePath . "/$file";
         } else if (file_exists($this->vars->config->theme_path_default . "/$file")) {
             return $this->vars->config->theme_path_default . "/$file";
         } else {
@@ -86,8 +87,8 @@ class View
      */
     public function getFallbackUrl($file)
     {
-        if (file_exists($this->vars->config->theme_path . "/$file")) {
-            return $this->vars->config->theme_url . "/$file";
+        if (file_exists($this->options->themePath . "/$file")) {
+            return $this->options->themeUrl . "/$file";
         } else if (file_exists($this->vars->config->theme_path_default . "/$file")) {
             return $this->vars->config->theme_url_default . "/$file";
         } else {
@@ -120,7 +121,7 @@ class View
      * @param Route $route Route to extract location from
      * @return string Theme file is returned
      */ 
-    protected function _getThemeFileFromRoute(Route $route)
+    protected function _getViewFileFromRoute(Route $route)
     {
         $patterns = array(
             '/cc\-core\/controllers\//i',
@@ -139,18 +140,18 @@ class View
      */
     public function render()
     {
-        if (!$this->disableView) {
+        if (!$this->options->disableView) {
             // Retrieve theme file
-            if (empty($this->options->themeFile)) {
-                $themeFileName = $this->_getThemeFileFromRoute($this->_route);
-                $this->options->themeFile = $this->getFallbackPath($themeFileName);
-                if ($this->options->themeFile === false) throw new Exception('Missing theme file');
+            if (empty($this->options->viewFile)) {
+                $viewFileName = $this->_getViewFileFromRoute($this->_route);
+                $this->options->viewFile = $this->getFallbackPath($viewFileName);
+                if ($this->options->viewFile === false) throw new Exception('Missing theme file');
             }
             extract(get_object_vars($this->vars));
             
             // Catch output of body
             ob_start();
-            include($this->options->themeFile);
+            include($this->options->viewFile);
             $this->_body = ob_get_contents();
             ob_end_clean();
 
@@ -307,17 +308,17 @@ class View
     public function writeJs()
     {
         // Add theme preview JS
-        if (PREVIEW_THEME) {
+        if (isset($_GET['preview_theme'])) {
             $js_theme_preview = '<script type="text/javascript">';
-            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . PREVIEW_THEME . "';";
+            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . $_GET['preview_theme'] . "';";
             $js_theme_preview .= '</script>';
             $this->options->js[] = $js_theme_preview;
         }
 
         // Add language preview JS
-        if (PREVIEW_LANG) {
+        if (isset($_GET['preview_lang'])) {
             $js_lang_preview = '<script type="text/javascript">';
-            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
+            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . $_GET['preview_lang'] . "';";
             $js_lang_preview .= '</script>';
             $this->options->js[] = $js_lang_preview;
         }
@@ -379,7 +380,7 @@ class View
             $preview_theme = $_GET['preview_theme'];
         }
 
-        define ('PREVIEW_THEME', $preview_theme);
+//        define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
     }
     

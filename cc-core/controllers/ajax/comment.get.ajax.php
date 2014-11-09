@@ -3,7 +3,7 @@
 Plugin::triggerEvent('comment.ajax.start');
 
 // Establish page variables, objects, arrays, etc
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $videoMapper = new VideoMapper();
 $commentService = new CommentService();
 $limit = 5;

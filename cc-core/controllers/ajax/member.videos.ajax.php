@@ -1,6 +1,6 @@
 <?php
 
-$this->view->disableView = true;
+$this->view->options->disableView = true;
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();

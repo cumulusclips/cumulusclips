@@ -58,10 +58,10 @@ class Functions
      */
     public static function redirectIf($condition, $redirect)
     {
-        if (defined('PREVIEW_LANG') && PREVIEW_LANG) $redirect = Functions::AppendQueryString ($redirect, array ('preview_lang' => PREVIEW_LANG));
-        if (defined('PREVIEW_THEME') && PREVIEW_THEME) $redirect = Functions::AppendQueryString ($redirect, array ('preview_theme' => PREVIEW_THEME));
+        if (isset($_GET['preview_lang'])) $redirect = Functions::appendQueryString($redirect, array('preview_lang' => $_GET['preview_lang']));
+        if (isset($_GET['preview_theme'])) $redirect = Functions::appendQueryString($redirect, array('preview_theme' => $_GET['preview_theme']));
         if (empty ($condition)) {
-            header ("Location: $redirect");
+            header("Location: $redirect");
             exit();
         }
     }

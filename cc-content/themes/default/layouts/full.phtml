@@ -4,13 +4,13 @@
 <title><?=$meta->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseUrl" content="<?=HOST?>" />
-<meta name="themeUrl" content="<?=THEME?>" />
+<meta name="themeUrl" content="<?=$this->options->themeUrl?>" />
 <?php $this->writeMeta(); ?>
 <?php Plugin::triggerEvent('theme.head'); ?>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
-<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/reset.css" />
-<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/main.css" />
-<link rel="stylesheet" type="text/css" href="<?=$config->theme_url?>/css/pages.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/main.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/pages.css" />
 <?php $this->writeCSS(); ?>
 
 </head>
@@ -37,9 +37,9 @@
     
 <?php $this->block('footer.phtml'); ?>
 
-<script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?=$config->theme_url?>/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<?=$config->theme_url?>/js/general.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/general.js"></script>
 <?php $this->writeJs(); ?>
 
 </body>
