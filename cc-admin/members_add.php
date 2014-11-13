@@ -106,8 +106,7 @@ if (isset ($_POST['submitted'])) {
         // Create user
         $user->password = md5($user->password);
         $user->status = 'new';
-        $userId = $userMapper->save($user);
-        $newUser = $userMapper->getUserById($userId);
+        $newUser = $userService->create($user);
         $userService->approve($newUser, 'create');
         unset($user);
 

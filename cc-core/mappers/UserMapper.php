@@ -160,4 +160,11 @@ class UserMapper extends MapperAbstract
         $db->fetchRow($query);
         return $db->rowCount();
     }
+    
+    public function delete($userId)
+    {
+        $db = Registry::get('db');
+        $query = 'DELETE FROM ' . DB_PREFIX . 'users WHERE user_id = :userId';
+        $db->query($query, array(':userId' => $userId));
+    }
 }

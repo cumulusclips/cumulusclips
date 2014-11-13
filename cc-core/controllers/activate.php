@@ -1,6 +1,6 @@
 <?php
 
-Plugin::trigger('activate.start');
+Plugin::triggerEvent('activate.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -11,7 +11,7 @@ Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 $this->view->vars->message = null;
 
 // Verify token was provided
-if (isset($_GET['token'])) {
+if (!empty($_GET['token'])) {
     $token = $_GET['token'];
     $userMapper = new UserMapper();
     $user = $userMapper->getUserByCustom(array('confirm_code' => $token, 'status' => 'new'));
@@ -19,18 +19,18 @@ if (isset($_GET['token'])) {
         $userService->approve($user, 'activate');
         if (Settings::get('auto_approve_users') == '1') {
             $this->view->vars->message = Language::getText('activate_success', array('host' => HOST));
-            $_SESSION['user_id'] = $user->userId;
+            $_SESSION['loggedInUserId'] = $user->userId;
         } else {
             $this->view->vars->message = Language::getText('activate_approve');
         }
         $this->view->vars->messageType = 'success';
         Plugin::trigger('activate.activate');
     } else {
-        $this->view->vars->message = Language::getText('activate_error', array ('host' => HOST));
-        $this->view->vars->messageType = 'error';
+        $this->view->vars->message = Language::getText('activate_error', array('host' => HOST));
+        $this->view->vars->messageType = 'errors';
     }
 } else {
     App::throw404();
 }
 
-Plugin::trigger('activate.before_render');
+Plugin::triggerEvent('activate.before_render');

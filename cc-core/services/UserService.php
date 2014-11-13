@@ -26,11 +26,6 @@ class UserService extends ServiceAbstract
         $ratings = $ratingMapper->getMultipleRatingsByCustom(array('user_id' => $user->userId));
         foreach ($ratings as $rating) $ratingService->delete($rating);
 
-        // Delete Favorites
-//        $query = "SELECT fav_id FROM " . DB_PREFIX . "favorites WHERE user_id = $id";
-//        $result = $db->Query ($query);
-//        while ($row = $db->FetchObj ($result)) Favorite::Delete ($row->fav_id);
-
         // Delete Flags
         $flagService = new FlagService();
         $flagMapper = new FlagMapper();
@@ -97,9 +92,9 @@ class UserService extends ServiceAbstract
      * @param User $user Instance of user to have password reset
      * @return string Returns user's new password
      */
-    public function resetPassword($user)
+    public function resetPassword(User $user)
     {
-        $userMapper = new UserMapper();
+        $userMapper = $this->_getMapper();
         $password = Functions::random(10,true);
         $user->password = md5($password);
         Plugin::triggerEvent('user.reset_password');
@@ -113,13 +108,11 @@ class UserService extends ServiceAbstract
      */
     public function createToken()
     {
-        $userMapper = new UserMapper();
+         $userMapper = $this->_getMapper();
         do {
-            $token = Functions::Random(40);
-            if ($userMapper->getUserByCustom(array('confirm_code' => $token))) {
-                $token_available = true;
-            }
-        } while (empty($token_available));
+            $token = Functions::random(40);
+            $tokenAvailable = ($userMapper->getUserByCustom(array('confirm_code' => $token))) ? false : true;
+        } while (empty($tokenAvailable));
         return $token;
     }
     
@@ -131,7 +124,7 @@ class UserService extends ServiceAbstract
      */
     public function login($username, $password)
     {
-        $userMapper = new UserMapper();
+        $userMapper = $this->_getMapper();
         $user = $userMapper->getUserByCustom(array(
             'username' => $username,
             'password' => md5($password),
@@ -154,7 +147,7 @@ class UserService extends ServiceAbstract
      */
     public function logout()
     {
-        unset ($_SESSION['loggedInUserId']);
+        unset($_SESSION['loggedInUserId']);
         Plugin::triggerEvent('user.logout');
     }
 
@@ -165,7 +158,7 @@ class UserService extends ServiceAbstract
      */
     public function loginCheck()
     {
-        $userMapper = new UserMapper();
+        $userMapper = $this->_getMapper();
         if (!empty($_SESSION['loggedInUserId'])) {
             return $userMapper->getUserById($_SESSION['loggedInUserId']);
         } else {
@@ -187,7 +180,7 @@ class UserService extends ServiceAbstract
         if (!empty($userToCheck) && $userToCheck instanceof User) {
             $user = $userToCheck;
         } else if (!empty($userToCheck) && is_numeric($userToCheck)) {
-            $userMapper = new UserMapper();
+            $userMapper = $this->_getMapper();
             $user = $userMapper->getUserById($userToCheck);
         } else if ($logged_in = $this->loginCheck()) {
             $user = $logged_in;
@@ -238,6 +231,34 @@ class UserService extends ServiceAbstract
                 break;
         }
     }
+    
+    /**
+     * Creates a new user in the system
+     * @param User $user User to be created
+     * @return returns newly created user 
+     */
+    public function create(User $user)
+    {
+        // Save new user
+        $userMapper = $this->_getMapper();
+        $user->password = md5($user->password);
+        $user->confirmCode = $this->createToken();
+        $user->status = 'new';
+        $userId = $userMapper->save($user);
+        
+        // Create user's privacy record
+        $privacy = new Privacy();
+        $privacy->userId = $userId;
+        $privacy->videoComment = true;
+        $privacy->newMessage = true;
+        $privacy->newVideo = true;
+        $privacy->videoReady = true;
+        $privacy->commentReply = true;
+        $privacyMapper = new PrivacyMapper();
+        $privacyMapper->save($privacy);
+        
+        return $userMapper->getUserById($userId);
+    }
 
     /**
      * Make a user visible to the public and notify admin of registration
@@ -249,7 +270,7 @@ class UserService extends ServiceAbstract
     public function approve(User $user, $action)
     {
         $send_alert = false;
-        $userMapper = new UserMapper();
+        $userMapper = $this->_getMapper();
         Plugin::triggerEvent('user.before_approve');
 
         // 1) Admin created user in Admin Panel

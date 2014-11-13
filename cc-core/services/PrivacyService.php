@@ -7,9 +7,9 @@ class PrivacyService extends ServiceAbstract
      * @param Privacy $privacy Instance of privacy entry to be deleted
      * @return void Privacy entry is deleted from system
      */
-    public static function delete(Privacy $privacy)
+    public function delete(Privacy $privacy)
     {
-        Plugin::Trigger ('privacy.delete');
+        Plugin::triggerEvent('privacy.delete');
         $privacyMapper = $this->_getMapper();
         $privacyMapper->delete($privacy->privacyId);
     }
