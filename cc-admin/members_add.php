@@ -104,8 +104,6 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Create user
-        $user->password = md5($user->password);
-        $user->status = 'new';
         $newUser = $userService->create($user);
         $userService->approve($newUser, 'create');
         unset($user);
