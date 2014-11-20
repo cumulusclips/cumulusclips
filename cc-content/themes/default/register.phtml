@@ -1,4 +1,3 @@
-<?php $this->addJs('username.js'); ?>
 
 <h1><?=Language::getText('register_header')?></h1>
 
@@ -15,8 +14,8 @@
         <input name="email" type="text" class="text" value="<?=(isset($errors, $user->email)) ? $user->email : ''?>" />
 
         <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>"><?=Language::getText('username')?>:</label>
-        <input name="username" type="text" class="text" id="username" value="<?=(isset($errors, $user->username)) ? $user->username : ''?>" maxlength="30" />
-        <p id="status"></p>
+        <input name="username" type="text" class="text" value="<?=(isset($errors, $user->username)) ? $user->username : ''?>" maxlength="30" autocomplete="off" />
+        <p class="status"></p>
         <p class="hint"><?=Language::getText('username_req')?></p>
 
         <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::getText('password')?>:</label>

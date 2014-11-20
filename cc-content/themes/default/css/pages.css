@@ -177,6 +177,38 @@ REGISTER
     margin-top: 15px;
 }
 
+.register input[name="username"] {
+    margin-bottom: 0;
+}
+
+.register .status {
+    display: none;
+}
+
+.register .hint {
+    margin-top: 3px;
+}
+
+.register .available {
+    background: url('../images/icon_check.png') no-repeat 0 0;
+    padding-left: 19px;
+    color: #006600;
+}
+
+.register .unavailable {
+    background: url('../images/icon_ban.png') no-repeat 0 0;
+    padding-left: 19px;
+    padding-top: 1px;
+    color: #c20202;
+}
+
+.register .unavailable,
+.register .loading,
+.register .available {
+    font-weight: bold;
+    display: block;
+    margin: 7px 0 5px;
+}
 
 
 

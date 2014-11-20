@@ -110,6 +110,46 @@ $(document).ready(function(){
         executeAction(url, data, callback);
         return false;
     });
+    
+    // Registration page actions
+    if ($('.register').length > 0) {
+        var delay;
+        var validLengthReached = false;
+        var minMessage = '';
+        var checkAvailability = '';
+        getText (function(data){minMessage = data;}, 'username_minimum');
+        getText (function(data){checkAvailability = data;}, 'checking_availability');
+
+        $('.register input[name="username"]').keyup(function() {
+            var username = $(this).val();
+            clearTimeout(delay);
+            if (username.length >= 4) {
+                validLengthReached = true;
+                $('.register .status').html(checkAvailability + '&hellip;').addClass('loading').removeClass('unavailable available');
+                delay = setTimeout(function(){
+
+                    // Make call to search for username
+                    $.ajax({
+                        type: 'POST',
+                        url: cumulusClips.baseUrl + '/actions/username/',
+                        data: {username:username},
+                        dataType: 'json',
+                        success: function(response, textStatus, jqXHR) {
+                            $('.register .status').text(response.message);
+                            if (response.result === true) {
+                                $('.register .status').addClass('available').removeClass('unavailable loading');
+                            } else {
+                                $('.register .status').addClass('unavailable').removeClass('available loading');
+                            }
+                        }
+                    });
+
+                }, 500);
+            } else if (validLengthReached) {
+                $('.register .status').text(minMessage).addClass('unavailable').removeClass('available loading');
+            }
+        });
+    }
 
     // Profile page actions
     if ($('.profile').length > 0) {

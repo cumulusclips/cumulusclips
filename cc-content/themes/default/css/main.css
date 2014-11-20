@@ -364,10 +364,7 @@ a.button, a.button_small {
     float: right;
 }
 
-.form .hint,
-.form input + .error,
-.form input + .ok,
-.form input + .loading {
+.form .hint {
     margin-top: -17px;
     margin-bottom: 20px;
 }
@@ -384,21 +381,8 @@ a.button, a.button_small {
     padding: 10px 9px;
 }
 
-.form label.error,
-.error {
+.form label.error {
     color: #c20202;
-    font-weight: bold;
-}
-
-.loading {
-    background: url('../images/loading.gif') no-repeat 0 0;
-    padding-left: 19px;
-}
-
-.ok {
-    background: url('../images/tick.png') no-repeat 0 0;
-    padding-left: 19px;
-    color: #264409;
     font-weight: bold;
 }
 
