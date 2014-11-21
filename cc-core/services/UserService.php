@@ -44,6 +44,12 @@ class UserService extends ServiceAbstract
         $messages = $messageMapper->getMultipleMessagesByCustom(array('user_id' => $user->userId));
         foreach ($messages as $message) $messageService->delete($message);
 
+        // Delete Playlists
+        $playlistService = new PlaylistService();
+        $playlistMapper = new PlaylistMapper();
+        $playlists = $playlistMapper->getMultiplePlaylistsByCustom(array('user_id' => $user->userId));
+        foreach ($playlists as $playlist) $playlistService->delete($playlist);
+
         // Delete Videos
         $videoService = new VideoService();
         $videoMapper = new VideoMapper();
@@ -256,6 +262,21 @@ class UserService extends ServiceAbstract
         $privacy->commentReply = true;
         $privacyMapper = new PrivacyMapper();
         $privacyMapper->save($privacy);
+        
+        // Create user's favorites playlist
+        $playlistMapper = new PlaylistMapper();
+        $favorites = new Playlist();
+        $favorites->userId = $userId;
+        $favorites->public = false;
+        $favorites->type = 'favorites';
+        $playlistMapper->save($favorites);
+        
+        // Create user's watch later playlist
+        $watchLater = new Playlist();
+        $watchLater->userId = $userId;
+        $watchLater->public = false;
+        $watchLater->type = 'watch_later';
+        $playlistMapper->save($watchLater);
         
         return $userMapper->getUserById($userId);
     }
