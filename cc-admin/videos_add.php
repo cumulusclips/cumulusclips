@@ -216,7 +216,7 @@ include('header.php');
 
             <div class="row-shift">
                 <input id="private-video" data-block="private-url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty($errors) && !empty($video->private)) ? 'checked="checked"' : ''?> />
-                <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL below)</em>
+                <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL)</em>
             </div>
 
             <div id="private-url" class="row <?=(isset($errors['private_url'])) ? 'error' : ''?> <?=(!empty($video->private)) ? '' : 'hide'?>">

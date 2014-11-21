@@ -328,7 +328,7 @@
         <gated>Gated</gated>
         <gated_description>Video can only be viewed by members who are logged in</gated_description>
         <private>Private</private>
-        <private_description>Video can only be viewed by you or anyone with the private URL below</private_description>
+        <private_description>Video can only be viewed by you or anyone with the private URL</private_description>
         <private_url>Private URL</private_url>
         <regenerate>Regenerate</regenerate>
         <closeComments>Close Comments</closeComments>
