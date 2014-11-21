@@ -39,7 +39,7 @@ class SubscriptionService extends ServiceAbstract
             'user_id' => $unsubscribingUserId,
             'member' => $memberUserId
         ));
-        $subscriptionMapper->delete($subscription);
+        $this->delete($subscription);
     }
 
     /**
@@ -55,5 +55,17 @@ class SubscriptionService extends ServiceAbstract
             'user_id' => $subscribingUserId,
             'member' => $memberUserId
         ));
+    }
+    
+    /**
+     * Deletes a subscription from the system
+     * @param Subscription $subscription Subscription being deleted
+     * @return SubscriptionService Provides fluent interface
+     */
+    public function delete(Subscription $subscription)
+    {
+        $subscriptionMapper = $this->_getMapper();
+        $subscriptionMapper->delete($subscription->subscriptionId);
+        return $this;
     }
 }

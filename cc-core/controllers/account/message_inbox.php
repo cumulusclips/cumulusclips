@@ -12,6 +12,7 @@ $records_per_page = 20;
 $url = HOST . '/account/message/inbox';
 $this->view->vars->message = null;
 $messageMapper = new MessageMapper();
+$messageService = new MessageService();
 $db = Registry::get('db');
 
 // Delete message (Request came from this page)
@@ -25,7 +26,7 @@ if (isset ($_POST['submitted'])) {
                 'message_id' => $value)
             );
             if ($message) {
-                $messageMapper->delete($message->messageId);
+                $messageService->delete($message);
                 Plugin::triggerEvent('message_inbox.purge_single_message');
             }
         }

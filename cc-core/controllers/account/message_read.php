@@ -5,7 +5,7 @@ Plugin::triggerEvent('message_read.start');
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $messageMapper = new MessageMapper();
@@ -26,7 +26,7 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
         App::Throw404();
     }
 } else {
-    App::Throw404();
+    App::throw404();
 }
 
 Plugin::triggerEvent('message_read.before_render');
