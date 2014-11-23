@@ -6,67 +6,61 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $commentMapper = new CommentMapper();
 $commentService = new CommentService();
-$userMapper = new UserMapper();
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
-$records_per_page = 9;
+$recordsPerPage = 9;
 $url = ADMIN . '/comments.php';
-$query_string = array();
+$queryString = array();
 $message = null;
-$sub_header = null;
+$subHeader = null;
 
-
-
-### Handle "Delete" action
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete']) && $_GET['delete'] > 0) {
+// Handle "Delete" action
+if (!empty($_GET['delete']) && is_numeric($_GET['delete']) && $_GET['delete'] > 0) {
 
     // Validate id
     $comment = $commentMapper->getCommentById($_GET['delete']);
     if ($comment) {
         $commentService->delete($comment);
         $message = 'Comment has been deleted';
-        $message_type = 'success';
+        $messageType = 'success';
     }
-
 }
 
 
-### Handle "Approve" action
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve']) && $_GET['approve'] > 0) {
+// Handle "Approve" action
+else if (!empty($_GET['approve']) && is_numeric($_GET['approve']) && $_GET['approve'] > 0) {
 
     // Validate id
     $comment = $commentMapper->getCommentById($_GET['approve']);
     if ($comment) {
         $commentService->approve($comment, 'approve');
         $message = 'Comment has been approved';
-        $message_type = 'success';
+        $messageType = 'success';
     }
-
 }
 
 
-### Handle "Unban" action
-else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban']) && $_GET['unban'] > 0) {
+// Handle "Unban" action
+else if (!empty($_GET['unban']) && is_numeric($_GET['unban']) && $_GET['unban'] > 0) {
 
     // Validate id
     $comment = $commentMapper->getCommentById($_GET['unban']);
     if ($comment) {
-        $comment->approve($comment, 'approve');
+        $commentService->approve($comment, 'approve');
         $message = 'Comment has been unbanned';
-        $message_type = 'success';
+        $messageType = 'success';
     }
-
 }
 
 
-### Handle "Ban" action
-else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban']) && $_GET['ban'] > 0) {
+// Handle "Ban" action
+else if (!empty($_GET['ban']) && is_numeric($_GET['ban']) && $_GET['ban'] > 0) {
 
     // Validate id
     $comment = $commentMapper->getCommentById($_GET['ban']);
@@ -76,25 +70,20 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban']) && $_GET['ban'] > 0)
         $flagService = new FlagService();
         $flagService->flagDecision($comment, true);
         $message = 'Comment has been banned';
-        $message_type = 'success';
+        $messageType = 'success';
     }
-
 }
 
-
-
-
-### Determine which type (status) of record to display
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
+// Determine which type (status) of record to display
+$status = (!empty($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
-
     case 'pending':
-        $query_string['status'] = 'pending';
+        $queryString['status'] = 'pending';
         $header = 'Pending Comments';
         $page_title = 'Pending Comments';
         break;
     case 'banned':
-        $query_string['status'] = 'banned';
+        $queryString['status'] = 'banned';
         $header = 'Banned Comments';
         $page_title = 'Banned Comments';
         break;
@@ -103,70 +92,58 @@ switch ($status) {
         $header = 'Approved Comments';
         $page_title = 'Approved Comments';
         break;
-
 }
 $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = :status";
 $queryParams = array(':status' => $status);
 
-
-
-
-### Handle Search Records Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
-
-    $like = trim ($_POST['search']);
-    $query_string['search'] = $like;
+// Handle Search Records Form
+if (isset($_POST['search_submitted']) && !empty($_POST['search'])) {
+    $like = trim($_POST['search']);
+    $queryString['search'] = $like;
     $query .= " AND comments LIKE :like";
     $queryParams[':like'] = "%$like%";
-    $sub_header = "Search Results for: <em>$like</em>";
-
-} else if (!empty ($_GET['search'])) {
-
-    $like = trim ($_GET['search']);
-    $query_string['search'] = $like;
+    $subHeader = "Search Results for: <em>$like</em>";
+} else if (!empty($_GET['search'])) {
+    $like = trim($_GET['search']);
+    $queryString['search'] = $like;
     $query .= " AND comments LIKE :like";
     $queryParams[':like'] = "%$like%";
-    $sub_header = "Search Results for: <em>$like</em>";
-
+    $subHeader = "Search Results for: <em>$like</em>";
 }
-
-
-
 
 // Retrieve total count
 $query .= " ORDER BY comment_id DESC";
-$db->Query ($query, $queryParams);
+$db->query($query, $queryParams);
 $total = $db->rowCount();
 
 // Initialize pagination
-$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
-$start_record = $pagination->GetStartRecord();
+$url .= (!empty($queryString)) ? '?' . http_build_query($queryString) : '';
+$pagination = new Pagination($url, $total, $recordsPerPage, false);
+$startRecord = $pagination->getStartRecord();
 $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
-$query .= " LIMIT $start_record, $records_per_page";
+$query .= " LIMIT $startRecord, $recordsPerPage";
 $commentResults = $db->fetchAll($query, $queryParams);
 $commentList = $commentMapper->getCommentsFromList(
     Functions::arrayColumn($commentResults, 'comment_id')
 );
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
 <div id="comments">
 
     <h1><?=$header?></h1>
-    <?php if ($sub_header): ?>
-    <h3><?=$sub_header?></h3>
+    <?php if ($subHeader): ?>
+    <h3><?=$subHeader?></h3>
     <?php endif; ?>
 
 
     <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$messageType?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -214,7 +191,7 @@ include ('header.php');
                             <p class="poster"><?=($commentCard->author) ? $commentCard->author->email : '<a href="' . HOST . '/members/' . $commentCard->author->username . '/">' . $commentCard->author>username . '</a>'?></p>
                         </td>
                         <td class="comments-text">
-                            <?=Functions::CutOff (htmlspecialchars($commentCard->comment->comments), 150)?>
+                            <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>
                             <div class="record-actions invisible">
                                 <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
 
@@ -246,4 +223,4 @@ include ('header.php');
 
 </div>
 
-<?php include ('footer.php'); ?>
+<?php include('footer.php'); ?>

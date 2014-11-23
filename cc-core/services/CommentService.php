@@ -15,111 +15,135 @@ class CommentService extends ServiceAbstract
     }
 
     /**
-     * Make a comment visible to the public and notify user of new comment
+     * Approve a comment for display according to who posted, what site settings are,
+     * and whether or not comment has been previously approved
      * @param Comment $comment The comment being approved
      * @param string $action Step in the approval proccess to perform. Allowed values: create|activate|approve
-     * @return void Comment is activated, user is notified, and admin alerted.
-     * If approval is required comment is marked pending and placed in queue
+     * @return CommentService Provides fluent interface
+     * @throws Exception Thrown if invalid action is provided
      */
     public function approve(Comment $comment, $action)
     {
-        $config = Registry::get('config');
-        $send_alert = false;
         $videoMapper = new VideoMapper();
         $videoService = new VideoService();
-        $commentMapper = new CommentMapper();
         $video = $videoMapper->getVideoById($comment->videoId);
+        $commentMapper = $this->_getMapper();
         Plugin::triggerEvent('comment.before_approve');
         
-        // 1) Admin posted comment in Admin Panel
-        // 2) Comment is posted by user
-        // 3) Comment is being approved by admin for first time
-        if ($action == 'create' || ($action == 'approve' && !$comment->released)) {
-
-            // Comment is being posted by user, but approval is required
-            if ($action == 'create' && Settings::get('auto_approve_comments') == '0') {
-
-                // Send Admin Approval Alert
-                $send_alert = true;
-                $subject = 'New Comment Awaiting Approval';
-                $body = 'A new comment has been posted and is awaiting admin approval.';
-
-                // Set Pending
-                $comment->status = 'pending';
-                $commentMapper->save($comment);
-                Plugin::triggerEvent('comment.approve_required');
-                
+        // Determine which comment action is being performed
+        if ($action == 'create') {
+            
+            // Check if auto-approval of comments is turned on
+            if (Settings::get('auto_approve_comments') == '1') {
+                $this->_releaseComment($comment);
             } else {
+                // Check if admin created  comment (auto-approve is so)
+                $commentAuthor = $this->getCommentAuthor($comment);
+                if ($commentAuthor->isAdmin) {
+                    $this->_releaseComment($comment);
+                } else {
+                    // Set Pending
+                    $comment->status = 'pending';
+                    $commentMapper->save($comment);
 
-                // Send Admin Alert
-                if ($action == 'create' && Settings::get('alerts_comments') == '1') {
-                    $send_alert = true;
-                    $subject = 'New Comment Posted';
-                    $body = 'A new comment has been posted.';
+                    // Send Admin Approval Alert
+                    $subject = 'New Comment Awaiting Approval';
+                    $body = 'A new comment has been posted and is awaiting admin approval.';
+                    $body .= "\n\n=======================================================\n";
+                    $body .= 'Author: ' . $this->getCommentAuthor($comment)->username . "\n";
+                    $body .= 'Video URL: ' . $videoService->getUrl($video) . "/\n";
+                    $body .= "Comments: $comment->comments\n";
+                    $body .= "=======================================================";
+                    App::alert($subject, $body);
+                    Plugin::triggerEvent('comment.approve_required');
                 }
-
-                // Activate & Release
-                $comment->status = 'approved';
-                $comment->released = true;
-                $commentMapper->save($comment);
-
-                // Send video owner new comment notifition, if opted-in and he wasn't comment author
-                $privacyService = new PrivacyService();
-                $userMapper = new UserMapper();
-                $user = $userMapper->getUserById($video->userId);
-                if ($comment->userId != $video->userId && $privacyService->OptCheck($user, Privacy::VIDEO_COMMENT)) {
-                    $replacements = array (
-                        'host'      => HOST,
-                        'sitename'  => $config->sitename,
-                        'email'     => $user->email,
-                        'title'     => $video->title
-                    );
-                    $mail = new Mail();
-                    $mail->LoadTemplate('video_comment', $replacements);
-                    $mail->Send($user->email);
-                    Plugin::triggerEvent('comment.notify_member');
-                }
-
-                // Notify comment author of reply to their comment if apl.
-                if ($comment->parentId) {
-                    $parentComment = $commentMapper->getCommentById($comment->parentId);
-                    $parentAuthor = $this->getCommentAuthor($parentComment);
-                    
-                    // Verify parent comment author is opted-in and not replying to himself
-                    if ($comment->userId != $parentComment->userId && $privacyService->OptCheck($parentAuthor, Privacy::COMMENT_REPLY)) {
-                        $replacements = array (
-                            'host'      => HOST,
-                            'sitename'  => $config->sitename,
-                            'email'     => $parentAuthor->email,
-                            'title'     => $video->title,
-                            'videoUrl'  => $videoService->getUrl($video),
-                            'comments'  => $comment->comments
-                        );
-                        $mail = new Mail();
-                        $mail->LoadTemplate('comment_reply', $replacements);
-                        $mail->Send($parentAuthor->email);
-                    }
-                }
-
-                Plugin::triggerEvent('comment.release');
             }
-
-        // Comment is being re-approved
-        } else if ($action == 'approve' && $comment->released) {
-            Plugin::triggerEvent('comment.reapprove');
+            
+        } else if ($action == 'approve') {
+            // Check if comment has been approved in the past
+            if (!$comment->released) {
+                $this->_releaseComment($comment);
+            } else {
+                // Approve comment
+                $comment->status = 'approved';
+                $commentMapper->save($comment);
+            }
+                
+        } else {
+            throw new Exception('Invalid comment approval action');
         }
-
+    }
+    
+    /**
+     * Mark comment as approved and notify any stakeholders of new comment
+     * @param Comment $comment Comment being approved
+     * @return CommentService Provides fluent interface
+     */
+    protected function _releaseComment(Comment $comment)
+    {
+        $config = Registry::get('config');
+        $videoMapper = new VideoMapper();
+        $videoService = new VideoService();
+        $video = $videoMapper->getVideoById($comment->videoId);
+        $commentMapper = $this->_getMapper();
+        
+        // Approve comment
+        $comment->status = 'approved';
+        $comment->released = true;
+        $commentMapper->save($comment);
+        
         // Send admin alert
-        if ($send_alert) {
+        if (Settings::get('alerts_comments') == '1') {
+            $subject = 'New Comment Posted';
+            $body = 'A new comment has been posted.';
             $body .= "\n\n=======================================================\n";
             $body .= 'Author: ' . $this->getCommentAuthor($comment)->username . "\n";
             $body .= 'Video URL: ' . $videoService->getUrl($video) . "/\n";
             $body .= "Comments: $comment->comments\n";
             $body .= "=======================================================";
-            App::Alert($subject, $body);
+            App::alert($subject, $body);
         }
 
-        Plugin::triggerEvent('comment.approve');
+        // Send video owner notifition of new comment, if opted-in and he wasn't comment author
+        $privacyService = new PrivacyService();
+        $userMapper = new UserMapper();
+        $user = $userMapper->getUserById($video->userId);
+        if ($comment->userId != $video->userId && $privacyService->optCheck($user, Privacy::VIDEO_COMMENT)) {
+            $replacements = array (
+                'host'      => HOST,
+                'sitename'  => $config->sitename,
+                'email'     => $user->email,
+                'title'     => $video->title
+            );
+            $mail = new Mail();
+            $mail->loadTemplate('video_comment', $replacements);
+            $mail->send($user->email);
+            Plugin::triggerEvent('comment.notify_member');
+        }
+
+        // Notify comment author of reply to their comment if apl.
+        if ($comment->parentId) {
+            $parentComment = $commentMapper->getCommentById($comment->parentId);
+            $parentAuthor = $this->getCommentAuthor($parentComment);
+
+            // Verify parent comment author is opted-in and not replying to himself
+            if ($comment->userId != $parentComment->userId && $privacyService->optCheck($parentAuthor, Privacy::COMMENT_REPLY)) {
+                $replacements = array (
+                    'host'      => HOST,
+                    'sitename'  => $config->sitename,
+                    'email'     => $parentAuthor->email,
+                    'title'     => $video->title,
+                    'videoUrl'  => $videoService->getUrl($video),
+                    'comments'  => $comment->comments
+                );
+                $mail = new Mail();
+                $mail->loadTemplate('comment_reply', $replacements);
+                $mail->send($parentAuthor->email);
+            }
+        }
+
+        Plugin::triggerEvent('comment.release');
+        return $this;
     }
     
     /**

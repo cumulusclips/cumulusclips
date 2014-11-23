@@ -143,11 +143,12 @@ class CommentMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $sql = 'SELECT comment_id FROM ' . DB_PREFIX . 'comments ';
-        $where = 'video_id = :videoId AND parent_id = :parentCommentId';
+        $where = 'video_id = :videoId AND parent_id = :parentCommentId and status = :status';
 
         $params = array(
             ':videoId' => $videoId,
-            ':parentCommentId' => $parentCommentId
+            ':parentCommentId' => $parentCommentId,
+            ':status' => 'approved'
         );
 
         if (!empty($offsetCommentId)) {
