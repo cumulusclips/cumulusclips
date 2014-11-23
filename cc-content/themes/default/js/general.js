@@ -22,6 +22,7 @@ $(document).ready(function(){
         }
     });
     
+    
     // Search Auto-Complete
     $('#header form input[type="text"]').autocomplete({
         source: cumulusClips.baseUrl + '/search/suggest/',
@@ -30,9 +31,9 @@ $(document).ready(function(){
 
 
     // Tabs Show/Hide Block
-    $('.tabs a').click(function(){
+    $('.tabs a').click(function(event){
         // Skip for non show/hide tabs
-        if ($(this).data('block') == 'undefined') return false;
+        if ($(this).data('block') == 'undefined') return;
         
         // Hide all blocks except for targeted block
         var block = '#' + $(this).data('block');
@@ -47,23 +48,23 @@ $(document).ready(function(){
                 duration:0
             });
         }
-        return false;
+        event.preventDefault();
     });  
 
 
     // Show/Hide Block
-    $('.showhide').click(function(){
+    $(document).on('click', '.showhide', function(event){
         // Retrieve and toggle targeted block
         var block = $(this).data('block');
         $('#'+block).toggle();
 
         // Prevent link click through
-        if ($(this).is('a')) return false;
+        if ($(this).is('a')) event.preventDefault();
     });
 
 
     // Attach confirm popup to confirm action links
-    $('.confirm').click(function() {
+    $(document).on('click', '.confirm', function(event) {
         // Code to execute once string is retrieved
         var location = $(this).attr('href')
         var callback = function(confirmString){
@@ -73,12 +74,12 @@ $(document).ready(function(){
 
         // Retrieve confirm string
         getText(callback, $(this).data('node'), $(this).data('replacements'));
-        return false;
+        event.preventDefault();
     });
 
 
     // Attach flag action to flag links / buttons
-    $('#main').on('click', '.flag', function(){
+    $(document).on('click', '.flag', function(){
         var url = cumulusClips.baseUrl+'/actions/flag/';
         var data = {type: $(this).data('type'), id: $(this).data('id')};
         executeAction(url, data);
@@ -110,7 +111,10 @@ $(document).ready(function(){
         executeAction(url, data, callback);
         return false;
     });
-    
+
+
+
+
     // Registration page actions
     if ($('.register').length > 0) {
         var delay;
@@ -150,6 +154,9 @@ $(document).ready(function(){
             }
         });
     }
+
+
+
 
     // Profile page actions
     if ($('.profile').length > 0) {
