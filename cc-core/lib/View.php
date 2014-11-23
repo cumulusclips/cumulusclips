@@ -23,6 +23,7 @@ class View
 
         $this->options = new stdClass();
         $this->options->disableView = false;
+        $this->options->disableLayout = false;
         $this->options->theme = null;
         $this->options->themeUrl = null;
         $this->options->themePath = null;
@@ -158,8 +159,12 @@ class View
             $this->_body = ob_get_contents();
             ob_end_clean();
 
-            // Output layout of page
-            include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
+            // Output page
+            if ($this->options->disableLayout) {
+                echo $this->_body;
+            } else {
+                include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
+            }
         }
     }
     

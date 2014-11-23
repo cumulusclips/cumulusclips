@@ -1,5 +1,7 @@
 <?php
 
+$this->view->options->disableLayout = true;
+
 try {
     // Verify video is available
     if (empty($_GET['vid']) || !is_numeric ($_GET['vid']) || $_GET['vid'] < 1) throw new Exception();
@@ -17,5 +19,5 @@ try {
     $video = null;
 }
 
-// Output player
-include ($config->theme_path . '/embed.tpl');
+$this->view->vars->vp8Options = json_decode(Settings::get('vp8Options'));
+$this->view->vars->video = $video;

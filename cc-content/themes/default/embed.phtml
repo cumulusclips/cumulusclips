@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/reset.css" />
 <style type="text/css">
-html, body, .video-unavailable, object, img {
+html, body, .video-unavailable, video, img {
     width:100% !important;
     height:100% !important;
     overflow:hidden;
@@ -27,25 +27,20 @@ html, body, .video-unavailable, object, img {
 <?php if ($video && $video->disableEmbed == '0'): ?>
 
     <!-- BEGIN VIDEO -->
-    <div id="player"><?=$video->title?> - <?=Language::GetText('loading')?>...</div>
-    <script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jwplayer.js"></script>
-    <script type="text/javascript">
-    jwplayer("player").setup({
-        flashplayer : '<?=$this->options->themeUrl?>/flash/player.swf',
-        file        : '<?=$config->flv_url?>/<?=$video->filename?>.flv',
-        image       : '<?=$config->thumb_url?>/<?=$video->filename?>.jpg',
-        controlbar  : 'bottom',
-        width       : '100%',
-        height      : '100%'
-    });
-    </script>
+    <video controls="controls" poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
+        <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
+        <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogv" type="video/ogg" />
+        <?php if ($vp8Options->enabled): ?>
+            <source src="<?=$config->vp8Url?>/<?=$video->filename?>.webm" type="video/webm" />
+        <?php endif; ?>
+    </video>
     <!-- END VIDEO -->
 
 <?php elseif ($video && $video->disableEmbed == '1'): ?>
-    <?php $link = HOST . "/videos/$video->videoId/$video->slug/"; ?>
-    <div class="video-unavailable"><p><?=Language::GetText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename))?></p></div>
+    <?php $link = $this->getService('Video')->getUrl($video) . '/'; ?>
+    <div class="video-unavailable"><p><?=Language::getText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename))?></p></div>
 <?php else: ?>
-    <div class="video-unavailable"><p><?=Language::GetText('video_unavailable')?></p></div>
+    <div class="video-unavailable"><p><?=Language::getText('video_unavailable')?></p></div>
 <?php endif; ?>
 
 </body>
