@@ -450,7 +450,7 @@ class Router
                 
         $routes['embed'] = new Route(array(
             'path' => 'embed/([0-9]+)',
-            'location' => 'cc-core/system/embed.php',
+            'location' => 'cc-core/controllers/embed.php',
             'mappings' => array('vid')
         ));
 

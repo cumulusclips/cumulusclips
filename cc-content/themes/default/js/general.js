@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 
     // Attach flag action to flag links / buttons
-    $('.flag').click(function(){
+    $('#main').on('click', '.flag', function(){
         var url = cumulusClips.baseUrl+'/actions/flag/';
         var data = {type: $(this).data('type'), id: $(this).data('id')};
         executeAction(url, data);
@@ -301,8 +301,10 @@ $(document).ready(function(){
 
 
         // Make entire playlist video tile clickable
-        $('#playlistVideos .video_small').click(function(){
-            location = $(this).find('div > a').attr('href');
+        $('#playlistVideos .video_small').click(function(event){
+            if (event.target.nodeName !== 'A') {
+                location = $(this).find('div > a').attr('href');
+            }
         });
 
 
@@ -326,7 +328,6 @@ $(document).ready(function(){
             };
             executeAction(url, data, callback);
             event.preventDefault();
-            return false;
         });
 
 
@@ -517,9 +518,8 @@ $(document).ready(function(){
 
     // Add to Watch Later actions
     $('.videos_list').on('click', '.video .watchLater a', function(event){
-        event.stopPropagation();
-        event.preventDefault();
         
+        event.preventDefault();
         var video = $(this).parents('.video');
         var url = cumulusClips.baseUrl+'/actions/playlist/';
         var data = {

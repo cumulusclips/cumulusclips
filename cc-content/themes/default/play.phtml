@@ -85,18 +85,32 @@ $this->SetLayout('full');
 
     <div id="share" class="tab_block">
         <div>
-            <p class="big"><?=Language::GetText('share')?></p>
+            <p class="big"><?=Language::getText('share')?></p>
+            
+            <!--
+            Share Widget Notes
+             - Please replace <your_app_id> in the FaceBook share URL with your actual app id obtained from FaceBook's website. This widget will not work until that happens.
+             - FaceBook, and Google + widgets require the video's URL to be publicly accessible, otherwise the widgets will not work.
+            -->
+            
             <!-- FACEBOOK BUTTON -->
-            <a class="facebook" href="" onClick="window.open('https://www.facebook.com/dialog/feed?app_id=573507612661821&display=popup&link=https://developers.facebook.com/docs/reference/dialogs/&picture=http://demo.cumulusclips.org/cc-content/uploads/thumbs/lIIKcKxnri31fJ6EoeLA.jpg&name=<?=urlencode($video->title)?>&caption=<?=urlencode($config->sitename)?>&description=<?=urlencode($video->description)?>&redirect_uri=http://demo.cumulusclips.org/videos/110/the-avengers/','mywindow','width=550,height=300');return false;">Share on Facebook</a>
-
+            <meta property="og:url" content="<?=$this->getService('Video')->getUrl($video)?>/" /> 
+            <meta property="og:title" content="<?=$video->title?>" />
+            <meta property="og:description" content="<?=$video->description?>" /> 
+            <meta property="og:image" content="<?=$config->thumb_url?>/<?=$video->filename?>.jpg" /> 
+            <meta property="og:type" content="video" /> 
+            <meta property="og:video" content="<?=$config->h264Url?>/<?=$video->filename?>.mp4"> 
+            <meta property="og:video:type" content="video/mp4"> 
+            <meta property="og:video:width" content="640"> 
+            <meta property="og:video:height" content="360"> 
+            <script>if (window.location.hash === '#facebook-share') {window.close();}</script>      
+            <a class="facebook" href="https://www.facebook.com/dialog/share?app_id=<your_app_id>&display=popup&href=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&redirect_uri=<?=urlencode($this->getService('Video')->getUrl($video) . '/#facebook-share')?>" onClick="window.open(this.href, 'sharewindow','width=550,height=300');return false;">Share on Facebook</a>
+            
             <!-- TWITTER BUTTON -->
-            <a class="twitter" href="" onClick="window.open('https://twitter.com/share?url=http://demo.cumulusclips.org/videos/110/the-avengers/&text=<?=urlencode(Functions::CutOff($video->description, 140))?>','mywindow','width=650,height=400');return false;">Share on Twitter</a>
+            <a class="twitter" href="" onClick="window.open('https://twitter.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&text=<?=urlencode(Functions::cutOff($video->description, 140))?>','sharewindow','width=650,height=400');return false;">Share on Twitter</a>
 
-            <!-- Google +1 BUTTON -->
-            <meta itemprop="name" content="<?=$video->title?>">
-            <meta itemprop="description" content="<?=$video->description?>">
-            <meta itemprop="image" content="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
-            <a class="google" href="" onClick="window.open('https://plus.google.com/share?url=http://demo.cumulusclips.org/test.php','mywindow','width=600,height=600');return false;">Share on Google+</a>
+            <!-- Google +BUTTON -->
+            <a class="google" href="https://plus.google.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>" onClick="javascript:window.open(this.href, 'sharewindow', 'height=600,width=600');return false;">Share</a>
         </div>
         
         <?php if ($video->disableEmbed == '0' && $video->gated == '0' && $video->private == '0'): ?>
@@ -234,7 +248,7 @@ $this->SetLayout('full');
 
 <!-- BEGIN PLAY RIGHT -->
 <div class="right">
-    
+         
     <?php if ($playlist): ?>
         <div id="playlistVideos">
             <header>
