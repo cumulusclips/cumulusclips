@@ -6,8 +6,8 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $commentMapper = new CommentMapper();
@@ -21,23 +21,16 @@ $url = ADMIN . '/flags.php';
 $query_string = array();
 $message = null;
 
-
-
 // Verify content type was provided
-if (!empty ($_GET['status']) && in_array ($_GET['status'], array ('video', 'user', 'comment'))) {
+if (!empty($_GET['status']) && in_array($_GET['status'], array('video', 'user', 'comment'))) {
     $type = $_GET['status'];
 } else {
     $type = 'video';
 }
 
-
-
-
-### Handle "Ban" record
-if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
-
+// Handle "Ban" record
+if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
     switch ($type) {
-
         case 'video':
             $video = $videoMapper->getVideoById($_GET['ban']);
             if ($video) {
@@ -48,19 +41,25 @@ if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
                 $message_type = 'success';
             }
             break;
-
         case 'user':
             $user = $userMapper->getUserById($_GET['ban']);
             if ($user) {
-                $user->status = 'banned';
-                $userMapper->save($user);
-                $flagService->flagDecision($user, true);
-                $userService->updateContentStatus ($user, 'banned');
-                $message = 'Member has been banned';
-                $message_type = 'success';
+                if ($user->userId == $adminUser->userId) {
+                    $message = 'You can\'t ban yourself, silly!';
+                    $message_type = 'errors';
+                } else if ($user->role == 'administrator') {
+                    $message = 'Administrators can\'t be banned. Change their role to that of a normal user first.';
+                    $message_type = 'errors';
+                } else {
+                    $user->status = 'banned';
+                    $userMapper->save($user);
+                    $flagService->flagDecision($user, true);
+                    $userService->updateContentStatus ($user, 'banned');
+                    $message = 'Member has been banned';
+                    $message_type = 'success';
+                }
             }
             break;
-
         case 'comment':
             $comment = $commentMapper->getCommentById($_GET['ban']);
             if ($comment) {
@@ -71,15 +70,11 @@ if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
                 $message_type = 'success';
             }
             break;
-
     }
-
 }
 
-
-
-### Handle "Dismiss" flags
-else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
+// Handle "Dismiss" flags
+else if (!empty($_GET['dismiss']) && is_numeric($_GET['dismiss'])) {
     
     switch ($type) {
         case 'video':
@@ -102,12 +97,8 @@ else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
     }
 }
 
-
-
-
-### Determine which type (account status) of members to display
+// Determine which type (account status) of members to display
 switch ($type) {
-
     case 'user':
         $query_string['status'] = 'user';
         $header = 'Flagged Member';
@@ -123,7 +114,6 @@ switch ($type) {
         $header = 'Flagged Comments';
         $page_title = 'Flagged Comments';
         break;
-
 }
 $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE status = 'pending' AND type = '$type'";
 
@@ -132,9 +122,9 @@ $db->fetchRow($query);
 $total = $db->rowCount();
 
 // Initialize pagination
-$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
-$start_record = $pagination->GetStartRecord();
+$url .= (!empty($query_string)) ? '?' . http_build_query($query_string) : '';
+$pagination = new Pagination($url, $total, $records_per_page, false);
+$start_record = $pagination->getStartRecord();
 $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
@@ -143,7 +133,6 @@ $flagResult = $db->fetchAll($query);
 $flagsList = $flagMapper->getFlagsFromList(
     Functions::arrayColumn($flagResult, 'flag_id')
 );
-
 
 // Output Header
 include ('header.php');
