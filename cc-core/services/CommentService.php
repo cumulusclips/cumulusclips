@@ -39,7 +39,7 @@ class CommentService extends ServiceAbstract
             } else {
                 // Check if admin created  comment (auto-approve is so)
                 $commentAuthor = $this->getCommentAuthor($comment);
-                if ($commentAuthor->isAdmin) {
+                if ($commentAuthor->role == 'administrator') {
                     $this->_releaseComment($comment);
                 } else {
                     // Set Pending
