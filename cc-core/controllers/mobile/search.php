@@ -27,4 +27,4 @@ if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
     );
 }
 
-Plugin::Trigger ('mobile_search.before_render');
+Plugin::triggerEvent('mobile_search.before_render');

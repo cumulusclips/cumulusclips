@@ -1,9 +1,9 @@
 <div id="videos">
-    <h1><?=Language::GetText('videos_header')?></h1>
+    <h1><?=Language::getText('videos_header')?></h1>
     <?php if (!empty($count)): ?>
 
         <div class="list">
-            <?php $this->RepeatingBlock('video.phtml', $videos); ?>
+            <?php $this->repeatingBlock('video.phtml', $videos); ?>
 
             <?php if ($count > 20): ?>
                 <div id="load-more">
@@ -24,6 +24,6 @@
         </div>
 
     <?php else: ?>
-        <div class="block"><strong><?=Language::GetText('no_videos')?></strong></div>
+        <div class="block"><strong><?=Language::getText('no_videos')?></strong></div>
     <?php endif; ?>
 </div>

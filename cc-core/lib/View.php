@@ -50,6 +50,11 @@ class View
         $this->options->themeUrl = HOST . '/cc-content/themes/' . $themeFiltered;
         $this->options->themePath = THEMES_DIR . '/' . $themeFiltered;
         
+        // Set default theme settings
+        $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-v2' : 'default';
+        $this->options->defaultThemeUrl = HOST . '/cc-content/themes/' . $this->options->defaultTheme;
+        $this->options->defaultThemePath = THEMES_DIR . '/' . $this->options->defaultTheme;
+        
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
         if ($viewHelper && file_exists($viewHelper)) include_once($viewHelper);
@@ -75,8 +80,8 @@ class View
     {
         if (file_exists($this->options->themePath . "/$file")) {
             return $this->options->themePath . "/$file";
-        } else if (file_exists($this->vars->config->theme_path_default . "/$file")) {
-            return $this->vars->config->theme_path_default . "/$file";
+        } else if (file_exists($this->options->defaultThemePath . "/$file")) {
+            return $this->options->defaultThemePath . "/$file";
         } else {
             return false;
         }
@@ -93,8 +98,8 @@ class View
     {
         if (file_exists($this->options->themePath . "/$file")) {
             return $this->options->themeUrl . "/$file";
-        } else if (file_exists($this->vars->config->theme_path_default . "/$file")) {
-            return $this->vars->config->theme_url_default . "/$file";
+        } else if (file_exists($this->options->defaultThemeUrl . "/$file")) {
+            return $this->options->defaultThemeUrl . "/$file";
         } else {
             return false;
         }
@@ -128,7 +133,7 @@ class View
     protected function _getViewFileFromRoute(Route $route)
     {
         $patterns = array(
-            '/cc\-core\/controllers\//i',
+            '/cc\-core\/controllers\/(mobile\/)?/i',
             '/\.php$/i'
         );
         $replacements = array(

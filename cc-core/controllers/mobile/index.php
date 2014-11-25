@@ -8,8 +8,9 @@ $this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
-$this->view->vars->meta->title = Language::GetText ('mobile_heading', array ('sitename' => $config->sitename));
+$config = Registry::get('config');
 $db = Registry::get('db');
+$this->view->vars->meta->title = Language::getText('mobile_heading', array('sitename' => $config->sitename));
 
 // Retrieve Featured Video
 $this->view->vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
@@ -25,5 +26,4 @@ $recentResults = $db->fetchAll($query);
 $this->view->vars->recentVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentResults, 'video_id')
 );
-
-Plugin::Trigger ('mobile_index.before_render');
+Plugin::triggerEvent('mobile_index.before_render');

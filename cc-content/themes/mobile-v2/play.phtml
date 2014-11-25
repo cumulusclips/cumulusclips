@@ -1,9 +1,7 @@
 <?php
-
-$this->AddCss ('video-js.css');
-$this->AddJs ('video.js');
-$this->AddJs ('play.js');
-
+$this->addCss('video-js.css');
+$this->addJs('video.js');
+$this->addJs('play.js');
 ?>
 
 <div id="play">
@@ -25,9 +23,9 @@ $this->AddJs ('play.js');
             </video>
         </div>
 
-        <p><strong><?=Language::GetText('duration')?>: </strong><?=$video->duration?></p>
-        <p><strong><?=Language::GetText('by')?>: </strong><?=$video->username?></p>
-        <p><strong><?=Language::GetText('description')?>: </strong><?=$video->description?></p>
+        <p><strong><?=Language::getText('duration')?>: </strong><?=$video->duration?></p>
+        <p><strong><?=Language::getText('by')?>: </strong><?=$video->username?></p>
+        <p><strong><?=Language::getText('description')?>: </strong><?=$video->description?></p>
                 
     </div>
 </div>

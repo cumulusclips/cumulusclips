@@ -19,10 +19,10 @@ $video = $videoMapper->getVideoByCustom(array(
     'private' => '0',
     'gated' => '0'
 ));
-if (!$video) App::Throw404();
+if (!$video) App::throw404();
 
 // Retrieve video
 $this->view->vars->video = $video;
 $this->view->vars->meta->title = $video->title;
 
-Plugin::Trigger ('mobile_play.before_render');
+Plugin::triggerEvent('mobile_play.before_render');

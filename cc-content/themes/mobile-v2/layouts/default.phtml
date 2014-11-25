@@ -5,39 +5,39 @@
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
 <meta name="baseURL" content="<?=HOST?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php $this->WriteMeta(); ?>
-<link rel="apple-touch-icon" href="<?=$config->theme_url?>/images/touch.png"/>
-<link href="<?=$config->theme_url?>/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="<?=$config->theme_url?>/css/main.css" rel="stylesheet" type="text/css" />
-<?php $this->WriteCSS(); ?>
+<?php $this->writeMeta(); ?>
+<link rel="apple-touch-icon" href="<?=$this->options->themeUrl?>/images/touch.png"/>
+<link href="<?=$this->options->themeUrl?>/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="<?=$this->options->themeUrl?>/css/main.css" rel="stylesheet" type="text/css" />
+<?php $this->writeCSS(); ?>
 </head>
-<body class="<?=Language::GetCSSName()?>">
+<body class="<?=Language::getCSSName()?>">
     
 <div id="header">
-    <a href="<?=MOBILE_HOST?>/"><img src="<?=$config->theme_url?>/images/logo.png" alt="<?=Language::GetText('mobile_heading', array ('sitename' => $config->sitename))?>" /></a>
+    <a href="<?=MOBILE_HOST?>/"><img src="<?=$this->options->themeUrl?>/images/logo.png" alt="<?=Language::getText('mobile_heading', array('sitename' => $config->sitename))?>" /></a>
 </div>
 
 <div id="wrapper">
     
     <div id="nav">
         <?php if ($this->options->page == 'mobile_play'): ?>
-            <div><a href="" class="back"><?=Language::GetText('back')?></a></div>
+            <div><a href="" class="back"><?=Language::getText('back')?></a></div>
         <?php else: ?>
-            <div><a href="<?=MOBILE_HOST?>/"><?=Language::GetText('home')?></a></div>
-            <div><a href="<?=MOBILE_HOST?>/v/"><?=Language::GetText('videos')?></a></div>
-            <div><a href="<?=MOBILE_HOST?>/s/"><?=Language::GetText('search')?></a></div>
+            <div><a href="<?=MOBILE_HOST?>/"><?=Language::getText('home')?></a></div>
+            <div><a href="<?=MOBILE_HOST?>/v/"><?=Language::getText('videos')?></a></div>
+            <div><a href="<?=MOBILE_HOST?>/s/"><?=Language::getText('search')?></a></div>
         <?php endif; ?>
     </div>
     
     <?=$this->body()?>
 
     <div id="footer">
-        <p><a href="<?=HOST?>/?nomobile"><?=Language::GetText('standard_site')?></a></p>
+        <p><a href="<?=HOST?>/?nomobile"><?=Language::getText('standard_site')?></a></p>
     </div>
 
 </div>
-<script type="text/javascript" src="<?=$config->theme_url?>/js/jquery.min.js"></script>
-<script type="text/javascript" src="<?=$config->theme_url?>/js/general.js"></script>
+<script src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>
+<script src="<?=$this->options->themeUrl?>/js/general.js"></script>
 <?php $this->WriteJs(); ?>
 
 </body>

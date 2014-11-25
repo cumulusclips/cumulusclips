@@ -3,22 +3,22 @@
     <!-- BEGIN SEARCH FORM -->
     <div id="search-form">
         <form action="<?=MOBILE_HOST?>/s/" method="post">
-        <input type="text" name="keyword" id="search-field" title="<?=Language::GetText('search_text')?>" value="" />
+        <input type="text" name="keyword" id="search-field" title="<?=Language::getText('search_text')?>" value="" />
         <input type="hidden" name="submitted" value="TRUE" />
-        <input id="search-button" type="image" value="<?=Language::GetText('search_text')?>" src="<?=$config->theme_url?>/images/search-button.png">
+        <input id="search-button" type="image" value="<?=Language::getText('search_text')?>" src="<?=$this->options->themeUrl?>/images/search-button.png">
         </form>
     </div>
     <!-- END SEARCH FORM -->
 
-    <h1><?=Language::GetText('search_header')?></h1>
+    <h1><?=Language::getText('search_header')?></h1>
     <?php if (!empty($count)): ?>
 
-        <p><strong><?=Language::GetText('results_for')?>: </strong><?=$keyword?></p>
+        <p><strong><?=Language::getText('results_for')?>: </strong><?=$keyword?></p>
 
         <?php if (empty ($count)): ?>
 
             <!-- BEGIN NO RESULTS FOUND -->
-            <div class="block"><strong><?=Language::GetText('no_results')?></strong></div>
+            <div class="block"><strong><?=Language::getText('no_results')?></strong></div>
             <!-- END NO RESULTS FOUND -->
 
         <?php else: ?>
@@ -39,8 +39,8 @@
                         <input type="hidden" id="start" name="start" value="20" />
                         </form>
                         <div>
-                            <span id="loading-text" style="display:none;"><?=Language::GetText('loading')?>...</span>
-                            <span id="load-more-text"><?=Language::GetText('load_more')?></span>
+                            <span id="loading-text" style="display:none;"><?=Language::getText('loading')?>...</span>
+                            <span id="load-more-text"><?=Language::getText('load_more')?></span>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -54,7 +54,7 @@
 
         <!-- BEGIN SEARCH PAGE -->
         <div class="block">
-            <p><?=Language::GetText('search_body')?></p>
+            <p><?=Language::getText('search_body')?></p>
         </div>
         <!-- END SEARCH PAGE -->
 

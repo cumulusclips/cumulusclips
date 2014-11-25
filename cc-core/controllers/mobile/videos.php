@@ -23,4 +23,4 @@ $this->view->vars->videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($videoResults, 'video_id')
 );
 
-Plugin::Trigger ('mobile_videos.before_render');
+Plugin::triggerEvent('mobile_videos.before_render');
