@@ -328,6 +328,31 @@ PLAY VIDEO
     height: 337px;
 }
 
+#player-gated {
+    position: relative;
+}
+
+#player-gated div {
+    top: 130px;
+    left: 35px;
+    padding: 15px;
+    position: absolute;
+    width: 500px;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+}
+
+#player-gated p {
+    margin: 0;
+}
+
+#player-gated .button_small {
+    margin: 10px 10px 0;
+}
+
 .play .actions {
     overflow: hidden;
     margin-bottom: 4px;
