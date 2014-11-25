@@ -5,7 +5,7 @@ Plugin::triggerEvent('message_send.start');
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
 $this->view->vars->to = null;
@@ -17,6 +17,7 @@ $message = array();
 $userMapper = new UserMapper();
 $messageMapper = new MessageMapper();
 $message = new Message();
+$config = Registry::get('config');
 
 // Verify if request came from outside page
 if (!empty($_GET['username'])) {
@@ -51,13 +52,13 @@ if (isset($_POST['submitted'])) {
                 $this->view->vars->to = $recipient->username;
                 $message->recipient = $recipient->userId;
             } else {
-                $this->view->vars->errors['recipient'] = Language::GetText('error_recipient_self');
+                $this->view->vars->errors['recipient'] = Language::getText('error_recipient_self');
             }    
         } else {
-            $this->view->vars->errors['recipient'] = Language::GetText('error_recipient_exist');
+            $this->view->vars->errors['recipient'] = Language::getText('error_recipient_exist');
         }
     } else {
-        $this->view->vars->errors['recipient'] = Language::GetText('error_recipient');
+        $this->view->vars->errors['recipient'] = Language::getText('error_recipient');
     }
 
     // Validate subject field
@@ -65,7 +66,7 @@ if (isset($_POST['submitted'])) {
         $message->subject = trim($_POST['subject']);
         $this->view->vars->subject = $message->subject;
     } else {
-        $this->view->vars->errors['subject'] = Language::GetText('error_subject');
+        $this->view->vars->errors['subject'] = Language::getText('error_subject');
     }
 
     // Validate message field
@@ -73,7 +74,7 @@ if (isset($_POST['submitted'])) {
         $message->message = trim($_POST['message']);
         $this->view->vars->msg = $message->message;
     } else {
-        $this->view->vars->errors['message'] = Language::GetText('error_message');
+        $this->view->vars->errors['message'] = Language::getText('error_message');
     }
 
     // Create message if no errors were found
@@ -95,14 +96,14 @@ if (isset($_POST['submitted'])) {
                 'email'     => $recipient->email
             );
             $mail = new Mail();
-            $mail->LoadTemplate('new_message', $replacements);
-            $mail->Send($recipient->email);
+            $mail->loadTemplate('new_message', $replacements);
+            $mail->send($recipient->email);
         }
-        $this->view->vars->message = Language::GetText('success_message_sent');
+        $this->view->vars->message = Language::getText('success_message_sent');
         $this->view->vars->message_type = 'success';
         Plugin::triggerEvent('message_send.send_message');
     } else {
-        $this->view->vars->message = Language::GetText('errors_below');
+        $this->view->vars->message = Language::getText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);
         $this->view->vars->message_type = 'errors';
     }
