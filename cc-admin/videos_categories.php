@@ -6,8 +6,8 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $page_title = 'Video Categories';
@@ -17,82 +17,66 @@ $errors = array();
 $message = null;
 $categoryMapper = new CategoryMapper();
 
-
-
-
-/**************************
-Handle create category form
-**************************/
-
-if (isset ($_POST['submitted_add'])) {
+// Handle create category form
+if (isset($_POST['submitted_add'])) {
 
     try {
-
         // Validate title
-        if (empty ($_POST['cat_name']) || ctype_space ($_POST['cat_name'])) {
-            throw new Exception ('Invalid category name. Please try again.');
+        if (empty($_POST['cat_name'])) {
+            throw new Exception('Invalid category name. Please try again.');
         }
 
         $category = new Category();
-        $category->slug = Functions::CreateSlug (trim ($_POST['cat_name']));
+        $category->slug = Functions::createSlug(trim($_POST['cat_name']));
         $category->name = trim($_POST['cat_name']);
         
         if ($categoryMapper->getCategoryBySlug($category->slug)) {
-            throw new Exception ('Category name or slug already exists. Please note that in the slug special characters are replaced by hyphens.');
+            throw new Exception('Category name or slug already exists. Please note that in the slug special characters are replaced by hyphens.');
         }
 
         $categoryMapper->save($category);
         $message = $category->name . ' was successfully created.';
-        $message_type = 'success';
-        unset ($category);
+        $messageType = 'success';
+        unset($category);
 
     } catch (Exception $e) {
         $errors['cat_name'] = true;
         $message = $e->getMessage();
-        $message_type = 'errors';
+        $messageType = 'errors';
     }
-
 }
 
-
-
-
-
-/*******************************
-Handle move/delete category form
-*******************************/
-
-if (isset ($_POST['submitted_edit'])) {
+// Handle move/delete category form
+if (isset($_POST['submitted_edit'])) {
 
     // Validate move category
-    if (isset ($_POST['move']) && is_numeric ($_POST['move']) && $categoryMapper->getCategoryById($_POST['move'])) {
+    if (isset($_POST['move']) && is_numeric($_POST['move']) && $categoryMapper->getCategoryById($_POST['move'])) {
         $data['move'] = $_POST['move'];
     } else {
         $errors['move'] = 'Invalid receiving (move to) category';
     }
 
     // Validate category
-    if (isset ($_POST['category']) && is_numeric ($_POST['category']) && $categoryMapper->getCategoryById($_POST['category'])) {
+    if (isset($_POST['category']) && is_numeric($_POST['category']) && $categoryMapper->getCategoryById($_POST['category'])) {
         $data['category'] = $_POST['category'];
     } else {
         $errors['category'] = 'Invalid source category';
     }
 
     // Verify videos aren't moved to same category
-    if (isset ($data['category'], $data['move'])) {
+    if (isset($data['category'], $data['move'])) {
         if ($data['category'] == $data['move']) $errors['category'] = "Can't move videos to the same category";
     }
 
     // Validate action
-    if (!empty ($_POST['action']) && in_array ($_POST['action'], array ('move','delete'))) {
+    if (!empty($_POST['action']) && in_array($_POST['action'], array('move','delete'))) {
         $data['action'] = $_POST['action'];
     } else {
         $errors['action'] = 'Invalid category action';
     }
 
-
     // Move videos if no errors were made
-    if (empty ($errors)) {
+    if (empty($errors)) {
 
         // Move videos
         $query = 'UPDATE ' . DB_PREFIX . 'videos SET category_id = :categoryId WHERE category_id = :oldCategoryId';
@@ -108,41 +92,38 @@ if (isset ($_POST['submitted_edit'])) {
         }
 
         // Output message
-        $message_type = 'success';
+        $messageType = 'success';
         unset ($data);
         
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message .= '<br><br> - ' . implode('<br> - ', $errors);
+        $messageType = 'errors';
     }
-
 }
-
-
 
 // Retrieve Category names
 $query = "SELECT " . DB_PREFIX . "categories.category_id, name, COUNT(video_id) AS video_count ";
 $query .= "FROM " . DB_PREFIX . "categories LEFT JOIN " . DB_PREFIX . "videos ON " . DB_PREFIX . "categories.category_id = " . DB_PREFIX . "videos.category_id ";
+$query .= "WHERE status = 'approved' OR video_id IS NULL ";
 $query .= "GROUP BY " . DB_PREFIX . "categories.category_id ORDER BY name asc";
 $categories = $db->fetchAll($query, array(), PDO::FETCH_OBJ);
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
 <div id="videos-categories">
 
     <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$messageType?>"><?=$message?></div>
     <?php endif; ?>
 
     <h1>Add Category</h1>
     <div id="add-category" class="block">
         <form action="<?=ADMIN?>/videos_categories.php" method="post">
-            <span class="<?=(isset ($errors['cat_name']))?'error':''?>"><strong>Category Name:</strong></span>
+            <span class="<?=(isset($errors['cat_name']))?'error':''?>"><strong>Category Name:</strong></span>
             <input type="text" class="text" name="cat_name" value="<?=(!empty($category->name))?$category->name:''?>"/>
             <input type="hidden" name="submitted_add" value="TRUE" />
             <input type="submit" class="button" value="Add Category" />
@@ -154,10 +135,10 @@ include ('header.php');
 
     <?php if (count($categories) > 1): ?>
 
-        <?php foreach ($categories as $category_obj): ?>
+        <?php foreach ($categories as $categoryObj): ?>
 
             <div class="block">
-                <p><strong><?=$category_obj->name?></strong> (<?=$category_obj->video_count?> videos)</p>
+                <p><strong><?=$categoryObj->name?></strong> (<?=$categoryObj->video_count?> videos)</p>
                 <p><a href="" class="category-action" data-action="move">Move Videos</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" class="delete category-action" data-action="delete">Delete</a></p>
 
                 <div class="hide">
@@ -166,11 +147,11 @@ include ('header.php');
                         <select name="move" class="dropdown">
                         <?php $list = $categories; ?>
                         <?php foreach ($list as $value): ?>
-                            <?php if ($category_obj->category_id == $value->category_id) continue; ?>
+                            <?php if ($categoryObj->category_id == $value->category_id) continue; ?>
                             <option value="<?=$value->category_id?>"><?=$value->name?></option>
                         <?php endforeach; ?>
                         </select>
-                        <input type="hidden" name="category" value="<?=$category_obj->category_id?>" />
+                        <input type="hidden" name="category" value="<?=$categoryObj->category_id?>" />
                         <input type="hidden" name="action" value="" />
                         <input type="hidden" name="submitted_edit" value="TRUE" />
                         <input type="submit" class="button move-videos" value="Move Videos" />
@@ -191,4 +172,4 @@ include ('header.php');
 
 </div>
 
-<?php include ('footer.php'); ?>
+<?php include('footer.php'); ?>
