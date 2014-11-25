@@ -32,26 +32,37 @@ class VideoService extends ServiceAbstract
             App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
         }
 
+        // Delete comments on video
         $commentService = new CommentService();
         $commentMapper = new CommentMapper();
         $comments = $commentMapper->getMultipleCommentsByCustom(array('video_id' => $video->videoId));
         foreach ($comments as $comment) $commentService->delete($comment);
         
+        // Delete video's ratings
         $ratingService = new RatingService();
         $ratingMapper = new RatingMapper();
         $ratings = $ratingMapper->getMultipleRatingsByCustom(array('video_id' => $video->videoId));
         foreach ($ratings as $rating) $ratingService->delete($rating);
         
-//        $favoriteService = new FavoriteService();
-//        $favoriteMapper = new FavoriteMapper();
-//        $favorites = $favoriteMapper->getMultipleFavoritesByCustom(array('video_id' => $video->videoId));
-//        foreach ($favorites as $favorite) $favoriteService->delete($favorite);
+        // Delete playlist entries for video
+        $playlistService = new PlaylistService();
+        $playlistEntryMapper = new PlaylistEntryMapper();
+        $playlistMapper = new PlaylistMapper();
+        $playlistEntries = $playlistEntryMapper->getMultiplePlaylistEntriesByCustom(array(
+            'video_id' => $video->videoId
+        ));
+        foreach ($playlistEntries as $playlistEntry) {
+            $playlist = $playlistMapper->getPlaylistById($playlistEntry->playlistId);
+            $playlistService->deleteVideo($video, $playlist);
+        }
         
+        // Delete video flags
         $flagService = new FlagService();
         $flagMapper = new FlagMapper();
         $flags = $flagMapper->getMultipleFlagsByCustom(array('object_id' => $video->videoId, 'type' => 'video'));
         foreach ($flags as $flag) $flagService->delete($flag);
 
+        // Delete video
         $videoMapper = $this->_getMapper();
         $videoMapper->delete($video->videoId);
     }
