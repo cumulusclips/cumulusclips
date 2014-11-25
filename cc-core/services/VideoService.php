@@ -172,8 +172,7 @@ class VideoService extends ServiceAbstract
                     'email'     => $subscriber->email,
                     'member'    => $subscriber->username,
                     'title'     => $video->title,
-                    'video_id'  => $video->videoId,
-                    'slug'      => $this->getUrl($video)
+                    'video_url' => $this->getUrl($video)
                 );
                 $mail = new Mail();
                 $mail->LoadTemplate ('new_video', $replacements);
@@ -196,13 +195,11 @@ class VideoService extends ServiceAbstract
                 'host'      => HOST,
                 'sitename'  => $config->sitename,
                 'email'     => $user->email,
-                'member'    => $user->username,
                 'title'     => $video->title,
-                'video_id'  => $video->videoId,
-                'slug'      => $this->getUrl($video)
+                'video_url' => $this->getUrl($video)
             );
             $mail = new Mail();
-            $mail->LoadTemplate('VideoReady', $replacements);
+            $mail->LoadTemplate('video_ready', $replacements);
             $mail->Send($user->email);
             Plugin::trigger('video.notify_user_video_is_ready', $video);
         }

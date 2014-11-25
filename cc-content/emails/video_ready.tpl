@@ -1,12 +1,17 @@
 <!-- Begin: Subject -->
-Your video has been commented on - {sitename}
+Your video is ready! - {sitename}
 <!-- End: Subject -->
 
 
 <!-- Begin: Message -->
 Hello,
 
-One of your videos, ({title}), has just received a comment. Login and check it out.
+Your new video is now available for viewing. Click on the link below to see it.
+
+----------------------------------------------------------------------
+Title: {title}
+Watch Video: {video_url}/
+----------------------------------------------------------------------
 
 Thanks,
 {sitename}
