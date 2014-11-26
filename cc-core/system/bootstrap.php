@@ -53,7 +53,7 @@ $config->accepted_avatar_formats = array('png', 'jpeg', 'jpg', 'gif');
 $config->pagination_page_limit = Settings::get('pagination_page_limit');
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
-$config->vp8Url = HOST . '/cc-content/uploads/vp8';
+$config->webmUrl = HOST . '/cc-content/uploads/webm';
 $config->mobile_url = HOST . '/cc-content/uploads/mobile';
 $config->thumb_url = HOST . '/cc-content/uploads/thumbs';
 Registry::set('config', $config);

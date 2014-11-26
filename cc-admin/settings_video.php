@@ -3,7 +3,7 @@
 // Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
-// Verify if user is logged in
+// Verify if user is ltheoraed in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
@@ -19,14 +19,16 @@ $message = null;
 $data['php'] = Settings::Get('php');
 $data['ffmpeg'] = Settings::Get('ffmpeg');
 $data['h264EncodingOptions'] = Settings::Get('h264EncodingOptions');
-$data['theoraEncodingOptions'] = Settings::Get('theoraEncodingOptions');
-$data['vp8Options'] = Settings::Get('vp8Options');
-$vp8Options = json_decode($data['vp8Options']);
-$data['mobile_options'] = Settings::Get('mobile_options');
+$data['webm_encoding_options'] = Settings::get('webm_encoding_options');
+$webmEncodingOptions = json_decode($data['webm_encoding_options']);
+$data['theora_encoding_options'] = Settings::get('theora_encoding_options');
+$theoraEncodingOptions = json_decode($data['theora_encoding_options']);
+$data['mobile_encoding_options'] = Settings::get('mobile_encoding_options');
+$mobileEncodingOptions = json_decode($data['mobile_encoding_options']);
 $data['thumb_options'] = Settings::Get('thumb_options');
 $data['debug_conversion'] = Settings::Get('debug_conversion');
 $data['video_size_limit'] = Settings::Get('video_size_limit');
-$data['keepOriginalVideo'] = Settings::Get('keepOriginalVideo');
+$data['keep_original_video'] = Settings::Get('keepOriginalVideo');
 
 
 
@@ -53,10 +55,10 @@ if (isset ($_POST['submitted'])) {
     }
 
     // Validate video size limit
-    if (isset($_POST['keepOriginalVideo']) && in_array ($_POST['keepOriginalVideo'], array ('1', '0'))) {
-        $data['keepOriginalVideo'] = trim($_POST['keepOriginalVideo']);
+    if (isset($_POST['keep_original_video']) && in_array ($_POST['keep_original_video'], array ('1', '0'))) {
+        $data['keep_original_video'] = trim($_POST['keep_original_video']);
     } else {
-        $errors['keepOriginalVideo'] = 'Invalid keep original video option';
+        $errors['keep_original_video'] = 'Invalid keep original video option';
     }
 
     // Validate H.264 encoding options
@@ -66,35 +68,55 @@ if (isset ($_POST['submitted'])) {
         $errors['h264EncodingOptions'] = 'Invalid H.264 encoding options';
     }
 
-    // Validate Theora encoding options
-    if (!empty($_POST['theoraEncodingOptions']) && !ctype_space($_POST['theoraEncodingOptions'])) {
-        $data['theoraEncodingOptions'] = trim($_POST['theoraEncodingOptions']);
-    } else {
-        $errors['theoraEncodingOptions'] = 'Invalid Theora encoding options';
-    }
-
-    // Validate VP8 encoding enabled
-    if (isset($_POST['vp8EncodingEnabled']) && in_array($_POST['vp8EncodingEnabled'], array('1', '0'))) {
-        $vp8Options->enabled = $_POST['vp8EncodingEnabled'] == '1' ? true : false;
+    // Validate WebM encoding enabled
+    if (isset($_POST['webm_encoding_enabled']) && in_array($_POST['webm_encoding_enabled'], array('1', '0'))) {
+        $webmEncodingOptions->enabled = $_POST['webm_encoding_enabled'] == '1' ? true : false;
         
-        // Validate VP8 encoding options
-        if ($vp8Options->enabled) {
-            if (!empty($_POST['vp8EncodingOptions']) && !ctype_space($_POST['vp8EncodingOptions'])) {
-                $vp8Options->options = trim($_POST['vp8EncodingOptions']);
+        // Validate WebM encoding options
+        if ($webmEncodingOptions->enabled) {
+            if (!empty($_POST['webm_encoding_options']) && !ctype_space($_POST['webm_encoding_options'])) {
+                $webmEncodingOptions->options = trim($_POST['webm_encoding_options']);
             } else {
-                $errors['vp8EncodingOptions'] = 'Invalid VP8 encoding options';
+                $errors['webm_encoding_options'] = 'Invalid WebM encoding options';
             }
         }
-        $data['vp8Options'] = json_encode($vp8Options);
+        $data['webm_encoding_options'] = json_encode($webmEncodingOptions);
     } else {
-        $errors['vp8EncodingEnabled'] = 'Invalid Theora encoding options';
+        $errors['webm_encoding_enabled'] = 'Invalid WebM encoding options';
     }
 
-    // Validate mobile encoding options
-    if (!empty($_POST['mobile_options']) && !ctype_space($_POST['mobile_options'])) {
-        $data['mobile_options'] = trim($_POST['mobile_options']);
+    // Validate Theora encoding enabled
+    if (isset($_POST['theora_encoding_enabled']) && in_array($_POST['theora_encoding_enabled'], array('1', '0'))) {
+        $theoraEncodingOptions->enabled = $_POST['theora_encoding_enabled'] == '1' ? true : false;
+        
+        // Validate Theora  encoding options
+        if ($theoraEncodingOptions->enabled) {
+            if (!empty($_POST['theora_encoding_options']) && !ctype_space($_POST['theora_encoding_options'])) {
+                $theoraEncodingOptions->options = trim($_POST['theora_encoding_options']);
+            } else {
+                $errors['theora_encoding_options'] = 'Invalid Theora encoding options';
+            }
+        }
+        $data['theora_encoding_options'] = json_encode($theoraEncodingOptions);
     } else {
-        $errors['mobile_options'] = 'Invalid mobile encoding options';
+        $errors['theora_encoding_enabled'] = 'Invalid Theora encoding options';
+    }
+
+    // Validate Mobile encoding enabled
+    if (isset($_POST['mobile_encoding_enabled']) && in_array($_POST['mobile_encoding_enabled'], array('1', '0'))) {
+        $mobileEncodingOptions->enabled = $_POST['mobile_encoding_enabled'] == '1' ? true : false;
+        
+        // Validate Mobile  encoding options
+        if ($mobileEncodingOptions->enabled) {
+            if (!empty($_POST['mobile_encoding_options']) && !ctype_space($_POST['mobile_encoding_options'])) {
+                $mobileEncodingOptions->options = trim($_POST['mobile_encoding_options']);
+            } else {
+                $errors['mobile_encoding_options'] = 'Invalid Mobile encoding options';
+            }
+        }
+        $data['mobile_encoding_options'] = json_encode($mobileEncodingOptions);
+    } else {
+        $errors['mobile_encoding_enabled'] = 'Invalid Mobile encoding options';
     }
 
     // Validate thumbnail encoding options
@@ -240,27 +262,43 @@ include('header.php');
                 <input class="text" type="text" name="h264EncodingOptions" value="<?=htmlspecialchars($data['h264EncodingOptions'])?>" />
             </div>
 
-            <div class="row <?=(isset($errors['theoraEncodingOptions'])) ? ' error' : ''?>">
-                <label>Theora Encoding Options:</label>
-                <input class="text" type="text" name="theoraEncodingOptions" value="<?=htmlspecialchars($data['theoraEncodingOptions'])?>" />
-            </div>
-
-            <div class="row <?=(isset($errors['vp8EncodingEnabled'])) ? ' error' : ''?>">
-                <label>VP8 Encoding:</label>
-                <select data-toggle="vp8EncodingOptions" name="vp8EncodingEnabled" class="dropdown">
-                    <option value="1" <?=($vp8Options->enabled == true)?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($vp8Options->enabled == false)?'selected="selected"':''?>>Disabled</option>
+            <div class="row <?=(isset($errors['webm_encoding_enabled'])) ? ' error' : ''?>">
+                <label>WebM Encoding:</label>
+                <select data-toggle="webm-encoding-options" name="webm_encoding_enabled" class="dropdown">
+                    <option value="1" <?=($webmEncodingOptions->enabled == true)?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($webmEncodingOptions->enabled == false)?'selected="selected"':''?>>Disabled</option>
                 </select>
             </div> 
             
-            <div id="vp8EncodingOptions" class="row <?=(isset($errors['vp8EncodingOptions'])) ? ' error' : ''?> <?=($vp8Options->enabled == false) ? 'hide' : ''?>">
-                <label>VP8 Encoding Options:</label>
-                <input class="text" type="text" name="vp8EncodingOptions" value="<?=htmlspecialchars($vp8Options->options)?>" />
+            <div id="webm-encoding-options" class="row <?=(isset($errors['webm_encoding_options'])) ? ' error' : ''?> <?=($webmEncodingOptions->enabled == false) ? 'hide' : ''?>">
+                <label>WebM Encoding Options:</label>
+                <input class="text" type="text" name="webm_encoding_options" value="<?=htmlspecialchars($webmEncodingOptions->options)?>" />
             </div>
             
-            <div class="row <?=(isset($errors['mobile_options'])) ? ' error' : ''?>">
-                <label>Mobile Options:</label>
-                <input class="text" type="text" name="mobile_options" value="<?=htmlspecialchars($data['mobile_options'])?>" />
+            <div class="row <?=(isset($errors['theora_encoding_enabled'])) ? ' error' : ''?>">
+                <label>Theora Encoding:</label>
+                <select data-toggle="theora-encoding-options" name="theora_encoding_enabled" class="dropdown">
+                    <option value="1" <?=($theoraEncodingOptions->enabled == true)?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($theoraEncodingOptions->enabled == false)?'selected="selected"':''?>>Disabled</option>
+                </select>
+            </div> 
+
+            <div id="theora-encoding-options" class="row <?=(isset($errors['theora_encoding_options'])) ? ' error' : ''?> <?=($theoraEncodingOptions->enabled == false) ? 'hide' : ''?>">
+                <label>Theora Encoding Options:</label>
+                <input class="text" type="text" name="theora_encoding_options" value="<?=htmlspecialchars($theoraEncodingOptions->options)?>" />
+            </div>
+            
+            <div class="row <?=(isset($errors['mobile_encoding_enabled'])) ? ' error' : ''?>">
+                <label>Mobile Encoding:</label>
+                <select data-toggle="mobile-encoding-options" name="mobile_encoding_enabled" class="dropdown">
+                    <option value="1" <?=($mobileEncodingOptions->enabled == true)?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($mobileEncodingOptions->enabled == false)?'selected="selected"':''?>>Disabled</option>
+                </select>
+            </div> 
+
+            <div id="mobile-encoding-options" class="row <?=(isset($errors['mobile_encoding_options'])) ? ' error' : ''?> <?=($mobileEncodingOptions->enabled == false) ? 'hide' : ''?>">
+                <label>Mobile Encoding Options:</label>
+                <input class="text" type="text" name="mobile_encoding_options" value="<?=htmlspecialchars($mobileEncodingOptions->options)?>" />
             </div>
 
             <div class="row <?=(isset ($errors['thumb_options'])) ? ' error' : ''?>">
@@ -274,11 +312,11 @@ include('header.php');
                 (Bytes)
             </div>
             
-            <div class="row <?=(isset($errors['keepOriginalVideo'])) ? ' error' : ''?>">
+            <div class="row <?=(isset($errors['keep_original_video'])) ? ' error' : ''?>">
                 <label>Keep Original Video:</label>
-                <select name="keepOriginalVideo" class="dropdown">
-                    <option value="1" <?=($data['keepOriginalVideo'] == '1')?'selected="selected"':''?>>Keep</option>
-                    <option value="0" <?=($data['keepOriginalVideo'] == '0')?'selected="selected"':''?>>Discard</option>
+                <select name="keep_original_video" class="dropdown">
+                    <option value="1" <?=($data['keep_original_video'] == '1')?'selected="selected"':''?>>Keep</option>
+                    <option value="0" <?=($data['keep_original_video'] == '0')?'selected="selected"':''?>>Discard</option>
                 </select>
             </div> 
 

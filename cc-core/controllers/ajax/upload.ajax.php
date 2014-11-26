@@ -73,8 +73,12 @@ try {
     // Initilize Encoder
     $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
     Plugin::triggerEvent('upload.ajax.before_encode');
-    $converter_cmd = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->videoId . '" >> ' .  $cmd_output . ' 2>&1 &';
-    exec($converter_cmd);
+    
+    // Check if encoding is enabled
+    if (Settings::get('enable_encoding') == '1') {
+        $converter_cmd = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->videoId . '" >> ' .  $cmd_output . ' 2>&1 &';
+        exec($converter_cmd);
+    }
     Plugin::triggerEvent('upload.ajax.encode');
 
     // Output success message

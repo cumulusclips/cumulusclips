@@ -6,8 +6,8 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
@@ -18,18 +18,17 @@ $query_string = array();
 $categories = array();
 $message = null;
 $sub_header = null;
-$vp8Options = json_decode(Settings::Get('vp8Options'));
+$webmEncodingOptions = json_decode(Settings::get('webm_encoding_options'));
+$theoraEncodingOptions = json_decode(Settings::get('theora_encoding_options'));
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
 $admin_js[] = ADMIN . '/js/fancybox.js';
-
 
 // Retrieve Category names
 $categoryService = new CategoryService();
 $categories = $categoryService->getCategories();
 
-
-### Handle "Delete" video if requested
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
+// Handle "Delete" video if requested
+if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoById($_GET['delete']);
@@ -40,9 +39,8 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     }
 }
 
-
-### Handle "Feature" video if requested
-else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
+// Handle "Feature" video if requested
+else if (!empty($_GET['feature']) && is_numeric($_GET['feature'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'featured' => 0, 'status' => 'approved'));
@@ -54,9 +52,8 @@ else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
     }
 }
 
-
-### Handle "Un-Feature" video if requested
-else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
+// Handle "Un-Feature" video if requested
+else if (!empty($_GET['unfeature']) && is_numeric($_GET['unfeature'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'featured' => 1, 'status' => 'approved'));
@@ -68,9 +65,8 @@ else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
     }
 }
 
-
-### Handle "Approve" video if requested
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
+// Handle "Approve" video if requested
+else if (!empty($_GET['approve']) && is_numeric($_GET['approve'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['approve'], 'status' => VideoMapper::PENDING_APPROVAL));
@@ -81,9 +77,8 @@ else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
     }
 }
 
-
-### Handle "Unban" video if requested
-else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
+// Handle "Unban" video if requested
+else if (!empty($_GET['unban']) && is_numeric($_GET['unban'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unban'], 'status' => 'banned'));
@@ -94,9 +89,8 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
     }
 }
 
-
-### Handle "Ban" video if requested
-else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+// Handle "Ban" video if requested
+else if (!empty($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['ban']));
@@ -110,12 +104,9 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
     }
 }
 
-
-
-
-### Determine which type (status) of video to display
+// Determine which type (status) of video to display
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE";
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
+$status = (!empty($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
     case 'pending':
         $query .= " status IN ('processing', '" . VideoMapper::PENDING_APPROVAL . "', '" . VideoMapper::PENDING_CONVERSION . "')";
@@ -144,13 +135,13 @@ switch ($status) {
 }
 
 // Handle Search Member Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
+if (isset ($_POST['search_submitted'])&& !empty($_POST['search'])) {
     $like = trim($_POST['search']);
     $query_string['search'] = $like;
     $query .= " AND title LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
     $queryParams = array(':like' => '%' . $like . '%');
-} else if (!empty ($_GET['search'])) {
+} else if (!empty($_GET['search'])) {
     $like = trim($_GET['search']);
     $query_string['search'] = $like;
     $query .= " AND title LIKE :like";
@@ -166,10 +157,10 @@ $db->fetchAll($query, $queryParams);
 $total = $db->rowCount();
 
 // Initialize pagination
-$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
-$start_record = $pagination->GetStartRecord();
-$_SESSION['list_page'] = $pagination->GetURL();
+$url .= (!empty($query_string)) ? '?' . http_build_query($query_string) : '';
+$pagination = new Pagination($url, $total, $records_per_page, false);
+$start_record = $pagination->getStartRecord();
+$_SESSION['list_page'] = $pagination->getURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
@@ -178,18 +169,19 @@ $videoList = $videoMapper->getVideosFromList(
     Functions::arrayColumn($videoResults, 'video_id')
 );
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
 <meta name="h264Url" content="<?=$config->h264Url?>" />
-<meta name="theoraUrl" content="<?=$config->theoraUrl?>" />
 <meta name="thumbUrl" content="<?=$config->thumb_url?>" />
-<?php if ($vp8Options->enabled): ?>
-    <meta name="vp8Url" content="<?=$config->vp8Url?>" />
+<?php if ($webmEncodingOptions->enabled): ?>
+    <meta name="webmUrl" content="<?=$config->webmUrl?>" />
+<?php endif; ?>
+<?php if ($theoraEncodingOptions->enabled): ?>
+    <meta name="theoraUrl" content="<?=$config->theoraUrl?>" />
 <?php endif; ?>
 
 <div id="videos">
@@ -255,14 +247,14 @@ include ('header.php');
 
                                 <?php if ($status == 'approved'): ?>
                                     <?php if ($video->featured == 1): ?>
-                                        <a href="<?=$pagination->GetURL('unfeature='.$video->videoId)?>">Un-Feature</a>
+                                        <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
                                     <?php else: ?>
-                                        <a href="<?=$pagination->GetURL('feature='.$video->videoId)?>">Feature</a>
+                                        <a href="<?=$pagination->getURL('feature='.$video->videoId)?>">Feature</a>
                                     <?php endif ?>
                                 <?php endif; ?>
                                     
                                 <?php if ($status == 'featured'): ?>
-                                    <a href="<?=$pagination->GetURL('unfeature='.$video->videoId)?>">Un-Feature</a>
+                                    <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
                                 <?php endif; ?>
 
                                 <?php if (in_array ($status, array ('approved','featured'))): ?>
@@ -270,14 +262,14 @@ include ('header.php');
                                 <?php endif; ?>
 
                                 <?php if ($video->status == VideoMapper::PENDING_APPROVAL): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$video->videoId)?>">Approve</a>
+                                    <a class="approve" href="<?=$pagination->getURL('approve='.$video->videoId)?>">Approve</a>
                                 <?php elseif (in_array ($status, array ('approved','featured'))): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$video->videoId)?>">Ban</a>
+                                    <a class="delete" href="<?=$pagination->getURL('ban='.$video->videoId)?>">Ban</a>
                                 <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$video->videoId)?>">Unban</a>
+                                    <a href="<?=$pagination->getURL('unban='.$video->videoId)?>">Unban</a>
                                 <?php endif; ?>
 
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->getURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
                         <td class="category"><?=$categories[$video->categoryId]->name?></td>
@@ -298,12 +290,14 @@ include ('header.php');
         
     <video width="600" height="337" controls="controls" poster="">
         <source src="" type="video/mp4" />
-        <source src="" type="video/ogg" />
-        <?php if ($vp8Options->enabled): ?>
+        <?php if ($webmEncodingOptions->enabled): ?>
             <source src="" type="video/webm" />
+        <?php endif; ?>
+        <?php if ($theoraEncodingOptions->enabled): ?>
+            <source src="" type="video/ogg" />
         <?php endif; ?>
     </video>
 
 </div>
     
-<?php include ('footer.php'); ?>
+<?php include('footer.php'); ?>
