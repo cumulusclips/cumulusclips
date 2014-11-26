@@ -5,35 +5,37 @@ Plugin::triggerEvent('video_sitemap.start');
 // Establish page variables, objects, arrays, etc
 $xml_header = '<?xml version="1.0" encoding="UTF-8"?>';
 $limit = 45000;
+$this->view->options->disableView = true;
+$config = Registry::get('config');
 
 // Count number of video xml files
 $db = Registry::get('db');
 $query = "SELECT COUNT(video_id) AS total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
 $row = $db->fetchRow($query);
 if ($row['total'] > $limit) {
-    $file_count = ceil ($row['total']/$limit);
+    $file_count = ceil($row['total']/$limit);
 } else {
     $file_count = 1;
 }
 
 // Display content based on requested xml type
-if (empty ($_GET['page'])) {
+if (empty($_GET['page'])) {
 
     // Open sitemap index
     Plugin::triggerEvent('video_sitemap.sitemapindex');
     $xml_root = '<sitemapindex></sitemapindex>';
     $xml_frame = $xml_header . $xml_root;
-    $xml = new SimpleXMLElement ($xml_frame);
-    $xml->addAttribute ('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    $xml = new SimpleXMLElement($xml_frame);
+    $xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
     // Add video xml files
     for ($x = 1; $x <= $file_count; $x++) {
-        $sitemap = $xml->addChild ('sitemap');
-        $sitemap->addChild ('loc', HOST . '/video-sitemap-' . $x . '.xml');
-        $sitemap->addChild ('lastmod', date ('Y-m-d'));
+        $sitemap = $xml->addChild('sitemap');
+        $sitemap->addChild('loc', HOST . '/video-sitemap-' . $x . '.xml');
+        $sitemap->addChild('lastmod', date('Y-m-d'));
     }
 
-} elseif (is_numeric ($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $file_count) {
+} elseif (is_numeric($_GET['page']) && $_GET['page'] > 0 && $_GET['page'] <= $file_count) {
 
     $page = $_GET['page'];
     $start = ($page*$limit)-$limit;
@@ -48,7 +50,7 @@ if (empty ($_GET['page'])) {
 
     $xml_root = '<urlset' . $namespace . '></urlset>';
     $xml_frame = $xml_header . $xml_root;
-    $xml = new SimpleXMLElement ($xml_frame);
+    $xml = new SimpleXMLElement($xml_frame);
 
     // Add video entries
     $videoMapper = new VideoMapper();
@@ -56,33 +58,33 @@ if (empty ($_GET['page'])) {
     $ratingService = new RatingService();
     foreach ($result as $row) {
         $video = $videoMapper->getVideoById($row['video_id']);
-        $url = $xml->addChild ('url');
+        $url = $xml->addChild('url');
 
-        $url->addChild ('loc', $videoService->getUrl($video) . '/');
-        $block = $url->addChild ('video:video','','video');
+        $url->addChild('loc', $videoService->getUrl($video) . '/');
+        $block = $url->addChild('video:video','','video');
 
-        $block->addChild ('content_loc', $config->h264Url . '/' . $video->filename . '.flv');
-        $block->addChild ('thumbnail_loc', $config->thumb_url . '/' . $video->filename . '.jpg');
-        $block->addChild ('title', $video->title);
-        $block->addChild ('description', $video->description);
-        $block->addChild ('rating', $ratingService->getFiveScaleRating($video->videoId));
-        $block->addChild ('view_count', $video->views);
-        $block->addChild ('publication_date', Functions::DateFormat ('Y-m-d', $video->dateCreated));
+        $block->addChild('content_loc', $config->h264Url . '/' . $video->filename . '.flv');
+        $block->addChild('thumbnail_loc', $config->thumb_url . '/' . $video->filename . '.jpg');
+        $block->addChild('title', $video->title);
+        $block->addChild('description', $video->description);
+        $block->addChild('rating', $ratingService->getFiveScaleRating($video->videoId));
+        $block->addChild('view_count', $video->views);
+        $block->addChild('publication_date', date('Y-m-d', strtotime($video->dateCreated)));
 
         foreach ($video->tags as $_value) {
-            $block->addChild ('tag', $_value);
+            $block->addChild('tag', $_value);
         }
 
-        $block->addChild ('category', $row['name']);
-        $block->addChild ('family_friendly', 'yes');
-        $block->addChild ('duration', Functions::DurationInSeconds ($video->duration));
+        $block->addChild('category', $row['name']);
+        $block->addChild('family_friendly', 'yes');
+        $block->addChild('duration', Functions::durationInSeconds($video->duration));
     }
     
 } else {
-    App::Throw404();
+    App::throw404();
 }
 
 // Output XML
 Plugin::triggerEvent('video_sitemap.output');
-header ("Content-type: text/xml");
+header("Content-type: text/xml");
 echo $xml->asXML();
