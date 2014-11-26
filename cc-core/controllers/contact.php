@@ -13,6 +13,7 @@ $this->view->vars->email = null;
 $this->view->vars->feedback = null;
 $this->view->vars->message = null;
 $this->view->vars->messageType = null;
+$config = Registry::get('config');
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
@@ -53,7 +54,7 @@ if (isset($_POST['submitted'])) {
     } else {
         $this->view->vars->messageType = 'errors';
         $this->view->vars->message = Language::getText('errors_below');
-        $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);
+        $this->view->vars->message .= '<br><br> - ' . implode('<br> - ', $this->view->vars->errors);
     }
 }
 
