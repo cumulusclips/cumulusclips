@@ -54,7 +54,7 @@ $this->view->vars->playlistCount = $playlistCount;
 // Retrieve member's video list
 if ($videoCount > 0) {
     $videoMapper = new VideoMapper();
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $profileUser->userId . " AND status = 'approved' AND private = '0' LIMIT 9";
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $profileUser->userId . " AND status = 'approved' AND private = '0' ORDER BY date_created DESC LIMIT 9";
     Plugin::triggerEvent('profile.load_recent_videos');
     $memberVideosResults = $db->fetchAll($query);
     $this->view->vars->videoList = $videoMapper->getVideosFromList(
