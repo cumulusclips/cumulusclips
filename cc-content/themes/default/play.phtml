@@ -28,10 +28,10 @@ $this->setLayout('full');
         <div id="player">
             <video width="600" height="337" controls="controls" poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg"<!--autoplay="autoplay">-->>
                 <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
-                <?php if ($webmEncodingOptions->enabled): ?>
+                <?php if ($webmEncodingEnabled): ?>
                     <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
                 <?php endif; ?>
-                <?php if ($theoraEncodingOptions->enabled): ?>
+                <?php if ($theoraEncodingEnabled): ?>
                     <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogg" type="video/ogg" />
                 <?php endif; ?>
             </video>

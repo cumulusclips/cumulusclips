@@ -19,8 +19,8 @@ $this->view->vars->tags = null;
 $this->view->vars->private = null;
 $this->view->vars->playlist = null;
 $this->view->vars->playlistVideos = null;
-$this->view->vars->webmEncodingOptions = json_decode(Settings::get('webm_encoding_options'));
-$this->view->vars->theoraEncodingOptions = json_decode(Settings::get('theora_encoding_options'));
+$this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
+$this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 
 // Validate requested video
 if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['vid'], 'status' => 'approved'))) {
