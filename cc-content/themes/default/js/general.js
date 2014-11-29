@@ -271,6 +271,8 @@ $(document).ready(function(){
         cumulusClips.commentCount = Number($('#comments .totals span').text());
         cumulusClips.loadMoreComments = (cumulusClips.commentCount > 5) ? true : false;
         cumulusClips.videoId = $('meta[name="videoId"]').attr('content');
+        videojs.options.flash.swf = cumulusClips.themeUrl + '/images/video-js.swf';
+
 
         // Attach rating action to like & dislike links
         $('.rating').click(function(){

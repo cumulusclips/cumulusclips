@@ -18,8 +18,8 @@ $query_string = array();
 $categories = array();
 $message = null;
 $sub_header = null;
-$webmEncodingOptions = json_decode(Settings::get('webm_encoding_options'));
-$theoraEncodingOptions = json_decode(Settings::get('theora_encoding_options'));
+$webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
+$theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
 $admin_js[] = ADMIN . '/js/fancybox.js';
 
@@ -177,10 +177,10 @@ include('header.php');
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
 <meta name="h264Url" content="<?=$config->h264Url?>" />
 <meta name="thumbUrl" content="<?=$config->thumb_url?>" />
-<?php if ($webmEncodingOptions->enabled): ?>
+<?php if ($webmEncodingEnabled): ?>
     <meta name="webmUrl" content="<?=$config->webmUrl?>" />
 <?php endif; ?>
-<?php if ($theoraEncodingOptions->enabled): ?>
+<?php if ($theoraEncodingEnabled): ?>
     <meta name="theoraUrl" content="<?=$config->theoraUrl?>" />
 <?php endif; ?>
 
@@ -290,10 +290,10 @@ include('header.php');
         
     <video width="600" height="337" controls="controls" poster="">
         <source src="" type="video/mp4" />
-        <?php if ($webmEncodingOptions->enabled): ?>
+        <?php if ($webmEncodingEnabled): ?>
             <source src="" type="video/webm" />
         <?php endif; ?>
-        <?php if ($theoraEncodingOptions->enabled): ?>
+        <?php if ($theoraEncodingEnabled): ?>
             <source src="" type="video/ogg" />
         <?php endif; ?>
     </video>

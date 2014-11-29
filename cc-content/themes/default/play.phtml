@@ -2,7 +2,9 @@
 $this->addMeta('videoId', $video->videoId);
 $this->addMeta('theme', $this->options->themeUrl);
 $this->addMeta('loggedIn', (boolean) $loggedInUser);
+$this->addCss('video-js.css');
 $this->addCss('jscrollpane.css');
+$this->addJs('video.plugin.js');
 $this->addJs('jscrollpane.plugin.js');
 $this->addJs('mousewheel.plugin.js');
 $this->setLayout('full');
@@ -26,7 +28,7 @@ $this->setLayout('full');
     <?php else: ?>
         <!-- BEGIN VIDEO -->
         <div id="player">
-            <video width="600" height="337" controls="controls" poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg"<!--autoplay="autoplay">-->>
+            <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": true, "preload": "auto" }' width="600" height="337" poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
                 <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
                 <?php if ($webmEncodingEnabled): ?>
                     <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />

@@ -4,6 +4,7 @@
 <title><?=$video->title?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/reset.css" />
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/video-js.css" />
 <style type="text/css">
 html, body, .video-unavailable, video, img {
     width:100% !important;
@@ -27,11 +28,13 @@ html, body, .video-unavailable, video, img {
 <?php if ($video && $video->disableEmbed == '0'): ?>
 
     <!-- BEGIN VIDEO -->
-    <video controls="controls" poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
+    <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": false, "preload": "auto" }' poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
         <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
-        <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogv" type="video/ogg" />
-        <?php if ($vp8Options->enabled): ?>
-            <source src="<?=$config->vp8Url?>/<?=$video->filename?>.webm" type="video/webm" />
+        <?php if ($webmEncodingEenabled): ?>
+            <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
+        <?php endif; ?>
+        <?php if ($theoraEncodingEenabled): ?>
+            <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogv" type="video/ogg" />
         <?php endif; ?>
     </video>
     <!-- END VIDEO -->
@@ -43,5 +46,7 @@ html, body, .video-unavailable, video, img {
     <div class="video-unavailable"><p><?=Language::getText('video_unavailable')?></p></div>
 <?php endif; ?>
 
+<script>videojs.options.flash.swf = '<?=$this->options->themeUrl?>/images/video-js.swf';</script>
+<script src="<?=$this->options->themeUrl?>/js/video.plugin.js"></script>
 </body>
 </html>

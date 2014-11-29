@@ -19,5 +19,6 @@ try {
     $video = null;
 }
 
-$this->view->vars->vp8Options = json_decode(Settings::get('vp8Options'));
+$this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
+$this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 $this->view->vars->video = $video;
