@@ -214,7 +214,7 @@ class Router
 
         $routes['logout'] = new Route(array(
             'path' => 'logout',
-            'location' => 'cc-core/system/logout.php'
+            'location' => 'cc-core/controllers/logout.php'
         ));
 
         $routes['search'] = new Route(array(
