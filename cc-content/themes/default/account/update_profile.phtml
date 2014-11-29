@@ -54,7 +54,7 @@ $this->SetLayout('account');
             <input id="upload_button" class="button" type="button" value="<?=Language::GetText('update_avatar_button')?>" />
             <input type="hidden" name="timestamp" value="<?=$timestamp?>" />
             <input type="hidden" name="upload-limit" id="upload-limit" value="<?=1024*30?>" />
-            <input type="hidden" name="file-types" id="file-types" value="<?=htmlspecialchars(json_encode($config->accepted_avatar_formats))?>" />
+            <input type="hidden" name="file-types" id="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedAvatarFormats))?>" />
             <input type="hidden" name="upload-type" id="upload-type" value="avatar" />
 
             <div id="upload_status">

@@ -188,16 +188,16 @@ class UserService extends ServiceAbstract
         } else if (!empty($userToCheck) && is_numeric($userToCheck)) {
             $userMapper = $this->_getMapper();
             $user = $userMapper->getUserById($userToCheck);
-        } else if ($logged_in = $this->loginCheck()) {
-            $user = $logged_in;
+        } else if ($loggedIn = $this->loginCheck()) {
+            $user = $loggedIn;
         } else {
             return false;
         }
 
         // Check for given permission in user's role
-        if (array_key_exists ($user->role, $config->roles)) {
-            $permissions_list = $config->roles[$user->role]['permissions'];
-            return in_array ($permission, $permissions_list);
+        if (isset($config->roles->{$user->role})) {
+            $permissionsList = $config->roles->{$user->role}['permissions'];
+            return in_array ($permission, $permissionsList);
         } else {
             return false;
         }

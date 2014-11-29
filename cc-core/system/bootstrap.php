@@ -44,13 +44,12 @@ define('SECRET_KEY', Settings::get('secret_key'));
 
 $config = new stdClass();
 $config->sitename = Settings::get('sitename');
-$config->roles = unserialize(Settings::get('roles'));
+$config->roles = json_decode(Settings::get('roles'));
 $config->enableUploads = Settings::get('enable_uploads');
 $config->debugConversion = Settings::get('debug_conversion') == '1' ? true : false;
-$config->video_size_limit = Settings::get('video_size_limit');
-$config->accepted_video_formats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
-$config->accepted_avatar_formats = array('png', 'jpeg', 'jpg', 'gif');
-$config->pagination_page_limit = Settings::get('pagination_page_limit');
+$config->videoSizeLimit = Settings::get('video_size_limit');
+$config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
+$config->acceptedAvatarFormats = array('png', 'jpeg', 'jpg', 'gif');
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->webmUrl = HOST . '/cc-content/uploads/webm';

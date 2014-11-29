@@ -20,8 +20,8 @@ if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], array('addo
 try {
     // Create vars based on upload type (video | addon)
     if ($_POST['upload-type'] == 'video') {
-        $maxFilesize = $config->video_size_limit;
-        $extensionList = $config->accepted_video_formats;
+        $maxFilesize = $config->videoSizeLimit;
+        $extensionList = $config->acceptedVideoFormats;
         $temp = UPLOAD_PATH . '/temp';
         $fileName = $videoService->generateFilename() . '.';
         $createDir = false;

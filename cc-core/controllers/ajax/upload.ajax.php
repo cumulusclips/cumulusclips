@@ -37,7 +37,7 @@ try {
     }
 
     // Validate filesize
-    if ($_FILES['upload']['size'] > $config->video_size_limit || filesize($_FILES['upload']['tmp_name']) > $config->video_size_limit) {
+    if ($_FILES['upload']['size'] > $config->videoSizeLimit || filesize($_FILES['upload']['tmp_name']) > $config->videoSizeLimit) {
         throw new Exception(Language::getText('error_upload_filesize'));
     }
 

@@ -158,8 +158,8 @@ include('header.php');
                     <input id="upload" type="file" name="upload" />
                 </div>
                 <input id="upload_button" class="button" type="button" value="Upload" />
-                <input type="hidden" name="upload-limit" value="<?=$config->video_size_limit?>" />
-                <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->accepted_video_formats))?>" />
+                <input type="hidden" name="upload-limit" value="<?=$config->videoSizeLimit?>" />
+                <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
                 <input type="hidden" name="upload-type" value="video" />
                 <input type="hidden" name="original-video-name" value="<?=htmlspecialchars($originalVideoName)?>" />
                 <input type="hidden" name="temp-file" value="<?=$tempFile?>" />

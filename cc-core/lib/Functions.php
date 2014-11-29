@@ -327,7 +327,7 @@ class Functions
     {
         global $config;
         $type = array();
-        $type['array'] = $config->accepted_video_formats;
+        $type['array'] = $config->acceptedVideoFormats;
         $type['fileDesc'] = $type['fileExt'] = '';
         foreach ($type['array'] as $value) {
             $format = "*.$value";
