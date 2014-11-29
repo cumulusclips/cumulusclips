@@ -19,7 +19,7 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
         $playlistService->delete($playlist);
         $this->view->vars->message = Language::GetText('success_playlist_deleted');
         $this->view->vars->message_type = 'success';
-        Plugin::Trigger ('myfavorites.remove_favorite');
+        Plugin::triggerEvent('myfavorites.remove_favorite');
     }
 }
 
@@ -69,4 +69,4 @@ foreach ($userLists as $playlist) {
     }
 }
 
-Plugin::Trigger ('myfavorites.before_render');
+Plugin::triggerEvent('myfavorites.before_render');

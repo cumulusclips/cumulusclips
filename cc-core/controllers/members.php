@@ -1,6 +1,6 @@
 <?php
 
-Plugin::Trigger ('members.start');
+Plugin::triggerEvent('members.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -27,4 +27,4 @@ $this->view->vars->userResults = $userMapper->getUsersFromList(
     Functions::arrayColumn($userResults, 'user_id')
 );
 
-Plugin::Trigger ('members.before_render');
+Plugin::triggerEvent('members.before_render');

@@ -11,7 +11,7 @@ class FlagService extends ServiceAbstract
     {
         $flagMapper = $this->_getMapper();
         $flagMapper->delete($flag->flagId);
-        Plugin::Trigger ('flag.delete');
+        Plugin::triggerEvent('flag.delete');
     }
 
     /**
