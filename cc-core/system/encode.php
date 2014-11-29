@@ -49,7 +49,7 @@ try {
     $mobileTempFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '_temp.mp4';
     $mobileFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4';
     $thumb = UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg';
-    Plugin::trigger('encode.load_video');
+    Plugin::triggerEvent('encode.load_video');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying raw video exists...') : null;

@@ -5,7 +5,7 @@ Plugin::triggerEvent('favorite.ajax.start');
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Plugin::trigger('favorite.ajax.login_check');
+Plugin::triggerEvent('favorite.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
@@ -40,7 +40,7 @@ if ($_POST['action'] == 'add') {
     // Add video to playlist if not already in list
     if (!$playlistService->checkListing($video, $playlist)) {
         $playlistService->addVideoToPlaylist($video, $playlist);
-        Plugin::trigger('favorite.ajax.favorite_video');
+        Plugin::triggerEvent('favorite.ajax.favorite_video');
         $playlistName = $playlistService->getPlaylistName($playlist);
         $message = (!empty($_POST['shortText'])) ? 'success_playlist_added_short' : 'success_playlist_added';
         echo json_encode(array(

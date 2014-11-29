@@ -1,6 +1,6 @@
 <?php
 
-Plugin::Trigger('index.start');
+Plugin::triggerEvent('index.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -22,4 +22,4 @@ $this->view->vars->recent_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentVideosResults, 'video_id')
 );
 
-Plugin::Trigger('index.before_render');
+Plugin::triggerEvent('index.before_render');

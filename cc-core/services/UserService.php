@@ -196,7 +196,7 @@ class UserService extends ServiceAbstract
 
         // Check for given permission in user's role
         if (isset($config->roles->{$user->role})) {
-            $permissionsList = $config->roles->{$user->role}['permissions'];
+            $permissionsList = $config->roles->{$user->role}->permissions;
             return in_array ($permission, $permissionsList);
         } else {
             return false;

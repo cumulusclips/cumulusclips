@@ -19,7 +19,7 @@ if (!empty($_GET['username'])) {
 if ($profileUser) {
     $this->view->vars->member = $profileUser;
     $this->view->vars->meta->title = Functions::Replace($this->view->vars->meta->title, array('member' => $profileUser->username));
-    Plugin::Trigger('profile.load_member');
+    Plugin::triggerEvent('profile.load_member');
 } else {
     App::Throw404();
 }

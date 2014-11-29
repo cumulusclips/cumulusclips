@@ -212,7 +212,7 @@ class VideoService extends ServiceAbstract
             $mail = new Mail();
             $mail->LoadTemplate('video_ready', $replacements);
             $mail->Send($user->email);
-            Plugin::trigger('video.notify_user_video_is_ready', $video);
+            Plugin::triggerEvent('video.notify_user_video_is_ready', $video);
         }
     }
     

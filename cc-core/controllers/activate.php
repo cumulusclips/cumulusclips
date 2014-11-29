@@ -24,7 +24,7 @@ if (!empty($_GET['token'])) {
             $this->view->vars->message = Language::getText('activate_approve');
         }
         $this->view->vars->messageType = 'success';
-        Plugin::trigger('activate.activate');
+        Plugin::triggerEvent('activate.activate');
     } else {
         $this->view->vars->message = Language::getText('activate_error', array('host' => HOST));
         $this->view->vars->messageType = 'errors';

@@ -1,6 +1,6 @@
 <?php
 
-Plugin::Trigger('videos.start');
+Plugin::triggerEvent('videos.start');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -72,4 +72,4 @@ $this->view->vars->browse_videos = $videoMapper->getVideosFromList(
 );
 
 $this->view->vars->meta->title = $this->view->vars->meta->title . ' ' . $this->view->vars->sub_header;
-Plugin::Trigger('videos.before_render');
+Plugin::triggerEvent('videos.before_render');

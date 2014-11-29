@@ -14,15 +14,6 @@ class Plugin
     
     private static $_enabledPlugins = array();
     private static $_installedPlugins = array();
-
-    /**
-     * Add plugin method (code) to specified event in system
-     * @deprecated as of v2.0, Use self::attachEvent instead
-     */
-    public static function attach($eventName, $callbackMethod)
-    {
-        self::attachEvent($eventName, $callbackMethod);
-    }
     
     /**
      * Add plugin method (code) to specified event in system
@@ -54,15 +45,6 @@ class Plugin
 
         // Add callback to filter list
         self::$_filters[$filterName][] = $callbackMethod;
-    }
-
-    /**
-     * Execute methods (code) attached to specified event
-     * @deprecated as of v2.0, use self::triggerEvent instead
-     */
-    public static function trigger($eventName)
-    {
-        self::triggerEvent($eventName);
     }
     
     /**
