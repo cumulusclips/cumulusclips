@@ -64,7 +64,7 @@ if (empty($_GET['page'])) {
         $block = $url->addChild('video:video','','video');
 
         $block->addChild('content_loc', $config->h264Url . '/' . $video->filename . '.flv');
-        $block->addChild('thumbnail_loc', $config->thumb_url . '/' . $video->filename . '.jpg');
+        $block->addChild('thumbnail_loc', $config->thumbUrl . '/' . $video->filename . '.jpg');
         $block->addChild('title', $video->title);
         $block->addChild('description', $video->description);
         $block->addChild('rating', $ratingService->getFiveScaleRating($video->videoId));

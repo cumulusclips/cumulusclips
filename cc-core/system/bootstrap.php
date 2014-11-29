@@ -45,8 +45,8 @@ define('SECRET_KEY', Settings::get('secret_key'));
 $config = new stdClass();
 $config->sitename = Settings::get('sitename');
 $config->roles = unserialize(Settings::get('roles'));
-$config->enable_uploads = Settings::get('enable_uploads');
-$config->debug_conversion = Settings::get('debug_conversion') == '1' ? true : false;
+$config->enableUploads = Settings::get('enable_uploads');
+$config->debugConversion = Settings::get('debug_conversion') == '1' ? true : false;
 $config->video_size_limit = Settings::get('video_size_limit');
 $config->accepted_video_formats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v');
 $config->accepted_avatar_formats = array('png', 'jpeg', 'jpg', 'gif');
@@ -54,8 +54,8 @@ $config->pagination_page_limit = Settings::get('pagination_page_limit');
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->webmUrl = HOST . '/cc-content/uploads/webm';
-$config->mobile_url = HOST . '/cc-content/uploads/mobile';
-$config->thumb_url = HOST . '/cc-content/uploads/thumbs';
+$config->mobileUrl = HOST . '/cc-content/uploads/mobile';
+$config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
 Registry::set('config', $config);
 
 // Start session

@@ -71,7 +71,7 @@ try {
     $videoMapper->save($video);
 
     // Initilize Encoder
-    $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
+    $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
     Plugin::triggerEvent('upload.ajax.before_encode');
     
     // Check if encoding is enabled

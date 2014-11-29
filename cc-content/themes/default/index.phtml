@@ -54,7 +54,7 @@ if (!$loggedInUser) $this->addSidebarBlock('home_login.phtml');
     <!-- BEGIN FEATURED VIDEO SLIDES -->
     <?php foreach ($featured_videos as $featuredVideo): ?>
         <div>
-            <img src="<?=$config->thumb_url?>/<?=$featuredVideo->filename?>.jpg" />
+            <img src="<?=$config->thumbUrl?>/<?=$featuredVideo->filename?>.jpg" />
             <div class="slide-text">
                 <p class="large"><u><?=Language::getText('featured')?>:</u> <?=$featuredVideo->title?></p>
                 <p><?=Functions::cutOff($featuredVideo->description, 80)?></p>

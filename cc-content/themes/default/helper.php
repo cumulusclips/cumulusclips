@@ -49,5 +49,5 @@ function getPlaylistThumbnail(Playlist $playlist)
     $config = Registry::get('config');
     $videoMapper = new VideoMapper();
     $video = $videoMapper->getVideoById($playlist->entries[0]->videoId);
-    return $config->thumb_url . '/' . $video->filename . '.jpg';
+    return $config->thumbUrl . '/' . $video->filename . '.jpg';
 }

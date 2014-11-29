@@ -28,7 +28,7 @@ html, body, .video-unavailable, video, img {
 <?php if ($video && $video->disableEmbed == '0'): ?>
 
     <!-- BEGIN VIDEO -->
-    <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": false, "preload": "auto" }' poster="<?=$config->thumb_url?>/<?=$video->filename?>.jpg">
+    <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": false, "preload": "auto" }' poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
         <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
         <?php if ($webmEncodingEenabled): ?>
             <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />

@@ -176,7 +176,7 @@ include('header.php');
 
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
 <meta name="h264Url" content="<?=$config->h264Url?>" />
-<meta name="thumbUrl" content="<?=$config->thumb_url?>" />
+<meta name="thumbUrl" content="<?=$config->thumbUrl?>" />
 <?php if ($webmEncodingEnabled): ?>
     <meta name="webmUrl" content="<?=$config->webmUrl?>" />
 <?php endif; ?>

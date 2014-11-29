@@ -117,7 +117,7 @@ if (isset($_POST['submitted'])) {
         $videoId = $videoMapper->save($video);
 
         // Begin encoding
-        $cmd_output = $config->debug_conversion ? CONVERSION_LOG : '/dev/null';
+        $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
         $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
         exec($converter_cmd);
 
