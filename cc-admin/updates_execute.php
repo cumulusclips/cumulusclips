@@ -150,7 +150,9 @@ try {
 
     ### Setting required permissions
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/flv', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/h264', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/webm', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/theora', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/mobile', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/temp', 0777);

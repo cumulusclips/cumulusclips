@@ -247,35 +247,24 @@ class Functions
     }
 
     /**
-     * Convert the given system version into a integer from a formatted string
-     * @param string $version Formatted string of a system version
-     * @return integer Returns three digit numerical version of the system version
-     */
-    public static function numerizeVersion($version)
-    {
-        return (int) str_pad (str_replace ('.', '', $version), 3, '0');
-    }
-
-    /**
      * "Phone home" to check if updates are available
      * @return object|boolean Returns update object if its available, false otherwise
      */
     public static function updateCheck()
     {
-        $version = self::NumerizeVersion (CURRENT_VERSION);
-        $client = urlencode ($_SERVER['REMOTE_ADDR']);
-        $system = urlencode ($_SERVER['SERVER_ADDR']);
+        $client = urlencode($_SERVER['REMOTE_ADDR']);
+        $system = urlencode($_SERVER['SERVER_ADDR']);
         $update_url = MOTHERSHIP_URL . "/updates/?version=$version&client=$client&system=$system";
 
         $curl_handle = curl_init();
-        curl_setopt ($curl_handle, CURLOPT_URL, $update_url);
-        curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
-        $update = curl_exec ($curl_handle);
-        curl_close ($curl_handle);
+        curl_setopt($curl_handle, CURLOPT_URL, $update_url);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
+        $update = curl_exec($curl_handle);
+        curl_close($curl_handle);
 
-        $json = json_decode ($update);
-        return (!empty ($update) && !empty ($json) && self::NumerizeVersion($json->version) > $version) ? $json : false;
+        $json = json_decode($update);
+        return (!empty($update) && !empty($json) && (version_compare(CURRENT_VERSION, $json->version) === -1)) ? $json : false;
     }
 
     /**
