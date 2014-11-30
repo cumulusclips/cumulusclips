@@ -571,6 +571,6 @@ class Router
             'location' => 'cc-core/controllers/api/video_list.get.php'
         ));
 
-        return Plugin::triggerFilter('router.getRoutes', $routes);
+        return $routes;
     }
 }

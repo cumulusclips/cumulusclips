@@ -37,8 +37,6 @@ class Avatar {
             $height_dst = $height_src;
         }
 
-        Plugin::triggerEvent('avatar.before_save');
-
         // Determin which type of image object to create (and how to process it) based on file extension
         if (in_array ($original_extension, array ('jpg', 'jpeg'))) {
 
@@ -74,9 +72,6 @@ class Avatar {
             imagepng ($image_dst, $save_as);
 
         }
-
-        Plugin::triggerEvent('avatar.save');
-
     }
 
 

@@ -45,7 +45,6 @@ class View
         
         // Define theme configuration
         $theme = $this->_currentTheme($this->_route->mobile);
-        $themeFiltered = Plugin::triggerFilter('app.before_set_theme', $theme);
         $this->options->theme = $themeFiltered;
         $this->options->themeUrl = HOST . '/cc-content/themes/' . $themeFiltered;
         $this->options->themePath = THEMES_DIR . '/' . $themeFiltered;
@@ -179,7 +178,7 @@ class View
      */
     public function body()
     {
-        return Plugin::triggerFilter('view.body', $this->_body);
+        return $this->_body;
     }
     
     /**
@@ -195,7 +194,6 @@ class View
         } else {
             throw new Exception('Unknown layout "' . $layout . '"');
         }
-        Plugin::triggerEvent('view.set_layout');
     }
     
     /**
@@ -210,7 +208,6 @@ class View
         $block = ($request_block) ? $request_block : $viewFile;
 
         extract(get_object_vars($this->vars));
-        Plugin::triggerEvent('view.block');
         include($block);
     }
     
@@ -227,10 +224,8 @@ class View
         $block = ($request_block) ? $request_block : $viewFile;
         
         extract(get_object_vars($this->vars));
-        Plugin::triggerEvent('view.repeating_block');
 
         foreach ($records as $model) {
-            Plugin::triggerEvent('view.repeating_block_loop');
             include($block);
         }
     }
@@ -243,7 +238,6 @@ class View
     public function addSidebarBlock($viewFile)
     {
         $this->_blocks[] = $viewFile;
-        Plugin::triggerEvent('view.add_sidebar_block');
     }
     
     /**
@@ -252,9 +246,7 @@ class View
      */
     public function writeSidebarBlocks()
     {
-        Plugin::triggerEvent('view.write_sidebar_blocks');
         foreach ($this->_blocks as $_block) {
-            Plugin::triggerEvent('view.write_sidebar_blocks_loop');
             $this->block($_block);
         }
     }
@@ -281,7 +273,6 @@ class View
         $css_url = ($request_file) ? $request_file : $css_name;
 
         $this->_css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
-        Plugin::triggerEvent('view.add_css');
     }
 
     /**
@@ -290,10 +281,8 @@ class View
      */
     public function writeCss()
     {
-        Plugin::triggerEvent('view.write_css');
         if (isset($this->_css)) {
             foreach ($this->_css as $_value) {
-                Plugin::triggerEvent('view.write_css_loop');
                 echo $_value, "\n";
             }
         }
@@ -311,7 +300,6 @@ class View
         $js_url = ($request_file) ? $request_file : $js_name;
 
         $this->_js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
-        Plugin::triggerEvent('view.add_js');
     }
 
     /**
@@ -336,10 +324,8 @@ class View
             $this->_js[] = $js_lang_preview;
         }
 
-        Plugin::triggerEvent('view.write_js');
         if (isset($this->_js)) {
             foreach ($this->_js as $_value) {
-                Plugin::triggerEvent('view.write_js_loop');
                 echo $_value, "\n";
             }
         }
@@ -354,7 +340,6 @@ class View
     public function addMeta($meta_name, $meta_content)
     {
         $this->_meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
-        Plugin::triggerEvent('view.add_meta');
     }
 
     /**
@@ -363,14 +348,12 @@ class View
      */
     public function writeMeta()
     {
-        Plugin::triggerEvent('view.write_meta');
         $this->addMeta('generator', 'CumulusClips');
         if (!empty($this->_meta->keywords)) $this->addMeta('keywords', $this->_meta->keywords);
         if (!empty($this->_meta->description)) $this->addMeta('description', $this->_meta->description);
         
         if (isset($this->_meta)) {
             foreach ($this->_meta as $_value) {
-                Plugin::triggerEvent('view.write_meta_loop');
                 echo $_value, "\n";
             }
         }
