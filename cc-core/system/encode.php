@@ -6,7 +6,6 @@ include_once(dirname(__FILE__) . '/bootstrap.php');
 // Establish page variables, objects, arrays, etc
 if (!isset($argv[1]) || !preg_match('/--video=([0-9]+)$/i', $argv[1], $arg_matches)) exit();
 $video_id = $arg_matches[1];
-Plugin::triggerEvent('encode.parse');
 $ffmpegPath = Settings::get('ffmpeg');
 $qt_faststart_path = DOC_ROOT . '/cc-core/system/bin/qtfaststart';
 $videoMapper = new VideoMapper();
@@ -49,7 +48,6 @@ try {
     $mobileTempFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '_temp.mp4';
     $mobileFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4';
     $thumb = UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg';
-    Plugin::triggerEvent('encode.load_video');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying raw video exists...') : null;
@@ -82,7 +80,6 @@ try {
 
     // Encode raw video to H.264
     $h264Command = "$ffmpegPath -i $rawVideo " . Settings::get('h264_encoding_options') . " $h264TempFilePath >> $debugLog 2>&1";
-    $h264Command = Plugin::triggerFilter('encode.before_h264_encode', $h264Command);
 
     // Debug Log
     $logMessage = "\n\n\n\n==================================================================\n";
@@ -95,7 +92,6 @@ try {
 
     // Execute H.264 encoding command
     exec($h264Command);
-    Plugin::triggerEvent('encode.h264_encode');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying H.264 video was created...') : null;
@@ -134,7 +130,6 @@ try {
 
     // Prepare shift moov atom command
     $h264ShiftMoovAtomCommand = "$qt_faststart_path $h264TempFilePath $h264FilePath >> $debugLog 2>&1";
-    Plugin::triggerFilter('encode.before_h264_shift_moov_atom', $h264ShiftMoovAtomCommand);
 
     // Debug Log
     $logMessage = "\n\n\n\n==================================================================\n";
@@ -147,7 +142,6 @@ try {
 
     // Execute shift moov atom command
     exec($h264ShiftMoovAtomCommand);
-    Plugin::triggerEvent('encode.h264_shift_moov_atom');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying final H.264 file was created...') : null;
@@ -178,7 +172,6 @@ try {
 
         // Encode raw video to WebM
         $webmCommand = "$ffmpegPath -i $rawVideo " . $webmEncodingOptions . " $webmFilePath >> $debugLog 2>&1";
-        $webmCommand = Plugin::triggerFilter('encode.before_webm_encode', $webmCommand);
 
         // Debug Log
         $logMessage = "\n\n\n\n==================================================================\n";
@@ -191,7 +184,6 @@ try {
 
         // Execute WebM encoding command
         exec($webmCommand);
-        Plugin::triggerEvent('encode.webm_encode');
 
         // Debug Log
         $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying WebM video was created...') : null;
@@ -223,7 +215,6 @@ try {
 
         // Encode raw video to Theora
         $theoraCommand = "$ffmpegPath -i $rawVideo " . $theoraEncodingOptions . " $theoraFilePath >> $debugLog 2>&1";
-        $theoraCommand = Plugin::triggerFilter('encode.before_theora_encode', $theoraCommand);
 
         // Debug Log
         $logMessage = "\n\n\n\n==================================================================\n";
@@ -236,7 +227,6 @@ try {
 
         // Execute Theora encoding command
         exec($theoraCommand);
-        Plugin::triggerEvent('encode.theora_encode');
 
         // Debug Log
         $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying Theora video was created...') : null;
@@ -268,7 +258,6 @@ try {
 
         // Encode raw video to Mobile
         $mobileCommand = "$ffmpegPath -i $rawVideo " . $mobileEncodingOptions . " $mobileTempFilePath >> $debugLog 2>&1";
-        $mobileCommand = Plugin::triggerFilter('encode.before_mobile_encode', $mobileCommand);
 
         // Debug Log
         $logMessage = "\n\n\n\n==================================================================\n";
@@ -281,7 +270,6 @@ try {
 
         // Execute Mobile encoding command
         exec($mobileCommand);
-        Plugin::triggerEvent('encode.mobile_encode');
 
         // Debug Log
         $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying Mobile video was created...') : null;
@@ -309,7 +297,6 @@ try {
 
         // Execute Faststart Command
         $faststartCommand = "$qt_faststart_path $mobileTempFilePath $mobileFilePath >> $debugLog 2>&1";
-        Plugin::triggerEvent('encode.before_faststart');
 
         // Debug Log
         $logMessage = "\n\n\n\n==================================================================\n";
@@ -322,7 +309,6 @@ try {
 
         // Execute Faststart command
         exec($faststartCommand);
-        Plugin::triggerEvent('encode.faststart');
 
         // Debug Log
         $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying final Mobile file was created...') : null;
@@ -349,7 +335,6 @@ try {
 
     // Retrieve duration of raw video file.
     $durationCommand = "$ffmpegPath -i $rawVideo 2>&1 | grep Duration:";
-    Plugin::triggerEvent('encode.before_get_duration');
     exec($durationCommand, $durationResults);
 
     // Debug Log
@@ -364,7 +349,6 @@ try {
 
     // Calculate thumbnail position
     $thumbPosition = round ($sec / 2);
-    Plugin::triggerEvent('encode.get_duration');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, "Thumb Position: $thumbPosition") : null;
@@ -387,7 +371,6 @@ try {
 
     // Create video thumbnail image
     $thumbCommand = "$ffmpegPath -i $rawVideo -ss $thumbPosition " . Settings::get('thumb_encoding_options') . " $thumb >> $debugLog 2>&1";
-    Plugin::triggerEvent('encode.before_create_thumbnail');
 
     // Debug Log
     $logMessage = "\n\n\n\n==================================================================\n";
@@ -399,7 +382,6 @@ try {
     App::log($debugLog, $logMessage);
 
     exec($thumbCommand);    // Execute Thumb Creation Command
-    Plugin::triggerEvent('encode.create_thumbnail');
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying valid thumbnail was created...') : null;
@@ -425,9 +407,7 @@ try {
 
     // Update database with new video status information
     $video->duration = Functions::formatDuration($duration[0]);
-    Plugin::triggerEvent('encode.before_update');
     $videoMapper->save($video);
-    Plugin::triggerEvent('encode.update');
 
     // Activate video
     $videoService = new VideoService();
@@ -469,8 +449,6 @@ try {
         App::alert('Error During Video Encoding', $e->getMessage());
         App::log(CONVERSION_LOG, $e->getMessage());
     }
-
-    Plugin::triggerEvent('encode.complete');
 
 } catch (Exception $e) {
     App::alert('Error During Video Encoding', $e->getMessage());

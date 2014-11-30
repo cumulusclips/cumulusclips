@@ -1,7 +1,5 @@
 <?php
 
-Plugin::triggerEvent('video_sitemap.start');
-
 // Establish page variables, objects, arrays, etc
 $xml_header = '<?xml version="1.0" encoding="UTF-8"?>';
 $limit = 45000;
@@ -22,7 +20,6 @@ if ($row['total'] > $limit) {
 if (empty($_GET['page'])) {
 
     // Open sitemap index
-    Plugin::triggerEvent('video_sitemap.sitemapindex');
     $xml_root = '<sitemapindex></sitemapindex>';
     $xml_frame = $xml_header . $xml_root;
     $xml = new SimpleXMLElement($xml_frame);
@@ -44,7 +41,6 @@ if (empty($_GET['page'])) {
     $result = $db->fetchAll($query);
 
     // Open video sitemap
-    Plugin::triggerEvent('video_sitemap.sitemap');
     $namespace = ' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
     $namespace .= ' xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"';
 
@@ -85,6 +81,5 @@ if (empty($_GET['page'])) {
 }
 
 // Output XML
-Plugin::triggerEvent('video_sitemap.output');
 header("Content-type: text/xml");
 echo $xml->asXML();
