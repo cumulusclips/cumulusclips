@@ -19,22 +19,13 @@ $continue = null;
 
 
 // Check PHP version
-$version = explode ('.', phpversion(), 3);
-if (count ($version) > 1){
-    
-    $current_version = (int) $version[0] . '.' . $version[1];
-    if (5.2 > $current_version) {
-        $version = false;
-        $errors = true;
-    } else {
-        $version = true;
-    }
-    
-} else if ($version[0] < 6) {
+if (version_compare(phpversion(), '5.2.0') >= 0) {
+    $version = true;
+} else {
     $version = false;
     $errors = true;
 }
-
+    
 
 
 

@@ -13,5 +13,3 @@ define ('FTP_USER', '{FTP_USER}');
 define ('FTP_PASS', '{FTP_PASS}');
 define ('FTP_PATH', '{FTP_PATH}');
 define ('FTP_SSL', {FTP_SSL});
-
-?>

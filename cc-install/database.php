@@ -110,7 +110,7 @@ if (isset ($_POST['submitted'])) {
 
 
             // Save database settings to config file in permanent location
-            $perm_config_file = DOC_ROOT . '/cc-core/config/config.php';
+            $perm_config_file = DOC_ROOT . '/cc-core/system/config.php';
             FilesystemInstaller::Open();
             FilesystemInstaller::Create ($perm_config_file);
             FilesystemInstaller::Write ($perm_config_file, $config_content);

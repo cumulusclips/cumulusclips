@@ -9,8 +9,8 @@ DROP_CATEGORIES_TABLE;
 $_CREATE_CATEGORIES_TABLE = <<<CREATE_CATEGORIES_TABLE
 
 CREATE TABLE `{DB_PREFIX}categories` (
-  `cat_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `cat_name` varchar(252) NOT NULL,
+  `category_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(252) NOT NULL,
   `slug` varchar(255) NOT NULL,
   PRIMARY KEY (`cat_id`)
 ) DEFAULT CHARSET=utf8
@@ -37,41 +37,15 @@ CREATE TABLE `{DB_PREFIX}comments` (
   `comment_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL DEFAULT '0',
   `video_id` bigint(20) NOT NULL,
+  `parent_id` bigint(20) DEFAULT '0',
   `comments` longtext NOT NULL,
   `date_created` datetime NOT NULL,
   `status` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `website` varchar(255) DEFAULT NULL,
-  `ip` varchar(255) DEFAULT NULL,
-  `user_agent` longtext,
   `released` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`comment_id`)
 ) DEFAULT CHARSET=utf8
 
 CREATE_COMMENTS_TABLE;
-
-
-
-
-
-/*Table structure for table `favorites` */
-
-$_DROP_FAVORITES_TABLE = <<<DROP_FAVORITES_TABLE
-DROP TABLE IF EXISTS `{DB_PREFIX}favorites`
-DROP_FAVORITES_TABLE;
-
-$_CREATE_FAVORITES_TABLE = <<<CREATE_FAVORITES_TABLE
-
-CREATE TABLE `{DB_PREFIX}favorites` (
-  `fav_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `video_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `date_created` date NOT NULL,
-  PRIMARY KEY (`fav_id`)
-) DEFAULT CHARSET=utf8
-
-CREATE_FAVORITES_TABLE;
 
 
 
@@ -155,23 +129,47 @@ POPULATE_PAGES_TABLE;
 
 
 
-/*Table structure for table `posts` */
+/*Table structure for table `playlists` */
 
-$_DROP_POSTS_TABLE = <<<DROP_POSTS_TABLE
-DROP TABLE IF EXISTS `{DB_PREFIX}posts`
-DROP_POSTS_TABLE;
+$_DROP_PLAYLISTS_TABLE = <<<DROP_PLAYLISTS_TABLE
+DROP TABLE IF EXISTS `{DB_PREFIX}playlists`
+DROP_PLAYLISTS_TABLE;
 
-$_CREATE_POSTS_TABLE = <<<CREATE_POSTS_TABLE
+$_CREATE_PLAYLISTS_TABLE = <<<CREATE_PLAYLISTS_TABLE
 
-CREATE TABLE `{DB_PREFIX}posts` (
-  `post_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `{DB_PREFIX}playlists` (
+  `playlist_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  `post` longtext NOT NULL,
-  `date_created` datetime NOT NULL,
-  PRIMARY KEY (`post_id`)
+  `type` varchar(20) NOT NULL DEFAULT 'list',
+  `public` tinyint(1) DEFAULT '1',
+  `date_created` date NOT NULL,
+  PRIMARY KEY (`playlist_id`)
 ) DEFAULT CHARSET=utf8
 
-CREATE_POSTS_TABLE;
+CREATE_PLAYLISTS_TABLE;
+
+
+
+
+
+/*Table structure for table `playlist_entries` */
+
+$_DROP_PLAYLIST_ENTRIES_TABLE = <<<DROP_PLAYLIST_ENTRIES_TABLE
+DROP TABLE IF EXISTS `{DB_PREFIX}playlist_entries`
+DROP_PLAYLIST_ENTRIES_TABLE;
+
+$_CREATE_PLAYLIST_ENTRIES_TABLE = <<<CREATE_PLAYLIST_ENTRIES_TABLE
+
+CREATE TABLE `{DB_PREFIX}playlist_entries` (
+  `playlist_entry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `playlist_id` int(11) NOT NULL,
+  `video_id` int(11) NOT NULL,
+  `date_created` date NOT NULL,
+  PRIMARY KEY (`playlist_entry_id`)
+) DEFAULT CHARSET=utf8
+
+CREATE_PLAYLIST_ENTRIES_TABLE;
 
 
 
@@ -191,6 +189,8 @@ CREATE TABLE `{DB_PREFIX}privacy` (
   `video_comment` tinyint(1) NOT NULL DEFAULT '1',
   `new_message` tinyint(1) NOT NULL DEFAULT '1',
   `new_video` tinyint(1) NOT NULL DEFAULT '1',
+  `video_ready` tinyint(1) NOT NULL DEFAULT '1',
+  `comment_reply` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`privacy_id`)
 ) DEFAULT CHARSET=utf8
 
@@ -243,22 +243,25 @@ CREATE_SETTINGS_TABLE;
 $_POPULATE_SETTINGS_TABLE = <<<POPULATE_SETTINGS_TABLE
 
 INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
-('active_theme','cumulus'),
-('active_mobile_theme','mobile'),
+('active_theme','default'),
+('active_mobile_theme','mobile-default'),
 ('default_language', 'english'),
-('active_languages', 'a:1:{s:7:"english";a:2:{s:9:"lang_name";s:7:"English";s:11:"native_name";s:7:"English";}}'),
-('installed_plugins','a:0:{}'),
-('enabled_plugins','a:0:{}'),
-('pagination_page_limit','9'),
-('roles','a:2:{s:5:"admin";a:2:{s:4:"name";s:13:"Administrator";s:11:"permissions";a:1:{i:0;s:11:"admin_panel";}}s:4:"user";a:2:{s:4:"name";s:4:"User";s:11:"permissions";a:0:{}}}'),
+('active_languages', '[{"system_name":"english","lang_name":"English","native_name":"English"}]'),
+('installed_plugins','[]'),
+('enabled_plugins','[]'),
+('roles','{"admin":{"name":"Administrator","permissions":["admin_panel"]},"user":{"name":"User","permissions":[]}}'),
 ('debug_conversion','0'),
 ('video_size_limit','102000000'),
-('flv_url',''),
-('mobile_url',''),
-('thumb_url',''),
-('flv_options','-s 640x480 -vb 800k -ac 2 -ab 96k -ar 44100 -f flv'),
-('mobile_options','-s 480x360 -vb 600k -ac 2 -ab 96k -ar 44100 -f mp4'),
-('thumb_options','-s 640x480 -t 1 -r 1 -f mjpeg'),
+('keep_original_video','1'),
+('enable_encoding','1'),
+('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libfaac -ab 96k -ar 44100 -f mp4'),
+('webm_encoding_enabled','0'),
+('webm_encoding_options','-vcodec libvpx -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f webm'),
+('theora_encoding_enabled','0'),
+('theora_encoding_options','-vcodec libtheora -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -qscale 8 -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f ogg'),
+('mobile_encoding_enabled','1'),
+('mobile_encoding_options','-vcodec libx264 -vf "scale=min(480\,iw):trunc(ow/a/2)*2" -vb 600k -ac 2 -ab 96k -ar 44100 -f mp4'),
+('thumb_encoding_options','-vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -t 1 -r 1 -f mjpeg'),
 ('auto_approve_users','1'),
 ('auto_approve_videos','1'),
 ('auto_approve_comments','1'),
@@ -268,7 +271,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('alerts_flags','1'),
 ('from_name',''),
 ('from_address',''),
-('smtp','O:8:"stdClass":5:{s:7:"enabled";s:1:"0";s:4:"host";s:0:"";s:4:"port";i:25;s:8:"username";s:0:"";s:8:"password";s:0:"";}')
+('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}')
 
 POPULATE_SETTINGS_TABLE;
 
@@ -314,8 +317,8 @@ CREATE TABLE `{DB_PREFIX}users` (
   `status` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'user',
   `date_created` date NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255),
+  `last_name` varchar(255),
   `about_me` text,
   `website` text,
   `confirm_code` varchar(255) DEFAULT NULL,
@@ -346,7 +349,7 @@ CREATE TABLE `{DB_PREFIX}videos` (
   `video_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `cat_id` bigint(20) NOT NULL,
+  `category_id` bigint(20) NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `tags` text NOT NULL,
@@ -362,6 +365,7 @@ CREATE TABLE `{DB_PREFIX}videos` (
   `gated` TINYINT(1) DEFAULT '0' NOT NULL,
   `private` TINYINT(1) DEFAULT '0' NOT NULL,
   `private_url` VARCHAR(255) NULL,
+  `comments_closed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`video_id`),
   KEY `user_id` (`user_id`),
   FULLTEXT KEY `title_description_tags` (`title`,`description`,`tags`)
@@ -388,6 +392,10 @@ $install_queries = array (
     $_DROP_PAGES_TABLE,
     $_CREATE_PAGES_TABLE,
     $_POPULATE_PAGES_TABLE,
+    $_DROP_PLAYLISTS_TABLE,
+    $_CREATE_PLAYLISTS_TABLE,
+    $_DROP_PLAYLIST_ENTRIES_TABLE,
+    $_CREATE_PLAYLISTS_ENTRIES_TABLE,
     $_DROP_POSTS_TABLE,
     $_CREATE_POSTS_TABLE,
     $_DROP_PRIVACY_TABLE,
