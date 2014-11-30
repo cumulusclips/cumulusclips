@@ -164,7 +164,7 @@ try {
     //               Encode raw video to WebM                  //
     /////////////////////////////////////////////////////////////
 
-    $webmEncodingEnabled = (Settings::get('webm_encoding_options') == '1') ? true : false;
+    $webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
     $webmEncodingOptions = Settings::get('webm_encoding_options');
     if ($webmEncodingEnabled) {
         // Debug Log
@@ -207,7 +207,7 @@ try {
     //              Encode raw video to Theora                 //
     /////////////////////////////////////////////////////////////
 
-    $theoraEncodingEnabled = (Settings::get('theora_encoding_options') == '1') ? true : false;
+    $theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
     $theoraEncodingOptions = Settings::get('theora_encoding_options');
     if ($theoraEncodingEnabled) {
         // Debug Log
@@ -250,7 +250,7 @@ try {
     //              Encode raw video to Mobile                 //
     /////////////////////////////////////////////////////////////
 
-    $mobileEncodingEnabled = (Settings::get('mobile_encoding_options') == '1') ? true : false;
+    $mobileEncodingEnabled = (Settings::get('mobile_encoding_enabled') == '1') ? true : false;
     $mobileEncodingOptions = Settings::get('mobile_encoding_options');
     if ($mobileEncodingEnabled) {
         // Debug Log
