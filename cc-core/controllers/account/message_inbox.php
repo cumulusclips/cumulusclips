@@ -27,12 +27,10 @@ if (isset ($_POST['submitted'])) {
             );
             if ($message) {
                 $messageService->delete($message);
-                Plugin::triggerEvent('message_inbox.purge_single_message');
             }
         }
         $this->view->vars->message = Language::getText('success_messages_purged');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('messsage_inbox.purge_all_messages');
     }
 
 // Delete message (Request came from view message page)
@@ -45,7 +43,6 @@ if (isset ($_POST['submitted'])) {
         $messageMapper->delete($message->messageId);
         $this->view->vars->message = Language::GetText('success_messages_purged');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('message_inbox.delete_message');
     }
 }
 

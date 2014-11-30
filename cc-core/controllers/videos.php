@@ -72,4 +72,4 @@ $this->view->vars->browse_videos = $videoMapper->getVideosFromList(
 );
 
 $this->view->vars->meta->title = $this->view->vars->meta->title . ' ' . $this->view->vars->sub_header;
-Plugin::triggerEvent('videos.before_render');
+Plugin::triggerEvent('videos.end');

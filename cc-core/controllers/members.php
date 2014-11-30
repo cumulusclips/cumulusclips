@@ -27,4 +27,4 @@ $this->view->vars->userResults = $userMapper->getUsersFromList(
     Functions::arrayColumn($userResults, 'user_id')
 );
 
-Plugin::triggerEvent('members.before_render');
+Plugin::triggerEvent('members.end');

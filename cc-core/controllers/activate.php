@@ -24,7 +24,6 @@ if (!empty($_GET['token'])) {
             $this->view->vars->message = Language::getText('activate_approve');
         }
         $this->view->vars->messageType = 'success';
-        Plugin::triggerEvent('activate.activate');
     } else {
         $this->view->vars->message = Language::getText('activate_error', array('host' => HOST));
         $this->view->vars->messageType = 'errors';
@@ -33,4 +32,4 @@ if (!empty($_GET['token'])) {
     App::throw404();
 }
 
-Plugin::triggerEvent('activate.before_render');
+Plugin::triggerEvent('activate.end');

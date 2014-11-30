@@ -34,7 +34,6 @@ if (isset($_POST['submitted_login'])) {
     if ($this->view->vars->username && $this->view->vars->password) {
 
         if ($userService->login($this->view->vars->username, $this->view->vars->password)) {
-            Plugin::triggerEvent('login.login');
             header('Location: ' . HOST . '/account/');
         } else {
             $this->view->vars->message = Language::getText('error_invalid_login');
@@ -73,7 +72,6 @@ if (isset($_POST['submitted_forgot'])) {
             $mail = new Mail();
             $mail->LoadTemplate ('forgot_password', $replacements);
             $mail->Send ($user->email);
-            Plugin::triggerEvent('login.password_reset');
         } else {
             $this->view->vars->message = Language::getText('error_no_users_email');
             $this->view->vars->message_type = 'errors';
@@ -85,4 +83,4 @@ if (isset($_POST['submitted_forgot'])) {
     }
 }
 
-Plugin::triggerEvent('login.before_render');
+Plugin::triggerEvent('login.end');

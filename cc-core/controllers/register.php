@@ -72,9 +72,7 @@ if (isset($_POST['submitted'])) {
     // Create user if no errors were found
     if (empty ($this->view->vars->errors)) {
         // Create new user
-        Plugin::triggerEvent('register.before_create');
         $newUser = $userService->create($this->view->vars->user);
-        Plugin::triggerEvent('register.create');
         
         // Send welcome email
         $config = Registry::get('config');
@@ -103,4 +101,4 @@ $token = md5(uniqid(rand(), true));
 $this->view->vars->token = $token;
 $_SESSION['formToken'] = $token;
 
-Plugin::triggerEvent('register.before_render');
+Plugin::triggerEvent('register.end');

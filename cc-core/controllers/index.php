@@ -22,4 +22,4 @@ $this->view->vars->recent_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentVideosResults, 'video_id')
 );
 
-Plugin::triggerEvent('index.before_render');
+Plugin::triggerEvent('index.end');

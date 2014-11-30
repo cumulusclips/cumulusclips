@@ -35,7 +35,6 @@ if (!empty($_GET['username'])) {
         $this->view->vars->to = $originalMessage->username;
         $this->view->vars->subject = "Re: $originalMessage->subject";
         $this->view->vars->msg = "\n\n\n> " . $this->view->vars->to . " wrote: \n\n $originalMessage->message";
-        Plugin::triggerEvent('message_send.load_original_message');
     }
 }
 
@@ -79,7 +78,6 @@ if (isset($_POST['submitted'])) {
 
     // Create message if no errors were found
     if (empty($this->view->vars->errors)) {
-        Plugin::triggerEvent('message_send.before_send_message');
         $message->userId = $this->view->vars->loggedInUser->userId;
         $messageMapper->save($message);
         $this->view->vars->to = null;
@@ -101,7 +99,6 @@ if (isset($_POST['submitted'])) {
         }
         $this->view->vars->message = Language::getText('success_message_sent');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('message_send.send_message');
     } else {
         $this->view->vars->message = Language::getText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);

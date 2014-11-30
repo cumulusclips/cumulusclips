@@ -25,7 +25,6 @@ if (!empty($_GET['vid'])) {
         $videoService->delete($video);
         $this->view->vars->message = Language::GetText('success_video_deleted');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('myvideos.delete_video');
     }
 }
 

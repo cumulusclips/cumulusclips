@@ -26,4 +26,4 @@ $recentResults = $db->fetchAll($query);
 $this->view->vars->recentVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentResults, 'video_id')
 );
-Plugin::triggerEvent('mobile_index.before_render');
+Plugin::triggerEvent('mobile_index.end');

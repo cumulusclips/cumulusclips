@@ -51,7 +51,6 @@ $this->view->vars->rating = $ratingService->getRating($this->view->vars->video->
 $this->view->vars->meta->title = $this->view->vars->video->title;
 $this->view->vars->meta->keywords = implode (', ',$this->view->vars->video->tags);
 $this->view->vars->meta->description = $this->view->vars->video->description;
-Plugin::triggerEvent('play.load_video');
 
 // Retrieve user data if logged in
 if ($this->view->vars->loggedInUser) {
@@ -121,10 +120,9 @@ if ($total['total'] > 20) {
 $this->view->vars->relatedVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($relatedVideosResults, 'video_id')
 );
-Plugin::triggerEvent('play.load_suggestions');
 
 // Retrieve comments
 $this->view->vars->commentCount = $commentMapper->getVideoCommentCount($video->videoId);
 $this->view->vars->commentCardList = $commentService->getVideoComments($video, 5);
 
-Plugin::triggerEvent('play.before_render');
+Plugin::triggerEvent('play.end');

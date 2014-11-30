@@ -19,7 +19,6 @@ if (!empty($_GET['username'])) {
 if ($profileUser) {
     $this->view->vars->member = $profileUser;
     $this->view->vars->meta->title = Functions::Replace($this->view->vars->meta->title, array('member' => $profileUser->username));
-    Plugin::triggerEvent('profile.load_member');
 } else {
     App::Throw404();
 }
@@ -55,7 +54,6 @@ $this->view->vars->playlistCount = $playlistCount;
 if ($videoCount > 0) {
     $videoMapper = new VideoMapper();
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE user_id = " . $profileUser->userId . " AND status = 'approved' AND private = '0' ORDER BY date_created DESC LIMIT 9";
-    Plugin::triggerEvent('profile.load_recent_videos');
     $memberVideosResults = $db->fetchAll($query);
     $this->view->vars->videoList = $videoMapper->getVideosFromList(
         Functions::arrayColumn($memberVideosResults, 'video_id')
@@ -72,4 +70,4 @@ if ($playlistCount > 0) {
     );
 }
 
-Plugin::triggerEvent('profile.before_render');
+Plugin::triggerEvent('profile.end');

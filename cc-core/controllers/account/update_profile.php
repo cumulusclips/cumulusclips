@@ -69,7 +69,6 @@ if (isset($_POST['submitted'])) {
         $this->view->vars->message = Language::GetText('success_profile_updated');
         $this->view->vars->message_type = 'success';
         $userMapper->save($this->view->vars->loggedInUser);
-        Plugin::triggerEvent('update_profile.update_profile');
     } else {
         $this->view->vars->message = Language::GetText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $this->view->vars->Errors);
@@ -88,7 +87,6 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view-
     $userMapper->save($this->view->vars->loggedInUser);
     $this->view->vars->message = Language::GetText('success_avatar_reset');
     $this->view->vars->message_type = 'success';
-    Plugin::triggerEvent('update_profile.avatar_reset');
 }
 
 Plugin::triggerEvent('update_profile.end');

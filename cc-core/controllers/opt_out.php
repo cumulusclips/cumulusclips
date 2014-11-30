@@ -20,7 +20,6 @@ if (isset($_GET['email'])) {
         $privacy->videoComment = false;
         $privacy->commentReply = false;
         $privacyMapper->save($privacy);
-        Plugin::triggerEvent('opt_out.opt_out');
     } else {
         App::throw404();
     }
@@ -29,4 +28,4 @@ if (isset($_GET['email'])) {
     App::throw404();
 }
 
-Plugin::triggerEvent('opt_out.before_render');
+Plugin::triggerEvent('opt_out.end');

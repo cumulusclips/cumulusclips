@@ -99,7 +99,6 @@ if (isset ($_POST['submitted'])) {
         $video->filename = $videoService->generateFilename();
         $video->status = 'new';
         $_SESSION['upload'] = $videoMapper->save($video);
-        Plugin::triggerEvent('upload.create_video');
         header('Location: ' . HOST . '/account/upload/video/');
         exit();
     } else {

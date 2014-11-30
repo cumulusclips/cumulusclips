@@ -47,7 +47,6 @@ if (isset($_POST['submitted'])) {
         $Msg .= "E-mail: " . $this->view->vars->email . "\n";
         $Msg .= "Message:\n" . $this->view->vars->feedback;
         App::alert($subject, $Msg);
-        Plugin::triggerEvent('contact.send');
 
         $this->view->vars->messageType = 'success';
         $this->view->vars->message = Language::getText('success_contact_sent');
@@ -58,4 +57,4 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-Plugin::triggerEvent('contact.before_render');
+Plugin::triggerEvent('contact.end');

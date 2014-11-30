@@ -34,7 +34,6 @@ $resultTotal = $db->fetchRow($query);
 if ($resultTotal['total'] > 20 && strlen($keyword) > 3) {
     // Use FULLTEXT query
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND MATCH(title, tags, description) AGAINST(:keyword)";
-    Plugin::triggerEvent('search.search_count');
     $db->fetchAll($query, array(':keyword' => $keyword));
     $count = $db->rowCount();
 } else {
@@ -44,7 +43,6 @@ if ($resultTotal['total'] > 20 && strlen($keyword) > 3) {
     $db->fetchAll($query, array(':keyword' => $keyword));
     $count = $db->rowCount();
 }
-Plugin::triggerEvent('search.search_count');
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
@@ -53,11 +51,10 @@ $start_record = $this->view->vars->pagination->GetStartRecord();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-Plugin::triggerEvent('search.search');
 $searchResult = $db->fetchAll($query, array(':keyword' => $keyword));
 $videoMapper = new VideoMapper();
 $this->view->vars->search_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($searchResult, 'video_id')
 );
 
-Plugin::triggerEvent('search.before_render');
+Plugin::triggerEvent('search.end');

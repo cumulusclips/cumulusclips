@@ -29,4 +29,4 @@ if ($page) {
 }
 
 // Output Page
-Plugin::triggerEvent('page.before_render');
+Plugin::triggerEvent('page.end');

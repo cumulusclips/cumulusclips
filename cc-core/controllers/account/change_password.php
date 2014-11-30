@@ -40,7 +40,6 @@ if ((isset($_POST['submitted']))) {
             $userMapper->save($this->view->vars->loggedInUser);
             $this->view->vars->message = Language::GetText('success_password_updated');
             $this->view->vars->message_type = 'success';
-            Plugin::triggerEvent('change_password.change_password');
         } else {
             $this->view->vars->errors['match'] = TRUE;
             $this->view->vars->message = Language::GetText('error_password_match');

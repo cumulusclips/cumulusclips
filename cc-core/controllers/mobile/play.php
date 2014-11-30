@@ -25,4 +25,4 @@ if (!$video) App::throw404();
 $this->view->vars->video = $video;
 $this->view->vars->meta->title = $video->title;
 
-Plugin::triggerEvent('mobile_play.before_render');
+Plugin::triggerEvent('mobile_play.end');

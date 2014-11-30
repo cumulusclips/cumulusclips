@@ -112,7 +112,6 @@ if (isset($_POST['submitted'])) {
         $videoMapper->save($video);
         $this->view->vars->message = Language::getText('success_video_updated');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('videos_edit.edit');
     } else {
         $this->view->vars->message = Language::getText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode('<br /> - ', $this->view->vars->errors);

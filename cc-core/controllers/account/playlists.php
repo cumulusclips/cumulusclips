@@ -1,7 +1,5 @@
 <?php
 
-Plugin::triggerEvent('edit_video.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
@@ -19,7 +17,6 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
         $playlistService->delete($playlist);
         $this->view->vars->message = Language::GetText('success_playlist_deleted');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('myfavorites.remove_favorite');
     }
 }
 
@@ -68,5 +65,3 @@ foreach ($userLists as $playlist) {
             break;
     }
 }
-
-Plugin::triggerEvent('myfavorites.end');

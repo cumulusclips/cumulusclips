@@ -6,4 +6,4 @@ Plugin::triggerEvent('system_error.start');
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
 
-Plugin::triggerEvent('system_error.before_render');
+Plugin::triggerEvent('system_error.end');

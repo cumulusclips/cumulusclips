@@ -56,7 +56,6 @@ if (isset($_POST['submitted'])) {
         $privacyMapper->save($this->view->vars->privacy);
         $this->view->vars->message = Language::GetText('success_privacy_updated');
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('privacy_settings.update_privacy');
     } else {
         $this->view->vars->message = Language::GetText('error_general');
         $this->view->vars->message_type = 'errors';

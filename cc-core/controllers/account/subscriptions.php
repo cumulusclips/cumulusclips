@@ -22,7 +22,6 @@ if (isset ($_GET['id']) && is_numeric ($_GET['id'])) {
         $subscriptionService->unsubscribe($this->view->vars->loggedInUser->userId, $subscribedUser->userId);
         $this->view->vars->message = Language::GetText('success_unsubscribed', array('username' => $subscribedUser->username));
         $this->view->vars->message_type = 'success';
-        Plugin::triggerEvent('subscriptions.unsubscribe');
     }
 }
 
