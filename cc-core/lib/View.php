@@ -49,7 +49,7 @@ class View
         $this->options->themePath = THEMES_DIR . '/' . $this->options->theme;
         
         // Set default theme settings
-        $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-v2' : 'default';
+        $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-default' : 'default';
         $this->options->defaultThemeUrl = HOST . '/cc-content/themes/' . $this->options->defaultTheme;
         $this->options->defaultThemePath = THEMES_DIR . '/' . $this->options->defaultTheme;
         
