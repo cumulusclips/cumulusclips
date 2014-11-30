@@ -61,7 +61,7 @@ $_CREATE_FLAGS_TABLE = <<<CREATE_FLAGS_TABLE
 
 CREATE TABLE `{DB_PREFIX}flags` (
   `flag_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `id` bigint(20) NOT NULL,
+  `object_id` bigint(20) NOT NULL,
   `type` varchar(255) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `date_created` date NOT NULL,
@@ -261,7 +261,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('theora_encoding_enabled','0'),
 ('theora_encoding_options','-vcodec libtheora -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -qscale 8 -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f ogg'),
 ('mobile_encoding_enabled','1'),
-('mobile_encoding_options','-vcodec libx264 -vf "scale=min(480\,iw):trunc(ow/a/2)*2" -vb 600k -ac 2 -ab 96k -ar 44100 -f mp4'),
+('mobile_encoding_options','-vcodec libx264 -vf "scale=min(480\\,iw):trunc(ow/a/2)*2" -vb 600k -ac 2 -ab 96k -ar 44100 -f mp4'),
 ('thumb_encoding_options','-vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -t 1 -r 1 -f mjpeg'),
 ('auto_approve_users','1'),
 ('auto_approve_videos','1'),
