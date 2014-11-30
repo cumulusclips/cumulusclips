@@ -2,6 +2,10 @@
 HOMEPAGE
 *******/
 
+.index .block {
+    margin-bottom: 20px;
+}
+
 .index .form {
     margin-bottom: 20px;
 }
