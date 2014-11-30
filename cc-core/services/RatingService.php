@@ -11,7 +11,6 @@ class RatingService extends ServiceAbstract
     {
         $ratingMapper = $this->_getMapper();
         $ratingMapper->delete($rating->ratingId);
-        Plugin::triggerEvent('rating.delete');
     }
 
     /**

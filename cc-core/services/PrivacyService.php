@@ -9,7 +9,6 @@ class PrivacyService extends ServiceAbstract
      */
     public function delete(Privacy $privacy)
     {
-        Plugin::triggerEvent('privacy.delete');
         $privacyMapper = $this->_getMapper();
         $privacyMapper->delete($privacy->privacyId);
     }

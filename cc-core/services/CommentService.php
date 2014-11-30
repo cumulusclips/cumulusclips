@@ -11,7 +11,6 @@ class CommentService extends ServiceAbstract
     {
         $commentMapper = $this->_getMapper();
         $commentMapper->delete($comment->commentId);
-        Plugin::triggerEvent('comment.delete');
     }
 
     /**
@@ -28,7 +27,6 @@ class CommentService extends ServiceAbstract
         $videoService = new VideoService();
         $video = $videoMapper->getVideoById($comment->videoId);
         $commentMapper = $this->_getMapper();
-        Plugin::triggerEvent('comment.before_approve');
         
         // Determine which comment action is being performed
         if ($action == 'create') {
@@ -55,7 +53,6 @@ class CommentService extends ServiceAbstract
                     $body .= "Comments: $comment->comments\n";
                     $body .= "=======================================================";
                     App::alert($subject, $body);
-                    Plugin::triggerEvent('comment.approve_required');
                 }
             }
             
@@ -118,7 +115,6 @@ class CommentService extends ServiceAbstract
             $mail = new Mail();
             $mail->loadTemplate('video_comment', $replacements);
             $mail->send($user->email);
-            Plugin::triggerEvent('comment.notify_member');
         }
 
         // Notify comment author of reply to their comment if apl.
@@ -141,8 +137,6 @@ class CommentService extends ServiceAbstract
                 $mail->send($parentAuthor->email);
             }
         }
-
-        Plugin::triggerEvent('comment.release');
         return $this;
     }
     

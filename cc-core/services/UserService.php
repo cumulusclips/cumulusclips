@@ -9,8 +9,6 @@ class UserService extends ServiceAbstract
      */
     public function delete(User $user)
     {
-        Plugin::triggerEvent('user.delete');
-
         // Delete Avatar
         if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
 
@@ -103,7 +101,6 @@ class UserService extends ServiceAbstract
         $userMapper = $this->_getMapper();
         $password = Functions::random(10,true);
         $user->password = md5($password);
-        Plugin::triggerEvent('user.reset_password');
         $userMapper->save($user);
         return $password;
     }
@@ -140,7 +137,6 @@ class UserService extends ServiceAbstract
             $_SESSION['loggedInUserId'] = $user->userId;
             $user->lastLogin = date(DATE_FORMAT);
             $userMapper->save($user);
-            Plugin::triggerEvent('user.login');
             return true;
         } else {
             return false;
@@ -154,7 +150,6 @@ class UserService extends ServiceAbstract
     public function logout()
     {
         unset($_SESSION['loggedInUserId']);
-        Plugin::triggerEvent('user.logout');
     }
 
     /**
@@ -292,7 +287,6 @@ class UserService extends ServiceAbstract
     {
         $send_alert = false;
         $userMapper = $this->_getMapper();
-        Plugin::triggerEvent('user.before_approve');
 
         // 1) Admin created user in Admin Panel
         // 2) User signed up & activated
@@ -310,7 +304,6 @@ class UserService extends ServiceAbstract
                 // Set Pending
                 $user->status = 'pending';
                 $userMapper->save($user);
-                Plugin::triggerEvent('user.approve_required');
             } else {
 
                 // Send Admin Alert
@@ -336,8 +329,6 @@ class UserService extends ServiceAbstract
                     $mail->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
                     $mail->Send ($user->email);
                 }
-
-                Plugin::triggerEvent('user.release');
             }
 
         // User is being re-approved
@@ -345,7 +336,6 @@ class UserService extends ServiceAbstract
             // Activate User
             $user->status = 'active';
             $userMapper->save($user);
-            Plugin::triggerEvent('user.reapprove');
         }
 
         // Send admin alert
@@ -356,8 +346,6 @@ class UserService extends ServiceAbstract
             $body .= "=======================================================";
             App::Alert ($subject, $body);
         }
-
-        Plugin::triggerEvent('user.approve');
     }
     
     /**

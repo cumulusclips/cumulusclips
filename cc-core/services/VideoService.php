@@ -19,8 +19,6 @@ class VideoService extends ServiceAbstract
      */
     public function delete(Video $video)
     {
-        Plugin::triggerEvent('video.delete');
-
         // Delete files
         try {
             Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
@@ -108,7 +106,6 @@ class VideoService extends ServiceAbstract
     {
         $send_alert = false;
         $videoMapper = $this->_getMapper();
-        Plugin::triggerEvent('video.before_approve');
 
         // 1) Video completed encoding
         // 2) Video is being approved by admin for first time
@@ -125,7 +122,6 @@ class VideoService extends ServiceAbstract
                 // Set Pending
                 $video->status = VideoMapper::PENDING_APPROVAL;
                 $videoMapper->save($video);
-                Plugin::triggerEvent('video.approve_required');
             } else {
 
                 // Send Admin Alert
@@ -145,7 +141,6 @@ class VideoService extends ServiceAbstract
 
                 // Send subscribers notification of new video
                 $this->_notifySubscribersOfNewVideo($video);
-                Plugin::triggerEvent('video.release');
             }
 
         // Video is being re-approved
@@ -153,7 +148,6 @@ class VideoService extends ServiceAbstract
             // Approve Video
             $video->status = 'approved';
             $videoMapper->save($video);
-            Plugin::triggerEvent('video.reapprove');
         }
 
         // Send admin alert
@@ -164,8 +158,6 @@ class VideoService extends ServiceAbstract
             $body .= "=======================================================";
             App::Alert ($subject, $body);
         }
-
-        Plugin::triggerEvent('video.approve');
     }
     
     protected function _notifySubscribersOfNewVideo(Video $video)
@@ -188,7 +180,6 @@ class VideoService extends ServiceAbstract
                 $mail = new Mail();
                 $mail->LoadTemplate ('new_video', $replacements);
                 $mail->Send ($subscriber->email);
-                Plugin::triggerEvent('video.notify_subscribers');
             }
         }
     }
@@ -212,7 +203,6 @@ class VideoService extends ServiceAbstract
             $mail = new Mail();
             $mail->LoadTemplate('video_ready', $replacements);
             $mail->Send($user->email);
-            Plugin::triggerEvent('video.notify_user_video_is_ready', $video);
         }
     }
     

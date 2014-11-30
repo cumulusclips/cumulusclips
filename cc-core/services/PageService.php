@@ -32,7 +32,6 @@ class PageService extends ServiceAbstract
     {
         $pageMapper = new PageMapper();
         $pageMapper->delete($page->pageId);
-        Plugin::triggerEvent('page.delete');
     }
     
     /**
