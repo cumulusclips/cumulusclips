@@ -172,7 +172,6 @@ $(document).ready(function(){
         
         // Load More Videos
         $('#member-videos .loadMore').click(function(event){
-            event.preventDefault();
             var loadMoreButton = $(this);
             var userId = loadMoreButton.data('user');
             var retrieveOffset = $('#member-videos .video').length;
@@ -194,11 +193,11 @@ $(document).ready(function(){
                     }
                 }
             });
+            event.preventDefault();
         });
         
         // Load More Playlists
         $('#member-playlists .loadMore').click(function(event){
-            event.preventDefault();
             var loadMoreButton = $(this);
             var userId = loadMoreButton.data('user');
             var retrieveOffset = $('#member-playlists .playlist').length;
@@ -254,6 +253,7 @@ $(document).ready(function(){
                     }
                 }
             });
+            event.preventDefault();
         });
     }
         
@@ -528,7 +528,6 @@ $(document).ready(function(){
     // Add to Watch Later actions
     $('.videos_list').on('click', '.video .watchLater a', function(event){
         
-        event.preventDefault();
         var video = $(this).parents('.video');
         var url = cumulusClips.baseUrl+'/actions/playlist/';
         var data = {
@@ -566,6 +565,7 @@ $(document).ready(function(){
                 });
             }
         });
+        event.preventDefault();
     });
 
 }); // END jQuery
@@ -675,7 +675,7 @@ function buildCommentCard(commentCardTemplate, commentCardData)
         .text(commentCardData.author.username);
     
     // Set comment date
-    var commentDate = new Date(commentCardData.comment.dateCreated);
+    var commentDate = new Date(commentCardData.comment.dateCreated.split(' ')[0]);
     monthPadding = (String(commentDate.getMonth()+1).length === 1) ? '0' : '';
     datePadding = (String(commentDate.getDate()).length === 1) ? '0' : '';
     commentCard.find('.commentDate').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());

@@ -290,6 +290,7 @@ input::-moz-focus-inner {
 }
 
 .button, .button_small {
+    margin: 0;
     font-family: arial, helvetica, sans-serif;
     line-height: 31px;
     height: 35px;
@@ -313,6 +314,11 @@ input::-moz-focus-inner {
 
 a.button, a.button_small {
     display: inline-block;
+}
+
+a.button {
+    line-height: 33px;
+    padding: 0 15px;
 }
 
 .form {
@@ -397,6 +403,10 @@ a.button, a.button_small {
     display: none;
 }
 
+.left > .message:first-child {
+    margin-top: 0;
+}
+
 .success {
     background: #e6efc2;
     color: #264409;
@@ -426,14 +436,7 @@ a.button, a.button_small {
     overflow: hidden;
 }
 
-/*.videos_list div:nth-child(3n+1) {
-    margin-right: 0;
-}*/
-
-/** BLAME IE8 **/
-.videos_list div:first-child + div + div,
-.videos_list div:first-child + div + div + div + div + div,
-.videos_list div:first-child + div + div + div + div + div + div + div + div {
+.videos_list div:nth-child(3n+3) {
     margin-right: 0;
 }
 
@@ -589,15 +592,15 @@ a.button, a.button_small {
 
 .playlist {
     width: 165px;
-    margin-left: 47px;
+    margin-right: 47px;
     margin-bottom: 20px;
     display: inline-block;
     vertical-align: top;
     position: relative;
 }
 
-.playlist:nth-child(3n+1) {
-    margin-left: 0;
+.playlist:nth-child(3n+3) {
+    margin-right: 0;
 }
 
 .playlist img {

@@ -243,6 +243,20 @@ UPLOAD - VIDEO
     height: 10px;
 }
 
+.ie9 #upload_status {
+    width: 285px;
+}
+
+.ie9 #upload_status .fill {
+    width: 100% !important;
+    background-color: #E1E1E1;
+}
+
+.ie9 #upload_status .in-progress {
+    background: url('../images/jquery-ui/animated-overlay.gif');
+    opacity: 0.3;
+}
+
 #upload_status .percentage {
     width: 35px;
     float: right;
@@ -311,6 +325,7 @@ PLAYLISTS
 .playlists_form .button {
     clear: both;
     float: none;
+    margin-top: 18px;
 }
 
 
@@ -399,8 +414,8 @@ MESSAGES & INBOX
 ***************/
 
 #inbox {
-    border-collapse:collapse;
-    margin-bottom:20px;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 #inbox thead {
@@ -408,19 +423,20 @@ MESSAGES & INBOX
 }
 
 #inbox td {
-    padding:3px 0;
-    width:70px;
-    border-bottom:1px solid #CCC;
+    padding: 3px 0;
+    width: 70px;
+    border-bottom: 1px solid #CCC;
+    vertical-align: middle;
 }
 
 #inbox .subject {
-    width:350px;
+    width: 350px;
 }
 
 #message_body {
-    background-color:#f0f0f0;
-    padding:15px;
-    margin:20px 0;
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 20px 0;
 }
 
 #message_display p {

@@ -1,10 +1,12 @@
 <?php
 $this->addJs('fileupload.jquery-ui.widget.js');
-//$this->addJs('fileupload.iframe-transport');
+$this->addJs('fileupload.iframe-transport.js');
 $this->addJs('fileupload.plugin.js');
 $this->addJs('fileupload.js');
 $this->SetLayout('account');
 ?>
+
+<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
 
 <h1><?=Language::GetText('profile_header')?></h1>
 

@@ -104,7 +104,7 @@ if ($total['total'] > 20) {
     // Use FULLTEXT query
     $search_terms = $this->view->vars->video->title . ' ' . implode (' ', $this->view->vars->video->tags);
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE MATCH(title, tags, description) AGAINST (:searchTerms) AND status = 'approved' AND private = '0' AND video_id != :videoId LIMIT 9";
-    $relatedVideosResults = $db->fetchAll($query, array(':searchTerms' => $search_terms, ':videoId' => $this->view->vars->video->video_id));
+    $relatedVideosResults = $db->fetchAll($query, array(':searchTerms' => $search_terms, ':videoId' => $this->view->vars->video->videoId));
 } else {
     // Use LIKE query
     $replacements = array(':videoId' => $this->view->vars->video->videoId);

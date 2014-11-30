@@ -327,6 +327,7 @@ function displayMessage(result, message)
  */
 function resetProgress()
 {
+    $('#upload_status .fill').removeClass('in-progress');
     $('#upload_status').hide();
     $('#upload_status .title').text('');
     $('#upload_status .fill').css('width', '0%');

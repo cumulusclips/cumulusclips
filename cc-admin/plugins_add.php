@@ -14,6 +14,7 @@ $page_title = 'Add New Plugin';
 $message = null;
 $message_type = null;
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
+$admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $clean_up = true;
@@ -77,6 +78,8 @@ if (isset($_POST['submitted'])) {
 include('header.php');
 
 ?>
+
+<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
 
 <div id="plugins-add">
 

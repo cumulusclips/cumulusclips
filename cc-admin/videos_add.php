@@ -22,6 +22,7 @@ $message = null;
 $message_type = null;
 $php_path = Settings::get('php');
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
+$admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $private_url = $videoService->generatePrivate();
@@ -141,6 +142,9 @@ if (isset($_POST['submitted'])) {
 include('header.php');
 
 ?>
+
+<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
+
 <div id="videos-add">
 
     <h1>Add Video</h1>

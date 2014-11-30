@@ -9,6 +9,7 @@ $(function(){
             cumulusClips.uploadFileData = data;
             var file = data.files[0];
             var filesizeLimit;
+            var filename = '';
             var callback;
             
             // Validate file type
@@ -34,11 +35,16 @@ $(function(){
                 return false;
             }
             
+            // Prepare upload progress box
             $('.message').hide();
             $('#upload_status').show();
             $('#upload_status .fill').css('width', '0%');
             $('#upload_status .percentage').text('0%');
-            $('#upload_status .title').text(file.name + ' (' + formatBytes(file.size, 0) + ')');
+            
+            // Set upload filename
+            filename = file.name;
+            if (!cumulusClips.ie9) filename += ' (' + formatBytes(file.size, 0) + ')';
+            $('#upload_status .title').text(filename);
         },
         progress: function(event, data)
         {
@@ -89,16 +95,16 @@ $(function(){
     });
 
     // Attach upload event to upload button
-    $('#upload_button').click(function(){
-        event.preventDefault();
+    $('#upload_button').click(function(event){
         if (cumulusClips.uploadFileData !== undefined) {
+            $('#upload_status .fill').addClass('in-progress');
             cumulusClips.jqXHR = cumulusClips.uploadFileData.submit();
         }
+        event.preventDefault();
     });
     
     // Attach cancel event to cance button
     $('#upload_status a').click(function(event){
-        event.preventDefault();
         if (cumulusClips.jqXHR !== undefined) {
             cumulusClips.jqXHR.abort();
         }
@@ -106,7 +112,17 @@ $(function(){
         $('#upload').val('');
         cumulusClips.jqXHR = undefined;
         cumulusClips.uploadFileData = undefined;
+        event.preventDefault();
     });
+    
+    // Detect IE9
+    if ($('meta[name="ie9"]').length > 0) {
+        $('body').addClass('ie9');
+        cumulusClips.ie9 = true;
+        $('#upload_status .percentage').hide();
+    } else {
+        cumulusClips.ie9 = false;
+    }
 });
 
 /**
@@ -115,6 +131,7 @@ $(function(){
  */
 function resetProgress()
 {
+    $('#upload_status .fill').removeClass('in-progress');
     $('#upload_status').hide();
     $('#upload_status .title').text('');
     $('#upload_status .fill').css('width', '0%');

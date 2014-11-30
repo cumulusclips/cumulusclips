@@ -786,6 +786,20 @@ FILE UPLOAD STYLES
     height: 10px;
 }
 
+.ie9 #upload_status {
+    width: 285px;
+}
+
+.ie9 #upload_status .fill {
+    width: 100% !important;
+    background-color: #E1E1E1;
+}
+
+.ie9 #upload_status .in-progress {
+    background: url('../images/animated-overlay.gif');
+    opacity: 0.3;
+}
+
 #upload_status .percentage {
     width: 35px;
     float: right;

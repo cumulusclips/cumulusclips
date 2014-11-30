@@ -252,6 +252,7 @@ class Functions
      */
     public static function updateCheck()
     {
+        $version = urlencode(CURRENT_VERSION);
         $client = urlencode($_SERVER['REMOTE_ADDR']);
         $system = urlencode($_SERVER['SERVER_ADDR']);
         $update_url = MOTHERSHIP_URL . "/updates/?version=$version&client=$client&system=$system";

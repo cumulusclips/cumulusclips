@@ -547,6 +547,7 @@ PLAY VIDEO
 .commentForm {
     width: 550px;
     overflow: hidden;
+    clear: both;
 }
 
 .commentForm .cancel {
