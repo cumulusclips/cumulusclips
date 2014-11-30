@@ -32,9 +32,29 @@
 <!-- BEGIN NAV -->
 <div id="nav">
     <div id="sub_nav">
-        <a href="<?=HOST?>/videos/"><?=Language::GetText('videos')?></a>
-        <a href="<?=HOST?>/members/"><?=Language::GetText('members')?></a>
-        <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
+        <nav>
+            <a href="<?=HOST?>/videos/"><?=Language::GetText('videos')?></a>
+            <a href="<?=HOST?>/members/"><?=Language::GetText('members')?></a>
+            <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
+        </nav>
+        
+        <?php $activeLanguages = Language::getActiveLanguages(); ?>
+        <?php if (count($activeLanguages) > 1): ?>
+
+            <div id="languages">
+                <a class="active-language" href=""><?=Language::getLanguage(true)?></a>
+                <ul>
+                    <?php foreach ($activeLanguages as $language): ?>
+                        <li><a href="<?=HOST?>/language/set/<?=$language->system_name?>/"><?=$language->native_name?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+        <?php endif; ?>
+        
     </div>
+    
 </div>
 <!-- END NAV -->
+
+

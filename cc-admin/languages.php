@@ -92,7 +92,8 @@ else if (!empty($_GET['default']) && !ctype_space($_GET['default'])) {
 
     // Validate language
     $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['default'] . '.xml';
-    if (array_key_exists($_GET['default'], $active_languages) && file_exists($language_file)) {
+    $key = array_search($_GET['default'], $languageSystemNames);
+    if ($key !== false) {
         $xml = simplexml_load_file($language_file);
         Settings::set('default_language', $_GET['default']);
         $message = $xml->information->lang_name . ' is now the default language.';

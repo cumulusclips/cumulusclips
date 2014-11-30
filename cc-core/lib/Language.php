@@ -66,7 +66,7 @@ class Language
     }
 
     /**
-     * Output the formal English language name of the loaded language
+     * Output the formal human readable name of the loaded language
      * @param boolean $native (optional) Whether or not to return the native translation for the current language
      * @return string The language name in the language xml file
      */

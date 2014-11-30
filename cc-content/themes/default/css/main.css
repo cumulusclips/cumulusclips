@@ -197,7 +197,14 @@ NAV BAR
     margin: 0 auto;
 }
 
-#nav a {
+#sub_nav:after {
+    content:"";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+nav a {
     color: #FFF;
     font-size: 16px;
     margin-right: 50px;
@@ -207,12 +214,51 @@ NAV BAR
     height: 45px;
 }
 
-#nav a:hover {
+nav a:hover {
     color: #034b95;
     background-color: #FFF;
     text-decoration: none;
 }
 
+nav {
+    float: left;
+}
+
+#languages {
+    float: right;
+    position: relative;
+}
+
+#languages .active-language {
+    background: url('../images/arrow.png') no-repeat right 7px;
+    padding-right: 12px;
+}
+
+#languages a {
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 45px;
+}
+
+#languages ul {
+    display: none;
+    position: absolute;
+    background-color: #034b95;
+    text-align: right;
+    padding: 5px 15px;
+    right: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#languages:hover ul {
+    display: block;
+}
+
+#languages ul a {
+    line-height: 23px;
+}
 
 
 
