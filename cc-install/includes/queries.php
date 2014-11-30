@@ -254,6 +254,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('video_size_limit','102000000'),
 ('keep_original_video','1'),
 ('enable_encoding','1'),
+('mobile_site','1'),
 ('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libfaac -ab 96k -ar 44100 -f mp4'),
 ('webm_encoding_enabled','0'),
 ('webm_encoding_options','-vcodec libvpx -vf "scale=min(640\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f webm'),
