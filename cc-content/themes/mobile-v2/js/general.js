@@ -1,4 +1,5 @@
 var baseURL = $('[name=baseURL]').attr('content');
+var themeUrl = $('[name="themeUrl"]').attr('content');
 
 $('document').ready(function(){
 
