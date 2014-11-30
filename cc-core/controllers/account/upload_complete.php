@@ -18,4 +18,4 @@ if (isset($_SESSION['upload'])) {
     exit();
 }
 
-Plugin::triggerEvent('upload_complete.before_render');
+Plugin::triggerEvent('upload_complete.end');

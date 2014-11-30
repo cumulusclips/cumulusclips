@@ -66,4 +66,4 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
 $this->view->vars->meta->title = Functions::Replace($this->view->vars->meta->title, array ('playlist_name' => $playlistService->getPlaylistName($this->view->vars->playlist)));
 $this->view->vars->videoList = $playlistService->getPlaylistVideos($this->view->vars->playlist);
 
-Plugin::triggerEvent('myfavorites.before_render');
+Plugin::triggerEvent('myfavorites.end');

@@ -125,4 +125,4 @@ $categoryService = new CategoryService();
 $this->view->vars->categoryList = $categoryService->getCategories();
 
 $this->view->vars->video = $video;
-Plugin::triggerEvent('videos_edit.before_render');
+Plugin::triggerEvent('videos_edit.end');

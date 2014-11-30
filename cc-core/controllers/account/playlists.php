@@ -69,4 +69,4 @@ foreach ($userLists as $playlist) {
     }
 }
 
-Plugin::triggerEvent('myfavorites.before_render');
+Plugin::triggerEvent('myfavorites.end');

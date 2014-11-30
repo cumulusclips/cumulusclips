@@ -52,4 +52,4 @@ $this->view->vars->userVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($resultVideos, 'video_id')
 );
 
-Plugin::triggerEvent('myvideos.before_render');
+Plugin::triggerEvent('myvideos.end');

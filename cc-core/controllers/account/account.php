@@ -19,4 +19,4 @@ $userMessages = $messageMapper->getMultipleMessagesByCustom(array(
 ));
 $this->view->vars->unreadMessageCount = count($userMessages);
 
-Plugin::triggerEvent('account.before_render');
+Plugin::triggerEvent('account.end');

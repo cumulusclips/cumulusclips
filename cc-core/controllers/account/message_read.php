@@ -29,4 +29,4 @@ if (!empty($_GET['msg']) && is_numeric($_GET['msg'])) {
     App::throw404();
 }
 
-Plugin::triggerEvent('message_read.before_render');
+Plugin::triggerEvent('message_read.end');

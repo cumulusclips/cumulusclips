@@ -109,4 +109,4 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-Plugin::triggerEvent('message_send.before_render');
+Plugin::triggerEvent('message_send.end');

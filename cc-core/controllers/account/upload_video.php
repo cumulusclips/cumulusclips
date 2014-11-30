@@ -26,4 +26,4 @@ if (isset($_SESSION['upload'])) {
     exit();
 }
 
-Plugin::triggerEvent('upload_video.before_render');
+Plugin::triggerEvent('upload_video.end');

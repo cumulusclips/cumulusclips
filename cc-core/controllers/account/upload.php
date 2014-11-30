@@ -110,4 +110,4 @@ if (isset ($_POST['submitted'])) {
 }
 
 $this->view->vars->video = $video;
-Plugin::triggerEvent('upload.before_render');
+Plugin::triggerEvent('upload.end');

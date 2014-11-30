@@ -91,4 +91,4 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view-
     Plugin::triggerEvent('update_profile.avatar_reset');
 }
 
-Plugin::triggerEvent('update_profile.before_render');
+Plugin::triggerEvent('update_profile.end');

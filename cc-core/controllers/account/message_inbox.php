@@ -65,4 +65,4 @@ $this->view->vars->messages = $messageMapper->getMessagesFromList(
     Functions::arrayColumn($messageResults, 'message_id')
 );
 
-Plugin::triggerEvent('message_inbox.before_render');
+Plugin::triggerEvent('message_inbox.end');

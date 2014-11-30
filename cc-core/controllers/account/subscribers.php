@@ -29,4 +29,4 @@ $this->view->vars->subscribers = $userMapper->getUsersFromList(
     Functions::arrayColumn($subscriberResults, 'user_id')
 );
 
-Plugin::triggerEvent('subscribers.before_render');
+Plugin::triggerEvent('subscribers.end');

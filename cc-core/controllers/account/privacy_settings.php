@@ -63,4 +63,4 @@ if (isset($_POST['submitted'])) {
     }
 }
 
-Plugin::triggerEvent('privacy_settings.before_render');
+Plugin::triggerEvent('privacy_settings.end');

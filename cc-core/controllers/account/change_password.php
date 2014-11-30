@@ -54,4 +54,4 @@ if ((isset($_POST['submitted']))) {
     }
 }
 
-Plugin::triggerEvent('change_password.before_render');
+Plugin::triggerEvent('change_password.end');
