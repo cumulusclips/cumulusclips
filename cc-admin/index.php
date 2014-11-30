@@ -57,7 +57,7 @@ include ('header.php');
     <h1>Dashboard</h1>
 
     <?php if ($first_run): ?>
-    <div class="success">
+    <div class="message success">
         <p>All done! Your video site is now ready for use. This is your admin panel,
         we went ahead and logged you in so that you can start exploring.</p>
 

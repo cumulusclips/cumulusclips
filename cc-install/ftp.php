@@ -163,5 +163,3 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 include_once ('views/ftp.tpl');
-
-?>

@@ -13,5 +13,3 @@ $_SESSION['settings'] = serialize ($settings);
 
 // Output page
 include_once (INSTALL . '/views/welcome.tpl');
-
-?>

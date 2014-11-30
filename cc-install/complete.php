@@ -44,7 +44,5 @@ $result = @mysql_query ($query);
 
 // Log user into admin panel
 $id = @mysql_insert_id();
-$_SESSION['user_id'] = $id;
+$_SESSION['loggedInUserId'] = $id;
 header ("Location: " . $settings->base_url . '/cc-admin/?first_run');
-
-?>

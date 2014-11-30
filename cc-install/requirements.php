@@ -166,5 +166,3 @@ if (!$errors) {
 
 // Output page
 include_once (INSTALL . '/views/requirements.tpl');
-
-?>

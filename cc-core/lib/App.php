@@ -66,7 +66,7 @@ class App
      */
     public static function installCheck()
     {
-        if (!file_exists(DOC_ROOT . '/cc-core/config/config.php') && file_exists(DOC_ROOT . '/cc-install')) {
+        if (!file_exists(DOC_ROOT . '/cc-core/system/config.php') && file_exists(DOC_ROOT . '/cc-install')) {
             $PROTOCOL = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
             $HOSTNAME = $_SERVER['SERVER_NAME'];
             $PORT = ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT']);
