@@ -73,7 +73,7 @@ try {
     ### Download patch file
 
     $curl_handle = curl_init();
-    curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/updates/patches/?version=' . Functions::NumerizeVersion (CURRENT_VERSION));
+    curl_setopt ($curl_handle, CURLOPT_URL, MOTHERSHIP_URL . '/updates/patches/?version=' . urlencode(CURRENT_VERSION));
     curl_setopt ($curl_handle, CURLOPT_RETURNTRANSFER, true);
     curl_setopt ($curl_handle, CURLOPT_FOLLOWLOCATION, true);
     $patch_file_content = curl_exec ($curl_handle);
