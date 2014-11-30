@@ -68,11 +68,9 @@ class CommentMapper extends MapperAbstract
 
     public function save(Comment $comment)
     {
-        $comment = Plugin::triggerFilter('video.beforeSave', $comment);
         $db = Registry::get('db');
         if (!empty($comment->commentId)) {
             // Update
-            Plugin::triggerEvent('video.update', $comment);
             $query = 'UPDATE ' . DB_PREFIX . 'comments SET';
             $query .= ' user_id = :userId, video_id = :videoId, parent_id = :parentId, comments = :comments, date_created = :dateCreated, status = :status, released = :released';
             $query .= ' WHERE comment_id = :commentId';
@@ -88,7 +86,6 @@ class CommentMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $comment);
             $query = 'INSERT INTO ' . DB_PREFIX . 'comments';
             $query .= ' (user_id, video_id, parent_id, comments, date_created, status, released)';
             $query .= ' VALUES (:userId, :videoId, :parentId, :comments, :dateCreated, :status, :released)';
@@ -105,7 +102,6 @@ class CommentMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $commentId = (!empty($comment->commentId)) ? $comment->commentId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $commentId);
         return $commentId;
     }
     

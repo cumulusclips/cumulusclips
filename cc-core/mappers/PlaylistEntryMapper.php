@@ -59,11 +59,9 @@ class PlaylistEntryMapper extends MapperAbstract
 
     public function save(PlaylistEntry $playlistEntry)
     {
-        $playlist = Plugin::triggerFilter('video.beforeSave', $playlistEntry);
         $db = Registry::get('db');
         if (!empty($playlistEntry->playlistEntryId)) {
             // Update
-            Plugin::triggerEvent('video.update', $playlist);
             $query = 'UPDATE ' . DB_PREFIX . 'playlist_entries SET';
             $query .= ' playlist_id = :playlistId, video_id = :videoId, date_created = :dateCreated';
             $query .= ' WHERE playlist_id = :playlistId';
@@ -74,7 +72,6 @@ class PlaylistEntryMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $playlistEntry);
             $query = 'INSERT INTO ' . DB_PREFIX . 'playlist_entries';
             $query .= ' (playlist_id, video_id, date_created)';
             $query .= ' VALUES (:playlistId, :videoId, :dateCreated)';
@@ -87,7 +84,6 @@ class PlaylistEntryMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $playlistEntryId = (!empty($playlistEntry->playlistEntryId)) ? $playlistEntry->playlistEntryId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $playlistEntryId);
         return $playlistEntryId;
     }
     

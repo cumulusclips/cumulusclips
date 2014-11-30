@@ -46,11 +46,9 @@ class PrivacyMapper extends MapperAbstract
 
     public function save(Privacy $privacy)
     {
-        $privacy = Plugin::triggerFilter('video.beforeSave', $privacy);
         $db = Registry::get('db');
         if (!empty($privacy->privacyId)) {
             // Update
-            Plugin::triggerEvent('video.update', $privacy);
             $query = 'UPDATE ' . DB_PREFIX . 'privacy SET';
             $query .= ' user_id = :userId, video_comment = :videoComment, new_message = :newMessage, new_video = :newVideo, video_ready = :videoReady, comment_reply = :commentReply';
             $query .= ' WHERE privacy_id = :privacyId';
@@ -65,7 +63,6 @@ class PrivacyMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $privacy);
             $query = 'INSERT INTO ' . DB_PREFIX . 'privacy';
             $query .= ' (user_id, video_comment, new_message, new_video, video_ready, comment_reply)';
             $query .= ' VALUES (:userId, :videoComment, :newMessage, :newVideo, :videoReady, :commentReply)';
@@ -81,7 +78,6 @@ class PrivacyMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $privacyId = (!empty($privacy->privacyId)) ? $privacy->privacyId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $privacyId);
         return $privacyId;
     }
     

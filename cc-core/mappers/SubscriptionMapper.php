@@ -59,11 +59,9 @@ class SubscriptionMapper extends MapperAbstract
 
     public function save(Subscription $subscription)
     {
-        $subscription = Plugin::triggerFilter('video.beforeSave', $subscription);
         $db = Registry::get('db');
         if (!empty($subscription->subscriptionId)) {
             // Update
-            Plugin::triggerEvent('video.update', $subscription);
             $query = 'UPDATE ' . DB_PREFIX . 'subscriptions SET';
             $query .= ' user_id = :userId, member = :member, date_created = :dateCreated';
             $query .= ' WHERE subscription_id = :subscriptionId';
@@ -75,7 +73,6 @@ class SubscriptionMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $subscription);
             $query = 'INSERT INTO ' . DB_PREFIX . 'subscriptions';
             $query .= ' (user_id, member, date_created)';
             $query .= ' VALUES (:userId, :member, :dateCreated)';
@@ -88,7 +85,6 @@ class SubscriptionMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $subscriptionId = (!empty($subscription->subscriptionId)) ? $subscription->subscriptionId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $subscriptionId);
         return $subscriptionId;
     }
     
@@ -99,7 +95,6 @@ class SubscriptionMapper extends MapperAbstract
      */
     public function delete($subscriptionId)
     {
-        Plugin::triggerEvent('subscription.delete');
         $db = Registry::get('db');
         $query = 'DELETE FROM ' . DB_PREFIX . 'subscriptions WHERE subscription_id = :subscriptionId';
         $db->query($query, array(':subscriptionId' => $subscriptionId));

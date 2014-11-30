@@ -76,11 +76,9 @@ class UserMapper extends MapperAbstract
 
     public function save(User $user)
     {
-        $user = Plugin::triggerFilter('video.beforeSave', $user);
         $db = Registry::get('db');
         if (!empty($user->userId)) {
             // Update
-            Plugin::triggerEvent('video.update', $user);
             $query = 'UPDATE ' . DB_PREFIX . 'users SET';
             $query .= ' username = :username, email = :email, password = :password, status = :status, role = :role, date_created = :dateCreated, first_name = :firstName, last_name = :lastName, about_me = :aboutMe, website = :website, confirm_code = :confirmCode, views = :views, last_login = :lastLogin, avatar = :avatar, released = :released';
             $query .= ' WHERE user_id = :userId';
@@ -104,7 +102,6 @@ class UserMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $user);
             $query = 'INSERT INTO ' . DB_PREFIX . 'users';
             $query .= ' (username, email, password, status, role, date_created, first_name, last_name, about_me, website, confirm_code, views, last_login, avatar, released)';
             $query .= ' VALUES (:username, :email, :password, :status, :role, :dateCreated, :firstName, :lastName, :aboutMe, :website, :confirmCode, :views, :lastLogin, :avatar, :released)';
@@ -129,7 +126,6 @@ class UserMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $userId = (!empty($user->userId)) ? $user->userId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $userId);
         return $userId;
     }
     

@@ -61,11 +61,9 @@ class FlagMapper extends MapperAbstract
 
     public function save(Flag $flag)
     {
-        $flag = Plugin::triggerFilter('video.beforeSave', $flag);
         $db = Registry::get('db');
         if (!empty($flag->flagId)) {
             // Update
-            Plugin::triggerEvent('video.update', $flag);
             $query = 'UPDATE ' . DB_PREFIX . 'flags SET';
             $query .= ' object_id = :objectId, type = :type, user_id = :userId, status = :status, date_created = :dateCreated';
             $query .= ' WHERE flagId = :flagId';
@@ -79,7 +77,6 @@ class FlagMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $flag);
             $query = 'INSERT INTO ' . DB_PREFIX . 'flags';
             $query .= ' (object_id, type, user_id, status, date_created)';
             $query .= ' VALUES (:objectId, :type, :userId, :status, :dateCreated)';
@@ -94,7 +91,6 @@ class FlagMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $flagId = (!empty($flag->flagId)) ? $flag->flagId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $flagId);
         return $flagId;
     }
     

@@ -63,11 +63,9 @@ class CategoryMapper extends MapperAbstract
 
     public function save(Category $category)
     {
-        $category = Plugin::triggerFilter('video.beforeSave', $category);
         $db = Registry::get('db');
         if (!empty($category->categoryId)) {
             // Update
-            Plugin::triggerEvent('video.update', $category);
             $query = 'UPDATE ' . DB_PREFIX . 'categories SET';
             $query .= ' name = :name, slug = :slug';
             $query .= ' WHERE category_id = :categoryId';
@@ -78,7 +76,6 @@ class CategoryMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $category);
             $query = 'INSERT INTO ' . DB_PREFIX . 'categories';
             $query .= ' (name, slug)';
             $query .= ' VALUES (:name, :slug)';
@@ -90,7 +87,6 @@ class CategoryMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $categoryId = (!empty($category->categoryId)) ? $category->categoryId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $categoryId);
         return $categoryId;
     }
     
@@ -118,7 +114,6 @@ class CategoryMapper extends MapperAbstract
     public function delete($categoryId)
     {
         $db = Registry::get('db');
-        Plugin::triggerEvent('category.delete');
         $query = 'DELETE FROM ' . DB_PREFIX . 'categories WHERE category_id = :categoryId';
         $db->query($query, array(':categoryId' => $categoryId));
     }

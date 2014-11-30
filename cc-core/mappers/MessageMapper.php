@@ -73,11 +73,9 @@ class MessageMapper extends MapperAbstract
 
     public function save(Message $message)
     {
-        $message = Plugin::triggerFilter('video.beforeSave', $message);
         $db = Registry::get('db');
         if (!empty($message->messageId)) {
             // Update
-            Plugin::triggerEvent('video.update', $message);
             $query = 'UPDATE ' . DB_PREFIX . 'messages SET';
             $query .= ' user_id = :userId, recipient = :recipient, subject = :subject, message = :message, status = :status, date_created = :dateCreated';
             $query .= ' WHERE message_id = :messageId';
@@ -92,7 +90,6 @@ class MessageMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $message);
             $query = 'INSERT INTO ' . DB_PREFIX . 'messages';
             $query .= ' (user_id, recipient, subject, message, status, date_created)';
             $query .= ' VALUES (:userId, :recipient, :subject, :message, :status, :dateCreated)';
@@ -108,7 +105,6 @@ class MessageMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $messageId = (!empty($message->messageId)) ? $message->messageId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $messageId);
         return $messageId;
     }
     
@@ -140,7 +136,6 @@ class MessageMapper extends MapperAbstract
     public function delete($messageId)
     {
         $db = Registry::get('db');
-        Plugin::triggerEvent('message.delete');
         $query = 'DELETE FROM ' . DB_PREFIX . 'messages WHERE message_id = :messageId';
         $db->query($query, array(':messageId' => $messageId));
     }

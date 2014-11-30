@@ -60,11 +60,9 @@ class RatingMapper extends MapperAbstract
 
     public function save(Rating $rating)
     {
-        $rating = Plugin::triggerFilter('video.beforeSave', $rating);
         $db = Registry::get('db');
         if (!empty($rating->ratingId)) {
             // Update
-            Plugin::triggerEvent('video.update', $rating);
             $query = 'UPDATE ' . DB_PREFIX . 'ratings SET';
             $query .= ' video_id = :videoId, user_id = :userId, rating = :rating, date_created = :dateCreated';
             $query .= ' WHERE ratingId = :ratingId';
@@ -77,7 +75,6 @@ class RatingMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $rating);
             $query = 'INSERT INTO ' . DB_PREFIX . 'ratings ';
             $query .= '(video_id, user_id, rating, date_created) ';
             $query .= 'VALUES (:videoId, :userId, :rating, :dateCreated)';
@@ -91,7 +88,6 @@ class RatingMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $ratingId = (!empty($rating->userId)) ? $rating->ratingId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $ratingId);
         return $ratingId;
     }
     

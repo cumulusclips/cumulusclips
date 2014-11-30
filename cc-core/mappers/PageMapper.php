@@ -47,11 +47,9 @@ class PageMapper extends MapperAbstract
 
     public function save(Page $page)
     {
-        $page = Plugin::triggerFilter('page.beforeSave', $page);
         $db = Registry::get('db');
         if (!empty($page->pageId)) {
             // Update
-            Plugin::triggerEvent('page.update', $page);
             $query = 'UPDATE ' . DB_PREFIX . 'pages SET';
             $query .= ' title = :title, content = :content, slug = :slug, layout = :layout, status = :status, date_created = :dateCreated';
             $query .= ' WHERE page_id = :pageId';
@@ -66,7 +64,6 @@ class PageMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('page.create', $page);
             $query = 'INSERT INTO ' . DB_PREFIX . 'pages';
             $query .= ' (title, content, slug, layout, status, date_created)';
             $query .= ' VALUES (:title, :content, :slug, :layout, :status, :dateCreated)';
@@ -82,7 +79,6 @@ class PageMapper extends MapperAbstract
             
         $db->query($query, $bindParams);
         $pageId = (!empty($page->pageId)) ? $page->pageId : $db->lastInsertId();
-        Plugin::triggerEvent('page.save', $pageId);
         return $pageId;
     }
     

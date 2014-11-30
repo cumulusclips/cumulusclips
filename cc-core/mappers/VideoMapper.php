@@ -90,11 +90,9 @@ class VideoMapper extends MapperAbstract
 
     public function save(Video $video)
     {
-        $video = Plugin::triggerFilter('video.beforeSave', $video);
         $db = Registry::get('db');
         if (!empty($video->videoId)) {
             // Update
-            Plugin::triggerEvent('video.update', $video);
             $query = 'UPDATE ' . DB_PREFIX . 'videos SET';
             $query .= ' filename = :filename, title = :title, description = :description, tags = :tags, category_id = :categoryId, user_id = :userId, date_created = :dateCreated, duration = :duration, status = :status, views = :views, original_extension = :originalExtension, featured = :featured, gated = :gated, released = :released, disable_embed = :disableEmbed, private = :private, private_url = :privateUrl, comments_closed = :commentsClosed';
             $query .= ' WHERE video_id = :videoId';
@@ -121,7 +119,6 @@ class VideoMapper extends MapperAbstract
             );
         } else {
             // Create
-            Plugin::triggerEvent('video.create', $video);
             $query = 'INSERT INTO ' . DB_PREFIX . 'videos';
             $query .= ' (filename, title, description, tags, category_id, user_id, date_created, duration, status, views, original_extension, featured, gated, released, disable_embed, private, private_url, comments_closed)';
             $query .= ' VALUES (:filename, :title, :description, :tags, :categoryId, :userId, :dateCreated, :duration, :status, :views, :originalExtension, :featured, :gated, :released, :disableEmbed, :private, :privateUrl, :commentsClosed)';
@@ -149,7 +146,6 @@ class VideoMapper extends MapperAbstract
 
         $db->query($query, $bindParams);
         $videoId = (!empty($video->videoId)) ? $video->videoId : $db->lastInsertId();
-        Plugin::triggerEvent('video.save', $videoId);
         return $videoId;
     }
     
