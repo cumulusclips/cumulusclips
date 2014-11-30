@@ -63,11 +63,11 @@
         <!-- Register Page -->
         <register_header>Register with Us</register_header>
         <register_text><![CDATA[
-            <p><strong>Join {SITENAME} Today!</strong><br /><br />
+            <p><strong>Join {SITENAME} Today!</strong><br><br>
             As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to members, and much more!</p>
         ]]></register_text>
         <asterisk>An asterisk (*) denotes required field.</asterisk>
-        <username_req>Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
+        <username_req>Username can only contain letters and numbers, no spaces or special characters.</username_req>
         <confirm_password>Confirm Password</confirm_password>
         <register_button>Create Account</register_button>
         <checking_availability>Checking availability</checking_availability>
@@ -467,23 +467,11 @@
             <description>Browse through registered members.</description>
         </members>
 
-        <member_videos>
-            <title>Videos By: {MEMBER}</title>
-            <keywords>Member Videos, Videos by member, Member, Videos</keywords>
-            <description>Browse all videos uploaded by this member.</description>
-        </member_videos>
-
         <profile>
             <title>{MEMBER}'s Profile</title>
             <keywords>Member Profile, Member, Profile</keywords>
             <description>Member profile for this member.</description>
         </profile>
-
-        <comments>
-            <title>View All Comments for: {VIDEO}</title>
-            <keywords>Video Comments, Comments, Video</keywords>
-            <description>View all comments for this videos.</description>
-        </comments>
 
         <contact>
             <title>Contact Us</title>
