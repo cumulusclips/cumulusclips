@@ -152,7 +152,7 @@ class UserMapper extends MapperAbstract
     public function getVideoCount($userId)
     {
         $db = Registry::get('db');
-        $query = "SELECT COUNT(video_id) as count FROM " . DB_PREFIX . "videos WHERE user_id = $userId AND status = 'approved'";
+        $query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE user_id = $userId AND status = 'approved'";
         $result = $db->fetchRow($query);
         return $result['count'];
     }
