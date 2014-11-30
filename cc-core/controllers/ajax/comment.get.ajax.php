@@ -1,7 +1,5 @@
 <?php
 
-Plugin::triggerEvent('comment.ajax.start');
-
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
 $videoMapper = new VideoMapper();

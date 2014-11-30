@@ -1,13 +1,10 @@
 <?php
 
-Plugin::triggerEvent('flag.ajax.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
 
 $this->view->options->disableView = true;
-Plugin::triggerEvent('flag.ajax.login_check');
 $flagMapper = new FlagMapper();
 $videoMapper = new VideoMapper();
 $userMapper = new UserMapper();
@@ -34,7 +31,6 @@ try {
             $type = 'Video';
             $flag->type = 'video';
             $flag->objectId = $video->videoId;
-            Plugin::triggerEvent('flag.ajax.flag_video');
             break;
         case 'user':
             $user = $userMapper->getUserByCustom(array('user_id' => $_POST['id'], 'status' => 'active'));
@@ -45,7 +41,6 @@ try {
             $type = 'Member';
             $flag->type = 'user';
             $flag->objectId = $user->userId;
-            Plugin::triggerEvent('flag.ajax.flag_user');
             break;
         case 'comment':
             $comment = $commentMapper->getCommentByCustom(array('comment_id' => $_POST['id'], 'status' => 'approved'));
@@ -56,7 +51,6 @@ try {
             $type = 'Comment';
             $flag->type = 'comment';
             $flag->objectId = $comment->commentId;
-            Plugin::triggerEvent('flag.ajax.flag_comment');
             break;
     }
 
@@ -70,7 +64,6 @@ try {
         'user_id' => $flag->userId
     ));
     if ($flagExistCheck) throw new Exception (Language::GetText ('error_flag_duplicate'));
-    Plugin::triggerEvent('flag.ajax.before_flag');
 
     // Send admin alert
     if (Settings::Get ('alerts_flags') == '1') {
@@ -84,13 +77,11 @@ try {
         $body .= "URL: $url\n";
         $body .= "$name\n";
         $body .= "=======================================================";
-        Plugin::triggerEvent('flag.ajax.alert');
         App::Alert ($subject, $body);
     }
 
     // Create flag and output message
     $flagMapper->save($flag);
-    Plugin::triggerEvent('flag.ajax.flag');
     echo json_encode (array ('result' => true, 'message' => (string) Language::GetText('success_flag')));
     exit();
 } catch (Exception $e) {

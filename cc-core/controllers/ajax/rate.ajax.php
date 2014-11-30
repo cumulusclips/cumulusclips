@@ -1,12 +1,10 @@
 <?php
 
-Plugin::triggerEvent('rate.ajax.start');
 $this->view->options->disableView = true;
 
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Plugin::triggerEvent('rate.ajax.login_check');
 
 // Verify a video was selected
 if (empty($_POST['video_id']) || !is_numeric ($_POST['video_id'])) App::Throw404();
@@ -38,11 +36,9 @@ $rating->rating = (int) $_POST['rating'];
 $rating->videoId = $video->videoId;
 $rating->userId = $loggedInUser->userId;
 if ($ratingService->rateVideo($rating)) {
-    Plugin::triggerEvent('rate.ajax.rate_video');
     echo json_encode(array('result' => true, 'message' => (string) Language::GetText('success_rated'), 'other' => $ratingService->getRating($video->videoId)));
     exit();
 } else {
-    Plugin::triggerEvent('rate.ajax.rate_video_duplicate');
     echo json_encode(array('result' => false, 'message' => (string) Language::GetText('error_rate_duplicate')));
     exit();
 }

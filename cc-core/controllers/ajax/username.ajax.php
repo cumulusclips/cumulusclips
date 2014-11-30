@@ -1,8 +1,5 @@
 <?php
 
-// Init view
-Plugin::triggerEvent('username.ajax.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();

@@ -1,11 +1,8 @@
 <?php
 
-Plugin::triggerEvent('subscribe.ajax.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Plugin::triggerEvent('subscribe.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
@@ -47,7 +44,6 @@ switch ($_POST['type']) {
         // Create subscription if not yet subscribed
         if (!$subscriptionService->checkSubscription($loggedInUser->userId, $member->userId)) {
             $subscriptionService->subscribe($loggedInUser->userId, $member->userId);
-            Plugin::triggerEvent('subscribe.ajax.subscribe');
             echo json_encode(array('result' => true, 'message' => (string) Language::getText('success_subscribed', array('username' => $member->username)), 'other' => (string) Language::getText('unsubscribe')));
             exit();
         } else {
@@ -67,7 +63,6 @@ switch ($_POST['type']) {
         // Unsubscribe user if subscribed
         if ($subscriptionService->checkSubscription($loggedInUser->userId, $member->userId)) {
             $subscriptionService->unsubscribe($loggedInUser->userId, $member->userId);
-            Plugin::triggerEvent('subscribe.ajax.unsubscribe');
             echo json_encode(array('result' => true, 'message' => (string) Language::getText('success_unsubscribed', array('username' => $member->username)), 'other' => (string) Language::getText('subscribe')));
             exit();
         } else {

@@ -1,6 +1,5 @@
 <?php
 
-Plugin::triggerEvent('upload.start');
 $this->view->options->disableView = true;
 
 // Verify if user is logged in
@@ -62,7 +61,6 @@ try {
     $userMapper = new UserMapper();
     $loggedInUser->avatar = $save_as;
     $userMapper->save($loggedInUser);
-    Plugin::triggerEvent('update_profile.update_avatar');
 
     // Output success message
     exit (json_encode (array ('result' => true, 'message' => (string) Language::GetText('success_avatar_updated'), 'other' => $userService->getAvatarUrl($loggedInUser))));

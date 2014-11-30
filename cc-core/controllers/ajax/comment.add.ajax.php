@@ -1,11 +1,8 @@
 <?php
 
-Plugin::triggerEvent('comment.ajax.start');
-
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
-Plugin::triggerEvent('comment.ajax.login_check');
 
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
@@ -49,7 +46,6 @@ if (!empty($_POST['comments'])) {
 // Save comment if no errors were found
 if (empty($errors)) {
     $comment->status = 'new';
-    Plugin::triggerEvent('comment.ajax.before_post_comment');
     $commentId = $commentMapper->save($comment);
     $newComment = $commentMapper->getCommentById($commentId);
     $commentService = new CommentService();
@@ -69,7 +65,6 @@ if (empty($errors)) {
         $other = array('autoApprove' => false);
     }
     echo json_encode(array('result' => true, 'message' => $message, 'other' => $other));
-    Plugin::triggerEvent('comment.ajax.post_comment');
     exit();
 } else {
     $error_msg = Language::GetText('errors_below');
