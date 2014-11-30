@@ -41,6 +41,13 @@ $id = mysql_insert_id();
 $query = "INSERT INTO " . $settings->db_prefix . "privacy (user_id) VALUES ($id)";
 $result = @mysql_query ($query);
 
+// Create admin user's favorites playlist
+$query = "INSERT INTO " . $settings->db_prefix . "playlists (user_id, public, type, date_created) VALUES ($id, 0, 'favorites', NOW())";
+$result = @mysql_query($query);
+
+// Create admin user's watch later playlist
+$query = "INSERT INTO " . $settings->db_prefix . "playlists (user_id, public, type, date_created) VALUES ($id, 0, 'watch_later', NOW())";
+$result = @mysql_query($query);
 
 // Log user into admin panel
 $id = @mysql_insert_id();

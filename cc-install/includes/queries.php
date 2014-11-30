@@ -288,11 +288,11 @@ DROP_SUBSCRIPTIONS_TABLE;
 $_CREATE_SUBSCRIPTIONS_TABLE = <<<CREATE_SUBSCRIPTIONS_TABLE
 
 CREATE TABLE `{DB_PREFIX}subscriptions` (
-  `sub_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `subscription_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `member` bigint(20) NOT NULL,
   `date_created` datetime NOT NULL,
-  PRIMARY KEY (`sub_id`)
+  PRIMARY KEY (`subscription_id`)
 ) DEFAULT CHARSET=utf8
 
 CREATE_SUBSCRIPTIONS_TABLE;
