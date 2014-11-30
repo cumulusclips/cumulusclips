@@ -44,10 +44,9 @@ class View
         $this->_route = $route;
         
         // Define theme configuration
-        $theme = $this->_currentTheme($this->_route->mobile);
-        $this->options->theme = $themeFiltered;
-        $this->options->themeUrl = HOST . '/cc-content/themes/' . $themeFiltered;
-        $this->options->themePath = THEMES_DIR . '/' . $themeFiltered;
+        $this->options->theme = $this->_currentTheme($this->_route->mobile);
+        $this->options->themeUrl = HOST . '/cc-content/themes/' . $this->options->theme;
+        $this->options->themePath = THEMES_DIR . '/' . $this->options->theme;
         
         // Set default theme settings
         $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-v2' : 'default';
