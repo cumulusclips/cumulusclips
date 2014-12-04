@@ -231,7 +231,7 @@ h3, .big { font-size:14px; }
 
 
 .small { font-size:10px; }
-.errors, .delete { color:#C00; }
+.error, .delete { color:#C00; }
 .approve { color:green; }
 em { font-style: italic; }
 
@@ -311,7 +311,9 @@ textarea.text {
 MISC STYLES
 **********/
 
-.clear { clear:both; }
+.clear {
+    clear:both;
+}
 
 .block {
     margin-top:15px;
@@ -334,49 +336,53 @@ MISC STYLES
     font-size:14px;
 }
 
-.success {
+.message {
+    display: none;
     font-weight:bold;
     padding:15px;
     margin-top:15px;
-    border:solid 3px #C6D880;
-    background-color: #E6EFC2;
-    color: #264409;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
+    border: solid 3px;
 }
 
-.error {
-    font-weight:bold;
-    padding:15px;
-    margin-top:15px;
-    border:solid 3px #FBC2C4;
+.success {
+    display: block;
+    border-color: #C6D880;
+    background-color: #E6EFC2;
+    color: #264409;
+}
+
+.errors {
+    display: block;
+    border-color: #FBC2C4;
     background-color: #FBE3E4;
     color: #8a1f11;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
 }
 
 .notice {
-    font-weight:bold;
-    padding:15px;
-    margin-top:15px;
+    display: block;
     background-color: #FFF6BF;
-    border:solid 3px #FFD324;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
+    border-color: #FFD324;
     color: #514721;
 }
 
-.invisible { visibility:hidden; }
+.invisible {
+    visibility:hidden;
+}
 
-.options { display:inline; }
+.options {
+    display:inline;
+}
 
-.hide { display:none; }
+.hide {
+    display:none;
+}
 
-.tipsy { font-size: 12px; }
+.tipsy {
+    font-size: 12px;
+}
 
 .loading {
     background:url('../images/loading.gif') no-repeat 0 0;
@@ -410,7 +416,8 @@ RECORD LISTING STYLES
     margin-left:15px;
 }
 
-#browse-header select, #browse-header input[type="text"] {
+#browse-header select,
+#browse-header input[type="text"] {
     border:1px solid #CCC;
     border-radius:5px;
     -moz-border-radius:5px;
@@ -443,7 +450,12 @@ RECORD LISTING STYLES
 }
 
 .record-actions {
+    visibility: hidden;
     margin-top:7px;
+}
+
+.list tr:hover .record-actions {
+    visibility: visible;
 }
 
 
@@ -454,7 +466,9 @@ RECORD LISTING STYLES
 DASHBOARD STYLES
 ***************/
 
-#dashboard .block h2 { margin:0 0 10px; }
+#dashboard .block h2 {
+    margin:0 0 10px;
+}
 
 #dashboard .block {
     min-width:300px;
@@ -471,41 +485,43 @@ DASHBOARD STYLES
 VIDEO STYLES
 ***********/
 
-#videos .list td { width:20%; }
-
-#videos .list .video-title { width:40%; }
-
-#videos-edit form { margin-top:15px; }
-
-#upload-box {
-    float:left;
-    position:relative;
+#videos .list td {
+    width:20%;
 }
 
-#uploadUploader {
-    position:relative;
-    width:150px;
-    height:28px;
+#videos .list .video-title {
+    width:40%;
 }
 
-#browse-button {
-    position:absolute;
-    top:0;
-    left:0;
-    width:150px;
+#videos video {
+    display: none;
 }
 
-#upload-button {
-    position:absolute;
-    top:0;
-    left:165px;
+#videos-edit form {
+    margin-top:15px;
 }
 
-.move-videos-button, .delete-category-button { display:none; }
+.move-videos-button,
+.delete-category-button {
+    display:none;
+}
 
-#videos-categories .dropdown { margin:0 5px; }
+#videos-categories .dropdown {
+    margin:0 5px;
+}
 
-#add-category input[name="cat_name"] { margin:0 5px; }
+#add-category input[name="cat_name"] {
+    margin:0 5px;
+}
+
+.videoUploadComplete {
+    display: none;
+    margin: 0 0 15px 115px;
+    background: #d5edf8;
+    color: #205791;
+    border: 2px solid #92cae4;
+    padding: 10px;
+}
 
 
 
@@ -515,7 +531,9 @@ VIDEO STYLES
 MEMBER STYLES
 ************/
 
-#members-edit form { margin-top:15px; }
+#members-edit form {
+    margin-top:15px;
+}
 
 
 
@@ -525,16 +543,22 @@ MEMBER STYLES
 COMMENT STYLES
 *************/
 
-#comments .list td { width:20%; }
+#comments .list td {
+    width:20%;
+}
 
-#comments .list .comments-text { width:40%; }
+#comments .list .comments-text {
+    width:40%;
+}
 
 #comments .list .poster {
     width:150px;
     word-wrap:break-word;
 }
 
-#comments-edit form { margin-top:15px; }
+#comments-edit form {
+    margin-top:15px;
+}
 
 
 
@@ -544,17 +568,32 @@ COMMENT STYLES
 PAGE STYLES
 **********/
 
-#page-slug { line-height:26px; }
+#page-slug {
+    line-height:26px;
+}
 
-#page-slug input { margin:0 5px; }
+#page-slug input {
+    margin:0 5px;
+}
 
-#pages-add #edit-slug, #pages-add #view-slug { display:none; }
+#pages-add #edit-slug,
+#pages-add #view-slug {
+    display:none;
+}
 
-#pages-edit #edit-slug, #pages-edit #empty-slug { display:none; }
+#pages-edit #edit-slug,
+#pages-edit #empty-slug {
+    display:none;
+}
 
-#page-slug a { margin-left:10px; }
+#page-slug a {
+    margin-left:10px;
+}
 
-#pages-add form, #pages-edit form { margin-top:15px; }
+#pages-add form,
+#pages-edit form {
+    margin-top:15px;
+}
 
 #pages-edit .preview {
     float:left;
@@ -569,9 +608,13 @@ PAGE STYLES
 THEME STYLES
 ***********/
 
-#themes { overflow:hidden; }
+#themes {
+    overflow:hidden;
+}
 
-#themes h1 { clear:both; }
+#themes h1 {
+    clear:both;
+}
 
 .theme {
     float:left;
@@ -613,9 +656,13 @@ UPDATE STYLES
     padding-left:50px;
 }
 
-#updates li { padding:5px 0; }
+#updates li {
+    padding:5px 0;
+}
 
-#updates .button { margin-right:15px; }
+#updates .button {
+    margin-right:15px;
+}
 
 
 
@@ -625,7 +672,9 @@ UPDATE STYLES
 PLUGIN STYLES
 ************/
 
-#enable-options { line-height:14px; }
+#enable-options {
+    line-height:14px;
+}
 
 
 
@@ -650,6 +699,109 @@ SETTINGS STYLES
 
 
 
+/**********
+LOGS STYLES
+**********/
+
+#logs pre {
+    padding: 10px;
+    margin: 10px 0 0 10px;
+    font-family: Courier New, Courier New, monospace;
+    color: #444;
+    background-color: #F5F5F5;
+    width: 90%;
+    height: 350px;
+    overflow: scroll;
+    border: 1px solid #DDD;
+}
 
 
 
+
+
+/*****************
+FILE UPLOAD STYLES
+*****************/
+
+#upload-select-file {
+    float: left;
+    margin-right: 15px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+#upload-select-file input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
+}
+
+#upload_status {
+    font-family: arial;
+    background-color: #F0F0F0;
+    border: 3px solid #E1E1E1;
+    margin: 10px 0 15px 115px;
+    padding: 10px;
+    width: 330px;
+    display: none;
+    font-size: 12px;
+}
+
+#upload_status .title {
+    margin: 0 0 10px;
+}
+
+#upload_status .progress {
+    width: 330px;
+    overflow: hidden;
+}
+
+#upload_status a {
+    float: left;
+    display: block;
+    text-indent: -9999px;
+    background: url('../images/cancel.png') no-repeat 0 0;
+    height: 16px;
+    width: 16px;
+}
+
+#upload_status .meter {
+    width: 250px;
+    height: 10px;
+    background-color: #E1E1E1;
+    float: left;
+    margin: 3px 15px 0 14px;
+}
+
+#upload_status .fill {
+    background-color: #023e7b;
+    width: 0%;
+    height: 10px;
+}
+
+.ie9 #upload_status {
+    width: 285px;
+}
+
+.ie9 #upload_status .fill {
+    width: 100% !important;
+    background-color: #E1E1E1;
+}
+
+.ie9 #upload_status .in-progress {
+    background: url('../images/animated-overlay.gif');
+    opacity: 0.3;
+}
+
+#upload_status .percentage {
+    width: 35px;
+    float: right;
+    line-height: 16px;
+}

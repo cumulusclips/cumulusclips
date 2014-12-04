@@ -1,40 +1,40 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
-
-// Establish page variables, objects, arrays, etc
-Plugin::Trigger ('admin.plugin_settings.start');
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
-$enabled_plugins = Plugin::GetEnabledPlugins();
-
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Validate plugin
-if (!empty ($_GET['plugin']) && Plugin::ValidPlugin ($_GET['plugin'], true)) {
-    $plugin = trim ($_GET['plugin']);
-} else {
+if (empty($_GET['plugin']) || !Plugin::isPluginValid($_GET['plugin'])) {
     App::Throw404();
 }
 
+$plugin = Plugin::getPlugin($_GET['plugin']);
+$page_title = $plugin->name . ' Settings';
+$admin_meta['plugin'] = $plugin->getSystemName();
+$admin_meta['pluginUrl'] = HOST . '/cc-content/plugins/' . $plugin->getSystemName();
 
 // Verify plugin is enabled and has 'Settings'
-if (array_search ($plugin, $enabled_plugins) !== false && method_exists ($plugin, 'Settings')) {
-    $plugin_info = Plugin::GetPluginInfo ($plugin);
-    $page_title = $plugin_info->name . ' Settings';
-} else {
+if (!Plugin::hasSettingsMethod($plugin)) {
     App::Throw404();
 }
 
+// Execute plugin's settings method
+ob_start();
+$plugin->settings();
+$body = ob_get_contents();
+ob_end_clean();
 
 // Output Page
-Plugin::Trigger ("admin.$plugin.before_render");
-include ('header.php');
-call_user_func (array ($plugin, 'Settings'));
-Plugin::Trigger ("admin.$plugin.settings");
-include ('footer.php');
+include('header.php');
 
 ?>
+
+<div id="plugin-settings"><?php echo $body; ?></div>
+
+<?php include('footer.php'); ?>

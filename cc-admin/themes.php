@@ -1,14 +1,15 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $message = null;
 $page_title = 'Themes';
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
@@ -26,17 +27,15 @@ if (!empty ($_GET['delete']) && !ctype_space ($_GET['delete']) && Functions::Val
         $message = $xml->name . ' theme has been deleted';
         $message_type = 'success';
         try {
-            Filesystem::Open();
-            Filesystem::Delete ($theme_path);
-            Filesystem::Close();
+            Filesystem::delete($theme_path);
         } catch (Exception $e) {
             $message = $e->getMessage();
-            $message_type = 'error';
+            $message_type = 'errors';
         }
 
     } else {
         $message = 'Active theme cannot be deleted. Activate another theme and then try again';
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -92,7 +91,7 @@ include ('header.php');
     <h1>Themes</h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 

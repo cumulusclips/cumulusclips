@@ -1,0 +1,446 @@
+
+/***********************
+GENERAL account STYLES
+***********************/
+
+#main > .right {
+    width:700px;
+    float: left;
+}
+
+#main > .left {
+    width:200px;
+    margin-right:30px;
+}
+
+#main > .left .large,
+#main > .right h1:first-child {
+    margin-top: -10px;
+}
+
+#menu p:first-child {
+    margin-top: 10px;
+}
+
+#menu p {
+    margin-top:15px;
+    padding:0;
+}
+
+#menu ul {
+    padding-bottom:5px;
+}
+
+#menu ul:last-child {
+    padding-bottom: 0;
+}
+
+#menu li {
+    margin-top:5px;
+}
+
+.member .delete {
+    z-index:99;
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:16px;
+    height:16px;
+    background: url(../images/cancel.png) no-repeat;
+}
+
+.member .delete span {
+    display:none;
+}
+
+.account .form p:first-child {
+    margin-top: 0;
+}
+
+.actions {
+    border-top: 1px solid #D2D2D2;
+    overflow: hidden;
+    padding-top: 3px;
+}
+
+.confirm {
+    color: #900;
+}
+
+
+
+
+
+/**************
+MY ACCOUNT HOME
+**************/
+
+#account p:first-child {
+    margin-top: -10px;
+}
+
+#account .left {
+    float: left;
+}
+
+#account .left > div {
+    margin-bottom: 10px;
+}
+
+#account .right {
+    float: left;
+    margin-left: 25px;
+}
+
+#account .right p {
+    margin: 10px 0;
+}
+
+#account .right p:first-child {
+    margin-top: 0;
+}
+
+#account .right p span {
+    display: inline-block;
+    width: 75px;
+    margin-right: 50px;
+    font-weight: bold;
+}
+
+
+
+
+
+/************
+UPLOAD - INFO
+************/
+
+.account_upload .wide,
+.account_edit_video .wide {
+    width: 470px;
+}
+
+.account_upload .wide input[type="text"],
+.account_edit_video .wide input[type="text"] {
+    width: 260px;
+}
+
+.account_upload select,
+.account_edit_video select {
+    width: 280px;
+}
+
+.account_upload textarea,
+.account_edit_video textarea {
+    width: 450px;
+    margin-bottom: 22px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+}
+
+input[type="checkbox"],
+input[type="checkbox"] + label,
+input[type="checkbox"] + label + em {
+    margin: 5px 0;
+    float: left;
+}
+
+input[type="checkbox"] + label + em {
+    margin-left: 3px;
+}
+
+input[type="checkbox"] + label + em + br {
+    clear: both;
+}
+
+#private_url {
+    margin: 5px 0 5px 20px;
+}
+
+#private_url a {
+    margin-left:15px;
+}
+
+.account_upload .form input[type="submit"],
+.account_edit_video .form input[type="submit"] {
+    margin-top: 15px;
+}
+
+
+
+
+
+/*************
+UPLOAD - VIDEO
+*************/
+
+.account_upload_video form[name="upload"] {
+    margin-top: 15px;
+}
+
+#upload-select-file {
+    float: left;
+    margin-right: 15px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+#upload-select-file input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
+}
+
+#upload_status {
+    font-family: arial;
+    background-color: #F0F0F0;
+    border: 3px solid #E1E1E1;
+    margin: 10px 0;
+    padding: 10px;
+    width: 330px;
+    display: none;
+    font-size: 12px;
+    clear: both;
+}
+
+#upload_status .title {
+    margin: 0 0 10px;
+}
+
+#upload_status .progress {
+    width: 330px;
+    overflow: hidden;
+}
+
+#upload_status a {
+    float: left;
+    display: block;
+    text-indent: -9999px;
+    background: url('../images/cancel.png') no-repeat 0 0;
+    height: 16px;
+    width: 16px;
+}
+
+#upload_status .meter {
+    width: 250px;
+    height: 10px;
+    background-color: #E1E1E1;
+    float: left;
+    margin: 3px 15px 0 14px;
+}
+
+#upload_status .fill {
+    background-color: #023e7b;
+    width: 0%;
+    height: 10px;
+}
+
+.ie9 #upload_status {
+    width: 285px;
+}
+
+.ie9 #upload_status .fill {
+    width: 100% !important;
+    background-color: #E1E1E1;
+}
+
+.ie9 #upload_status .in-progress {
+    background: url('../images/jquery-ui/animated-overlay.gif');
+    opacity: 0.3;
+}
+
+#upload_status .percentage {
+    width: 35px;
+    float: right;
+    line-height: 16px;
+}
+
+
+
+
+
+/********
+MY VIDEOS
+********/
+
+.video .actions p a:first-child {
+    float: left;
+}
+
+.account_myvideos #main > .right {
+    width: 605px;
+}
+
+.videos_list .right {
+    float: right;
+}
+
+
+
+
+
+/********
+PLAYLISTS
+********/
+
+.playlist .actions .right {
+    float: right;
+}
+
+.playlist-list + h2 {
+    margin-top: 20px;
+}
+
+#createNewPlaylist {
+    display: none;
+}
+
+.account_playlists .playlist-list {
+    margin-top: 15px;
+}
+
+.playlists_form {
+    width: auto;
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
+.playlists_form .field {
+    width: 250px;
+    float: left;
+    margin-right: 10px;
+}
+
+.playlists_form input[type="text"],
+.playlists_form select {
+    margin-bottom: 15px;
+}
+
+.playlists_form .button {
+    clear: both;
+    float: none;
+    margin-top: 18px;
+}
+
+
+
+
+
+/*************
+UPDATE PROFILE
+*************/
+
+.update_profile .form .large {
+    margin: 0;
+}
+
+.update_profile .form .large + p {
+    margin-bottom: 20px;
+}
+
+.update_profile .form + h1 {
+    margin-top: 15px;
+}
+
+#update_avatar {
+    width: 486px;
+    overflow: hidden;
+}
+
+#update_avatar .left {
+    float:left;
+    margin-right:30px;
+    font-weight:bold;
+    text-align:center;
+    line-height:18px;
+}
+
+#update_avatar .avatar {
+    margin:0 auto;
+    margin-bottom:5px;
+}
+
+#update_avatar .right {
+    float:left;
+    width: 356px;
+}
+
+#update_avatar .right p:first-child {
+    margin-top: 0;
+}
+
+#update_avatar form {
+    margin-top: 15px;
+}
+
+#upload-select-file + .button {
+    float: none;
+}
+
+
+
+/**************
+CHANGE PASSWORD
+**************/
+
+.change_password .form p {
+    margin-bottom: 15px;
+}
+
+
+
+
+
+/************
+SUBSCRIPTIONS
+************/
+
+.member_list > div {
+    margin-right: 25px;
+}
+
+
+
+
+
+/***************
+MESSAGES & INBOX
+***************/
+
+#inbox {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#inbox thead {
+    font-weight: bold;
+}
+
+#inbox td {
+    padding: 3px 0;
+    width: 70px;
+    border-bottom: 1px solid #CCC;
+    vertical-align: middle;
+}
+
+#inbox .subject {
+    width: 350px;
+}
+
+#message_body {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+#message_display p {
+    margin: 5px 0;
+}

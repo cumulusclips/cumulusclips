@@ -1,50 +1,72 @@
 <?php
 
-class View {
-    
+class View
+{
     // Object Properties
-    public static $options;
-    public static $vars;
-
-
-
-
+    public $options;
+    public $vars;
+    protected $_body;
+    protected static $_view;
+    protected $_route;
+    protected $_js;
+    protected $_css;
+    protected $_blocks;
+    
     /**
-     * Initialize view and set template & layout properties
-     * @global object $db Instance of database object
-     * @global object $config Site configuration settings
-     * @param string $page [optional] Page whose information to load
-     * @return void View is initialized
+     * Creates a new view 
      */
-    static function InitView ($page = null) {
+    public function __construct()
+    {
+        $this->vars = new stdClass();
+        $this->vars->db = Registry::get('db');
+        $this->vars->config = Registry::get('config');
 
-        if (!empty (self::$vars)) return true;
-        
-        global $db, $config;
-        self::$vars = new stdClass();
-        self::$vars->db = $db;
-        self::$vars->config = $config;
-
-        self::$options = new stdClass();
-        self::$options->layout = 'default';
-        self::$options->header = self::GetFallbackPath ('layouts/' . self::$options->layout . '.header.tpl');
-        self::$options->footer = self::GetFallbackPath ('layouts/' . self::$options->layout . '.footer.tpl');
-        self::$options->blocks = array();
-
-        // Load page's meta information into memory for use in templates
-        if ($page) {
-            self::$options->page = $page;
-            self::$vars->meta = Language::GetMeta ($page);
-            if (empty (self::$vars->meta->title)) self::$vars->meta->title = $config->sitename;
-        }
-
-        Plugin::Trigger ('view.init');
-
+        $this->options = new stdClass();
+        $this->options->disableView = false;
+        $this->options->disableLayout = false;
+        $this->options->theme = null;
+        $this->options->themeUrl = null;
+        $this->options->themePath = null;
+        $this->options->viewFile = null;
+        $this->options->layout = 'default';
+        $this->_blocks = array();
+        $this->_css = array();
+        $this->_js = array();
     }
+    
+    /**
+     * Loads theme, meta language, and prepares view to render a given route
+     * @param Route $route Route to be rendered
+     * @return View Provides fluid interface
+     */
+    public function load(Route $route)
+    {
+        $this->_route = $route;
+        
+        // Define theme configuration
+        $this->options->theme = $this->_currentTheme($this->_route->mobile);
+        $this->options->themeUrl = HOST . '/cc-content/themes/' . $this->options->theme;
+        $this->options->themePath = THEMES_DIR . '/' . $this->options->theme;
+        
+        // Set default theme settings
+        $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-default' : 'default';
+        $this->options->defaultThemeUrl = HOST . '/cc-content/themes/' . $this->options->defaultTheme;
+        $this->options->defaultThemePath = THEMES_DIR . '/' . $this->options->defaultTheme;
+        
+        // Load view helper
+        $viewHelper = $this->getFallbackPath('helper.php');
+        if ($viewHelper && file_exists($viewHelper)) include_once($viewHelper);
+        
+        // Retrieve page
+        $this->options->page = $this->_getPageFromRoute($this->_route);
 
-
-
-
+        // Retrieve meta data
+        $this->vars->meta = Language::getMeta($this->options->page);
+        if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
+        
+        return $this;
+    }
+    
     /**
      * Determine which theme to obtain requested file path from.
      * @param string $file Path of file to check relative to theme root
@@ -52,19 +74,17 @@ class View {
      * If file is not found in current theme, but rather default theme, it's path is returned.
      * Returns boolean false if file is not found in either theme.
      */
-    static function GetFallbackPath ($file) {
-        if (file_exists (self::$vars->config->theme_path . "/$file")) {
-            return self::$vars->config->theme_path . "/$file";
-        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
-            return self::$vars->config->theme_path_default . "/$file";
+    public function getFallbackPath($file)
+    {
+        if (file_exists($this->options->themePath . "/$file")) {
+            return $this->options->themePath . "/$file";
+        } else if (file_exists($this->options->defaultThemePath . "/$file")) {
+            return $this->options->defaultThemePath . "/$file";
         } else {
             return false;
         }
     }
-
-
-
-
+    
     /**
      * Determine which theme to obtain requested file URL from.
      * @param string $file Path of file to check relative to theme root
@@ -72,247 +92,243 @@ class View {
      * If file is not found in current theme, but rather default theme, it's URL is returned.
      * Returns boolean false if file is not found in either theme.
      */
-    static function GetFallbackUrl ($file) {
-        if (file_exists (self::$vars->config->theme_path . "/$file")) {
-            return self::$vars->config->theme_url . "/$file";
-        } else if (file_exists (self::$vars->config->theme_path_default . "/$file")) {
-            return self::$vars->config->theme_url_default . "/$file";
+    public function getFallbackUrl($file)
+    {
+        if (file_exists($this->options->themePath . "/$file")) {
+            return $this->options->themeUrl . "/$file";
+        } else if (file_exists($this->options->defaultThemeUrl . "/$file")) {
+            return $this->options->defaultThemeUrl . "/$file";
         } else {
             return false;
         }
     }
     
-
-
-
     /**
-     * Output the requested page to the browser
-     * @param string $view The view file to be output
-     * @return mixed Page is output to browser
+     * Retrieve or generate a page name from a route
+     * @param Route $route Route to get page name for
+     * @return string Returns Route's page name in route if it exists, generated based on path otherwise 
      */
-    static function Render ($view) {
-        self::$options->view = self::GetFallbackPath ($view);
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.render');
-        include (self::$options->view);
+    protected function _getPageFromRoute(Route $route)
+    {
+        $patterns = array(
+            '/cc\-core\/controllers\//i',
+            '/\//',
+            '/\.php$/i'
+        );
+        $replacements = array(
+            '',
+            '_',
+            ''
+        );
+        return (!empty($route->name)) ? $route->name : preg_replace($patterns, $replacements, $route->location);
     }
+    
+    /**
+     * Generate a theme file from a route's location path
+     * @param Route $route Route to extract location from
+     * @return string Theme file is returned
+     */ 
+    protected function _getViewFileFromRoute(Route $route)
+    {
+        $patterns = array(
+            '/cc\-core\/controllers\/(mobile\/)?/i',
+            '/\.php$/i'
+        );
+        $replacements = array(
+            '',
+            '.phtml'
+        );
+        return preg_replace($patterns, $replacements, $route->location);
+    }
+    
+    /**
+     * Output to the browser the view corresponding to the requested script
+     * @return mixed View is output to browser
+     */
+    public function render()
+    {
+        if (!$this->options->disableView) {
+            // Retrieve theme file
+            if (empty($this->options->viewFile)) {
+                $viewFileName = $this->_getViewFileFromRoute($this->_route);
+                $this->options->viewFile = $this->getFallbackPath($viewFileName);
+                if ($this->options->viewFile === false) throw new Exception('Missing theme file');
+            }
+            extract(get_object_vars($this->vars));
+            
+            // Catch output of body
+            ob_start();
+            include($this->options->viewFile);
+            $this->_body = ob_get_contents();
+            ob_end_clean();
 
-
-
-
+            // Output page
+            if ($this->options->disableLayout) {
+                echo $this->_body;
+            } else {
+                include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
+            }
+        }
+    }
+    
+    /**
+     * Retrieve the HTML for the body of a page
+     * @return string Returns the HTML for the body of a page
+     */
+    public function body()
+    {
+        return $this->_body;
+    }
+    
     /**
      * Switch the layout to be used
      * @param string $layout The new layout to switch to
      * @return void Layout is updated and new templates are used
      */
-    static function SetLayout ($layout) {
-        self::$options->layout = $layout;
-        $header = self::GetFallbackPath ("layouts/$layout.header.tpl");
-        $footer = self::GetFallbackPath ("layouts/$layout.footer.tpl");
-        if (file_exists ($header)) self::$options->header = $header;
-        if (file_exists ($header)) self::$options->footer = $footer;
-        Plugin::Trigger ('view.set_layout');
+    public function setLayout($layout)
+    {
+        $layoutPath = $this->getFallbackPath("layouts/$layout.phtml");
+        if (file_exists($layoutPath)) {
+            $this->options->layout = $layout;
+        } else {
+            throw new Exception('Unknown layout "' . $layout . '"');
+        }
     }
-
-
-
-
-    /**
-     * Output the layout header to the browser
-     * @return mixed Header is output to browser
-     */
-    static function Header() {
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.header');
-        include (self::$options->header);
-    }
-
-
-
-
-    /**
-     * Output the layout footer to the browser
-     * @return mixed Footer is output to browser
-     */
-    static function Footer() {
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.footer');
-        include (self::$options->footer);
-    }
-
-
-
-
+    
     /**
      * Output a custom block to the browser
-     * @param string $tpl_file Name of the block to be output
+     * @param string $viewFile Name of the block to be output
      * @return mixed Block is output to browser
      */
-    static function Block ($tpl_file) {
-
+    public function block($viewFile)
+    {
         // Detect correct block path
-        $request_block = self::GetFallbackPath ("blocks/$tpl_file");
-        $block = ($request_block) ? $request_block : $tpl_file;
+        $request_block = $this->getFallbackPath("blocks/$viewFile");
+        $block = ($request_block) ? $request_block : $viewFile;
 
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.block');
-        include ($block);
+        extract(get_object_vars($this->vars));
+        include($block);
     }
-
-
-
-
+    
     /**
      * Repeat output of a block based on list of records
-     * @param string $tpl_file Name of the block to be repeated
+     * @param string $viewFile Name of the block to be repeated
      * @param array $records List of records to loop through
      * @return mixed The given block is output according to the number entries in the list
      */
-    static function RepeatingBlock ($tpl_file, $records) {
-
+    public function repeatingBlock($viewFile, $records)
+    {
         // Detect correct block path
-        $request_block = self::GetFallbackPath ("blocks/$tpl_file");
-        $block = ($request_block) ? $request_block : $tpl_file;
+        $request_block = $this->getFallbackPath("blocks/$viewFile");
+        $block = ($request_block) ? $request_block : $viewFile;
         
-        extract (get_object_vars (self::$vars));
-        Plugin::Trigger ('view.repeating_block');
+        extract(get_object_vars($this->vars));
 
-        foreach ($records as $_id) {
-            Plugin::Trigger ('view.repeating_block_loop');
-            include ($block);
+        foreach ($records as $model) {
+            include($block);
         }
-
     }
-
-
-
-
+    
     /**
      * Add specified block to sidebar queue for later output
-     * @param string $tpl_file The block to be loaded into the sidebar queue
+     * @param string $viewFile The block to be loaded into the sidebar queue
      * @return void Block is queued for later output
      */
-    static function AddSidebarBlock ($tpl_file) {
-        self::$options->blocks[] = $tpl_file;
-        Plugin::Trigger ('view.add_sidebar_block');
+    public function addSidebarBlock($viewFile)
+    {
+        $this->_blocks[] = $viewFile;
     }
-
-
-
-
+    
     /**
      * Write queued sidebar blocks to the browser
      * @return mixed Sidebar blocks are output
      */
-    static function WriteSidebarBlocks() {
-        Plugin::Trigger ('view.write_sidebar_blocks');
-        foreach (self::$options->blocks as $_block) {
-            Plugin::Trigger ('view.write_sidebar_blocks_loop');
-            self::Block($_block);
+    public function writeSidebarBlocks()
+    {
+        foreach ($this->_blocks as $_block) {
+            $this->block($_block);
         }
     }
-
-
-
-
+    
     /**
      * Retrieve page name, language, and layout type as class names
      * for use in theme as CSS Hooks
      * @return string Returns string of page name and layout type
      */
-    static function CssHooks() {
-        return self::$options->page . ' ' . self::$options->layout . ' ' . Language::GetCSSName();
+    public function cssHooks()
+    {
+        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::GetCSSName();
     }
-
-
-
 
     /**
      * Add CSS file to the document
      * @param string $css_name Filename of the CSS file to be attached
      * @return void CSS file is stored to be written in document
      */
-    static function AddCss ($css_name) {
-
+    public function addCss($css_name)
+    {
         // Detect correct file path
-        $request_file = self::GetFallbackUrl ("css/$css_name");
+        $request_file = $this->getFallbackUrl("css/$css_name");
         $css_url = ($request_file) ? $request_file : $css_name;
 
-        self::$options->css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
-        Plugin::Trigger ('view.add_css');
+        $this->_css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
     }
-
-
-
 
     /**
      * Write the additional CSS tags to the browser
      * @return mixed CSS link tags are written
      */
-    static function WriteCss() {
-        Plugin::Trigger ('view.write_css');
-        if (isset (self::$options->css)) {
-            foreach (self::$options->css as $_value) {
-                Plugin::Trigger ('view.write_css_loop');
+    public function writeCss()
+    {
+        if (isset($this->_css)) {
+            foreach ($this->_css as $_value) {
                 echo $_value, "\n";
             }
         }
     }
-
-
-
 
     /**
      * Add JS file to the document
      * @param string $js_name Filename of the JS file to be attached
      * @return void JS file is stored to be written in document
      */
-    static function AddJs ($js_name) {
-
+    public function addJs($js_name)
+    {
         // Detect correct file path
-        $request_file = self::GetFallbackUrl ("js/$js_name");
+        $request_file = $this->getFallbackUrl("js/$js_name");
         $js_url = ($request_file) ? $request_file : $js_name;
 
-        self::$options->js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
-        Plugin::Trigger ('view.add_js');
+        $this->_js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
     }
-
-
-
 
     /**
      * Write the Additional JS tags to the browser
      * @return mixed JS src tags are written
      */
-    static function WriteJs() {
-
+    public function writeJs()
+    {
         // Add theme preview JS
-	if (PREVIEW_THEME) {
+        if (isset($_GET['preview_theme'])) {
             $js_theme_preview = '<script type="text/javascript">';
-            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . PREVIEW_THEME . "';";
+            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . $_GET['preview_theme'] . "';";
             $js_theme_preview .= '</script>';
-            self::$options->js[] = $js_theme_preview;
+            $this->_js[] = $js_theme_preview;
         }
 
         // Add language preview JS
-	if (PREVIEW_LANG) {
+        if (isset($_GET['preview_lang'])) {
             $js_lang_preview = '<script type="text/javascript">';
-            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
+            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . $_GET['preview_lang'] . "';";
             $js_lang_preview .= '</script>';
-            self::$options->js[] = $js_lang_preview;
+            $this->_js[] = $js_lang_preview;
         }
 
-        Plugin::Trigger ('view.write_js');
-        if (isset (self::$options->js)) {
-            foreach (self::$options->js as $_value) {
-                Plugin::Trigger ('view.write_js_loop');
+        if (isset($this->_js)) {
+            foreach ($this->_js as $_value) {
                 echo $_value, "\n";
             }
         }
     }
-
-
-
 
     /**
      * Add META tag to the document head
@@ -320,33 +336,80 @@ class View {
      * @param string $meta_content Content for the META tag
      * @return void META tag is stored to be written in document head
      */
-    static function AddMeta ($meta_name, $meta_content) {
-        self::$options->meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
-        Plugin::Trigger ('view.add_meta');
+    public function addMeta($meta_name, $meta_content)
+    {
+        $this->_meta[] = '<meta name="' . $meta_name . '" content="' . $meta_content . '" />';
     }
-
-
-
 
     /**
      * Write the Additional META tags to the browser
      * @return mixed Stored META tags are written to browser
      */
-    static function WriteMeta() {
+    public function writeMeta()
+    {
+        $this->addMeta('generator', 'CumulusClips');
+        if (!empty($this->_meta->keywords)) $this->addMeta('keywords', $this->_meta->keywords);
+        if (!empty($this->_meta->description)) $this->addMeta('description', $this->_meta->description);
         
-        Plugin::Trigger ('view.write_meta');
-        self::AddMeta ('generator', 'CumulusClips');
-        if (!empty (self::$vars->meta->keywords)) self::AddMeta ('keywords', self::$vars->meta->keywords);
-        if (!empty (self::$vars->meta->description)) self::AddMeta ('description', self::$vars->meta->description);
-        
-        if (isset (self::$options->meta)) {
-            foreach (self::$options->meta as $_value) {
-                Plugin::Trigger ('view.write_meta_loop');
+        if (isset($this->_meta)) {
+            foreach ($this->_meta as $_value) {
                 echo $_value, "\n";
             }
         }
     }
+    
+    /**
+     * Determine which theme should be used
+     * @param boolean $isMobile Whether or not the platform being loaded is mobile
+     * @return string Theme to be used
+     */
+    protected function _currentTheme($isMobile = false)
+    {
+        // Determine active theme
+        $active_theme = ($isMobile) ? Settings::get('active_mobile_theme') : Settings::get('active_theme');
 
+        // Check if 'Preview' theme was provided
+        $preview_theme = false;
+        if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
+            $active_theme = $_GET['preview_theme'];
+            $preview_theme = $_GET['preview_theme'];
+        }
+
+//        define ('PREVIEW_THEME', $preview_theme);
+        return $active_theme;
+    }
+    
+    /**
+     * Retrieve an instance of a view
+     * @return View Returns existing view or new one if none has been created
+     */
+    public static function getInstance()
+    {
+        if (!self::$_view instanceof View) {
+            self::$_view = new View();
+        }
+        return self::$_view;
+    }
+
+    /**
+     * Retrieve instance of service of a given domain
+     * @param string $service Name of domain service to instanciate
+     * @return ServiceAbstract Returns instance of given service class
+     */
+    public static function getService($service)
+    {
+        $class = $service . 'Service';
+        return new $class;
+    }
+
+    /**
+     * Retrieve instance of model mapper for a given domain
+     * @param string $mapper Name of domain model mapper to instanciate
+     * @return MapperAbstract Returns instance of given domain mapper class
+     */
+    public static function getMapper($mapper)
+    {
+        $class = $mapper . 'Mapper';
+        return new $class;
+    }
 }
-
-?>

@@ -30,7 +30,6 @@ class Pagination {
         $this->page_limit = 9;
         $this->page_count = ceil ($this->total/$this->records_per_page);
         $this->page = $this->GetPage();
-        Plugin::Trigger ('pagination.start');
     }
 
 
@@ -41,7 +40,6 @@ class Pagination {
      * @return mixed Returns the pagination block with links 
      */
     public function Paginate() {
-        Plugin::Trigger ('pagination.paginate');
         if ($this->total <= $this->records_per_page) return '';
         $links = $this->GetLinks();
         $previous = $this->GetPrevious();

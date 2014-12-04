@@ -1,0 +1,38 @@
+<h1><?=Language::getText('login_header')?></h1>
+
+<?php if ($message): ?>
+    <div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
+
+<div id="login_login_form" class="form">
+    <form action="<?=HOST?>/login/" method="post">
+
+        <label class="<?=$login_submit && !$username ? 'error':''?>"><?=Language::getText('username')?>:</label>
+        <input name="username" type="text" value="<?=($login_submit && $username) ? $username : ''?>" />
+
+        <label class="<?=($login_submit && !$password) ? 'error' : ''?>"><?=Language::getText('password')?>:</label>
+        <input type="password" name="password" value="" />
+
+        <input type="hidden" name="submitted_login" value="TRUE" />
+        <input class="button" type="submit" name="button" value="<?=Language::getText('login_button')?>" />
+
+    </form>
+    <p><a href="<?=HOST?>/register/"><?=Language::getText('no_account')?></a></p>
+    <p><a href="#" data-block="login_forgot_form" class="showhide"><?=Language::getText('forgot_your_login')?></a></p>
+</div>
+
+
+<div class="form" id="login_forgot_form" <?=($forgot_submit) ? 'style="display:block;"' : ''?>>
+
+    <form action="<?=HOST?>/login/" method="post">
+    <h2><?=Language::getText('forgot_header')?></h2>
+    <p><?=Language::getText('forgot_text')?></p>
+    
+    <label class="<?=($forgot_submit && $message_type == 'errors') ? 'error' : ''?>"><?=Language::getText('email')?>:</label>
+    <input type="text" id="email" name="email" />
+
+    <input type="hidden" name="submitted_forgot" value="TRUE" />
+    <input class="button" type="submit" name="button" value="<?=Language::getText('forgot_button')?>" />
+    </form>
+
+</div>

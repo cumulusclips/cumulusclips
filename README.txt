@@ -30,18 +30,19 @@ SERVER REQUIREMENTS
 CumulusClips requires:
 
 - Linux operating system
-- Apache web server version 2.0 (or greater) (http://httpd.apache.org/).
+- Apache web server version 2.0 (or greater) (http://httpd.apache.org/)
     - Apache mod_rewrite module
-- PHP 5.2 (or greater) (http://www.php.net/).
-- MySQL 5.0 (or greater) (http://www.mysql.com/).
+- PHP 5.2 (or greater) (http://www.php.net/)
+- MySQL 5.0 (or greater) (http://www.mysql.com/)
 
 For video encoding:
 
 - FFMPEG (http://ffmpeg.org/ - videolan mirror recommended).
-- x264 (http://www.videolan.org/).
-- faac (http://www.audiocoding.com/).
-- Theora (http://www.theora.org/).
-- Vorbis (http://www.vorbis.com/).
+- x264 (http://www.videolan.org/)
+- faac (http://www.audiocoding.com/)
+- WebM (http://www.webmproject.org/)
+- Theora (http://www.theora.org/)
+- Vorbis (http://www.vorbis.com/)
 
 
 
@@ -77,6 +78,9 @@ Make sure the following directories are writeable by PHP and the webserver:
 
 /cc-core/log
 /cc-content/uploads/temp
-/cc-content/uploads/flv
+/cc-content/uploads/h264
+/cc-content/uploads/webm
+/cc-content/uploads/theora
 /cc-content/uploads/mobile
 /cc-content/uploads/thumbs
+/cc-content/uploads/avatars

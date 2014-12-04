@@ -1,140 +1,247 @@
 <?php
 
-class Plugin {
-
-    private static $events = array();
-
+class Plugin
+{
+    /**
+     * @var array List of events hooks with plugins attached to them
+     */
+    private static $_events = array();
+    
+    /**
+     * @var array List of filter hooks with plugins attached to them 
+     */
+    private static $_filters = array();
+    
+    private static $_enabledPlugins = array();
+    private static $_installedPlugins = array();
+    
     /**
      * Add plugin method (code) to specified event in system
-     * @param string $event_name The event to attach plugin method to
-     * @param function $call_back_method Plugin code to execute when given event is reached
+     * @param string $eventName The event to attach plugin method to
+     * @param function $callbackMethod Plugin code to execute when given event is reached
      */
-    static function Attach ( $event_name , $call_back_method ) {
-
+    public static function attachEvent($eventName, $callbackMethod)
+    {
         // Create event list if non exist
-        if (empty (self::$events[$event_name])) {
-            self::$events[$event_name] = array();
+        if (empty(self::$_events[$eventName])) {
+            self::$_events[$eventName] = array();
         }
 
         // Add callback to event list
-        self::$events[$event_name][] = $call_back_method;
-
+        self::$_events[$eventName][] = $callbackMethod;
     }
-
-
-
 
     /**
-     * Execute methods (code) attached to specified event
-     * @param string $event_name Event for which attached events are fired
+     * Add plugin method (code) to specified filter hook in system
+     * @param string $filterName The filter hook to attach plugin method to
+     * @param function $callbackMethod Plugin code to execute when given filter hook is reached
      */
-    static function Trigger ( $event_name ) {
+    public static function attachFilter($filterName, $callbackMethod)
+    {
+        // Create filter list if non exist
+        if (empty(self::$_filters[$filterName])) {
+            self::$_filters[$filterName] = array();
+        }
 
+        // Add callback to filter list
+        self::$_filters[$filterName][] = $callbackMethod;
+    }
+    
+    /**
+     * Execute methods (code) attached to specified event
+     * @param string $eventName Event for which attached events are fired
+     */
+    public static function triggerEvent($eventName)
+    {
         // Call plugin methods if any are attached to event
-        if (isset (self::$events[$event_name])) {
-            foreach (self::$events[$event_name] as $call_back_method) {
-                call_user_func ($call_back_method);
+        if (!empty(self::$_events[$eventName])) {
+            foreach (self::$_events[$eventName] as $callbackMethod) {
+                $args = array_slice(func_get_args(), 1);
+                call_user_func_array($callbackMethod, $args);
             }
         }
-        
     }
 
-
-
+    /**
+     * Execute methods (code) attached to specified filter hook
+     * @param string $filterName Name of filter hook for which attached plugins are fired
+     * @param mixed $value Value being passed through filter
+     * @return mixed Filtered value is returned
+     * @throws Exception If attached plugin method returns null value
+     */
+    public static function triggerFilter($filterName, $value)
+    {
+        // Call plugin methods if any are attached to filter hook
+        if (!empty(self::$_filters[$filterName])) {
+            foreach (self::$_filters[$filterName] as $callbackMethod) {
+                $value = call_user_func($callbackMethod, $value);
+                if ($value === null) {
+                    throw new Exception('Return type for filter methods cannot be null');
+                }
+            }
+        }
+        return $value;
+    }
 
     /**
      * Instantiate all plugins and attach their methods to the listener
      */
-    static function Init() {
-
-        // Retrieve all active plugins
-        $active_plugins = self::GetEnabledPlugins();
-
-        // Load all active plugins
-        foreach ($active_plugins as $plugin) {
-
-            // Load plugin
-            include_once (DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php");
-
-            // Load plugin and attach it's code to various hooks
-            call_user_func (array ($plugin, 'Load'));
-            # $plugin::Load();  // Only works on PHP 5.3+
-
+    public static function init()
+    {
+        // Retrieve all enabled plugins
+        $installedPlugins = json_decode(Settings::get('installed_plugins'));
+        $enabledPlugins = json_decode(Settings::get('enabled_plugins'));
+        
+        // Load enabled plugins and attach their code to code to corresponding hooks
+        $pluginsWereDisabled = false;
+        foreach ($enabledPlugins as $key => $pluginName) {
+            if (self::isPluginValid($pluginName)) {
+                $plugin = self::getPlugin($pluginName);
+                $plugin->load();
+            } else {
+                $pluginsWereDisabled = true;
+                unset($enabledPlugins[$key]);
+            }
         }
-
+        reset($enabledPlugins);
+        self::$_installedPlugins = $installedPlugins;
+        self::$_enabledPlugins = $enabledPlugins;
+        
+        // Update enabled plugin list if any plugins were enabled but were not valid
+        if ($pluginsWereDisabled) {
+            Settings::set('enabled_plugins', json_encode($enabledPlugins));
+        }
     }
 
-
-
-
+    /**
+     * Check if plugin is valid
+     * @param string $pluginName Name of the plugin to validate
+     * @return boolean Returns true if the plugin is valid, false otherwise
+     */
+    public static function isPluginValid($pluginName)
+    {
+        // Check plugin file exists
+        $pluginFile = DOC_ROOT . "/cc-content/plugins/$pluginName/$pluginName.php";
+        if (!file_exists($pluginFile)) {
+            return false;
+        }
+        
+        // Load plugin
+        include_once($pluginFile);
+        if (!class_exists($pluginName, false)) return false;
+        $plugin = new $pluginName();
+        
+        // Verify plugin adheres to plugin API
+        if (!$plugin instanceof PluginAbstract) return false;
+        return true;
+    }
+    
+    /**
+     * Load and retrieve instance of given plugin
+     * @param string $pluginName Name of plugin to be retireved
+     * @return PluginAbstract Returns instance of given plugin 
+     */
+    public static function getPlugin($pluginName)
+    {
+        include_once(DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/' . $pluginName . '.php');
+        return new $pluginName();
+    }
+    
+    /**
+     * Checks if given plugin has a settings method
+     * @param PluginAbstract $plugin Plugin to be checked
+     * @return boolean Returns true if settings method exists, false otherwise 
+     */
+    public static function hasSettingsMethod(PluginAbstract $plugin)
+    {
+        $pluginReflection = new ReflectionClass($plugin);
+        $pluginReflectionMethod = $pluginReflection->getMethod('settings');
+        return ($pluginReflectionMethod->getDeclaringClass() == 'PluginAbstract') ? false : true;
+    }
+    
+    /**
+     * Retrieves a list of plugins which have been installed
+     * @return array Returns list of installed plugin names 
+     */
+    public static function getInstalledPlugins()
+    {
+        return json_decode(Settings::get('installed_plugins'));
+    }
+    
     /**
      * Retrieve a list of valid enabled plugins
      * @return array Returns a list of enabled plugins, any orphaned plugins are disabled
      */
-    static function GetEnabledPlugins() {
-
-        $enabled = Settings::Get ('enabled_plugins');
-        $enabled = unserialize ($enabled);
-
-        foreach ($enabled as $key => $plugin) {
-            $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
-            if (!file_exists ($plugin_file)) {
-                unset ($enabled[$key]);
-            }
-        }
-        
-        reset ($enabled);
-        Settings::Set ('enabled_plugins', serialize ($enabled));
-        return $enabled;
-
+    public static function getEnabledPlugins()
+    {
+        return self::$_enabledPlugins;
     }
-
-
-
-
+    
     /**
-     * Retrieve plugin information
-     * @param string $plugin Name of the plugin whose information to retrieve
-     * @return object Innstance of stdClass object is returned is developers
-     * information
+     * Checks if a given plugin is enabled
+     * @param string $pluginName Name of plugin to be checked
+     * @return boolean Returns true if plugin is enabled, false otherwise 
      */
-    static function GetPluginInfo ($plugin) {
-        return (object) call_user_func (array ($plugin, 'Info'));
+    public static function isPluginEnabled($pluginName)
+    {
+        return (in_array($pluginName, self::$_enabledPlugins)) ? true : false;
     }
-
-
-
-
+    
     /**
-     * Check if a give plugin a valid
-     * @param string $plugin Name of the plugin to validate
-     * @param boolean $load_plugin_file [optional] Whether to perform a deep
-     * validity check, if true the plugin is loaded into memory
-     * @return boolean Returns true if the plugin is valid, false otherwise
+     * Checks if given plugin is installed
+     * @param string $pluginName Name of plugin to be checked
+     * @return boolean Returns true if plugin is installed, false otherwise 
      */
-    static function ValidPlugin ($plugin, $load_plugin_file = true) {
-
-        // Check plugin file exists
-        $plugin_file = DOC_ROOT . "/cc-content/plugins/$plugin/$plugin.php";
-        if (!file_exists ($plugin_file)) return false;
-
-        // Perform deeper validity check
-        if ($load_plugin_file) {
-
-            // Load plugin and check it's info method outputs required data
-            include_once ($plugin_file);
-            if (method_exists ($plugin, 'Info')) {
-                $info = (object) call_user_func (array ($plugin, 'Info'));
-                return (!empty ($info->name)) ? true : false;
-            } else {
-                return false;
-            }
-
-        } else {
-            return true;
-        }
+    public static function isPluginInstalled($pluginName)
+    {
+        return (in_array($pluginName, self::$_installedPlugins)) ? true : false;
     }
-
+    
+    /**
+     * Installs and enables given plugin
+     * @param string $pluginName Name of plugin to be installed
+     */
+    public static function installPlugin($pluginName)
+    {
+        $plugin = self::getPlugin($pluginName);
+        $plugin->install();
+        self::$_installedPlugins[] = $pluginName;
+        Settings::set('installed_plugins', json_encode(self::$_installedPlugins));
+        self::enablePlugin($pluginName);
+    }
+    
+    /**
+     * Disables and uninstalls given plugin
+     * @param string $pluginName Name of plugin to be uninstalled
+     */
+    public static function uninstallPlugin($pluginName)
+    {
+        $plugin = self::getPlugin($pluginName);
+        $plugin->uninstall();
+        $key = array_search($pluginName, self::$_installedPlugins);
+        unset(self::$_installedPlugins[$key]);
+        Settings::set('installed_plugins', json_encode(self::$_installedPlugins));
+        self::disablePlugin($pluginName);
+    }
+    
+    /**
+     * Marks given plugin as enabled
+     * @param string $pluginName Name of plugin to be enabled
+     */
+    public static function enablePlugin($pluginName)
+    {
+        self::$_enabledPlugins[] = $pluginName;
+        Settings::set('enabled_plugins', json_encode(self::$_enabledPlugins));
+    }
+    
+    /*
+     * Marks given plugin as disabled
+     * @param string $pluginName Name of plugin to be disabled
+     */
+    public static function disablePlugin($pluginName)
+    {
+        $key = array_search($pluginName, self::$_enabledPlugins);
+        unset(self::$_enabledPlugins[$key]);
+        Settings::set('enabled_plugins', json_encode(self::$_enabledPlugins));
+    }
 }
-
-?>

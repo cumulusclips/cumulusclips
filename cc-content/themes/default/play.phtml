@@ -1,0 +1,326 @@
+<?php
+$this->addMeta('videoId', $video->videoId);
+$this->addMeta('theme', $this->options->themeUrl);
+$this->addMeta('loggedIn', (boolean) $loggedInUser);
+$this->addCss('video-js.css');
+$this->addCss('jscrollpane.css');
+$this->addJs('video.plugin.js');
+$this->addJs('jscrollpane.plugin.js');
+$this->addJs('mousewheel.plugin.js');
+$this->setLayout('full');
+?>
+
+<h1><?=$video->title?></h1>
+
+<div class="left">
+
+    <div class="message"></div>
+    <?php if ($video->gated && !$loggedInUser): ?>
+        <div id="player-gated">
+            <img width="600" height="337" src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" alt="" />
+            <div>
+                <p><?=Language::getText('gated_video')?></p>
+                <a href="<?=HOST?>/login/" class="button_small"><?=Language::getText('login')?></a>
+                <a href="<?=HOST?>/register/" class="button_small"><?=Language::getText('register')?></a>
+            </div>
+        </div>
+    
+    <?php else: ?>
+        <!-- BEGIN VIDEO -->
+        <div id="player">
+            <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": true, "preload": "auto" }' width="600" height="337" poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
+                <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
+                <?php if ($webmEncodingEnabled): ?>
+                    <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
+                <?php endif; ?>
+                <?php if ($theoraEncodingEnabled): ?>
+                    <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogg" type="video/ogg" />
+                <?php endif; ?>
+            </video>
+        </div>
+        <!-- END VIDEO -->
+    <?php endif; ?>
+
+
+
+    <!-- BEGIN ACTIONS -->
+    <div class="actions">
+        <div class="left">
+            <p class="large"><?=$video->views?></p>
+            <p>
+                <span class="like"><?=$rating->likes?></span>
+                <span class="dislike"><?=$rating->dislikes?></span>
+            </p>
+        </div>
+        <div class="right">
+            <a class="like rating" href="" data-rating="1" title="<?=Language::getText('like')?>"><?=Language::getText('like')?></a>
+            <a class="dislike rating" href="" data-rating="0" title="<?=Language::getText('dislike')?>"><?=Language::getText('dislike')?></a>
+        </div>
+    </div>
+    <!-- END ACTIONS -->
+
+
+    <!-- BEGIN Action Buttons -->
+    <div class="tabs">
+        <a href="" data-block="about" title="<?=Language::getText('about')?>"><?=Language::getText('about')?></a>
+        <a href="" data-block="share" title="<?=Language::getText('share')?>"><?=Language::getText('share')?></a>
+        <a href="" data-block="addToPlaylist" title="<?=Language::getText('add')?>"><?=Language::getText('add')?></a>
+        <a href="" class="flag" data-type="video" data-id="<?=$video->videoId?>" title="<?=Language::getText('flag')?>"><?=Language::getText('flag')?></a>
+    </div>
+    <!-- END Action Buttons -->
+
+
+    <div id="about" class="tab_block">
+        <?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
+        <img width="65" height="65" src="<?=($avatar) ? $avatar : $this->options->themeUrl . '/images/avatar.gif'?>" alt="<?=$member->username?>" />
+        <div>
+            <a href="" class="button_small subscribe" title="<?=Language::getText($subscribe_text)?>" data-type="<?=$subscribe_text?>" data-user="<?=$video->userId?>"><?=Language::getText($subscribe_text)?></a>
+            <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$member->username?>/" title="<?=$member->username?>"><?=$member->username?></a></p>
+            <p><strong><?=Language::getText('date_uploaded')?>:</strong> <?=date('m/d/Y', strtotime($video->dateCreated))?></p>
+            <p><strong><?=Language::getText('tags')?>:</strong>
+                <?php foreach ($video->tags as $value): ?>
+                    <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
+                <?php endforeach; ?>
+            </p>
+        </div>
+        <p><?=$video->description?></p>
+    </div>
+
+
+    <div id="share" class="tab_block">
+        <div>
+            <p class="big"><?=Language::getText('share')?></p>
+            
+            <!--
+            Share Widget Notes
+             - Please replace <your_app_id> in the FaceBook share URL with your actual app id obtained from FaceBook's website. This widget will not work until that happens.
+             - FaceBook, and Google + widgets require the video's URL to be publicly accessible, otherwise the widgets will not work.
+            -->
+            
+            <!-- FACEBOOK BUTTON -->
+            <meta property="og:url" content="<?=$this->getService('Video')->getUrl($video)?>/" /> 
+            <meta property="og:title" content="<?=$video->title?>" />
+            <meta property="og:description" content="<?=$video->description?>" /> 
+            <meta property="og:image" content="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" /> 
+            <meta property="og:type" content="video" /> 
+            <meta property="og:video" content="<?=$config->h264Url?>/<?=$video->filename?>.mp4"> 
+            <meta property="og:video:type" content="video/mp4"> 
+            <meta property="og:video:width" content="640"> 
+            <meta property="og:video:height" content="360"> 
+            <script>if (window.location.hash === '#facebook-share') {window.close();}</script>      
+            <a class="facebook" href="https://www.facebook.com/dialog/share?app_id=<your_app_id>&display=popup&href=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&redirect_uri=<?=urlencode($this->getService('Video')->getUrl($video) . '/#facebook-share')?>" onClick="window.open(this.href, 'sharewindow','width=550,height=300');return false;">Share on Facebook</a>
+            
+            <!-- TWITTER BUTTON -->
+            <a class="twitter" href="" onClick="window.open('https://twitter.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&text=<?=urlencode(Functions::cutOff($video->description, 140))?>','sharewindow','width=650,height=400');return false;">Share on Twitter</a>
+
+            <!-- Google +BUTTON -->
+            <a class="google" href="https://plus.google.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>" onClick="javascript:window.open(this.href, 'sharewindow', 'height=600,width=600');return false;">Share</a>
+        </div>
+        
+        <?php if ($video->disableEmbed == '0' && $video->gated == '0' && $video->private == '0'): ?>
+            <!-- EMBED CODE -->
+            <div>
+                <p class="big"><?=Language::getText('embed')?></p>
+                <p><?=Language::getText('embed_text')?></p>
+                <textarea class="text" rows="5" cols="58">&lt;iframe src="<?=HOST?>/embed/<?=$video->videoId?>/" width="480" height="360" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+            </div>
+        <?php endif; ?>
+    </div>
+
+   
+    <div id="addToPlaylist" class="tab_block" >
+        <?php if ($loggedInUser): ?>
+            <div>
+                <p class="big"><?=Language::getText('add_to')?></p>
+                    <div>
+                        <ul>
+                            <?php $playlistService = $this->getService('Playlist'); ?>
+                            <li><a data-playlist_id="<?=$favoritesList->playlistId?>" class="<?=($playlistService->checkListing($video, $favoritesList)) ? 'added' : ''?>" href=""><?=Language::getText('favorites')?></a></li>
+                            <li><a data-playlist_id="<?=$watchLaterList->playlistId?>" class="<?=($playlistService->checkListing($video, $watchLaterList)) ? 'added' : ''?>" href=""><?=Language::getText('watch_later')?></a></li>
+                            <?php if (count($userPlaylists) > 0): ?>
+                                <li><strong><?=Language::getText('playlists')?></strong></li>
+                                <?php foreach ($userPlaylists as $userPlaylist): ?>
+                                    <li><a data-playlist_id="<?=$userPlaylist->playlistId?>" class="<?=($playlistService->checkListing($video, $userPlaylist)) ? 'added' : ''?>" href=""><?=$userPlaylist->name?> (<?=count($userPlaylist->entries)?>)</a></li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+            </div>
+            <div>
+                <p class="big"><?=Language::getText('create_new_playlist')?></p>
+                <div class="form">
+                    <form>
+                        <label><?=Language::getText('playlist_name')?></label>
+                        <input type="text" name="playlist_name" />
+                        <label><?=Language::getText('visibility')?></label>
+                        <select name="playlist_visibility">
+                            <option value="public"><?=Language::getText('public')?></option>
+                            <option value="private"><?=Language::getText('private')?></option>
+                        </select>
+                        <input type="hidden" name="action" value="create" />
+                        <input type="hidden" name="video_id" value="<?=$video->videoId?>" />
+                        <input class="button" type="submit" value="<?=Language::getText('create_playlist_button')?>" />
+                    </form>
+                </div>
+            </div>
+        <?php else: ?>
+            <p class="big"><?=Language::getText('add_to')?></p>
+            <p><?=Language::getText('playlist_login', array('host' => HOST))?></p>
+        <?php endif; ?>
+    </div>
+
+
+    <!-- BEGIN COMMENTS SECTION -->
+    <div id="comments">
+        
+        <p class="large"><?=Language::getText('comments_header')?></p>
+        
+        <?php if ($video->commentsClosed): ?>
+            <p class="commentMessage"><?=Language::getText('comments_closed')?></p>
+        <?php else: ?>
+            <p class="totals"><span><?=$commentCount?></span> <?=Language::getText('comments_total')?></p>
+
+            <?php if ($loggedInUser): ?>
+                <!-- BEGIN COMMENTS FORM -->
+                <div class="form collapsed commentForm">
+                    <form action="" method="post">
+                        <label><?=Language::getText('comments')?></label>
+                        <textarea class="text" rows="4" cols="50" name="comments" title="<?=Language::getText('comments')?>"><?=Language::getText('comments')?></textarea>
+
+                        <a class="cancel" href=""><?=Language::getText('cancel')?></a>
+                        <input type="hidden" name="videoId" value="<?=$video->videoId?>" />
+                        <input type="hidden" name="parentCommentId" value="" />
+                        <input class="button" type="submit" name="button" value="<?=Language::getText('comments_button')?>" />
+                    </form>
+                </div>
+                <!-- END COMMENTS FORM -->
+            <?php else: ?>
+                <p class="commentMessage"><?=Language::getText('comments_login', array('login_link' => HOST . '/login/', 'register_link' => HOST . '/register/'))?></p>
+            <?php endif; ?>
+
+
+            <!-- BEGIN COMMENTS LIST -->
+            <div class="commentList">
+                <?php if ($commentCount > 0): ?>
+
+                    <?php foreach ($commentCardList as $commentCard): ?>
+
+                        <?php $commentIndentClass = getCommentIndentClass($commentCard->comment); ?>
+
+                        <div class="comment <?=$commentIndentClass?>" data-comment="<?=$commentCard->comment->commentId?>">
+                            <img width="60" height="60" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
+                            <div>
+                                <p>
+                                    <span class="commentAuthor"><a href="<?=getUserProfileLink($commentCard->author)?>"><?=$commentCard->author->username?></a></span>
+                                    <span class="commentDate"><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></span>
+                                    <?php if ($commentCard->comment->parentId != 0): ?>
+                                        <span class="commentReply"><?=Language::getText('reply_to')?> <a href="<?=getUserProfileLink($commentCard->parentAuthor)?>"><?=$commentCard->parentAuthor->username?></a></span>
+                                    <?php endif; ?>
+                                    <span class="commentAction">
+                                        <a class="reply" href=""><?=Language::getText('reply')?></a>
+                                        <a class="flag" data-type="comment" data-id="<?=$commentCard->comment->commentId?>" href=""><?=Language::getText('report_abuse')?></a>
+                                    </span>
+                                </p>
+                                <p><?=nl2br($commentCard->comment->comments)?></p>
+                            </div>
+                        </div>
+
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p><?=Language::getText('no_comments')?></p>
+                <?php endif; ?>
+            </div>
+            <!-- END COMMENTS LIST -->
+
+            <?php if ($commentCount > 5): ?>
+                <div class="loadMoreComments">
+                    <a href="" class="button" data-loading_text="<?=Language::getText('loading')?>"><?=Language::getText('load_more')?></a>
+                </div>
+            <?php endif; ?>
+            
+        <?php endif; ?>
+        
+    </div>
+    <!-- END COMMENTS SECTION -->
+
+</div>
+<!-- END PLAY LEFT -->
+
+
+
+
+
+<!-- BEGIN PLAY RIGHT -->
+<div class="right">
+         
+    <?php if ($playlist): ?>
+        <div id="playlistVideos">
+            <header>
+                <p class="big"><?=$this->getService('Playlist')->getPlaylistName($playlist)?></p>
+                <?php $playlistAuthor = $this->getMapper('User')->getUserById($playlist->userId); ?>
+                <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$playlistAuthor->username?>/"><?=$playlistAuthor->username?></a></p>
+            </header>
+            
+            <div class="videos_list">
+            <?php $videoService = $this->getService('Video'); ?>
+            <?php foreach ($playlistVideos as $playlistVideo): ?>
+                
+                <div class="video video_small <?=($playlistVideo->videoId == $video->videoId) ? 'active' : ''?>">
+                    <div class="thumbnail">
+                        <a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>">
+                            <img width="100" height="56" src="<?=$config->thumbUrl?>/<?=$playlistVideo->filename?>.jpg" />
+                        </a>
+                        <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                        <span class="watchLater"><a data-video="<?=$playlistVideo->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::getText('watch_later')?>"><?=Language::getText('watch_later')?></a></span>
+                        <span class="duration"><?=$playlistVideo->duration?></span>
+                    </div>
+                    <div>
+                        <p><a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>"><?=$playlistVideo->title?></a></p>
+                        <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$playlistVideo->username?>/" title="<?=$playlistVideo->username?>"><?=$playlistVideo->username?></a></p>
+                        <p><strong><?=Language::getText('views')?>:</strong> <?=$playlistVideo->views?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    
+    <?php $this->Block ('ad300.phtml'); ?>
+
+    
+    <!-- BEGIN RELATED VIDEOS -->
+    <div class="related_videos">
+        <p class="large"><?=Language::getText('suggestions_header')?></p>
+        <?php if (count($relatedVideos) > 0): ?>
+
+            <div class="video_list">
+            <?php $videoService = $this->getService('Video'); ?>
+            <?php foreach ($relatedVideos as $relatedVideo): ?>
+                <div class="video video_medium">
+                    <div class="thumbnail">
+                        <a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>">
+                            <img width="125" height="70" src="<?=$config->thumbUrl?>/<?=$relatedVideo->filename?>.jpg" />
+                        </a>
+                        <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                        <span class="watchLater"><a data-video="<?=$relatedVideo->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::getText('watch_later')?>"><?=Language::getText('watch_later')?></a></span>
+                        <span class="duration"><?=$relatedVideo->duration?></span>
+                    </div>
+                    <div>
+                        <p><a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>"><?=$relatedVideo->title?></a></p>
+                        <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$relatedVideo->username?>/" title="<?=$relatedVideo->username?>"><?=$relatedVideo->username?></a></p>
+                        <p><strong><?=Language::getText('views')?>:</strong> <?=$relatedVideo->views?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+
+        <?php else: ?>
+                <strong><?=Language::getText('no_suggestions')?></strong>
+        <?php endif; ?>
+    </div>
+    <!-- END RELATED VIDEOS -->
+
+
+</div>
+<!-- END PLAY RIGHT -->
+<br clear="all" />

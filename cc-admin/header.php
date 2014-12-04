@@ -28,6 +28,7 @@
             <h3 class="dashboard"><span>Dashboard</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/">Dashboard</a></p>
+                <p><a href="<?=ADMIN?>/logs.php">System Logs</a></p>
                 <p><a href="<?=ADMIN?>/updates.php">Updates</a></p>
             </div>
         </div>
@@ -36,7 +37,6 @@
             <h3 class="videos"><span>Videos</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/videos.php">Browse Videos</a></p>
-                <p><a href="<?=ADMIN?>/videos.php?status=pending">Pending Videos</a></p>
                 <p><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></p>
                 <p><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></p>
             </div>
@@ -64,7 +64,7 @@
             <h3 class="flags"><span>Flags</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/flags.php?status=video">Flagged Videos</a></p>
-                <p><a href="<?=ADMIN?>/flags.php?status=member">Flagged Members</a></p>
+                <p><a href="<?=ADMIN?>/flags.php?status=user">Flagged Members</a></p>
                 <p><a href="<?=ADMIN?>/flags.php?status=comment">Flagged Comments</a></p>
             </div>
         </div>
@@ -81,6 +81,7 @@
             <h3 class="appearance"><span>Appearance</span></h3>
             <div>
                 <p><a href="<?=ADMIN?>/themes.php">Themes</a></p>
+                <p><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></p>
                 <p><a href="<?=ADMIN?>/languages.php">Languages</a></p>
             </div>
         </div>

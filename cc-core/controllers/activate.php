@@ -1,47 +1,35 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
+Plugin::triggerEvent('activate.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('activate');
-Plugin::Trigger ('activate.start');
-View::$vars->logged_in = User::LoginCheck();
-Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
-View::$vars->message = null;
+Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
+$this->view->vars->message = null;
 
-
-
-### Verify token was provided
-if (isset ($_GET['token'])) {
-	
+// Verify token was provided
+if (!empty($_GET['token'])) {
     $token = $_GET['token'];
-    $id = User::Exist (array ('confirm_code' => $token, 'status' => 'new'));
-    if ($id) {
-        $user = new User ($id);
-        $user->Approve ('activate');
-        if (Settings::Get('auto_approve_users') == 1) {
-            View::$vars->message = Language::GetText ('activate_success', array ('host' => HOST));
-            $_SESSION['user_id'] = $user->user_id;
+    $userMapper = new UserMapper();
+    $user = $userMapper->getUserByCustom(array('confirm_code' => $token, 'status' => 'new'));
+    if ($user) {
+        $userService->approve($user, 'activate');
+        if (Settings::get('auto_approve_users') == '1') {
+            $this->view->vars->message = Language::getText('activate_success', array('host' => HOST));
+            $_SESSION['loggedInUserId'] = $user->userId;
         } else {
-            View::$vars->message = Language::GetText ('activate_approve');
+            $this->view->vars->message = Language::getText('activate_approve');
         }
-        View::$vars->message_type = 'success';
-        Plugin::Trigger ('activate.activate');
+        $this->view->vars->messageType = 'success';
     } else {
-        View::$vars->message = Language::GetText ('activate_error', array ('host' => HOST));
-        View::$vars->message_type = 'error';
+        $this->view->vars->message = Language::getText('activate_error', array('host' => HOST));
+        $this->view->vars->messageType = 'errors';
     }
-	
 } else {
-    App::Throw404();
+    App::throw404();
 }
 
-
-// Output Page
-Plugin::Trigger ('activate.before_render');
-View::Render ('activate.tpl');
-
-?>
+Plugin::triggerEvent('activate.end');

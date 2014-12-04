@@ -15,7 +15,7 @@
         <login>Login</login>
         <register>Sign Up Free</register>
         <logout>Logout</logout>
-        <myaccount>My Account</myaccount>
+        <account>My Account</account>
         <view_my_profile>View My Profile</view_my_profile>
         <admin_panel>Admin Panel</admin_panel>
         <videos>Videos</videos>
@@ -26,7 +26,7 @@
         <yes>Yes</yes>
         <no>No</no>
         <quick_links>Quick Links</quick_links>
-        <uploadify_supported_formats>Supported Formats</uploadify_supported_formats>
+        <upload_supported_formats>Supported Formats</upload_supported_formats>
         <video_feed>Video Feed</video_feed>
 
         <!-- Mobile -->
@@ -34,7 +34,7 @@
         <home>Home</home>
         <back>Back</back>
         <duration>Duration</duration>
-        <load_more>Load 20 More</load_more>
+        <load_more>Load More</load_more>
         <loading>Loading</loading>
         <featured>Featured</featured>
         <search>Search</search>
@@ -63,11 +63,11 @@
         <!-- Register Page -->
         <register_header>Register with Us</register_header>
         <register_text><![CDATA[
-            <p><strong>Join {SITENAME} Today!</strong><br /><br />
+            <p><strong>Join {SITENAME} Today!</strong><br><br>
             As a member you'll be able to upload videos, post comments, rate and share videos, subscribe to members, and much more!</p>
         ]]></register_text>
         <asterisk>An asterisk (*) denotes required field.</asterisk>
-        <username_req>Username can only contain alphanumeric (A-Z, 0-9) characters, no spaces or special characters.</username_req>
+        <username_req>Username can only contain letters and numbers, no spaces or special characters.</username_req>
         <confirm_password>Confirm Password</confirm_password>
         <register_button>Create Account</register_button>
         <checking_availability>Checking availability</checking_availability>
@@ -85,7 +85,7 @@
         <!-- Browse Videos Page -->
         <videos_header>Browse Videos</videos_header>
         <viewing>Viewing</viewing>
-        <grouping>Grouping</grouping>
+        <sorting>Sorting</sorting>
         <most_recent>Most Recent</most_recent>
         <most_viewed>Most Viewed</most_viewed>
         <most_discussed>Most Discussed</most_discussed>
@@ -110,11 +110,9 @@
         <website>Website</website>
         <recent_videos>Recent Videos</recent_videos>
         <view_all_videos>View all Videos</view_all_videos>
-        <recent_posts_header>Recent Updates</recent_posts_header>
-        <update_status>Update your Status</update_status>
-        <post_update_button>Post Update</post_update_button>
-        <no_updates>No recent status updates.</no_updates>
         <no_member_videos>Member currently has no videos.</no_member_videos>
+        <no_member_playlists>Member currently has no playlists.</no_member_playlists>
+        <watch_all>Watch All</watch_all>
 
         <!-- Member Videos Page -->
         <videos_by>Videos By</videos_by>
@@ -127,7 +125,18 @@
         <share>Share</share>
         <embed>Embed</embed>
         <embed_text>Copy and paste this code into your website or blog.</embed_text>
+        <add>Add</add>
+        <add_to>Add To</add_to>
         <favorite>Favorite</favorite>
+        <favorites>Favorites</favorites>
+        <watch_later>Watch Later</watch_later>
+        <playlists>Playlists</playlists>
+        <playlist_login><![CDATA[You must <a href="{HOST}/login/">login</a> to add videos to your playlists.]]></playlist_login>
+        <create_new_playlist>Create New Playlist</create_new_playlist>
+        <playlist_name>Playlist Name</playlist_name>
+        <visibility>Visibility</visibility>
+        <public>Public</public>
+        <create_playlist_button>Create Playlist</create_playlist_button>
         <flag>Flag</flag>
         <date_uploaded>Date Uploaded</date_uploaded>
         <comments_header>Video Comments</comments_header>
@@ -138,7 +147,12 @@
         <comments_post_header>Post a Comment</comments_post_header>
         <optional>Optional</optional>
         <comments>Comments</comments>
-        <comments_button>Comment</comments_button>
+        <reply_to>Reply to</reply_to>
+        <comments_closed>Comments are closed for this video.</comments_closed>
+        <comments_login><![CDATA[
+            <a href="{LOGIN_LINK}">Sign In</a> or <a href="{REGISTER_LINK}">Register</a> to post comments.
+        ]]></comments_login>
+        <comments_button>Post Comment</comments_button>
         <suggestions_header>Suggestions</suggestions_header>
         <no_suggestions>No suggestions could be made.</no_suggestions>
         <views>Views</views>
@@ -170,7 +184,7 @@
         <!-- Activate Account Page -->
         <activate_header>Activate your Account</activate_header>
         <activate_success><![CDATA[
-        Thank you! Your account is now active. <a href="{HOST}/myaccount/">Go to My Account</a>
+        Thank you! Your account is now active. <a href="{HOST}/account/">Go to My Account</a>
         ]]></activate_success>
         <activate_approve>Thank you! Your account is now active, however it still needs to be approved by a member of our team before you can login. We will notify you once this is complete.</activate_approve>
         <activate_error><![CDATA[
@@ -189,7 +203,7 @@
         <system_error_text>We are unable to continue due to a system error. We apologize for any inconvenience.</system_error_text>
 
         <!-- My Account / Home Page -->
-        <myaccount_header>Welcome</myaccount_header>
+        <account_header>Welcome</account_header>
         <last_login>Last Login</last_login>
         <edit_avatar>Edit Avatar</edit_avatar>
         <new_messages>You have new unread messages!</new_messages>
@@ -197,7 +211,7 @@
         <manage_media>Manage Media</manage_media>
         <upload_video>Upload a Video</upload_video>
         <my_videos>My Videos</my_videos>
-        <my_favorite_videos>My Favorite Videos</my_favorite_videos>
+        <my_playlists>My Playlists</my_playlists>
         <account_settings>Account Settings</account_settings>
         <update_profile>Update Member Profile</update_profile>
         <privacy_settings>Privacy Settings</privacy_settings>
@@ -213,15 +227,28 @@
         <back_to_videos>Back to videos</back_to_videos>
 
         <!-- My Account / My Videos Page -->
-        <myvideos_header>My Videos</myvideos_header>
+        <my_videos_header>My Videos</my_videos_header>
         <no_user_videos>You haven't uploaded any videos yet.</no_user_videos>
         <edit_video>Edit Video</edit_video>
         <delete_video>Delete Video</delete_video>
+        <pending_conversion>Pending Conversion</pending_conversion>
+        <processing>Processing</processing>
+        <pending_approval>Pending Approval</pending_approval>
+        
+        <!-- My Account / Playlists Page -->
+        <playlists_header>My Playlists</playlists_header>
+        <delete_playlist>Delete Playlist</delete_playlist>
+        <edit_playlist>Edit Playlist</edit_playlist>
+        <no_playlists>You haven't created any playlists yet.</no_playlists>
 
-        <!-- My Account / My Favorite Videos Page -->
-        <myfavorites_header>My Favorite Videos</myfavorites_header>
-        <no_favorites>You haven't added any videos to your favorites yet.</no_favorites>
-        <remove_favorite>Remove from Favorites</remove_favorite>
+        <!-- My Account / Playlist Edit Page -->
+        <playlists_edit_header>Edit Playlist</playlists_edit_header>
+        <back_to_playlists>Back to playlists</back_to_playlists>
+        <update_playlist_header>Update Playlist Details</update_playlist_header>
+        <update_playlist_button>Update Playlist</update_playlist_button>
+        <playlist_videos>Playlist Videos</playlist_videos>
+        <no_videos_playlist>Playlist doesn't contain any videos yet.</no_videos_playlist>
+        <remove_playlist_video>Remove from playlist</remove_playlist_video>
 
         <!-- My Account / Edit Profile Page -->
         <profile_header>Update Profile</profile_header>
@@ -246,6 +273,8 @@
         <alert_comment>E-mail me when one of my videos receives a comment</alert_comment>
         <alert_video>Inform me of new videos by members subscribed to</alert_video>
         <alert_message>E-mail me when I receive a message</alert_message>
+        <alert_video_ready>Notify me when my uploaded video is done processing and is available</alert_video_ready>
+        <alert_comment_reply>Notify me when someone replies to one of my comments</alert_comment_reply>
         <privacy_settings_button>Update Privacy</privacy_settings_button>
 
         <!-- My Account / Change Password Page -->
@@ -299,15 +328,18 @@
         <gated>Gated</gated>
         <gated_description>Video can only be viewed by members who are logged in</gated_description>
         <private>Private</private>
-        <private_description>Video can only be viewed by you or anyone with the private URL below</private_description>
+        <private_description>Video can only be viewed by you or anyone with the private URL</private_description>
         <private_url>Private URL</private_url>
         <regenerate>Regenerate</regenerate>
+        <closeComments>Close Comments</closeComments>
+        <closeCommentsDescription>Allow comments to be posted to video</closeCommentsDescription>
         <submit_button>Submit</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->
         <upload_video_header>Upload Step 2 - Upload Video</upload_video_header>
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
+        <cancel>Cancel</cancel>
         <upload_video_button>Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
@@ -323,7 +355,8 @@
         <error_invalid_login>Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
         <error_no_users_email>No users were found with that email! Please try again.</error_no_users_email>
         
-        <confirm_remove_favorite>Video will be removed from your favorites. Do you want to proceed?</confirm_remove_favorite>
+        <confirm_delete_playlist>Playlist will be deleted. Do you want to proceed?</confirm_delete_playlist>
+        <confirm_remove_playlist_video>Video will be removed from your playlist. Do you want to proceed?</confirm_remove_playlist_video>
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
 
@@ -346,15 +379,16 @@
         <error_tags>Invalid tags</error_tags>
         <error_category>Invalid category</error_category>
         <error_name>Invalid name</error_name>
+        <error_comment_login>You must login to post comments.</error_comment_login>
         <error_comment>Invalid comment</error_comment>
         <error_private_url>Invalid private url</error_private_url>
         <error_status_update>Invalid status update</error_status_update>
         <error_flag_login>You must login to report inappropriate content.</error_flag_login>
         <error_flag_own>You can't flag your own content.</error_flag_own>
         <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
-        <error_favorite_login>You must login to add videos to your favorites.</error_favorite_login>
         <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
-        <error_favorite_duplicate>This video is already in your favorites.</error_favorite_duplicate>
+        <error_playlist_duplicate>Video is already in this playlist.</error_playlist_duplicate>
+        <error_playlist_name>Invalid playlist name</error_playlist_name>
         <error_subscribe_login>You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>You can't subscribe to yourself.</error_subscribe_own>
         <error_subscribe_duplicate>You have already subscribed to this member.</error_subscribe_duplicate>
@@ -364,14 +398,14 @@
         <error_rate_duplicate>You have already rated this video.</error_rate_duplicate>
         
 
-        <error_uploadify_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_uploadify_filesize>
-        <error_uploadify_system><![CDATA[
+        <error_upload_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_upload_filesize>
+        <error_upload_system><![CDATA[
             Errors were encountered during the processing of your file, and it cannot be uploaded at this time.
             We apologize for this inconvenience. Our support team has been notified and will investigate into the cause and fix for this issue.
             If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.
-        ]]></error_uploadify_system>
-        <error_uploadify_extension>Your file is not in one of the accepted file formats. Please try again.</error_uploadify_extension>
-        <error_uploadify_empty>No file was uploaded. Please try again.</error_uploadify_empty>
+        ]]></error_upload_system>
+        <error_upload_extension>Your file is not in one of the accepted file formats. Please try again.</error_upload_extension>
+        <error_upload_empty>No file was uploaded. Please try again.</error_upload_empty>
 
 
         <success_avatar_reset>Your avatar has been reset.</success_avatar_reset>
@@ -379,7 +413,6 @@
         <success_rated>Rating has been submitted.</success_rated>
         <success_unsubscribed>You have been unsubscribed from {USERNAME}.</success_unsubscribed>
         <success_subscribed>You are now subscribed to {USERNAME}.</success_subscribed>
-        <success_favorite_added>Video has been added to your favorites.</success_favorite_added>
         <success_flag>Thank you for reporting this. We will look into this immediately.</success_flag>
         <success_status_updated>Your status update has been posted.</success_status_updated>
         <success_comment_posted>Your comment has been posted.</success_comment_posted>
@@ -389,7 +422,12 @@
         <success_login_sent>We have sent you your login information. Please check your email.</success_login_sent>
         <success_video_updated>Video has been updated.</success_video_updated>
         <success_video_deleted>Video has been deleted.</success_video_deleted>
-        <success_favorite_removed>Video has been removed from your favorites.</success_favorite_removed>
+        <success_playlist_added>Video added to {LIST_NAME}.</success_playlist_added>
+        <success_playlist_added_short>Video Added</success_playlist_added_short>
+        <success_playlist_created>Playlist has been created.</success_playlist_created>
+        <success_playlist_updated>Playlist has been updated.</success_playlist_updated>
+        <success_playlist_video_removed>Video removed from playlist.</success_playlist_video_removed>
+        <success_playlist_deleted>Playlist has been deleted.</success_playlist_deleted>
         <success_profile_updated>Your profile has been successfully updated.</success_profile_updated>
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
         <success_password_updated>Your password has been updated.</success_password_updated>
@@ -429,23 +467,11 @@
             <description>Browse through registered members.</description>
         </members>
 
-        <member_videos>
-            <title>Videos By: {MEMBER}</title>
-            <keywords>Member Videos, Videos by member, Member, Videos</keywords>
-            <description>Browse all videos uploaded by this member.</description>
-        </member_videos>
-
         <profile>
             <title>{MEMBER}'s Profile</title>
             <keywords>Member Profile, Member, Profile</keywords>
             <description>Member profile for this member.</description>
         </profile>
-
-        <comments>
-            <title>View All Comments for: {VIDEO}</title>
-            <keywords>Video Comments, Comments, Video</keywords>
-            <description>View all comments for this videos.</description>
-        </comments>
 
         <contact>
             <title>Contact Us</title>
@@ -495,96 +521,101 @@
             <description>A system error has occurred.</description>
         </system_error>
 
-        <myaccount>
+        <account_account>
             <title>Welcome - {USERNAME}</title>
             <keywords>Welcome</keywords>
             <description>Welcome</description>
-        </myaccount>
+        </account_account>
 
-        <upload>
+        <account_upload>
             <title>Upload Step 1 - Video Information</title>
             <keywords>Upload Video, Step 1, Video Information</keywords>
             <description>Upload Step 1 - Video Information.</description>
-        </upload>
+        </account_upload>
 
-        <upload_video>
+        <account_upload_video>
             <title>Upload Step 2 - Upload Video</title>
             <keywords>Upload Video, Step 2</keywords>
             <description>Upload Step 2 - Upload Video.</description>
-        </upload_video>
+        </account_upload_video>
 
-        <upload_complete>
+        <account_upload_complete>
             <title>Upload Step 3 - Upload Complete!</title>
             <keywords>Upload Video, Step 3, Upload Complete</keywords>
             <description>Upload Step 3 - Upload Complete!</description>
-        </upload_complete>
+        </account_upload_complete>
 
-        <edit_video>
+        <account_videos_edit>
             <title>Edit Video</title>
             <keywords>Edit Video, Video Information</keywords>
             <description>Edit video information.</description>
-        </edit_video>
+        </account_videos_edit>
 
-        <myvideos>
+        <account_videos>
             <title>My Videos</title>
             <keywords>My Videos, Videos</keywords>
             <description>View all videos uploaded by this member.</description>
-        </myvideos>
+        </account_videos>
 
-        <myfavorites>
-            <title>My Favorite Videos</title>
-            <keywords>My Favorite Videos, Favorite Videos, Favorites</keywords>
-            <description>View all of this member's favorite videos.</description>
-        </myfavorites>
+        <account_playlists>
+            <title>My Playlists</title>
+            <keywords>My Playlists, Playlist</keywords>
+            <description>View all my playlists.</description>
+        </account_playlists>
 
-        <update_profile>
+        <account_playlists_edit>
+            <title>Edit Playlist: {PLAYLIST_NAME}</title>
+            <keywords>Playlist Videos, Videos, Playlist, Edit</keywords>
+            <description>Update playlist, and view all videos in playlist.</description>
+        </account_playlists_edit>
+
+        <account_update_profile>
             <title>Update Profile</title>
             <keywords>Update profile, profile</keywords>
             <description>Update user profile information.</description>
-        </update_profile>
+        </account_update_profile>
 
-        <privacy_settings>
+        <account_privacy_settings>
             <title>Privacy Settings</title>
             <keywords>Privacy Settings, Update Privacy Settings</keywords>
             <description>Update privacy settings.</description>
-        </privacy_settings>
+        </account_privacy_settings>
 
-        <change_password>
+        <account_change_password>
             <title>Change Password</title>
             <keywords>Change Password, Password, Update Password</keywords>
             <description>Change account password.</description>
-        </change_password>
+        </account_change_password>
 
-        <subscriptions>
+        <account_subscriptions>
             <title>My Subscriptions</title>
             <keywords>Subscriptions, Member Subscriptions</keywords>
             <description>View all users member is subscribed to.</description>
-        </subscriptions>
+        </account_subscriptions>
 
-        <subscribers>
+        <account_subscribers>
             <title>My Subscribers</title>
             <keywords>Subscribers, Subscribing Members</keywords>
             <description>View all members that are subscribed to this member.</description>
-        </subscribers>
+        </account_subscribers>
 
-        <message_inbox>
+        <account_message_inbox>
             <title>Message Inbox</title>
             <keywords>Message Inbox, Message, Inbox</keywords>
             <description>View all messages.</description>
-        </message_inbox>
+        </account_message_inbox>
 
-        <message_read>
+        <account_message_read>
             <title>Read Message</title>
             <keywords>Read Message, Message</keywords>
             <description>Read a message.</description>
-        </message_read>
+        </account_message_read>
 
-        <message_send>
+        <account_message_send>
             <title>Send a Message</title>
             <keywords>Send Message, Message</keywords>
             <description>Send another member a message.</description>
-        </message_send>
-
+        </account_message_send>
 
         <mobile_videos>
             <title>Browse Videos</title>

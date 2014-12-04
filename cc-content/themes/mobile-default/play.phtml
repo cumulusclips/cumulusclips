@@ -1,0 +1,23 @@
+<?php
+$this->addCss('video-js.css');
+$this->addJs('video.plugin.js');
+$this->addJs('play.js');
+?>
+
+<div id="play">
+    <div class="block">
+        
+        <h1><?=$video->title?></h1>
+
+        <div class="video-js-box">
+            <video class="video-js vjs-default-skin" data-setup='{ "controls": false, "autoplay": false, "preload": "auto" }' width="100%" height="264" poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
+                <source src="<?=$config->mobileUrl?>/<?=$video->filename?>.mp4" type="video/mp4" />
+            </video>
+        </div>
+
+        <p><strong><?=Language::getText('duration')?>: </strong><?=$video->duration?></p>
+        <p><strong><?=Language::getText('by')?>: </strong><?=$video->username?></p>
+        <p><strong><?=Language::getText('description')?>: </strong><?=$video->description?></p>
+                
+    </div>
+</div>

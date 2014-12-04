@@ -1,37 +1,25 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Rating');
+Plugin::triggerEvent('index.start');
 
-
-// Establish page variables, objects, arrays, etc
-View::InitView ('index');
-Plugin::Trigger ('index.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-
-
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Retrieve Featured Video
+$videoMapper = new VideoMapper();
+$db = Registry::get('db');
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND featured = 1 AND private = '0'";
-$result_featured = $db->Query ($query);
-View::$vars->featured_videos = array();
-while ($video = $db->FetchObj ($result_featured)) View::$vars->featured_videos[] = $video->video_id;
-
-
+$featuredVideosResults = $db->fetchAll($query);
+$this->view->vars->featured_videos = $videoMapper->getVideosFromList(
+    Functions::arrayColumn($featuredVideosResults, 'video_id')
+);
 
 // Retrieve Recent Videos
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC LIMIT 3";
-$result_recent = $db->Query ($query);
-View::$vars->recent_videos = array();
-while ($video = $db->FetchObj ($result_recent)) View::$vars->recent_videos[] = $video->video_id;
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC LIMIT 6";
+$recentVideosResults = $db->fetchAll($query);
+$this->view->vars->recent_videos = $videoMapper->getVideosFromList(
+    Functions::arrayColumn($recentVideosResults, 'video_id')
+);
 
-
-// Output Page
-Plugin::Trigger ('index.before_render');
-View::Render ('index.tpl');
-
-?>
+Plugin::triggerEvent('index.end');

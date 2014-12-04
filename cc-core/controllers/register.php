@@ -1,113 +1,104 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Mail');
+Plugin::triggerEvent('register.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
+Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('register');
-Plugin::Trigger ('register.start');
-View::$vars->logged_in = User::LoginCheck();
-Functions::RedirectIf (!View::$vars->logged_in, HOST . '/myaccount/');
-$resp = NULL;
-$pass1 = NULL;
-$pass2 = NULL;
-View::$vars->message = null;
-View::$vars->data = array ();
-View::$vars->errors = array();
+$password = null;
+$this->view->vars->message = null;
+$this->view->vars->data = array ();
+$this->view->vars->errors = array();
+$token = null;
+$userMapper = new UserMapper();
 
-
-
-
-/***********************
-Handle form if submitted
-***********************/
-
-if (isset ($_POST['submitted'])) {
-
-    // Validate Username
-    if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
-        if (!User::Exist (array ('username' => $_POST['username']))) {
-            View::$vars->data['username'] = htmlspecialchars (trim ($_POST['username']));
+// Handle form if submitted
+if (isset($_POST['submitted'])) {
+    
+    if (
+        !empty($_POST['token'])
+        && !empty($_SESSION['formToken'])
+        && $_POST['token'] == $_SESSION['formToken']
+    ) {
+        $this->view->vars->user = new User();
+        
+        // Validate Username
+        if (!empty($_POST['username']) && preg_match('/[a-z0-9]+/i', $_POST['username'])) {
+            if (!$userMapper->getUserByUsername($_POST['username'])) {
+                $this->view->vars->user->username = $_POST['username'];
+            } else {
+                $this->view->vars->errors['username'] = Language::getText('error_username_unavailable');
+            }
         } else {
-            View::$vars->errors['username'] = Language::GetText('error_username_unavailable');
-        }
-    } else {
-        View::$vars->errors['username'] = Language::GetText('error_username');
-    }
-
-
-    // Validate password
-    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $password_first = trim ($_POST['password']);
-    } else {
-        View::$vars->errors['password'] = Language::GetText('error_password');
-    }
-
-
-    // Validate password confirm
-    if (!empty ($_POST['password_confirm']) && !ctype_space ($_POST['password'])) {
-
-        if (isset ($password_first) && $password_first == $_POST['password_confirm']) {
-            View::$vars->data['password'] = trim ($_POST['password']);
-        } else {
-            View::$vars->errors['match'] = Language::GetText('error_password_match');
+            $this->view->vars->errors['username'] = Language::getText('error_username');
         }
 
-    } else {
-        View::$vars->errors['password_confirm'] = Language::GetText('error_password_confirm');
-    }
-
-
-    // Validate email
-    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        if (!User::Exist (array ('email' => $_POST['email']))) {
-            View::$vars->data['email'] = htmlspecialchars (trim ($_POST['email']));
+        // Validate password
+        if (!empty($_POST['password'])) {
+            $password = trim($_POST['password']);
         } else {
-            View::$vars->errors['email'] = Language::GetText('error_email_unavailable');
+            $this->view->vars->errors['password'] = Language::getText('error_password');
         }
+
+        // Validate password confirm
+        if (!empty($_POST['confirm'])) {
+            if (isset($password) && $password == $_POST['confirm']) {
+                $this->view->vars->user->password = $password;
+            } else {
+                $this->view->vars->errors['match'] = Language::getText('error_password_match');
+            }
+        } else {
+            $this->view->vars->errors['password_confirm'] = Language::getText('error_password_confirm');
+        }
+
+        // Validate email
+        if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
+            if (!$userMapper->getUserByCustom(array('email' => $_POST['email']))) {
+                $this->view->vars->user->email = trim($_POST['email']);
+            } else {
+                $this->view->vars->errors['email'] = Language::getText('error_email_unavailable');
+            }
+        } else {
+            $this->view->vars->errors['email'] = Language::getText('error_email');
+        }   
+        
     } else {
-        View::$vars->errors['email'] = Language::GetText('error_email');
+        $this->view->vars->errors['token'] = 'Invalid security token';
     }
 
-
-
-    ### Create user if no errors were found
-    if (empty (View::$vars->errors)) {
-
-        View::$vars->data['confirm_code'] = User::CreateToken();
-        View::$vars->data['status'] = 'new';
-        View::$vars->data['password'] = md5 (View::$vars->data['password']);
-
-        Plugin::Trigger ('register.before_create');
-        User::Create (View::$vars->data);
-        View::$vars->message = Language::GetText('success_registered');
-        View::$vars->message_type = 'success';
-
+    // Create user if no errors were found
+    if (empty ($this->view->vars->errors)) {
+        // Create new user
+        $newUser = $userService->create($this->view->vars->user);
+        
+        // Send welcome email
+        $config = Registry::get('config');
         $replacements = array (
-            'confirm_code' => View::$vars->data['confirm_code'],
+            'confirm_code' => $newUser->confirmCode,
             'host' => HOST,
             'sitename' => $config->sitename
         );
         $mail = new Mail();
-        $mail->LoadTemplate ('welcome', $replacements);
-        $mail->Send (View::$vars->data['email']);
-        Plugin::Trigger ('register.create');
-        unset (View::$vars->data);
-
+        $mail->loadTemplate('welcome', $replacements);
+        $mail->send($newUser->email);
+        
+        // Prepare message
+        unset($this->view->vars->user);
+        $this->view->vars->message = Language::getText('success_registered');
+        $this->view->vars->message_type = 'success';
     } else {
-        View::$vars->message = Language::GetText('errors_below');
-        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->errors);
-        View::$vars->message_type = 'error';
+        $this->view->vars->message = Language::getText('errors_below');
+        $this->view->vars->message .= '<br><br> - ' . implode('<br> - ', $this->view->vars->errors);
+        $this->view->vars->message_type = 'errors';
     }
-
 }
 
+// Generate new form token
+$token = md5(uniqid(rand(), true));
+$this->view->vars->token = $token;
+$_SESSION['formToken'] = $token;
 
-// Output Page
-Plugin::Trigger ('register.before_render');
-View::Render ('register.tpl');
-
-?>
+Plugin::triggerEvent('register.end');

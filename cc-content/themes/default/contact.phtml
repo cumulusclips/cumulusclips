@@ -1,0 +1,23 @@
+<h1><?=Language::GetText('contact_header')?></h1>
+
+<?php if ($message): ?>
+    <div class="message <?=$messageType?>"><?=$message?></div>
+<?php endif; ?>
+
+<p><?=Language::getText('contact_text')?></p>
+
+<div class="form wide">
+    <form action="<?=HOST?>/contact/" method="post">
+        <label for="name" class="<?=(!empty($errors['name'])) ? 'error' : ''?>"><?=Language::getText('name')?>:</label>
+        <input type="text" name="name" value="<?=(!empty($errors) && !empty($name)) ? htmlspecialchars($name) : ''?>" />
+
+        <label for="email" class="<?=(!empty($errors['email'])) ? 'error' : ''?>"><?=Language::getText('email')?>:</label>
+        <input type="text" name="email" value="<?=(!empty($errors) && !empty($email)) ? $email : ''?>" />
+
+        <label for="feedback" class="<?=(!empty($errors['feedback'])) ? 'error' : ''?>"><?=Language::getText('message')?>:</label>
+        <textarea name="feedback" cols="40" rows="9"><?=(!empty($errors) && !empty($feedback)) ? htmlspecialchars($feedback) : ''?></textarea>
+
+        <input type="hidden" value="TRUE" name="submitted" />
+        <input class="button" type="submit" name="button" value="<?=Language::getText('contact_button')?>" />
+    </form>
+</div>

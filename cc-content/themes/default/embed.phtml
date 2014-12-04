@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><?=$video->title?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/reset.css" />
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/video-js.css" />
+<style type="text/css">
+html, body, .video-unavailable, video, img, .video-js {
+    width:100% !important;
+    height:100% !important;
+    overflow:hidden;
+}
+.video-unavailable {
+    background-color:#000;
+    text-align:center;
+    color:#FFF;
+    font-size:16px;
+    font-family:arial,helvetica,sans-serif;
+}
+.video-unavailable p {
+    padding:50px;
+    line-height:1.5em;
+}
+</style>
+<body>
+
+<?php if ($video && $video->disableEmbed == '0'): ?>
+
+    <!-- BEGIN VIDEO -->
+    <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": false, "preload": "auto" }' poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
+        <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
+        <?php if ($webmEncodingEenabled): ?>
+            <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
+        <?php endif; ?>
+        <?php if ($theoraEncodingEenabled): ?>
+            <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogv" type="video/ogg" />
+        <?php endif; ?>
+    </video>
+    <!-- END VIDEO -->
+
+<?php elseif ($video && $video->disableEmbed == '1'): ?>
+    <?php $link = $this->getService('Video')->getUrl($video) . '/'; ?>
+    <div class="video-unavailable"><p><?=Language::getText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename))?></p></div>
+<?php else: ?>
+    <div class="video-unavailable"><p><?=Language::getText('video_unavailable')?></p></div>
+<?php endif; ?>
+
+<script>videojs.options.flash.swf = '<?=$this->options->themeUrl?>/images/video-js.swf';</script>
+<script src="<?=$this->options->themeUrl?>/js/video.plugin.js"></script>
+</body>
+</html>

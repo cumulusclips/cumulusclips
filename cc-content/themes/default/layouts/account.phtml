@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><?=$meta->title?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="baseUrl" content="<?=HOST?>" />
+<meta name="themeUrl" content="<?=$this->options->themeUrl?>" />
+<?php $this->writeMeta(); ?>
+<?php Plugin::triggerEvent('theme.head'); ?>
+<link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/main.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/account.css" />
+<?php $this->writeCSS(); ?>
+
+</head>
+<body class="<?=$this->cssHooks()?>">
+<?php Plugin::triggerEvent('theme.body'); ?>
+    
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+    
+    <?php $this->block('header.phtml'); ?>
+    
+    <!-- BEGIN MAIN CONTAINER -->
+    <div id="retainer">
+        <div id="main">
+            
+            <!-- BEGIN SIDEBAR -->
+            <div class="left">
+                <p class="large"><?=Language::GetText('account_menu_header')?></p>
+                <div id="menu">
+                    <p class="big"><?=Language::GetText('manage_media')?></p>
+                    <ul>
+                        <li><a href="<?php echo HOST; ?>/account/upload/" title="<?=Language::GetText('upload_video')?>"><?=Language::GetText('upload_video')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/videos/" title="<?=Language::GetText('my_videos')?>"><?=Language::GetText('my_videos')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/playlists/" title="<?=Language::GetText('my_playlists')?>"><?=Language::GetText('my_playlists')?></a></li>
+                    </ul>
+
+                    <p class="big"><?=Language::GetText('account_settings')?></p>
+                    <ul>
+                        <li><a href="<?php echo HOST; ?>/account/profile/" title="<?=Language::GetText('update_profile')?>"><?=Language::GetText('update_profile')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/privacy-settings/" title="<?=Language::GetText('privacy_settings')?>"><?=Language::GetText('privacy_settings')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/change-password/" title="<?=Language::GetText('change_password')?>"><?=Language::GetText('change_password')?></a></li>
+                    </ul>
+
+                    <p class="big"><?=Language::GetText('community')?></p>
+                    <ul>
+                        <li><a href="<?php echo HOST; ?>/account/subscriptions/" title="<?=Language::GetText('my_subscriptions')?>"><?=Language::GetText('my_subscriptions')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/subscribers/" title="<?=Language::GetText('my_subscribers')?>"><?=Language::GetText('my_subscribers')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/message/inbox/" title="<?=Language::GetText('inbox')?>"><?=Language::GetText('inbox')?></a></li>
+                        <li><a href="<?php echo HOST; ?>/account/message/send/" title="<?=Language::GetText('send_message')?>"><?=Language::GetText('send_message')?></a></li>
+                    </ul>
+                </div>
+                <?php $this->writeSidebarBlocks(); ?>
+            </div>
+            <!-- END SIDEBAR -->
+
+            <!-- BEGIN CONTENT -->
+            <div class="right">
+
+                <?=$this->body()?>
+                
+            </div>
+        </div>
+    </div>
+    <!-- END MAIN CONTAINER -->
+    
+</div>
+<!-- END WRAPPER -->
+    
+<?php $this->block('footer.phtml'); ?>
+
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/general.js"></script>
+<?php $this->writeJs(); ?>
+
+</body>
+</html>

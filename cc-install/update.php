@@ -55,5 +55,3 @@ try {
 }
 
 echo '<p>Your database has been updated!</p>';
-
-?>

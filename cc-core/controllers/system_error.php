@@ -1,20 +1,9 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
+Plugin::triggerEvent('system_error.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
-// Establish page variables, objects, arrays, etc
-View::InitView ('system_error');
-Plugin::Trigger ('system_error.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in)  View::$vars->user = new User (View::$vars->logged_in);
-
-
-
-// Output Page
-Plugin::Trigger ('system_error.before_render');
-View::Render ('system_error.tpl');
-
-?>
+Plugin::triggerEvent('system_error.end');

@@ -34,5 +34,3 @@ if (isset ($_GET['complete'])) $action = 'complete';
 if (!$action) $action = 'welcome';
 
 include_once (INSTALL . "/$action.php");
-
-?>

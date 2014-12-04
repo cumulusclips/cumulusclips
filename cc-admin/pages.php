@@ -1,16 +1,17 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Page');
-App::LoadClass ('Pagination');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$pageMapper = new PageMapper();
+$pageService = new PageService();
 $records_per_page = 9;
 $url = ADMIN . '/pages.php';
 $query_string = array();
@@ -23,8 +24,9 @@ $sub_header = null;
 if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate id
-    if (Page::Exist (array ('page_id' => $_GET['delete']))) {
-        Page::Delete ($_GET['delete']);
+    $page = $pageMapper->getPageById($_GET['delete']);
+    if ($page) {
+        $pageService->delete($page);
         $message = 'Page has been deleted';
         $message_type = 'success';
     }
@@ -52,23 +54,26 @@ switch ($status) {
 
 }
 $query = "SELECT page_id FROM " . DB_PREFIX . "pages WHERE status = '$status'";
+$queryParams = array();
 
 
 
 // Handle Search Member Form
 if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
-    $like = $db->Escape (trim ($_POST['search']));
+    $like = trim ($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE '%$like%' OR content LIKE '%$like%'";
+    $query .= " AND title LIKE :like OR content LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
+    $queryParams[':like'] = "%$like%";
 
 } else if (!empty ($_GET['search'])) {
 
-    $like = $db->Escape (trim ($_GET['search']));
+    $like = trim ($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE '%$like%' OR content LIKE '%$like%'";
+    $query .= " AND title LIKE :like OR content LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
+    $queryParams[':like'] = "%$like%";
 
 }
 
@@ -76,8 +81,8 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
 // Retrieve total count
 $query .= " ORDER BY page_id DESC";
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$db->fetchAll ($query, $queryParams);
+$total = $db->rowCount();
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
@@ -87,7 +92,10 @@ $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$result = $db->Query ($query);
+$resultPages = $db->fetchAll ($query, $queryParams);
+$pageList = $pageMapper->getPagesFromList(
+    Functions::arrayColumn($resultPages, 'page_id')
+);
 
 
 // Output Header
@@ -104,7 +112,7 @@ include ('header.php');
 
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -142,25 +150,23 @@ include ('header.php');
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($row = $db->FetchObj ($result)): ?>
+                <?php foreach ($pageList as $page): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $page = new Page ($row->page_id); ?>
-
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>" class="large"><?=$page->title?></a><br />
+                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>" class="large"><?=$page->title?></a><br />
                             <div class="record-actions invisible">
-                                <a href="<?=HOST?>/page/?preview=<?=$page->page_id?>" target="_ccsite">Preview</a>
-                                <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">Edit</a>
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->page_id)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                                <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" target="_ccsite">Preview</a>
+                                <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">Edit</a>
+                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->pageId)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
                             </div>
                         </td>
                         <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$page->date_created)?></td>
+                        <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
                     </tr>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

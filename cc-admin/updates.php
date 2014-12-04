@@ -1,14 +1,15 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
 $message = null;
 $page_title = 'Updates';
 $update = Functions::UpdateCheck();
@@ -25,7 +26,7 @@ include ('header.php');
     <h1>Update CumulusClips</h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
     <?php if ($update): ?>

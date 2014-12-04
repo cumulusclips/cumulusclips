@@ -1,45 +1,31 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Privacy');
+Plugin::triggerEvent('opt_out.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
-// Establish page variables, objects, arrays, etc
-View::InitView ('opt_out');
-Plugin::Trigger ('opt_out.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
+$userMapper = new UserMapper();
 
+// Verify user actually unsubscribed
+if (isset($_GET['email'])) {
 
-
-
-### Verify user actually unsubscribed
-if (isset ($_GET['email'])) {
-
-    $data = array ('email' => $_GET['email']);
-    $id = User::Exist ($data);
-    if ($id) {
-        $privacy = Privacy::LoadByUser ($id);
-        $data = array (
-            'new_video'         => 'no',
-            'new_message'       => 'no',
-            'video_comment'     => 'no'
-        );
-        Plugin::Trigger ('opt_out.opt_out');
-        $privacy->Update ($data);
+    $user = $userMapper->getUserByCustom(array('email' => $_GET['email']));
+    if ($user) {
+        $privacyMapper = new PrivacyMapper();
+        $privacy = $privacyMapper->getPrivacyByUser($user->userId);
+        $privacy->newVideo = false;
+        $privacy->newMessage = false;
+        $privacy->videoComment = false;
+        $privacy->commentReply = false;
+        $privacyMapper->save($privacy);
     } else {
-        App::Throw404();
+        App::throw404();
     }
 
 } else {
-    App::Throw404();
+    App::throw404();
 }
 
-
-// Output Page
-Plugin::Trigger ('opt_out.before_render');
-View::Render ('opt_out.tpl');
-
-?>
+Plugin::triggerEvent('opt_out.end');

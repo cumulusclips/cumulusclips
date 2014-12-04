@@ -1,0 +1,29 @@
+<div id="home">
+    <!-- BEGIN FEATURED VIDEO -->
+    <h1><?=Language::getText('featured')?></h1>
+    <div id="featured-video">
+        <?php if (!empty($featuredVideos)): ?>
+
+            <div class="list">
+                <?php $this->RepeatingBlock('video.phtml', $featuredVideos); ?>
+            </div>
+
+        <?php else: ?>
+            <div class="block"><strong><?=Language::getText('no_videos')?></strong></div>
+        <?php endif; ?>
+    </div>
+    <!-- END FEATURED VIDEO -->
+    
+    <!-- BEGIN RECENT VIDEOS -->
+    <h1><?=Language::getText('recent_videos')?></h1>
+    <?php if (!empty($recentVideos)): ?>
+
+        <div class="list">
+            <?php $this->RepeatingBlock ('video.phtml', $recentVideos); ?>
+        </div>
+
+    <?php else: ?>
+        <div class="block"><strong><?=Language::getText('no_videos')?></strong></div>
+    <?php endif; ?>
+    <!-- END RECENT VIDEOS -->
+</div>

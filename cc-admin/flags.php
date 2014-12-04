@@ -1,94 +1,107 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Comment');
-App::LoadClass ('Flag');
-App::LoadClass ('Pagination');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$commentMapper = new CommentMapper();
+$videoMapper = new VideoMapper();
+$videoService = new VideoService();
+$userMapper = new UserMapper();
+$flagService = new FlagService();
+$flagMapper = new FlagMapper();
 $records_per_page = 9;
 $url = ADMIN . '/flags.php';
 $query_string = array();
 $message = null;
-$sub_header = null;
-
-
 
 // Verify content type was provided
-if (!empty ($_GET['status']) && in_array ($_GET['status'], array ('video', 'member', 'comment'))) {
+if (!empty($_GET['status']) && in_array($_GET['status'], array('video', 'user', 'comment'))) {
     $type = $_GET['status'];
 } else {
     $type = 'video';
 }
 
-
-
-
-### Handle "Ban" record
-if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
-
+// Handle "Ban" record
+if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
     switch ($type) {
-
         case 'video':
-            $video = new Video ($_GET['ban']);
-            if ($video->found) {
-                Flag::FlagDecision ($video->video_id, $type, true);
-                $video->Update (array ('status' => 'banned'));
+            $video = $videoMapper->getVideoById($_GET['ban']);
+            if ($video) {
+                $video->status = 'banned';
+                $videoMapper->save($video);
+                $flagService->flagDecision($video, true);
                 $message = 'Video has been banned';
                 $message_type = 'success';
             }
             break;
-
-        case 'member':
-            $user = new User ($_GET['ban']);
-            if ($user->found) {
-                Flag::FlagDecision ($user->user_id, $type, true);
-                $user->UpdateContentStatus ('banned');
-                $user->Update (array ('status' => 'banned'));
-                $message = 'Member has been banned';
-                $message_type = 'success';
+        case 'user':
+            $user = $userMapper->getUserById($_GET['ban']);
+            if ($user) {
+                if ($user->userId == $adminUser->userId) {
+                    $message = 'You can\'t ban yourself, silly!';
+                    $message_type = 'errors';
+                } else if ($user->role == 'administrator') {
+                    $message = 'Administrators can\'t be banned. Change their role to that of a normal user first.';
+                    $message_type = 'errors';
+                } else {
+                    $user->status = 'banned';
+                    $userMapper->save($user);
+                    $flagService->flagDecision($user, true);
+                    $userService->updateContentStatus ($user, 'banned');
+                    $message = 'Member has been banned';
+                    $message_type = 'success';
+                }
             }
             break;
-
         case 'comment':
-            $comment = new Comment ($_GET['ban']);
-            if ($comment->found) {
-                Flag::FlagDecision ($comment->comment_id, $type, true);
-                $comment->Update (array ('status' => 'banned'));
+            $comment = $commentMapper->getCommentById($_GET['ban']);
+            if ($comment) {
+                $comment->status = 'banned';
+                $commentMapper->save($comment);
+                $flagService->flagDecision($comment, true);
                 $message = 'Comment has been banned';
                 $message_type = 'success';
             }
             break;
-
     }
-
 }
 
+// Handle "Dismiss" flags
+else if (!empty($_GET['dismiss']) && is_numeric($_GET['dismiss'])) {
+    
+    switch ($type) {
+        case 'video':
+            $contentObject = $videoMapper->getVideoById($_GET['dismiss']);
+            break;
 
+        case 'user':
+            $contentObject = $userMapper->getUserById($_GET['dismiss']);
+            break;
 
-### Handle "Dismiss" flags
-else if (!empty ($_GET['dismiss']) && is_numeric ($_GET['dismiss'])) {
-    Flag::FlagDecision ($_GET['dismiss'], $type, false);
-    $message = 'Flags has been dismissed';
-    $message_type = 'success';
+        case 'comment':
+            $contentObject = $commentMapper->getCommentById($_GET['dismiss']);
+            break;
+    }
+    
+    if ($contentObject) {
+        $flagService->flagDecision($contentObject, false);
+        $message = 'Flags has been dismissed';
+        $message_type = 'success';
+    }
 }
 
-
-
-
-### Determine which type (account status) of members to display
+// Determine which type (account status) of members to display
 switch ($type) {
-
-    case 'member':
-        $query_string['status'] = 'member';
-        $header = 'Flagged Members';
+    case 'user':
+        $query_string['status'] = 'user';
+        $header = 'Flagged Member';
         $page_title = 'Flagged Members';
         break;
     case 'video':
@@ -101,45 +114,25 @@ switch ($type) {
         $header = 'Flagged Comments';
         $page_title = 'Flagged Comments';
         break;
-
 }
 $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE status = 'pending' AND type = '$type'";
 
-
-
-// Handle Search Member Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
-
-    $like = $db->Escape (trim ($_POST['search']));
-    $query_string['search'] = $like;
-    $query .= " AND username LIKE '%$like%'";
-    $sub_header = "Search Results for: <em>$like</em>";
-
-} else if (!empty ($_GET['search'])) {
-
-    $like = $db->Escape (trim ($_GET['search']));
-    $query_string['search'] = $like;
-    $query .= " AND username LIKE '%$like%'";
-    $sub_header = "Search Results for: <em>$like</em>";
-
-}
-
-
-
 // Retrieve total count
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$db->fetchRow($query);
+$total = $db->rowCount();
 
 // Initialize pagination
-$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
-$start_record = $pagination->GetStartRecord();
+$url .= (!empty($query_string)) ? '?' . http_build_query($query_string) : '';
+$pagination = new Pagination($url, $total, $records_per_page, false);
+$start_record = $pagination->getStartRecord();
 $_SESSION['list_page'] = $pagination->GetURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$result = $db->Query ($query);
-
+$flagResult = $db->fetchAll($query);
+$flagsList = $flagMapper->getFlagsFromList(
+    Functions::arrayColumn($flagResult, 'flag_id')
+);
 
 // Output Header
 include ('header.php');
@@ -151,7 +144,7 @@ include ('header.php');
     <h1><?=$header?></h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -160,7 +153,7 @@ include ('header.php');
             Jump To:
             <select name="status" data-jump="<?=ADMIN?>/flags.php">
                 <option <?=($type == 'video') ? 'selected="selected"' : ''?>value="video">Videos</option>
-                <option <?=($type == 'member') ? 'selected="selected"' : ''?>value="member">Members</option>
+                <option <?=($type == 'user') ? 'selected="selected"' : ''?>value="user">Members</option>
                 <option <?=($type == 'comment') ? 'selected="selected"' : ''?>value="comment">Comments</option>
             </select>
         </div>
@@ -179,51 +172,50 @@ include ('header.php');
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($row = $db->FetchObj ($result)): ?>
+                <?php foreach ($flagsList as $flag): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $flag = new Flag ($row->flag_id); ?>
-                    <?php $user = new User ($flag->user_id); ?>
+                    <?php $reporter = $userMapper->getUserById($flag->userId); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
 
-                            <?php if ($type == 'member'): ?>
+                            <?php if ($type == 'user'): ?>
 
-                                <?php $user = new User ($flag->id); ?>
-                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>" class="large"><?=$user->username?></a>
+                                <?php $user = $userMapper->getUserById($flag->objectId); ?>
+                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
                                 <div class="record-actions invisible">
                                     <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                                    <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>">Edit</a>
+                                    <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
 
                             <?php elseif ($type == 'video'): ?>
 
-                                <?php $video = new Video ($flag->id); ?>
-                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a>
+                                <?php $video = $videoMapper->getVideoById($flag->objectId); ?>
+                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="large"><?=$video->title?></a>
                                 <div class="record-actions invisible">
-                                    <a href="<?=HOST?>/videos/<?=$video->video_id?>/<?=$video->slug?>/">Watch Video</a>
-                                    <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
+                                    <a href="<?=$videoService->getUrl($video)?>/">Watch Video</a>
+                                    <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
 
                             <?php elseif ($type == 'comment'): ?>
 
-                                <?php $comment = new Comment ($flag->id); ?>
-                                <?php $video = new Video ($comment->video_id); ?>
+                                <?php $comment = $commentMapper->getCommentById($flag->objectId); ?>
+                                <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
 
-                                <?=$comment->comments_display?>
+                                <?=$comment->comments?>
                                 <div class="record-actions invisible">
-                                    <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->comment_id?>">Edit</a>
+                                    <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
 
                             <?php endif; ?>
 
-                                <a href="<?=$pagination->GetURL('dismiss='.$flag->id)?>">Dismiss Flag</a>
-                                <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->id)?>">Ban</a>
+                                <a href="<?=$pagination->GetURL('dismiss='.$flag->objectId)?>">Dismiss Flag</a>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->objectId)?>">Ban</a>
                             </div>
                         </td>
-                        <td><?=$user->username?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$flag->date_created)?></td>
+                        <td><?=$reporter->username?></td>
+                        <td><?=date('m/d/Y', strtotime($flag->dateCreated))?></td>
                     </tr>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>

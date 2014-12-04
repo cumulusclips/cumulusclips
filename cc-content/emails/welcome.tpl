@@ -8,9 +8,7 @@ Hello,
 
 Thank you for becoming a member of {sitename}!
 
-We're glad to have you join us. You're one step away from being able to enjoy
-all the benefits of membership to our video sharing community. Please visit the
-url below to activate your account and complete your registration.
+We're glad to have you join us. You're one step away from being able to enjoy all the benefits of membership to our video sharing community. Please visit the url below to activate your account and complete your registration.
 
 {host}/activate/?token={confirm_code}
 

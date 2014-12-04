@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><?=$meta->title?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="baseUrl" content="<?=HOST?>" />
+<meta name="themeUrl" content="<?=$this->options->themeUrl?>" />
+<?php $this->writeMeta(); ?>
+<?php Plugin::triggerEvent('theme.head'); ?>
+<link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/main.css" />
+<link rel="stylesheet" type="text/css" href="<?=$this->options->themeUrl?>/css/pages.css" />
+<?php $this->writeCSS(); ?>
+
+</head>
+<body class="<?=$this->cssHooks()?>">
+<?php Plugin::triggerEvent('theme.body'); ?>
+    
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+    
+    <?php $this->block('header.phtml'); ?>
+    
+    <!-- BEGIN MAIN CONTAINER -->
+    <div id="retainer">
+        <div id="main">
+            <div class="left">
+                
+                <?=$this->body()?>
+                
+            </div>
+            <div class="right">
+                <?php $this->writeSidebarBlocks(); ?>
+                <?php $this->block('ad300.phtml'); ?>
+            </div>
+        </div>
+    </div>
+    <!-- END MAIN CONTAINER -->
+    
+</div>
+<!-- END WRAPPER -->
+    
+<?php $this->block('footer.phtml'); ?>
+
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<?=$this->options->themeUrl?>/js/general.js"></script>
+<?php $this->writeJs(); ?>
+
+</body>
+</html>

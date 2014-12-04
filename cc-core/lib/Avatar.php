@@ -37,8 +37,6 @@ class Avatar {
             $height_dst = $height_src;
         }
 
-        Plugin::Trigger ('avatar.before_save');
-
         // Determin which type of image object to create (and how to process it) based on file extension
         if (in_array ($original_extension, array ('jpg', 'jpeg'))) {
 
@@ -74,9 +72,6 @@ class Avatar {
             imagepng ($image_dst, $save_as);
 
         }
-
-        Plugin::Trigger ('avatar.save');
-
     }
 
 
@@ -106,9 +101,7 @@ class Avatar {
      */
     static function Delete ($filename) {
         try {
-            Filesystem::Open();
-            Filesystem::Delete (UPLOAD_PATH . '/avatars/' . $filename);
-            Filesystem::Close();
+            Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename);
         } catch (Exception $e) {
             App::Alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
         }

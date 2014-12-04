@@ -1,11 +1,7 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-
-
 // Node requested from language file
-if (isset ($_GET['get'])) {
+if (isset($_GET['action']) && $_GET['action'] == 'get') {
 
     // Return requested string
     if (!empty ($_POST['node'])) {
@@ -19,13 +15,13 @@ if (isset ($_GET['get'])) {
         exit();
     }
 
-
 // Language change requested
-} else if (isset ($_GET['set'])) {
+} else if (isset($_GET['action']) && $_GET['action'] == 'set') {
 
     // Set language to user's request
-    $active_languages = Language::GetActiveLanguages();
-    if (array_key_exists($_GET['language'], $active_languages)) {
+    $activeLanguages = Language::getActiveLanguages();
+    $languageSystemNames = Functions::arrayColumn($activeLanguages, 'system_name');
+    if (array_search($_GET['language'], $languageSystemNames) !== false) {
         $_SESSION['user_lang'] = $_GET['language'];
     }
 
@@ -37,9 +33,6 @@ if (isset ($_GET['get'])) {
         header ('Location: ' . HOST . '/');
         exit();
     }
-
 } else {
     App::Throw404();
 }
-
-?>

@@ -1,81 +1,60 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('User');
+Plugin::triggerEvent('contact.start');
 
+// Verify if user is logged in
+$userService = new UserService();
+$this->view->vars->loggedInUser = $userService->loginCheck();
 
 // Establish page variables, objects, arrays, etc
-View::InitView ('contact');
-Plugin::Trigger ('contact.start');
-View::$vars->logged_in = User::LoginCheck();
-if (View::$vars->logged_in) View::$vars->user = new User (View::$vars->logged_in);
-View::$vars->Errors = array();
-View::$vars->name = null;
-View::$vars->email = null;
-View::$vars->feedback = null;
-View::$vars->message = null;
-View::$vars->message_type = null;
+$this->view->vars->errors = array();
+$this->view->vars->name = null;
+$this->view->vars->email = null;
+$this->view->vars->feedback = null;
+$this->view->vars->message = null;
+$this->view->vars->messageType = null;
+$config = Registry::get('config');
 
-
-
-
-
-/***********************
-Handle form if submitted
-***********************/
-
-if (isset ($_POST['submitted'])) {
+// Handle form if submitted
+if (isset($_POST['submitted'])) {
 	
     // Validate name
-    if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
-        View::$vars->name = trim ($_POST['name']);
+    if (!empty($_POST['name']) && !ctype_space($_POST['name'])) {
+        $this->view->vars->name = trim($_POST['name']);
     } else {
-        View::$vars->Errors['name'] = Language::GetText('error_name');
+        $this->view->vars->errors['name'] = Language::getText('error_name');
     }
-
 
     // Validate email
     $string = '/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i';
-    if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ($string, $_POST['email'])) {
-        View::$vars->email = trim ($_POST['email']);
+    if (!empty($_POST['email']) && !ctype_space($_POST['email']) && preg_match($string, $_POST['email'])) {
+        $this->view->vars->email = trim($_POST['email']);
     } else {
-        View::$vars->Errors['email'] = Language::GetText('error_email');
+        $this->view->vars->errors['email'] = Language::getText('error_email');
     }
-
 
     // Validate feedback
-    if (!empty ($_POST['feedback']) && !ctype_space ($_POST['feedback'])) {
-        View::$vars->feedback = trim ($_POST['feedback']);
+    if (!empty($_POST['feedback']) && !ctype_space($_POST['feedback'])) {
+        $this->view->vars->feedback = trim($_POST['feedback']);
     } else {
-        View::$vars->Errors['feedback'] = Language::GetText('error_message');
+        $this->view->vars->errors['feedback'] = Language::getText('error_message');
     }
-
 
     // Send email if no errors
-    if (empty (View::$vars->Errors)) {
-
+    if (empty($this->view->vars->errors)) {
         $subject = 'Message received From ' . $config->sitename;
-        $Msg = "Name: " . View::$vars->name . "\n";
-        $Msg .= "E-mail: " . View::$vars->email . "\n";
-        $Msg .= "Message:\n" . View::$vars->feedback;
-        App::Alert ($subject, $Msg);
-        Plugin::Trigger ('contact.send');
+        $Msg = "Name: " . $this->view->vars->name . "\n";
+        $Msg .= "E-mail: " . $this->view->vars->email . "\n";
+        $Msg .= "Message:\n" . $this->view->vars->feedback;
+        App::alert($subject, $Msg);
 
-        View::$vars->message_type = 'success';
-        View::$vars->message = Language::GetText('success_contact_sent');
-
+        $this->view->vars->messageType = 'success';
+        $this->view->vars->message = Language::getText('success_contact_sent');
     } else {
-        View::$vars->message_type = 'error';
-        View::$vars->message = Language::GetText('errors_below');
-        View::$vars->message .= '<br /><br /> - ' . implode ('<br /> - ', View::$vars->Errors);
+        $this->view->vars->messageType = 'errors';
+        $this->view->vars->message = Language::getText('errors_below');
+        $this->view->vars->message .= '<br><br> - ' . implode('<br> - ', $this->view->vars->errors);
     }
-	
 }
 
-
-// Output Page
-Plugin::Trigger ('contact.before_render');
-View::Render ('contact.tpl');
-
-?>
+Plugin::triggerEvent('contact.end');

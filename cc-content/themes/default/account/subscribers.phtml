@@ -1,0 +1,20 @@
+<?php $this->SetLayout ('account'); ?>
+
+<h1><?=Language::GetText('subscribers_header')?></h1>
+
+<?php if (count($subscribers) >= 1): ?>
+    <div class="member_list">
+    <?php foreach ($subscribers as $subscriber): ?>
+        <div>
+            <?php $avatar = $this->getService('User')->getAvatarUrl($subscriber); ?>
+            <p><a href="<?=HOST?>/members/<?=$subscriber->username?>/" title="<?=$subscriber->username?>"><img class="picture" src="<?=($avatar) ? $avatar : $this->options->themeUrl . '/images/avatar.gif'?>" alt="<?=$subscriber->username?>" /></a></p>
+            <p><a href="<?=HOST?>/members/<?=$subscriber->username?>/" title="<?=$subscriber->username?>"><?=Functions::CutOff ($subscriber->username,18)?></a></p>
+        </div>
+    <?php endforeach; ?>
+
+    </div>
+    <?=$pagination->Paginate()?>
+
+<?php else: ?>
+    <p><strong><?=Language::GetText('no_subscribers')?></strong></p>
+<?php endif; ?>

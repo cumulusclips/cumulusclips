@@ -1,15 +1,18 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Page');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$pageMapper = new PageMapper();
+$pageService = new PageService();
+$view = View::getInstance();
 $data = array();
 $errors = array();
 $message = null;
@@ -19,71 +22,56 @@ $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
 
-
-
 // Build return to list link
-if (!empty ($_SESSION['list_page'])) {
+if (!empty($_SESSION['list_page'])) {
     $list_page = $_SESSION['list_page'];
 } else {
     $list_page = ADMIN . '/pages.php';
 }
 
-
-
 // Validate & load requested record
-if (!empty ($_GET['id']) && is_numeric ($_GET['id'])) {
-    $page = new Page ($_GET['id']);
-    if (!$page->found) header ("Location: " . ADMIN . '/pages.php');
+if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+    $page = $pageMapper->getPageById($_GET['id']);
+    if (!$page) header("Location: " . ADMIN . '/pages.php');
 } else {
-    header ("Location: " . ADMIN . '/pages.php');
+    header("Location: " . ADMIN . '/pages.php');
 }
-
-
 
 // Retrieve list of available layouts
-foreach (glob (THEME_PATH . '/layouts/*.header.tpl') as $filename) {
-    $layouts[] = basename ($filename, '.header.tpl');
+$activeTheme = Settings::get('active_theme');
+foreach (glob(THEMES_DIR . '/' . $activeTheme .'/layouts/*.phtml') as $filename) {
+    $layouts[] = basename($filename, '.phtml');
 }
 
-
-
-
-
-/***********************
-HANDLE FORM IF SUBMITTED
-***********************/
-
-if (isset ($_POST['submitted'])) {
+// HANDLE FORM IF SUBMITTED
+if (isset($_POST['submitted'])) {
 
     // Validate layout
-    if (!empty ($_POST['layout']) && !ctype_space ($_POST['layout'])) {
-        $data['layout'] = $_POST['layout'];
+    if (!empty($_POST['layout']) && !ctype_space($_POST['layout'])) {
+        $page->layout = $_POST['layout'];
     } else {
         $errors['layout'] = "You didn't provide a valid layout";
     }
 
-
     // Validate status
-    if (!empty ($_POST['status']) && in_array ($_POST['status'], array ('published', 'draft'))) {
-        $data['status'] = $_POST['status'];
+    if (!empty($_POST['status']) && in_array($_POST['status'], array ('published', 'draft'))) {
+        $page->status = $_POST['status'];
     } else {
         $errors['status'] = "You didn't provide a valid status";
     }
 
-
     // Validate title
-    if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
-        $data['title'] = htmlspecialchars (trim ($_POST['title']));
+    if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
+        $page->title = trim ($_POST['title']);
     } else {
         $errors['title'] = "You didn't enter a valid title";
     }
 
-
     // Validate slug
-    if (!empty ($_POST['slug']) && !ctype_space ($_POST['slug'])) {
-        $slug = Functions::CreateSlug (trim ($_POST['slug']));
-        if ($slug == $page->slug || (!Page::IsReserved ($slug) && !Page::Exist (array ('slug' => $slug)))) {
-            $data['slug'] = $slug;
+    if (!empty($_POST['slug']) && !ctype_space($_POST['slug'])) {
+        $slug = Functions::createSlug(trim($_POST['slug']));
+        if ($slug == $page->slug || (!$pageService->isReserved($slug) && !$pageMapper->getPageBySlug($slug))) {
+            $page->slug = $slug;
         } else {
             $errors['slug'] = "URL is not available";
         }
@@ -91,31 +79,27 @@ if (isset ($_POST['submitted'])) {
         $errors['slug'] = "You didn't enter a valid URL";
     }
 
-
     // Validate content
-    if (!empty ($_POST['content']) && !ctype_space ($_POST['content'])) {
-        $data['content'] = trim ($_POST['content']);
+    if (!empty($_POST['content']) && !ctype_space($_POST['content'])) {
+        $page->content = trim($_POST['content']);
     } else {
         $data['content'] = '';
     }
 
-
     // Update record if no errors were found
-    if (empty ($errors)) {
-        $page->Update ($data);
+    if (empty($errors)) {
+        $pageMapper->save($page);
         $message = 'Page has been updated';
         $message_type = 'success';
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
-        $message .= implode ('<br />- ', $errors);
-        $message_type = 'error';
+        $message .= implode('<br />- ', $errors);
+        $message_type = 'errors';
     }
-
 }
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
@@ -124,7 +108,7 @@ include ('header.php');
     <h1>Edit Page</h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -132,14 +116,14 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->page_id?>">
+        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
 
-            <div class="row <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
+            <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
                 <label>*Title:</label>
-                <input class="text" type="text" name="title" value="<?=$page->title?>" />
+                <input id="page-title" class="text" type="text" name="title" value="<?=$page->title?>" />
             </div>
 
-            <div id="page-slug" class="row  <?=(isset ($errors['title'])) ? 'errors' : '' ?>">
+            <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
                 
                 <label>*URL:</label>
                 <input type="hidden" name="slug" value="<?=$page->slug?>" />
@@ -187,8 +171,9 @@ include ('header.php');
             </div>
 
             <div class="row-shift">
+                <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
                 <input type="hidden" name="submitted" value="TRUE" />
-                <a href="<?=HOST?>/page/?preview=<?=$page->page_id?>" class="button preview" target="_ccsite">Preview</a>
+                <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
                 <input type="submit" class="button" value="Update Page" />
             </div>
             

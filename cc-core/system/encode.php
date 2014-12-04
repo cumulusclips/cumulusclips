@@ -1,81 +1,66 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/config/bootstrap.php');
-App::LoadClass ('Video');
-Plugin::Trigger ('encode.start');
-
+// Startup application
+include_once(dirname(__FILE__) . '/bootstrap.php');
 
 // Establish page variables, objects, arrays, etc
-if (!isset ($argv[1]) || !preg_match ('/--video=(.*)$/i', $argv[1], $arg_matches)) exit();
+if (!isset($argv[1]) || !preg_match('/--video=([0-9]+)$/i', $argv[1], $arg_matches)) exit();
 $video_id = $arg_matches[1];
-Plugin::Trigger ('encode.parse');
-$ffmpeg_path = Settings::Get ('ffmpeg');
+$ffmpegPath = Settings::get('ffmpeg');
 $qt_faststart_path = DOC_ROOT . '/cc-core/system/bin/qtfaststart';
-
+$videoMapper = new VideoMapper();
 
 // Set MySQL wait_timeout to 10 hours to prevent 'MySQL server has gone away' errors
-$db->Query ("SET @@session.wait_timeout=36000");
-
+$db->query("SET @@session.wait_timeout=36000");
 
 // Debug Log
-if ($config->debug_conversion) {
-    App::Log (CONVERSION_LOG, "\n\n### Converter Called...");
-    App::Log (CONVERSION_LOG, "Values passed to encoder:\n" . print_r ($argv, TRUE));
+if ($config->debugConversion) {
+    App::log(CONVERSION_LOG, "\n\n// Converter Called...");
+    App::log(CONVERSION_LOG, "Values passed to encoder:\n" . print_r ($argv, TRUE));
 }
 
-
-
-
 try {
-
     /////////////////////////////////////////////////////////////
     //                        STEP 1                           //
     //               Validate Requested Video                  //
     /////////////////////////////////////////////////////////////
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Validating requested video...') : null;
+
+    // Validate requested video
+    
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $video_id, 'status' => VideoMapper::PENDING_CONVERSION));
+    if (!$video) throw new Exception("An invalid video was passed to the video encoder.");
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Validating requested video...') : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Establishing variables...') : null;
 
-    ### Validate requested video
-    $video = new Video ($video_id);
-    if (!Video::Exist(array ('video_id' => $video_id, 'status' => 'pending conversion'))) throw new Exception ("An invalid video was passed to the video encoder.");
-
-
-
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Establishing variables...') : null;
-
-    ### Retrieve video information
-    $video->Update (array ('status' => 'processing'));
-    $debug_log = LOG . '/' . $video->filename . '.log';
-    $raw_video = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->original_extension;
-    $flv = UPLOAD_PATH . '/flv/' . $video->filename . '.flv';
-    $mobile_temp = UPLOAD_PATH . '/mobile/' . $video->filename . '_temp.mp4';
-    $mobile = UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4';
+    // Retrieve video information
+    $video->status = VideoMapper::PROCESSING;
+    $videoMapper->save($video);
+    $debugLog = LOG . '/' . $video->filename . '.log';
+    $rawVideo = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension;
+    $h264TempFilePath = UPLOAD_PATH . '/h264/' . $video->filename . '_temp.mp4';
+    $h264FilePath = UPLOAD_PATH . '/h264/' . $video->filename . '.mp4';
+    $theoraFilePath = UPLOAD_PATH . '/theora/' . $video->filename . '.ogg';
+    $webmFilePath = UPLOAD_PATH . '/webm/' . $video->filename . '.webm';
+    $mobileTempFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '_temp.mp4';
+    $mobileFilePath = UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4';
     $thumb = UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg';
-    Plugin::Trigger ('encode.load_video');
-
-
-
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying raw video exists...') : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying raw video exists...') : null;
 
-    ### Verify Raw Video Exists
-    if (!file_exists ($raw_video)) throw new Exception ("The raw video file does not exists. The id of the video is: $video->video_id");
-
-
-
+    // Verify Raw Video Exists
+    if (!file_exists ($rawVideo)) throw new Exception("The raw video file does not exists. The id of the video is: $video->videoId");
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying raw video was valid size...') : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying raw video was valid size...') : null;
 
-    ### Verify Raw Video has valid file size
+    // Verify Raw Video has valid file size
     // (Greater than min. 5KB, anything smaller is probably corrupted
-    if (!filesize ($raw_video) > 1024*5) throw new Exception ("The raw video file is not a valid filesize. The id of the video is: $video->video_id");
+    if (!filesize ($rawVideo) > 1024*5) throw new Exception("The raw video file is not a valid filesize. The id of the video is: $video->videoId");
 
 
 
@@ -87,37 +72,34 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 2                           //
-    //                Encode raw video to FLV                  //
+    //              Encode raw video to H.264                  //
     /////////////////////////////////////////////////////////////
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nPreparing for: H.264 Encoding...") : null;
+
+    // Encode raw video to H.264
+    $h264Command = "$ffmpegPath -i $rawVideo " . Settings::get('h264_encoding_options') . " $h264TempFilePath >> $debugLog 2>&1";
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: FLV Encoding...") : null;
+    $logMessage = "\n\n\n\n==================================================================\n";
+    $logMessage .= "H.264 ENCODING\n";
+    $logMessage .= "==================================================================\n\n";
+    $logMessage .= "H.264 Encoding Command: $h264Command\n\n";
+    $logMessage .= "H.264 Encoding Output:\n\n";
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'H.264 Encoding Command: ' . $h264Command) : null;
+    App::log($debugLog, $logMessage);
 
-    ### Encode raw video to FLV
-    $flv_command = "$ffmpeg_path -i $raw_video " . Settings::Get('flv_options') . " $flv >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_flv_encode');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "FLV ENCODING\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "FLV Encoding Command: $flv_command";
-    $log_msg .= "FLV Encoding Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'FLV Encoding Command: ' . $flv_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    ### Execute FLV encoding command
-    exec ($flv_command);
-    Plugin::Trigger ('encode.flv_encode');
-
-
+    // Execute H.264 encoding command
+    exec($h264Command);
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying FLV video was created...') : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying H.264 video was created...') : null;
 
-    ### Verify temp FLV video was created successfully
-    if (!file_exists ($flv) || filesize ($flv) < 1024*5) throw new Exception ("The FLV file was not created. The id of the video is: $video->video_id");
+    // Verify temp H.264 video was created successfully
+    if (!file_exists($h264TempFilePath) || filesize($h264TempFilePath) < 1024*5) {
+        throw new Exception("The temp H.264 file was not created. The id of the video is: $video->videoId");
+    }
 
 
 
@@ -129,94 +111,211 @@ try {
 
     /////////////////////////////////////////////////////////////
     //                        STEP 3                           //
-    //              Encode raw video to Mobile                 //
+    //            Shift Moov atom on H.264 video               //
     /////////////////////////////////////////////////////////////
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nChecking qt-faststart permissions...") : null;
+
+    if ((string) substr(sprintf('%o', fileperms($qt_faststart_path)), -4) != '0777') {
+        try {
+            Filesystem::setPermissions($qt_faststart_path, 0777);
+        } catch (Exception $e) {
+            throw new Exception("Unable to update permissions for qt-faststart. Please make sure it ($qt_faststart_path) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
+        }
+    }
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing for: Mobile Encoding...") : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nShifting moov atom on H.264 video...") : null;
 
-    ### Encode raw video to Mobile
-    $mobile_command = "$ffmpeg_path -i $raw_video " . Settings::Get('mobile_options') . " $mobile_temp >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_mobile_encode');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "MOBILE ENCODING\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Mobile Encoding Command: $mobile_command\n";
-    $log_msg .= "Mobile Encoding Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Mobile Encoding Command: ' . $mobile_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    ### Execute Mobile Encoding Command
-    exec ($mobile_command);
-    Plugin::Trigger ('encode.mobile_encode');
-
-
+    // Prepare shift moov atom command
+    $h264ShiftMoovAtomCommand = "$qt_faststart_path $h264TempFilePath $h264FilePath >> $debugLog 2>&1";
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying temp Mobile file was created...') : null;
+    $logMessage = "\n\n\n\n==================================================================\n";
+    $logMessage .= "H.264 SHIFT MOOV ATOM\n";
+    $logMessage .= "==================================================================\n\n";
+    $logMessage .= "H.264 Shift Moov Atom Command: $h264ShiftMoovAtomCommand\n\n";
+    $logMessage .= "H.264 Shift Moov Atom Output:\n\n";
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'H.264 Shift Moov Atom Command: ' . $h264ShiftMoovAtomCommand) : null;
+    App::log($debugLog, $logMessage);
 
-    ### Verify temp Mobile video was created successfully
-    if (!file_exists ($mobile_temp) || filesize ($mobile_temp) < 1024*5) throw new Exception ("The temp Mobile file was not created. The id of the video is: $video->video_id");
+    // Execute shift moov atom command
+    exec($h264ShiftMoovAtomCommand);
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying final H.264 file was created...') : null;
 
-
-
-
-
-
-
-
+    // Verify H.264 video was created successfully
+    if (!file_exists($h264FilePath) || filesize($h264FilePath) < 1024*5) {
+        throw new Exception("The final H.264 file was not created. The id of the video is: $video->videoId");
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /////////////////////////////////////////////////////////////
     //                        STEP 4                           //
-    //            Shift Moov atom on Mobile video              //
+    //               Encode raw video to WebM                  //
     /////////////////////////////////////////////////////////////
 
+    $webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
+    $webmEncodingOptions = Settings::get('webm_encoding_options');
+    if ($webmEncodingEnabled) {
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, "\nPreparing for: WebM Encoding...") : null;
 
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nChecking qt-faststart permissions...") : null;
+        // Encode raw video to WebM
+        $webmCommand = "$ffmpegPath -i $rawVideo " . $webmEncodingOptions . " $webmFilePath >> $debugLog 2>&1";
 
-    if ((string) substr (sprintf ('%o', fileperms ($qt_faststart_path)), -4) != '0777') {
-        try {
-            Filesystem::Open();
-            Filesystem::SetPermissions ($qt_faststart_path, 0777);
-            Filesystem::Close();
-        } catch (Exception $e) {
-            throw new Exception ("Unable to update permissions for qt-faststart. Please make sure it ($qt_faststart_path) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
+        // Debug Log
+        $logMessage = "\n\n\n\n==================================================================\n";
+        $logMessage .= "WebM ENCODING\n";
+        $logMessage .= "==================================================================\n\n";
+        $logMessage .= "WebM Encoding Command: $webmCommand\n\n";
+        $logMessage .= "WebM Encoding Output:\n\n";
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'WebM Encoding Command: ' . $webmCommand) : null;
+        App::log($debugLog, $logMessage);
+
+        // Execute WebM encoding command
+        exec($webmCommand);
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying WebM video was created...') : null;
+
+        // Verify temp WebM video was created successfully
+        if (!file_exists($webmFilePath) || filesize($webmFilePath) < 1024*5) {
+            throw new Exception("The WebM file was not created. The id of the video is: $video->videoId");
         }
     }
 
 
 
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
-
-    ### Execute Faststart Command
-    $faststart_command = "$qt_faststart_path $mobile_temp $mobile >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_faststart');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "FASTSTART\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Faststart Command: $faststart_command\n";
-    $log_msg .= "Faststart Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Faststart Command: ' . $faststart_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    ### Execute Faststart command
-    exec ($faststart_command);
-    Plugin::Trigger ('encode.faststart');
 
 
 
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying final Mobile file was created...') : null;
 
-    ### Verify Mobile video was created successfully
-    if (!file_exists ($mobile) || filesize ($mobile) < 1024*5) throw new Exception ("The final Mobile file was not created. The id of the video is: $video->video_id");
+
+
+    /////////////////////////////////////////////////////////////
+    //                        STEP 5                           //
+    //              Encode raw video to Theora                 //
+    /////////////////////////////////////////////////////////////
+
+    $theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
+    $theoraEncodingOptions = Settings::get('theora_encoding_options');
+    if ($theoraEncodingEnabled) {
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, "\nPreparing for: Theora Encoding...") : null;
+
+        // Encode raw video to Theora
+        $theoraCommand = "$ffmpegPath -i $rawVideo " . $theoraEncodingOptions . " $theoraFilePath >> $debugLog 2>&1";
+
+        // Debug Log
+        $logMessage = "\n\n\n\n==================================================================\n";
+        $logMessage .= "Theora ENCODING\n";
+        $logMessage .= "==================================================================\n\n";
+        $logMessage .= "Theora Encoding Command: $theoraCommand\n\n";
+        $logMessage .= "Theora Encoding Output:\n\n";
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Theora Encoding Command: ' . $theoraCommand) : null;
+        App::log($debugLog, $logMessage);
+
+        // Execute Theora encoding command
+        exec($theoraCommand);
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying Theora video was created...') : null;
+
+        // Verify temp Theora video was created successfully
+        if (!file_exists($theoraFilePath) || filesize($theoraFilePath) < 1024*5) {
+            throw new Exception("The Theora file was not created. The id of the video is: $video->videoId");
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    //                        STEP 6                           //
+    //              Encode raw video to Mobile                 //
+    /////////////////////////////////////////////////////////////
+
+    $mobileEncodingEnabled = (Settings::get('mobile_encoding_enabled') == '1') ? true : false;
+    $mobileEncodingOptions = Settings::get('mobile_encoding_options');
+    if ($mobileEncodingEnabled) {
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, "\nPreparing for: Mobile Encoding...") : null;
+
+        // Encode raw video to Mobile
+        $mobileCommand = "$ffmpegPath -i $rawVideo " . $mobileEncodingOptions . " $mobileTempFilePath >> $debugLog 2>&1";
+
+        // Debug Log
+        $logMessage = "\n\n\n\n==================================================================\n";
+        $logMessage .= "Mobile ENCODING\n";
+        $logMessage .= "==================================================================\n\n";
+        $logMessage .= "Mobile Encoding Command: $mobileCommand\n\n";
+        $logMessage .= "Mobile Encoding Output:\n\n";
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Mobile Encoding Command: ' . $mobileCommand) : null;
+        App::log($debugLog, $logMessage);
+
+        // Execute Mobile encoding command
+        exec($mobileCommand);
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying Mobile video was created...') : null;
+
+        // Verify temp Mobile video was created successfully
+        if (!file_exists($mobileTempFilePath) || filesize($mobileTempFilePath) < 1024*5) {
+            throw new Exception("The Mobile file was not created. The id of the video is: $video->videoId");
+        }
+
+
+
+
+
+
+
+
+    
+        /////////////////////////////////////////////////////////////
+        //                        STEP 7                           //
+        //            Shift Moov atom on Mobile video              //
+        /////////////////////////////////////////////////////////////
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
+
+        // Execute Faststart Command
+        $faststartCommand = "$qt_faststart_path $mobileTempFilePath $mobileFilePath >> $debugLog 2>&1";
+
+        // Debug Log
+        $logMessage = "\n\n\n\n==================================================================\n";
+        $logMessage .= "FASTSTART\n";
+        $logMessage .= "==================================================================\n\n";
+        $logMessage .= "Faststart Command: $faststartCommand";
+        $logMessage .= "Faststart Output:\n\n";
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Faststart Command: ' . $faststartCommand) : null;
+        App::log($debugLog, $logMessage);
+
+        // Execute Faststart command
+        exec($faststartCommand);
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying final Mobile file was created...') : null;
+
+        // Verify Mobile video was created successfully
+        if (!file_exists($mobileFilePath) || filesize($mobileFilePath) < 1024*5) throw new Exception("The final Mobile file was not created. The id of the video is: $video->videoId");
+    }
 
 
 
@@ -231,37 +330,28 @@ try {
     //                  Get Video Duration                     //
     /////////////////////////////////////////////////////////////
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nRetrieving video duration...") : null;
+
+    // Retrieve duration of raw video file.
+    $durationCommand = "$ffmpegPath -i $rawVideo 2>&1 | grep Duration:";
+    exec($durationCommand, $durationResults);
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nRetrieving video duration...") : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, "Duration command results:\n" . print_r ($durationResults, TRUE)) : null;
 
-    ### Retrieve duration of raw video file.
-    $duration_cmd = "$ffmpeg_path -i $raw_video 2>&1 | grep Duration:";
-    Plugin::Trigger ('encode.before_get_duration');
-    exec ($duration_cmd, $duration_results);
-
-    // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "Duration command results:\n" . print_r ($duration_results, TRUE)) : null;
-
-
-
-
-    $duration_results_cleaned = preg_replace ('/^\s*Duration:\s*/', '', $duration_results[0]);
-    preg_match ('/^[0-9]{2}:[0-9]{2}:[0-9]{2}/', $duration_results_cleaned, $duration);
-    $sec = Functions::DurationInSeconds ($duration[0]);
+    $durationResultsCleaned = preg_replace('/^\s*Duration:\s*/', '', $durationResults[0]);
+    preg_match ('/^[0-9]{2}:[0-9]{2}:[0-9]{2}/', $durationResultsCleaned, $duration);
+    $sec = Functions::durationInSeconds($duration[0]);
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "Duration in Seconds: $sec") : null;
-
-
-
+    $config->debugConversion ? App::log(CONVERSION_LOG, "Duration in Seconds: $sec") : null;
 
     // Calculate thumbnail position
-    $thumb_position = round ($sec / 2);
-    Plugin::Trigger ('encode.get_duration');
+    $thumbPosition = round ($sec / 2);
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "Thumb Position: $thumb_position") : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, "Thumb Position: $thumbPosition") : null;
 
 
 
@@ -276,34 +366,28 @@ try {
     //                Create Thumbnail Image                   //
     /////////////////////////////////////////////////////////////
 
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nPreparing to create video thumbnail...") : null;
+
+    // Create video thumbnail image
+    $thumbCommand = "$ffmpegPath -i $rawVideo -ss $thumbPosition " . Settings::get('thumb_encoding_options') . " $thumb >> $debugLog 2>&1";
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nPreparing to create video thumbnail...") : null;
+    $logMessage = "\n\n\n\n==================================================================\n";
+    $logMessage .= "THUMB CREATION\n";
+    $logMessage .= "==================================================================\n\n";
+    $logMessage .= "Thumb Creation Command: $thumbCommand";
+    $logMessage .= "Thumb Creation Output:\n\n";
+    $config->debugConversion ? App::log(CONVERSION_LOG, "Thumbnail Creation Command: " . $thumbCommand) : null;
+    App::log($debugLog, $logMessage);
 
-    ### Create video thumbnail image
-    $thumb_command = "$ffmpeg_path -i $flv -ss $thumb_position " . Settings::Get('thumb_options') . " $thumb >> $debug_log 2>&1";
-    Plugin::Trigger ('encode.before_create_thumbnail');
-
-    // Debug Log
-    $log_msg = "\n\n\n\n==================================================================\n";
-    $log_msg .= "THUMB CREATION\n";
-    $log_msg .= "==================================================================\n\n";
-    $log_msg .= "Thumb Creation Command: $thumb_command\n\n";
-    $log_msg .= "Thumb Creation Output:\n\n";
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "Thumbnail Creation Command: " . $thumb_command) : null;
-    App::Log ($debug_log, $log_msg);
-
-    exec ($thumb_command);    // Execute Thumb Creation Command
-    Plugin::Trigger ('encode.create_thumbnail');
-
-
-
+    exec($thumbCommand);    // Execute Thumb Creation Command
 
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Verifying valid thumbnail was created...') : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, 'Verifying valid thumbnail was created...') : null;
 
     // Verify valid thumbnail was created
-    if (!file_exists ($thumb) || filesize ($thumb) == 0) throw new Exception ("The video thumbnail is invalid. The id of the video is: $video->video_id");
+    if (!file_exists($thumb) || filesize($thumb) == 0) throw new Exception("The video thumbnail is invalid. The id of the video is: $video->videoId");
 
 
 
@@ -318,18 +402,16 @@ try {
     //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
-
     // Debug Log
-    $config->debug_conversion ? App::Log (CONVERSION_LOG, "\nUpdating video information...") : null;
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nUpdating video information...") : null;
 
     // Update database with new video status information
-    $data['duration'] = $duration[0];
-    Plugin::Trigger ('encode.before_update');
-    $video->Update ($data);
-    Plugin::Trigger ('encode.update');
+    $video->duration = Functions::formatDuration($duration[0]);
+    $videoMapper->save($video);
 
     // Activate video
-    $video->Approve ('activate');
+    $videoService = new VideoService();
+    $videoService->approve($video, 'activate');
 
 
 
@@ -344,38 +426,32 @@ try {
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 
-    
     try {
-
         // Debug Log
-        $config->debug_conversion ? App::Log (CONVERSION_LOG, 'Deleting raw video...') : null;
+        $config->debugConversion ? App::log(CONVERSION_LOG, 'Deleting raw video...') : null;
 
-        ### Delete raw videos & pre-faststart files
-        Filesystem::Open();
-        Filesystem::Delete ($raw_video);
-        Filesystem::Delete ($mobile_temp);
+        // Delete pre-faststart files
+        Filesystem::delete($h264TempFilePath);
+        if ($mobileEncodingEnabled) Filesystem::delete($mobileTempFilePath);
 
-
-
-        ### Delete encoding log files
-        if ($config->debug_conversion) {
-            App::Log (CONVERSION_LOG, "Video ID: $video->video_id, has completed processing!\n");
-        } else {
-            Filesystem::Delete ($debug_log);
+        // Delete original video
+        if (Settings::get('keep_original_video') != '1') {
+            Filesystem::delete($rawVideo);
         }
 
+        // Delete encoding log files
+        if ($config->debugConversion) {
+            App::log(CONVERSION_LOG, "Video ID: $video->videoId, has completed processing!\n");
+        } else {
+            Filesystem::delete($debugLog);
+        }
     } catch (Exception $e) {
-        App::Alert ('Error During Video Encoding', $e->getMessage());
-        App::Log (CONVERSION_LOG, $e->getMessage());
+        App::alert('Error During Video Encoding', $e->getMessage());
+        App::log(CONVERSION_LOG, $e->getMessage());
     }
 
-    Plugin::Trigger ('encode.complete');
-
-
 } catch (Exception $e) {
-    App::Alert ('Error During Video Encoding', $e->getMessage());
-    App::Log (CONVERSION_LOG, $e->getMessage());
+    App::alert('Error During Video Encoding', $e->getMessage());
+    App::log(CONVERSION_LOG, $e->getMessage());
     exit();
 }
-
-?>

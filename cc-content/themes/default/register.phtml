@@ -1,0 +1,32 @@
+
+<h1><?=Language::getText('register_header')?></h1>
+
+<?php if ($message): ?>
+    <div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
+
+<?=Language::getText('register_text', array ('sitename' => $config->sitename))?>
+
+<div class="form">
+
+    <form action="<?=HOST?>/register/" method="post">
+        <label class="<?=(isset ($errors['email'])) ? 'error' : ''?>"><?=Language::getText('email')?>:</label>
+        <input name="email" type="text" class="text" value="<?=(isset($errors, $user->email)) ? $user->email : ''?>" />
+
+        <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>"><?=Language::getText('username')?>:</label>
+        <input name="username" type="text" class="text" value="<?=(isset($errors, $user->username)) ? $user->username : ''?>" maxlength="30" autocomplete="off" />
+        <p class="status"></p>
+        <p class="hint"><?=Language::getText('username_req')?></p>
+
+        <label class="<?=(isset ($errors['password']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::getText('password')?>:</label>
+        <input name="password" type="password" class="text" value="<?=(isset($errors, $user->password)) ? $user->password : ''?>" />
+
+        <label class="<?=(isset ($errors['password_confirm']) || isset($errors['match'])) ? 'error' : ''?>"><?=Language::getText('confirm_password')?>:</label>
+        <input name="confirm" type="password" class="text" value="<?=(isset($errors, $user->password)) ? $user->password : ''?>" />
+
+        <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="token" value="<?=$token?>" />
+        <input class="button" type="submit" name="button" value="<?=Language::getText('register_button')?>" />
+    </form>
+
+</div>

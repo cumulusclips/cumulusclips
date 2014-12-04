@@ -110,8 +110,7 @@ if (isset ($_POST['submitted'])) {
 
 
             // Save database settings to config file in permanent location
-            $perm_config_file = DOC_ROOT . '/cc-core/config/config.php';
-            FilesystemInstaller::Open();
+            $perm_config_file = DOC_ROOT . '/cc-core/system/config.php';
             FilesystemInstaller::Create ($perm_config_file);
             FilesystemInstaller::Write ($perm_config_file, $config_content);
             FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/bin', 0777);
@@ -120,7 +119,6 @@ if (isset ($_POST['submitted'])) {
             FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
             FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
             FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
-            FilesystemInstaller::Close();
 
 
             // Store information & redirect user
@@ -148,5 +146,3 @@ if (isset ($_POST['submitted'])) {
 
 // Output page
 include_once (INSTALL . '/views/database.tpl');
-
-?>

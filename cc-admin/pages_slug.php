@@ -1,15 +1,17 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Page');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$pageMapper = new PageMapper();
+$pageService = new PageService();
 
 
 
@@ -19,10 +21,8 @@ if (!empty ($_POST['action']) && in_array ($_POST['action'], array ('slug','titl
 
     if ($_POST['action'] == 'slug') {
         $slug = Functions::CreateSlug (trim ($_POST['slug']));
-    } else if ($_POST['action'] == 'title') {
-        $slug = Functions::CreateSlug (trim ($_POST['title']));
     } else {
-        App::Throw404();
+        $slug = Functions::CreateSlug (trim ($_POST['title']));
     }
 
 } else {
@@ -31,28 +31,21 @@ if (!empty ($_POST['action']) && in_array ($_POST['action'], array ('slug','titl
 
 
 // Validate Page ID
-if (isset ($_POST['page_id']) && $_POST['page_id'] == 0) {
+if (empty($_POST['page_id'])) {
     $page_id = 0;
-} else if (!empty ($_POST['page_id']) && is_numeric ($_POST['page_id']) && Page::Exist (array ('page_id' => $_POST['page_id']))) {
+} else if (!empty ($_POST['page_id']) && is_numeric ($_POST['page_id']) && $pageMapper->getPageById($_POST['page_id'])) {
     $page_id = $_POST['page_id'];
 } else {
     App::Throw404();
 }
 
 
-
-$slug_page_id = Page::Exist (array ('slug' => $slug));
-
-
-
-
-
-
 // If reserved
 // If create & taken
 // If update and & taken
-if (Page::IsReserved ($slug) || ($slug_page_id && $slug_page_id !== $page_id)) {
-    echo json_encode (array ('result' => 0, 'msg' => Page::GetAvailableSlug ($slug)));
+$page = $pageMapper->getPageBySlug($slug);
+if ($pageService->isReserved ($slug) || ($page && $page->pageId != $page_id)) {
+    echo json_encode (array ('result' => 1, 'msg' => $pageService->getAvailableSlug ($slug)));
 }
 
 
@@ -63,5 +56,3 @@ else {
     // OK
     echo json_encode (array ('result' => 1, 'msg' => $slug));
 }
-
-?>

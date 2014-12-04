@@ -5,44 +5,34 @@ class Settings
     /**
      * @var stdClass Object containing all values from settings DB table 
      */
-    private static $settings;
-    
-    /**
-     * @var string Name of table in the database  
-     */
-    protected static $table = 'settings';
-    
-    /**
-     * @var string Name of the primary key column in the database table 
-     */
-    protected static $id_name = 'setting_id';
+    protected static $_settings;
 
     /**
      * Load site settings from DB into memory
      */
-    public static function LoadSettings()
+    public static function loadSettings()
     {
-        self::$settings = new stdClass();
+        self::$_settings = new stdClass();
 
         // Retrieve all settings from DB and store in object
-        $db = Database::GetInstance();
-        $query = "SELECT * FROM " . DB_PREFIX . self::$table;
-        $result = $db->Query ($query);
-        while ($row = $db->FetchObj ($result)) {
-            $field = $row->name;
-            self::$settings->$field = $row->value;
+        $db = Registry::get('db');
+        $query = "SELECT * FROM " . DB_PREFIX . 'settings';
+        $results = $db->basicQuery($query);
+        foreach ($results as $row) {
+            $field = $row['name'];
+            self::$_settings->$field = $row['value'];
         }
     }
 
     /**
      * Retrieve value of site setting
      * @param string $setting_name Name of setting to be retrieved
-     * @return string|boolean Value of requested setting or false if it doesn't exist
+     * @return string|boolean Value of requested setting or boolean false if it doesn't exist
      */
-    public static function Get($setting_name)
+    public static function get($setting_name)
     {
-        if (isset(self::$settings->$setting_name)) {
-            return self::$settings->$setting_name;
+        if (isset(self::$_settings->$setting_name)) {
+            return self::$_settings->$setting_name;
         } else {
             return false;
         }
@@ -54,18 +44,16 @@ class Settings
      * @param mixed $value Value to be assigned to the setting
      * @return void Setting is updated or created in DB and object as well
      */
-    public static function Set($settingName, $value)
+    public static function set($settingName, $value)
     {
-        $db = Database::GetInstance();
-        $cleanSettingName = $db->Escape($settingName);
-        $cleanValue = $db->Escape($value);
-        if (self::Get($settingName)) {
-            $query = "UPDATE " . DB_PREFIX . self::$table . " SET value = '$cleanValue' WHERE name = '$cleanSettingName'";
+        $db = Registry::get('db');
+        if (self::get($settingName) !== false) {
+            $query = "UPDATE " . DB_PREFIX . "settings SET value = :settingValue WHERE name = :settingName";
         } else {
-            $query = "INSERT INTO " . DB_PREFIX . self::$table . " (name, value) VALUES ('$cleanSettingName', '$cleanValue')";
+            $query = "INSERT INTO " . DB_PREFIX . "settings (name, value) VALUES (:settingName, :settingValue)";
         }
-        $db->Query ($query);
-        self::$settings->$settingName = $value;
+        $db->query($query, array(':settingValue' => $value, ':settingName' => $settingName));
+        self::$_settings->$settingName = $value;
     }
     
     /**
@@ -73,12 +61,11 @@ class Settings
      * @param string $settingName Name of the setting to be removed
      * @return void Setting is removed from DB and object in memory
      */
-    public static function Remove($settingName)
+    public static function remove($settingName)
     {
-        unset(self::$settings->$settingName);
-        $db = Database::GetInstance();
-        $settingName = $db->Escape($settingName);
-        $query = "DELETE FROM " . DB_PREFIX . self::$table . " WHERE name = '$settingName'";
-        $db->Query($query);
+        unset(self::$_settings->$settingName);
+        $db = Registry::get('db');
+        $query = "DELETE FROM " . DB_PREFIX . "settings WHERE name = ?";
+        $db->query($query, array($settingName));
     }
 }

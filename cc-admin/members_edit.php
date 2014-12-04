@@ -1,15 +1,16 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Flag');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::RedirectIf($adminUser, HOST . '/login/');
+Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$userMapper = new UserMapper();
 $page_title = 'Edit Member';
 $data = array();
 $errors = array();
@@ -27,11 +28,11 @@ if (!empty ($_SESSION['list_page'])) {
 
 
 ### Verify a member was provided
-if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] != 0) {
+if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] > 0) {
 
     ### Retrieve member information
-    $user = new User ($_GET['id']);
-    if (!$user->found) {
+    $user = $userMapper->getUserById($_GET['id']);
+    if (!$user) {
         header ('Location: ' . ADMIN . '/members.php');
         exit();
     }
@@ -53,7 +54,7 @@ if (isset ($_POST['submitted'])) {
 
     // Validate status
     if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-        $data['status'] = htmlspecialchars (trim ($_POST['status']));
+        $user->status = trim ($_POST['status']);
     } else {
         $errors['status'] = 'Invalid status';
     }
@@ -61,18 +62,17 @@ if (isset ($_POST['submitted'])) {
 
     // Validate role
     if (!empty ($_POST['role']) && !ctype_space ($_POST['role'])) {
-        $data['role'] = htmlspecialchars (trim ($_POST['role']));
+        $user->role = trim ($_POST['role']);
     } else {
         $errors['role'] = 'Invalid role';
     }
 
 
     // Validate Email
-    if (!empty ($_POST['email']) && !ctype_space ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
-        $email = array ('email' => $_POST['email']);
-        $id = User::Exist ($email);
-        if (!$id || $id == $user->user_id) {
-            $data['email'] = $_POST['email'];
+    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
+        $duplicateEmailUser = $userMapper->getUserByCustom(array('email' => $_POST['email']));
+        if (!$duplicateEmailUser || $duplicateEmailUser->userId == $user->userId) {
+            $user->email = $_POST['email'];
         } else {
             $errors['email'] = 'Email is unavailable';
         }
@@ -84,34 +84,34 @@ if (isset ($_POST['submitted'])) {
 
     // Validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $data['password'] = trim ($_POST['password']);
+        $user->password = trim ($_POST['password']);
     }
 
 
     // Validate First Name
-    if (!empty ($user->first_name) && $_POST['first_name'] == '') {
-        $data['first_name'] = '';
+    if (!empty ($user->firstName) && $_POST['first_name'] == '') {
+        $user->firstName = '';
     } elseif (!empty ($_POST['first_name']) && !ctype_space ($_POST['first_name'])) {
-        $data['first_name'] = htmlspecialchars ($_POST['first_name']);
+        $user->firstName = $_POST['first_name'];
     }
 
 
     // Validate Last Name
-    if (!empty ($user->last_name) && $_POST['last_name'] == '') {
-        $data['last_name'] = '';
+    if (!empty ($user->lastName) && $_POST['last_name'] == '') {
+        $user->lastName = '';
     } elseif (!empty ($_POST['last_name']) && !ctype_space ($_POST['last_name'])) {
-        $data['last_name'] = htmlspecialchars ($_POST['last_name']);
+        $user->lastName = $_POST['last_name'];
     }
 
 
     // Validate website
     if (!empty ($user->website) && empty ($_POST['website'])) {
-        $data['website'] = '';
+        $user->website = '';
     } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
         $website = $_POST['website'];
         if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
             $website = (empty($matches[1])) ? 'http://' . $website : $website;
-            $data['website'] = htmlspecialchars (trim ($website));
+            $user->website = trim ($website);
         } else {
             $errors['website'] = 'Invalid website';
         }
@@ -119,10 +119,10 @@ if (isset ($_POST['submitted'])) {
 
 
     // Validate About Me
-    if (!empty ($user->about_me) && empty ($_POST['about_me'])) {
-        $data['about_me'] = '';
+    if (!empty ($user->aboutMe) && empty ($_POST['about_me'])) {
+        $user->aboutMe = '';
     } elseif (!empty ($_POST['about_me']) && !ctype_space ($_POST['about_me'])) {
-        $data['about_me'] = htmlspecialchars ($_POST['about_me']);
+        $user->aboutMe = $_POST['about_me'];
     }
 
 
@@ -131,42 +131,43 @@ if (isset ($_POST['submitted'])) {
     if (empty ($errors)) {
 
         // Perform addional actions based on status change
-        if ($data['status'] != $user->status) {
+        if ($user->status != $user->status) {
 
-            switch ($data['status']) {
+            switch ($user->status) {
 
                 // Handle "Approve" action
                 case 'active':
-                    $user->UpdateContentStatus ('active');
-                    $user->Approve ('approve');
+                    $userService->updateContentStatus($user, 'active');
+                    $userService->approve($user, 'approve');
                     break;
 
 
                 // Handle "Ban" action
                 case 'banned':
-                    $user->UpdateContentStatus ('banned');
-                    Flag::FlagDecision ($user->user_id, 'user', true);
+                    $userService->updateContentStatus($user, 'banned');
+                    $flagService = new FlagService();
+                    $flagService->flagDecision($user, true);
                     break;
 
 
                 // Handle "Pending" or "New" action
                 case 'new':
                 case 'pending':
-                    $user->UpdateContentStatus ($data['status']);
+                    $userService->updateContentStatus($user);
                     break;
 
             }
 
         }
 
-        if (isset ($data['password'])) $data['password'] = md5 ($data['password']);
+        if (isset ($user->password)) $user->password = md5 ($user->password);
         $message = 'Member has been updated.';
         $message_type = 'success';
-        $user->Update ($data);
+        $userMapper->save($user);
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'error';
+        $message_type = 'errors';
     }
 
 }
@@ -182,7 +183,7 @@ include ('header.php');
     <h1>Update Member</h1>
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -190,11 +191,11 @@ include ('header.php');
 
         <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form action="<?=ADMIN?>/members_edit.php?id=<?=$user->user_id?>" method="post">
+        <form action="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" method="post">
 
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Status:</label>
                 <select name="status" class="dropdown">
                     <option value="active"<?=(isset ($data['status']) && $data['status'] == 'active') || (!isset ($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
@@ -204,18 +205,18 @@ include ('header.php');
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Role:</label>
                 <select name="role" class="dropdown">
                 <?php foreach ($config->roles as $key => $value): ?>
-                    <option value="<?=$key?>" <?=(isset ($data['role']) && $data['role'] == $key) || (!isset ($data['role']) && $user->role == $key)?'selected="selected"':''?>><?=$value['name']?></option>
+                    <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value['name']?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['email'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['email'])) ? ' error' : ''?>">
                 <label>*Email:</label>
-                <input class="text" type="text" name="email" value="<?=(isset ($errors, $data['email'])) ? $data['email'] : $user->email?>" />
+                <input class="text" type="text" name="email" value="<?=$user->email?>" />
             </div>
 
             <div class="row">
@@ -224,28 +225,28 @@ include ('header.php');
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['password'])) ? 'errors' : ''?>">Password:</label>
-                <input name="password" type="password" class="text mask" value="<?=(!empty ($errors) && !empty ($data['password'])) ? htmlspecialchars ($data['password']):''?>" />
+                <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">Password:</label>
+                <input name="password" type="password" class="text mask" value="<?=htmlspecialchars($user->password)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['first_name'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['first_name'])) ? ' error' : ''?>">
                 <label>First Name:</label>
-                <input class="text" type="text" name="first_name" value="<?=(isset ($data['first_name'])) ? $data['first_name'] : $user->first_name?>" />
+                <input class="text" type="text" name="first_name" value="<?=htmlspecialchars($user->firstName)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['last_name'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['last_name'])) ? ' error' : ''?>">
                 <label>Last Name:</label>
-                <input class="text" type="text" name="last_name" value="<?=(isset ($data['last_name'])) ? $data['last_name'] : $user->last_name?>" />
+                <input class="text" type="text" name="last_name" value="<?=htmlspecialchars($user->lastName)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['website'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['website'])) ? ' error' : ''?>">
                 <label>Website:</label>
-                <input class="text" type="text" name="website" value="<?=(isset ($data['website'])) ? $data['website'] : $user->website?>" />
+                <input class="text" type="text" name="website" value="<?=htmlspecialchars($user->website)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['about_me'])) ? ' errors' : ''?>">
+            <div class="row<?=(isset ($errors['about_me'])) ? ' error' : ''?>">
                 <label>About Me:</label>
-                <textarea rows="7" cols="50" class="text" name="about_me"><?=(isset ($data['about_me'])) ? $data['about_me'] : $user->about_me?></textarea>
+                <textarea rows="7" cols="50" class="text" name="about_me"><?=htmlspecialchars($user->aboutMe)?></textarea>
             </div>
             
             <div class="row-shift">

@@ -1,128 +1,115 @@
 <?php
 
-// Include required files
-include_once (dirname (dirname (__FILE__)) . '/cc-core/config/admin.bootstrap.php');
-App::LoadClass ('User');
-App::LoadClass ('Video');
-App::LoadClass ('Flag');
-App::LoadClass ('Pagination');
+// Init application
+include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
+// Verify if user is logged in
+$userService = new UserService();
+$adminUser = $userService->loginCheck();
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-Functions::RedirectIf ($logged_in = User::LoginCheck(), HOST . '/login/');
-$admin = new User ($logged_in);
-Functions::RedirectIf (User::CheckPermissions ('admin_panel', $admin), HOST . '/myaccount/');
+$videoMapper = new VideoMapper();
+$videoService = new VideoService();
 $records_per_page = 9;
 $url = ADMIN . '/videos.php';
 $query_string = array();
 $categories = array();
 $message = null;
 $sub_header = null;
-
-
+$webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
+$theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
+$admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
+$admin_js[] = ADMIN . '/js/fancybox.js';
 
 // Retrieve Category names
-$query = "SELECT cat_id, cat_name FROM " . DB_PREFIX . "categories";
-$result = $db->Query ($query);
-while ($row = $db->FetchObj ($result)) {
-    $categories[$row->cat_id] = $row->cat_name;
-}
+$categoryService = new CategoryService();
+$categories = $categoryService->getCategories();
 
-
-
-### Handle "Delete" video if requested
-if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
+// Handle "Delete" video if requested
+if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['delete']))) {
-        Video::Delete($_GET['delete']);
+    $video = $videoMapper->getVideoById($_GET['delete']);
+    if ($video) {
+        $videoService->delete($video);
         $message = 'Video has been deleted';
         $message_type = 'success';
     }
-
 }
 
-
-### Handle "Feature" video if requested
-else if (!empty ($_GET['feature']) && is_numeric ($_GET['feature'])) {
+// Handle "Feature" video if requested
+else if (!empty($_GET['feature']) && is_numeric($_GET['feature'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['feature'], 'featured' => 0))) {
-        $video = new Video ($_GET['feature']);
-        $video->Update (array ('featured' => 1));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'featured' => 0, 'status' => 'approved'));
+    if ($video) {
+        $video->featured = true;
+        $videoMapper->save($video);
         $message = 'Video has been featured';
         $message_type = 'success';
     }
-
 }
 
-
-### Handle "Un-Feature" video if requested
-else if (!empty ($_GET['unfeature']) && is_numeric ($_GET['unfeature'])) {
+// Handle "Un-Feature" video if requested
+else if (!empty($_GET['unfeature']) && is_numeric($_GET['unfeature'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['unfeature'], 'featured' => 1))) {
-        $video = new Video ($_GET['unfeature']);
-        $video->Update (array ('featured' => 0));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'featured' => 1, 'status' => 'approved'));
+    if ($video) {
+        $video->featured = false;
+        $videoMapper->save($video);
         $message = 'Video has been unfeatured';
         $message_type = 'success';
     }
-
 }
 
-
-### Handle "Approve" video if requested
-else if (!empty ($_GET['approve']) && is_numeric ($_GET['approve'])) {
+// Handle "Approve" video if requested
+else if (!empty($_GET['approve']) && is_numeric($_GET['approve'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['approve']))) {
-        $video = new Video ($_GET['approve']);
-        $video->Approve ('approve');
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['approve'], 'status' => VideoMapper::PENDING_APPROVAL));
+    if ($video) {
+        $videoService->approve($video, 'approve');
         $message = 'Video has been approved and is now available';
         $message_type = 'success';
     }
-
 }
 
-
-### Handle "Unban" video if requested
-else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
+// Handle "Unban" video if requested
+else if (!empty($_GET['unban']) && is_numeric($_GET['unban'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['unban']))) {
-        $video = new Video ($_GET['unban']);
-        $video->Approve ('approve');
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unban'], 'status' => 'banned'));
+    if ($video) {
+        $videoService->approve($video, 'approve');
         $message = 'Video has been unbanned';
         $message_type = 'success';
     }
-
 }
 
-
-### Handle "Ban" video if requested
-else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
+// Handle "Ban" video if requested
+else if (!empty($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate video id
-    if (Video::Exist (array ('video_id' => $_GET['ban']))) {
-        $video = new Video ($_GET['ban']);
-        $video->Update (array ('status' => 'banned'));
-        Flag::FlagDecision ($video->video_id, 'video', true);
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['ban']));
+    if ($video && $video->status != 'banned') {
+        $video->status = 'banned';
+        $videoMapper->save($video);
+        $flagService = new FlagService();
+        $flagService->flagDecision($video, true);
         $message = 'Video has been banned';
         $message_type = 'success';
     }
-
 }
 
-
-
-
-### Determine which type (status) of video to display
+// Determine which type (status) of video to display
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE";
-$status = (!empty ($_GET['status'])) ? $_GET['status'] : 'approved';
+$status = (!empty($_GET['status'])) ? $_GET['status'] : 'approved';
 switch ($status) {
-
     case 'pending':
-        $query .= " status = 'pending approval'";
+        $query .= " status IN ('processing', '" . VideoMapper::PENDING_APPROVAL . "', '" . VideoMapper::PENDING_CONVERSION . "')";
         $query_string['status'] = 'pending';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
@@ -145,50 +132,57 @@ switch ($status) {
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
         break;
-
 }
-
-
 
 // Handle Search Member Form
-if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
-
-    $like = $db->Escape (trim ($_POST['search']));
+if (isset ($_POST['search_submitted'])&& !empty($_POST['search'])) {
+    $like = trim($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE '%$like%'";
+    $query .= " AND title LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
-
-} else if (!empty ($_GET['search'])) {
-
-    $like = $db->Escape (trim ($_GET['search']));
+    $queryParams = array(':like' => '%' . $like . '%');
+} else if (!empty($_GET['search'])) {
+    $like = trim($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE '%$like%'";
+    $query .= " AND title LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
-
+    $queryParams = array(':like' => '%' . $like . '%');
+} else {
+    $queryParams = array();
 }
-
-
 
 // Retrieve total count
 $query .= " ORDER BY video_id DESC";
-$result_count = $db->Query ($query);
-$total = $db->Count ($result_count);
+$db->fetchAll($query, $queryParams);
+$total = $db->rowCount();
 
 // Initialize pagination
-$url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
-$start_record = $pagination->GetStartRecord();
-$_SESSION['list_page'] = $pagination->GetURL();
+$url .= (!empty($query_string)) ? '?' . http_build_query($query_string) : '';
+$pagination = new Pagination($url, $total, $records_per_page, false);
+$start_record = $pagination->getStartRecord();
+$_SESSION['list_page'] = $pagination->getURL();
 
 // Retrieve limited results
 $query .= " LIMIT $start_record, $records_per_page";
-$result = $db->Query ($query);
-
+$videoResults = $db->fetchAll($query, $queryParams);
+$videoList = $videoMapper->getVideosFromList(
+    Functions::arrayColumn($videoResults, 'video_id')
+);
 
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
+
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
+<meta name="h264Url" content="<?=$config->h264Url?>" />
+<meta name="thumbUrl" content="<?=$config->thumbUrl?>" />
+<?php if ($webmEncodingEnabled): ?>
+    <meta name="webmUrl" content="<?=$config->webmUrl?>" />
+<?php endif; ?>
+<?php if ($theoraEncodingEnabled): ?>
+    <meta name="theoraUrl" content="<?=$config->theoraUrl?>" />
+<?php endif; ?>
 
 <div id="videos">
 
@@ -199,7 +193,7 @@ include ('header.php');
 
 
     <?php if ($message): ?>
-    <div class="<?=$message_type?>"><?=$message?></div>
+    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php endif; ?>
 
 
@@ -236,56 +230,54 @@ include ('header.php');
                     </tr>
                 </thead>
                 <tbody>
-                <?php while ($row = $db->FetchObj ($result)): ?>
+                <?php foreach ($videoList as $video): ?>
 
                     <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $video = new Video ($row->video_id); ?>
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td class="video-title">
-                            <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>" class="large"><?=$video->title?></a><br />
-                            <div class="record-actions invisible">
-
-                                <?php if (in_array ($status, array ('approved','featured'))): ?>
-                                    <a href="<?=$video->url?>/" target="_ccsite">Watch</a>
+                            <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="large"><?=$video->title?></a><br />
+                            <div class="record-actions">
+                                
+                                <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
+                                    <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
                                 <?php endif; ?>
-
-
-                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->video_id?>">Edit</a>
-
+                                    
+                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
 
                                 <?php if ($status == 'approved'): ?>
                                     <?php if ($video->featured == 1): ?>
-                                        <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
+                                        <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
                                     <?php else: ?>
-                                        <a href="<?=$pagination->GetURL('feature='.$video->video_id)?>">Feature</a>
+                                        <a href="<?=$pagination->getURL('feature='.$video->videoId)?>">Feature</a>
                                     <?php endif ?>
                                 <?php endif; ?>
-
                                     
                                 <?php if ($status == 'featured'): ?>
-                                    <a href="<?=$pagination->GetURL('unfeature='.$video->video_id)?>">Un-Feature</a>
+                                    <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
                                 <?php endif; ?>
 
+                                <?php if (in_array ($status, array ('approved','featured'))): ?>
+                                    <a href="<?=$videoService->getUrl($video)?>/" target="_ccsite">Go to Video</a>
+                                <?php endif; ?>
 
-                                <?php if ($status == 'pending'): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$video->video_id)?>">Approve</a>
+                                <?php if ($video->status == VideoMapper::PENDING_APPROVAL): ?>
+                                    <a class="approve" href="<?=$pagination->getURL('approve='.$video->videoId)?>">Approve</a>
                                 <?php elseif (in_array ($status, array ('approved','featured'))): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$video->video_id)?>">Ban</a>
+                                    <a class="delete" href="<?=$pagination->getURL('ban='.$video->videoId)?>">Ban</a>
                                 <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$video->video_id)?>">Unban</a>
+                                    <a href="<?=$pagination->getURL('unban='.$video->videoId)?>">Unban</a>
                                 <?php endif; ?>
 
-
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$video->video_id)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
+                                <a class="delete confirm" href="<?=$pagination->getURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
                             </div>
                         </td>
-                        <td class="category"><?=$categories[$video->cat_id]?></td>
+                        <td class="category"><?=$categories[$video->categoryId]->name?></td>
                         <td><?=$video->username?></td>
-                        <td><?=Functions::DateFormat('m/d/Y',$video->date_created)?></td>
+                        <td><?=date('m/d/Y', strtotime($video->dateCreated))?></td>
                     </tr>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -295,7 +287,17 @@ include ('header.php');
     <?php else: ?>
         <div class="block"><strong>No videos found</strong></div>
     <?php endif; ?>
+        
+    <video width="600" height="337" controls="controls" poster="">
+        <source src="" type="video/mp4" />
+        <?php if ($webmEncodingEnabled): ?>
+            <source src="" type="video/webm" />
+        <?php endif; ?>
+        <?php if ($theoraEncodingEnabled): ?>
+            <source src="" type="video/ogg" />
+        <?php endif; ?>
+    </video>
 
 </div>
-
-<?php include ('footer.php'); ?>
+    
+<?php include('footer.php'); ?>
