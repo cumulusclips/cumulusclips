@@ -274,7 +274,7 @@ class Filesystem
             }
 
             // Delete directory
-            if (self::_canUseNative($dirname, true)) {
+            if (self::_canUseNative($dirname)) {
                 if (!@rmdir($dirname)) throw new Exception("Unable to delete directory ($dirname)");
             } else {
                 self::_open();
@@ -284,7 +284,7 @@ class Filesystem
             }
         } else {
             // Delete file
-            if (self::_canUseNative($filename, true)) {
+            if (self::_canUseNative($filename)) {
                 if (!@unlink($filename)) throw new Exception("Unable to delete file ($filename)");
             } else {
                 self::_open();
@@ -346,7 +346,7 @@ class Filesystem
     protected static function _open()
     {
         // Set FTP login settings
-        if (defined('FTP_HOST') && defined('FTP_USER') && defined('FTP_PASS') && defined('FTP_PATH') && defined('FTP_SSL')) {
+        if (FTP_HOST !== '' && FTP_USER !== '' && FTP_PASS !== '' && FTP_PATH !== '' && is_bool(FTP_SSL)) {
             self::$_ftp_hostname = FTP_HOST;
             self::$_ftp_username = FTP_USER;
             self::$_ftp_password = FTP_PASS;
