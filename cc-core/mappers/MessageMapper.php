@@ -11,14 +11,14 @@ class MessageMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
-            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= DB_PREFIX . "messages.$fieldName = :$fieldName AND ";
+            $query .= "messages.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
@@ -35,14 +35,14 @@ class MessageMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
-            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
-            $query .= DB_PREFIX . "messages.$fieldName = :$fieldName AND ";
+            $query .= "messages.$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
@@ -116,9 +116,9 @@ class MessageMapper extends MapperAbstract
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($messageIds), '?'));
         $sql = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages '
-            . 'INNER JOIN ' . DB_PREFIX . 'users senders ON messages.user_id = senders.user_id '
-            . 'INNER JOIN ' . DB_PREFIX . 'users recipients ON messages.recipient = recipients.user_id '
+            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
+            . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE message_id IN (' . $inQuery . ')';
         $result = $db->fetchAll($sql, $messageIds);
 

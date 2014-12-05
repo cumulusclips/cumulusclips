@@ -25,7 +25,7 @@ class VideoMapper extends MapperAbstract
     public function getVideoByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
+        $query = 'SELECT ' . DB_PREFIX . 'videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN ' . DB_PREFIX . 'users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
@@ -45,7 +45,7 @@ class VideoMapper extends MapperAbstract
     public function getMultipleVideosByCustom(array $params)
     {
         $db = Registry::get('db');
-        $query = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
+        $query = 'SELECT ' . DB_PREFIX . 'videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN ' . DB_PREFIX . 'users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id WHERE ';
         
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
@@ -156,7 +156,7 @@ class VideoMapper extends MapperAbstract
         
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($videoIds), '?'));
-        $sql = 'SELECT videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id ';
+        $sql = 'SELECT ' . DB_PREFIX . 'videos.*, username FROM ' . DB_PREFIX . 'videos INNER JOIN ' . DB_PREFIX . 'users ON ' . DB_PREFIX . 'videos.user_id = ' . DB_PREFIX . 'users.user_id ';
         $sql .= 'WHERE video_id IN (' . $inQuery . ') ';
         $sql .= 'ORDER BY FIELD(video_id, ' . $inQuery . ')';
         $result = $db->fetchAll($sql, array_merge($videoIds, $videoIds));
