@@ -69,9 +69,9 @@ if (isset($_POST['submitted_forgot'])) {
                 'username'  => $user->username,
                 'password'  => $new_password
             );
-            $mail = new Mail();
-            $mail->LoadTemplate ('forgot_password', $replacements);
-            $mail->Send ($user->email);
+            $mailer = new Mailer();
+            $mailer->LoadTemplate ('forgot_password', $replacements);
+            $mailer->Send ($user->email);
         } else {
             $this->view->vars->message = Language::getText('error_no_users_email');
             $this->view->vars->message_type = 'errors';

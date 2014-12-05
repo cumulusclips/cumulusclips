@@ -1,6 +1,6 @@
 <?php
 
-class Mail
+class Mailer
 {
     private $config;
     public $template;

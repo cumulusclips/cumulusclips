@@ -112,9 +112,9 @@ class CommentService extends ServiceAbstract
                 'email'     => $user->email,
                 'title'     => $video->title
             );
-            $mail = new Mail();
-            $mail->loadTemplate('video_comment', $replacements);
-            $mail->send($user->email);
+            $mailer = new Mailer();
+            $mailer->loadTemplate('video_comment', $replacements);
+            $mailer->send($user->email);
         }
 
         // Notify comment author of reply to their comment if apl.
@@ -132,9 +132,9 @@ class CommentService extends ServiceAbstract
                     'videoUrl'  => $videoService->getUrl($video),
                     'comments'  => $comment->comments
                 );
-                $mail = new Mail();
-                $mail->loadTemplate('comment_reply', $replacements);
-                $mail->send($parentAuthor->email);
+                $mailer = new Mailer();
+                $mailer->loadTemplate('comment_reply', $replacements);
+                $mailer->send($parentAuthor->email);
             }
         }
         return $this;

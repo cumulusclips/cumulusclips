@@ -93,9 +93,9 @@ if (isset($_POST['submitted'])) {
                 'sender'    => $this->view->vars->loggedInUser->username,
                 'email'     => $recipient->email
             );
-            $mail = new Mail();
-            $mail->loadTemplate('new_message', $replacements);
-            $mail->send($recipient->email);
+            $mailer = new Mailer();
+            $mailer->loadTemplate('new_message', $replacements);
+            $mailer->send($recipient->email);
         }
         $this->view->vars->message = Language::getText('success_message_sent');
         $this->view->vars->message_type = 'success';

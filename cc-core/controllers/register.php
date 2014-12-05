@@ -81,9 +81,9 @@ if (isset($_POST['submitted'])) {
             'host' => HOST,
             'sitename' => $config->sitename
         );
-        $mail = new Mail();
-        $mail->loadTemplate('welcome', $replacements);
-        $mail->send($newUser->email);
+        $mailer = new Mailer();
+        $mailer->loadTemplate('welcome', $replacements);
+        $mailer->send($newUser->email);
         
         // Prepare message
         unset($this->view->vars->user);

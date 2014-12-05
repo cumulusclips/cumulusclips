@@ -52,11 +52,10 @@ class App
      */
     public static function alert($subject, $body)
     {
-        App::loadClass('Mail');
-        $mail = new Mail();
-        $mail->subject = $subject;
-        $mail->body = $body;
-        $mail->send(Settings::get('admin_email'));
+        $mailer = new Mailer();
+        $mailer->subject = $subject;
+        $mailer->body = $body;
+        $mailer->send(Settings::get('admin_email'));
     }
 
     /**

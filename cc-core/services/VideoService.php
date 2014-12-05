@@ -177,9 +177,9 @@ class VideoService extends ServiceAbstract
                     'title'     => $video->title,
                     'video_url' => $this->getUrl($video)
                 );
-                $mail = new Mail();
-                $mail->LoadTemplate ('new_video', $replacements);
-                $mail->Send ($subscriber->email);
+                $mailer = new Mailer();
+                $mailer->LoadTemplate ('new_video', $replacements);
+                $mailer->Send ($subscriber->email);
             }
         }
     }
@@ -200,9 +200,9 @@ class VideoService extends ServiceAbstract
                 'title'     => $video->title,
                 'video_url' => $this->getUrl($video)
             );
-            $mail = new Mail();
-            $mail->LoadTemplate('video_ready', $replacements);
-            $mail->Send($user->email);
+            $mailer = new Mailer();
+            $mailer->LoadTemplate('video_ready', $replacements);
+            $mailer->Send($user->email);
         }
     }
     

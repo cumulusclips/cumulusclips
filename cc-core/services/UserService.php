@@ -324,10 +324,9 @@ class UserService extends ServiceAbstract
 
                 // Send Welcome email
                 if ($action == 'approve') {
-                    App::LoadClass ('Mail');
-                    $mail = new Mail();
-                    $mail->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
-                    $mail->Send ($user->email);
+                    $mailer = new Mailer();
+                    $mailer->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
+                    $mailer->Send ($user->email);
                 }
             }
 
