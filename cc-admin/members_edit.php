@@ -6,8 +6,8 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
@@ -16,60 +16,46 @@ $data = array();
 $errors = array();
 $message = null;
 
-
-
 // Build return to list link
-if (!empty ($_SESSION['list_page'])) {
+if (!empty($_SESSION['list_page'])) {
     $list_page = $_SESSION['list_page'];
 } else {
     $list_page = ADMIN . '/member.php';
 }
 
+// Verify a member was provided
+if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 
-
-### Verify a member was provided
-if (isset ($_GET['id']) && is_numeric ($_GET['id']) && $_GET['id'] > 0) {
-
-    ### Retrieve member information
+    // Retrieve member information
     $user = $userMapper->getUserById($_GET['id']);
     if (!$user) {
-        header ('Location: ' . ADMIN . '/members.php');
+        header('Location: ' . ADMIN . '/members.php');
         exit();
     }
-
 } else {
-    header ('Location: ' . ADMIN . '/members.php');
+    header('Location: ' . ADMIN . '/members.php');
     exit();
 }
 
-
-
-
-
-/***********************
-Handle form if submitted
-***********************/
-
-if (isset ($_POST['submitted'])) {
+// Handle form if submitted
+if (isset($_POST['submitted'])) {
 
     // Validate status
-    if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-        $user->status = trim ($_POST['status']);
+    if (!empty($_POST['status'])) {
+        $user->status = trim($_POST['status']);
     } else {
         $errors['status'] = 'Invalid status';
     }
 
-
     // Validate role
-    if (!empty ($_POST['role']) && !ctype_space ($_POST['role'])) {
-        $user->role = trim ($_POST['role']);
+    if (!empty($_POST['role'])) {
+        $user->role = trim($_POST['role']);
     } else {
         $errors['role'] = 'Invalid role';
     }
 
-
     // Validate Email
-    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i',$_POST['email'])) {
+    if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
         $duplicateEmailUser = $userMapper->getUserByCustom(array('email' => $_POST['email']));
         if (!$duplicateEmailUser || $duplicateEmailUser->userId == $user->userId) {
             $user->email = $_POST['email'];
@@ -81,54 +67,47 @@ if (isset ($_POST['submitted'])) {
         $errors['email'] = 'Invalid email address';
     }
 
-
     // Validate password
-    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $user->password = trim ($_POST['password']);
+    if (!empty($_POST['password'])) {
+        $password = trim($_POST['password']);
     }
 
-
     // Validate First Name
-    if (!empty ($user->firstName) && $_POST['first_name'] == '') {
+    if (!empty($user->firstName) && $_POST['first_name'] == '') {
         $user->firstName = '';
-    } elseif (!empty ($_POST['first_name']) && !ctype_space ($_POST['first_name'])) {
+    } elseif (!empty($_POST['first_name'])) {
         $user->firstName = $_POST['first_name'];
     }
 
-
     // Validate Last Name
-    if (!empty ($user->lastName) && $_POST['last_name'] == '') {
+    if (!empty($user->lastName) && $_POST['last_name'] == '') {
         $user->lastName = '';
-    } elseif (!empty ($_POST['last_name']) && !ctype_space ($_POST['last_name'])) {
+    } elseif (!empty($_POST['last_name'])) {
         $user->lastName = $_POST['last_name'];
     }
 
-
     // Validate website
-    if (!empty ($user->website) && empty ($_POST['website'])) {
+    if (!empty($user->website) && empty($_POST['website'])) {
         $user->website = '';
-    } else if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
+    } else if (!empty ($_POST['website'])) {
         $website = $_POST['website'];
-        if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+        if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
             $website = (empty($matches[1])) ? 'http://' . $website : $website;
-            $user->website = trim ($website);
+            $user->website = trim($website);
         } else {
             $errors['website'] = 'Invalid website';
         }
     }
 
-
     // Validate About Me
-    if (!empty ($user->aboutMe) && empty ($_POST['about_me'])) {
+    if (!empty($user->aboutMe) && empty($_POST['about_me'])) {
         $user->aboutMe = '';
-    } elseif (!empty ($_POST['about_me']) && !ctype_space ($_POST['about_me'])) {
+    } elseif (!empty($_POST['about_me'])) {
         $user->aboutMe = $_POST['about_me'];
     }
 
-
-
-    ### Update User if no errors were found
-    if (empty ($errors)) {
+    // Update User if no errors were found
+    if (empty($errors)) {
 
         // Perform addional actions based on status change
         if ($user->status != $user->status) {
@@ -141,7 +120,6 @@ if (isset ($_POST['submitted'])) {
                     $userService->approve($user, 'approve');
                     break;
 
-
                 // Handle "Ban" action
                 case 'banned':
                     $userService->updateContentStatus($user, 'banned');
@@ -149,29 +127,24 @@ if (isset ($_POST['submitted'])) {
                     $flagService->flagDecision($user, true);
                     break;
 
-
                 // Handle "Pending" or "New" action
                 case 'new':
                 case 'pending':
                     $userService->updateContentStatus($user);
                     break;
-
             }
-
         }
 
-        if (isset ($user->password)) $user->password = md5 ($user->password);
+        if (isset($password)) $user->password = md5($user->password);
         $message = 'Member has been updated.';
         $message_type = 'success';
         $userMapper->save($user);
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+        $message .= '<br><br> - ' . implode('<br> - ', $errors);
         $message_type = 'errors';
     }
-
 }
-
 
 // Output Header
 include ('header.php');
@@ -195,26 +168,26 @@ include ('header.php');
 
             <div class="row-shift">An asterisk (*) denotes required field.</div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
                 <label>*Status:</label>
                 <select name="status" class="dropdown">
-                    <option value="active"<?=(isset ($data['status']) && $data['status'] == 'active') || (!isset ($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
-                    <option value="new"<?=(isset ($data['status']) && $data['status'] == 'new') || (!isset ($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
-                    <option value="pending"<?=(isset ($data['status']) && $data['status'] == 'pending') || (!isset ($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset ($data['status']) && $data['status'] == 'banned') || (!isset ($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                    <option value="active"<?=(isset($data['status']) && $data['status'] == 'active') || (!isset($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
+                    <option value="new"<?=(isset($data['status']) && $data['status'] == 'new') || (!isset($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
+                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
                 <label>*Role:</label>
                 <select name="role" class="dropdown">
-                <?php foreach ($config->roles as $key => $value): ?>
-                    <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value['name']?></option>
+                <?php foreach ((array) $config->roles as $key => $value): ?>
+                    <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value->name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
 
-            <div class="row<?=(isset ($errors['email'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
                 <label>*Email:</label>
                 <input class="text" type="text" name="email" value="<?=$user->email?>" />
             </div>
@@ -225,26 +198,26 @@ include ('header.php');
             </div>
 
             <div class="row">
-                <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">Password:</label>
-                <input name="password" type="password" class="text mask" value="<?=htmlspecialchars($user->password)?>" />
+                <label class="<?=(isset($errors['password'])) ? 'error' : ''?>">Password:</label>
+                <input name="password" type="password" class="text mask" value="" />
             </div>
 
-            <div class="row<?=(isset ($errors['first_name'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['first_name'])) ? ' error' : ''?>">
                 <label>First Name:</label>
                 <input class="text" type="text" name="first_name" value="<?=htmlspecialchars($user->firstName)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['last_name'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['last_name'])) ? ' error' : ''?>">
                 <label>Last Name:</label>
                 <input class="text" type="text" name="last_name" value="<?=htmlspecialchars($user->lastName)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['website'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
                 <label>Website:</label>
                 <input class="text" type="text" name="website" value="<?=htmlspecialchars($user->website)?>" />
             </div>
 
-            <div class="row<?=(isset ($errors['about_me'])) ? ' error' : ''?>">
+            <div class="row<?=(isset($errors['about_me'])) ? ' error' : ''?>">
                 <label>About Me:</label>
                 <textarea rows="7" cols="50" class="text" name="about_me"><?=htmlspecialchars($user->aboutMe)?></textarea>
             </div>

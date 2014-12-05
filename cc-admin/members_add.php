@@ -6,8 +6,8 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 // Verify if user is logged in
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($adminUser, HOST . '/login/');
+Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
@@ -17,29 +17,21 @@ $data = array();
 $errors = array();
 $message = null;
 
-
-
-
-
-/***********************
-Handle form if submitted
-***********************/
-
-if (isset ($_POST['submitted'])) {
+// Handle form if submitted
+if (isset($_POST['submitted'])) {
 
     // Validate role
-    if (!empty ($_POST['role']) && !ctype_space ($_POST['role'])) {
-        $user->role = trim ($_POST['role']);
+    if (!empty($_POST['role'])) {
+        $user->role = trim($_POST['role']);
     } else {
         $errors['role'] = 'Invalid role';
     }
 
-
     // Validate email
-    if (!empty ($_POST['email']) && preg_match ('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
+    if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
         $emailCheck = $userMapper->getUserByCustom(array('email' => $_POST['email']));
         if (!$emailCheck) {
-            $user->email = trim ($_POST['email']);
+            $user->email = trim($_POST['email']);
         } else {
             $errors['email'] = 'Email is unavailable';
         }
@@ -47,12 +39,11 @@ if (isset ($_POST['submitted'])) {
         $errors['email'] = 'Invalid email address';
     }
 
-
     // Validate Username
-    if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
+    if (!empty($_POST['username'])) {
         $usernameCheck = $userMapper->getUserByCustom(array('username' => $_POST['username']));
         if (!$usernameCheck) {
-            $user->username = trim ($_POST['username']);
+            $user->username = trim($_POST['username']);
         } else {
             $errors['username'] = 'Username is unavailable';
         }
@@ -60,48 +51,41 @@ if (isset ($_POST['submitted'])) {
         $errors['username'] = 'Invalid username';
     }
 
-
     // Validate password
-    if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
-        $user->password = trim ($_POST['password']);
+    if (!empty($_POST['password'])) {
+        $user->password = trim($_POST['password']);
     } else {
         $errors['password'] = 'Invalid password';
     }
 
-
     // Validate first name
-    if (!empty ($_POST['first_name']) && !ctype_space ($_POST['first_name'])) {
-        $user->firstName = trim ($_POST['first_name']);
+    if (!empty($_POST['first_name'])) {
+        $user->firstName = trim($_POST['first_name']);
     }
-
 
     // Validate last name
-    if (!empty ($_POST['last_name']) && !ctype_space ($_POST['last_name'])) {
-        $user->lastName = trim ($_POST['last_name']);
+    if (!empty($_POST['last_name'])) {
+        $user->lastName = trim($_POST['last_name']);
     }
 
-
     // Validate website
-    if (!empty ($_POST['website']) && !ctype_space ($_POST['website'])) {
+    if (!empty($_POST['website'])) {
         $website = $_POST['website'];
-        if (preg_match ('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
-            $website = (empty ($matches[1]) ? 'http://' : '') . $website;
-            $user->website = trim ($website);
+        if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+            $website = (empty($matches[1]) ? 'http://' : '') . $website;
+            $user->website = trim($website);
         } else {
             $errors['website'] = 'Invalid website';
         }
     }
 
-
     // Validate about me
-    if (!empty ($_POST['about_me']) && !ctype_space ($_POST['about_me'])) {
-        $user->aboutMe = trim ($_POST['about_me']);
+    if (!empty($_POST['about_me'])) {
+        $user->aboutMe = trim($_POST['about_me']);
     }
 
-
-
-    ### Create user if no errors were found
-    if (empty ($errors)) {
+    // Create user if no errors were found
+    if (empty($errors)) {
 
         // Create user
         $newUser = $userService->create($user);
@@ -114,15 +98,13 @@ if (isset ($_POST['submitted'])) {
 
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+        $message .= '<br><br> - ' . implode('<br> - ', $errors);
         $message_type = 'errors';
     }
-
 }
 
-
 // Output Header
-include ('header.php');
+include('header.php');
 
 ?>
 
@@ -144,8 +126,8 @@ include ('header.php');
             <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
                 <label>*Role:</label>
                 <select name="role" class="dropdown">
-                <?php foreach ($config->roles as $key => $value): ?>
-                    <option value="<?=$key?>" <?=(isset ($user->role) && $user->role == $key)?'selected="selected"':''?>><?=$value['name']?></option>
+                <?php foreach ((array) $config->roles as $key => $value): ?>
+                    <option value="<?=$key?>" <?=(isset ($user->role) && $user->role == $key)?'selected="selected"':''?>><?=$value->name?></option>
                 <?php endforeach; ?>
                 </select>
             </div>
