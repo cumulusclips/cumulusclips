@@ -12,37 +12,14 @@ if (!isset ($settings->completed)) {
     exit();
 }
 
-
 // Establish needed vars.
 $page_title = 'CumulusClips - FTP Connection';
 $native = null;
 $errors = array();
 $error_msg = null;
 
-
-// Check if native PHP methods should be used - Test 1
-$native = (is_writable (DOC_ROOT) && getmyuid() == fileowner (DOC_ROOT)) ? true : false;
-
-// Check if native PHP methods should be used - Test 2
-if ($native) {
-
-    // Create temporary file
-    $native_check_file = DOC_ROOT . '/native-check' . time();
-    $handle = @fopen ($native_check_file, 'w');
-    @fwrite ($handle, 'Native Check');
-
-    // Check if webserver/PHP has filesystem access
-    $native = (fileowner ($native_check_file) == getmyuid()) ? true : false;
-
-    // Remove temporary file
-    @fclose ($handle);
-    @unlink ($native_check_file);
-
-}
-
-
-// Redirect user if FTP access isn't needed
-if ($native) {
+// Check if Apache owns directories. If so, this means that native filesystem methods can be used and FTP isn't needed
+if (posix_getuid() == fileowner(DOC_ROOT) && is_writable(DOC_ROOT)) {
     $settings->ftp_hostname = '';
     $settings->ftp_username = '';
     $settings->ftp_password = '';
@@ -53,7 +30,6 @@ if ($native) {
     header ("Location: " . HOST . '/cc-install/?database');
     exit();
 }
-
 
 // Validate form if submitted
 if (isset ($_POST['submitted'])) {
@@ -66,14 +42,12 @@ if (isset ($_POST['submitted'])) {
         $errors['hostname'] = 'A valid hostname is needed';
     }
 
-
     // Validate username
     if (!empty ($_POST['username']) && !ctype_space ($_POST['username'])) {
         $username = trim ($_POST['username']);
     } else {
         $errors['username'] = 'A valid username is needed';
     }
-
 
     // Validate password
     if (!empty ($_POST['password']) && !ctype_space ($_POST['password'])) {
@@ -82,14 +56,12 @@ if (isset ($_POST['submitted'])) {
         $errors['password'] = 'A valid password is needed';
     }
 
-
     // Validate path
     if (!empty ($_POST['path']) && !ctype_space ($_POST['path'])) {
         $path = rtrim ($_POST['path'], '/');
     } else {
         $errors['path'] = 'A valid path is needed';
     }
-
 
     // Validate connection method
     if (isset ($_POST['method']) && in_array ($_POST['method'], array ('ftp', 'ftps'))) {
@@ -98,7 +70,6 @@ if (isset ($_POST['submitted'])) {
         $errors['method'] = 'A valid connection method is needed';
     }
 
-
     if (empty ($errors)) {
 
         // Create and populate local file stream
@@ -106,7 +77,6 @@ if (isset ($_POST['submitted'])) {
         fwrite ($handle, 'FTP Test');
 
         try {
-
             // Connect to FTP server
             if ($method == 'ftp') {
                 $stream = @ftp_connect ($hostname);
@@ -115,7 +85,6 @@ if (isset ($_POST['submitted'])) {
                 $stream = @ftp_ssl_connect ($hostname);
             }
             if (!$stream) throw new Exception ("We were unable to connect to the FTP server you specified, please verify it is correct.");
-
 
             // Login to FTP server
             $login = @ftp_login ($stream, $username, $password);
@@ -126,7 +95,6 @@ if (isset ($_POST['submitted'])) {
                 throw new Exception ($error_msg);
             }
 
-
             // Create test file
             $test_file = $path . '/ftp-test' . time();
             if (!@ftp_chdir ($stream, $path)) throw new Exception ("We were unable to navigate to the CumulusClips directory. Please verify your ftp path is correct and your account has access.");
@@ -134,7 +102,6 @@ if (isset ($_POST['submitted'])) {
             if (!@ftp_delete ($stream, $test_file)) throw new Exception ("We were unable delete our test file. Please verify your account has the ability to delete files.");
             @ftp_close ($stream);
             fclose ($handle);
-
 
             // Store information & redirect user
             $settings->ftp_hostname = $hostname;
@@ -152,14 +119,11 @@ if (isset ($_POST['submitted'])) {
             @ftp_close ($stream);
             fclose ($handle);
         }
-
     } else {
         $error_msg = "Errors were found. Please correct them and try again.<br /><br /> - ";
         $error_msg .= implode ("<br /> - ", $errors);
     }
-
 }
-
 
 // Output page
 include_once ('views/ftp.tpl');
