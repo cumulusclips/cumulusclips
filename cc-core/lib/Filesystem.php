@@ -261,6 +261,8 @@ class Filesystem
      */
     public static function delete($filename)
     {
+        if (!file_exists($filename)) return true;
+        
         // If dir. delete contents then dir., if file simply delete
         if (is_dir($filename)) {
 

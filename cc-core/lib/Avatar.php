@@ -94,12 +94,10 @@ class Avatar
      */
     public static function delete($filename)
     {
-        if (file_exists(UPLOAD_PATH . '/avatars/' . $filename)) {
-            try {
-                Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename);
-            } catch (Exception $e) {
-                App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
-            }
+        try {
+            Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename);
+        } catch (Exception $e) {
+            App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
         }
     }
 }
