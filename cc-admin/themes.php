@@ -47,7 +47,8 @@ else if (!empty ($_GET['activate']) && !ctype_space ($_GET['activate'])) {
     // Validate theme
     if (Functions::ValidTheme ($_GET['activate'])) {
         $xml = simplexml_load_file (THEMES_DIR . '/' . $_GET['activate'] . '/theme.xml');
-        Settings::Set ('active_theme', $_GET['activate']);
+        $themeSetting = ($xml->mobile == 'true') ? 'active_mobile_theme' : 'active_theme';
+        Settings::Set ($themeSetting, $_GET['activate']);
         $message = $xml->name . ' is now the active theme';
         $message_type = 'success';
     }
