@@ -11,7 +11,7 @@ class MessageMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'FROM ' . DB_PREFIX . 'messages AS messages '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
@@ -35,7 +35,7 @@ class MessageMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $query = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'FROM ' . DB_PREFIX . 'messages AS messages '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE ';
@@ -116,7 +116,7 @@ class MessageMapper extends MapperAbstract
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($messageIds), '?'));
         $sql = 'SELECT messages.*, senders.username, recipients.username as recipient_username '
-            . 'FROM ' . DB_PREFIX . 'messages AS messages'
+            . 'FROM ' . DB_PREFIX . 'messages AS messages '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS senders ON messages.user_id = senders.user_id '
             . 'INNER JOIN ' . DB_PREFIX . 'users AS recipients ON messages.recipient = recipients.user_id '
             . 'WHERE message_id IN (' . $inQuery . ')';
