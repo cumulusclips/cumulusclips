@@ -10,7 +10,7 @@ class UserService extends ServiceAbstract
     public function delete(User $user)
     {
         // Delete Avatar
-        if (!empty ($user->avatar)) Avatar::Delete ($user->avatar);
+        if (!empty($user->avatar)) Avatar::delete($user->avatar);
 
         // Delete Comments
         $commentService = new CommentService();

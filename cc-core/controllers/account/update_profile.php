@@ -79,7 +79,7 @@ if (isset($_POST['submitted'])) {
 // Reset avatar if requested
 if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view->vars->loggedInUser->avatar)) {
     try {
-        Filesystem::delete(UPLOAD_PATH . '/avatars/' . $this->view->vars->loggedInUser->avatar);
+        Avatar::delete($this->view->vars->loggedInUser->avatar);
     } catch (Exception $exception) {
         App::Alert('Error during Avatar Reset', $exception->getMessage());
     }
