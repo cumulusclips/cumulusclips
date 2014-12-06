@@ -41,7 +41,7 @@ HOMEPAGE
     background-color: #000;
 }
 
-.slide_text {
+.slide-text {
     height: 115px;
     width: 600px;
     bottom: 0;
@@ -53,11 +53,15 @@ HOMEPAGE
     display: none;
 }
 
-.slide_text > div {
+.slide-text > div {
     height: 85px;
     width: 560px;
     padding: 15px 20px;
     overflow: hidden;
+}
+
+.slide-text .large {
+    color: #FFF;
 }
 
 #slideshow p {
