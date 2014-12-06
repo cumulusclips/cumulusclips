@@ -19,17 +19,6 @@ class VideoService extends ServiceAbstract
      */
     public function delete(Video $video)
     {
-        // Delete files
-        try {
-            Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
-            Filesystem::delete(UPLOAD_PATH . '/theora/' . $video->filename . '.ogv');
-            if (file_exists(UPLOAD_PATH . '/vp8/' . $video->filename . '.webm')) Filesystem::delete(UPLOAD_PATH . '/vp8/' . $video->filename . '.webm');
-            Filesystem::delete(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
-            Filesystem::delete(UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
-        } catch (Exception $e) {
-            App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
-        }
-
         // Delete comments on video
         $commentService = new CommentService();
         $commentMapper = new CommentMapper();
@@ -63,6 +52,41 @@ class VideoService extends ServiceAbstract
         // Delete video
         $videoMapper = $this->_getMapper();
         $videoMapper->delete($video->videoId);
+        
+        // Delete files
+        try {
+            // Delete H.264 video file
+            if (file_exists(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4')) {
+                Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
+            }
+            
+            // Delete WebM video file
+            if (file_exists(UPLOAD_PATH . '/webm/' . $video->filename . '.webm')) {
+                Filesystem::delete(UPLOAD_PATH . '/webm/' . $video->filename . '.webm');
+            }
+            
+            // Delete Theora video file
+            if (file_exists(UPLOAD_PATH . '/theora/' . $video->filename . '.ogg')) {
+                Filesystem::delete(UPLOAD_PATH . '/theora/' . $video->filename . '.ogg');
+            }
+            
+            // Delete video thumbnail
+            if (file_exists(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg')) {
+                Filesystem::delete(UPLOAD_PATH . '/thumbs/' . $video->filename . '.jpg');
+            }
+            
+            // Delete mobile video file
+            if (file_exists(UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4')) {
+                Filesystem::delete(UPLOAD_PATH . '/mobile/' . $video->filename . '.mp4');
+            }
+            
+            // Delete original raw video file
+            if (file_exists(UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension)) {
+                Filesystem::delete(UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension);
+            }
+        } catch (Exception $e) {
+            App::Alert('Error During Video Removal', "Unable to delete video files for: $video->filename. The video has been removed from the system, but the files still remain. Error: " . $e->getMessage());
+        }
     }
 
     /**
