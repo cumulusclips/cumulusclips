@@ -1,12 +1,6 @@
-$(document).ready(function(){
+$(function(){
 
-    // Initialize fancybox lightbox
-    $('.fancybox').fancybox({
-        'transitionIn'	: 'elastic',
-        'transitionOut'	: 'elastic',
-        'speedIn'       : 250
-    });
-
+    // Initialize fancybox lightbox for theme and language preview
     $('.iframe').fancybox({
         'transitionIn'	: 'elastic',
         'transitionOut'	: 'elastic',
@@ -14,6 +8,17 @@ $(document).ready(function(){
         'type'          : 'iframe',
         'width'         : '95%',
         'height'        : '95%',
+        'autoScale'     : false
+    });
+
+    // Initialize fancybox lightbox for mobile theme preview
+    $('.iframe-mobile').fancybox({
+        'transitionIn'	: 'elastic',
+        'transitionOut'	: 'elastic',
+        'speedIn'       : 250,
+        'type'          : 'iframe',
+        'width'         : '30%',
+        'height'        : '80%',
         'autoScale'     : false
     });
     
