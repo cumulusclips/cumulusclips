@@ -318,10 +318,6 @@ class UserService extends ServiceAbstract
                 $user->released = true;
                 $userMapper->save($user);
 
-                // Update user's anonymous comments IF/APP
-                $query = "UPDATE " . DB_PREFIX . "comments SET user_id = ? WHERE email = ?";
-                Registry::get('db')->query($query, array($user->userId, $user->email));
-
                 // Send Welcome email
                 if ($action == 'approve') {
                     $mailer = new Mailer();
