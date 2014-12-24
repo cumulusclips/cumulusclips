@@ -13,7 +13,9 @@ $(function(){
             var callback;
             
             // Validate file type
-            var matches = file.name.match(/\.[a-z0-9]+$/i);
+            var filenameLower = file.name.toLowerCase();
+            var matches = filenameLower.match(/\.[a-z0-9]+$/i);
+			
             var fileTypes = $.parseJSON($('#file-types').val());
             var filesizeLimit = $('#upload-limit').val();
             if (!matches || $.inArray(matches[0].substr(1),fileTypes) == -1) {
