@@ -59,7 +59,11 @@
                 <li><a class="icon-favorites" href="<?=MOBILE_HOST?>/a/f/"><?=Language::getText('favorites')?></a></li>
                 <li><a class="icon-videos" href="<?=MOBILE_HOST?>/a/v/"><?=Language::getText('my_videos')?></a></li>
             <?php endif; ?>
-            <li><a class="icon-language" href="<?=MOBILE_HOST?>/l/"><?=Language::getLanguage(true)?></a></li>
+                
+            <?php if (count(Language::getActiveLanguages()) > 1): ?>
+                <li><a class="icon-language" href="<?=MOBILE_HOST?>/l/"><?=Language::getLanguage(true)?></a></li>
+            <?php endif; ?>
+                
             <li><a class="icon-desktop" href="<?=HOST?>?nomobile"><?=Language::getText('standard_site')?></a></li>
                 
             <?php if (!$loggedInUser): ?>

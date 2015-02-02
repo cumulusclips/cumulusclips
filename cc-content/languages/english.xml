@@ -45,6 +45,7 @@
         <device_not_supported>Your device is not supported for video playback.</device_not_supported>
         <close>Close</close>
         <menu>Menu</menu>
+        <choose_language>Choose a Language</choose_language>
         
         <!-- Home Page -->
         <home_header>Fresh Out The Oven!</home_header>

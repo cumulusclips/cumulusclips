@@ -471,16 +471,10 @@ class Router
             'mappings' => array('vid')
         ));
 
-        $routes['languageGet'] = new Route(array(
-            'path' => 'language/(get)',
+        $routes['language'] = new Route(array(
+            'path' => 'language/([g|s]et)',
             'location' => 'cc-core/system/language.php',
             'mappings' => array('action')
-        ));
-
-        $routes['languageSet'] = new Route(array(
-            'path' => 'language/(set)/(.*)',
-            'location' => 'cc-core/system/language.php',
-            'mappings' => array('action', 'language')
         ));
 
         $routes['videoSitemap'] = new Route(array(
