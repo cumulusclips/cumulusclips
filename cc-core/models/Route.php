@@ -2,6 +2,10 @@
 
 class Route
 {
+    const STANDARD = 1;
+    const MOBILE = 2;
+    const AGNOSTIC = 3;
+    
     /**
      * @var string REGEX pattern to be matched against the request URI
      * Omit leading & trailing slashes, as well as REGEX beginning and ending
@@ -23,6 +27,11 @@ class Route
      * @example $mappings[0] => 'page' will create $_GET['page']
      */
     public $mappings = null;
+    
+    /**
+     * @var int The type of route
+     */
+    public $type = null;
     
     /**
      * @var boolean Whether or not the route is intended for mobile devices 
@@ -59,6 +68,10 @@ class Route
             
             if (isset($options['mobile']) && is_bool($options['mobile'])) {
                 $this->mobile = $options['mobile'];
+            }
+            
+            if (isset($options['type']) && in_array($options['type'], array(self::STANDARD, self::MOBILE, self::AGNOSTIC))) {
+                $this->type = $options['type'];
             }
         }
     }

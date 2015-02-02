@@ -422,16 +422,33 @@ class Router
             'mobile' => true
         ));
         
-        $routes['mobileLogin'] = new Route(array(
+        $routes['mobileLanguages'] = new Route(array(
             'path' => 'm/l',
-            'location' => 'cc-core/controllers/mobile/login.php',
+            'location' => 'cc-core/controllers/mobile/languages.php',
             'mobile' => true
         ));
         
-        $routes['mobileUser'] = new Route(array(
-            'path' => 'm/u/([a-z0-9]+)',
-            'location' => 'cc-core/controllers/mobile/user.php',
-            'mappings' => array('username'),
+        $routes['mobileWatchLater'] = new Route(array(
+            'path' => 'm/wl',
+            'location' => 'cc-core/controllers/mobile/watch_later.php',
+            'mobile' => true
+        ));
+        
+        $routes['mobileFavorites'] = new Route(array(
+            'path' => 'm/f',
+            'location' => 'cc-core/controllers/mobile/favorites.php',
+            'mobile' => true
+        ));
+        
+        $routes['mobileMyVideos'] = new Route(array(
+            'path' => 'm/mv',
+            'location' => 'cc-core/controllers/mobile/my_videos.php',
+            'mobile' => true
+        ));
+        
+        $routes['mobileUpload'] = new Route(array(
+            'path' => 'm/u',
+            'location' => 'cc-core/controllers/mobile/upload.php',
             'mobile' => true
         ));
         
@@ -492,7 +509,8 @@ class Router
 
         $routes['ajaxSearchSuggest'] = new Route(array(
             'path' => 'search/suggest',
-            'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php'
+            'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxAvatarUpload'] = new Route(array(

@@ -257,7 +257,7 @@ class View
      */
     public function cssHooks()
     {
-        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::GetCSSName();
+        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::getCSSName();
     }
 
     /**

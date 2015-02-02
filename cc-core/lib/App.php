@@ -111,7 +111,7 @@ class App
         if (isset($_GET['nomobile'])) {
             setcookie('nomobile', md5('nomobile'), time()+3600*24*3);
         }
-
+        
         // Redirect to mobile if user hasn't opted out from mobile site
         $agent = '/ip(ad|hone|od)|android|Windows Phone/i';
         if (
@@ -121,6 +121,7 @@ class App
             && !isset($_COOKIE['nomobile'])
             && !isset($_GET['nomobile'])
             && !$route->mobile
+            && !in_array($route->type, array(Route::MOBILE, Route::AGNOSTIC))
         ) {
             header("Location: " . MOBILE_HOST . "/");
             exit();
