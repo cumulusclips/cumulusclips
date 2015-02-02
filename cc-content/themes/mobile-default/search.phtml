@@ -1,62 +1,122 @@
-<div id="search">
-
-    <!-- BEGIN SEARCH FORM -->
-    <div id="search-form">
-        <form action="<?=MOBILE_HOST?>/s/" method="post">
-        <input type="text" name="keyword" id="search-field" title="<?=Language::getText('search_text')?>" value="" />
-        <input type="hidden" name="submitted" value="TRUE" />
-        <input id="search-button" type="image" value="<?=Language::getText('search_text')?>" src="<?=$this->options->themeUrl?>/images/search-button.png">
-        </form>
-    </div>
-    <!-- END SEARCH FORM -->
-
-    <h1><?=Language::getText('search_header')?></h1>
-    <?php if (!empty($count)): ?>
-
-        <p><strong><?=Language::getText('results_for')?>: </strong><?=$keyword?></p>
-
-        <?php if (empty ($count)): ?>
-
-            <!-- BEGIN NO RESULTS FOUND -->
-            <div class="block"><strong><?=Language::getText('no_results')?></strong></div>
-            <!-- END NO RESULTS FOUND -->
-
-        <?php else: ?>
-
-            <!-- BEGIN SEARCH RESULTS -->
-            <div class="list">
-                <?php $this->RepeatingBlock ('video.phtml', $searchVideos); ?>
-
-                <?php if ($count > 20): ?>
-                    <div id="load-more">
-                        <form>
-                        <input type="hidden" id="loadLocation" name="loadLocation" value="search" />
-                        <input type="hidden" id="format" name="format" value="html" />
-                        <input type="hidden" id="block" name="block" value="video" />
-                        <input type="hidden" id="submitted" name="submitted" value="true" />
-                        <input type="hidden" id="keyword" name="keyword" value="<?=$keyword?>" />
-                        <input type="hidden" id="max" name="max" value="<?=$count?>" />
-                        <input type="hidden" id="start" name="start" value="20" />
-                        </form>
-                        <div>
-                            <span id="loading-text" style="display:none;"><?=Language::getText('loading')?>...</span>
-                            <span id="load-more-text"><?=Language::getText('load_more')?></span>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-            </div>
-            <!-- END SEARCH RESULTS -->
-
-        <?php endif; ?>
-						
-    <?php else: ?>
-
-        <!-- BEGIN SEARCH PAGE -->
-        <div class="block">
-            <p><?=Language::getText('search_body')?></p>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Search Results</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/sandbox/mobile/externals/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" href="/sandbox/mobile/externals/jquery-ui-1.11.2/jquery-ui.min.css">
+<link rel="stylesheet" href="/sandbox/mobile/css/styles.css">
+<script src="/sandbox/mobile/js/jquery-1.11.2.min.js"></script>
+<script src="/sandbox/mobile/externals/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="/sandbox/mobile/js/fastclick.js"></script>
+<script src="/sandbox/mobile/externals/jquery-ui-1.11.2/jquery-ui.min.js"></script>
+<script src="/sandbox/mobile/js/general.js"></script>
+</head>
+<body>
+    
+<!-- BEGIN SEARCH -->
+<div id="search-form">
+    <form action="/sandbox/mobile/search.html" method="post" data-ajax="false">
+        <div id="search-field">
+            <input type="search" name="search" value="" placeholder="Search Videos" />
+            <a href="" class="clear"> </a>
         </div>
-        <!-- END SEARCH PAGE -->
-
-    <?php endif; ?>
+        <div class="cancel"><a href="">Cancel</a></div>
+        <div id="results"></div>
+    </form>
 </div>
+<div id="overlay"></div>
+<!-- END SEARCH -->
+
+<!-- BEGIN PAGE -->
+<div data-role="page" id="search">
+
+    <!-- BEGIN HEADER -->
+    <div id="header" data-role="header" data-position="fixed">
+        <span><a href="#menu" class="hide-for-search icon-menu">Menu</a></span>
+        <img width="198" height="19" src="/sandbox/mobile/images/logo.svg" />
+        <span><a href="" class="hide-for-search icon-search">Search</a></span>
+    </div>
+    <!-- END HEADER -->
+
+    <!-- BEGIN PAGE BODY -->
+    <div data-role="content">
+        
+        <h1>Search Results</h1>
+        <p><strong>Results for:</strong> unusually long search keyword</p>
+        <div class="block block-listview">
+            <ul data-role="listview">
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="/sandbox/mobile/images/thumb2.png" />
+                            <span class="duration">2:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="/sandbox/mobile/images/thumb3.png" />
+                            <span class="duration">7:10</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="/sandbox/mobile/images/thumb4.png" />
+                            <span class="duration">4:50</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+                <li data-icon="false" class="load-more"><a href="">Load More</a></li>
+            </ul>
+        </div>
+  
+<!--        <p><a href="#login" data-transition="pop" data-rel="popup" data-position-to="window">Login</a></p>
+        <div id="login" data-role="popup" data-overlay-theme="b">
+            <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+            <div style="padding: 10px 20px;">
+                <h3 style="margin-top: 0;">Please sign in</h3>
+                <form action="" method="post">
+                    <label for="un" class="ui-hidden-accessible">Username:</label>
+                    <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+                    <label for="pw" class="ui-hidden-accessible">Password:</label>
+                    <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+                    <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>
+                </form>
+            </div>
+        </div>-->
+
+    </div>
+    <!-- END PAGE BODY -->
+
+    <!-- BEGIN PANEL -->
+    <div data-role="panel" data-position-fixed="true" id="menu">
+        <ul data-role="listview" data-icon="false">
+            <li><a class="icon-home" href="/sandbox/mobile/">Home</a></li>
+            <li><a class="icon-videos" href="/sandbox/mobile/videos.html">Videos</a></li>
+            <li><a class="icon-upload" href="/sandbox/mobile/upload.html">Upload</a></li>
+            <li><a class="icon-watch-later" href="">Watch Later</a></li>
+            <li><a class="icon-favorites" href="">Favorites</a></li>
+            <li><a class="icon-videos" href="">My Videos</a></li>
+            <li><a class="icon-language" href="/sandbox/mobile/languages.html">English</a></li>
+            <li><a class="icon-desktop" href="">Standard Site</a></li>
+            <li><a class="icon-login" href="">Login</a></li>
+        </ul>
+        <a href="" data-rel="close" class="icon-close">Close</a>
+    </div>
+    <!-- END PANEL -->
+
+</div>
+<!-- END PAGE -->
+    
+</body>
+</html>

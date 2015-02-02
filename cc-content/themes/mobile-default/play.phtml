@@ -1,23 +1,140 @@
-<?php
-$this->addCss('video-js.css');
-$this->addJs('video.plugin.js');
-$this->addJs('play.js');
-?>
 
-<div id="play">
-    <div class="block">
         
-        <h1><?=$video->title?></h1>
+<div class="play-thumbnail block">
+    <div class="thumbnail">
+        <img src="<?=$this->options->themeUrl?>/images/video.png" />
+        <span class="icon-play"></span>
+    </div>
 
-        <div class="video-js-box">
-            <video class="video-js vjs-default-skin" data-setup='{ "controls": false, "autoplay": false, "preload": "auto" }' width="100%" height="264" poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
-                <source src="<?=$config->mobileUrl?>/<?=$video->filename?>.mp4" type="video/mp4" />
-            </video>
-        </div>
+    <h1>Title for incredible video with amazing visuals</h1>
 
-        <p><strong><?=Language::getText('duration')?>: </strong><?=$video->duration?></p>
-        <p><strong><?=Language::getText('by')?>: </strong><?=$video->username?></p>
-        <p><strong><?=Language::getText('description')?>: </strong><?=$video->description?></p>
-                
+    <div id="play-tabs" data-role="navbar">
+        <ul>
+            <li><a href="" data-block="#about" class="ui-btn-active" data-ajax="false">About</a></li>
+            <li><a href="" data-block="#suggestions" data-ajax="false">Suggestions</a></li>
+            <li><a href="" data-block="#comments"  data-ajax="false">Comments</a></li>
+        </ul>
     </div>
 </div>
+
+
+
+<div id="tab-blocks">
+
+    <!-- About -->
+    <div id="about">
+        <h1>About</h1>
+        <div class="block">
+            <p><strong>Duration:</strong> 01:52</p>
+            <p><strong>Views:</strong> 457,890</p>
+            <p><strong>Description:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porttitor tincidunt pulvinar. Aliquam erat volutpat. Sed sed nibh leo. Donec viverra mollis auctor. </p>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div id="suggestions">
+        <h1>Suggestions</h1>
+        <div class="block block-listview">
+            <ul data-role="listview">
+
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb2.png" />
+                            <span class="duration">2:35</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb3.png" />
+                            <span class="duration">7:10</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+
+                <li><a href="">
+                    <div class="video">
+                        <div class="thumbnail">
+                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb4.png" />
+                            <span class="duration">4:50</span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- Comments -->
+    <div id="comments">
+
+        <div class="header">
+            <h1>Comments</h1>
+            &bull; <span>5</span>
+            <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Post Comment</a>
+        </div>
+
+        <div class="block block-listview">
+            <ul data-role="listview">
+
+                <li>
+                    <div class="comment">
+                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
+                        <div>
+                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="comment">
+                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
+                        <div>
+                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
+                            <p class="reply">Reply to Gino Bambino</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="comment">
+                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
+                        <div>
+                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="post-comment" data-role="popup" data-tolerance="15" data-overlay-theme="b">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+    <div>
+        <h3 style="margin-top: 0;">Post Your Comments</h3>
+        <form action="" method="post">
+            <textarea style="height:auto;" placeholder="Comments" rows="4"></textarea>
+            <button type="submit" class="ui-btn ui-corner-all">Post Comment</button>
+        </form>
+    </div>
+</div>
+       

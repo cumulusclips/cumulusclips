@@ -1,1 +1,0 @@
-videojs.options.flash.swf = themeUrl + '/images/video-js.swf';
