@@ -474,7 +474,8 @@ class Router
         $routes['language'] = new Route(array(
             'path' => 'language/([g|s]et)',
             'location' => 'cc-core/system/language.php',
-            'mappings' => array('action')
+            'mappings' => array('action'),
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['videoSitemap'] = new Route(array(
