@@ -54,10 +54,10 @@
             <li><a class="icon-home" href="<?=MOBILE_HOST?>/"><?=Language::getText('home')?></a></li>
             <li><a class="icon-videos" href="<?=MOBILE_HOST?>/v/"><?=Language::getText('videos')?></a></li>
             <?php if ($loggedInUser): ?>
-                <li><a class="icon-upload" href="<?=MOBILE_HOST?>/u/"><?=Language::getText('upload')?></a></li>
-                <li><a class="icon-watch-later" href="<?=MOBILE_HOST?>/wl/"><?=Language::getText('watch_later')?></a></li>
-                <li><a class="icon-favorites" href="<?=MOBILE_HOST?>/f/"><?=Language::getText('favorites')?></a></li>
-                <li><a class="icon-videos" href="<?=MOBILE_HOST?>/mv/"><?=Language::getText('my_videos')?></a></li>
+                <li><a class="icon-upload" href="<?=MOBILE_HOST?>/a/u/"><?=Language::getText('upload')?></a></li>
+                <li><a class="icon-watch-later" href="<?=MOBILE_HOST?>/a/wl/"><?=Language::getText('watch_later')?></a></li>
+                <li><a class="icon-favorites" href="<?=MOBILE_HOST?>/a/f/"><?=Language::getText('favorites')?></a></li>
+                <li><a class="icon-videos" href="<?=MOBILE_HOST?>/a/v/"><?=Language::getText('my_videos')?></a></li>
             <?php endif; ?>
             <li><a class="icon-language" href="<?=MOBILE_HOST?>/l/"><?=Language::getLanguage(true)?></a></li>
             <li><a class="icon-desktop" href="<?=HOST?>?nomobile"><?=Language::getText('standard_site')?></a></li>

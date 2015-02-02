@@ -429,26 +429,26 @@ class Router
         ));
         
         $routes['mobileWatchLater'] = new Route(array(
-            'path' => 'm/wl',
-            'location' => 'cc-core/controllers/mobile/watch_later.php',
+            'path' => 'm/a/wl',
+            'location' => 'cc-core/controllers/mobile/account/watch_later.php',
             'mobile' => true
         ));
         
         $routes['mobileFavorites'] = new Route(array(
-            'path' => 'm/f',
-            'location' => 'cc-core/controllers/mobile/favorites.php',
+            'path' => 'm/a/f',
+            'location' => 'cc-core/controllers/mobile/account/favorites.php',
             'mobile' => true
         ));
         
         $routes['mobileMyVideos'] = new Route(array(
-            'path' => 'm/mv',
-            'location' => 'cc-core/controllers/mobile/my_videos.php',
+            'path' => 'm/a/v',
+            'location' => 'cc-core/controllers/mobile/account/videos.php',
             'mobile' => true
         ));
         
         $routes['mobileUpload'] = new Route(array(
-            'path' => 'm/u',
-            'location' => 'cc-core/controllers/mobile/upload.php',
+            'path' => 'm/a/u',
+            'location' => 'cc-core/controllers/mobile/account/upload.php',
             'mobile' => true
         ));
         
