@@ -41,7 +41,6 @@
         <recent_videos>Recently Added Videos</recent_videos>
         <search>Search</search>
         <standard_site>Standard Site</standard_site>
-        <search_body>When searching, use keywords that are likely to be included in the video's title, it's description or as its tags. For a greater number of results use short, less specific keywords.</search_body>
         <device_not_supported>Your device is not supported for video playback.</device_not_supported>
         <close>Close</close>
         <menu>Menu</menu>
@@ -174,8 +173,8 @@
         <no_comments>No comments have been posted for this video yet.</no_comments>
 
         <!-- Search Page -->
-        <search_header>Search Videos</search_header>
-        <results_for>Search Results for</results_for>
+        <search_header>Search Results</search_header>
+        <results_for>Results for</results_for>
         <no_results>No results were found.</no_results>
 
         <!-- Opt-Out Page -->

@@ -9,9 +9,10 @@ $this->view->vars->loggedInUser = $userService->loginCheck();
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
 $db = Registry::get('db');
+$this->view->vars->keyword = null;
 
 // Handle form if submitted
-if (!empty ($_POST['keyword']) && !ctype_space ($_POST['keyword'])) {
+if (!empty($_POST['keyword'])) {
 
     // Retrieve search result count
     $this->view->vars->keyword = $keyword = trim($_POST['keyword']);
