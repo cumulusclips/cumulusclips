@@ -6,17 +6,13 @@ cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
 
 $.mobile.defaultPageTransition = 'slide';
  
-
-
-
-$(document).on('pageshow', '#mobile_index', function(){
-    if (window.location.search.match(/message=login/)) {
-        setTimeout(function(){$('#login-message').popup('open', {transition: 'pop', positionTo: 'window'});}, 100);
-    }
-});
-
- 
 $(function(){
+    
+    // Play video when play icon is clicked
+    $(document).on('click', '.icon-play', function(){
+        var video = videojs($('.ui-content video')[0]);
+        video.play();
+    });
     
     // Init global login popup
     $('#login').enhanceWithin().popup();

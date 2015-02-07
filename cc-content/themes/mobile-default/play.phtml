@@ -1,18 +1,26 @@
-
         
-<div class="play-thumbnail block">
-    <div class="thumbnail">
-        <img src="<?=$this->options->themeUrl?>/images/video.png" />
+<div class="video-player-container block">
+    <div class="video-player">
+        <img src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
+        <video width="100%" height="100%" class="video-js vjs-default-skin" data-setup='{"preload": "auto"}'>
+            <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
+            <?php if ($webmEncodingEnabled): ?>
+                <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
+            <?php endif; ?>
+            <?php if ($theoraEncodingEnabled): ?>
+                <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogg" type="video/ogg" />
+            <?php endif; ?>
+        </video>
         <span class="icon-play"></span>
     </div>
 
-    <h1>Title for incredible video with amazing visuals</h1>
+    <h1><?=$video->title?></h1>
 
     <div id="play-tabs" data-role="navbar">
         <ul>
-            <li><a href="" data-block="#about" class="ui-btn-active" data-ajax="false">About</a></li>
-            <li><a href="" data-block="#suggestions" data-ajax="false">Suggestions</a></li>
-            <li><a href="" data-block="#comments"  data-ajax="false">Comments</a></li>
+            <li><a href="" data-block="#about" class="ui-btn-active" data-ajax="false"><?=Language::getText('about')?></a></li>
+            <li><a href="" data-block="#suggestions" data-ajax="false"><?=Language::getText('suggestions')?></a></li>
+            <li><a href="" data-block="#comments"  data-ajax="false"><?=Language::getText('comments')?></a></li>
         </ul>
     </div>
 </div>
@@ -23,53 +31,24 @@
 
     <!-- About -->
     <div id="about">
-        <h1>About</h1>
+        <h1><?=Language::getText('about')?></h1>
         <div class="block">
-            <p><strong>Duration:</strong> 01:52</p>
-            <p><strong>Views:</strong> 457,890</p>
-            <p><strong>Description:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porttitor tincidunt pulvinar. Aliquam erat volutpat. Sed sed nibh leo. Donec viverra mollis auctor. </p>
+            <p><strong><?=Language::getText('duration')?>:</strong> <?=$video->duration?></p>
+            <p><strong><?=Language::getText('views')?>:</strong> <?=$video->views?></p>
+            <p><strong><?=Language::getText('description')?>:</strong> <?=$video->description?></p>
         </div>
     </div>
 
     <!-- Suggestions -->
     <div id="suggestions">
-        <h1>Suggestions</h1>
+        <h1><?=Language::getText('suggestions_header')?></h1>
         <div class="block block-listview">
             <ul data-role="listview">
-
-                <li><a href="">
-                    <div class="video">
-                        <div class="thumbnail">
-                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb2.png" />
-                            <span class="duration">2:35</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </a>
-                </li>
-
-                <li><a href="">
-                    <div class="video">
-                        <div class="thumbnail">
-                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb3.png" />
-                            <span class="duration">7:10</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </a>
-                </li>
-
-                <li><a href="">
-                    <div class="video">
-                        <div class="thumbnail">
-                            <img width="107" height="60" src="<?=$this->options->themeUrl?>/images/thumb4.png" />
-                            <span class="duration">4:50</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </a>
-                </li>
-
+            <?php if (count($relatedVideos) > 0): ?>
+                <?php $this->repeatingBlock('video.phtml', $relatedVideos); ?>
+            <?php else: ?>
+                <li><p><?=Language::getText('no_suggestions')?></p></li>
+            <?php endif; ?>
             </ul>
         </div>
     </div>
@@ -78,50 +57,34 @@
     <div id="comments">
 
         <div class="header">
-            <h1>Comments</h1>
-            &bull; <span>5</span>
-            <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Post Comment</a>
+            <h1><?=Language::getText('comments_header')?></h1>
+            &bull; <span><?=$commentCount?></span>
+            <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('comments_button')?></a>
         </div>
 
         <div class="block block-listview">
             <ul data-role="listview">
+            <?php if ($commentCount > 0): ?>
 
-                <li>
-                    <div class="comment">
-                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
-                        <div>
-                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <?php foreach ($commentCardList as $commentCard): ?>
+
+                    <li>
+                        <div class="comment">
+                            <img width="40" height="40" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
+                            <div>
+                                <p><?=$commentCard->author->username?> <?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?> <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('reply')?></a></p>
+                                <?php if ($commentCard->comment->parentId != 0): ?>
+                                    <p class="reply"><?=Language::getText('reply_to')?> <?=$commentCard->parentAuthor->username?></p>
+                                <?php endif; ?>
+                                <p><?=nl2br($commentCard->comment->comments)?></p>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
 
-                <li>
-                    <div class="comment">
-                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
-                        <div>
-                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
-                            <p class="reply">Reply to Gino Bambino</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="comment">
-                        <img width="40" height="40" src="<?=$this->options->themeUrl?>/images/avatar.png" />
-                        <div>
-                            <p>Gino Bambino 7/10/2014 <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window">Reply</a></p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                    </div>
-                </li>
-
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li><p><?=Language::getText('no_comments')?></p></li>
+            <?php endif; ?>
             </ul>
         </div>
     </div>
@@ -130,10 +93,10 @@
 <div id="post-comment" data-role="popup" data-tolerance="15" data-overlay-theme="b">
     <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
     <div>
-        <h3 style="margin-top: 0;">Post Your Comments</h3>
+        <h3 style="margin-top: 0;"><?=Language::getText('comments_post_header')?></h3>
         <form action="" method="post">
-            <textarea style="height:auto;" placeholder="Comments" rows="4"></textarea>
-            <button type="submit" class="ui-btn ui-corner-all">Post Comment</button>
+            <textarea style="height:auto;" placeholder="<?=Language::getText('comments')?>" rows="4"></textarea>
+            <button type="submit" class="ui-btn ui-corner-all"><?=Language::getText('comments_button')?></button>
         </form>
     </div>
 </div>

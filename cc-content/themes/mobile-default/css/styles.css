@@ -290,21 +290,28 @@ h1 {
 
 /** Play Page **/
 
-.play-thumbnail {
+.video-player-container {
     padding: 0 0 .75em;
     margin-bottom: 1em;
 }
 
-.play-thumbnail .thumbnail {
+.video-player-container .video-player {
     position: relative;
-}
-
-.play-thumbnail img {
-    display: block;
     width: 100%;
+    height: 200px;
 }
 
-.play-thumbnail .icon-play {
+.video-player-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+}
+
+.video-player-container .icon-play {
+    z-index: 1100;
     background: url("../images/icon-play.svg") no-repeat 0 0;
     background-size: 65px 65px;
     width: 65px;
@@ -313,17 +320,21 @@ h1 {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-top: -2em;
-    margin-left: -2em;
+    margin-top: -33px;
+    margin-left: -33px;
     opacity: .6;
     text-decoration: none;
 }
 
-.play-thumbnail h1 {
+.video-player-container .icon-play:active {
+    opacity: .8;
+}
+
+.video-player-container h1 {
     margin: .75em;
 }
 
-.play-thumbnail [data-role="navbar"] {
+.video-player-container [data-role="navbar"] {
     margin: .75em .75em 0;
 }
 
@@ -460,22 +471,22 @@ h1 {
 
 /** Upload Page **/
 
-#mobile_upload .ui-checkbox {
+#mobile_account_upload .ui-checkbox {
     margin: 1em 0;
 }
 
-#mobile_upload .ui-checkbox label {
+#mobile_account_upload .ui-checkbox label {
     border: none;
     background-color: #FFF;
     padding: .4em 1em .4em 2.5em;
 }
 
-#mobile_upload textarea {
+#mobile_account_upload textarea {
     min-height: 7em;
 }
 
-#mobile_upload button,
-#mobile_upload input[type="button"] {
+#mobile_account_upload button,
+#mobile_account_upload input[type="button"] {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAtCAMAAACgRQoBAAAAGXRFW…ISJ3EVFzGIt7IzUYu5+Ci7FY3YiE6Eo1iKl7IL8RCF/gIMAK7fJC3DdE7WAAAAAElFTkSuQmCC) repeat-x;
     background: linear-gradient(to bottom, #034e9a 0%,#023e7b 100%);
     text-shadow: none;

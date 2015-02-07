@@ -45,6 +45,7 @@
         <close>Close</close>
         <menu>Menu</menu>
         <choose_language>Choose a Language</choose_language>
+        <suggestions>Suggestions</suggestions>
         
         <!-- Home Page -->
         <home_header>Fresh Out The Oven!</home_header>
@@ -143,7 +144,7 @@
         <create_playlist_button>Create Playlist</create_playlist_button>
         <flag>Flag</flag>
         <date_uploaded>Date Uploaded</date_uploaded>
-        <comments_header>Video Comments</comments_header>
+        <comments_header>Comments</comments_header>
         <view_all_comments>View All Comments</view_all_comments>
         <comments_total>Comments total</comments_total>
         <posted>Posted By</posted>
