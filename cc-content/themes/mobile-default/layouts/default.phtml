@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="<?=$this->options->themeUrl?>/externals/video-js/video-js.min.css">
 <script src="<?=$this->options->themeUrl?>/js/jquery-1.11.2.min.js"></script>
 <script src="<?=$this->options->themeUrl?>/externals/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+var cumulusClips = {lang: {}};
+</script>
 <?php $this->writeCSS(); ?>
 
 </head>
@@ -86,12 +89,16 @@
     <div id="login" data-role="popup" data-overlay-theme="b">
         <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"><?=Language::getText('close')?></a>
         <div>
+            <div id="login-message" class="message block"></div>
             <h3><?=Language::getText('login_header')?></h3>
-            <form action="<?=MOBILE_HOST?>/" method="post" data-ajax="false">
+            <form action="<?=HOST?>/actions/login/" method="post" data-ajax="false">
                 <input type="text" name="username" id="username" value="" placeholder="<?=Language::getText('username')?>">
                 <input type="password" name="password" id="password" value="" placeholder="<?=Language::getText('password')?>">
-                <input type="hidden" name="submitted" id="submitted" value="true" placeholder="<?=Language::getText('password')?>">
                 <button type="submit" class="ui-btn ui-corner-all"><?=Language::getText('login_button')?></button>
+                <script>
+                    cumulusClips.lang.error_username = <?=json_encode(Language::getText('error_username'))?>;
+                    cumulusClips.lang.error_password = <?=json_encode(Language::getText('error_password'))?>;
+                </script>
             </form>
         </div>
     </div>
@@ -99,8 +106,13 @@
 <?php endif; ?>
 
 <script src="<?=$this->options->themeUrl?>/externals/jquery-ui-1.11.2/jquery-ui.min.js"></script>
-<script src="<?=$this->options->themeUrl?>/js/general.js"></script>
 <script src="<?=$this->options->themeUrl?>/externals/video-js/video.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.jquery-ui.widget.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.iframe-transport.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.plugin.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/jquery-validation-1.13.1/dist/jquery.validate.min.js"></script>
+<script src="<?=$this->options->themeUrl?>/js/general.js"></script>
+<script src="<?=$this->options->themeUrl?>/js/fileupload.js"></script>
 <?php $this->writeJs(); ?>
 
 </body>

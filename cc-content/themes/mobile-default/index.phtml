@@ -2,7 +2,7 @@
 <?php if ($message): ?>
     <div class="message block <?=$messageType?>"><?=$message?></div>
 <?php endif; ?>
-
+    
 <?php if (!empty($featuredVideos)): ?>
     <h1><?=Language::getText('featured_videos')?></h1>
     <div class="block block-listview">
@@ -22,12 +22,3 @@
         <?php endif; ?>
     </ul>
 </div>
-
-<!-- BEGIN LOGIN MESSAGE -->
-<div id="login-message" class="message" data-role="popup" data-overlay-theme="b">
-    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"><?=Language::getText('no_videos')?></a>
-    <div>
-        <p>Invalid login please try again.</p>
-    </div>
-</div>
-<!-- END LOGIN MESSAGE -->

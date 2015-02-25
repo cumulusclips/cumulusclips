@@ -669,19 +669,42 @@ h1 {
 /** Message **/
 
 .message {
+    display: none;
     font-weight: bold;
     font-size: .75em;
 }
 
 .errors {
+    display: block;
     background: #fbe3e4;
     color: #8a1f11;
     box-shadow: 0px 0px 4px 1px rgba(251,194,196,0.75);
 }
 
 .success {
+    display: block;
     background: #e6efc2;
     color: #264409;
     box-shadow: 0px 0px 4px 1px rgba(198,216,128,0.75);
 }
 
+.ui-popup-container .message {
+    box-shadow: none;
+    margin: 0 0 15px;
+}
+
+.ui-popup-container .errors {
+    border: 1px solid #fbc2c4;
+}
+
+
+
+/** Forms **/
+
+label.error {
+    color: #c20202;
+}
+
+.ui-input-text + label.error {
+    margin: -10px 0 15px;
+}

@@ -492,6 +492,12 @@ class Router
         
         /** AJAX Routes **/
 
+        $routes['ajaxLogin'] = new Route(array(
+            'path' => 'actions/login',
+            'location' => 'cc-core/controllers/ajax/login.php',
+            'type' => Route::AGNOSTIC
+        ));
+
         $routes['ajaxMemberVideos'] = new Route(array(
             'path' => 'members/videos',
             'location' => 'cc-core/controllers/ajax/member.videos.ajax.php'
