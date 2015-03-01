@@ -5,26 +5,49 @@ cumulusClips.mobileBaseUrl = $('meta[name="mobileBaseUrl"]').attr('content');
 cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
 
 $.mobile.defaultPageTransition = 'slide';
- 
-$(function(){
-    
-    // Play video when play icon is clicked
-    $(document).on('click', '.icon-play', function(){
-        var video = videojs($('.ui-content video')[0]);
-        video.play();
-    });
-    
-    // Init global login popup
-    $('#login').enhanceWithin().popup();
-    
-    // Show/hide tab blocks when tabs are clicked on play page
-    $(document).on('tap', '#play-tabs a', function(event){
-        $('#tab-blocks > div').hide();
-        var tabBlock = $(this).data('block');
-        $(tabBlock).show();
-        event.preventDefault();
-    });
 
+$('body').pagecontainer({
+    create: function(event, ui){
+        cumulusClips.originalPage = $('[data-role="page"]');
+        init();
+    },
+    hide: function(event, ui) {
+        // Clear any messages on outgoing page
+        ui.prevPage.find('.message').each(function(index){
+            clearMessage(this);
+        });
+        
+        // Reset play tabs when navigating away
+        if (ui.prevPage.attr('id') === 'mobile_play') {
+            ui.prevPage.find('.tab-blocks > div').hide();
+            ui.prevPage.find('.about-container').show();
+            ui.prevPage.find('[data-block="about-container"]').addClass('ui-btn-active');
+        }
+        
+        // Reset video upload form when navigating away
+        if (
+            cumulusClips.originalPage.attr('id') === ui.prevPage.attr('id')
+            && ui.prevPage.attr('id') === 'mobile_account_upload'
+        ) {
+            resetUploadForm();
+            removeQueuedVideoUpload();
+        }
+    },
+    show: function(event, ui){
+        // Run controller for video upload page
+        if (ui.toPage.attr('id') === 'mobile_account_upload') {
+            videoUploadController();
+        }
+        
+        // Run controller for play page
+        if (ui.toPage.attr('id') === 'mobile_play') {
+            playController();
+        }
+    }
+});
+
+function init()
+{
     // Attach auto complete functionality to search field
     $("#search-field input").autocomplete({
         source: cumulusClips.baseUrl + '/search/suggest/',
@@ -70,8 +93,11 @@ $(function(){
         }
     });
     
-    // Validate login form
-    $('#login form').validate({
+    // Init global login popup
+    $('#login').enhanceWithin().popup();
+
+    // Validate and submit login form
+    cumulusClips.loginFormValidator = $('#login form').validate({
         rules: {
             username: 'required',
             password: 'required'
@@ -82,29 +108,150 @@ $(function(){
         },
         errorPlacement: function(error, element) {
             element.parent().after(error);
+        },
+        invalidHandler: function(event, validator) { event.preventDefault(); },
+        submitHandler: function(form){
+            var url = $(form).attr('action');
+            var formValues = $(form).serialize();
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: formValues,
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR){
+                    if (data.result) {
+                        window.location = cumulusClips.mobileBaseUrl + '/?welcome';
+                    } else {
+                        displayMessage(data.result, data.message, $('#login-message'));
+                    }
+                }
+            });
+            return false;
         }
     });
     
-    // Submit login form for server side authentication
-    $('#login').on('submit', 'form', function(event){
-        var url = $(this).attr('action');
-        var formValues = $(this).serialize();
-        $.ajax({
-            url: url,
-            method: 'post',
-            data: formValues,
-            dataType: 'json',
-            success: function(data, textStatus, jqXHR){
-                if (data.result) {
-                    window.location = cumulusClips.mobileBaseUrl + '/?welcome';
-                } else {
-                    displayMessage(data.result, data.message, $('#login-message'));
-                }
-            }
-        });
+    // Reset the login form after closing it's popup
+    $('#login').popup({
+        afterclose: function(){
+            cumulusClips.loginFormValidator.resetForm();
+            $(this).find('form')[0].reset();
+            clearMessage($(this).find('.message')[0]);
+        }
+    });
+    
+    // Validate category when select is changed on video upload form
+    $(document).on('change', 'select', function(event){
+        $(this).valid();
+    });
+}
+
+function playController()
+{
+    var playPage = ($('[data-role="page"]').length > 1) ? $('.ui-page-active') : $('#mobile_play');
+    
+    // Play video when play icon is clicked
+    cumulusClips.video = videojs(playPage.find('video')[0]);
+    $('.icon-play').off('click').on('click', function(){
+        cumulusClips.video.play();
+    });
+    
+    // Show/hide tab blocks when tabs are clicked on play page
+    playPage.find('.play-tabs a').off('tap').on('tap', function(event){
+        playPage.find('.tab-blocks > div').hide();
+        var tabBlock = '.' + $(this).data('block');
+        playPage.find(tabBlock).show();
         event.preventDefault();
     });
-});
+}
+
+function videoUploadController()
+{
+    // Validate and submit video upload form
+    cumulusClips.uploadFormValidator = $('#upload-form').validate({
+        ignore: [],
+        rules: {
+            filename: 'required',
+            title: 'required',
+            tags: 'required',
+            description: 'required',
+            category_id: 'required'
+        },
+        messages: {
+            filename: cumulusClips.lang.error_video_upload,
+            title: cumulusClips.lang.error_title,
+            tags: cumulusClips.lang.error_tags,
+            description: cumulusClips.lang.error_description,
+            category_id: cumulusClips.lang.error_category
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr('name') === 'title' || element.attr('name') === 'tags' || element.attr('name') === 'category_id') {
+                element.parent().after(error);
+            } else {
+                element.after(error);
+            }
+        },
+        invalidHandler: function(event, validator) { event.preventDefault(); },
+        submitHandler: function(form) {
+            var url = $(form).attr('action');
+            var formValues = $(form).serialize();
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: formValues,
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR){
+                    // Clear form if upload was successful
+                    if (data.result) {
+                        resetUploadForm();
+                        $.mobile.silentScroll(0);
+                    }
+                    displayMessage(data.result, data.message, $('#upload-message'));
+                }
+            });
+            return false;
+        }
+    });
+    
+    // Toggle display of private url when video upload is marked as private
+    $('#private').off('change').on('change', function(event){
+        $('#private_url').toggle();
+    });
+    
+    // Regenerate Private URL
+    $('#private_url a').off('click').on('click', function(event){
+        regeneratePrivateUrl();
+        event.preventDefault();
+    });
+}
+
+
+function regeneratePrivateUrl()
+{
+    $.ajax({
+        type: 'get',
+        url: cumulusClips.baseUrl + '/private/get/',
+        success: function(responseData, textStatus, jqXHR) {
+            $('#private_url span').text(responseData);
+            $('#private_url input').val(responseData);
+        }
+    });
+}
+
+function clearMessage(messageDomNode)
+{
+    $(messageDomNode).removeClass('success errors').html('').hide();
+}
+
+function resetUploadForm()
+{
+    regeneratePrivateUrl();
+    cumulusClips.uploadFormValidator.resetForm();
+    $('#upload-form')[0].reset();
+    $('#uploaded-file span').text('');
+    $('#uploaded-file').hide();
+    $('#filename').val('');
+    $('#private_url').hide();
+}
 
 function cancelSearch()
 {
@@ -112,6 +259,40 @@ function cancelSearch()
     $('body').toggleClass('search-visible');
     $('#search-field .icon-clear').hide();
     $('#search-field input').val('');
+}
+
+/**
+ * Format number of bytes into human readable format
+ * @param int bytes Total number of bytes
+ * @param int precision Accuracy of final round
+ * @return string Returns human readable formatted bytes
+ */
+function formatBytes(bytes, precision)
+{
+    var units = ['b', 'KB', 'MB', 'GB', 'TB'];
+    bytes = Math.max(bytes, 0);
+    var pwr = Math.floor((bytes ? Math.log(bytes) : 0) / Math.log(1024));
+    pwr = Math.min(pwr, units.length - 1);
+    bytes /= Math.pow(1024, pwr);
+    return Math.round(bytes, precision) + units[pwr];
+}
+
+/**
+ * Retrieve localised string via AJAX
+ * @param function callback Code to be executed once AJAX call to retrieve text is complete
+ * @param string node Name of term node in language file to retrieve
+ * @param json replacements (Optional) List of key/value replacements in JSON format
+ * @return void Requested string, with any replacements made, is passed to callback
+ * for any futher behaviour
+ */
+function getText(callback, node, replacements)
+{
+    $.ajax({
+        type: 'POST',
+        url: cumulusClips.baseUrl+'/language/get/',
+        data: {node:node, replacements:replacements},
+        success: callback
+    });
 }
 
 /**

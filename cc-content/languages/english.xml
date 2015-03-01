@@ -46,6 +46,9 @@
         <menu>Menu</menu>
         <choose_language>Choose a Language</choose_language>
         <suggestions>Suggestions</suggestions>
+        <upload_button>Upload</upload_button>
+        <post_video_button>Post Video</post_video_button>
+        <mobile_upload_header>Upload a Video</mobile_upload_header>
         
         <!-- Home Page -->
         <home_header>Fresh Out The Oven!</home_header>
@@ -379,6 +382,7 @@
         <error_recipient_self>You can't send yourself a message</error_recipient_self>
         <error_subject>Invalid subject</error_subject>
         <error_message>Invalid message</error_message>
+        <error_video_upload>Invalid video upload</error_video_upload>
         <error_title>Invalid title</error_title>
         <error_description>Invalid description</error_description>
         <error_tags>Invalid tags</error_tags>
@@ -425,6 +429,7 @@
         <success_contact_sent>Thank you! Your message has been sent, we will be in touch soon.</success_contact_sent>
         <success_registered>Thank you, you have successfully created your account! Please check your email to activate your account, make sure to look in both your Inbox and Junk folders for your activation email.</success_registered>
         <success_login_sent>We have sent you your login information. Please check your email.</success_login_sent>
+        <success_video_upload>Your video has been successfully uploaded. Please allow several minutes of processing before it is available viewing.</success_video_upload>
         <success_video_updated>Video has been updated.</success_video_updated>
         <success_video_deleted>Video has been deleted.</success_video_deleted>
         <success_playlist_added>Video added to {LIST_NAME}.</success_playlist_added>

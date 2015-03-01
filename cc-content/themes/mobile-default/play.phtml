@@ -16,21 +16,21 @@
 
     <h1><?=$video->title?></h1>
 
-    <div id="play-tabs" data-role="navbar">
+    <div class="play-tabs" data-role="navbar">
         <ul>
-            <li><a href="" data-block="#about" class="ui-btn-active" data-ajax="false"><?=Language::getText('about')?></a></li>
-            <li><a href="" data-block="#suggestions" data-ajax="false"><?=Language::getText('suggestions')?></a></li>
-            <li><a href="" data-block="#comments"  data-ajax="false"><?=Language::getText('comments')?></a></li>
+            <li><a href="" data-block="about-container" class="ui-btn-active" data-ajax="false"><?=Language::getText('about')?></a></li>
+            <li><a href="" data-block="suggestions-container" data-ajax="false"><?=Language::getText('suggestions')?></a></li>
+            <li><a href="" data-block="comments-container"  data-ajax="false"><?=Language::getText('comments')?></a></li>
         </ul>
     </div>
 </div>
 
 
 
-<div id="tab-blocks">
+<div class="tab-blocks">
 
     <!-- About -->
-    <div id="about">
+    <div class="about-container">
         <h1><?=Language::getText('about')?></h1>
         <div class="block">
             <p><strong><?=Language::getText('duration')?>:</strong> <?=$video->duration?></p>
@@ -40,7 +40,7 @@
     </div>
 
     <!-- Suggestions -->
-    <div id="suggestions">
+    <div class="suggestions-container">
         <h1><?=Language::getText('suggestions_header')?></h1>
         <div class="block block-listview">
             <ul data-role="listview">
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Comments -->
-    <div id="comments">
+    <div class="comments-container">
 
         <div class="header">
             <h1><?=Language::getText('comments_header')?></h1>

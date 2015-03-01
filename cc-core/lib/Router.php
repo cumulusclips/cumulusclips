@@ -239,7 +239,8 @@ class Router
         $routes['getPrivateCode'] = new Route(array(
             'path' => 'private/get',
             'location' => 'cc-core/controllers/play.php',
-            'mappings' => array('get_private' => 'true')
+            'mappings' => array('get_private' => 'true'),
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['privateVideoPlay'] = new Route(array(
@@ -522,6 +523,12 @@ class Router
         $routes['ajaxVideoUpload'] = new Route(array(
             'path' => 'account/upload/validate',
             'location' => 'cc-core/controllers/ajax/upload.ajax.php'
+        ));
+
+        $routes['ajaxVideoFileUpload'] = new Route(array(
+            'path' => 'ajax/upload',
+            'location' => 'cc-core/controllers/ajax/upload.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxUsernameExists'] = new Route(array(
