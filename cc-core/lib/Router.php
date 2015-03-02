@@ -558,7 +558,8 @@ class Router
 
         $routes['ajaxCommentAdd'] = new Route(array(
             'path' => 'actions/comment/add',
-            'location' => 'cc-core/controllers/ajax/comment.add.ajax.php'
+            'location' => 'cc-core/controllers/ajax/comment.add.ajax.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxCommentGet'] = new Route(array(

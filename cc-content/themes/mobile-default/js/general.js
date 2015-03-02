@@ -162,6 +162,58 @@ function playController()
         playPage.find(tabBlock).show();
         event.preventDefault();
     });
+    
+    cumulusClips.commentFormValidator = $('.post-comment form').validate({
+        rules: {
+            comments: 'required'
+        },
+        messages: {
+            comments: cumulusClips.lang.error_comment
+        },
+        invalidHandler: function(event, validator){ event.preventDefault(); },
+        submitHandler: function(form){
+            var url = $(form).attr('action');
+            var formValues = {
+                videoId: $(form).find('[name="video-id"]').val(),
+                comments: $(form).find('textarea').val(),
+                parentCommentId: $(form).find('[name="parent-comment-id"]').val()
+            };
+            $.ajax({
+                url: url,
+                method: 'post',
+                data: formValues,
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR){
+                    if (data.result) {
+                        console.log(data);
+                        form.reset();
+                    }
+                    displayMessage(data.result, data.message, playPage.find('.post-comment .message'));
+                }
+            });
+            return false;
+        }
+    });
+    
+    // Reset the comment form after closing it's popup
+    $('.post-comment').popup({
+        afterclose: function(){
+            cumulusClips.commentFormValidator.resetForm();
+            $(this).find('form')[0].reset();
+            clearMessage($(this).find('.message')[0]);
+            $(this).find('input[name="parent-comment-id"]').val('');
+        }
+    });
+    
+    // Set parent comment value in comment form when replying to comment
+    $('.comment-reply').on('click', function(event){
+        playPage.find('input[name="parent-comment-id"]').val($(this).data('parent-comment'));
+    });
+    
+    // Display login popup when sign in link is clicked
+    $('.comments-container .login-link').on('click', function(event){
+        $('#login').popup('open', {transition: 'pop', positionTo: 'window'});
+    });
 }
 
 function videoUploadController()
@@ -223,7 +275,6 @@ function videoUploadController()
         event.preventDefault();
     });
 }
-
 
 function regeneratePrivateUrl()
 {

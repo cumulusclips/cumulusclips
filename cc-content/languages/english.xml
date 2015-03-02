@@ -158,7 +158,7 @@
         <reply_to>Reply to</reply_to>
         <comments_closed>Comments are closed for this video.</comments_closed>
         <comments_login><![CDATA[
-            <a href="{LOGIN_LINK}">Sign In</a> or <a href="{REGISTER_LINK}">Register</a> to post comments.
+            <a class="login-link" href="{LOGIN_LINK}">Sign In</a> or <a class="register-link" href="{REGISTER_LINK}">Register</a> to post comments.
         ]]></comments_login>
         <comments_button>Post Comment</comments_button>
         <suggestions_header>Suggestions</suggestions_header>

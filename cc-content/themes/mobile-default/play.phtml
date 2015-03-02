@@ -1,4 +1,7 @@
-        
+<script>
+cumulusClips.lang.error_comment = <?=json_encode(Language::getText('error_comment'))?>;
+</script>
+
 <div class="video-player-container block">
     <div class="video-player">
         <img src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
@@ -59,7 +62,12 @@
         <div class="header">
             <h1><?=Language::getText('comments_header')?></h1>
             &bull; <span><?=$commentCount?></span>
-            <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('comments_button')?></a>
+            
+            <?php if ($loggedInUser): ?>
+                <a href="#post-comment-<?=$video->videoId?>" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('comments_button')?></a>
+            <?php else: ?>
+                <p><?=Language::getText('comments_login', array('login_link' => '', 'register_link' => HOST . '/register/'))?></p>
+            <?php endif; ?>
         </div>
 
         <div class="block block-listview">
@@ -72,7 +80,12 @@
                         <div class="comment">
                             <img width="40" height="40" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
                             <div>
-                                <p><?=$commentCard->author->username?> <?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?> <a href="#post-comment" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('reply')?></a></p>
+                                <p>
+                                    <?=$commentCard->author->username?> <?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?>
+                                    <?php if ($loggedInUser): ?>
+                                        <a href="#post-comment-<?=$video->videoId?>" class="comment-reply" data-parent-comment="<?=$commentCard->comment->commentId?>" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('reply')?></a>
+                                    <?php endif; ?>
+                                </p>
                                 <?php if ($commentCard->comment->parentId != 0): ?>
                                     <p class="reply"><?=Language::getText('reply_to')?> <?=$commentCard->parentAuthor->username?></p>
                                 <?php endif; ?>
@@ -90,12 +103,16 @@
     </div>
 </div>
 
-<div id="post-comment" data-role="popup" data-tolerance="15" data-overlay-theme="b">
+
+<div id="post-comment-<?=$video->videoId?>" class="post-comment" data-role="popup" data-tolerance="15" data-overlay-theme="b">
     <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
     <div>
-        <h3 style="margin-top: 0;"><?=Language::getText('comments_post_header')?></h3>
-        <form action="" method="post">
-            <textarea style="height:auto;" placeholder="<?=Language::getText('comments')?>" rows="4"></textarea>
+        <div class="message block"></div>
+        <h3><?=Language::getText('comments_post_header')?></h3>
+        <form action="<?=HOST?>/actions/comment/add/" method="post" data-ajax="false">
+            <textarea name="comments" style="height:auto;" placeholder="<?=Language::getText('comments')?>" rows="4"></textarea>
+            <input type="hidden" name="video-id" value="<?=$video->videoId?>" />
+            <input type="hidden" name="parent-comment-id" value="" />
             <button type="submit" class="ui-btn ui-corner-all"><?=Language::getText('comments_button')?></button>
         </form>
     </div>

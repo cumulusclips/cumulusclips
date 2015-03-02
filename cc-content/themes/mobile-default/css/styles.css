@@ -45,6 +45,10 @@
     padding-bottom: 1.25em;
 }
 
+.ui-popup-container {
+    max-width: 90% !important;
+}
+
 
 
 
@@ -190,7 +194,7 @@
 /** Login **/
 
 #login {
-    min-width: 275px;
+    min-width: 90% !important;
 }
 
 #login,
@@ -355,7 +359,7 @@ h1 {
     padding: 10px 12px;
 }
 
-.tab-blocks p {
+.tab-blocks .block p {
     font-size: .75em;
     margin: .33em 0;
 }
@@ -429,10 +433,13 @@ h1 {
 }
 
 .comments-container .header a {
-    float: right;
     font-weight: bold;
     color: #023e7b;
     text-decoration: none;
+}
+
+.comments-container .header > a {
+    float: right;
     line-height: 2em;
 }
 
@@ -440,23 +447,26 @@ h1 {
     clear: both;
 }
 
-#post-comment > div {
+.post-comment {
+    width: 260px;
+}
+
+.post-comment > div {
     padding: 1em;
 }
 
-#post-comment h3 {
+.post-comment h3 {
     line-height: 1em;
     font-size: 1.15em;
     margin: 0 0 .4em;
 }
 
-#post-comment textarea {
-    width: 15em;
+.post-comment textarea {
     min-height: 7em;
     margin: .4em 0 .75em;
 }
 
-#post-comment button {
+#mobile_play .post-comment form .ui-btn {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAtCAMAAACgRQoBAAAAGXRFW…ISJ3EVFzGIt7IzUYu5+Ci7FY3YiE6Eo1iKl7IL8RCF/gIMAK7fJC3DdE7WAAAAAElFTkSuQmCC) repeat-x;
     background: linear-gradient(to bottom, #034e9a 0%,#023e7b 100%);
     text-shadow: none;
@@ -496,6 +506,30 @@ h1 {
 #mobile_account_upload textarea {
     min-height: 7em;
 }
+
+#mobile_account_upload .ui-input-text {
+    margin: 10px 0;
+}
+
+#mobile_account_upload input[type="hidden"] + .error {
+    margin-top: 5px;
+}
+
+#mobile_account_upload .ui-input-text + .error {
+    margin: -5px 0 0;
+}
+
+#mobile_account_upload fieldset {
+    margin-top: 0;
+}
+
+#private_url {
+    display: none;
+}
+
+
+
+/** File Upload Widget **/
 
 .upload-buttons .ui-btn {
     width: 49%;
@@ -544,6 +578,7 @@ h1 {
 #mobile_account_upload .ui-icon-delete:after {
     background-color: #900;
 }
+
 
 
 /** Upload Status **/
@@ -752,6 +787,10 @@ h1 {
     border: 1px solid #fbc2c4;
 }
 
+.ui-popup-container .success {
+    border: 1px solid #c6d880;
+}
+
 
 
 /** Forms **/
@@ -768,25 +807,3 @@ label.error {
 #login-form .error {
     margin: -10px 0 15px;
 }
-
-#mobile_account_upload .ui-input-text {
-    margin: 10px 0;
-}
-
-#mobile_account_upload input[type="hidden"] + .error {
-    margin-top: 5px;
-}
-
-#mobile_account_upload .ui-input-text + .error {
-    margin: -5px 0 0;
-}
-
-#mobile_account_upload fieldset {
-    margin-top: 0;
-}
-
-#private_url {
-    display: none;
-}
-
-/*select { display: block !important;}*/
