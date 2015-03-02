@@ -149,6 +149,9 @@ function playController()
 {
     var playPage = ($('[data-role="page"]').length > 1) ? $('.ui-page-active') : $('#mobile_play');
     
+    // Retrieve comments partial
+    $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentCardTemplate = responseData;});
+    
     // Play video when play icon is clicked
     cumulusClips.video = videojs(playPage.find('video')[0]);
     $('.icon-play').off('click').on('click', function(){
@@ -168,7 +171,7 @@ function playController()
             comments: 'required'
         },
         messages: {
-            comments: cumulusClips.lang.error_comment
+            comments: cumulusClips.lang.errorComment
         },
         invalidHandler: function(event, validator){ event.preventDefault(); },
         submitHandler: function(form){
@@ -183,12 +186,34 @@ function playController()
                 method: 'post',
                 data: formValues,
                 dataType: 'json',
-                success: function(data, textStatus, jqXHR){
-                    if (data.result) {
-                        console.log(data);
+                success: function(responseData, textStatus, jqXHR){
+                    if (responseData.result) {
+                        console.log(responseData);
                         form.reset();
+                        
+                        // Append new comment if auto-approve comments is on
+                        if (responseData.other.autoApprove === true) {
+                            var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, responseData.other.commentCard);
+                            var commentCard = responseData.other.commentCard;
+                            var commentList = playPage.find('.comments-container ul');
+
+                            // Remove 'no comments' message if this is first comment
+                            commentList.find('.no-comments').remove();
+
+                            // Update comment count text
+                            playPage.find('.comments-container .header span').text(responseData.other.commentCount);
+
+                            // Append comment to list
+                            if (commentCard.comment.parentId !== 0) {
+                                var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
+                                parentComment.after(commentCardElement)
+                            } else {
+                                commentList.append(commentCardElement);
+                            }
+                            commentList.listview('refresh');
+                        }
                     }
-                    displayMessage(data.result, data.message, playPage.find('.post-comment .message'));
+                    displayMessage(responseData.result, responseData.message, playPage.find('.post-comment .message'));
                 }
             });
             return false;
@@ -206,8 +231,9 @@ function playController()
     });
     
     // Set parent comment value in comment form when replying to comment
-    $('.comment-reply').on('click', function(event){
-        playPage.find('input[name="parent-comment-id"]').val($(this).data('parent-comment'));
+    $('.comments-container').on('click', '.comment-reply', function(event){
+        var commentId = $(this).parents('li').data('comment');
+        playPage.find('input[name="parent-comment-id"]').val(commentId);
     });
     
     // Display login popup when sign in link is clicked
@@ -363,4 +389,52 @@ function displayMessage(result, message, target)
     domNode.html(message);
     domNode.removeClass(existingClass);
     domNode.addClass(cssClass);
+}
+
+/**
+ * Generates comment card HTML to be appended to comment list on play page
+ * @param string commentCardTemplate The HTML template of the comment card
+ * @param object commentCardData The CommentCard object for the comment being appended
+ * @return object the jQuery object for the newly filled comment card element
+ */
+function buildCommentCard(commentCardTemplate, commentCardData)
+{
+    var commentCard = $(commentCardTemplate);
+    commentCard.attr('data-comment', commentCardData.comment.commentId);
+    
+    // Set comment avatar
+    if (commentCardData.avatar !== null) {
+        commentCard.find('img').attr('src', commentCardData.avatar);
+    } else {
+        commentCard.find('img').attr('src', cumulusClips.themeUrl + '/images/avatar.gif');
+    }
+    
+    // Set comment author
+    commentCard.find('.comment-author').text(commentCardData.author.username);
+    
+    // Set comment date
+    var commentDate = new Date(commentCardData.comment.dateCreated.split(' ')[0]);
+    monthPadding = (String(commentDate.getMonth()+1).length === 1) ? '0' : '';
+    datePadding = (String(commentDate.getDate()).length === 1) ? '0' : '';
+    commentCard.find('.comment-date').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
+    
+    // Set comment reply link
+    commentCard.find('.comment-reply')
+        .attr('href', '#post-comment-' + commentCardData.comment.videoId)
+        .text(cumulusClips.lang.reply)
+        .attr('data-parent-comment', commentCardData.comment.commentId);
+        
+    // Set reply to text if apl.
+    if (commentCardData.comment.parentId !== 0) {
+        commentCard.find('.reply').text(cumulusClips.lang.replyTo + ' ' + commentCardData.parentAuthor.username);
+    } else {
+        commentCard.find('.reply').remove();
+    }
+ 
+    // Set comment text
+    commentCardData.comment.comments = commentCardData.comment.comments.replace(/</g, '&lt;');
+    commentCardData.comment.comments = commentCardData.comment.comments.replace(/>/g, '&gt;');
+    commentCard.find('.comment-text').html(commentCardData.comment.comments.replace(/\r\n|\n|\r/g, '<br>'));
+    
+    return commentCard;
 }

@@ -359,9 +359,10 @@ h1 {
     padding: 10px 12px;
 }
 
-.tab-blocks .block p {
-    font-size: .75em;
-    margin: .33em 0;
+.tab-blocks p,
+.tab-blocks li p {
+    font-size: 12px;
+    margin: 3px 0;
 }
 
 .tab-blocks > div {
@@ -370,6 +371,14 @@ h1 {
 
 .tab-blocks > div:first-child {
     display: block;
+}
+
+.about-container p:first-child {
+    margin-top: 0;
+}
+
+.about-container p:last-child {
+    margin: 10px 0 0;
 }
 
 
@@ -388,12 +397,12 @@ h1 {
 
 .comment div p:first-child {
     margin: 0 0 .15em;
-    font-size: .65em;
+    font-size: 11px;
 }
 
 .comment .reply {
     margin: .15em 0;
-    font-size: .65em;
+    font-size: 11px;
     padding-left: 15px;
     background: url("../images/icon-reply.svg") no-repeat 0 2px;
     background-size: 10px 10px;
@@ -412,6 +421,10 @@ h1 {
 
 .ui-listview .comment p {
     white-space: normal;
+}
+
+.ui-listview .comment-text {
+    font-size: 12px;
 }
 
 .comments-container .header {
@@ -441,6 +454,10 @@ h1 {
 .comments-container .header > a {
     float: right;
     line-height: 2em;
+}
+
+.comments-container .header p {
+    margin: 8px 0 13px;
 }
 
 .comments-container .block {

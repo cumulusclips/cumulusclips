@@ -1,5 +1,7 @@
 <script>
-cumulusClips.lang.error_comment = <?=json_encode(Language::getText('error_comment'))?>;
+cumulusClips.lang.errorComment = <?=json_encode(Language::getText('error_comment'))?>;
+cumulusClips.lang.reply = <?=json_encode(Language::getText('reply'))?>;
+cumulusClips.lang.replyTo = <?=json_encode(Language::getText('reply_to'))?>;
 </script>
 
 <div class="video-player-container block">
@@ -38,6 +40,7 @@ cumulusClips.lang.error_comment = <?=json_encode(Language::getText('error_commen
         <div class="block">
             <p><strong><?=Language::getText('duration')?>:</strong> <?=$video->duration?></p>
             <p><strong><?=Language::getText('views')?>:</strong> <?=$video->views?></p>
+            <p><strong><?=Language::getText('by')?>:</strong> <?=$video->username?></p>
             <p><strong><?=Language::getText('description')?>:</strong> <?=$video->description?></p>
         </div>
     </div>
@@ -76,7 +79,7 @@ cumulusClips.lang.error_comment = <?=json_encode(Language::getText('error_commen
 
                 <?php foreach ($commentCardList as $commentCard): ?>
 
-                    <li>
+                    <li data-comment="<?=$commentCard->comment->commentId?>">
                         <div class="comment">
                             <img width="40" height="40" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
                             <div>
@@ -89,14 +92,14 @@ cumulusClips.lang.error_comment = <?=json_encode(Language::getText('error_commen
                                 <?php if ($commentCard->comment->parentId != 0): ?>
                                     <p class="reply"><?=Language::getText('reply_to')?> <?=$commentCard->parentAuthor->username?></p>
                                 <?php endif; ?>
-                                <p><?=nl2br($commentCard->comment->comments)?></p>
+                                <p class="comment-text"><?=nl2br($commentCard->comment->comments)?></p>
                             </div>
                         </div>
                     </li>
 
                 <?php endforeach; ?>
             <?php else: ?>
-                <li><p><?=Language::getText('no_comments')?></p></li>
+                <li class="no-comments"><p><?=Language::getText('no_comments')?></p></li>
             <?php endif; ?>
             </ul>
         </div>
