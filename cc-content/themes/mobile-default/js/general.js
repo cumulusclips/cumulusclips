@@ -3,6 +3,7 @@ var cumulusClips = cumulusClips || {};
 cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
 cumulusClips.mobileBaseUrl = $('meta[name="mobileBaseUrl"]').attr('content');
 cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
+cumulusClips.thumbUrl = $('meta[name="thumbUrl"]').attr('content');
 
 $.mobile.defaultPageTransition = 'slide';
 
@@ -42,6 +43,11 @@ $('body').pagecontainer({
         // Run controller for play page
         if (ui.toPage.attr('id') === 'mobile_play') {
             playController();
+        }
+        
+        // Run controller for play page
+        if (ui.toPage.attr('id') === 'mobile_videos') {
+            videosController();
         }
     }
 });
@@ -302,6 +308,46 @@ function videoUploadController()
     });
 }
 
+function videosController()
+{
+    // Load video card template
+    $.get(cumulusClips.themeUrl + '/blocks/video.html', function(responseData, textStatus, jqXHR){cumulusClips.videoCardTemplate = responseData;});
+
+    // Load More Videos
+    $('.video-list .load-more').on('click', function(event){
+        var loadMoreButton = $(this);
+        var retrieveOffset = $('.video-list .video').length;
+        var retrieveLimit = Number(loadMoreButton.data('limit'));
+        var videoCount = loadMoreButton.data('count');
+
+        $.ajax({
+            url: cumulusClips.baseUrl + '/videos/load-more/',
+            beforeSend: function(){
+                $.mobile.loading('show');
+            },
+            data: {start: retrieveOffset, limit: retrieveLimit},
+            dataType: 'json',
+            success: function(responseData, textStatus, jqXHR){
+                // Append video cards
+                $.each(responseData.other.videoList, function(index, value){
+                    var videoCard = buildVideoCard(cumulusClips.videoCardTemplate, value);
+                    loadMoreButton.before(videoCard);
+                });
+
+                // Remove load more button
+                if ($('.video-list .video').length === videoCount) {
+                    loadMoreButton.remove();
+                }
+
+                // Refresh list
+                $.mobile.loading('hide');
+                $('.video-list').listview('refresh');
+            }
+        });
+        event.preventDefault();
+    });
+}
+
 function regeneratePrivateUrl()
 {
     $.ajax({
@@ -437,4 +483,33 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     commentCard.find('.comment-text').html(commentCardData.comment.comments.replace(/\r\n|\n|\r/g, '<br>'));
     
     return commentCard;
+}
+
+/**
+ * Builds a video card from the video card template
+ * @param string videoCardTemplate The HTML template to build the video card
+ * @param object video The video which will be represented by the card
+ * @return object Returns jQuery object Representing the new video card
+ */
+function buildVideoCard(videoCardTemplate, video)
+{
+    var videoCard = $(videoCardTemplate);
+    var url = getVideoUrl(video);
+    videoCard.find('img').attr('src', cumulusClips.baseUrl + '/cc-content/uploads/thumbs/' + video.filename + '.jpg');
+    videoCard.find('.duration').text(video.duration);
+    videoCard.find('a').attr('href', url);
+    videoCard.find('p').text(video.title);
+    return videoCard;
+}
+
+/**
+ * Retrieve the full URL to a video
+ * @param object video The video whose URL is being retrieved
+ * @return string Returns the complete URL to given video
+ */
+function getVideoUrl(video)
+{
+    var url = cumulusClips.mobileBaseUrl;
+    url += '/v/' + video.videoId + '/';
+    return url;
 }

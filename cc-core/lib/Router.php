@@ -514,6 +514,12 @@ class Router
             'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php',
             'type' => Route::AGNOSTIC
         ));
+        
+        $routes['ajaxVideos'] = new Route(array(
+            'path' => 'videos/load-more',
+            'location' => 'cc-core/controllers/ajax/videos.php',
+            'type' => Route::AGNOSTIC
+        ));
 
         $routes['ajaxAvatarUpload'] = new Route(array(
             'path' => 'account/upload/avatar',
@@ -570,18 +576,6 @@ class Router
         $routes['ajaxPost'] = new Route(array(
             'path' => 'actions/post',
             'location' => 'cc-core/controllers/ajax/post.ajax.php'
-        ));
-
-        $routes['ajaxMobileLoadMoreVideos'] = new Route(array(
-            'path' => 'actions/mobile-videos',
-            'location' => 'cc-core/controllers/ajax/mobile_videos.ajax.php',
-            'mobile' => true
-        ));
-
-        $routes['ajaxMobileLoadMoreSearch'] = new Route(array(
-            'path' => 'actions/mobile-search',
-            'location' => 'cc-core/controllers/ajax/mobile_search.ajax.php',
-            'mobile' => true
         ));
 
 
