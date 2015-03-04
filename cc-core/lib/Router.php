@@ -508,6 +508,12 @@ class Router
             'path' => 'members/playlists',
             'location' => 'cc-core/controllers/ajax/member.playlists.ajax.php'
         ));
+        
+        $routes['ajaxSearch'] = new Route(array(
+            'path' => 'search/load-more',
+            'location' => 'cc-core/controllers/ajax/search.php',
+            'type' => Route::AGNOSTIC
+        ));
 
         $routes['ajaxSearchSuggest'] = new Route(array(
             'path' => 'search/suggest',

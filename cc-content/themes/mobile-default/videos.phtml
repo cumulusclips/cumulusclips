@@ -1,7 +1,7 @@
 
 <h1><?=Language::getText('videos_header')?></h1>
 <div class="block block-listview">
-    <ul class="video-list" data-role="listview">
+    <ul data-role="listview" class="video-list">
         <?php if (!empty($videos)): ?>
             <?php $this->repeatingBlock('video.phtml', $videos); ?>
         

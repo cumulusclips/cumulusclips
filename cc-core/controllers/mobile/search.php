@@ -16,9 +16,9 @@ if (!empty($_POST['keyword'])) {
 
     // Retrieve search result count
     $this->view->vars->keyword = $keyword = trim($_POST['keyword']);
-    $query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword)";
-    $db->fetchRow($query, array(':keyword' => $keyword));
-    $this->view->vars->count = $db->rowCount();
+    $query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword)";
+    $results = $db->fetchRow($query, array(':keyword' => $keyword));
+    $this->view->vars->count = (int) $results['count'];
 
     // Retrieve search result video list
     $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT 20";

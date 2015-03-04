@@ -1,10 +1,15 @@
-    
+
 <h1><?=Language::getText('search_header')?></h1>
-<p><strong><?=Language::getText('results_for')?>:</strong> <?=$keyword?></p>
+<p><strong><?=Language::getText('results_for')?>:</strong> <?=htmlspecialchars($keyword)?></p>
 <div class="block block-listview">
-    <ul data-role="listview">
+    <ul data-role="listview" class="video-list">
         <?php if (!empty($searchVideos)): ?>
             <?php $this->repeatingBlock('video.phtml', $searchVideos); ?>
+        
+            <?php if (count($searchVideos) < $count): ?>
+                <li data-icon="false" data-keyword="<?=htmlspecialchars($keyword)?>" data-count="<?=$count?>" data-limit="20" class="load-more"><a href=""><?=Language::getText('load_more')?></a></li>
+            <?php endif; ?>
+        
         <?php else: ?>
             <li><?=Language::getText('no_results')?></li>
         <?php endif; ?>

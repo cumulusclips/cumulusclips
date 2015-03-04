@@ -49,6 +49,11 @@ $('body').pagecontainer({
         if (ui.toPage.attr('id') === 'mobile_videos') {
             videosController();
         }
+        
+        // Run controller for play page
+        if (ui.toPage.attr('id') === 'mobile_search') {
+            searchController();
+        }
     }
 });
 
@@ -326,6 +331,48 @@ function videosController()
                 $.mobile.loading('show');
             },
             data: {start: retrieveOffset, limit: retrieveLimit},
+            dataType: 'json',
+            success: function(responseData, textStatus, jqXHR){
+                // Append video cards
+                $.each(responseData.other.videoList, function(index, value){
+                    var videoCard = buildVideoCard(cumulusClips.videoCardTemplate, value);
+                    loadMoreButton.before(videoCard);
+                });
+
+                // Remove load more button
+                if ($('.video-list .video').length === videoCount) {
+                    loadMoreButton.remove();
+                }
+
+                // Refresh list
+                $.mobile.loading('hide');
+                $('.video-list').listview('refresh');
+            }
+        });
+        event.preventDefault();
+    });
+}
+
+function searchController()
+{
+    // Load video card template
+    $.get(cumulusClips.themeUrl + '/blocks/video.html', function(responseData, textStatus, jqXHR){cumulusClips.videoCardTemplate = responseData;});
+
+    // Load More Videos
+    $('.video-list .load-more').on('click', function(event){
+        var loadMoreButton = $(this);
+        var retrieveOffset = $('.video-list .video').length;
+        var keyword = loadMoreButton.data('keyword');
+        var retrieveLimit = Number(loadMoreButton.data('limit'));
+        var videoCount = loadMoreButton.data('count');
+
+        $.ajax({
+            url: cumulusClips.baseUrl + '/search/load-more/',
+            method: 'post',
+            beforeSend: function(){
+                $.mobile.loading('show');
+            },
+            data: {keyword: keyword, start: retrieveOffset, limit: retrieveLimit},
             dataType: 'json',
             success: function(responseData, textStatus, jqXHR){
                 // Append video cards
