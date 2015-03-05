@@ -384,18 +384,12 @@ h1 {
 
 /** Comments **/
 
-.comment img {
+.comment .avatar {
     float: left;
     margin-right: 1em;
 }
 
-.comment:after {
-    content: "";
-    display: block;
-    clear: both;
-}
-
-.comment div p:first-child {
+.comment .content p:first-child {
     margin: 0 0 .15em;
     font-size: 11px;
 }

@@ -4,6 +4,7 @@ cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
 cumulusClips.mobileBaseUrl = $('meta[name="mobileBaseUrl"]').attr('content');
 cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
 cumulusClips.thumbUrl = $('meta[name="thumbUrl"]').attr('content');
+cumulusClips.loggedIn = $('meta[name="loggedIn"]').attr('content');
 
 $.mobile.defaultPageTransition = 'slide';
 
@@ -158,8 +159,11 @@ function init()
 
 function playController()
 {
+    // Establish play page vars
     var playPage = ($('[data-role="page"]').length > 1) ? $('.ui-page-active') : $('#mobile_play');
-    
+    cumulusClips.lastCommentId = playPage.find('.comment-list .comment').last().data('comment');
+    cumulusClips.loadMoreComments = (cumulusClips.commentCount > 5) ? true : false;
+
     // Retrieve comments partial
     $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentCardTemplate = responseData;});
     
@@ -199,7 +203,7 @@ function playController()
                 dataType: 'json',
                 success: function(responseData, textStatus, jqXHR){
                     if (responseData.result) {
-                        console.log(responseData);
+
                         form.reset();
                         
                         // Append new comment if auto-approve comments is on
@@ -250,6 +254,49 @@ function playController()
     // Display login popup when sign in link is clicked
     $('.comments-container .login-link').on('click', function(event){
         $('#login').popup('open', {transition: 'pop', positionTo: 'window'});
+    });
+    
+    // Load more comments
+    $('.comments-container .load-more').on('click', function(event){
+
+        var loadMoreButton = $(this);
+        var limit = loadMoreButton.data('limit');
+        var data = {videoId:cumulusClips.videoId, lastCommentId:cumulusClips.lastCommentId, limit: limit};
+
+        // Retrieve subsequent comments
+        $.ajax({
+            url: cumulusClips.baseUrl + '/actions/comments/get/',
+            data: data,
+            dataType: 'json',
+            beforeSend: function(){
+                $.mobile.loading('show');
+            },
+            success: function(responseData, textStatus, jqXHR){
+
+                var lastCommentKey = responseData.other.commentCardList.length-1;
+                cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;                    
+
+                // Build comment cards and append them to the list
+                $.each(responseData.other.commentCardList, function(key, commentCard){
+                    playPage.find('[data-comment="' + commentCard.comment.commentId + '"]').remove();
+                    var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, commentCard);
+                    loadMoreButton.before(commentCardElement);
+                });
+
+                // Hide load more button if no more comments are available
+                if (playPage.find('.comment').length < cumulusClips.commentCount) {
+                    cumulusClips.loadMoreComments = true;
+                } else {
+                    cumulusClips.loadMoreComments = false;
+                    loadMoreButton.remove();
+                }
+
+                // Refresh list
+                $.mobile.loading('hide');
+                playPage.find('.comment-list').listview('refresh');
+            }
+        });
+        event.preventDefault();
     });
 }
 
@@ -512,10 +559,14 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     commentCard.find('.comment-date').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
     
     // Set comment reply link
-    commentCard.find('.comment-reply')
-        .attr('href', '#post-comment-' + commentCardData.comment.videoId)
-        .text(cumulusClips.lang.reply)
-        .attr('data-parent-comment', commentCardData.comment.commentId);
+    if (cumulusClips.loggedIn === '1') {
+        commentCard.find('.comment-reply')
+            .attr('href', '#post-comment-' + commentCardData.comment.videoId)
+            .text(cumulusClips.lang.reply)
+            .attr('data-parent-comment', commentCardData.comment.commentId);
+    } else {
+        commentCard.find('.comment-reply').remove();
+    }
         
     // Set reply to text if apl.
     if (commentCardData.comment.parentId !== 0) {
