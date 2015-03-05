@@ -13,18 +13,33 @@ $this->view->vars->keyword = null;
 
 // Handle form if submitted
 if (!empty($_POST['keyword'])) {
-
-    // Retrieve search result count
-    $this->view->vars->keyword = $keyword = trim($_POST['keyword']);
-    $query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword)";
-    $results = $db->fetchRow($query, array(':keyword' => $keyword));
-    $this->view->vars->count = (int) $results['count'];
-
-    // Retrieve search result video list
-    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT 20";
-    $videoResults = $db->fetchAll($query, array(':keyword' => $keyword));
+    
+    $keyword = $_POST['keyword'];
+    $this->view->vars->keyword = $keyword;
+    
+    // Retrieve count of all videos
+    $query = "SELECT COUNT(video_id) as total FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0'";
+    $resultTotal = $db->fetchRow($query);
+    $total = (int) $resultTotal['total'];
+    
+    // Retrieve total count
+    if ($total > 20 && strlen($keyword) > 3) {
+        // Use FULLTEXT query
+        $queryCount = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND MATCH(title, tags, description) AGAINST(:keyword)";
+        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND MATCH(title, tags, description) AGAINST(:keyword) LIMIT 20";
+    } else {
+        // Use LIKE query
+        $keyword = '%' . $keyword . '%';
+        $queryCount = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND (title LIKE :keyword OR description LIKE :keyword OR tags LIKE :keyword)";
+        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND (title LIKE :keyword OR description LIKE :keyword OR tags LIKE :keyword) LIMIT 20";
+    }
+    
+    // Retrieve search results
+    $resultsCount = $db->fetchRow($queryCount, array(':keyword' => $keyword));
+    $this->view->vars->count = (int) $resultsCount['count'];
+    $searchResults = $db->fetchAll($query, array(':keyword' => $keyword));
     $this->view->vars->searchVideos = $videoMapper->getVideosFromList(
-        Functions::arrayColumn($videoResults, 'video_id')
+        Functions::arrayColumn($searchResults, 'video_id')
     );
 }
 

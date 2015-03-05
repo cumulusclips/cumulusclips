@@ -28,7 +28,6 @@ if ($resultTotal['total'] > 20 && strlen($keyword) > 3) {
     $db->fetchAll($query, array(':keyword' => $keyword));
 }
 
-
 // Retrieve limited results
 $query .= " LIMIT $suggestLimit";
 $searchResult = $db->fetchAll($query, array(':keyword' => $keyword));
