@@ -42,7 +42,12 @@ var cumulusClips = {lang: {}};
 
     <!-- BEGIN HEADER -->
     <div id="header" data-role="header" data-position="fixed">
-        <span><a href="#menu" class="hide-for-search icon-menu"><?=Language::getText('menu')?></a></span>
+        
+        <?php if ($this->options->page == 'mobile_play'): ?>
+            <span><a href="<?=MOBILE_HOST?>/" class="hide-for-search icon-back" data-transition="slide" data-rel="back"><?=Language::getText('back')?></a></span>
+        <?php else: ?>
+            <span><a href="#menu" class="hide-for-search icon-menu"><?=Language::getText('menu')?></a></span>
+        <?php endif; ?>
         <img width="198" height="19" src="<?=$this->options->themeUrl?>/images/logo.svg" />
         <span><a href="" class="hide-for-search icon-search"><?=Language::getText('search')?></a></span>
     </div>
