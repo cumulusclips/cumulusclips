@@ -67,7 +67,8 @@ function init()
     // Attach auto complete functionality to search field
     $("#search-field input").autocomplete({
         source: cumulusClips.baseUrl + '/search/suggest/',
-        appendTo: '#results'
+        appendTo: '#results',
+        minLength: 3
     });
     
     $(document).on('touchstart', '.ui-autocomplete li', function(event){
