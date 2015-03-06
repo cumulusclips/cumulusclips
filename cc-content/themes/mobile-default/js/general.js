@@ -75,7 +75,7 @@ function init()
     });
 
     // Display search form when search icon is clicked
-    $(document).on('touchstart', '.icon-search', function(event){
+    $(document).on('touchstart, click', '.icon-search', function(event){
         $('#search-overlay').show();
         $('body').toggleClass('search-visible');
         $('#search-form input').focus();
