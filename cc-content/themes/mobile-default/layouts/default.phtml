@@ -76,7 +76,7 @@ var cumulusClips = {lang: {}};
                 <li><a class="icon-language" href="<?=MOBILE_HOST?>/l/"><?=Language::getLanguage(true)?></a></li>
             <?php endif; ?>
                 
-            <li><a class="icon-desktop" href="<?=HOST?>?nomobile"><?=Language::getText('standard_site')?></a></li>
+            <li><a class="icon-desktop" href="<?=HOST?>?nomobile" data-ajax="false"><?=Language::getText('standard_site')?></a></li>
                 
             <?php if (!$loggedInUser): ?>
                 <li><a class="icon-login" href="#login" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('login')?></a></li>
