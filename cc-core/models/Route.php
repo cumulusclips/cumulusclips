@@ -29,20 +29,15 @@ class Route
     public $mappings = null;
     
     /**
-     * @var int The type of route
-     */
-    public $type = null;
-    
-    /**
-     * @var boolean Whether or not the route is intended for mobile devices 
-     */
-    public $mobile = null;
-    
-    /**
      * @var string Page name given for route. When provided this becomes the CSS
      * selector name for the given page 
      */
     public $name = null;
+    
+    /**
+     * @var int Intended audience for the route. Defines whether it's Mobile vs Desktop vs Agnostic
+     */
+    public $type = null;
     
     /**
      * Create a new URL route for loading a given controller based on the request URI
@@ -72,7 +67,18 @@ class Route
             
             if (isset($options['type']) && in_array($options['type'], array(self::STANDARD, self::MOBILE, self::AGNOSTIC))) {
                 $this->type = $options['type'];
+            } else {
+                $this->type = self::STANDARD;
             }
         }
+    }
+    
+    /**
+     * Evaluates whether current route is for mobile platforms or otherwise
+     * @return boolean Returns true if route is for mobile, false otherwise
+     */
+    public function isMobile()
+    {
+        return $this->type == self::MOBILE;
     }
 }
