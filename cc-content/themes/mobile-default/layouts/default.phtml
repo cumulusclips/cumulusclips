@@ -3,6 +3,7 @@
 <head>
 <title><?=$meta->title?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="baseUrl" content="<?=HOST?>">
 <meta name="mobileBaseUrl" content="<?=MOBILE_HOST?>">
 <meta name="themeUrl" content="<?=$this->options->themeUrl?>">
@@ -48,7 +49,7 @@ var cumulusClips = {lang: {}};
         <?php else: ?>
             <span><a href="#menu" class="hide-for-search icon-menu"><?=Language::getText('menu')?></a></span>
         <?php endif; ?>
-        <img width="198" height="19" src="<?=$this->options->themeUrl?>/images/logo.svg" />
+        <a href="<?=MOBILE_HOST?>" data-role="none" class="logo"><img width="198" height="19" src="<?=$this->options->themeUrl?>/images/logo.svg" /></a>
         <span><a href="" class="hide-for-search icon-search"><?=Language::getText('search')?></a></span>
     </div>
     <!-- END HEADER -->

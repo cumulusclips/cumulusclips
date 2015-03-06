@@ -29,7 +29,7 @@
 }
 
 .ui-page-theme-a .ui-btn.ui-btn-active {
-    background: none;
+    background: #CCC;
     border-color: #DDD;
     text-shadow: 0 1px 0 #555;
 }
@@ -61,8 +61,15 @@
     text-align: center;
 }
 
-#header > img {
+#header .logo img {
     margin-top: 14px;
+    display: block;
+    margin: 14px auto 0;
+}
+
+#header .logo {
+    position: static;
+    top: auto;
 }
 
 #header .icon-menu {
@@ -341,6 +348,12 @@ h1 {
 
 .video-player-container [data-role="navbar"] {
     margin: .75em .75em 0;
+}
+
+.video-js {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 
