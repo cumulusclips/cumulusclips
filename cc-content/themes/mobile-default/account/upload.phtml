@@ -1,0 +1,72 @@
+
+<script>
+cumulusClips.lang.error_video_upload = <?=json_encode(Language::getText('error_video_upload'))?>;
+cumulusClips.lang.error_title = <?=json_encode(Language::getText('error_title'))?>;
+cumulusClips.lang.error_tags = <?=json_encode(Language::getText('error_tags'))?>;
+cumulusClips.lang.error_description = <?=json_encode(Language::getText('error_description'))?>;
+cumulusClips.lang.error_category = <?=json_encode(Language::getText('error_category'))?>;
+</script>
+
+
+<div id="upload-message" class="message block"></div>
+
+<h1><?=Language::getText('mobile_upload_header')?></h1>
+<div class="block">
+    <form action="<?=HOST?>/ajax/upload/">
+        <div class="upload-buttons">
+            <div id="browse-button" class="button ui-btn ui-btn-inline">
+                <span><?=Language::getText('browse_files_button')?></span>
+                <input data-role="none" id="upload" type="file" name="upload" />
+            </div>
+            <button id="upload-button" class="button ui-btn ui-btn-inline"><?=Language::getText('upload_button')?></button>
+            
+            <input type="hidden" name="upload-limit" id="upload-limit" value="<?=$config->videoSizeLimit?>" />
+            <input type="hidden" name="file-types" id="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
+        </div>
+        
+        <div id="upload-status">
+            <div class="title"></div>
+            <div class="progress">
+                <a class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline" href="" title="<?=Language::getText('cancel')?>"><?=Language::getText('cancel')?></a>
+                <div class="percentage">0%</div>
+                <div class="meter">
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    
+    
+    <p id="uploaded-file"><a href="" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline"><?=Language::getText('cancel')?></a><span></span></p>
+        
+    <form id="upload-form" action="<?=MOBILE_HOST?>/a/u/" method="post" data-ajax="false">
+        <input type="hidden" id="filename" name="filename" value="" />
+        <input type="hidden" name="submitted" value="true" />
+        <input type="text" placeholder="<?=Language::getText('title')?>" name="title" />
+        <input type="text" placeholder="<?=Language::getText('tags')?>" name="tags" />
+        <textarea placeholder="<?=Language::getText('description')?>" name="description"></textarea>
+        <select name="category_id" data-native-menu="false">
+            <option value="" selected><?=Language::getText('category')?></option>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?=$category->categoryId?>"><?=$category->name?></option>
+            <?php endforeach; ?>
+        </select>
+        <fieldset data-role="controlgroup">
+            <input type="checkbox" name="disable-embed" id="disable-embed" value="1">
+            <label for="disable-embed"><?=Language::getText('disable_embed')?></label>
+            <input type="checkbox" name="gated" id="gated" value="1">
+            <label for="gated"><?=Language::getText('gated')?></label>
+            <input type="checkbox" name="private" id="private" value="1">
+            <label for="private"><?=Language::getText('private')?></label>
+            <div id="private_url">
+                <input type="hidden" name="private_url" value="<?=$private_url?>" />
+                <?=HOST?>/private/videos/<span><?=$private_url?></span>/
+                <a href=""><?=Language::getText('regenerate')?></a>
+            </div>
+            <input type="checkbox" name="comments-closed" id="comments-closed" value="1">
+            <label for="comments-closed"><?=Language::getText('closeComments')?></label>
+        </fieldset>
+        <button type="submit" class="button ui-btn ui-corner-all"><?=Language::getText('post_video_button')?></button>
+    </form>
+</div>

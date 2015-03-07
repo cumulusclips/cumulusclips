@@ -1,0 +1,9 @@
+
+<h1><?=Language::getText('choose_language')?></h1>
+<div class="block block-listview">
+    <ul data-role="listview">
+        <?php foreach (Language::getActiveLanguages() as $language): ?>
+            <li><a href="<?=HOST?>/language/set/?language=<?=$language->system_name?>" data-ajax="false"><?=$language->native_name?></a>
+        <?php endforeach; ?>
+    </ul>
+</div>

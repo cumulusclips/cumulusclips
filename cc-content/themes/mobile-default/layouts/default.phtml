@@ -2,44 +2,126 @@
 <html>
 <head>
 <title><?=$meta->title?></title>
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
-<meta name="baseURL" content="<?=HOST?>" />
-<meta name="themeUrl" content="<?=$this->options->themeUrl?>" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php $this->writeMeta(); ?>
-<link rel="apple-touch-icon" href="<?=$this->options->themeUrl?>/images/touch.png"/>
-<link href="<?=$this->options->themeUrl?>/css/reset.css" rel="stylesheet" type="text/css" />
-<link href="<?=$this->options->themeUrl?>/css/main.css" rel="stylesheet" type="text/css" />
+<meta name="baseUrl" content="<?=HOST?>">
+<meta name="mobileBaseUrl" content="<?=MOBILE_HOST?>">
+<meta name="themeUrl" content="<?=$this->options->themeUrl?>">
+<meta name="loggedIn" content="<?=(boolean) $loggedInUser?>">
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/externals/jquery-ui-1.11.2/jquery-ui.min.css">
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/externals/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/css/styles.css">
+<link rel="stylesheet" href="<?=$this->options->themeUrl?>/externals/video-js/video-js.min.css">
+<script src="<?=$this->options->themeUrl?>/js/jquery-1.11.2.min.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/jquery-ui-1.11.2/jquery-ui.min.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+var cumulusClips = {lang: {}};
+</script>
 <?php $this->writeCSS(); ?>
+
 </head>
 <body class="<?=Language::getCSSName()?>">
     
-<div id="header">
-    <a href="<?=MOBILE_HOST?>/"><img src="<?=$this->options->themeUrl?>/images/logo.png" alt="<?=Language::getText('mobile_heading', array('sitename' => $config->sitename))?>" /></a>
+<!-- BEGIN SEARCH -->
+<div id="search-form">
+<!--    <form action="<?=MOBILE_HOST?>/s/" method="post">-->
+    <form action="<?=MOBILE_HOST?>/s/" method="post" data-ajax="false">
+        <div id="search-field">
+            <input type="search" name="keyword" value="" placeholder="<?=Language::getText('search')?>" />
+            <a href="" class="icon-clear"> </a>
+        </div>
+        <div class="cancel"><a href=""><?=Language::getText('cancel')?></a></div>
+        <div id="results"></div>
+    </form>
 </div>
+<div id="search-overlay"></div>
+<!-- END SEARCH -->
 
-<div id="wrapper">
-    
-    <div id="nav">
+<!-- BEGIN PAGE -->
+<div data-role="page" id="<?=$this->options->page?>">
+
+    <!-- BEGIN HEADER -->
+    <div id="header" data-role="header" data-position="fixed">
+        
         <?php if ($this->options->page == 'mobile_play'): ?>
-            <div><a href="" class="back"><?=Language::getText('back')?></a></div>
+            <span><a href="<?=MOBILE_HOST?>/" class="hide-for-search icon-back" data-transition="slide" data-rel="back"><?=Language::getText('back')?></a></span>
         <?php else: ?>
-            <div><a href="<?=MOBILE_HOST?>/"><?=Language::getText('home')?></a></div>
-            <div><a href="<?=MOBILE_HOST?>/v/"><?=Language::getText('videos')?></a></div>
-            <div><a href="<?=MOBILE_HOST?>/s/"><?=Language::getText('search')?></a></div>
+            <span><a href="#menu" class="hide-for-search icon-menu"><?=Language::getText('menu')?></a></span>
         <?php endif; ?>
+        <a href="<?=MOBILE_HOST?>" data-role="none" class="logo"><img width="198" height="19" src="<?=$this->options->themeUrl?>/images/logo.svg" /></a>
+        <span><a href="" class="hide-for-search icon-search"><?=Language::getText('search')?></a></span>
     </div>
-    
-    <?=$this->body()?>
+    <!-- END HEADER -->
 
-    <div id="footer">
-        <p><a href="<?=HOST?>/?nomobile"><?=Language::getText('standard_site')?></a></p>
+    <!-- BEGIN PAGE BODY -->
+    <div data-role="content">
+        <?=$this->body()?>
     </div>
+    <!-- END PAGE BODY -->
+
+    <!-- BEGIN PANEL -->
+    <div data-role="panel" data-position-fixed="true" id="menu">
+        <ul data-role="listview" data-icon="false">
+            <li><a class="icon-home" href="<?=MOBILE_HOST?>/"><?=Language::getText('home')?></a></li>
+            <li><a class="icon-videos" href="<?=MOBILE_HOST?>/v/"><?=Language::getText('videos')?></a></li>
+            <?php if ($loggedInUser): ?>
+                <li><a class="icon-upload" href="<?=MOBILE_HOST?>/a/u/"><?=Language::getText('upload')?></a></li>
+                <li><a class="icon-watch-later" href="<?=MOBILE_HOST?>/a/wl/"><?=Language::getText('watch_later')?></a></li>
+                <li><a class="icon-favorites" href="<?=MOBILE_HOST?>/a/f/"><?=Language::getText('favorites')?></a></li>
+                <li><a class="icon-videos" href="<?=MOBILE_HOST?>/a/v/"><?=Language::getText('my_videos')?></a></li>
+            <?php endif; ?>
+                
+            <?php if (count(Language::getActiveLanguages()) > 1): ?>
+                <li><a class="icon-language" href="<?=MOBILE_HOST?>/l/"><?=Language::getLanguage(true)?></a></li>
+            <?php endif; ?>
+                
+            <li><a class="icon-desktop" href="<?=HOST?>?nomobile" data-ajax="false"><?=Language::getText('standard_site')?></a></li>
+                
+            <?php if (!$loggedInUser): ?>
+                <li><a class="icon-login" href="#login" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('login')?></a></li>
+            <?php else: ?>
+                <li><a class="icon-login" href="<?=MOBILE_HOST?>/?logout" data-ajax="false"><?=Language::getText('logout')?></a></li>
+            <?php endif; ?>
+        </ul>
+        <a href="" data-rel="close" class="icon-close"><?=Language::getText('close')?></a>
+
+    </div>
+    <!-- END PANEL -->
 
 </div>
-<script src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>
+<!-- END PAGE -->
+
+<?php if (!$loggedInUser): ?>
+    <!-- BEGIN LOGIN -->
+    <div id="login" data-role="popup" data-overlay-theme="b">
+        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right"><?=Language::getText('close')?></a>
+        <div>
+            <div id="login-message" class="message block"></div>
+            <h3><?=Language::getText('login_header')?></h3>
+            <form action="<?=HOST?>/actions/login/" method="post" data-ajax="false">
+                <input type="text" name="username" id="username" value="" placeholder="<?=Language::getText('username')?>">
+                <input type="password" name="password" id="password" value="" placeholder="<?=Language::getText('password')?>">
+                <button type="submit" class="ui-btn ui-corner-all"><?=Language::getText('login_button')?></button>
+                <script>
+                    cumulusClips.lang.error_username = <?=json_encode(Language::getText('error_username'))?>;
+                    cumulusClips.lang.error_password = <?=json_encode(Language::getText('error_password'))?>;
+                </script>
+            </form>
+        </div>
+    </div>
+    <!-- END LOGIN -->
+<?php endif; ?>
+
+<script src="<?=$this->options->themeUrl?>/externals/video-js/video.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.jquery-ui.widget.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.iframe-transport.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/file-upload/fileupload.plugin.js"></script>
+<script src="<?=$this->options->themeUrl?>/externals/jquery-validation-1.13.1/dist/jquery.validate.min.js"></script>
+<script src="<?=$this->options->themeUrl?>/js/controllers.js"></script>
 <script src="<?=$this->options->themeUrl?>/js/general.js"></script>
-<?php $this->WriteJs(); ?>
+<script src="<?=$this->options->themeUrl?>/js/fileupload.js"></script>
+<?php $this->writeJs(); ?>
 
 </body>
 </html>

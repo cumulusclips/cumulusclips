@@ -111,7 +111,7 @@ class App
         if (isset($_GET['nomobile'])) {
             setcookie('nomobile', md5('nomobile'), time()+3600*24*3);
         }
-
+        
         // Redirect to mobile if user hasn't opted out from mobile site
         $agent = '/ip(ad|hone|od)|android|Windows Phone/i';
         if (
@@ -120,8 +120,19 @@ class App
             && preg_match($agent, $_SERVER['HTTP_USER_AGENT'])
             && !isset($_COOKIE['nomobile'])
             && !isset($_GET['nomobile'])
-            && !$route->mobile
+            && !in_array($route->type, array(Route::MOBILE, Route::AGNOSTIC))
         ) {
+            // Detect if route is for video play page and redirect to mobile version instead
+            $router = new Router();
+            $playRoute = $router->getStaticRoute('play');
+            if ($playRoute->location == $route->location) {
+                $requestPath = trim($router->getRequestUri(), '/');
+                preg_match('#^' . $route->path . '$#i', $requestPath, $matches);
+                header("Location: " . MOBILE_HOST . '/v/' . $matches[1] . '/');
+                exit();
+            }
+            
+            // Redirect to mobile homepage
             header("Location: " . MOBILE_HOST . "/");
             exit();
         }

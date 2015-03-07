@@ -1,0 +1,12 @@
+
+<h1>My Videos</h1>
+<div class="block block-listview">
+    <ul data-role="listview">
+        <?php if (!empty($videos)): ?>
+            <?php $this->repeatingBlock('video.phtml', $videos); ?>
+        <?php else: ?>
+            <li><?=Language::getText('no_videos_playlist')?></li>
+        <?php endif; ?>
+    </ul>
+</div>
+        

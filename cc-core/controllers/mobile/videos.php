@@ -1,6 +1,7 @@
 <?php
 
 Plugin::triggerEvent('mobile_videos.start');
+Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -11,9 +12,9 @@ $videoMapper = new VideoMapper();
 $db = Registry::get('db');
 
 // Retrieve video count
-$query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0'";
-$db->fetchRow($query);
-$this->view->vars->count = $db->rowCount();
+$query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0'";
+$results = $db->fetchRow($query);
+$this->view->vars->count = (int) $results['count'];
 
 // Retrieve video list
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' ORDER BY video_id DESC LIMIT 20";

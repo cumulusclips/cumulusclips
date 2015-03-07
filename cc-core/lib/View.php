@@ -44,12 +44,12 @@ class View
         $this->_route = $route;
         
         // Define theme configuration
-        $this->options->theme = $this->_currentTheme($this->_route->mobile);
+        $this->options->theme = $this->_currentTheme($this->_route->isMobile());
         $this->options->themeUrl = HOST . '/cc-content/themes/' . $this->options->theme;
         $this->options->themePath = THEMES_DIR . '/' . $this->options->theme;
         
         // Set default theme settings
-        $this->options->defaultTheme = ($this->_route->mobile) ? 'mobile-default' : 'default';
+        $this->options->defaultTheme = ($this->_route->isMobile()) ? 'mobile-default' : 'default';
         $this->options->defaultThemeUrl = HOST . '/cc-content/themes/' . $this->options->defaultTheme;
         $this->options->defaultThemePath = THEMES_DIR . '/' . $this->options->defaultTheme;
         
@@ -257,7 +257,7 @@ class View
      */
     public function cssHooks()
     {
-        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::GetCSSName();
+        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::getCSSName();
     }
 
     /**

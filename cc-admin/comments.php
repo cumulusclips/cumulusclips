@@ -187,8 +187,8 @@ include('header.php');
 
                     <tr class="<?=$odd ? 'odd' : ''?>">
                         <td>
-                            <img src="<?=($commentCard->avatar) ? $commentCard->avatar : $config->theme_url_default . '/images/avatar.gif'?>" height="80" width="80" />
-                            <p class="poster"><?=($commentCard->author) ? $commentCard->author->email : '<a href="' . HOST . '/members/' . $commentCard->author->username . '/">' . $commentCard->author>username . '</a>'?></p>
+                            <img src="<?=($commentCard->avatar) ? $commentCard->avatar : HOST . '/cc-content/themes/default/images/avatar.gif'?>" height="80" width="80" />
+                            <p class="poster"><a href="<?=HOST?>/members/<?=$commentCard->author->username?>/"><?=$commentCard->author->username?></a></p>
                         </td>
                         <td class="comments-text">
                             <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>

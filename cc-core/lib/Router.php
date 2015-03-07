@@ -188,17 +188,20 @@ class Router
 
         $routes['optOut'] = new Route(array(
             'path' => 'opt-out',
-            'location' => 'cc-core/controllers/opt_out.php'
+            'location' => 'cc-core/controllers/opt_out.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['register'] = new Route(array(
             'path' => 'register',
-            'location' => 'cc-core/controllers/register.php'
+            'location' => 'cc-core/controllers/register.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['activate'] = new Route(array(
             'path' => 'activate',
-            'location' => 'cc-core/controllers/activate.php'
+            'location' => 'cc-core/controllers/activate.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['login'] = new Route(array(
@@ -239,7 +242,8 @@ class Router
         $routes['getPrivateCode'] = new Route(array(
             'path' => 'private/get',
             'location' => 'cc-core/controllers/play.php',
-            'mappings' => array('get_private' => 'true')
+            'mappings' => array('get_private' => 'true'),
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['privateVideoPlay'] = new Route(array(
@@ -400,39 +404,56 @@ class Router
         $routes['mobile'] = new Route(array(
             'path' => 'm',
             'location' => 'cc-core/controllers/mobile/index.php',
-            'mobile' => true
+            'type' => Route::MOBILE
         ));
         
         $routes['mobileBrowseVideos'] = new Route(array(
             'path' => 'm/v',
             'location' => 'cc-core/controllers/mobile/videos.php',
-            'mobile' => true
+            'type' => Route::MOBILE
         ));
         
         $routes['mobilePlay'] = new Route(array(
             'path' => 'm/v/([0-9]+)',
             'location' => 'cc-core/controllers/mobile/play.php',
             'mappings' => array('vid'),
-            'mobile' => true
+            'type' => Route::MOBILE
         ));
         
         $routes['mobileSearch'] = new Route(array(
             'path' => 'm/s',
             'location' => 'cc-core/controllers/mobile/search.php',
-            'mobile' => true
+            'type' => Route::MOBILE
         ));
         
-        $routes['mobileLogin'] = new Route(array(
+        $routes['mobileLanguages'] = new Route(array(
             'path' => 'm/l',
-            'location' => 'cc-core/controllers/mobile/login.php',
-            'mobile' => true
+            'location' => 'cc-core/controllers/mobile/languages.php',
+            'type' => Route::MOBILE
         ));
         
-        $routes['mobileUser'] = new Route(array(
-            'path' => 'm/u/([a-z0-9]+)',
-            'location' => 'cc-core/controllers/mobile/user.php',
-            'mappings' => array('username'),
-            'mobile' => true
+        $routes['mobileWatchLater'] = new Route(array(
+            'path' => 'm/a/wl',
+            'location' => 'cc-core/controllers/mobile/account/watch_later.php',
+            'type' => Route::MOBILE
+        ));
+        
+        $routes['mobileFavorites'] = new Route(array(
+            'path' => 'm/a/f',
+            'location' => 'cc-core/controllers/mobile/account/favorites.php',
+            'type' => Route::MOBILE
+        ));
+        
+        $routes['mobileMyVideos'] = new Route(array(
+            'path' => 'm/a/v',
+            'location' => 'cc-core/controllers/mobile/account/videos.php',
+            'type' => Route::MOBILE
+        ));
+        
+        $routes['mobileUpload'] = new Route(array(
+            'path' => 'm/a/u',
+            'location' => 'cc-core/controllers/mobile/account/upload.php',
+            'type' => Route::MOBILE
         ));
         
         
@@ -440,12 +461,14 @@ class Router
         
         $routes['system404'] = new Route(array(
             'path' => 'not-found',
-            'location' => 'cc-core/controllers/system_404.php'
+            'location' => 'cc-core/controllers/system_404.php',
+            'type' => Route::AGNOSTIC
         ));
         
         $routes['systemError'] = new Route(array(
             'path' => 'system-error',
-            'location' => 'cc-core/controllers/system_error.php'
+            'location' => 'cc-core/controllers/system_error.php',
+            'type' => Route::AGNOSTIC
         ));
                 
         $routes['embed'] = new Route(array(
@@ -454,16 +477,11 @@ class Router
             'mappings' => array('vid')
         ));
 
-        $routes['languageGet'] = new Route(array(
-            'path' => 'language/(get)',
+        $routes['language'] = new Route(array(
+            'path' => 'language/([g|s]et)',
             'location' => 'cc-core/system/language.php',
-            'mappings' => array('action')
-        ));
-
-        $routes['languageSet'] = new Route(array(
-            'path' => 'language/(set)/(.*)',
-            'location' => 'cc-core/system/language.php',
-            'mappings' => array('action', 'language')
+            'mappings' => array('action'),
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['videoSitemap'] = new Route(array(
@@ -480,6 +498,12 @@ class Router
         
         /** AJAX Routes **/
 
+        $routes['ajaxLogin'] = new Route(array(
+            'path' => 'actions/login',
+            'location' => 'cc-core/controllers/ajax/login.php',
+            'type' => Route::AGNOSTIC
+        ));
+
         $routes['ajaxMemberVideos'] = new Route(array(
             'path' => 'members/videos',
             'location' => 'cc-core/controllers/ajax/member.videos.ajax.php'
@@ -489,15 +513,34 @@ class Router
             'path' => 'members/playlists',
             'location' => 'cc-core/controllers/ajax/member.playlists.ajax.php'
         ));
+        
+        $routes['ajaxSearch'] = new Route(array(
+            'path' => 'search/load-more',
+            'location' => 'cc-core/controllers/ajax/search.php',
+            'type' => Route::AGNOSTIC
+        ));
 
         $routes['ajaxSearchSuggest'] = new Route(array(
             'path' => 'search/suggest',
-            'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php'
+            'location' => 'cc-core/controllers/ajax/search.suggest.ajax.php',
+            'type' => Route::AGNOSTIC
+        ));
+        
+        $routes['ajaxVideos'] = new Route(array(
+            'path' => 'videos/load-more',
+            'location' => 'cc-core/controllers/ajax/videos.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxAvatarUpload'] = new Route(array(
             'path' => 'account/upload/avatar',
             'location' => 'cc-core/controllers/ajax/avatar.ajax.php'
+        ));
+
+        $routes['ajaxVideoFileUpload'] = new Route(array(
+            'path' => 'ajax/upload',
+            'location' => 'cc-core/controllers/ajax/upload.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxVideoUpload'] = new Route(array(
@@ -507,7 +550,8 @@ class Router
 
         $routes['ajaxUsernameExists'] = new Route(array(
             'path' => 'actions/username',
-            'location' => 'cc-core/controllers/ajax/username.ajax.php'
+            'location' => 'cc-core/controllers/ajax/username.ajax.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxFlag'] = new Route(array(
@@ -532,29 +576,14 @@ class Router
 
         $routes['ajaxCommentAdd'] = new Route(array(
             'path' => 'actions/comment/add',
-            'location' => 'cc-core/controllers/ajax/comment.add.ajax.php'
+            'location' => 'cc-core/controllers/ajax/comment.add.ajax.php',
+            'type' => Route::AGNOSTIC
         ));
 
         $routes['ajaxCommentGet'] = new Route(array(
             'path' => 'actions/comments/get',
-            'location' => 'cc-core/controllers/ajax/comment.get.ajax.php'
-        ));
-
-        $routes['ajaxPost'] = new Route(array(
-            'path' => 'actions/post',
-            'location' => 'cc-core/controllers/ajax/post.ajax.php'
-        ));
-
-        $routes['ajaxMobileLoadMoreVideos'] = new Route(array(
-            'path' => 'actions/mobile-videos',
-            'location' => 'cc-core/controllers/ajax/mobile_videos.ajax.php',
-            'mobile' => true
-        ));
-
-        $routes['ajaxMobileLoadMoreSearch'] = new Route(array(
-            'path' => 'actions/mobile-search',
-            'location' => 'cc-core/controllers/ajax/mobile_search.ajax.php',
-            'mobile' => true
+            'location' => 'cc-core/controllers/ajax/comment.get.ajax.php',
+            'type' => Route::AGNOSTIC
         ));
 
 

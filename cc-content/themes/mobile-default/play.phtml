@@ -1,23 +1,131 @@
-<?php
-$this->addCss('video-js.css');
-$this->addJs('video.plugin.js');
-$this->addJs('play.js');
-?>
+<script>
+cumulusClips.lang.errorComment = <?=json_encode(Language::getText('error_comment'))?>;
+cumulusClips.lang.reply = <?=json_encode(Language::getText('reply'))?>;
+cumulusClips.lang.replyTo = <?=json_encode(Language::getText('reply_to'))?>;
+cumulusClips.videoId = <?=$video->videoId?>;
+cumulusClips.commentCount = <?=$commentCount?>;
+</script>
 
-<div id="play">
-    <div class="block">
-        
-        <h1><?=$video->title?></h1>
+<div class="video-player-container block">
+    <div class="video-player">
+        <img src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
+        <video width="100%" height="100%" class="video-js vjs-default-skin" data-setup='{"preload": "auto"}'>
+            <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
+            <?php if ($webmEncodingEnabled): ?>
+                <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
+            <?php endif; ?>
+            <?php if ($theoraEncodingEnabled): ?>
+                <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogg" type="video/ogg" />
+            <?php endif; ?>
+        </video>
+        <span class="icon-play"></span>
+    </div>
 
-        <div class="video-js-box">
-            <video class="video-js vjs-default-skin" data-setup='{ "controls": false, "autoplay": false, "preload": "auto" }' width="100%" height="264" poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
-                <source src="<?=$config->mobileUrl?>/<?=$video->filename?>.mp4" type="video/mp4" />
-            </video>
-        </div>
+    <h1><?=$video->title?></h1>
 
-        <p><strong><?=Language::getText('duration')?>: </strong><?=$video->duration?></p>
-        <p><strong><?=Language::getText('by')?>: </strong><?=$video->username?></p>
-        <p><strong><?=Language::getText('description')?>: </strong><?=$video->description?></p>
-                
+    <div class="play-tabs" data-role="navbar">
+        <ul>
+            <li><a href="" data-block="about-container" class="ui-btn-active" data-ajax="false"><?=Language::getText('about')?></a></li>
+            <li><a href="" data-block="suggestions-container" data-ajax="false"><?=Language::getText('suggestions')?></a></li>
+            <li><a href="" data-block="comments-container"  data-ajax="false"><?=Language::getText('comments')?></a></li>
+        </ul>
     </div>
 </div>
+
+
+
+<div class="tab-blocks">
+
+    <!-- About -->
+    <div class="about-container">
+        <h1><?=Language::getText('about')?></h1>
+        <div class="block">
+            <p><strong><?=Language::getText('duration')?>:</strong> <?=$video->duration?></p>
+            <p><strong><?=Language::getText('views')?>:</strong> <?=$video->views?></p>
+            <p><strong><?=Language::getText('by')?>:</strong> <?=$video->username?></p>
+            <p><strong><?=Language::getText('description')?>:</strong> <?=$video->description?></p>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions-container">
+        <h1><?=Language::getText('suggestions_header')?></h1>
+        <div class="block block-listview">
+            <ul data-role="listview">
+            <?php if (count($relatedVideos) > 0): ?>
+                <?php $this->repeatingBlock('video.phtml', $relatedVideos); ?>
+            <?php else: ?>
+                <li><p><?=Language::getText('no_suggestions')?></p></li>
+            <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-container">
+
+        <div class="header">
+            <h1><?=Language::getText('comments_header')?></h1>
+            &bull; <span><?=$commentCount?></span>
+            
+            <?php if ($loggedInUser): ?>
+                <a href="#post-comment-<?=$video->videoId?>" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('comments_button')?></a>
+            <?php else: ?>
+                <p><?=Language::getText('comments_login', array('login_link' => '', 'register_link' => HOST . '/register/'))?></p>
+            <?php endif; ?>
+        </div>
+
+        <div class="block block-listview">
+            <ul data-role="listview" class="comment-list">
+            <?php if ($commentCount > 0): ?>
+
+                <?php foreach ($commentCardList as $commentCard): ?>
+
+                    <li data-comment="<?=$commentCard->comment->commentId?>" class="comment">
+                        <div class="avatar">
+                            <img width="40" height="40" src="<?=($commentCard->avatar) ? $commentCard->avatar : $this->options->themeUrl . '/images/avatar.gif'?>" />
+                        </div>
+                        
+                        <div class="content">
+                            <p>
+                                <?=$commentCard->author->username?> <?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?>
+                                <?php if ($loggedInUser): ?>
+                                    <a href="#post-comment-<?=$video->videoId?>" class="comment-reply" data-parent-comment="<?=$commentCard->comment->commentId?>" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('reply')?></a>
+                                <?php endif; ?>
+                            </p>
+                            <?php if ($commentCard->comment->parentId != 0): ?>
+                                <p class="reply"><?=Language::getText('reply_to')?> <?=$commentCard->parentAuthor->username?></p>
+                            <?php endif; ?>
+                            <p class="comment-text"><?=nl2br($commentCard->comment->comments)?></p>
+                        </div>
+                    </li>
+
+                <?php endforeach; ?>
+                    
+                <?php if (count($commentCardList) < $commentCount): ?>
+                    <li data-icon="false" data-limit="5" class="load-more"><a href=""><?=Language::getText('load_more')?></a></li>
+                <?php endif; ?>
+                    
+            <?php else: ?>
+                <li class="no-comments"><p><?=Language::getText('no_comments')?></p></li>
+            <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="post-comment-<?=$video->videoId?>" class="post-comment" data-role="popup" data-tolerance="15" data-overlay-theme="b">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+    <div>
+        <div class="message block"></div>
+        <h3><?=Language::getText('comments_post_header')?></h3>
+        <form action="<?=HOST?>/actions/comment/add/" method="post" data-ajax="false">
+            <textarea name="comments" style="height:auto;" placeholder="<?=Language::getText('comments')?>" rows="4"></textarea>
+            <input type="hidden" name="video-id" value="<?=$video->videoId?>" />
+            <input type="hidden" name="parent-comment-id" value="" />
+            <button type="submit" class="ui-btn ui-corner-all"><?=Language::getText('comments_button')?></button>
+        </form>
+    </div>
+</div>
+       

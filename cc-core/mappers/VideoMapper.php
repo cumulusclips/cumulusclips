@@ -2,6 +2,7 @@
 
 class VideoMapper extends MapperAbstract
 {
+    const NEW_VIDEO = 'new_video';
     const APPROVED = 'approved';
     const PROCESSING = 'processing';
     const PENDING_CONVERSION = 'pending_conversion';
