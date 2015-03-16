@@ -1,4 +1,19 @@
-        </div>
+
+
+    </main>
+    <!-- End Content Col -->
+
+</div>
+<!-- End Container -->
+<footer class="footer">Footer</footer>
+
+
+
+
+<!--
+
+
+</div>
     </div>
 
     <div id="footer-spacer"></div>
@@ -16,6 +31,8 @@
         &nbsp;&nbsp;|&nbsp;&nbsp; <a href="http://cumulusclips.org/docs/" title="Documentation">Documentation</a>
     </div>
 </div>
+
+-->
 
 <script type="text/javascript" src="<?=ADMIN?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/js/cookie.plugin.js"></script>

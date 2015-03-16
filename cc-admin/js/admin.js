@@ -9,7 +9,6 @@ $(function(){
     // Toggle expand/collapse of sidebar sub-menus
     $(".menu-toggle").on('click', function(){
         var name = $(this).attr('href').replace('#menu-', '');
-        $(this).toggleClass('open');
         var updatedSetting = (cumulusClips.settings[name] == 0) ? 1 : 0;
         updateSettings(name, updatedSetting);
     });
