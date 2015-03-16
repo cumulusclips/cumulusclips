@@ -152,12 +152,12 @@ SIDEBAR STYLES
 }
 
 #sidebar .panel div {
-    display:none;
+    /*display:none;*/
     margin-left:2px;
     line-height:15px;
 }
 #sidebar .open-panel div {
-    display:block;
+    /*display:block;*/
 }
 
 

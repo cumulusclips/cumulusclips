@@ -20,6 +20,7 @@
 <script type="text/javascript" src="<?=ADMIN?>/js/jquery.min.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/js/cookie.plugin.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/extras/tipsy/javascripts/jquery.tipsy.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?=ADMIN?>/js/admin.js"></script>
 <?php Functions::AdminOutputJS(); ?>
 </body>

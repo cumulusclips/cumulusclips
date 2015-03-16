@@ -4,16 +4,13 @@ cumulusClips.settings = retrieveSettings();
 cumulusClips.customSlug = false;
 cumulusClips.baseUrl = $('meta[name="baseURL"]').attr('content');
 
-$(document).ready(function(){
-
-    $("#sidebar h3").disableSelection();    // Disable selection (<= IE8 fix)
+$(function(){
 
     // Toggle expand/collapse of sidebar sub-menus
-    $("#sidebar h3").click(function(){
-        var name = $(this).attr('class');
-        $(this).parent().toggleClass('down-icon');
+    $(".menu-toggle").on('click', function(){
+        var name = $(this).attr('href').replace('#menu-', '');
+        $(this).toggleClass('open');
         var updatedSetting = (cumulusClips.settings[name] == 0) ? 1 : 0;
-        $(this).next().slideToggle('fast');
         updateSettings(name, updatedSetting);
     });
 
