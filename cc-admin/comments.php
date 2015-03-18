@@ -82,18 +82,21 @@ switch ($status) {
         $header = 'Pending Comments';
         $page_title = 'Pending Comments';
         $pageName = 'comments-pending';
+        $statusText = 'Pending';
         break;
     case 'banned':
         $queryString['status'] = 'banned';
         $header = 'Banned Comments';
         $page_title = 'Banned Comments';
         $pageName = 'comments-banned';
+        $statusText = 'Banned';
         break;
     default:
         $status = 'approved';
         $header = 'Approved Comments';
         $page_title = 'Approved Comments';
         $pageName = 'comments-approved';
+        $statusText = 'Approved';
         break;
 }
 $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = :status";
@@ -147,21 +150,27 @@ include('header.php');
 <div class="message <?=$messageType?>"><?=$message?></div>
 <?php endif; ?>
 
-
-<div id="browse-header">
+<div class="filters">
     <div class="jump">
         Jump To:
-        <select name="status" data-jump="<?=ADMIN?>/comments.php">
-            <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
-            <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
-            <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
-        </select>
+
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=$statusText?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="<?=ADMIN?>/comments.php?status=approved">Approved</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/comments.php?status=pending">Pending</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/comments.php?status=banned">Banned</a></li>
+          </ul>
+        </div>
     </div>
 
     <div class="search">
         <form method="POST" action="<?=ADMIN?>/comments.php?status=<?=$status?>">
             <input type="hidden" name="search_submitted" value="true" />
-            <input type="text" name="search" value="" />&nbsp;
+            <input class="text" type="text" name="search" value="" />
             <input type="submit" name="submit" class="button" value="Search" />
         </form>
     </div>

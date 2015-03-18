@@ -45,11 +45,13 @@ switch ($status) {
         $query_string['status'] = 'draft';
         $header = 'Draft Pages';
         $page_title = 'Draft Pages';
+        $statusText = 'Drafts';
         break;
     default:
         $status = 'published';
         $header = 'Published Pages';
         $page_title = 'Published Pages';
+        $statusText = 'Published';
         break;
 
 }
@@ -114,27 +116,30 @@ include ('header.php');
 <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-
-<div id="browse-header">
-
+<div class="filters">
     <div class="jump">
         Jump To:
-        <select name="status" data-jump="<?=ADMIN?>/pages.php">
-            <option <?=(isset($status) && $status == 'published') ? 'selected="selected"' : ''?>value="published">Published</option>
-            <option <?=(isset($status) && $status == 'draft') ? 'selected="selected"' : ''?>value="draft">Draft</option>
-        </select>
-    </div>
 
-    <a class="button add" href="<?=ADMIN?>/pages_add.php">Add New</a>
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=$statusText?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="<?=ADMIN?>/pages.php?status=published">Published</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/pages.php?status=draft">Draft</a></li>
+          </ul>
+        </div>
+        <a class="button add" href="<?=ADMIN?>/pages_add.php">Add New</a>
+    </div>
 
     <div class="search">
         <form method="POST" action="<?=ADMIN?>/pages.php?status=<?=$status?>">
             <input type="hidden" name="search_submitted" value="true" />
-            <input type="text" name="search" value="" />&nbsp;
+            <input class="text" type="text" name="search" value="" />
             <input type="submit" name="submit" class="button" value="Search" />
         </form>
     </div>
-
 </div>
 
 <?php if ($total > 0): ?>

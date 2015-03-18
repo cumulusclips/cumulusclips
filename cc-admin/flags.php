@@ -104,18 +104,21 @@ switch ($type) {
         $header = 'Flagged Member';
         $page_title = 'Flagged Members';
         $pageName = 'flags-members';
+        $statusText = 'Members';
         break;
     case 'video':
         $query_string['status'] = 'video';
         $header = 'Flagged Videos';
         $page_title = 'Flagged Videos';
         $pageName = 'flags-videos';
+        $statusText = 'Videos';
         break;
     case 'comment':
         $query_string['status'] = 'comment';
         $header = 'Flagged Comments';
         $page_title = 'Flagged Comments';
         $pageName = 'flags-comments';
+        $statusText = 'Comments';
         break;
 }
 $query = "SELECT flag_id FROM " . DB_PREFIX . "flags WHERE status = 'pending' AND type = '$type'";
@@ -148,17 +151,22 @@ include ('header.php');
 <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-
-<div id="browse-header">
+<div class="filters">
     <div class="jump">
         Jump To:
-        <select name="status" data-jump="<?=ADMIN?>/flags.php">
-            <option <?=($type == 'video') ? 'selected="selected"' : ''?>value="video">Videos</option>
-            <option <?=($type == 'user') ? 'selected="selected"' : ''?>value="user">Members</option>
-            <option <?=($type == 'comment') ? 'selected="selected"' : ''?>value="comment">Comments</option>
-        </select>
-    </div>
 
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=$statusText?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="<?=ADMIN?>/flags.php?status=video">Videos</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/flags.php?status=user">Members</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/flags.php?status=comment">Comments</a></li>
+          </ul>
+        </div>
+    </div>
 </div>
 
 <?php if ($total > 0): ?>

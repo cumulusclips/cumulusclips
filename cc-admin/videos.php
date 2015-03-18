@@ -113,24 +113,28 @@ switch ($status) {
         $query_string['status'] = 'pending';
         $header = 'Pending Videos';
         $page_title = 'Pending Videos';
+        $statusText = 'Pending';
         break;
     case 'banned':
         $query .= " status = 'banned'";
         $query_string['status'] = 'banned';
         $header = 'Banned Videos';
         $page_title = 'Banned Videos';
+        $statusText = 'Banned';
         break;
     case 'featured':
         $query .= " status = 'approved' AND featured = 1";
         $query_string['status'] = 'featured';
         $header = 'Featured Videos';
         $page_title = 'Featured Videos';
+        $statusText = 'Featured';
         break;
     default:
         $query .= " status = 'approved'";
         $status = 'approved';
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
+        $statusText = 'Approved';
         break;
 }
 
@@ -195,22 +199,28 @@ include('header.php');
 <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-
-<div id="browse-header">
+<div class="filters">
     <div class="jump">
         Jump To:
-        <select name="status" data-jump="<?=ADMIN?>/videos.php">
-            <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
-            <option <?=(isset($status) && $status == 'featured') ? 'selected="selected"' : ''?>value="featured">Featured</option>
-            <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
-            <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
-        </select>
+
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=$statusText?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="<?=ADMIN?>/videos.php?status=approved">Approved</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/videos.php?status=featured">Featured</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/videos.php?status=pending">Pending</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/videos.php?status=banned">Banned</a></li>
+          </ul>
+        </div>
     </div>
 
     <div class="search">
         <form method="POST" action="<?=ADMIN?>/videos.php?status=<?=$status?>">
             <input type="hidden" name="search_submitted" value="true" />
-            <input type="text" name="search" value="" />&nbsp;
+            <input class="text" type="text" name="search" value="" />
             <input type="submit" name="submit" class="button" value="Search" />
         </form>
     </div>
