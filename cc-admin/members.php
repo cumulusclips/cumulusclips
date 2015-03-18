@@ -149,8 +149,7 @@ $total = $db->rowCount();
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-//$pagination = new Pagination ($url, $total, $records_per_page, false);
-$pagination = new Pagination ($url, $total, 1, false);
+$pagination = new Pagination ($url, $total, $records_per_page, false);
 $start_record = $pagination->GetStartRecord();
 $_SESSION['list_page'] = $pagination->GetURL();
 
@@ -221,7 +220,7 @@ include ('header.php');
 
                 <tr class="<?=$odd ? 'odd' : ''?>">
                     <td>
-                        <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
+                        <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="h3"><?=$user->username?></a>
                         <div class="record-actions invisible">
 
                             <?php if ($status == 'active'): ?>

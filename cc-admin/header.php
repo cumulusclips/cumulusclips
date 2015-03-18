@@ -60,7 +60,7 @@
             <ul id="menu-members" class="collapse <?=($membersMenuOpen) ? 'in' : ''?>">
                 <li><a href="<?=ADMIN?>/members.php?status=active">Browse Members</a></li>
                 <li><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></li>
-                <li><a href="<?=ADMIN?>/members_add.php">Add New Member</a></li>
+                <li class="active"><a href="<?=ADMIN?>/members_add.php">Add New Member</a></li>
             </ul>
         </div>
 

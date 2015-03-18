@@ -12,11 +12,13 @@ body {
     margin-bottom: 60px;
     background-color:#ebebeb;
     color: #555;
+    font-size: 12px;
 }
 
 .container {
     width: 980px;
     margin: 0 auto;
+    padding: 0;
 }
 
 .container:after {
@@ -28,7 +30,7 @@ body {
 
 main {
     padding: 15px;
-    width: 755px;
+    width: 785px;
     display: block;
     background-color: #FFF;
     margin: -15px 0 35px 25px;
@@ -119,7 +121,7 @@ SIDEBAR
 
 #sidebar .menu {
     padding-right: 10px;
-    margin: 15px 0;
+    margin: 22px 0;
 }
 
 #sidebar .menu > a {
@@ -145,6 +147,17 @@ SIDEBAR
 
 #sidebar .menu li {
     margin: 15px 0;
+    padding-left: 10px;
+}
+
+#sidebar .active {
+    background-color: #1f578f;
+    margin: 11px 0;
+    padding: 4px 0;
+}
+
+#sidebar .active a {
+    color: #FFF;
 }
 
 #sidebar .menu li:last-child {
@@ -157,48 +170,48 @@ SIDEBAR
 
 #sidebar .menu .icon-dashboard span {
     background: url("../images/icon-dashboard.png") no-repeat 0 0;
-    padding-left: 25px;
+    padding: 1px 0 1px 25px;
 }
 
 #sidebar .menu .icon-video span {
-    background: url("../images/icon-video.png") no-repeat 0 0;
+    background: url("../images/icon-video.png") no-repeat 0 1px;
     padding-left: 25px;
 }
 
 #sidebar .menu .icon-members span {
     background: url("../images/icon-members.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 #sidebar .menu .icon-comment span {
     background: url("../images/icon-comment.png") no-repeat 0 0;
     padding-left: 25px;
-    padding: 0 0 1px 25px;
+    padding: 1px 0 2px 25px;
 }
 
 #sidebar .menu .icon-flag span {
     background: url("../images/icon-flag.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 #sidebar .menu .icon-pages span {
     background: url("../images/icon-pages.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 #sidebar .menu .icon-appearance span {
     background: url("../images/icon-appearance.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 #sidebar .menu .icon-plugin span {
     background: url("../images/icon-plugin.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 #sidebar .menu .icon-settings span {
     background: url("../images/icon-settings.png") no-repeat 0 0;
-    padding: 1px 0 1px 25px;
+    padding: 2px 0 2px 25px;
 }
 
 
@@ -266,15 +279,15 @@ GRID
 FONTS
 ****/
 
-h1 {
+h1, .h1 {
     font-size: 24px;
 }
 
-h3 {
+h3, .h3 {
     font-size: 16px;
 }
     
-h1, h3 {
+h1, h3, .h1, .h3 {
     font-weight: normal;
     margin: 15px 0;
 }
@@ -287,7 +300,7 @@ h1, h3 {
 LINK STYLES
 **********/
 
-a {
+a, a.h3 {
     color:#023e7b;
     text-decoration:none;
     font-weight: 500;
@@ -298,6 +311,8 @@ a:hover {
     text-decoration:underline;
     font-weight: 500;
 }
+
+
 
 a.button {
     padding:0 10px;
