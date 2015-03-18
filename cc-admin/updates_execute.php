@@ -11,6 +11,7 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 
 // Establish page variables, objects, arrays, etc
 $page_title = 'Update Complete!';
+$pageName = 'updates-complete';
 $tmp = DOC_ROOT . '/.updates';
 $log = $tmp . '/status';
 $error = null;
@@ -187,23 +188,19 @@ include ('header.php');
 
 ?>
 
-<div id="updates-complete">
+<?php if (!$error): ?>
 
-    <?php if (!$error): ?>
+    <h1>Update Complete!</h1>
+    <div class="block">
+        <p>You are now running the latest version of CumulusClips. Don't forget
+        to re-enable all your plugins and themes.</p>
+    </div>
 
-        <h1>Update Complete!</h1>
-        <div class="block">
-            <p>You are now running the latest version of CumulusClips. Don't forget
-            to re-enable all your plugins and themes.</p>
-        </div>
+<?php else: ?>
 
-    <?php else: ?>
+    <h1>Error During Update</h1>
+    <div class="block"><?=$error?></div>
 
-        <h1>Error During Update</h1>
-        <div class="block"><?=$error?></div>
-
-    <?php endif; ?>
-
-</div>
+<?php endif; ?>
 
 <?php include ('footer.php'); ?>

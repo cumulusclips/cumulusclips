@@ -107,73 +107,70 @@ foreach (glob(DOC_ROOT . '/cc-content/plugins/*') as $pluginPath) {
 }
 
 // Output Header
+$pageName = 'plugins';
 include('header.php');
 
 ?>
 
-<div id="plugins">
+<h1>Plugins</h1>
 
-    <h1>Plugins</h1>
-    
 
-    <?php foreach($invalidPluginList as $invalidPlugin): ?>
-        <div class="message notice">Plugin "<?=$invalidPlugin?>" is invalid and cannot be loaded.</div>
+<?php foreach($invalidPluginList as $invalidPlugin): ?>
+    <div class="message notice">Plugin "<?=$invalidPlugin?>" is invalid and cannot be loaded.</div>
+<?php endforeach; ?>
+
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
+
+
+<?php if (!empty($pluginList)): ?>
+
+    <?php foreach ($pluginList as $plugin): ?>
+
+        <div class="block">
+
+            <p>
+                <strong><?=$plugin->name?></strong>
+                <?php if (!empty($plugin->author)): ?>
+                    by: <?=$plugin->author?>
+                <?php endif; ?>
+            </p>
+
+
+            <?php if (!empty($plugin->version)): ?>
+            <p><strong>Version:</strong> <?=$plugin->version?></p>
+            <?php endif; ?>
+
+
+            <?php if (!empty($plugin->description)): ?>
+                <p><?=$plugin->description?></p>
+            <?php endif; ?>
+
+            <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
+                <p>
+                    <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
+                        <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->getSystemName()?>">Settings</a> &nbsp;|&nbsp;
+                    <?php endif; ?>
+
+                    <?php if (Plugin::isPluginEnabled($plugin->getSystemName())): ?>
+                        <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->getSystemName()?>">Disable</a>
+                    <?php else: ?>
+                        <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->getSystemName()?>">Enable</a>
+                    <?php endif; ?>
+
+                    &nbsp;|&nbsp; <a href="<?=ADMIN?>/plugins.php?uninstall=<?=$plugin->getSystemName()?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall</a>
+                </p>
+            <?php else: ?>
+                <a href="<?=ADMIN?>/plugins.php?install=<?=$plugin->getSystemName()?>">Install</a>
+            <?php endif; ?>
+
+        </div>
+
     <?php endforeach; ?>
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
-
-
-    <?php if (!empty($pluginList)): ?>
-
-        <?php foreach ($pluginList as $plugin): ?>
-
-            <div class="block">
-
-                <p>
-                    <strong><?=$plugin->name?></strong>
-                    <?php if (!empty($plugin->author)): ?>
-                        by: <?=$plugin->author?>
-                    <?php endif; ?>
-                </p>
-
-
-                <?php if (!empty($plugin->version)): ?>
-                <p><strong>Version:</strong> <?=$plugin->version?></p>
-                <?php endif; ?>
-
-
-                <?php if (!empty($plugin->description)): ?>
-                    <p><?=$plugin->description?></p>
-                <?php endif; ?>
-
-                <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
-                    <p>
-                        <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
-                            <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->getSystemName()?>">Settings</a> &nbsp;|&nbsp;
-                        <?php endif; ?>
-
-                        <?php if (Plugin::isPluginEnabled($plugin->getSystemName())): ?>
-                            <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->getSystemName()?>">Disable</a>
-                        <?php else: ?>
-                            <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->getSystemName()?>">Enable</a>
-                        <?php endif; ?>
-
-                        &nbsp;|&nbsp; <a href="<?=ADMIN?>/plugins.php?uninstall=<?=$plugin->getSystemName()?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall</a>
-                    </p>
-                <?php else: ?>
-                    <a href="<?=ADMIN?>/plugins.php?install=<?=$plugin->getSystemName()?>">Install</a>
-                <?php endif; ?>
-
-            </div>
-
-        <?php endforeach; ?>
-
-    <?php else: ?>
-        <div class="block"><strong>No plugins added yet.</strong></div>
-    <?php endif; ?>
-
-</div>
+<?php else: ?>
+    <div class="block"><strong>No plugins added yet.</strong></div>
+<?php endif; ?>
 
 <?php include ('footer.php'); ?>

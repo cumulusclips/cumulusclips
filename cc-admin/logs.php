@@ -45,39 +45,37 @@ if (isset($_GET['purge']) && $_GET['purge'] == 'all' && !empty($contents)) {
 }
 
 // Output Header
+$pageName = 'logs';
 include ('header.php');
 
 ?>
-<div id="logs">
 
-    <h1>System Logs</h1>
-    
-    <?php if ($message): ?>
-    <div class="message <?=$messageType?>"><?=$message?></div>
+<h1>System Logs</h1>
+
+<?php if ($message): ?>
+<div class="message <?=$messageType?>"><?=$message?></div>
+<?php endif; ?>
+
+<div class="block">
+    <?php if (!empty($contents)): ?>
+        <form action="<?=ADMIN?>/logs.php" method="get">
+            <strong>Logs Files:</strong>
+            <select name="log" class="dropdown">
+                <option>-- Select Log --</option>
+                <?php foreach($contents as $logFile): ?>
+                    <option><?=$logFile?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="submit" value="View Log" class="button" />
+            <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge All Logs</a>
+        </form>
+    <?php else: ?>
+        <p>No log files available.</p>
     <?php endif; ?>
 
-    <div class="block">
-        <?php if (!empty($contents)): ?>
-            <form action="<?=ADMIN?>/logs.php" method="get">
-                <strong>Logs Files:</strong>
-                <select name="log" class="dropdown">
-                    <option>-- Select Log --</option>
-                    <?php foreach($contents as $logFile): ?>
-                        <option><?=$logFile?></option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="submit" value="View Log" class="button" />
-                <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge All Logs</a>
-            </form>
-        <?php else: ?>
-            <p>No log files available.</p>
-        <?php endif; ?>
-            
-        <?php if ($logFileContents): ?>
-            <pre><?=$logFileContents?></pre>
-        <?php endif; ?>
-    </div>
-
+    <?php if ($logFileContents): ?>
+        <pre><?=$logFileContents?></pre>
+    <?php endif; ?>
 </div>
 
 <?php include ('footer.php'); ?>

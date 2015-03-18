@@ -88,6 +88,7 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
 ### Determine which type (account status) of members to display
 $status = (!empty ($_GET['status'])) ? $_GET['status'] : 'active';
+$pageName = 'members';
 switch ($status) {
 
     case 'new':
@@ -101,6 +102,7 @@ switch ($status) {
         $header = 'Pending Members';
         $page_title = 'Pending Members';
         $statusText = 'Pending';
+        $pageName = 'members-pending';
         break;
     case 'banned':
         $query_string['status'] = 'banned';
@@ -160,7 +162,6 @@ $users = $userMapper->getUsersFromList(Functions::arrayColumn($userResults, 'use
 
 
 // Output Header
-$pageName = 'members';
 include ('header.php');
 
 ?>

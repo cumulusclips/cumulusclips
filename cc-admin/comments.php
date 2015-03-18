@@ -81,16 +81,19 @@ switch ($status) {
         $queryString['status'] = 'pending';
         $header = 'Pending Comments';
         $page_title = 'Pending Comments';
+        $pageName = 'comments-pending';
         break;
     case 'banned':
         $queryString['status'] = 'banned';
         $header = 'Banned Comments';
         $page_title = 'Banned Comments';
+        $pageName = 'comments-banned';
         break;
     default:
         $status = 'approved';
         $header = 'Approved Comments';
         $page_title = 'Approved Comments';
+        $pageName = 'comments-approved';
         break;
 }
 $query = "SELECT comment_id FROM " . DB_PREFIX . "comments WHERE status = :status";
@@ -134,93 +137,89 @@ include('header.php');
 
 ?>
 
-<div id="comments">
-
-    <h1><?=$header?></h1>
-    <?php if ($subHeader): ?>
-    <h3><?=$subHeader?></h3>
-    <?php endif; ?>
+<h1><?=$header?></h1>
+<?php if ($subHeader): ?>
+<h3><?=$subHeader?></h3>
+<?php endif; ?>
 
 
-    <?php if ($message): ?>
-    <div class="message <?=$messageType?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$messageType?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div id="browse-header">
-        <div class="jump">
-            Jump To:
-            <select name="status" data-jump="<?=ADMIN?>/comments.php">
-                <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
-                <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
-                <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
-            </select>
-        </div>
-
-        <div class="search">
-            <form method="POST" action="<?=ADMIN?>/comments.php?status=<?=$status?>">
-                <input type="hidden" name="search_submitted" value="true" />
-                <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" class="button" value="Search" />
-            </form>
-        </div>
+<div id="browse-header">
+    <div class="jump">
+        Jump To:
+        <select name="status" data-jump="<?=ADMIN?>/comments.php">
+            <option <?=(isset($status) && $status == 'approved') ? 'selected="selected"' : ''?>value="approved">Approved</option>
+            <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
+            <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
+        </select>
     </div>
 
-    <?php if ($total > 0): ?>
-
-        <div class="block list">
-            <table>
-                <thead>
-                    <tr>
-                        <td class="large">Poster</td>
-                        <td class="large">Comments</td>
-                        <td class="large">Video</td>
-                        <td class="large">Date Posted</td>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($commentList as $comment): ?>
-
-                    <?php $odd = empty ($odd) ? true : false; ?>
-                    <?php $commentCard = $commentService->getCommentCard($comment); ?>
-                    <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
-
-                    <tr class="<?=$odd ? 'odd' : ''?>">
-                        <td>
-                            <img src="<?=($commentCard->avatar) ? $commentCard->avatar : HOST . '/cc-content/themes/default/images/avatar.gif'?>" height="80" width="80" />
-                            <p class="poster"><a href="<?=HOST?>/members/<?=$commentCard->author->username?>/"><?=$commentCard->author->username?></a></p>
-                        </td>
-                        <td class="comments-text">
-                            <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>
-                            <div class="record-actions invisible">
-                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
-
-                                <?php if ($status == 'approved'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$commentCard->comment->commentId)?>">Ban</a>
-                                <?php elseif ($status == 'pending'): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('approve='.$commentCard->comment->commentId)?>">Approve</a>
-                                <?php elseif ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$commentCard->comment->commentId)?>">Unban</a>
-                                <?php endif; ?>
-
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$commentCard->comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
-                            </div>
-                        </td>
-                        <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
-                        <td><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></td>
-                    </tr>
-
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <?=$pagination->paginate()?>
-
-    <?php else: ?>
-        <div class="block"><strong>No comments found</strong></div>
-    <?php endif; ?>
-
+    <div class="search">
+        <form method="POST" action="<?=ADMIN?>/comments.php?status=<?=$status?>">
+            <input type="hidden" name="search_submitted" value="true" />
+            <input type="text" name="search" value="" />&nbsp;
+            <input type="submit" name="submit" class="button" value="Search" />
+        </form>
+    </div>
 </div>
+
+<?php if ($total > 0): ?>
+
+    <div class="block list">
+        <table>
+            <thead>
+                <tr>
+                    <td class="large">Poster</td>
+                    <td class="large">Comments</td>
+                    <td class="large">Video</td>
+                    <td class="large">Date Posted</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($commentList as $comment): ?>
+
+                <?php $odd = empty ($odd) ? true : false; ?>
+                <?php $commentCard = $commentService->getCommentCard($comment); ?>
+                <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
+
+                <tr class="<?=$odd ? 'odd' : ''?>">
+                    <td>
+                        <img src="<?=($commentCard->avatar) ? $commentCard->avatar : HOST . '/cc-content/themes/default/images/avatar.gif'?>" height="80" width="80" />
+                        <p class="poster"><a href="<?=HOST?>/members/<?=$commentCard->author->username?>/"><?=$commentCard->author->username?></a></p>
+                    </td>
+                    <td class="comments-text">
+                        <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>
+                        <div class="record-actions invisible">
+                            <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
+
+                            <?php if ($status == 'approved'): ?>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$commentCard->comment->commentId)?>">Ban</a>
+                            <?php elseif ($status == 'pending'): ?>
+                                <a class="approve" href="<?=$pagination->GetURL('approve='.$commentCard->comment->commentId)?>">Approve</a>
+                            <?php elseif ($status == 'banned'): ?>
+                                <a href="<?=$pagination->GetURL('unban='.$commentCard->comment->commentId)?>">Unban</a>
+                            <?php endif; ?>
+
+                            <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$commentCard->comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
+                        </div>
+                    </td>
+                    <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
+                    <td><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></td>
+                </tr>
+
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?=$pagination->paginate()?>
+
+<?php else: ?>
+    <div class="block"><strong>No comments found</strong></div>
+<?php endif; ?>
 
 <?php include('footer.php'); ?>

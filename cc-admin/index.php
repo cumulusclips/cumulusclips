@@ -49,40 +49,40 @@ $result_ratings = $db->fetchRow("SELECT COUNT(rating_id) as count FROM " . DB_PR
 $ratings = $result_ratings['count'];
 
 // Output Header
+$pageName = 'dashboard';
 include ('header.php');
+
 ?>
 
-<div id="dashboard">
+<h1>Dashboard</h1>
 
-    <h1>Dashboard</h1>
+<?php if ($first_run): ?>
+<div class="message success">
+    <p>All done! Your video site is now ready for use. This is your admin panel,
+    we went ahead and logged you in so that you can start exploring.</p>
 
-    <?php if ($first_run): ?>
-    <div class="message success">
-        <p>All done! Your video site is now ready for use. This is your admin panel,
-        we went ahead and logged you in so that you can start exploring.</p>
+    <p>Your login for the main site and the admin panel are one in the same. To
+    enter the admin panel simply login and click on 'Admin'.</p>
 
-        <p>Your login for the main site and the admin panel are one in the same. To
-        enter the admin panel simply login and click on 'Admin'.</p>
-
-        <p>Thank you for choosing CumulusClips as your video sharing platform.</p>
-        <p><a href="<?=HOST?>/" class="button">View My Site</a></p>
-    </div>
-    <?php endif; ?>
-
-
-    <div id="news" class="block">
-        <h2>News from the mothership</h2>
-        <div><p class="loading">Loading...</p></div>
-    </div>
-
-    <div class="block">
-        <h2>Totals Report</h2>
-        <p><strong>Videos: </strong><?=$videos?></p>
-        <p><strong>Members: </strong><?=$members?></p>
-        <p><strong>Comments: </strong><?=$comments?></p>
-        <p><strong>Ratings: </strong><?=$ratings?></p>
-    </div>
-
+    <p>Thank you for choosing CumulusClips as your video sharing platform.</p>
+    <p><a href="<?=HOST?>/" class="button">View My Site</a></p>
 </div>
+<?php endif; ?>
+
+
+<div id="news" class="block">
+    <h2>News from the mothership</h2>
+    <div><p class="loading">Loading...</p></div>
+</div>
+
+<div class="block">
+    <h2>Totals Report</h2>
+    <p><strong>Videos: </strong><?=$videos?></p>
+    <p><strong>Members: </strong><?=$members?></p>
+    <p><strong>Comments: </strong><?=$comments?></p>
+    <p><strong>Ratings: </strong><?=$ratings?></p>
+</div>
+
+
 
 <?php include ('footer.php'); ?>

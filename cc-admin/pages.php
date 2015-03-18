@@ -99,84 +99,81 @@ $pageList = $pageMapper->getPagesFromList(
 
 
 // Output Header
+$pageName = 'pages';
 include ('header.php');
 
 ?>
 
-<div id="pages">
-
-    <h1><?=$header?></h1>
-    <?php if ($sub_header): ?>
-    <h3><?=$sub_header?></h3>
-    <?php endif; ?>
+<h1><?=$header?></h1>
+<?php if ($sub_header): ?>
+<h3><?=$sub_header?></h3>
+<?php endif; ?>
 
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div id="browse-header">
+<div id="browse-header">
 
-        <div class="jump">
-            Jump To:
-            <select name="status" data-jump="<?=ADMIN?>/pages.php">
-                <option <?=(isset($status) && $status == 'published') ? 'selected="selected"' : ''?>value="published">Published</option>
-                <option <?=(isset($status) && $status == 'draft') ? 'selected="selected"' : ''?>value="draft">Draft</option>
-            </select>
-        </div>
-
-        <a class="button add" href="<?=ADMIN?>/pages_add.php">Add New</a>
-
-        <div class="search">
-            <form method="POST" action="<?=ADMIN?>/pages.php?status=<?=$status?>">
-                <input type="hidden" name="search_submitted" value="true" />
-                <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" class="button" value="Search" />
-            </form>
-        </div>
-
+    <div class="jump">
+        Jump To:
+        <select name="status" data-jump="<?=ADMIN?>/pages.php">
+            <option <?=(isset($status) && $status == 'published') ? 'selected="selected"' : ''?>value="published">Published</option>
+            <option <?=(isset($status) && $status == 'draft') ? 'selected="selected"' : ''?>value="draft">Draft</option>
+        </select>
     </div>
 
-    <?php if ($total > 0): ?>
+    <a class="button add" href="<?=ADMIN?>/pages_add.php">Add New</a>
 
-        <div class="block list">
-            <table>
-                <thead>
-                    <tr>
-                        <td class="large">Title</td>
-                        <td class="large">Status</td>
-                        <td class="large">Date Created</td>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($pageList as $page): ?>
-
-                    <?php $odd = empty ($odd) ? true : false; ?>
-                    <tr class="<?=$odd ? 'odd' : ''?>">
-                        <td>
-                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>" class="large"><?=$page->title?></a><br />
-                            <div class="record-actions invisible">
-                                <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" target="_ccsite">Preview</a>
-                                <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">Edit</a>
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->pageId)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
-                            </div>
-                        </td>
-                        <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                        <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
-                    </tr>
-
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <?=$pagination->paginate()?>
-
-    <?php else: ?>
-        <div class="block"><strong>No pages found</strong></div>
-    <?php endif; ?>
+    <div class="search">
+        <form method="POST" action="<?=ADMIN?>/pages.php?status=<?=$status?>">
+            <input type="hidden" name="search_submitted" value="true" />
+            <input type="text" name="search" value="" />&nbsp;
+            <input type="submit" name="submit" class="button" value="Search" />
+        </form>
+    </div>
 
 </div>
+
+<?php if ($total > 0): ?>
+
+    <div class="block list">
+        <table>
+            <thead>
+                <tr>
+                    <td class="large">Title</td>
+                    <td class="large">Status</td>
+                    <td class="large">Date Created</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($pageList as $page): ?>
+
+                <?php $odd = empty ($odd) ? true : false; ?>
+                <tr class="<?=$odd ? 'odd' : ''?>">
+                    <td>
+                        <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>" class="large"><?=$page->title?></a><br />
+                        <div class="record-actions invisible">
+                            <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" target="_ccsite">Preview</a>
+                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">Edit</a>
+                            <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->pageId)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                        </div>
+                    </td>
+                    <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
+                    <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
+                </tr>
+
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?=$pagination->paginate()?>
+
+<?php else: ?>
+    <div class="block"><strong>No pages found</strong></div>
+<?php endif; ?>
 
 <?php include ('footer.php'); ?>

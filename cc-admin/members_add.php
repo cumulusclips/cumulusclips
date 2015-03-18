@@ -104,6 +104,7 @@ if (isset($_POST['submitted'])) {
 }
 
 // Output Header
+$pageName = 'members-add';
 include('header.php');
 
 ?>

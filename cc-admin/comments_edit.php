@@ -16,6 +16,7 @@ $videoMapper = new VideoMapper();
 $videoService = new VideoService();
 $userMapper = new UserMapper();
 $page_title = 'Edit Comment';
+$pageName = 'comments-edit';
 $data = array();
 $errors = array();
 $message = null;
@@ -126,79 +127,75 @@ include('header.php');
 
 ?>
 
-<div id="comments-edit">
+<h1>Update Comment</h1>
 
-    <h1>Update Comment</h1>
-
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div class="block">
+<div class="block">
 
-        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+    <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>" method="post">
+    <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>" method="post">
 
-            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
-                <label>Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
+        <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
+            <label>Status:</label>
+            <select name="status" class="dropdown">
+                <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
+                <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
+                <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
+            </select>
+        </div>
+
+        <div class="row"><label>Date Posted:</label>
+            <?=date('m/d/Y', strtotime($comment->dateCreated))?>
+        </div>
+
+        <div class="row">
+            <label>Video:</label>
+            <a target="_ccsite" href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a>
+        </div>
+
+        <?php if ($comment->userId == 0): ?>
+
+            <div class="row<?=(isset($errors['name'])) ? ' error' : ''?>">
+                <label>*Name:</label>
+                <input class="text" type="text" name="name" value="<?=htmlspecialchars($comment->name)?>" />
             </div>
 
-            <div class="row"><label>Date Posted:</label>
-                <?=date('m/d/Y', strtotime($comment->dateCreated))?>
+            <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
+                <label>*Email:</label>
+                <input class="text" type="text" name="email" value="<?=htmlspecialchars($comment->email)?>" />
             </div>
 
+            <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
+                <label>Website:</label>
+                <input class="text" type="text" name="website" value="<?=htmlspecialchars($comment->website)?>" />
+            </div>
+
+        <?php else: ?>
+
+            <?php $user = $userMapper->getUserById($comment->userId); ?>
             <div class="row">
-                <label>Video:</label>
-                <a target="_ccsite" href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a>
+                <label>Username:</label>
+                <a target="_ccsite" href="<?=HOST . '/members/' . $user->username?>/"><?=$user->username?></a>
             </div>
 
-            <?php if ($comment->userId == 0): ?>
+        <?php endif; ?>
 
-                <div class="row<?=(isset($errors['name'])) ? ' error' : ''?>">
-                    <label>*Name:</label>
-                    <input class="text" type="text" name="name" value="<?=htmlspecialchars($comment->name)?>" />
-                </div>
+        <div class="row<?=(isset($errors['comment'])) ? ' error' : ''?>">
+            <label>Comments:</label>
+            <textarea rows="7" cols="50" class="text" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
+        </div>
 
-                <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
-                    <label>*Email:</label>
-                    <input class="text" type="text" name="email" value="<?=htmlspecialchars($comment->email)?>" />
-                </div>
+        <div class="row-shift">
+            <input type="hidden" value="yes" name="submitted" />
+            <input type="submit" class="button" value="Update Comment" />
+        </div>
 
-                <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
-                    <label>Website:</label>
-                    <input class="text" type="text" name="website" value="<?=htmlspecialchars($comment->website)?>" />
-                </div>
-
-            <?php else: ?>
-
-                <?php $user = $userMapper->getUserById($comment->userId); ?>
-                <div class="row">
-                    <label>Username:</label>
-                    <a target="_ccsite" href="<?=HOST . '/members/' . $user->username?>/"><?=$user->username?></a>
-                </div>
-
-            <?php endif; ?>
-
-            <div class="row<?=(isset($errors['comment'])) ? ' error' : ''?>">
-                <label>Comments:</label>
-                <textarea rows="7" cols="50" class="text" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
-            </div>
-
-            <div class="row-shift">
-                <input type="hidden" value="yes" name="submitted" />
-                <input type="submit" class="button" value="Update Comment" />
-            </div>
-
-        </form>
-
-    </div>
+    </form>
 
 </div>
 

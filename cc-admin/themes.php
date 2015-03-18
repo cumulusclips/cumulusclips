@@ -68,96 +68,94 @@ foreach (glob(THEMES_DIR . '/*') as $theme_path) {
 }
 
 // Output Header
+$pageName = 'themes';
 include('header.php');
 
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
-<div id="themes">
 
-    <!-- BEGIN MAIN SITE THEMES -->
-    <h1>Themes</h1>
+<!-- BEGIN MAIN SITE THEMES -->
+<h1>Themes</h1>
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <?php foreach ($main_site_themes as $theme): ?>
-    
-        <div class="block theme">
-            
-            <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
+<?php foreach ($main_site_themes as $theme): ?>
 
-            <p>
-                <strong><?=$theme->xml->name?></strong>
-                <?php if (!empty($theme->xml->author)): ?>
-                    by: <strong><?=$theme->xml->author?></strong>
-                <?php endif; ?>
-            </p>
+    <div class="block theme">
 
-            
-            <?php if (!empty($theme->xml->description)): ?>
-                <p><?=$theme->xml->description?></p>
+        <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
+
+        <p>
+            <strong><?=$theme->xml->name?></strong>
+            <?php if (!empty($theme->xml->author)): ?>
+                by: <strong><?=$theme->xml->author?></strong>
             <?php endif; ?>
+        </p>
 
 
-            <p>
-                <?php if ($theme->name == Settings::get('active_theme')): ?>
-                    <strong>Active Theme</strong>
-                <?php else: ?>
-                    <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme->name?>" class="iframe">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
-                <?php endif; ?>
-            </p>
-
-        </div>
-    
-    <?php endforeach; ?>
-    <!-- END MAIN SITE THEMES -->
+        <?php if (!empty($theme->xml->description)): ?>
+            <p><?=$theme->xml->description?></p>
+        <?php endif; ?>
 
 
-
-
-
-
-    <!-- BEGIN MOBILE THEMES -->
-    <h1>Mobile Themes</h1>
-    <?php foreach ($mobile_themes as $theme): ?>
-
-        <div class="block theme">
-
-            <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
-
-            <p>
-                <strong><?=$theme->xml->name?></strong>
-                <?php if (!empty($theme->xml->author)): ?>
-                    by: <strong><?=$theme->xml->author?></strong>
-                <?php endif; ?>
-            </p>
-
-
-            <?php if (!empty($theme->xml->description)): ?>
-                <p><?=$theme->xml->description?></p>
+        <p>
+            <?php if ($theme->name == Settings::get('active_theme')): ?>
+                <strong>Active Theme</strong>
+            <?php else: ?>
+                <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme->name?>" class="iframe">Preview</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
             <?php endif; ?>
+        </p>
+
+    </div>
+
+<?php endforeach; ?>
+<!-- END MAIN SITE THEMES -->
 
 
-            <p>
-                <?php if ($theme->name == Settings::get('active_mobile_theme')): ?>
-                    <strong>Active Theme</strong>
-                <?php else: ?>
-                    <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/m/?preview_theme=<?=$theme->name?>" class="iframe-mobile">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>">Delete</a>
-                <?php endif; ?>
-            </p>
 
-        </div>
 
-    <?php endforeach; ?>
-    <!-- END MOBILE THEMES -->
 
-</div>
+
+<!-- BEGIN MOBILE THEMES -->
+<h1>Mobile Themes</h1>
+<?php foreach ($mobile_themes as $theme): ?>
+
+    <div class="block theme">
+
+        <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
+
+        <p>
+            <strong><?=$theme->xml->name?></strong>
+            <?php if (!empty($theme->xml->author)): ?>
+                by: <strong><?=$theme->xml->author?></strong>
+            <?php endif; ?>
+        </p>
+
+
+        <?php if (!empty($theme->xml->description)): ?>
+            <p><?=$theme->xml->description?></p>
+        <?php endif; ?>
+
+
+        <p>
+            <?php if ($theme->name == Settings::get('active_mobile_theme')): ?>
+                <strong>Active Theme</strong>
+            <?php else: ?>
+                <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/m/?preview_theme=<?=$theme->name?>" class="iframe-mobile">Preview</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>">Delete</a>
+            <?php endif; ?>
+        </p>
+
+    </div>
+
+<?php endforeach; ?>
+<!-- END MOBILE THEMES -->
 
 <?php include('footer.php'); ?>

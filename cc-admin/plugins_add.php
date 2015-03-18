@@ -75,54 +75,51 @@ if (isset($_POST['submitted'])) {
 }
 
 // Output Header
+$pageName = 'plugins-add';
 include('header.php');
 
 ?>
 
 <!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
 
-<div id="plugins-add">
+<h1>Add New Plugin</h1>
 
-    <h1>Add New Plugin</h1>
+<div class="message <?=$message_type?>"><?=$message?></div>
 
-    <div class="message <?=$message_type?>"><?=$message?></div>
+<div class="block">
 
-    <div class="block">
+    <p class="row-shift">If you have a plugin in .zip format use this form
+    to upload and add it to the system.</p>
 
-        <p class="row-shift">If you have a plugin in .zip format use this form
-        to upload and add it to the system.</p>
+    <form name="uploadify" action="<?=ADMIN?>/plugins_add.php" method="post">
 
-        <form name="uploadify" action="<?=ADMIN?>/plugins_add.php" method="post">
-
-            <div class="row">
-                <label>Plugin Zip File:</label>
-                <div id="upload-select-file" class="button">
-                    <span>Browse</span>
-                    <input id="upload" type="file" name="upload" />
-                </div>
-                <input id="upload_button" class="button" type="button" value="Upload" />
-                <input type="hidden" name="upload-limit" value="<?=1024*1024*100?>" />
-                <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode(array('zip')))?>" />
-                <input type="hidden" name="upload-type" value="addon" />
-                <input type="hidden" name="temp-file" value="" />
-                <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
-                <input type="hidden" name="submitted" value="true" />
+        <div class="row">
+            <label>Plugin Zip File:</label>
+            <div id="upload-select-file" class="button">
+                <span>Browse</span>
+                <input id="upload" type="file" name="upload" />
             </div>
+            <input id="upload_button" class="button" type="button" value="Upload" />
+            <input type="hidden" name="upload-limit" value="<?=1024*1024*100?>" />
+            <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode(array('zip')))?>" />
+            <input type="hidden" name="upload-type" value="addon" />
+            <input type="hidden" name="temp-file" value="" />
+            <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
+            <input type="hidden" name="submitted" value="true" />
+        </div>
 
-            <div id="upload_status">
-                <div class="title"></div>
-                <div class="progress">
-                    <a href="" title="Cancel">Cancel</a>
-                    <div class="meter">
-                        <div class="fill"></div>
-                    </div>
-                    <div class="percentage">0%</div>
+        <div id="upload_status">
+            <div class="title"></div>
+            <div class="progress">
+                <a href="" title="Cancel">Cancel</a>
+                <div class="meter">
+                    <div class="fill"></div>
                 </div>
+                <div class="percentage">0%</div>
             </div>
-            
-        </form>
+        </div>
 
-    </div>
+    </form>
 
 </div>
 

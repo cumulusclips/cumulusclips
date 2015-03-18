@@ -94,79 +94,75 @@ if (isset($_POST['submitted'])) {
 
 
 // Output Header
+$pageName = 'settings';
 include ('header.php');
 
 ?>
 
-<div id="settings">
+<h1>General Settings</h1>
 
-    <h1>General Settings</h1>
-
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div class="block">
+<div class="block">
 
-        <form action="<?=ADMIN?>/settings.php" method="post">
+    <form action="<?=ADMIN?>/settings.php" method="post">
 
-            <div class="row <?=(isset ($errors['sitename'])) ? ' error' : ''?>">
-                <label>Sitename:</label>
-                <input class="text" type="text" name="sitename" value="<?=$data['sitename']?>" />
-            </div>
+        <div class="row <?=(isset ($errors['sitename'])) ? ' error' : ''?>">
+            <label>Sitename:</label>
+            <input class="text" type="text" name="sitename" value="<?=$data['sitename']?>" />
+        </div>
 
-            <div class="row <?=(isset ($errors['base_url'])) ? ' error' : ''?>">
-                <label>Base URL:</label>
-                <input class="text" type="text" name="base_url" value="<?=$data['base_url']?>" />
-            </div>
+        <div class="row <?=(isset ($errors['base_url'])) ? ' error' : ''?>">
+            <label>Base URL:</label>
+            <input class="text" type="text" name="base_url" value="<?=$data['base_url']?>" />
+        </div>
 
-            <div class="row <?=(isset ($errors['admin_email'])) ? ' error' : ''?>">
-                <label>Admin Email:</label>
-                <input class="text" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
-            </div>
+        <div class="row <?=(isset ($errors['admin_email'])) ? ' error' : ''?>">
+            <label>Admin Email:</label>
+            <input class="text" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
+        </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_videos'])) ? ' error' : ''?>">
-                <label>Video Approval:</label>
-                <select name="auto_approve_videos" class="dropdown">
-                    <option value="1" <?=($data['auto_approve_videos']=='1')?'selected="selected"':''?>>Auto-Approve</option>
-                    <option value="0" <?=($data['auto_approve_videos']=='0')?'selected="selected"':''?>>Approval Required</option>
-                </select>
-            </div>
+        <div class="row <?=(isset ($errors['auto_approve_videos'])) ? ' error' : ''?>">
+            <label>Video Approval:</label>
+            <select name="auto_approve_videos" class="dropdown">
+                <option value="1" <?=($data['auto_approve_videos']=='1')?'selected="selected"':''?>>Auto-Approve</option>
+                <option value="0" <?=($data['auto_approve_videos']=='0')?'selected="selected"':''?>>Approval Required</option>
+            </select>
+        </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_users'])) ? ' error' : ''?>">
-                <label>Member Approval:</label>
-                <select name="auto_approve_users" class="dropdown">
-                    <option value="1" <?=($data['auto_approve_users']=='1')?'selected="selected"':''?>>Auto-Approve</option>
-                    <option value="0" <?=($data['auto_approve_users']=='0')?'selected="selected"':''?>>Approval Required</option>
-                </select>
-            </div>
+        <div class="row <?=(isset ($errors['auto_approve_users'])) ? ' error' : ''?>">
+            <label>Member Approval:</label>
+            <select name="auto_approve_users" class="dropdown">
+                <option value="1" <?=($data['auto_approve_users']=='1')?'selected="selected"':''?>>Auto-Approve</option>
+                <option value="0" <?=($data['auto_approve_users']=='0')?'selected="selected"':''?>>Approval Required</option>
+            </select>
+        </div>
 
-            <div class="row <?=(isset ($errors['auto_approve_comments'])) ? ' error' : ''?>">
-                <label>Comment Approval:</label>
-                <select name="auto_approve_comments" class="dropdown">
-                    <option value="1" <?=($data['auto_approve_comments']=='1')?'selected="selected"':''?>>Auto-Approve</option>
-                    <option value="0" <?=($data['auto_approve_comments']=='0')?'selected="selected"':''?>>Approval Required</option>
-                </select>
-            </div>
+        <div class="row <?=(isset ($errors['auto_approve_comments'])) ? ' error' : ''?>">
+            <label>Comment Approval:</label>
+            <select name="auto_approve_comments" class="dropdown">
+                <option value="1" <?=($data['auto_approve_comments']=='1')?'selected="selected"':''?>>Auto-Approve</option>
+                <option value="0" <?=($data['auto_approve_comments']=='0')?'selected="selected"':''?>>Approval Required</option>
+            </select>
+        </div>
 
-            <div class="row <?=(isset ($errors['mobile_site'])) ? ' error' : ''?>">
-                <label>Mobile Site:</label>
-                <select name="mobile_site" class="dropdown">
-                    <option value="1" <?=($data['mobile_site']=='1')?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($data['mobile_site']=='0')?'selected="selected"':''?>>Disabled</option>
-                </select>
-            </div>
+        <div class="row <?=(isset ($errors['mobile_site'])) ? ' error' : ''?>">
+            <label>Mobile Site:</label>
+            <select name="mobile_site" class="dropdown">
+                <option value="1" <?=($data['mobile_site']=='1')?'selected="selected"':''?>>Enabled</option>
+                <option value="0" <?=($data['mobile_site']=='0')?'selected="selected"':''?>>Disabled</option>
+            </select>
+        </div>
 
 
-            <div class="row-shift">
-                <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Update Settings" />
-            </div>
-        </form>
-
-    </div>
-
+        <div class="row-shift">
+            <input type="hidden" name="submitted" value="TRUE" />
+            <input type="submit" class="button" value="Update Settings" />
+        </div>
+    </form>
 
 </div>
 

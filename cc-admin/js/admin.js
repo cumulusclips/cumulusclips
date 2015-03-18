@@ -134,7 +134,7 @@ $(function(){
     $('.begin-update').click(function(){
 
         // Display message
-        $('#updates-begin').hide();
+        $('#pre-updates').hide();
         document.title = $('#updates-in-progress h1').text();
         $('#updates-in-progress').show();
 

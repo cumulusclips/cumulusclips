@@ -17,6 +17,7 @@ $data = array();
 $errors = array();
 $message = null;
 $page_title = 'Edit Page';
+$pageName = 'pages-edit';
 $layouts = array();
 $admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
 $admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
@@ -103,83 +104,80 @@ include('header.php');
 
 ?>
 
-<div id="pages-edit">
+<h1>Edit Page</h1>
 
-    <h1>Edit Page</h1>
-
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div class="block">
+<div class="block">
 
-        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+    <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
+    <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
 
-            <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
-                <label>*Title:</label>
-                <input id="page-title" class="text" type="text" name="title" value="<?=$page->title?>" />
+        <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
+            <label>*Title:</label>
+            <input id="page-title" class="text" type="text" name="title" value="<?=$page->title?>" />
+        </div>
+
+        <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
+
+            <label>*URL:</label>
+            <input type="hidden" name="slug" value="<?=$page->slug?>" />
+
+            <div id="empty-slug">
+                Not Set
+                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
             </div>
 
-            <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
-                
-                <label>*URL:</label>
-                <input type="hidden" name="slug" value="<?=$page->slug?>" />
-                
-                <div id="empty-slug">
-                    Not Set
-                    <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+            <div id="view-slug">
+                <?=HOST?>/<span><?=$page->slug?></span>/
+                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+            </div>
+
+            <div id="edit-slug">
+                <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
+                <div class="options">
+                    <a tabindex="-1" href="" class="done">Done</a>
+                    <a tabindex="-1" href="" class="cancel">Cancel</a>
                 </div>
-                
-                <div id="view-slug">
-                    <?=HOST?>/<span><?=$page->slug?></span>/
-                    <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
-                </div>
-                
-                <div id="edit-slug">
-                    <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
-                    <div class="options">
-                        <a tabindex="-1" href="" class="done">Done</a>
-                        <a tabindex="-1" href="" class="cancel">Cancel</a>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="row">
-                <label>Content:</label>
-                <textarea class="text tinymce" name="content" rows="7" cols="50"><?=$page->content?></textarea>
-            </div>
+        </div>
 
-            <div class="row">
-                <label>*Status:</label>
-                <select class="dropdown" name="status">
-                    <option <?=($page->status=='published')?'selected="selected"':''?> value="published">Published</option>
-                    <option <?=($page->status=='draft')?'selected="selected"':''?> value="draft">Draft</option>
-                </select>
-            </div>
+        <div class="row">
+            <label>Content:</label>
+            <textarea class="text tinymce" name="content" rows="7" cols="50"><?=$page->content?></textarea>
+        </div>
 
-            <div class="row">
-                <label>*Layout:</label>
-                <select class="dropdown" name="layout">
-                    <?php foreach ($layouts as $layout): ?>
-                        <option <?=($page->layout==$layout)?'selected="selected"':''?> value="<?=$layout?>"><?=$layout?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="row">
+            <label>*Status:</label>
+            <select class="dropdown" name="status">
+                <option <?=($page->status=='published')?'selected="selected"':''?> value="published">Published</option>
+                <option <?=($page->status=='draft')?'selected="selected"':''?> value="draft">Draft</option>
+            </select>
+        </div>
 
-            <div class="row-shift">
-                <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
-                <input type="hidden" name="submitted" value="TRUE" />
-                <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
-                <input type="submit" class="button" value="Update Page" />
-            </div>
-            
-        </form>
-    </div>
+        <div class="row">
+            <label>*Layout:</label>
+            <select class="dropdown" name="layout">
+                <?php foreach ($layouts as $layout): ?>
+                    <option <?=($page->layout==$layout)?'selected="selected"':''?> value="<?=$layout?>"><?=$layout?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
+        <div class="row-shift">
+            <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
+            <input type="hidden" name="submitted" value="TRUE" />
+            <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
+            <input type="submit" class="button" value="Update Page" />
+        </div>
+
+    </form>
 </div>
+
 
 <?php include ('footer.php'); ?>

@@ -92,85 +92,82 @@ if (isset($_POST['submitted'])) {
 }
 
 // Output Header
+$pageName = 'pages-add';
 include ('header.php');
 
 ?>
 
-<div id="pages-add">
+<h1>Add New Page</h1>
 
-    <h1>Add New Page</h1>
-
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div class="block">
+<div class="block">
 
-        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+    <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-        <form method="post" action="<?=ADMIN?>/pages_add.php">
+    <form method="post" action="<?=ADMIN?>/pages_add.php">
 
-            <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
-                <label>*Title:</label>
-                <input id="page-title" class="text" type="text" name="title" />
+        <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
+            <label>*Title:</label>
+            <input id="page-title" class="text" type="text" name="title" />
+        </div>
+
+        <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
+
+            <label>*URL:</label>
+            <input type="hidden" name="slug" />
+
+            <div id="empty-slug">
+                Not Set
+                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
             </div>
 
-            <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
-                
-                <label>*URL:</label>
-                <input type="hidden" name="slug" />
-                
-                <div id="empty-slug">
-                    Not Set
-                    <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+            <div id="view-slug">
+                <?=HOST?>/<span></span>/
+                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+            </div>
+
+            <div id="edit-slug">
+                <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
+                <div class="options">
+                    <a tabindex="-1" href="" class="done">Done</a>
+                    <a tabindex="-1" href="" class="cancel">Cancel</a>
                 </div>
-                
-                <div id="view-slug">
-                    <?=HOST?>/<span></span>/
-                    <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
-                </div>
-                
-                <div id="edit-slug">
-                    <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
-                    <div class="options">
-                        <a tabindex="-1" href="" class="done">Done</a>
-                        <a tabindex="-1" href="" class="cancel">Cancel</a>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="row">
-                <label>Content:</label>
-                <textarea class="text tinymce" name="content" rows="7" cols="50"><?=(!empty($page->content)) ? $page->content : ''?></textarea>
-            </div>
+        </div>
 
-            <div class="row">
-                <label>*Status:</label>
-                <select class="dropdown" name="status">
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
-                </select>
-            </div>
+        <div class="row">
+            <label>Content:</label>
+            <textarea class="text tinymce" name="content" rows="7" cols="50"><?=(!empty($page->content)) ? $page->content : ''?></textarea>
+        </div>
 
-            <div class="row">
-                <label>*Layout:</label>
-                <select class="dropdown" name="layout">
-                    <?php foreach ($layouts as $layout): ?>
-                        <option value="<?=$layout?>"><?=$layout?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="row">
+            <label>*Status:</label>
+            <select class="dropdown" name="status">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+            </select>
+        </div>
 
-            <div class="row-shift">
-                <input type="hidden" name="submitted" value="TRUE" />
-                <input tabindex="4" type="submit" class="button" value="Add Page" />
-            </div>
-            
-        </form>
-    </div>
+        <div class="row">
+            <label>*Layout:</label>
+            <select class="dropdown" name="layout">
+                <?php foreach ($layouts as $layout): ?>
+                    <option value="<?=$layout?>"><?=$layout?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
+        <div class="row-shift">
+            <input type="hidden" name="submitted" value="TRUE" />
+            <input tabindex="4" type="submit" class="button" value="Add Page" />
+        </div>
+
+    </form>
 </div>
 
 <?php include ('footer.php'); ?>

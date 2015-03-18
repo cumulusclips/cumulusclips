@@ -12,6 +12,7 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $message = null;
 $page_title = 'Begin Update';
+$pageName = 'updates-begin';
 $header = 'Begin Update';
 
 
@@ -28,7 +29,7 @@ include ('header.php');
 
 ?>
 
-<div id="updates-begin">
+<div id="pre-updates">
 
     <h1>Begin Update</h1>
 

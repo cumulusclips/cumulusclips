@@ -1,4 +1,4 @@
-$('document').ready(function(){
+$(function(){
 
     // Initialize & attach TinyMCE editor to specified field
     $('.tinymce').tinymce({

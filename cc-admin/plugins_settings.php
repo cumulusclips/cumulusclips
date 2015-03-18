@@ -16,6 +16,7 @@ if (empty($_GET['plugin']) || !Plugin::isPluginValid($_GET['plugin'])) {
 
 $plugin = Plugin::getPlugin($_GET['plugin']);
 $page_title = $plugin->name . ' Settings';
+$pageName = 'plugins-settings';
 $admin_meta['plugin'] = $plugin->getSystemName();
 $admin_meta['pluginUrl'] = HOST . '/cc-content/plugins/' . $plugin->getSystemName();
 
@@ -35,6 +36,6 @@ include('header.php');
 
 ?>
 
-<div id="plugin-settings"><?php echo $body; ?></div>
+<?php echo $body; ?>
 
 <?php include('footer.php'); ?>

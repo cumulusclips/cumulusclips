@@ -12,6 +12,7 @@ Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $userMapper = new UserMapper();
 $page_title = 'Edit Member';
+$pageName = 'members-edit';
 $data = array();
 $errors = array();
 $message = null;

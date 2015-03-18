@@ -38,9 +38,9 @@
             <?php $dashboardMenuOpen = Functions::isPanelOpen('dashboard'); ?>
             <a href="#menu-dashboard" data-toggle="collapse" class="menu-toggle icon-dashboard <?=($dashboardMenuOpen) ? '' : 'collapsed'?>"><span>Dashboard</span></a>
             <ul id="menu-dashboard" class="collapse <?=($dashboardMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/">Dashboard</a></li>
-                <li><a href="<?=ADMIN?>/logs.php">System Logs</a></li>
-                <li><a href="<?=ADMIN?>/updates.php">Updates</a></li>
+                <li class="<?=($pageName == 'dashboard') ? 'active' : ''?>"><a href="<?=ADMIN?>/">Dashboard</a></li>
+                <li class="<?=($pageName == 'logs') ? 'active' : ''?>"><a href="<?=ADMIN?>/logs.php">System Logs</a></li>
+                <li class="<?=($pageName == 'updates') ? 'active' : ''?>"><a href="<?=ADMIN?>/updates.php">Updates</a></li>
             </ul>
         </div>
 
@@ -48,9 +48,9 @@
             <?php $videoMenuOpen = Functions::isPanelOpen('videos'); ?>
             <a href="#menu-videos" data-toggle="collapse" class="menu-toggle icon-video <?=($videoMenuOpen) ? '' : 'collapsed'?>"><span>Videos</span></a>
             <ul id="menu-videos" class="collapse <?=($videoMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/videos.php">Browse Videos</a></li>
-                <li><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></li>
-                <li><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></li>
+                <li class="<?=($pageName == 'videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos.php">Browse Videos</a></li>
+                <li class="<?=($pageName == 'videos-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></li>
+                <li class="<?=($pageName == 'videos-categories') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></li>
             </ul>
         </div>
 
@@ -58,9 +58,9 @@
             <?php $membersMenuOpen = Functions::isPanelOpen('members'); ?>
             <a href="#menu-members" data-toggle="collapse" class="menu-toggle icon-members <?=($membersMenuOpen) ? '' : 'collapsed'?>"><span>Members</span></a>
             <ul id="menu-members" class="collapse <?=($membersMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/members.php?status=active">Browse Members</a></li>
-                <li><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></li>
-                <li class="active"><a href="<?=ADMIN?>/members_add.php">Add New Member</a></li>
+                <li class="<?=($pageName == 'members') ? 'active' : ''?>"><a href="<?=ADMIN?>/members.php?status=active">Browse Members</a></li>
+                <li class="<?=($pageName == 'members-pending') ? 'active' : ''?>"><a href="<?=ADMIN?>/members.php?status=pending">Pending Members</a></li>
+                <li class="<?=($pageName == 'members-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/members_add.php">Add New Member</a></li>
             </ul>
         </div>
 
@@ -68,9 +68,9 @@
             <?php $commentsMenuOpen = Functions::isPanelOpen('comments'); ?>
             <a href="#menu-comments" data-toggle="collapse" class="menu-toggle icon-comment <?=($commentsMenuOpen) ? '' : 'collapsed'?>"><span>Comments</span></a>
             <ul id="menu-comments" class="collapse <?=($commentsMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/comments.php?status=approved">Approved Comments</a></li>
-                <li><a href="<?=ADMIN?>/comments.php?status=pending">Pending Comments</a></li>
-                <li><a href="<?=ADMIN?>/comments.php?status=banned">Banned Comments</a></li>
+                <li class="<?=($pageName == 'comments-approved') ? 'active' : ''?>"><a href="<?=ADMIN?>/comments.php?status=approved">Approved Comments</a></li>
+                <li class="<?=($pageName == 'comments-pending') ? 'active' : ''?>"><a href="<?=ADMIN?>/comments.php?status=pending">Pending Comments</a></li>
+                <li class="<?=($pageName == 'comments-banned') ? 'active' : ''?>"><a href="<?=ADMIN?>/comments.php?status=banned">Banned Comments</a></li>
             </ul>
         </div>
 
@@ -78,9 +78,9 @@
             <?php $flagsMenuOpen = Functions::isPanelOpen('flags'); ?>
             <a href="#menu-flags" data-toggle="collapse" class="menu-toggle icon-flag <?=($flagsMenuOpen) ? '' : 'collapsed'?>"><span>Flags</span></a>
             <ul id="menu-flags" class="collapse <?=($flagsMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/flags.php?status=video">Flagged Videos</a></li>
-                <li><a href="<?=ADMIN?>/flags.php?status=user">Flagged Members</a></li>
-                <li><a href="<?=ADMIN?>/flags.php?status=comment">Flagged Comments</a></li>
+                <li class="<?=($pageName == 'flags-videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/flags.php?status=video">Flagged Videos</a></li>
+                <li class="<?=($pageName == 'flags-members') ? 'active' : ''?>"><a href="<?=ADMIN?>/flags.php?status=user">Flagged Members</a></li>
+                <li class="<?=($pageName == 'flags-comments') ? 'active' : ''?>"><a href="<?=ADMIN?>/flags.php?status=comment">Flagged Comments</a></li>
             </ul>
         </div>
 
@@ -88,8 +88,8 @@
             <?php $pagesMenuOpen = Functions::isPanelOpen('pages'); ?>
             <a href="#menu-pages" data-toggle="collapse" class="menu-toggle icon-pages <?=($pagesMenuOpen) ? '' : 'collapsed'?>"><span>Pages</span></a>
             <ul id="menu-pages" class="collapse <?=($pagesMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/pages.php">Browse Pages</a></li>
-                <li><a href="<?=ADMIN?>/pages_add.php">Add New Page</a></li>
+                <li class="<?=($pageName == 'pages') ? 'active' : ''?>"><a href="<?=ADMIN?>/pages.php">Browse Pages</a></li>
+                <li class="<?=($pageName == 'pages-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/pages_add.php">Add New Page</a></li>
             </ul>
         </div>
 
@@ -97,9 +97,9 @@
             <?php $appearanceMenuOpen = Functions::isPanelOpen('appearance'); ?>
             <a href="#menu-appearance" data-toggle="collapse" class="menu-toggle icon-appearance <?=($appearanceMenuOpen) ? '' : 'collapsed'?>"><span>Appearance</span></a>
             <ul id="menu-appearance" class="collapse <?=($appearanceMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/themes.php">Themes</a></li>
-                <li><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></li>
-                <li><a href="<?=ADMIN?>/languages.php">Languages</a></li>
+                <li class="<?=($pageName == 'themes') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes.php">Themes</a></li>
+                <li class="<?=($pageName == 'themes-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></li>
+                <li class="<?=($pageName == 'languages') ? 'active' : ''?>"><a href="<?=ADMIN?>/languages.php">Languages</a></li>
             </ul>
         </div>
 
@@ -107,8 +107,8 @@
             <?php $pluginsMenuOpen = Functions::isPanelOpen('plugins'); ?>
             <a href="#menu-plugins" data-toggle="collapse" class="menu-toggle icon-plugin <?=($pluginsMenuOpen) ? '' : 'collapsed'?>"><span>Plugins</span></a>
             <ul id="menu-plugins" class="collapse <?=($pluginsMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/plugins.php">Plugins</a></li>
-                <li><a href="<?=ADMIN?>/plugins_add.php">Add New Plugin</a></li>
+                <li class="<?=($pageName == 'plugins') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins.php">Plugins</a></li>
+                <li class="<?=($pageName == 'plugins-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins_add.php">Add New Plugin</a></li>
             </ul>
         </div>
 
@@ -116,9 +116,9 @@
             <?php $settingsMenuOpen = Functions::isPanelOpen('settings'); ?>
             <a href="#menu-settings" data-toggle="collapse" class="menu-toggle icon-settings <?=($settingsMenuOpen) ? '' : 'collapsed'?>"><span>Settings</span></a>
             <ul id="menu-settings" class="collapse <?=($settingsMenuOpen) ? 'in' : ''?>">
-                <li><a href="<?=ADMIN?>/settings.php">General</a></li>
-                <li><a href="<?=ADMIN?>/settings_video.php">Video</a></li>
-                <li><a href="<?=ADMIN?>/settings_email.php">Email</a></li>
+                <li class="<?=($pageName == 'settings') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings.php">General</a></li>
+                <li class="<?=($pageName == 'settings-videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_video.php">Video</a></li>
+                <li class="<?=($pageName == 'settings-email') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_email.php">Email</a></li>
             </ul>
         </div>
         

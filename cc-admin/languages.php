@@ -112,59 +112,57 @@ foreach (glob(DOC_ROOT . '/cc-content/languages/*') as $language) {
 }
 
 // Output Header
+$pageName = 'languages';
 include ('header.php');
 
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/fancybox/jquery.fancybox-1.3.4.css" />
-<div id="languages">
 
-    <h1>Languages</h1>
+<h1>Languages</h1>
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <?php foreach ($lang_list as $language): ?>
-    
-        <div class="block">
+<?php foreach ($lang_list as $language): ?>
 
-            <p>
-                <strong><?=$language->xml->information->lang_name?></strong>
-                <?php if (!empty($language->xml->information->author)): ?>
-                    by: <?=$language->xml->information->author?>
-                <?php endif; ?>
-            </p>
+    <div class="block">
 
-            <p><strong>Sample:</strong> <?=$language->xml->information->sample?></p>
-            
-            <?php if (!empty($language->xml->information->notes)): ?>
-                <p><?=$language->xml->information->notes?></p>
+        <p>
+            <strong><?=$language->xml->information->lang_name?></strong>
+            <?php if (!empty($language->xml->information->author)): ?>
+                by: <?=$language->xml->information->author?>
             <?php endif; ?>
+        </p>
+
+        <p><strong>Sample:</strong> <?=$language->xml->information->sample?></p>
+
+        <?php if (!empty($language->xml->information->notes)): ?>
+            <p><?=$language->xml->information->notes?></p>
+        <?php endif; ?>
 
 
-            <p>
-                <?php if ($language->active && $language->default): ?>
-                    <strong>Default Language</strong>
+        <p>
+            <?php if ($language->active && $language->default): ?>
+                <strong>Default Language</strong>
+            <?php else: ?>
+
+                <?php if ($language->active): ?>
+                    <a href="<?=ADMIN?>/languages.php?default=<?=$language->filename?>">Set Default</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="<?=ADMIN?>/languages.php?deactivate=<?=$language->filename?>">Deactivate</a>
                 <?php else: ?>
-
-                    <?php if ($language->active): ?>
-                        <a href="<?=ADMIN?>/languages.php?default=<?=$language->filename?>">Set Default</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="<?=ADMIN?>/languages.php?deactivate=<?=$language->filename?>">Deactivate</a>
-                    <?php else: ?>
-                        <a href="<?=ADMIN?>/languages.php?activate=<?=$language->filename?>">Activate</a>
-                    <?php endif; ?>
-
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
+                    <a href="<?=ADMIN?>/languages.php?activate=<?=$language->filename?>">Activate</a>
                 <?php endif; ?>
-            </p>
 
-        </div>
-    
-    <?php endforeach; ?>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
+            <?php endif; ?>
+        </p>
 
-</div>
+    </div>
+
+<?php endforeach; ?>
 
 <?php include('footer.php'); ?>

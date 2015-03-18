@@ -110,6 +110,7 @@ $query .= "GROUP BY " . DB_PREFIX . "categories.category_id ORDER BY name asc";
 $categories = $db->fetchAll($query, array(), PDO::FETCH_OBJ);
 
 // Output Header
+$pageName = 'videos-categories';
 include('header.php');
 
 ?>

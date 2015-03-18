@@ -208,119 +208,115 @@ if (isset ($_POST['submitted'])) {
 }
 
 // Output Header
+$pageName = 'settings-videos';
 include('header.php');
 
 ?>
 
-<div id="settings-video">
+<h1>Video Settings</h1>
 
-    <h1>Video Settings</h1>
-
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div class="block">
+<div class="block">
 
-        <form action="<?=ADMIN?>/settings_video.php" method="post">
+    <form action="<?=ADMIN?>/settings_video.php" method="post">
 
-            <div class="row <?=(isset ($errors['enable_uploads'])) ? ' error' : ''?>">
-                <label>Video Uploads:</label>
-                <span id="enable_uploads"><?=(Settings::Get('enable_uploads')=='1')?'Enabled':'Disabled'?></span>
-            </div>
+        <div class="row <?=(isset ($errors['enable_uploads'])) ? ' error' : ''?>">
+            <label>Video Uploads:</label>
+            <span id="enable_uploads"><?=(Settings::Get('enable_uploads')=='1')?'Enabled':'Disabled'?></span>
+        </div>
 
-            <div class="row <?=(isset ($errors['debug_conversion'])) ? ' error' : ''?>">
-                <label>Log Encoding:</label>
-                <select name="debug_conversion" class="dropdown">
-                    <option value="1" <?=($data['debug_conversion']=='1')?'selected="selected"':''?>>On</option>
-                    <option value="0" <?=($data['debug_conversion']=='0')?'selected="selected"':''?>>Off</option>
-                </select>
-            </div>
+        <div class="row <?=(isset ($errors['debug_conversion'])) ? ' error' : ''?>">
+            <label>Log Encoding:</label>
+            <select name="debug_conversion" class="dropdown">
+                <option value="1" <?=($data['debug_conversion']=='1')?'selected="selected"':''?>>On</option>
+                <option value="0" <?=($data['debug_conversion']=='0')?'selected="selected"':''?>>Off</option>
+            </select>
+        </div>
 
-            <div class="row <?=(isset ($errors['php'])) ? ' error' : ''?>">
-                <label>PHP Path:</label>
-                <input class="text" type="text" name="php" value="<?=$data['php']?>" />
-                <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
-            </div>
+        <div class="row <?=(isset ($errors['php'])) ? ' error' : ''?>">
+            <label>PHP Path:</label>
+            <input class="text" type="text" name="php" value="<?=$data['php']?>" />
+            <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
+        </div>
 
-            <div class="row <?=(isset ($errors['ffmpeg'])) ? ' error' : ''?>">
-                <label>FFMPEG Path:</label>
-                <input class="text" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
-                <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
-            </div>
+        <div class="row <?=(isset ($errors['ffmpeg'])) ? ' error' : ''?>">
+            <label>FFMPEG Path:</label>
+            <input class="text" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
+            <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
+        </div>
 
-            <div class="row <?=(isset($errors['h264_encoding_options'])) ? ' error' : ''?>">
-                <label>H.264 Encoding Options:</label>
-                <input class="text" type="text" name="h264_encoding_options" value="<?=htmlspecialchars($data['h264_encoding_options'])?>" />
-            </div>
+        <div class="row <?=(isset($errors['h264_encoding_options'])) ? ' error' : ''?>">
+            <label>H.264 Encoding Options:</label>
+            <input class="text" type="text" name="h264_encoding_options" value="<?=htmlspecialchars($data['h264_encoding_options'])?>" />
+        </div>
 
-            <div class="row <?=(isset($errors['webm_encoding_enabled'])) ? ' error' : ''?>">
-                <label>WebM Encoding:</label>
-                <select data-toggle="webm-encoding-options" name="webm_encoding_enabled" class="dropdown">
-                    <option value="1" <?=($data['webm_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($data['webm_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
-                </select>
-            </div> 
+        <div class="row <?=(isset($errors['webm_encoding_enabled'])) ? ' error' : ''?>">
+            <label>WebM Encoding:</label>
+            <select data-toggle="webm-encoding-options" name="webm_encoding_enabled" class="dropdown">
+                <option value="1" <?=($data['webm_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
+                <option value="0" <?=($data['webm_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
+            </select>
+        </div> 
 
-            <div id="webm-encoding-options" class="row <?=(isset($errors['webm_encoding_options'])) ? ' error' : ''?> <?=($data['webm_encoding_enabled'] == '0') ? 'hide' : ''?>">
-                <label>WebM Encoding Options:</label>
-                <input class="text" type="text" name="webm_encoding_options" value="<?=htmlspecialchars($data['webm_encoding_options'])?>" />
-            </div>
-            
-            <div class="row <?=(isset($errors['theora_encoding_enabled'])) ? ' error' : ''?>">
-                <label>Theora Encoding:</label>
-                <select data-toggle="theora-encoding-options" name="theora_encoding_enabled" class="dropdown">
-                    <option value="1" <?=($data['theora_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($data['theora_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
-                </select>
-            </div> 
+        <div id="webm-encoding-options" class="row <?=(isset($errors['webm_encoding_options'])) ? ' error' : ''?> <?=($data['webm_encoding_enabled'] == '0') ? 'hide' : ''?>">
+            <label>WebM Encoding Options:</label>
+            <input class="text" type="text" name="webm_encoding_options" value="<?=htmlspecialchars($data['webm_encoding_options'])?>" />
+        </div>
 
-            <div id="theora-encoding-options" class="row <?=(isset($errors['theora_encoding_options'])) ? ' error' : ''?> <?=($data['theora_encoding_enabled'] == '0') ? 'hide' : ''?>">
-                <label>Theora Encoding Options:</label>
-                <input class="text" type="text" name="theora_encoding_options" value="<?=htmlspecialchars($data['theora_encoding_options'])?>" />
-            </div>
-            
-            <div class="row <?=(isset($errors['mobile_encoding_enabled'])) ? ' error' : ''?>">
-                <label>Mobile Encoding:</label>
-                <select data-toggle="mobile-encoding-options" name="mobile_encoding_enabled" class="dropdown">
-                    <option value="1" <?=($data['mobile_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
-                    <option value="0" <?=($data['mobile_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
-                </select>
-            </div> 
+        <div class="row <?=(isset($errors['theora_encoding_enabled'])) ? ' error' : ''?>">
+            <label>Theora Encoding:</label>
+            <select data-toggle="theora-encoding-options" name="theora_encoding_enabled" class="dropdown">
+                <option value="1" <?=($data['theora_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
+                <option value="0" <?=($data['theora_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
+            </select>
+        </div> 
 
-            <div id="mobile-encoding-options" class="row <?=(isset($errors['mobile_encoding_options'])) ? ' error' : ''?> <?=($data['mobile_encoding_enabled'] == '0') ? 'hide' : ''?>">
-                <label>Mobile Encoding Options:</label>
-                <input class="text" type="text" name="mobile_encoding_options" value="<?=htmlspecialchars($data['mobile_encoding_options'])?>" />
-            </div>
+        <div id="theora-encoding-options" class="row <?=(isset($errors['theora_encoding_options'])) ? ' error' : ''?> <?=($data['theora_encoding_enabled'] == '0') ? 'hide' : ''?>">
+            <label>Theora Encoding Options:</label>
+            <input class="text" type="text" name="theora_encoding_options" value="<?=htmlspecialchars($data['theora_encoding_options'])?>" />
+        </div>
 
-            <div class="row <?=(isset ($errors['thumb_encoding_options'])) ? ' error' : ''?>">
-                <label>Thumbnail Options:</label>
-                <input class="text" type="text" name="thumb_encoding_options" value="<?=htmlspecialchars($data['thumb_encoding_options'])?>" />
-            </div>
+        <div class="row <?=(isset($errors['mobile_encoding_enabled'])) ? ' error' : ''?>">
+            <label>Mobile Encoding:</label>
+            <select data-toggle="mobile-encoding-options" name="mobile_encoding_enabled" class="dropdown">
+                <option value="1" <?=($data['mobile_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
+                <option value="0" <?=($data['mobile_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
+            </select>
+        </div> 
 
-            <div class="row <?=(isset ($errors['video_size_limit'])) ? ' error' : ''?>">
-                <label>Video Site Limit:</label>
-                <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
-                (Bytes)
-            </div>
-            
-            <div class="row <?=(isset($errors['keep_original_video'])) ? ' error' : ''?>">
-                <label>Keep Original Video:</label>
-                <select name="keep_original_video" class="dropdown">
-                    <option value="1" <?=($data['keep_original_video'] == '1')?'selected="selected"':''?>>Keep</option>
-                    <option value="0" <?=($data['keep_original_video'] == '0')?'selected="selected"':''?>>Discard</option>
-                </select>
-            </div> 
+        <div id="mobile-encoding-options" class="row <?=(isset($errors['mobile_encoding_options'])) ? ' error' : ''?> <?=($data['mobile_encoding_enabled'] == '0') ? 'hide' : ''?>">
+            <label>Mobile Encoding Options:</label>
+            <input class="text" type="text" name="mobile_encoding_options" value="<?=htmlspecialchars($data['mobile_encoding_options'])?>" />
+        </div>
 
-            <div class="row-shift">
-                <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Update Settings" />
-            </div>
-        </form>
+        <div class="row <?=(isset ($errors['thumb_encoding_options'])) ? ' error' : ''?>">
+            <label>Thumbnail Options:</label>
+            <input class="text" type="text" name="thumb_encoding_options" value="<?=htmlspecialchars($data['thumb_encoding_options'])?>" />
+        </div>
 
-    </div>
+        <div class="row <?=(isset ($errors['video_size_limit'])) ? ' error' : ''?>">
+            <label>Video Site Limit:</label>
+            <input class="text" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
+            (Bytes)
+        </div>
 
+        <div class="row <?=(isset($errors['keep_original_video'])) ? ' error' : ''?>">
+            <label>Keep Original Video:</label>
+            <select name="keep_original_video" class="dropdown">
+                <option value="1" <?=($data['keep_original_video'] == '1')?'selected="selected"':''?>>Keep</option>
+                <option value="0" <?=($data['keep_original_video'] == '0')?'selected="selected"':''?>>Discard</option>
+            </select>
+        </div> 
+
+        <div class="row-shift">
+            <input type="hidden" name="submitted" value="TRUE" />
+            <input type="submit" class="button" value="Update Settings" />
+        </div>
+    </form>
 
 </div>
 
