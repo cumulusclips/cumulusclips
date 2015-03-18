@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" />
 <?php Functions::AdminOutputCss(); ?>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">-->
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/admin.css" />
 </head>
 <body>
@@ -126,7 +126,7 @@
     <!-- End Sidebar -->
 
     <!-- Begin Main Content -->
-    <main>
+    <main id="<?=$pageName?>">
         
 
     

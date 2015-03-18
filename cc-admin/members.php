@@ -94,21 +94,25 @@ switch ($status) {
         $query_string['status'] = 'new';
         $header = 'New Members';
         $page_title = 'New Members';
+        $statusText = 'New';
         break;
     case 'pending':
         $query_string['status'] = 'pending';
         $header = 'Pending Members';
         $page_title = 'Pending Members';
+        $statusText = 'Pending';
         break;
     case 'banned':
         $query_string['status'] = 'banned';
         $header = 'Banned Members';
         $page_title = 'Banned Members';
+        $statusText = 'Banned';
         break;
     default:
         $status = 'active';
         $header = 'Active Members';
         $page_title = 'Active Members';
+        $statusText = 'Active';
         break;
 
 }
@@ -156,100 +160,103 @@ $users = $userMapper->getUsersFromList(Functions::arrayColumn($userResults, 'use
 
 
 // Output Header
+$pageName = 'members';
 include ('header.php');
 
 ?>
 
-<div id="members">
-
-    <h1><?=$header?></h1>
-    <?php if ($sub_header): ?>
-    <h3><?=$sub_header?></h3>
-    <?php endif; ?>
+<h1><?=$header?></h1>
+<?php if ($sub_header): ?>
+<h3><?=$sub_header?></h3>
+<?php endif; ?>
 
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
 
-    <div id="browse-header">
-        <div class="jump">
-            Jump To:
-            <select name="status" data-jump="<?=ADMIN?>/members.php">
-                <option <?=(isset($status) && $status == 'active') ? 'selected="selected"' : ''?>value="active">Active</option>
-                <option <?=(isset($status) && $status == 'new') ? 'selected="selected"' : ''?>value="new">New</option>
-                <option <?=(isset($status) && $status == 'pending') ? 'selected="selected"' : ''?>value="pending">Pending</option>
-                <option <?=(isset($status) && $status == 'banned') ? 'selected="selected"' : ''?>value="banned">Banned</option>
-            </select>
-        </div>
+<div class="filters">
+    <div class="jump">
+        Jump To:
 
-        <div class="search">
-            <form method="POST" action="<?=ADMIN?>/members.php?status=<?=$status?>">
-                <input type="hidden" name="search_submitted" value="true" />
-                <input type="text" name="search" value="" />&nbsp;
-                <input type="submit" name="submit" class="button" value="Search" />
-            </form>
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=$statusText?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="<?=ADMIN?>/members.php?status=active">Active</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/members.php?status=new">New</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/members.php?status=pending">Pending</a></li>
+            <li><a tabindex="-1" href="<?=ADMIN?>/members.php?status=banned">Banned</a></li>
+          </ul>
         </div>
     </div>
 
-    <?php if ($total > 0): ?>
-
-        <div class="block list">
-            <table>
-                <thead>
-                    <tr>
-                        <td class="large">Member</td>
-                        <td class="large">Email</td>
-                        <td class="large">Date Joined</td>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($users as $user): ?>
-
-                    <?php $odd = empty ($odd) ? true : false; ?>
-
-                    <tr class="<?=$odd ? 'odd' : ''?>">
-                        <td>
-                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
-                            <div class="record-actions invisible">
-
-                                <?php if ($status == 'active'): ?>
-                                    <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                                <?php endif; ?>
-
-                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
-
-                                <?php if ($status == 'active'): ?>
-                                    <a class="delete" href="<?=$pagination->GetURL('ban='.$user->userId)?>">Ban</a>
-                                <?php endif; ?>
-
-                                <?php if (in_array ($status, array ('new', 'pending'))): ?>
-                                    <a class="approve" href="<?=$pagination->GetURL('activate='.$user->userId)?>">Activate</a>
-                                <?php endif; ?>
-                                    
-                                <?php if ($status == 'banned'): ?>
-                                    <a href="<?=$pagination->GetURL('unban='.$user->userId)?>">Unban</a>
-                                <?php endif; ?>
-
-                                <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->userId)?>" data-confirm="You're about to delete this member and their content. This cannot be undone. Do you want to proceed?">Delete</a>
-                            </div>
-                        </td>
-                        <td><?=$user->email?></td>
-                        <td><?=date('m/d/Y', strtotime($user->dateCreated))?></td>
-                    </tr>
-
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <?=$pagination->paginate()?>
-
-    <?php else: ?>
-        <div class="block"><strong>No members found</strong></div>
-    <?php endif; ?>
-
+    <div class="search">
+        <form method="POST" action="<?=ADMIN?>/members.php?status=<?=$status?>">
+            <input type="hidden" name="search_submitted" value="true" />
+            <input class="text" type="text" name="search" value="" />&nbsp;
+            <input type="submit" name="submit" class="button" value="Search" />
+        </form>
+    </div>
 </div>
+
+<?php if ($total > 0): ?>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($users as $user): ?>
+
+                <?php $odd = empty ($odd) ? true : false; ?>
+
+                <tr class="<?=$odd ? 'odd' : ''?>">
+                    <td>
+                        <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
+                        <div class="record-actions invisible">
+
+                            <?php if ($status == 'active'): ?>
+                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+                            <?php endif; ?>
+
+                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
+
+                            <?php if ($status == 'active'): ?>
+                                <a class="delete" href="<?=$pagination->GetURL('ban='.$user->userId)?>">Ban</a>
+                            <?php endif; ?>
+
+                            <?php if (in_array ($status, array ('new', 'pending'))): ?>
+                                <a class="approve" href="<?=$pagination->GetURL('activate='.$user->userId)?>">Activate</a>
+                            <?php endif; ?>
+
+                            <?php if ($status == 'banned'): ?>
+                                <a href="<?=$pagination->GetURL('unban='.$user->userId)?>">Unban</a>
+                            <?php endif; ?>
+
+                            <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$user->userId)?>" data-confirm="You're about to delete this member and their content. This cannot be undone. Do you want to proceed?">Delete</a>
+                        </div>
+                    </td>
+                    <td><?=$user->email?></td>
+                    <td><?=date('m/d/Y', strtotime($user->dateCreated))?></td>
+                </tr>
+
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    <?=$pagination->paginate()?>
+
+<?php else: ?>
+    <p>No members found</p>
+<?php endif; ?>
+
 
 <?php include ('footer.php'); ?>

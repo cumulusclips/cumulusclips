@@ -205,6 +205,77 @@ SIDEBAR
 
 
 
+/******
+FILTERS
+******/
+
+.filters {
+    margin: 15px 0;
+}
+
+.filters:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.jump {
+    float: left;
+}
+
+.jump .dropdown {
+    display: inline-block;
+}
+
+.search {
+    float: right;
+}
+
+.search .text {
+    width: 175px;
+}
+
+
+
+
+
+/***
+GRID
+***/
+
+.table {
+    margin: 0;
+}
+
+.record-actions a {
+    display:inline-block;
+    margin-right:15px;
+    font-size:10px;
+}
+
+.delete, .delete:hover {
+    color: #900;
+}
+
+
+
+
+
+/****
+FONTS
+****/
+
+h1 {
+    font-size: 24px;
+    font-weight: normal;
+    margin: 15px 0;
+}
+
+
+
+
+
 /**********
 LINK STYLES
 **********/
@@ -216,13 +287,9 @@ a {
 }
 
 a:hover {
+    color:#023e7b;
     text-decoration:underline;
-}
-
-.record-actions a {
-    display:inline-block;
-    margin-right:15px;
-    font-size:10px;
+    font-weight: 500;
 }
 
 a.button {
@@ -278,17 +345,6 @@ FORM & MESSAGE STYLES
 textarea.text {
     width:auto;
     height:auto;
-}
-
-.dropdown {
-    border:1px solid #CCC;
-    border-radius:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    padding:5px;
 }
 
 .button {
@@ -358,10 +414,6 @@ MISC STYLES
     background-color: #FFF6BF;
     border-color: #FFD324;
     color: #514721;
-}
-
-.invisible {
-    visibility:hidden;
 }
 
 .options {
@@ -446,7 +498,7 @@ RECORD LISTING STYLES
     margin-top:7px;
 }
 
-.list tr:hover .record-actions {
+.table tr:hover .record-actions {
     visibility: visible;
 }
 
