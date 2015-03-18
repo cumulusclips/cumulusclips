@@ -25,12 +25,12 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     // Validate id
     $user = $userMapper->getUserById($_GET['delete']);
     if ($user && $user->userId != $adminUser->userId) {
-        $userService->delete($user);
+//        $userService->delete($user);
         $message = 'Member has been deleted';
         $message_type = 'success';
     } else if ($user->userId == $adminUser->userId) {
         $message = 'You can\'t delete yourself, silly!';
-        $message_type = 'errors';
+        $message_type = 'danger';
     }
 
 }
@@ -149,7 +149,8 @@ $total = $db->rowCount();
 
 // Initialize pagination
 $url .= (!empty ($query_string)) ? '?' . http_build_query($query_string) : '';
-$pagination = new Pagination ($url, $total, $records_per_page, false);
+//$pagination = new Pagination ($url, $total, $records_per_page, false);
+$pagination = new Pagination ($url, $total, 1, false);
 $start_record = $pagination->GetStartRecord();
 $_SESSION['list_page'] = $pagination->GetURL();
 
@@ -172,7 +173,7 @@ include ('header.php');
 
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert alert-<?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 
@@ -251,8 +252,6 @@ include ('header.php');
             <?php endforeach; ?>
             </tbody>
         </table>
-
-    <?=$pagination->paginate()?>
 
 <?php else: ?>
     <p>No members found</p>

@@ -228,7 +228,13 @@ class Pagination {
     public function GetURL ($additional_query = null) {
         return $this->BuildURL ($this->GetPage(), $additional_query);
     }
-
+    
+    /**
+     * Determine whether pagination is to be displayed
+     * @return boolean Returns true if pagination is to be displayed, false otherwise
+     */
+    public function displayPagination()
+    {
+        return ($this->total > 0 && $this->total > $this->records_per_page);
+    }
 }
-
-?>

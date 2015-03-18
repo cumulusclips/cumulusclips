@@ -1,6 +1,10 @@
 
     </main>
     <!-- End Main Content -->
+    
+    <?php if (isset($pagination) && $pagination->displayPagination()): ?>
+        <?=$pagination->paginate()?>
+    <?php endif; ?>
 
 </div>
 <!-- End Container -->
