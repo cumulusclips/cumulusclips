@@ -228,73 +228,67 @@ include('header.php');
 
 <?php if ($total > 0): ?>
 
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="video-title large">Title</td>
-                    <td class="category large">Category</td>
-                    <td class="large">Member</td>
-                    <td class="large">Upload Date</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($videoList as $video): ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="video-title">Title</th>
+                <th class="category">Category</th>
+                <th>Member</th>
+                <th>Upload Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($videoList as $video): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
+            <tr>
+                <td class="video-title">
+                    <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="h3"><?=$video->title?></a><br />
+                    <div class="record-actions">
 
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td class="video-title">
-                        <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="large"><?=$video->title?></a><br />
-                        <div class="record-actions">
+                        <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
+                            <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
+                        <?php endif; ?>
 
-                            <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
-                                <a href="" class="watch" data-filename="<?=$video->filename?>">Watch</a>
-                            <?php endif; ?>
+                        <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
 
-                            <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
-
-                            <?php if ($status == 'approved'): ?>
-                                <?php if ($video->featured == 1): ?>
-                                    <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
-                                <?php else: ?>
-                                    <a href="<?=$pagination->getURL('feature='.$video->videoId)?>">Feature</a>
-                                <?php endif ?>
-                            <?php endif; ?>
-
-                            <?php if ($status == 'featured'): ?>
+                        <?php if ($status == 'approved'): ?>
+                            <?php if ($video->featured == 1): ?>
                                 <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
-                            <?php endif; ?>
+                            <?php else: ?>
+                                <a href="<?=$pagination->getURL('feature='.$video->videoId)?>">Feature</a>
+                            <?php endif ?>
+                        <?php endif; ?>
 
-                            <?php if (in_array ($status, array ('approved','featured'))): ?>
-                                <a href="<?=$videoService->getUrl($video)?>/" target="_ccsite">Go to Video</a>
-                            <?php endif; ?>
+                        <?php if ($status == 'featured'): ?>
+                            <a href="<?=$pagination->getURL('unfeature='.$video->videoId)?>">Un-Feature</a>
+                        <?php endif; ?>
 
-                            <?php if ($video->status == VideoMapper::PENDING_APPROVAL): ?>
-                                <a class="approve" href="<?=$pagination->getURL('approve='.$video->videoId)?>">Approve</a>
-                            <?php elseif (in_array ($status, array ('approved','featured'))): ?>
-                                <a class="delete" href="<?=$pagination->getURL('ban='.$video->videoId)?>">Ban</a>
-                            <?php elseif ($status == 'banned'): ?>
-                                <a href="<?=$pagination->getURL('unban='.$video->videoId)?>">Unban</a>
-                            <?php endif; ?>
+                        <?php if (in_array ($status, array ('approved','featured'))): ?>
+                            <a href="<?=$videoService->getUrl($video)?>/" target="_ccsite">Go to Video</a>
+                        <?php endif; ?>
 
-                            <a class="delete confirm" href="<?=$pagination->getURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
-                        </div>
-                    </td>
-                    <td class="category"><?=$categories[$video->categoryId]->name?></td>
-                    <td><?=$video->username?></td>
-                    <td><?=date('m/d/Y', strtotime($video->dateCreated))?></td>
-                </tr>
+                        <?php if ($video->status == VideoMapper::PENDING_APPROVAL): ?>
+                            <a class="approve" href="<?=$pagination->getURL('approve='.$video->videoId)?>">Approve</a>
+                        <?php elseif (in_array ($status, array ('approved','featured'))): ?>
+                            <a class="delete" href="<?=$pagination->getURL('ban='.$video->videoId)?>">Ban</a>
+                        <?php elseif ($status == 'banned'): ?>
+                            <a href="<?=$pagination->getURL('unban='.$video->videoId)?>">Unban</a>
+                        <?php endif; ?>
 
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                        <a class="delete confirm" href="<?=$pagination->getURL('delete='.$video->videoId)?>" data-confirm="You're about to delete this video. This cannot be undone. Do you want to proceed?">Delete</a>
+                    </div>
+                </td>
+                <td class="category"><?=$categories[$video->categoryId]->name?></td>
+                <td><?=$video->username?></td>
+                <td><?=date('m/d/Y', strtotime($video->dateCreated))?></td>
+            </tr>
 
-    <?=$pagination->paginate()?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 <?php else: ?>
-    <div class="block"><strong>No videos found</strong></div>
+    <p>No videos found</p>
 <?php endif; ?>
 
 <video width="600" height="337" controls="controls" poster="">

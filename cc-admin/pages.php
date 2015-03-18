@@ -144,41 +144,36 @@ include ('header.php');
 
 <?php if ($total > 0): ?>
 
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="large">Title</td>
-                    <td class="large">Status</td>
-                    <td class="large">Date Created</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($pageList as $page): ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Date Created</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($pageList as $page): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td>
-                        <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>" class="large"><?=$page->title?></a><br />
-                        <div class="record-actions invisible">
-                            <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" target="_ccsite">Preview</a>
-                            <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">Edit</a>
-                            <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->pageId)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
-                        </div>
-                    </td>
-                    <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
-                    <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
-                </tr>
+            <tr>
+                <td>
+                    <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>" class="h3"><?=$page->title?></a><br />
+                    <div class="record-actions invisible">
+                        <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" target="_ccsite">Preview</a>
+                        <a href="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">Edit</a>
+                        <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$page->pageId)?>" data-confirm="You are about to delete this page, this cannot be undone. Are you sure you want to do this?">Delete</a>
+                    </div>
+                </td>
+                <td><?=($page->status == 'published') ? 'Published' : 'Draft'?></td>
+                <td><?=date('m/d/Y', strtotime($page->dateCreated))?></td>
+            </tr>
 
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <?=$pagination->paginate()?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 <?php else: ?>
-    <div class="block"><strong>No pages found</strong></div>
+    <p>No pages found</p>
 <?php endif; ?>
 
 <?php include ('footer.php'); ?>

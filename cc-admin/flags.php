@@ -171,68 +171,63 @@ include ('header.php');
 
 <?php if ($total > 0): ?>
 
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="large">Content</td>
-                    <td class="large">Flagged By</td>
-                    <td class="large">Date Flagged</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($flagsList as $flag): ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Content</th>
+                <th>Flagged By</th>
+                <th>Date Flagged</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($flagsList as $flag): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-                <?php $reporter = $userMapper->getUserById($flag->userId); ?>
+            <?php $reporter = $userMapper->getUserById($flag->userId); ?>
 
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td>
+            <tr>
+                <td>
 
-                        <?php if ($type == 'user'): ?>
+                    <?php if ($type == 'user'): ?>
 
-                            <?php $user = $userMapper->getUserById($flag->objectId); ?>
-                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="large"><?=$user->username?></a>
-                            <div class="record-actions invisible">
-                                <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
-                                <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
+                        <?php $user = $userMapper->getUserById($flag->objectId); ?>
+                        <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="h3"><?=$user->username?></a>
+                        <div class="record-actions invisible">
+                            <a href="<?=HOST?>/members/<?=$user->username?>/">View Profile</a>
+                            <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>">Edit</a>
 
-                        <?php elseif ($type == 'video'): ?>
+                    <?php elseif ($type == 'video'): ?>
 
-                            <?php $video = $videoMapper->getVideoById($flag->objectId); ?>
-                            <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="large"><?=$video->title?></a>
-                            <div class="record-actions invisible">
-                                <a href="<?=$videoService->getUrl($video)?>/">Watch Video</a>
-                                <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
+                        <?php $video = $videoMapper->getVideoById($flag->objectId); ?>
+                        <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" class="h3"><?=$video->title?></a>
+                        <div class="record-actions invisible">
+                            <a href="<?=$videoService->getUrl($video)?>/">Watch Video</a>
+                            <a href="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>">Edit</a>
 
-                        <?php elseif ($type == 'comment'): ?>
+                    <?php elseif ($type == 'comment'): ?>
 
-                            <?php $comment = $commentMapper->getCommentById($flag->objectId); ?>
-                            <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
+                        <?php $comment = $commentMapper->getCommentById($flag->objectId); ?>
+                        <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
 
-                            <?=$comment->comments?>
-                            <div class="record-actions invisible">
-                                <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
+                        <?=$comment->comments?>
+                        <div class="record-actions invisible">
+                            <a href="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>">Edit</a>
 
-                        <?php endif; ?>
+                    <?php endif; ?>
 
-                            <a href="<?=$pagination->GetURL('dismiss='.$flag->objectId)?>">Dismiss Flag</a>
-                            <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->objectId)?>">Ban</a>
-                        </div>
-                    </td>
-                    <td><?=$reporter->username?></td>
-                    <td><?=date('m/d/Y', strtotime($flag->dateCreated))?></td>
-                </tr>
+                        <a href="<?=$pagination->GetURL('dismiss='.$flag->objectId)?>">Dismiss Flag</a>
+                        <a class="delete" href="<?=$pagination->GetURL('ban='.$flag->objectId)?>">Ban</a>
+                    </div>
+                </td>
+                <td><?=$reporter->username?></td>
+                <td><?=date('m/d/Y', strtotime($flag->dateCreated))?></td>
+            </tr>
 
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <?=$pagination->paginate()?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 <?php else: ?>
-    <div class="block"><strong>No flags found</strong></div>
+    <p>No flags found</p>
 <?php endif; ?>
 
 <?php include ('footer.php'); ?>

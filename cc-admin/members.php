@@ -217,9 +217,7 @@ include ('header.php');
             <tbody>
             <?php foreach ($users as $user): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-
-                <tr class="<?=$odd ? 'odd' : ''?>">
+                <tr>
                     <td>
                         <a href="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" class="h3"><?=$user->username?></a>
                         <div class="record-actions invisible">

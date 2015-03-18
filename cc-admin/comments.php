@@ -178,57 +178,52 @@ include('header.php');
 
 <?php if ($total > 0): ?>
 
-    <div class="block list">
-        <table>
-            <thead>
-                <tr>
-                    <td class="large">Poster</td>
-                    <td class="large">Comments</td>
-                    <td class="large">Video</td>
-                    <td class="large">Date Posted</td>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($commentList as $comment): ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Poster</th>
+                <th>Comments</th>
+                <th>Video</th>
+                <th>Date Posted</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($commentList as $comment): ?>
 
-                <?php $odd = empty ($odd) ? true : false; ?>
-                <?php $commentCard = $commentService->getCommentCard($comment); ?>
-                <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
+            <?php $commentCard = $commentService->getCommentCard($comment); ?>
+            <?php $video = $videoMapper->getVideoById($comment->videoId); ?>
 
-                <tr class="<?=$odd ? 'odd' : ''?>">
-                    <td>
-                        <img src="<?=($commentCard->avatar) ? $commentCard->avatar : HOST . '/cc-content/themes/default/images/avatar.gif'?>" height="80" width="80" />
-                        <p class="poster"><a href="<?=HOST?>/members/<?=$commentCard->author->username?>/"><?=$commentCard->author->username?></a></p>
-                    </td>
-                    <td class="comments-text">
-                        <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>
-                        <div class="record-actions invisible">
-                            <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
+            <tr>
+                <td>
+                    <img src="<?=($commentCard->avatar) ? $commentCard->avatar : HOST . '/cc-content/themes/default/images/avatar.gif'?>" height="80" width="80" />
+                    <p class="poster"><a href="<?=HOST?>/members/<?=$commentCard->author->username?>/"><?=$commentCard->author->username?></a></p>
+                </td>
+                <td class="comments-text">
+                    <?=Functions::cutOff(htmlspecialchars($commentCard->comment->comments), 150)?>
+                    <div class="record-actions invisible">
+                        <a href="<?=ADMIN?>/comments_edit.php?id=<?=$commentCard->comment->commentId?>">Edit</a>
 
-                            <?php if ($status == 'approved'): ?>
-                                <a class="delete" href="<?=$pagination->GetURL('ban='.$commentCard->comment->commentId)?>">Ban</a>
-                            <?php elseif ($status == 'pending'): ?>
-                                <a class="approve" href="<?=$pagination->GetURL('approve='.$commentCard->comment->commentId)?>">Approve</a>
-                            <?php elseif ($status == 'banned'): ?>
-                                <a href="<?=$pagination->GetURL('unban='.$commentCard->comment->commentId)?>">Unban</a>
-                            <?php endif; ?>
+                        <?php if ($status == 'approved'): ?>
+                            <a class="delete" href="<?=$pagination->GetURL('ban='.$commentCard->comment->commentId)?>">Ban</a>
+                        <?php elseif ($status == 'pending'): ?>
+                            <a class="approve" href="<?=$pagination->GetURL('approve='.$commentCard->comment->commentId)?>">Approve</a>
+                        <?php elseif ($status == 'banned'): ?>
+                            <a href="<?=$pagination->GetURL('unban='.$commentCard->comment->commentId)?>">Unban</a>
+                        <?php endif; ?>
 
-                            <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$commentCard->comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
-                        </div>
-                    </td>
-                    <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
-                    <td><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></td>
-                </tr>
+                        <a class="delete confirm" href="<?=$pagination->GetURL('delete='.$commentCard->comment->commentId)?>" data-confirm="You're about to delete this comment. This cannot be undone. Do you want to proceed?">Delete</a>
+                    </div>
+                </td>
+                <td><a href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></td>
+                <td><?=date('m/d/Y', strtotime($commentCard->comment->dateCreated))?></td>
+            </tr>
 
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <?=$pagination->paginate()?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 <?php else: ?>
-    <div class="block"><strong>No comments found</strong></div>
+    <p>No comments found</p>
 <?php endif; ?>
 
 <?php include('footer.php'); ?>

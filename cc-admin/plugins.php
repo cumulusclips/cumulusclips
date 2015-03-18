@@ -170,7 +170,7 @@ include('header.php');
     <?php endforeach; ?>
 
 <?php else: ?>
-    <div class="block"><strong>No plugins added yet.</strong></div>
+    <p>No plugins added yet.</p>
 <?php endif; ?>
 
 <?php include ('footer.php'); ?>
