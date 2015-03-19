@@ -23,17 +23,17 @@ if (!empty($_GET['delete']) && Functions::validTheme($_GET['delete'])) {
 
         // DELETE THEME CODE
         $message = $xml->name . ' theme has been deleted';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         try {
             Filesystem::delete($theme_path);
         } catch (Exception $e) {
             $message = $e->getMessage();
-            $message_type = 'errors';
+            $message_type = 'alert-danger';
         }
 
     } else {
         $message = 'Active theme cannot be deleted. Activate another theme and then try again';
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -46,7 +46,7 @@ else if (!empty($_GET['activate'])) {
         $themeSetting = ($xml->mobile == 'true') ? 'active_mobile_theme' : 'active_theme';
         Settings::set($themeSetting, $_GET['activate']);
         $message = $xml->name . ' is now the active theme';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -79,7 +79,7 @@ include('header.php');
 <h1>Themes</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 

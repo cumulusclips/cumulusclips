@@ -36,13 +36,13 @@ if (isset($_POST['submitted_add'])) {
 
         $categoryMapper->save($category);
         $message = $category->name . ' was successfully created.';
-        $messageType = 'success';
+        $messageType = 'alert-success';
         unset($category);
 
     } catch (Exception $e) {
         $errors['cat_name'] = true;
         $message = $e->getMessage();
-        $messageType = 'errors';
+        $messageType = 'alert-danger';
     }
 }
 
@@ -92,13 +92,13 @@ if (isset($_POST['submitted_edit'])) {
         }
 
         // Output message
-        $messageType = 'success';
+        $messageType = 'alert-success';
         unset ($data);
         
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br><br> - ' . implode('<br> - ', $errors);
-        $messageType = 'errors';
+        $messageType = 'alert-danger';
     }
 }
 
@@ -115,62 +115,56 @@ include('header.php');
 
 ?>
 
-<div id="videos-categories">
+<?php if ($message): ?>
+<div class="alert <?=$messageType?>"><?=$message?></div>
+<?php endif; ?>
 
-    <?php if ($message): ?>
-    <div class="message <?=$messageType?>"><?=$message?></div>
-    <?php endif; ?>
+<h1>Add Category</h1>
+<div id="add-category" class="form-inline">
+    <form action="<?=ADMIN?>/videos_categories.php" method="post" class="<?=(isset($errors['cat_name'])) ? 'has-error' : ''?>">
+        <label class="control-label">Category Name:</label>
+        <input type="text" class="form-control" name="cat_name" value="<?=(!empty($category->name))?$category->name:''?>"/>
+        <input type="hidden" name="submitted_add" value="TRUE" />
+        <input type="submit" class="button" value="Add Category" />
+    </form>
+</div>
 
-    <h1>Add Category</h1>
-    <div id="add-category" class="form-inline">
-        <form action="<?=ADMIN?>/videos_categories.php" method="post">
-            <span class="<?=(isset($errors['cat_name']))?'error':''?>"><strong>Category Name:</strong></span>
-            <input type="text" class="form-control" name="cat_name" value="<?=(!empty($category->name))?$category->name:''?>"/>
-            <input type="hidden" name="submitted_add" value="TRUE" />
-            <input type="submit" class="button" value="Add Category" />
-        </form>
-    </div>
+<h1>Video Categories</h1>
 
-    
-    <h1>Video Categories</h1>
+<?php if (count($categories) > 1): ?>
 
-    <?php if (count($categories) > 1): ?>
+    <?php foreach ($categories as $categoryObj): ?>
 
-        <?php foreach ($categories as $categoryObj): ?>
+        <div class="block">
+            <p><strong><?=$categoryObj->name?></strong> (<?=$categoryObj->video_count?> videos)</p>
+            <p><a href="" class="category-action" data-action="move">Move Videos</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" class="delete category-action" data-action="delete">Delete</a></p>
 
-            <div class="block">
-                <p><strong><?=$categoryObj->name?></strong> (<?=$categoryObj->video_count?> videos)</p>
-                <p><a href="" class="category-action" data-action="move">Move Videos</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" class="delete category-action" data-action="delete">Delete</a></p>
-
-                <div class="hide">
-                    <form action="<?=ADMIN?>/videos_categories.php" method="post">
-                        <strong>Move videos to: </strong>
-                        <select name="move" class="dropdown">
-                        <?php $list = $categories; ?>
-                        <?php foreach ($list as $value): ?>
-                            <?php if ($categoryObj->category_id == $value->category_id) continue; ?>
-                            <option value="<?=$value->category_id?>"><?=$value->name?></option>
-                        <?php endforeach; ?>
-                        </select>
-                        <input type="hidden" name="category" value="<?=$categoryObj->category_id?>" />
-                        <input type="hidden" name="action" value="" />
-                        <input type="hidden" name="submitted_edit" value="TRUE" />
-                        <input type="submit" class="button move-videos" value="Move Videos" />
-                        <input type="submit" class="button delete-category" value="Delete Category" />
-                    </form>
-                </div>
-
+            <div class="hide">
+                <form action="<?=ADMIN?>/videos_categories.php" method="post">
+                    <strong>Move videos to: </strong>
+                    <select name="move" class="dropdown">
+                    <?php $list = $categories; ?>
+                    <?php foreach ($list as $value): ?>
+                        <?php if ($categoryObj->category_id == $value->category_id) continue; ?>
+                        <option value="<?=$value->category_id?>"><?=$value->name?></option>
+                    <?php endforeach; ?>
+                    </select>
+                    <input type="hidden" name="category" value="<?=$categoryObj->category_id?>" />
+                    <input type="hidden" name="action" value="" />
+                    <input type="hidden" name="submitted_edit" value="TRUE" />
+                    <input type="submit" class="button move-videos" value="Move Videos" />
+                    <input type="submit" class="button delete-category" value="Delete Category" />
+                </form>
             </div>
 
-        <?php endforeach; ?>
-
-    <?php else: ?>
-        <div class="block">
-            <p><strong><?=$categories[0]->name?></strong> (<?=$categories[0]->video_count?> videos)</p>
         </div>
-    <?php endif; ?>
 
+    <?php endforeach; ?>
 
-</div>
+<?php else: ?>
+    <div class="block">
+        <p><strong><?=$categories[0]->name?></strong> (<?=$categories[0]->video_count?> videos)</p>
+    </div>
+<?php endif; ?>
 
 <?php include('footer.php'); ?>

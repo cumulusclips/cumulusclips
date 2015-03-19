@@ -186,13 +186,13 @@ if (isset ($_POST['submitted'])) {
             $message .= '<p>The following requirements were not met. As a result video uploads have been disabled.';
             $message .= '<br /><br /> - ' . implode ('<br /> - ', $warnings);
             $message .= '</p><p class="small">If you\'re using a plugin or service for encoding videos you can ignore this message.</p>';
-            $message_type = 'notice';
+            $message_type = 'alert-warning';
 
         } else {
             $data['enable_uploads'] = 1;
             $message = 'Settings have been updated';
             $message .= (Settings::Get ('enable_uploads') == 0) ? ', and video uploads have been enabled.' : '.';
-            $message_type = 'success';
+            $message_type = 'alert-success';
         }
 
         
@@ -203,7 +203,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -216,93 +216,93 @@ include('header.php');
 <h1>Video Settings</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <form action="<?=ADMIN?>/settings_video.php" method="post">
 
-    <div class="form-group <?=(isset ($errors['enable_uploads'])) ? ' error' : ''?>">
-        <label>Video Uploads:</label>
+    <div class="form-group <?=(isset ($errors['enable_uploads'])) ? 'has-error' : ''?>">
+        <label class="control-label">Video Uploads:</label>
         <span id="enable_uploads"><?=(Settings::Get('enable_uploads')=='1')?'Enabled':'Disabled'?></span>
     </div>
 
-    <div class="form-group <?=(isset ($errors['debug_conversion'])) ? ' error' : ''?>">
-        <label>Log Encoding:</label>
+    <div class="form-group <?=(isset ($errors['debug_conversion'])) ? 'has-error' : ''?>">
+        <label class="control-label">Log Encoding:</label>
         <select name="debug_conversion" class="form-control">
             <option value="1" <?=($data['debug_conversion']=='1')?'selected="selected"':''?>>On</option>
             <option value="0" <?=($data['debug_conversion']=='0')?'selected="selected"':''?>>Off</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['php'])) ? ' error' : ''?>">
-        <label>PHP Path:</label>
+    <div class="form-group <?=(isset ($errors['php'])) ? 'has-error' : ''?>">
+        <label class="control-label">PHP Path:</label>
         <input class="form-control" type="text" name="php" value="<?=$data['php']?>" />
         <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
     </div>
 
-    <div class="form-group <?=(isset ($errors['ffmpeg'])) ? ' error' : ''?>">
-        <label>FFMPEG Path:</label>
+    <div class="form-group <?=(isset ($errors['ffmpeg'])) ? 'has-error' : ''?>">
+        <label class="control-label">FFMPEG Path:</label>
         <input class="form-control" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
         <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
     </div>
 
-    <div class="form-group <?=(isset($errors['h264_encoding_options'])) ? ' error' : ''?>">
-        <label>H.264 Encoding Options:</label>
+    <div class="form-group <?=(isset($errors['h264_encoding_options'])) ? 'has-error' : ''?>">
+        <label class="control-label">H.264 Encoding Options:</label>
         <input class="form-control" type="text" name="h264_encoding_options" value="<?=htmlspecialchars($data['h264_encoding_options'])?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['webm_encoding_enabled'])) ? ' error' : ''?>">
-        <label>WebM Encoding:</label>
+    <div class="form-group <?=(isset($errors['webm_encoding_enabled'])) ? 'has-error' : ''?>">
+        <label class="control-label">WebM Encoding:</label>
         <select data-toggle="webm-encoding-options" name="webm_encoding_enabled" class="form-control">
             <option value="1" <?=($data['webm_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['webm_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div> 
 
-    <div id="webm-encoding-options" class="form-group <?=(isset($errors['webm_encoding_options'])) ? ' error' : ''?> <?=($data['webm_encoding_enabled'] == '0') ? 'hide' : ''?>">
-        <label>WebM Encoding Options:</label>
+    <div id="webm-encoding-options" class="form-group <?=(isset($errors['webm_encoding_options'])) ? 'has-error' : ''?> <?=($data['webm_encoding_enabled'] == '0') ? 'hide' : ''?>">
+        <label class="control-label">WebM Encoding Options:</label>
         <input class="form-control" type="text" name="webm_encoding_options" value="<?=htmlspecialchars($data['webm_encoding_options'])?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['theora_encoding_enabled'])) ? ' error' : ''?>">
-        <label>Theora Encoding:</label>
+    <div class="form-group <?=(isset($errors['theora_encoding_enabled'])) ? 'has-error' : ''?>">
+        <label class="control-label">Theora Encoding:</label>
         <select data-toggle="theora-encoding-options" name="theora_encoding_enabled" class="form-control">
             <option value="1" <?=($data['theora_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['theora_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div> 
 
-    <div id="theora-encoding-options" class="form-group <?=(isset($errors['theora_encoding_options'])) ? ' error' : ''?> <?=($data['theora_encoding_enabled'] == '0') ? 'hide' : ''?>">
-        <label>Theora Encoding Options:</label>
+    <div id="theora-encoding-options" class="form-group <?=(isset($errors['theora_encoding_options'])) ? 'has-error' : ''?> <?=($data['theora_encoding_enabled'] == '0') ? 'hide' : ''?>">
+        <label class="control-label">Theora Encoding Options:</label>
         <input class="form-control" type="text" name="theora_encoding_options" value="<?=htmlspecialchars($data['theora_encoding_options'])?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['mobile_encoding_enabled'])) ? ' error' : ''?>">
-        <label>Mobile Encoding:</label>
+    <div class="form-group <?=(isset($errors['mobile_encoding_enabled'])) ? 'has-error' : ''?>">
+        <label class="control-label">Mobile Encoding:</label>
         <select data-toggle="mobile-encoding-options" name="mobile_encoding_enabled" class="form-control">
             <option value="1" <?=($data['mobile_encoding_enabled'] == '1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['mobile_encoding_enabled'] == '0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div> 
 
-    <div id="mobile-encoding-options" class="form-group <?=(isset($errors['mobile_encoding_options'])) ? ' error' : ''?> <?=($data['mobile_encoding_enabled'] == '0') ? 'hide' : ''?>">
-        <label>Mobile Encoding Options:</label>
+    <div id="mobile-encoding-options" class="form-group <?=(isset($errors['mobile_encoding_options'])) ? 'has-error' : ''?> <?=($data['mobile_encoding_enabled'] == '0') ? 'hide' : ''?>">
+        <label class="control-label">Mobile Encoding Options:</label>
         <input class="form-control" type="text" name="mobile_encoding_options" value="<?=htmlspecialchars($data['mobile_encoding_options'])?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['thumb_encoding_options'])) ? ' error' : ''?>">
-        <label>Thumbnail Options:</label>
+    <div class="form-group <?=(isset ($errors['thumb_encoding_options'])) ? 'has-error' : ''?>">
+        <label class="control-label">Thumbnail Options:</label>
         <input class="form-control" type="text" name="thumb_encoding_options" value="<?=htmlspecialchars($data['thumb_encoding_options'])?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['video_size_limit'])) ? ' error' : ''?>">
-        <label>Video Site Limit:</label>
+    <div class="form-group <?=(isset ($errors['video_size_limit'])) ? 'has-error' : ''?>">
+        <label class="control-label">Video Site Limit:</label>
         <input class="form-control" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
         (Bytes)
     </div>
 
-    <div class="form-group <?=(isset($errors['keep_original_video'])) ? ' error' : ''?>">
-        <label>Keep Original Video:</label>
+    <div class="form-group <?=(isset($errors['keep_original_video'])) ? 'has-error' : ''?>">
+        <label class="control-label">Keep Original Video:</label>
         <select name="keep_original_video" class="form-control">
             <option value="1" <?=($data['keep_original_video'] == '1')?'selected="selected"':''?>>Keep</option>
             <option value="0" <?=($data['keep_original_video'] == '0')?'selected="selected"':''?>>Discard</option>

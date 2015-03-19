@@ -28,7 +28,7 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     if ($page) {
         $pageService->delete($page);
         $message = 'Page has been deleted';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 
 }
@@ -113,7 +113,7 @@ include ('header.php');
 
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="filters">

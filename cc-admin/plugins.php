@@ -33,13 +33,13 @@ if (!empty($_GET['uninstall'])) {
 
         // Delete plugin files
         $message = $plugin->name . ' plugin has been uninstalled';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         try {
             Filesystem::delete(DOC_ROOT . '/cc-content/plugins/' . $pluginName);
         } catch (Exception $e) {
             $message = $plugin->name . ' was uninstalled. However, the following errors occured during removal of plugin files. '
             . 'They need to be removed manually.<br><br>' . $e->getMessage();
-            $message_type = 'errors';
+            $message_type = 'alert-danger';
         }
     }
 }
@@ -59,7 +59,7 @@ elseif (!empty($_GET['install'])) {
         $installedPlugins = Plugin::getInstalledPlugins();
         $enabledPlugins = Plugin::getEnabledPlugins();
         $message = $plugin->name . ' has been installed.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -75,7 +75,7 @@ elseif (!empty($_GET['enable'])) {
         Plugin::enablePlugin($pluginName);
         $enabledPlugins = Plugin::getEnabledPlugins();
         $message = $plugin->name . ' has been enabled.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -91,7 +91,7 @@ elseif (!empty($_GET['disable'])) {
         $enabledPlugins = Plugin::getEnabledPlugins();
         $plugin = Plugin::getPlugin($pluginName);
         $message = $plugin->name . ' has been disabled.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -116,11 +116,11 @@ include('header.php');
 
 
 <?php foreach($invalidPluginList as $invalidPlugin): ?>
-    <div class="message notice">Plugin "<?=$invalidPlugin?>" is invalid and cannot be loaded.</div>
+    <div class="alert alert-warning">Plugin "<?=$invalidPlugin?>" is invalid and cannot be loaded.</div>
 <?php endforeach; ?>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 

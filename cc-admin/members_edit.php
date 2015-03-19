@@ -138,12 +138,12 @@ if (isset($_POST['submitted'])) {
 
         if (isset($password)) $user->password = md5($user->password);
         $message = 'Member has been updated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         $userMapper->save($user);
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br><br> - ' . implode('<br> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -155,7 +155,7 @@ include ('header.php');
 <h1>Update Member</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <p><a href="<?=$list_page?>">Return to previous screen</a></p>
@@ -163,8 +163,8 @@ include ('header.php');
 
 <form action="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" method="post">
 
-    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
-        <label>*Status:</label>
+    <div class="form-group <?=(isset($errors['status'])) ? 'has-error' : ''?>">
+        <label class="control-label">*Status:</label>
         <select name="status" class="form-control">
             <option value="active"<?=(isset($data['status']) && $data['status'] == 'active') || (!isset($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
             <option value="new"<?=(isset($data['status']) && $data['status'] == 'new') || (!isset($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
@@ -173,8 +173,8 @@ include ('header.php');
         </select>
     </div>
 
-    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
-        <label>*Role:</label>
+    <div class="form-group <?=(isset($errors['status'])) ? 'has-error' : ''?>">
+        <label class="control-label">*Role:</label>
         <select name="role" class="form-control">
         <?php foreach ((array) $config->roles as $key => $value): ?>
             <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value->name?></option>
@@ -182,8 +182,8 @@ include ('header.php');
         </select>
     </div>
 
-    <div class="form-group <?=(isset($errors['email'])) ? ' error' : ''?>">
-        <label>*Email:</label>
+    <div class="form-group <?=(isset($errors['email'])) ? 'has-error' : ''?>">
+        <label class="control-label">*Email:</label>
         <input class="form-control" type="text" name="email" value="<?=$user->email?>" />
     </div>
 
@@ -197,23 +197,23 @@ include ('header.php');
         <input name="password" type="password" class="form-control mask" value="" />
     </div>
 
-    <div class="form-group <?=(isset($errors['first_name'])) ? ' error' : ''?>">
-        <label>First Name:</label>
+    <div class="form-group <?=(isset($errors['first_name'])) ? 'has-error' : ''?>">
+        <label class="control-label">First Name:</label>
         <input class="form-control" type="text" name="first_name" value="<?=htmlspecialchars($user->firstName)?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['last_name'])) ? ' error' : ''?>">
-        <label>Last Name:</label>
+    <div class="form-group <?=(isset($errors['last_name'])) ? 'has-error' : ''?>">
+        <label class="control-label">Last Name:</label>
         <input class="form-control" type="text" name="last_name" value="<?=htmlspecialchars($user->lastName)?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['website'])) ? ' error' : ''?>">
-        <label>Website:</label>
+    <div class="form-group <?=(isset($errors['website'])) ? 'has-error' : ''?>">
+        <label class="control-label">Website:</label>
         <input class="form-control" type="text" name="website" value="<?=htmlspecialchars($user->website)?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['about_me'])) ? ' error' : ''?>">
-        <label>About Me:</label>
+    <div class="form-group <?=(isset($errors['about_me'])) ? 'has-error' : ''?>">
+        <label class="control-label">About Me:</label>
         <textarea rows="7" cols="50" class="form-control" name="about_me"><?=htmlspecialchars($user->aboutMe)?></textarea>
     </div>
 

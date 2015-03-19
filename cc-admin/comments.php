@@ -28,7 +28,7 @@ if (!empty($_GET['delete']) && is_numeric($_GET['delete']) && $_GET['delete'] > 
     if ($comment) {
         $commentService->delete($comment);
         $message = 'Comment has been deleted';
-        $messageType = 'success';
+        $messageType = 'alert-success';
     }
 }
 
@@ -41,7 +41,7 @@ else if (!empty($_GET['approve']) && is_numeric($_GET['approve']) && $_GET['appr
     if ($comment) {
         $commentService->approve($comment, 'approve');
         $message = 'Comment has been approved';
-        $messageType = 'success';
+        $messageType = 'alert-success';
     }
 }
 
@@ -54,7 +54,7 @@ else if (!empty($_GET['unban']) && is_numeric($_GET['unban']) && $_GET['unban'] 
     if ($comment) {
         $commentService->approve($comment, 'approve');
         $message = 'Comment has been unbanned';
-        $messageType = 'success';
+        $messageType = 'alert-success';
     }
 }
 
@@ -70,7 +70,7 @@ else if (!empty($_GET['ban']) && is_numeric($_GET['ban']) && $_GET['ban'] > 0) {
         $flagService = new FlagService();
         $flagService->flagDecision($comment, true);
         $message = 'Comment has been banned';
-        $messageType = 'success';
+        $messageType = 'alert-success';
     }
 }
 
@@ -147,7 +147,7 @@ include('header.php');
 
 
 <?php if ($message): ?>
-<div class="message <?=$messageType?>"><?=$message?></div>
+<div class="alert <?=$messageType?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="filters">

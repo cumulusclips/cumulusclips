@@ -43,12 +43,12 @@ if (!empty($_GET['delete']) && !ctype_space($_GET['delete'])) {
         // Delete language file
         $xml = simplexml_load_file($language_file);
         $message = $xml->information->lang_name . ' language has been deleted';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         try {
             Filesystem::delete($language_file);
         } catch (Exception $e) {
             $message = $e->getMessage();
-            $message_type = 'errors';
+            $message_type = 'alert-danger';
         }
     }
 }
@@ -68,7 +68,7 @@ else if (!empty($_GET['activate']) && !ctype_space($_GET['activate'])) {
         $languageSystemNames[] = $_GET['activate'];
         Settings::set('active_languages', json_encode($active_languages));
         $message = $xml->information->lang_name . ' has been activated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -83,7 +83,7 @@ else if (!empty($_GET['deactivate']) && !ctype_space($_GET['deactivate'])) {
         unset($active_languages[$key]);
         Settings::set('active_languages', json_encode(array_values($active_languages)));
         $message = $xml->information->lang_name . ' has been deactivated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -97,7 +97,7 @@ else if (!empty($_GET['default']) && !ctype_space($_GET['default'])) {
         $xml = simplexml_load_file($language_file);
         Settings::set('default_language', $_GET['default']);
         $message = $xml->information->lang_name . ' is now the default language.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -122,7 +122,7 @@ include ('header.php');
 <h1>Languages</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 

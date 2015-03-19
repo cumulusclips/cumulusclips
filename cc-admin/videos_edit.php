@@ -171,11 +171,11 @@ if (isset ($_POST['submitted'])) {
 
         $videoMapper->save($video);
         $message = 'Video has been updated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 
 }
@@ -189,14 +189,14 @@ include ('header.php');
 <h1>Edit Video</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
 <form action="<?=ADMIN?>/videos_edit.php?id=<?=$video->videoId?>" method="post">
 
-    <div class="form-group <?=(isset ($errors['status'])) ? ' error' : ''?>">
+    <div class="form-group <?=(isset ($errors['status'])) ? 'has-error' : ''?>">
         <label>Status:</label>
         <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
             <select name="status" class="form-control">
@@ -210,22 +210,22 @@ include ('header.php');
 
     </div>
 
-    <div class="form-group <?=(isset ($errors['title'])) ? ' error' : ''?>">
-        <label>Title:</label>
+    <div class="form-group <?=(isset ($errors['title'])) ? 'has-error' : ''?>">
+        <label class="control-label">Title:</label>
         <input class="form-control" type="text" name="title" value="<?=htmlspecialchars($video->title)?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['description'])) ? ' error' : ''?>">
-        <label>Description:</label>
+    <div class="form-group <?=(isset ($errors['description'])) ? 'has-error' : ''?>">
+        <label class="control-label">Description:</label>
         <textarea rows="7" cols="50" class="form-control" name="description"><?=htmlspecialchars($video->description)?></textarea>
     </div>
 
-    <div class="form-group <?=(isset ($errors['tags'])) ? ' error' : ''?>">
-        <label>Tags:</label>
+    <div class="form-group <?=(isset ($errors['tags'])) ? 'has-error' : ''?>">
+        <label class="control-label">Tags:</label>
         <input class="form-control" type="text" name="tags" value="<?=htmlspecialchars(implode (', ', $video->tags))?>" /> (Comma Delimited)
     </div>
 
-    <div class="form-group <?=(isset ($errors['cat_id'])) ? ' error' : ''?>">
+    <div class="form-group <?=(isset ($errors['cat_id'])) ? 'has-error' : ''?>">
         <label>Category:</label>
         <select class="form-control" name="cat_id">
         <?php foreach ($categories as $category): ?>

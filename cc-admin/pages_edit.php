@@ -91,11 +91,11 @@ if (isset($_POST['submitted'])) {
     if (empty($errors)) {
         $pageMapper->save($page);
         $message = 'Page has been updated';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     } else {
         $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
         $message .= implode('<br />- ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -107,21 +107,21 @@ include('header.php');
 <h1>Edit Page</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
 <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
 
-    <div class="form-group <?=(isset($errors['title'])) ? 'error' : '' ?>">
-        <label>*Title:</label>
+    <div class="form-group <?=(isset($errors['title'])) ? 'has-error' : '' ?>">
+        <label class="control-label">*Title:</label>
         <input id="page-title" class="form-control" type="text" name="title" value="<?=$page->title?>" />
     </div>
 
-    <div id="page-slug" class="form-group <?=(isset($errors['title'])) ? 'error' : '' ?>">
+    <div id="page-slug" class="form-group <?=(isset($errors['title'])) ? 'has-error' : '' ?>">
 
-        <label>*URL:</label>
+        <label class="control-label">*URL:</label>
         <input type="hidden" name="slug" value="<?=$page->slug?>" />
 
         <div id="empty-slug">

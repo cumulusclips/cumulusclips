@@ -127,13 +127,13 @@ if (isset($_POST['submitted'])) {
         $videoUploadMessage = null;
         $originalVideoName = null;
         $message = 'Video has been created.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         $video = null;
         
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 
 }
@@ -148,12 +148,12 @@ include('header.php');
 
 <h1>Add Video</h1>
 
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 
 <form action="<?=ADMIN?>/videos_add.php" method="post">
 
-    <div class="form-group <?=(isset ($errors['video'])) ? 'error' : ''?>">
-        <label>Video File:</label>
+    <div class="form-group <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
+        <label class="control-label">Video File:</label>
         <div id="upload-select-file" class="button">
             <span>Browse</span>
             <input id="upload" type="file" name="upload" />
@@ -181,23 +181,23 @@ include('header.php');
         </div>
     </div>
 
-    <div class="form-group <?=(isset($errors['title'])) ? 'error' : ''?>">
-        <label>Title:</label>
+    <div class="form-group <?=(isset($errors['title'])) ? 'has-error' : ''?>">
+        <label class="control-label">Title:</label>
         <input class="form-control" type="text" name="title" value="<?=(!empty($video->title)) ? htmlspecialchars($video->title) : ''?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['description'])) ? 'error' : ''?>">
-        <label>Description:</label>
+    <div class="form-group <?=(isset($errors['description'])) ? 'has-error' : ''?>">
+        <label class="control-label">Description:</label>
         <textarea rows="7" cols="50" class="form-control" name="description"><?=(!empty($video->description)) ? htmlspecialchars($video->description) : ''?></textarea>
     </div>
 
-    <div class="form-group <?=(isset($errors['tags'])) ? 'error' : ''?>">
-        <label>Tags:</label>
+    <div class="form-group <?=(isset($errors['tags'])) ? 'has-error' : ''?>">
+        <label class="control-label">Tags:</label>
         <input class="form-control" type="text" name="tags" value="<?=(!empty($video->tags)) ? htmlspecialchars(implode(', ', $video->tags)) : ''?>" /> (Comma Delimited)
     </div>
 
-    <div class="form-group <?=(isset($errors['cat_id'])) ? 'error' : ''?>">
-        <label>Category:</label>
+    <div class="form-group <?=(isset($errors['cat_id'])) ? 'has-error' : ''?>">
+        <label class="control-label">Category:</label>
         <select class="form-control" name="cat_id">
         <?php foreach ($categories as $category): ?>
             <option value="<?=$category->categoryId?>" <?=(!empty($video->categoryId) && $video->categoryId == $category->categoryId) ? '' : 'selected="selected"'?>><?=$category->name?></option>
@@ -220,8 +220,8 @@ include('header.php');
         <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL)</em>
     </div>
 
-    <div id="private-url" class="form-group <?=(isset($errors['private_url'])) ? 'error' : ''?> <?=(!empty($video->private)) ? '' : 'hide'?>">
-        <label>Private URL:</label>
+    <div id="private-url" class="form-group <?=(isset($errors['private_url'])) ? 'has-error' : ''?> <?=(!empty($video->private)) ? '' : 'hide'?>">
+        <label class="control-label">Private URL:</label>
         <?=HOST?>/private/videos/<span><?=$private_url?></span>/
         <input type="hidden" name="private_url" value="<?=$private_url?>" />
         <a href="" class="small">Regenerate</a>
@@ -234,7 +234,7 @@ include('header.php');
 
     <input type="hidden" name="submitted" value="TRUE" />
     <input type="submit" class="button" value="Add Video" />
-</form>
 
+</form>
 
 <?php include('footer.php'); ?>

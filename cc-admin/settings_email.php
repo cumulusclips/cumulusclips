@@ -135,11 +135,11 @@ if (isset($_POST['submitted'])) {
         }
         $data['smtp'] = json_decode($data['smtp']);
         $message = 'Settings have been updated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -153,39 +153,39 @@ include('header.php');
 <h1>Email Settings</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <form action="<?=ADMIN?>/settings_email.php" method="post">
 
     <p class="h3">System Alerts</p>
 
-    <div class="form-group <?=(isset ($errors['alerts_videos'])) ? ' error' : ''?>">
-        <label>New Video Alerts:</label>
+    <div class="form-group <?=(isset ($errors['alerts_videos'])) ? 'has-error' : ''?>">
+        <label class="control-label">New Video Alerts:</label>
         <select name="alerts_videos" class="form-control">
             <option value="1" <?=($data['alerts_videos']=='1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['alerts_videos']=='0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['alerts_comments'])) ? ' error' : ''?>">
-        <label>Video Comment Alerts:</label>
+    <div class="form-group <?=(isset ($errors['alerts_comments'])) ? 'has-error' : ''?>">
+        <label class="control-label">Video Comment Alerts:</label>
         <select name="alerts_comments" class="form-control">
             <option value="1" <?=($data['alerts_comments']=='1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['alerts_comments']=='0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['alerts_users'])) ? ' error' : ''?>">
-        <label>New Member Alerts:</label>
+    <div class="form-group <?=(isset ($errors['alerts_users'])) ? 'has-error' : ''?>">
+        <label class="control-label">New Member Alerts:</label>
         <select name="alerts_users" class="form-control">
             <option value="1" <?=($data['alerts_users']=='1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['alerts_users']=='0')?'selected="selected"':''?>>Disabled</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['alerts_flags'])) ? ' error' : ''?>">
-        <label>Flagged Content Alerts:</label>
+    <div class="form-group <?=(isset ($errors['alerts_flags'])) ? 'has-error' : ''?>">
+        <label class="control-label">Flagged Content Alerts:</label>
         <select name="alerts_flags" class="form-control">
             <option value="1" <?=($data['alerts_flags']=='1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['alerts_flags']=='0')?'selected="selected"':''?>>Disabled</option>
@@ -196,18 +196,18 @@ include('header.php');
 
     <p class="h3">Email Configuration</p>
 
-    <div class="form-group <?=(isset ($errors['from_name'])) ? ' error' : ''?>">
-        <label>"From" Name:</label>
+    <div class="form-group <?=(isset ($errors['from_name'])) ? 'has-error' : ''?>">
+        <label class="control-label">"From" Name:</label>
         <input class="form-control" type="text" name="from_name" value="<?=htmlspecialchars($data['from_name'])?>" /> <a class="more-info" title="If left blank, defaults to '<?=Settings::get('sitename')?>'">More Info</a>
     </div>
 
-    <div class="form-group <?=(isset ($errors['from_address'])) ? ' error' : ''?>">
-        <label>"From" Email Address:</label>
+    <div class="form-group <?=(isset ($errors['from_address'])) ? 'has-error' : ''?>">
+        <label class="control-label">"From" Email Address:</label>
         <input class="form-control" type="text" name="from_address" value="<?=htmlspecialchars($data['from_address'])?>" /> <a class="more-info" title="If left blank, defaults to 'cumulusclips@<?=$_SERVER['SERVER_NAME']?>'">More Info</a>
     </div>
 
-    <div class="form-group <?=(isset ($errors['smtp_enabled'])) ? ' error' : ''?>">
-        <label>SMTP Authentication:</label>
+    <div class="form-group <?=(isset ($errors['smtp_enabled'])) ? 'has-error' : ''?>">
+        <label class="control-label">SMTP Authentication:</label>
         <select data-toggle="smtp_auth" name="smtp_enabled" class="form-control">
             <option value="1" <?=($data['smtp']->enabled)?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=(!$data['smtp']->enabled)?'selected="selected"':''?>>Disabled</option>
@@ -217,23 +217,23 @@ include('header.php');
     <!-- BEGIN SMTP AUTH SETTINGS -->
     <div id="smtp_auth" class="<?=(!$data['smtp']->enabled)?'hide':''?>">
 
-        <div class="form-group <?=(isset ($errors['smtp_host'])) ? ' error' : ''?>">
-            <label>SMTP Host:</label>
+        <div class="form-group <?=(isset ($errors['smtp_host'])) ? 'has-error' : ''?>">
+            <label class="control-label">SMTP Host:</label>
             <input class="form-control" type="text" name="smtp_host" value="<?=htmlspecialchars($data['smtp_host'])?>" />
         </div>
 
-        <div class="form-group <?=(isset ($errors['smtp_port'])) ? ' error' : ''?>">
-            <label>SMTP Port:</label>
+        <div class="form-group <?=(isset ($errors['smtp_port'])) ? 'has-error' : ''?>">
+            <label class="control-label">SMTP Port:</label>
             <input class="form-control" type="text" name="smtp_port" value="<?=$data['smtp_port']?>" />
         </div>
 
-        <div class="form-group <?=(isset ($errors['smtp_username'])) ? ' error' : ''?>">
-            <label>SMTP Username:</label>
+        <div class="form-group <?=(isset ($errors['smtp_username'])) ? 'has-error' : ''?>">
+            <label class="control-label">SMTP Username:</label>
             <input class="form-control" type="text" name="smtp_username" value="<?=htmlspecialchars($data['smtp_username'])?>" />
         </div>
 
-        <div class="form-group <?=(isset ($errors['smtp_password'])) ? ' error' : ''?>">
-            <label>SMTP Password:</label>
+        <div class="form-group <?=(isset ($errors['smtp_password'])) ? 'has-error' : ''?>">
+            <label class="control-label">SMTP Password:</label>
             <input class="form-control mask" type="password" name="smtp_password" value="<?=htmlspecialchars($data['smtp_password'])?>" />
         </div>
 

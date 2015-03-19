@@ -38,7 +38,7 @@ if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
                 $videoMapper->save($video);
                 $flagService->flagDecision($video, true);
                 $message = 'Video has been banned';
-                $message_type = 'success';
+                $message_type = 'alert-success';
             }
             break;
         case 'user':
@@ -46,17 +46,17 @@ if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
             if ($user) {
                 if ($user->userId == $adminUser->userId) {
                     $message = 'You can\'t ban yourself, silly!';
-                    $message_type = 'errors';
+                    $message_type = 'alert-danger';
                 } else if ($user->role == 'administrator') {
                     $message = 'Administrators can\'t be banned. Change their role to that of a normal user first.';
-                    $message_type = 'errors';
+                    $message_type = 'alert-danger';
                 } else {
                     $user->status = 'banned';
                     $userMapper->save($user);
                     $flagService->flagDecision($user, true);
                     $userService->updateContentStatus ($user, 'banned');
                     $message = 'Member has been banned';
-                    $message_type = 'success';
+                    $message_type = 'alert-success';
                 }
             }
             break;
@@ -67,7 +67,7 @@ if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
                 $commentMapper->save($comment);
                 $flagService->flagDecision($comment, true);
                 $message = 'Comment has been banned';
-                $message_type = 'success';
+                $message_type = 'alert-success';
             }
             break;
     }
@@ -93,7 +93,7 @@ else if (!empty($_GET['dismiss']) && is_numeric($_GET['dismiss'])) {
     if ($contentObject) {
         $flagService->flagDecision($contentObject, false);
         $message = 'Flags has been dismissed';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -148,7 +148,7 @@ include ('header.php');
 <h1><?=$header?></h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="filters">

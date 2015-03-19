@@ -84,11 +84,11 @@ if (isset($_POST['submitted'])) {
             Settings::set($key, $value);
         }
         $message = 'Settings have been updated.';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -102,52 +102,52 @@ include ('header.php');
 <h1>General Settings</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <form action="<?=ADMIN?>/settings.php" method="post">
 
-    <div class="form-group <?=(isset ($errors['sitename'])) ? ' error' : ''?>">
-        <label>Sitename:</label>
+    <div class="form-group <?=(isset ($errors['sitename'])) ? 'has-error' : ''?>">
+        <label class="control-label">Sitename:</label>
         <input class="form-control" type="text" name="sitename" value="<?=$data['sitename']?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['base_url'])) ? ' error' : ''?>">
-        <label>Base URL:</label>
+    <div class="form-group <?=(isset ($errors['base_url'])) ? 'has-error' : ''?>">
+        <label class="control-label">Base URL:</label>
         <input class="form-control" type="text" name="base_url" value="<?=$data['base_url']?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['admin_email'])) ? ' error' : ''?>">
-        <label>Admin Email:</label>
+    <div class="form-group <?=(isset ($errors['admin_email'])) ? 'has-error' : ''?>">
+        <label class="control-label">Admin Email:</label>
         <input class="form-control" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['auto_approve_videos'])) ? ' error' : ''?>">
-        <label>Video Approval:</label>
+    <div class="form-group <?=(isset ($errors['auto_approve_videos'])) ? 'has-error' : ''?>">
+        <label class="control-label">Video Approval:</label>
         <select name="auto_approve_videos" class="form-control">
             <option value="1" <?=($data['auto_approve_videos']=='1')?'selected="selected"':''?>>Auto-Approve</option>
             <option value="0" <?=($data['auto_approve_videos']=='0')?'selected="selected"':''?>>Approval Required</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['auto_approve_users'])) ? ' error' : ''?>">
-        <label>Member Approval:</label>
+    <div class="form-group <?=(isset ($errors['auto_approve_users'])) ? 'has-error' : ''?>">
+        <label class="control-label">Member Approval:</label>
         <select name="auto_approve_users" class="form-control">
             <option value="1" <?=($data['auto_approve_users']=='1')?'selected="selected"':''?>>Auto-Approve</option>
             <option value="0" <?=($data['auto_approve_users']=='0')?'selected="selected"':''?>>Approval Required</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['auto_approve_comments'])) ? ' error' : ''?>">
-        <label>Comment Approval:</label>
+    <div class="form-group <?=(isset ($errors['auto_approve_comments'])) ? 'has-error' : ''?>">
+        <label class="control-label">Comment Approval:</label>
         <select name="auto_approve_comments" class="form-control">
             <option value="1" <?=($data['auto_approve_comments']=='1')?'selected="selected"':''?>>Auto-Approve</option>
             <option value="0" <?=($data['auto_approve_comments']=='0')?'selected="selected"':''?>>Approval Required</option>
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['mobile_site'])) ? ' error' : ''?>">
-        <label>Mobile Site:</label>
+    <div class="form-group <?=(isset ($errors['mobile_site'])) ? 'has-error' : ''?>">
+        <label class="control-label">Mobile Site:</label>
         <select name="mobile_site" class="form-control">
             <option value="1" <?=($data['mobile_site']=='1')?'selected="selected"':''?>>Enabled</option>
             <option value="0" <?=($data['mobile_site']=='0')?'selected="selected"':''?>>Disabled</option>

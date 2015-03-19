@@ -35,7 +35,7 @@ if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
     if ($video) {
         $videoService->delete($video);
         $message = 'Video has been deleted';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -48,7 +48,7 @@ else if (!empty($_GET['feature']) && is_numeric($_GET['feature'])) {
         $video->featured = true;
         $videoMapper->save($video);
         $message = 'Video has been featured';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -61,7 +61,7 @@ else if (!empty($_GET['unfeature']) && is_numeric($_GET['unfeature'])) {
         $video->featured = false;
         $videoMapper->save($video);
         $message = 'Video has been unfeatured';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -73,7 +73,7 @@ else if (!empty($_GET['approve']) && is_numeric($_GET['approve'])) {
     if ($video) {
         $videoService->approve($video, 'approve');
         $message = 'Video has been approved and is now available';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -85,7 +85,7 @@ else if (!empty($_GET['unban']) && is_numeric($_GET['unban'])) {
     if ($video) {
         $videoService->approve($video, 'approve');
         $message = 'Video has been unbanned';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -100,7 +100,7 @@ else if (!empty($_GET['ban']) && is_numeric ($_GET['ban'])) {
         $flagService = new FlagService();
         $flagService->flagDecision($video, true);
         $message = 'Video has been banned';
-        $message_type = 'success';
+        $message_type = 'alert-success';
     }
 }
 
@@ -196,7 +196,7 @@ include('header.php');
 
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <div class="filters">

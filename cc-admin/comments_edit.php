@@ -82,12 +82,12 @@ if (isset($_POST['submitted'])) {
         }
 
         $message = 'Comment has been updated';
-        $message_type = 'success';
+        $message_type = 'alert-success';
         $commentMapper->save($comment);
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
-        $message_type = 'errors';
+        $message_type = 'alert-danger';
     }
 }
 
@@ -99,7 +99,7 @@ include('header.php');
 <h1>Update Comment</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <p><a href="<?=$list_page?>">Return to previous screen</a></p>
@@ -113,8 +113,8 @@ include('header.php');
         <p><strong>Username:</strong> <a target="_ccsite" href="<?=HOST . '/members/' . $user->username?>/"><?=$user->username?></a></p>
     </div>
 
-    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
-        <label>Status:</label>
+    <div class="form-group <?=(isset($errors['status'])) ? 'has-error' : ''?>">
+        <label class="control-label">Status:</label>
         <select name="status" class="form-control">
             <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
             <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
@@ -122,8 +122,8 @@ include('header.php');
         </select>
     </div>
 
-    <div class="form-group <?=(isset($errors['comment'])) ? ' error' : ''?>">
-        <label>Comments:</label>
+    <div class="form-group <?=(isset($errors['comments'])) ? 'has-error' : ''?>">
+        <label class="control-label">Comments:</label>
         <textarea rows="7" cols="50" class="form-control" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
     </div>
 
