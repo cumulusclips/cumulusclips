@@ -29,8 +29,8 @@ body {
 }
 
 main {
-    padding: 15px;
-    width: 785px;
+    padding: 15px 30px;
+    width: 725px;
     display: block;
     background-color: #FFF;
     margin: -15px 0 35px 25px;
@@ -38,6 +38,7 @@ main {
     -webkit-box-shadow: 0px 0px 4px 4px rgba(1, 1, 1, 0.1);
     box-shadow: 0px 0px 4px 4px rgba(1, 1, 1, 0.1);
     float: left;
+    box-sizing: content-box;
 }
 
 
@@ -245,7 +246,8 @@ FILTERS
     float: right;
 }
 
-.search .text {
+.search .form-control {
+    display: inline-block;
     width: 175px;
 }
 
@@ -352,19 +354,15 @@ FORM & MESSAGE STYLES
     font-weight:bold;
 }
 
-.text {
-    border:1px solid #CCC;
-    border-radius:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    padding:5px;
+.form-group input[type="checkbox"] + label {
+    margin-left: 5px; 
+}
+
+.form-control {
     width:300px;
 }
 
-textarea.text {
+textarea.form-control {
     width:auto;
     height:auto;
 }

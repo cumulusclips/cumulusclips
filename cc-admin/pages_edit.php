@@ -110,74 +110,67 @@ include('header.php');
 <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
+<p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-<div class="block">
+<form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
 
-    <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+    <div class="form-group <?=(isset($errors['title'])) ? 'error' : '' ?>">
+        <label>*Title:</label>
+        <input id="page-title" class="form-control" type="text" name="title" value="<?=$page->title?>" />
+    </div>
 
-    <form method="post" action="<?=ADMIN?>/pages_edit.php?id=<?=$page->pageId?>">
+    <div id="page-slug" class="form-group <?=(isset($errors['title'])) ? 'error' : '' ?>">
 
-        <div class="row <?=(isset($errors['title'])) ? 'error' : '' ?>">
-            <label>*Title:</label>
-            <input id="page-title" class="text" type="text" name="title" value="<?=$page->title?>" />
+        <label>*URL:</label>
+        <input type="hidden" name="slug" value="<?=$page->slug?>" />
+
+        <div id="empty-slug">
+            Not Set
+            <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
         </div>
 
-        <div id="page-slug" class="row  <?=(isset($errors['title'])) ? 'error' : '' ?>">
+        <div id="view-slug">
+            <?=HOST?>/<span><?=$page->slug?></span>/
+            <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+        </div>
 
-            <label>*URL:</label>
-            <input type="hidden" name="slug" value="<?=$page->slug?>" />
-
-            <div id="empty-slug">
-                Not Set
-                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
+        <div id="edit-slug" class="form-inline">
+            <?=HOST?>/<input class="form-control" type="text" name="edit-slug" />/
+            <div class="options">
+                <a tabindex="-1" href="" class="done">Done</a>
+                <a tabindex="-1" href="" class="cancel">Cancel</a>
             </div>
-
-            <div id="view-slug">
-                <?=HOST?>/<span><?=$page->slug?></span>/
-                <div class="options"><a tabindex="-1" href="" class="edit">Edit</a></div>
-            </div>
-
-            <div id="edit-slug">
-                <?=HOST?>/<input class="text" type="text" name="edit-slug" />/
-                <div class="options">
-                    <a tabindex="-1" href="" class="done">Done</a>
-                    <a tabindex="-1" href="" class="cancel">Cancel</a>
-                </div>
-            </div>
-
         </div>
 
-        <div class="row">
-            <label>Content:</label>
-            <textarea class="text tinymce" name="content" rows="7" cols="50"><?=$page->content?></textarea>
-        </div>
+    </div>
 
-        <div class="row">
-            <label>*Status:</label>
-            <select class="dropdown" name="status">
-                <option <?=($page->status=='published')?'selected="selected"':''?> value="published">Published</option>
-                <option <?=($page->status=='draft')?'selected="selected"':''?> value="draft">Draft</option>
-            </select>
-        </div>
+    <div class="form-group">
+        <label>Content:</label>
+        <textarea class="form-control tinymce" name="content" rows="7" cols="50"><?=$page->content?></textarea>
+    </div>
 
-        <div class="row">
-            <label>*Layout:</label>
-            <select class="dropdown" name="layout">
-                <?php foreach ($layouts as $layout): ?>
-                    <option <?=($page->layout==$layout)?'selected="selected"':''?> value="<?=$layout?>"><?=$layout?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <div class="form-group">
+        <label>*Status:</label>
+        <select class="form-control" name="status">
+            <option <?=($page->status=='published')?'selected="selected"':''?> value="published">Published</option>
+            <option <?=($page->status=='draft')?'selected="selected"':''?> value="draft">Draft</option>
+        </select>
+    </div>
 
-        <div class="row-shift">
-            <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
-            <input type="hidden" name="submitted" value="TRUE" />
-            <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
-            <input type="submit" class="button" value="Update Page" />
-        </div>
+    <div class="form-group">
+        <label>*Layout:</label>
+        <select class="form-control" name="layout">
+            <?php foreach ($layouts as $layout): ?>
+                <option <?=($page->layout==$layout)?'selected="selected"':''?> value="<?=$layout?>"><?=$layout?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 
-    </form>
-</div>
+    <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
+    <input type="hidden" name="submitted" value="TRUE" />
+    <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
+    <input type="submit" class="button" value="Update Page" />
 
+</form>
 
 <?php include ('footer.php'); ?>

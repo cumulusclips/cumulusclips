@@ -109,77 +109,66 @@ include('header.php');
 
 ?>
 
-<div id="members-add">
+<h1>Add New Member</h1>
 
-    <h1>Add New Member</h1>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<p>An asterisk (*) denotes required field.</p>
 
+<form action="<?=ADMIN?>/members_add.php" method="post">
 
-    <div class="block">
-
-        <form action="<?=ADMIN?>/members_add.php" method="post">
-
-            <div class="row-shift">An asterisk (*) denotes required field.</div>
-
-            <div class="row<?=(isset ($errors['status'])) ? ' error' : ''?>">
-                <label>*Role:</label>
-                <select name="role" class="dropdown">
-                <?php foreach ((array) $config->roles as $key => $value): ?>
-                    <option value="<?=$key?>" <?=(isset ($user->role) && $user->role == $key)?'selected="selected"':''?>><?=$value->name?></option>
-                <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="row">
-                <label class="<?=(isset ($errors['email'])) ? 'error' : ''?>">*E-mail:</label>
-                <input name="email" type="text" class="text" value="<?=isset($user->email) ? $user->email : ''?>" />
-            </div>
-
-            <div class="row">
-                <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>">*Username:</label>
-                <input name="username" type="text" class="text" value="<?=isset($user->username) ? $user->username:''?>" maxlength="30" />
-                <br /><span id="status"></span>
-            </div>
-
-            <div class="row-shift">Username can only contain alphanumeric (a-z, 0-9) characters, no spaces or special characters.</div>
-
-            <div class="row">
-                <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">*Password:</label>
-                <input name="password" type="password" class="text mask" value="<?=isset($user->password) ? htmlspecialchars($user->password) : ''?>" />
-            </div>
-
-            <div class="row">
-                <label>First Name:</label>
-                <input name="first_name" type="text" class="text" value="<?=isset($user->firstName) ? htmlspecialchars($user->firstName) : ''?>" />
-            </div>
-
-            <div class="row">
-                <label>Last Name:</label>
-                <input name="last_name" type="text" class="text" value="<?=isset($user->lastName) ? htmlspecialchars($user->lastName) : ''?>" />
-            </div>
-
-            <div class="row">
-                <label class="<?=(isset ($errors['website'])) ? 'error' : ''?>">Website:</label>
-                <input name="website" type="text" class="text" value="<?=isset($user->website) ? htmlspecialchars($user->website) : ''?>" />
-            </div>
-
-            <div class="row">
-                <label>About Me:</label>
-                <textarea name="about_me" rows="5" cols="50" class="text"><?=isset($user->aboutMe) ? htmlspecialchars($user->aboutMe) : ''?></textarea>
-            </div>
-
-            <div class="row-shift">
-                <input type="hidden" name="submitted" value="TRUE" />
-                <input type="submit" class="button" value="Create Member" />
-            </div>
-
-        </form>
-
+    <div class="form-group <?=(isset ($errors['status'])) ? ' error' : ''?>">
+        <label>*Role:</label>
+        <select name="role" class="form-control">
+        <?php foreach ((array) $config->roles as $key => $value): ?>
+            <option value="<?=$key?>" <?=(isset ($user->role) && $user->role == $key)?'selected="selected"':''?>><?=$value->name?></option>
+        <?php endforeach; ?>
+        </select>
     </div>
 
-</div>
+    <div class="form-group">
+        <label class="<?=(isset ($errors['email'])) ? 'error' : ''?>">*E-mail:</label>
+        <input name="email" type="text" class="form-control" value="<?=isset($user->email) ? $user->email : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label class="<?=(isset ($errors['username'])) ? 'error' : ''?>">*Username:</label>
+        <input name="username" type="text" class="form-control" value="<?=isset($user->username) ? $user->username:''?>" maxlength="30" />
+        <br /><span id="status"></span>
+        <p>Username can only contain alphanumeric (a-z, 0-9) characters, no spaces or special characters.</p>
+    </div>
+
+
+    <div class="form-group">
+        <label class="<?=(isset ($errors['password'])) ? 'error' : ''?>">*Password:</label>
+        <input name="password" type="password" class="form-control mask" value="<?=isset($user->password) ? htmlspecialchars($user->password) : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label>First Name:</label>
+        <input name="first_name" type="text" class="form-control" value="<?=isset($user->firstName) ? htmlspecialchars($user->firstName) : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label>Last Name:</label>
+        <input name="last_name" type="text" class="form-control" value="<?=isset($user->lastName) ? htmlspecialchars($user->lastName) : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label class="<?=(isset ($errors['website'])) ? 'error' : ''?>">Website:</label>
+        <input name="website" type="text" class="form-control" value="<?=isset($user->website) ? htmlspecialchars($user->website) : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label>About Me:</label>
+        <textarea name="about_me" rows="5" cols="50" class="form-control"><?=isset($user->aboutMe) ? htmlspecialchars($user->aboutMe) : ''?></textarea>
+    </div>
+
+    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="submit" class="button" value="Create Member" />
+
+</form>
 
 <?php include ('footer.php'); ?>

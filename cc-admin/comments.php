@@ -170,7 +170,7 @@ include('header.php');
     <div class="search">
         <form method="POST" action="<?=ADMIN?>/comments.php?status=<?=$status?>">
             <input type="hidden" name="search_submitted" value="true" />
-            <input class="text" type="text" name="search" value="" />
+            <input class="form-control" type="text" name="search" value="" />
             <input type="submit" name="submit" class="button" value="Search" />
         </form>
     </div>

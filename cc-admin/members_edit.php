@@ -152,86 +152,74 @@ include ('header.php');
 
 ?>
 
-<div id="members-edit">
+<h1>Update Member</h1>
 
-    <h1>Update Member</h1>
+<?php if ($message): ?>
+<div class="message <?=$message_type?>"><?=$message?></div>
+<?php endif; ?>
 
-    <?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-    <?php endif; ?>
+<p><a href="<?=$list_page?>">Return to previous screen</a></p>
+<p>An asterisk (*) denotes required field.</p>
 
+<form action="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" method="post">
 
-    <div class="block">
-
-        <p><a href="<?=$list_page?>">Return to previous screen</a></p>
-
-        <form action="<?=ADMIN?>/members_edit.php?id=<?=$user->userId?>" method="post">
-
-            <div class="row-shift">An asterisk (*) denotes required field.</div>
-
-            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
-                <label>*Status:</label>
-                <select name="status" class="dropdown">
-                    <option value="active"<?=(isset($data['status']) && $data['status'] == 'active') || (!isset($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
-                    <option value="new"<?=(isset($data['status']) && $data['status'] == 'new') || (!isset($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
-                    <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                    <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>
-                </select>
-            </div>
-
-            <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
-                <label>*Role:</label>
-                <select name="role" class="dropdown">
-                <?php foreach ((array) $config->roles as $key => $value): ?>
-                    <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value->name?></option>
-                <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
-                <label>*Email:</label>
-                <input class="text" type="text" name="email" value="<?=$user->email?>" />
-            </div>
-
-            <div class="row">
-                <label>Username:</label>
-                <p><a href="<?=HOST?>/members/<?=$user->username?>/"><?=$user->username?></a></p>
-            </div>
-
-            <div class="row">
-                <label class="<?=(isset($errors['password'])) ? 'error' : ''?>">Password:</label>
-                <input name="password" type="password" class="text mask" value="" />
-            </div>
-
-            <div class="row<?=(isset($errors['first_name'])) ? ' error' : ''?>">
-                <label>First Name:</label>
-                <input class="text" type="text" name="first_name" value="<?=htmlspecialchars($user->firstName)?>" />
-            </div>
-
-            <div class="row<?=(isset($errors['last_name'])) ? ' error' : ''?>">
-                <label>Last Name:</label>
-                <input class="text" type="text" name="last_name" value="<?=htmlspecialchars($user->lastName)?>" />
-            </div>
-
-            <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
-                <label>Website:</label>
-                <input class="text" type="text" name="website" value="<?=htmlspecialchars($user->website)?>" />
-            </div>
-
-            <div class="row<?=(isset($errors['about_me'])) ? ' error' : ''?>">
-                <label>About Me:</label>
-                <textarea rows="7" cols="50" class="text" name="about_me"><?=htmlspecialchars($user->aboutMe)?></textarea>
-            </div>
-            
-            <div class="row-shift">
-                <input type="hidden" value="yes" name="submitted" />
-                <input type="submit" class="button" value="Update Member" />
-            </div>
-
-        </form>
-
+    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
+        <label>*Status:</label>
+        <select name="status" class="form-control">
+            <option value="active"<?=(isset($data['status']) && $data['status'] == 'active') || (!isset($data['status']) && $user->status == 'active')?' selected="selected"':''?>>Active</option>
+            <option value="new"<?=(isset($data['status']) && $data['status'] == 'new') || (!isset($data['status']) && $user->status == 'new')?' selected="selected"':''?>>New</option>
+            <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $user->status == 'pending')?' selected="selected"':''?>>Pending</option>
+            <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $user->status == 'banned')?' selected="selected"':''?>>Banned</option>
+        </select>
     </div>
 
-</div>
+    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
+        <label>*Role:</label>
+        <select name="role" class="form-control">
+        <?php foreach ((array) $config->roles as $key => $value): ?>
+            <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value->name?></option>
+        <?php endforeach; ?>
+        </select>
+    </div>
+
+    <div class="form-group <?=(isset($errors['email'])) ? ' error' : ''?>">
+        <label>*Email:</label>
+        <input class="form-control" type="text" name="email" value="<?=$user->email?>" />
+    </div>
+
+    <div class="form-group">
+        <label>Username:</label>
+        <p><a href="<?=HOST?>/members/<?=$user->username?>/"><?=$user->username?></a></p>
+    </div>
+
+    <div class="form-group">
+        <label class="<?=(isset($errors['password'])) ? 'error' : ''?>">Password:</label>
+        <input name="password" type="password" class="form-control mask" value="" />
+    </div>
+
+    <div class="form-group <?=(isset($errors['first_name'])) ? ' error' : ''?>">
+        <label>First Name:</label>
+        <input class="form-control" type="text" name="first_name" value="<?=htmlspecialchars($user->firstName)?>" />
+    </div>
+
+    <div class="form-group <?=(isset($errors['last_name'])) ? ' error' : ''?>">
+        <label>Last Name:</label>
+        <input class="form-control" type="text" name="last_name" value="<?=htmlspecialchars($user->lastName)?>" />
+    </div>
+
+    <div class="form-group <?=(isset($errors['website'])) ? ' error' : ''?>">
+        <label>Website:</label>
+        <input class="form-control" type="text" name="website" value="<?=htmlspecialchars($user->website)?>" />
+    </div>
+
+    <div class="form-group <?=(isset($errors['about_me'])) ? ' error' : ''?>">
+        <label>About Me:</label>
+        <textarea rows="7" cols="50" class="form-control" name="about_me"><?=htmlspecialchars($user->aboutMe)?></textarea>
+    </div>
+
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="submit" class="button" value="Update Member" />
+
+</form>
 
 <?php include ('footer.php'); ?>

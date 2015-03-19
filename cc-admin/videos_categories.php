@@ -122,10 +122,10 @@ include('header.php');
     <?php endif; ?>
 
     <h1>Add Category</h1>
-    <div id="add-category" class="block">
+    <div id="add-category" class="form-inline">
         <form action="<?=ADMIN?>/videos_categories.php" method="post">
             <span class="<?=(isset($errors['cat_name']))?'error':''?>"><strong>Category Name:</strong></span>
-            <input type="text" class="text" name="cat_name" value="<?=(!empty($category->name))?$category->name:''?>"/>
+            <input type="text" class="form-control" name="cat_name" value="<?=(!empty($category->name))?$category->name:''?>"/>
             <input type="hidden" name="submitted_add" value="TRUE" />
             <input type="submit" class="button" value="Add Category" />
         </form>

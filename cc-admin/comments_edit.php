@@ -47,37 +47,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate user fields if anonymous
-    if ($comment->userId == 0) {
-
-        // Validate Name
-        if (!empty($_POST['name']) && !ctype_space($_POST['name'])) {
-            $comment->name = trim($_POST['name']);
-        } else {
-            $errors['name'] = 'Invalid name';
-        }
-
-        // Validate Email
-        if (!empty($_POST['email']) && !ctype_space($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-            $comment->email = trim($_POST['email']);
-        } else {
-            $errors['email'] = 'Invalid email address';
-        }
-
-        // Validate website
-        if (!empty($comment->website) && empty($_POST['website'])) {
-            $comment->website = null;
-        } else if (!empty($_POST['website']) && !ctype_space($_POST['website'])) {
-            $website = $_POST['website'];
-            if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
-                $website = (empty($matches[1])) ? 'http://' . $website : $website;
-                $comment->website = trim ($website);
-            } else {
-                $errors['website'] = 'Invalid website';
-            }
-        }
-    }   // END VALIDATE ANONYMOUS POSTER FIELDS
-
     // Validate status
     if (!empty($_POST['status']) && !ctype_space($_POST['status'])) {
         $newCommentStatus = trim ($_POST['status']);
@@ -133,70 +102,34 @@ include('header.php');
 <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
+<p><a href="<?=$list_page?>">Return to previous screen</a></p>
 
-<div class="block">
+<form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>" method="post">
 
-    <p><a href="<?=$list_page?>">Return to previous screen</a></p>
+    <?php $user = $userMapper->getUserById($comment->userId); ?>
+    <div class="form-group">
+        <p><strong>Date Posted:</strong> <?=date('m/d/Y', strtotime($comment->dateCreated))?></p>
+        <p><strong>Video:</strong> <a target="_ccsite" href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a></p>
+        <p><strong>Username:</strong> <a target="_ccsite" href="<?=HOST . '/members/' . $user->username?>/"><?=$user->username?></a></p>
+    </div>
 
-    <form action="<?=ADMIN?>/comments_edit.php?id=<?=$comment->commentId?>" method="post">
+    <div class="form-group <?=(isset($errors['status'])) ? ' error' : ''?>">
+        <label>Status:</label>
+        <select name="status" class="form-control">
+            <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
+            <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
+            <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
+        </select>
+    </div>
 
-        <div class="row<?=(isset($errors['status'])) ? ' error' : ''?>">
-            <label>Status:</label>
-            <select name="status" class="dropdown">
-                <option value="approved"<?=(isset($data['status']) && $data['status'] == 'approved') || (!isset($data['status']) && $comment->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                <option value="pending"<?=(isset($data['status']) && $data['status'] == 'pending') || (!isset($data['status']) && $comment->status == 'pending')?' selected="selected"':''?>>Pending</option>
-                <option value="banned"<?=(isset($data['status']) && $data['status'] == 'banned') || (!isset($data['status']) && $comment->status == 'banned')?' selected="selected"':''?>>Banned</option>
-            </select>
-        </div>
+    <div class="form-group <?=(isset($errors['comment'])) ? ' error' : ''?>">
+        <label>Comments:</label>
+        <textarea rows="7" cols="50" class="form-control" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
+    </div>
 
-        <div class="row"><label>Date Posted:</label>
-            <?=date('m/d/Y', strtotime($comment->dateCreated))?>
-        </div>
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="submit" class="button" value="Update Comment" />
 
-        <div class="row">
-            <label>Video:</label>
-            <a target="_ccsite" href="<?=$videoService->getUrl($video)?>/"><?=$video->title?></a>
-        </div>
-
-        <?php if ($comment->userId == 0): ?>
-
-            <div class="row<?=(isset($errors['name'])) ? ' error' : ''?>">
-                <label>*Name:</label>
-                <input class="text" type="text" name="name" value="<?=htmlspecialchars($comment->name)?>" />
-            </div>
-
-            <div class="row<?=(isset($errors['email'])) ? ' error' : ''?>">
-                <label>*Email:</label>
-                <input class="text" type="text" name="email" value="<?=htmlspecialchars($comment->email)?>" />
-            </div>
-
-            <div class="row<?=(isset($errors['website'])) ? ' error' : ''?>">
-                <label>Website:</label>
-                <input class="text" type="text" name="website" value="<?=htmlspecialchars($comment->website)?>" />
-            </div>
-
-        <?php else: ?>
-
-            <?php $user = $userMapper->getUserById($comment->userId); ?>
-            <div class="row">
-                <label>Username:</label>
-                <a target="_ccsite" href="<?=HOST . '/members/' . $user->username?>/"><?=$user->username?></a>
-            </div>
-
-        <?php endif; ?>
-
-        <div class="row<?=(isset($errors['comment'])) ? ' error' : ''?>">
-            <label>Comments:</label>
-            <textarea rows="7" cols="50" class="text" name="comments"><?=htmlspecialchars($comment->comments)?></textarea>
-        </div>
-
-        <div class="row-shift">
-            <input type="hidden" value="yes" name="submitted" />
-            <input type="submit" class="button" value="Update Comment" />
-        </div>
-
-    </form>
-
-</div>
+</form>
 
 <?php include('footer.php'); ?>
