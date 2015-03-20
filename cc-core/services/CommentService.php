@@ -3,14 +3,19 @@
 class CommentService extends ServiceAbstract
 {
     /**
-     * Delete a comment
+     * Delete a comment and all it's descendant comments
      * @param Comment $comment Instance of comment to be deleted
      * @return void Comment is deleted from system
      */
     public function delete(Comment $comment)
     {
         $commentMapper = $this->_getMapper();
-        $commentMapper->delete($comment->commentId);
+        $commentCount = $commentMapper->getVideoCommentCount($comment->videoId);
+        $commentsToDelete = $this->_getChildCommentThread($comment->videoId, $commentCount, $comment->commentId);
+        $commentsToDelete[] = $comment->commentId;
+        foreach ($commentsToDelete as $commentId) {
+            $commentMapper->delete($commentId);
+        }
     }
 
     /**

@@ -323,6 +323,13 @@ a.button {
     display:inline-block;
 }
 
+a.button:hover,
+a.button:focus {
+    color: #FFF;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 .more-info {
     margin-left:5px;
     cursor:pointer;
