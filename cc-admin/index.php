@@ -57,7 +57,7 @@ include ('header.php');
 <h1>Dashboard</h1>
 
 <?php if ($first_run): ?>
-<div class="message success">
+<div class="alert alert-success">
     <p>All done! Your video site is now ready for use. This is your admin panel,
     we went ahead and logged you in so that you can start exploring.</p>
 
@@ -69,20 +69,38 @@ include ('header.php');
 </div>
 <?php endif; ?>
 
-
-<div id="news" class="block">
-    <h2>News from the mothership</h2>
-    <div><p class="loading">Loading...</p></div>
+<div id="news" class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">News from the mothership</h3>
+    </div>
+    <div class="panel-body">
+        <p class="loading">Loading...</p>
+    </div>
 </div>
 
-<div class="block">
-    <h2>Totals Report</h2>
-    <p><strong>Videos: </strong><?=$videos?></p>
-    <p><strong>Members: </strong><?=$members?></p>
-    <p><strong>Comments: </strong><?=$comments?></p>
-    <p><strong>Ratings: </strong><?=$ratings?></p>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><h3 class="panel-title">Totals Report</h3></div>
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">
+        Videos
+        <span class="badge"><?=$videos?></span>
+    </li>
+    <li class="list-group-item">
+        Members
+        <span class="badge"><?=$members?></span>
+    </li>
+    <li class="list-group-item">
+        Comments
+        <span class="badge"><?=$comments?></span>
+    </li>
+    <li class="list-group-item">
+        Ratings
+        <span class="badge"><?=$ratings?></span>
+    </li>
+  </ul>
 </div>
-
-
 
 <?php include ('footer.php'); ?>

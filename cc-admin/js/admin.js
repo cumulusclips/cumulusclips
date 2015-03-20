@@ -7,7 +7,7 @@ cumulusClips.baseUrl = $('meta[name="baseURL"]').attr('content');
 $(function(){
 
     // Toggle expand/collapse of sidebar sub-menus
-    $(".menu-toggle").on('click', function(){
+    $("#sidebar").on('click', '[data-toggle="collapse"]', function(){
         var name = $(this).attr('href').replace('#menu-', '');
         var updatedSetting = (cumulusClips.settings[name] == 0) ? 1 : 0;
         updateSettings(name, updatedSetting);
@@ -19,12 +19,6 @@ $(function(){
         var agree = confirm ($(this).data('confirm'));
         if (agree) window.location = location;
         return false;
-    });
-
-    // Redirect user to requested location when status dropdown is updated
-    $('.jump select').change(function(){
-        var jumpLoc = $(this).data('jump');
-        window.location = jumpLoc+'?status='+$(this).val();
     });
 
     // Generate and update slug as page title changes
@@ -222,11 +216,11 @@ $(function(){
     // Load mothership message
     if ($('#dashboard').length == 1) {
         $.ajax({
-            'type'      : 'POST',
-            'url'       : cumulusClips.baseUrl + '/cc-admin/',
-            'data'      : {news:'true'},
-            'error'     : function(){$('#news div').html('<strong>Nothing to report.</strong>');},
-            'success'   : function(data){$('#news div').html(data);}
+            type: 'POST',
+            url: cumulusClips.baseUrl + '/cc-admin/',
+            data: {news:'true'},
+            error: function(){$('#news div').html('<strong>Nothing to report.</strong>');},
+            success: function(data){$('#news .panel-body').html(data);}
         });
     }
 

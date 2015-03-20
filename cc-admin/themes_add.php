@@ -92,13 +92,13 @@ to upload and add it to the system.</p>
 
 <form action="<?=ADMIN?>/themes_add.php" method="post">
 
-    <div class="row">
+    <div class="form-group select-file">
         <label>Theme Zip File:</label>
-        <div id="upload-select-file" class="button">
+        <div class="button button-browse">
             <span>Browse</span>
             <input id="upload" type="file" name="upload" />
         </div>
-        <input id="upload_button" class="button" type="button" value="Upload" />
+        <input type="button" class="button button-upload" value="Upload" />
         <input type="hidden" name="upload-limit" value="<?=1024*1024*100?>" />
         <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode(array('zip')))?>" />
         <input type="hidden" name="upload-type" value="addon" />

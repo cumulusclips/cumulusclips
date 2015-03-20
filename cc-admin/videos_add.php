@@ -152,13 +152,13 @@ include('header.php');
 
 <form action="<?=ADMIN?>/videos_add.php" method="post">
 
-    <div class="form-group <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
+    <div class="form-group select-file <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
         <label class="control-label">Video File:</label>
-        <div id="upload-select-file" class="button">
+        <div class="button button-browse">
             <span>Browse</span>
             <input id="upload" type="file" name="upload" />
         </div>
-        <input id="upload_button" class="button" type="button" value="Upload" />
+        <input type="button" class="button button-upload" value="Upload" />
         <input type="hidden" name="upload-limit" value="<?=$config->videoSizeLimit?>" />
         <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
         <input type="hidden" name="upload-type" value="video" />
@@ -167,8 +167,8 @@ include('header.php');
         <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
     </div>
 
-    <?php $style = ($videoUploadMessage) ? 'display: inline-block;' : ''; ?>
-    <div class="videoUploadComplete" style="<?=$style?>"><?=$videoUploadMessage?></div>
+    <?php $style = ($videoUploadMessage) ? 'display: block;' : ''; ?>
+    <div class="upload-complete alert alert-info" style="<?=$style?>"><?=$videoUploadMessage?></div>
 
     <div id="upload_status">
         <div class="title"></div>

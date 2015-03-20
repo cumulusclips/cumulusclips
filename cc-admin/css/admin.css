@@ -336,24 +336,6 @@ a.button {
 FORM & MESSAGE STYLES
 ********************/
 
-.row {
-    overflow:hidden;
-    margin-bottom:15px;
-}
-
-.row-shift {
-    margin-left:115px;
-    margin-bottom:15px;
-}
-
-.row > label {
-    float:left;
-    text-align:right;
-    margin-right:15px;
-    width:100px;
-    font-weight:bold;
-}
-
 .form-group input[type="checkbox"] + label {
     margin-left: 5px; 
 }
@@ -403,6 +385,13 @@ MISC STYLES
 
 .alert {
     margin: 15px 0;
+    display: none;
+}
+
+.alert-success,
+.alert-warning,
+.alert-danger {
+    display: block;
 }
 
 .options {
@@ -541,15 +530,6 @@ VIDEO STYLES
 
 #add-category input[name="cat_name"] {
     margin:0 5px;
-}
-
-.videoUploadComplete {
-    display: none;
-    margin: 0 0 15px 115px;
-    background: #d5edf8;
-    color: #205791;
-    border: 2px solid #92cae4;
-    padding: 10px;
 }
 
 
@@ -752,7 +732,11 @@ LOGS STYLES
 FILE UPLOAD STYLES
 *****************/
 
-#upload-select-file {
+.select-file label {
+    display: block;
+}
+
+.button-browse {
     float: left;
     margin-right: 15px;
     height: auto;
@@ -762,7 +746,7 @@ FILE UPLOAD STYLES
     padding: 0 10px;
 }
 
-#upload-select-file input {
+.button-browse input {
     cursor: pointer;
     position: absolute;
     top: 0;
@@ -776,11 +760,12 @@ FILE UPLOAD STYLES
     font-family: arial;
     background-color: #F0F0F0;
     border: 3px solid #E1E1E1;
-    margin: 10px 0 15px 115px;
+    margin: 10px 0 15px;
     padding: 10px;
     width: 330px;
     display: none;
     font-size: 12px;
+    box-sizing: content-box;
 }
 
 #upload_status .title {
@@ -789,7 +774,12 @@ FILE UPLOAD STYLES
 
 #upload_status .progress {
     width: 330px;
+    height: auto;
+    margin: 0;
     overflow: hidden;
+    box-shadow: none;
+    background: none;
+    border-radius: 0;
 }
 
 #upload_status a {
@@ -833,4 +823,9 @@ FILE UPLOAD STYLES
     width: 35px;
     float: right;
     line-height: 16px;
+}
+
+.upload-complete {
+    display: none;
+    width: 300px;
 }

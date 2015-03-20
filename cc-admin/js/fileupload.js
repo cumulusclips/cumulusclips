@@ -66,7 +66,7 @@ $(function(){
                 $('input[name="temp-file"]').val(data.result.other.temp);
                 if (cumulusClips.uploadType == 'video') {
                     $('input[name="original-video-name"]').val(fileName);
-                    $('.videoUploadComplete').css('display', 'inline-block').text(fileName + ' - has been uploaded');
+                    $('.upload-complete').show().text(fileName + ' - has been uploaded');
                     resetProgress();
                 } else {
                     $('form').submit();
@@ -79,7 +79,7 @@ $(function(){
     });
 
     // Attach upload event to upload button
-    $('#upload_button').click(function(event){
+    $('.button-upload').click(function(event){
         if (cumulusClips.uploadFileData !== undefined) {
             $('#upload_status .fill').addClass('in-progress');
             cumulusClips.jqXHR = cumulusClips.uploadFileData.submit();
