@@ -19,8 +19,8 @@ $message = null;
 $page_title = 'Edit Page';
 $pageName = 'pages-edit';
 $layouts = array();
-$admin_js[] = ADMIN . '/extras/tiny_mce/jquery.tinymce.js';
-$admin_js[] = ADMIN . '/extras/tiny_mce/tiny_mce.js';
+$admin_js[] = ADMIN . '/extras/tinymce_4.1.9_jquery/jquery.tinymce.min.js';
+$admin_js[] = ADMIN . '/extras/tinymce_4.1.9_jquery/tinymce.min.js';
 $admin_js[] = ADMIN . '/js/tinymce.js';
 
 // Build return to list link

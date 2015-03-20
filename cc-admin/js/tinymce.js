@@ -1,33 +1,18 @@
 $(function(){
-
     // Initialize & attach TinyMCE editor to specified field
     $('.tinymce').tinymce({
 
         // General options
-        theme : "advanced",
-        plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
-
-        // Theme options
-        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,formatselect,forecolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,blockquote,|,link,unlink,|,table,image,charmap,|,code,fullscreen",
-        theme_advanced_buttons2 : "",
-        theme_advanced_buttons3 : "",
-        theme_advanced_toolbar_location : "top",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "bottom",
+        theme : "modern",
+        plugins : "charmap,code,textcolor,image,link,lists,pagebreak,table,insertdatetime,media,searchreplace,contextmenu,paste,directionality,fullscreen,visualchars,nonbreaking",
         height : "300",
-        init_instance_callback : "skipToolbar"
-
+        toolbar: "styleselect | fontsizeselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+        menu : { // this is the complete default configuration
+            edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
+            insert : {title : 'Insert', items : 'media link image | charmap pagebreak insertdatetime nonbreaking'},
+            view   : {title : 'View'  , items : 'visualchars visualaid | code fullscreen'},
+            format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat  | formatselect fontselect fontsizeselect'},
+            table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'}
+        }
     });
-
 });
-
-
-
-
-/**
- * Allow tabbing directly to content by skipping the toolbar
- * @return void mce toolbar is skipped during tabs
- */
-function skipToolbar() {
-    $('.mceToolbar *').attr('tabindex',-1);
-}
