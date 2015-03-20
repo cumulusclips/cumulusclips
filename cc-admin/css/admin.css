@@ -269,7 +269,9 @@ GRID
     font-size:10px;
 }
 
-.delete, .delete:hover {
+.delete,
+.delete:hover,
+.delete:focus {
     color: #900;
 }
 
@@ -524,7 +526,7 @@ VIDEO STYLES
     display:none;
 }
 
-#videos-categories .dropdown {
+#videos-categories .category-action-effect .form-control {
     margin:0 5px;
 }
 
@@ -712,9 +714,13 @@ SETTINGS STYLES
 LOGS STYLES
 **********/
 
+#logs .dropdown {
+    display: inline-block;
+}
+
 #logs pre {
     padding: 10px;
-    margin: 10px 0 0 10px;
+    margin: 15px 0 0;
     font-family: Courier New, Courier New, monospace;
     color: #444;
     background-color: #F5F5F5;

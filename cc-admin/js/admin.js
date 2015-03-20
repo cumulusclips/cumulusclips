@@ -157,21 +157,18 @@ $(function(){
     // Toggle display of a block via select box change
     $('select[data-toggle]').change(function(){
         var targetBlock = '#' + $(this).data('toggle');
-        $(targetBlock).toggle({
-            complete:function(){$(targetBlock).trigger('toggle');},
-            duration:0
-        });
+        $(targetBlock).toggleClass('hide').trigger('toggle');
     });
 
     // Toggle Move Videos / Delete Category Forms
     $('.category-action').click(function(){
         var action = $(this).data('action');
-        var parent = $(this).parents('.block');
+        var parent = $(this).parents('li');
         var show = (action == 'move') ? '.move-videos' : '.delete-category';
         var hide = (action == 'move') ? '.delete-category' : '.move-videos';
         
-        $('.hide').hide();
-        parent.find('.hide').show();
+        $('.category-action-effect').addClass('hide');
+        parent.find('.category-action-effect').removeClass('hide');
         parent.find('input[name="action"]').val(action);
         parent.find(show).show();
         parent.find(hide).hide();
@@ -181,13 +178,13 @@ $(function(){
     // Add Show/Hide password link to password fields
     $('.mask').after(function(){
         var name = $(this).attr('name');
-        var field = '<input style="display:none;" type="text" class="text" name="'+name+'-show" />';
+        var field = '<input style="display:none;" type="text" class="form-control" name="'+name+'-show" />';
         var link = '<a href="" class="mask-link" data-for="'+name+'" tabindex="-1">Show Password</a>';
         return field+link;
     });
 
     // Toggle password visibility when mask link is clicked
-    $('.row').on('click', '.mask-link', function(){
+    $('.form-group').on('click', '.mask-link', function(event){
 
         var name = $(this).data('for');
 
@@ -210,7 +207,7 @@ $(function(){
 
         }
 
-        return false;
+        event.preventDefault();
     });
 
     // Load mothership message
@@ -229,10 +226,10 @@ $(function(){
 
         // Retrieve and toggle targeted block
         var block = $(this).data('block');
-        $('#'+block).toggle();
+        $('#'+block).toggleClass('hide');
 
         // Hide other blocks on same level as toggled block
-        $('.showhide-block:not(#'+block+')').hide();
+        $('.showhide-block:not(#'+block+')').addClass('hide');
 
         // Prevent link click through
         if ($(this).is('a')) return false;
@@ -241,9 +238,9 @@ $(function(){
     // Regenerate Private URL
     $('#private-url a').click(function(){
         $.ajax({
-            type    : 'get',
-            url     : cumulusClips.baseUrl + '/private/get/',
-            success : function (responseData, textStatus, jqXHR) {
+            type: 'get',
+            url: cumulusClips.baseUrl + '/private/get/',
+            success: function (responseData, textStatus, jqXHR) {
                 $('#private-url span').text(responseData);
                 $('#private-url input').val(responseData);
             }

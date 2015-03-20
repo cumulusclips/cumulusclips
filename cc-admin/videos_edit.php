@@ -249,11 +249,9 @@ include ('header.php');
         <label for="private-video">Private</label> <em>(Video can only be viewed by you or anyone with the private URL)</em>
     </div>
 
-    <div id="private-url" class="row <?=$video->private ? '' : 'hide'?>">
-
+    <div id="private-url" class="form-group <?=$video->private ? '' : 'hide'?>">
         <label <?=(isset ($errors['private_url'])) ? 'class="error"' : ''?>>Private URL:</label>
         <?=HOST?>/private/videos/<span><?=(!empty ($video->privateUrl)) ? $video->privateUrl : $private_url?></span>/
-
         <input type="hidden" name="private_url" value="<?=(!empty ($video->privateUrl)) ? $video->privateUrl : $private_url?>" />
         <a href="" class="small">Regenerate</a>
     </div>

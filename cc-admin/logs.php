@@ -24,7 +24,10 @@ foreach ($contents as $key => $file) {
 
 // Display log file when requested
 if (!empty($_GET['log']) && in_array($_GET['log'], $contents) && file_exists(LOG . '/' . $_GET['log'])) {
+    $activeLog = $_GET['log'];
     $logFileContents = file_get_contents(LOG . '/' . $_GET['log']);
+} else {
+    $activeLog = '-- Select Log --';
 }
 
 // Purge all log files when requested
@@ -34,11 +37,11 @@ if (isset($_GET['purge']) && $_GET['purge'] == 'all' && !empty($contents)) {
         foreach (glob(LOG . '/*.log') as $log) {
             Filesystem::delete($log);
         }
-        $messageType = 'success';
+        $messageType = 'alert-success';
         $message = 'Logs have been successfully purged.';
         $contents = array();
     } catch (Exception $e) {
-        $messageType = 'error';
+        $messageType = 'alert-danger';
         $message = 'Unable to delete log files.';
         App::Alert('Error During Log File Removal', "Unable to delete log files. Error: " . $e->getMessage());
     }
@@ -53,29 +56,29 @@ include ('header.php');
 <h1>System Logs</h1>
 
 <?php if ($message): ?>
-<div class="message <?=$messageType?>"><?=$message?></div>
+<div class="alert <?=$messageType?>"><?=$message?></div>
 <?php endif; ?>
 
-<div class="block">
-    <?php if (!empty($contents)): ?>
-        <form action="<?=ADMIN?>/logs.php" method="get">
-            <strong>Logs Files:</strong>
-            <select name="log" class="dropdown">
-                <option>-- Select Log --</option>
-                <?php foreach($contents as $logFile): ?>
-                    <option><?=$logFile?></option>
-                <?php endforeach; ?>
-            </select>
-            <input type="submit" value="View Log" class="button" />
-            <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge All Logs</a>
-        </form>
-    <?php else: ?>
-        <p>No log files available.</p>
-    <?php endif; ?>
+<?php if (!empty($contents)): ?>
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            <?=htmlspecialchars($activeLog)?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <?php foreach($contents as $logFile): ?>
+                <li class="<?=($logFile == $activeLog) ? 'active' : ''?>"><a tabindex="-1" href="<?=ADMIN?>/logs.php?log=<?=$logFile?>"><?=$logFile?></a></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
 
-    <?php if ($logFileContents): ?>
-        <pre><?=$logFileContents?></pre>
-    <?php endif; ?>
-</div>
+        <a style="margin-left:20px;" class="delete confirm" href="<?=ADMIN?>/logs.php?purge=all" data-confirm="You're about to delete all log files. This cannot be undone. Do you want to proceed?">Purge All Logs</a>
+<?php else: ?>
+    <p>No log files available.</p>
+<?php endif; ?>
+
+<?php if ($logFileContents): ?>
+    <pre><?=$logFileContents?></pre>
+<?php endif; ?>
 
 <?php include ('footer.php'); ?>

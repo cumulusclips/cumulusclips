@@ -133,16 +133,19 @@ include('header.php');
 
 <?php if (count($categories) > 1): ?>
 
+    <ul class="list-group">
     <?php foreach ($categories as $categoryObj): ?>
 
-        <div class="block">
-            <p><strong><?=$categoryObj->name?></strong> (<?=$categoryObj->video_count?> videos)</p>
+        <li class="list-group-item">
+            
+            <span class="badge"><?=$categoryObj->video_count?></span>
+            <h3 class="list-group-item-heading"><?=$categoryObj->name?></h3>
             <p><a href="" class="category-action" data-action="move">Move Videos</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="" class="delete category-action" data-action="delete">Delete</a></p>
 
-            <div class="hide">
+            <div class="category-action-effect hide form-inline">
                 <form action="<?=ADMIN?>/videos_categories.php" method="post">
-                    <strong>Move videos to: </strong>
-                    <select name="move" class="dropdown">
+                    <label>Move videos to: </label>
+                    <select name="move" class="form-control">
                     <?php $list = $categories; ?>
                     <?php foreach ($list as $value): ?>
                         <?php if ($categoryObj->category_id == $value->category_id) continue; ?>
@@ -156,15 +159,18 @@ include('header.php');
                     <input type="submit" class="button delete-category" value="Delete Category" />
                 </form>
             </div>
-
-        </div>
+        </li>
 
     <?php endforeach; ?>
+    </ul>
 
 <?php else: ?>
-    <div class="block">
-        <p><strong><?=$categories[0]->name?></strong> (<?=$categories[0]->video_count?> videos)</p>
-    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <span class="badge"><?=$categories[0]->video_count?></span>
+            <h3 class="list-group-item-heading"><?=$categories[0]->name?></h3>
+        </li>
+    </ul>
 <?php endif; ?>
 
 <?php include('footer.php'); ?>
