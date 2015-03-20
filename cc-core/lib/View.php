@@ -11,6 +11,7 @@ class View
     protected $_js;
     protected $_css;
     protected $_blocks;
+    protected $_bodyClasses = array();
     
     /**
      * Creates a new view 
@@ -249,15 +250,28 @@ class View
             $this->block($_block);
         }
     }
-    
+
     /**
-     * Retrieve page name, language, and layout type as class names
-     * for use in theme as CSS Hooks
+     * Queues a CSS class to be appended to the body tag
+     * @param string $class Name of class to be added to body tag
+     */
+    public function addBodyClass($class)
+    {
+        $this->_bodyClasses[] = $class;
+    }
+
+    /**
+     * Retrieve CSS classes to be added to the body tag. These include:
+     *  - Page Name
+     *  - Currently Active Language
+     *  - Layout
+     *  - Any Manually Added CSS Classes
      * @return string Returns string of page name and layout type
      */
     public function cssHooks()
     {
-        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::getCSSName();
+        $additionalClasses = (!empty($this->_bodyClasses)) ? ' ' . implode(' ', $this->_bodyClasses) : '';
+        return $this->options->page . ' ' . $this->options->layout . ' ' . Language::getCSSName() . $additionalClasses;
     }
 
     /**

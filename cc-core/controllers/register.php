@@ -24,7 +24,12 @@ if (isset($_POST['submitted'])) {
         && $_POST['token'] == $_SESSION['formToken']
     ) {
         $this->view->vars->user = new User();
-        
+
+        // Validate Post Speed
+        if (time()-$_SESSION['time'] < 5) {
+            $this->view->vars->errors['token'] = 'Invalid or Expired Session';
+        }
+
         // Validate Username
         if (!empty($_POST['username']) && preg_match('/[a-z0-9]+/i', $_POST['username'])) {
             if (!$userMapper->getUserByUsername($_POST['username'])) {
@@ -66,7 +71,7 @@ if (isset($_POST['submitted'])) {
         }   
         
     } else {
-        $this->view->vars->errors['token'] = 'Invalid security token';
+        $this->view->vars->errors['token'] = 'Invalid or Expired Session';
     }
 
     // Create user if no errors were found
@@ -100,5 +105,6 @@ if (isset($_POST['submitted'])) {
 $token = md5(uniqid(rand(), true));
 $this->view->vars->token = $token;
 $_SESSION['formToken'] = $token;
+$_SESSION['time'] = time();
 
 Plugin::triggerEvent('register.end');
