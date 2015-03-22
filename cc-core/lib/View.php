@@ -275,28 +275,31 @@ class View
     }
 
     /**
-     * Add CSS file to the document
+     * Queues a CSS file to be attached to the document
      * @param string $css_name Filename of the CSS file to be attached
-     * @return void CSS file is stored to be written in document
+     * @return void CSS file is queued
      */
     public function addCss($css_name)
     {
         // Detect correct file path
         $request_file = $this->getFallbackUrl("css/$css_name");
         $css_url = ($request_file) ? $request_file : $css_name;
-
-        $this->_css[] = '<link rel="stylesheet" href="' . $css_url . '" />';
+        $this->_css[] = $css_url;
     }
 
     /**
-     * Write the additional CSS tags to the browser
+     * Writes queued CSS files to the DOM
      * @return mixed CSS link tags are written
      */
     public function writeCss()
     {
+        // Output system generated CSS
+        echo '<link rel="stylesheet" href="' . HOST . '/css/system.css" />' . "\n";
+        
+        // Output queued CSS files
         if (isset($this->_css)) {
             foreach ($this->_css as $_value) {
-                echo $_value, "\n";
+                echo '<link rel="stylesheet" href="' . $_value . '" />' . "\n";
             }
         }
     }
@@ -311,13 +314,12 @@ class View
         // Detect correct file path
         $request_file = $this->getFallbackUrl("js/$js_name");
         $js_url = ($request_file) ? $request_file : $js_name;
-
-        $this->_js[] = '<script type="text/javascript" src="' . $js_url . '"></script>';
+        $this->_js[] = $js_url;
     }
 
     /**
-     * Write the Additional JS tags to the browser
-     * @return mixed JS src tags are written
+     * Writes queued JS files to the DOM
+     * @return void JS src tags are written
      */
     public function writeJs()
     {
@@ -336,10 +338,14 @@ class View
             $js_lang_preview .= '</script>';
             $this->_js[] = $js_lang_preview;
         }
+        
+        // Output system generated JS
+        echo '<script type="text/javascript" src="' . HOST . '/js/system.js"></script>' . "\n";
 
+        // Output queued JS files
         if (isset($this->_js)) {
             foreach ($this->_js as $_value) {
-                echo $_value, "\n";
+                echo '<script type="text/javascript" src="' . $_value . '"></script>' . "\n";
             }
         }
     }

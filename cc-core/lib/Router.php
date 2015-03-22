@@ -483,6 +483,18 @@ class Router
             'mappings' => array('action'),
             'type' => Route::AGNOSTIC
         ));
+        
+        $routes['systemCss'] = new Route(array(
+            'path' => 'css/system\.css',
+            'location' => 'cc-core/system/css.php',
+            'type' => Route::AGNOSTIC
+        ));
+        
+        $routes['systemJs'] = new Route(array(
+            'path' => 'js/system\.js',
+            'location' => 'cc-core/system/js.php',
+            'type' => Route::AGNOSTIC
+        ));
 
         $routes['videoSitemap'] = new Route(array(
             'path' => 'video-sitemap\.xml',
