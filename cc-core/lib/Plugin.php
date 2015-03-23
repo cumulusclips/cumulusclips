@@ -74,7 +74,8 @@ class Plugin
         // Call plugin methods if any are attached to filter hook
         if (!empty(self::$_filters[$filterName])) {
             foreach (self::$_filters[$filterName] as $callbackMethod) {
-                $value = call_user_func($callbackMethod, $value);
+                $args = array_slice(func_get_args(), 1);
+                $value = call_user_func_array($callbackMethod, $args);
                 if ($value === null) {
                     throw new Exception('Return type for filter methods cannot be null');
                 }
@@ -156,7 +157,7 @@ class Plugin
     {
         $pluginReflection = new ReflectionClass($plugin);
         $pluginReflectionMethod = $pluginReflection->getMethod('settings');
-        return ($pluginReflectionMethod->getDeclaringClass() == 'PluginAbstract') ? false : true;
+        return ($pluginReflectionMethod->getDeclaringClass()->name == 'PluginAbstract') ? false : true;
     }
     
     /**

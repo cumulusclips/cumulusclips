@@ -73,6 +73,8 @@ if (isset($_POST['submitted'])) {
     } else {
         $this->view->vars->errors['token'] = 'Invalid or Expired Session';
     }
+    
+    $this->view->vars->errors = Plugin::triggerFilter('register.validation', $this->view->vars->errors, $_POST);
 
     // Create user if no errors were found
     if (empty ($this->view->vars->errors)) {

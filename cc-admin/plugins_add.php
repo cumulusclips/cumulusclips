@@ -42,7 +42,7 @@ if (isset($_POST['submitted'])) {
             Filesystem::copyDir($tempDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
 
             // Validate Plugin
-            if (!Plugin::validPlugin($pluginName)) {
+            if (!Plugin::isPluginValid($pluginName)) {
                 throw new Exception("Plugin contains errors. Please report this to it's developer");
             }
 
@@ -51,8 +51,8 @@ if (isset($_POST['submitted'])) {
             Filesystem::delete($tempDirectory);
 
             // Display success message
-            $plugin_info = Plugin::getPluginInfo($pluginName);
-            $message = $plugin_info->name . ' has been added.';
+            $plugin = Plugin::getPlugin($pluginName);
+            $message = $plugin->name . ' has been uploaded and is available for use.';
             $message_type = 'alert-success';
         } catch (Exception $e) {
             $message = $e->getMessage();

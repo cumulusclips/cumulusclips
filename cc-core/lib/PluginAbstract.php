@@ -2,8 +2,6 @@
 
 abstract class PluginAbstract
 {
-    public $enabled = true;
-    
     /**
      * @var string Name of plugin 
      */
@@ -30,7 +28,7 @@ abstract class PluginAbstract
     public $version = '';
     
     /**
-     * Plugin gateway into codebase
+     * The plugin's gateway into codebase. Place plugin hook attachments here.
      */
     abstract public function load();
     
@@ -52,7 +50,10 @@ abstract class PluginAbstract
      */
     public function uninstall(){}
     
-    
+    /**
+     * Retrieves plugin's system name
+     * @return string Returns plugin's system name
+     */
     final public function getSystemName()
     {
         return get_class($this);

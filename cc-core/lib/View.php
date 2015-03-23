@@ -112,7 +112,7 @@ class View
     protected function _getPageFromRoute(Route $route)
     {
         $patterns = array(
-            '/cc\-core\/controllers\//i',
+            '/' . str_replace('/', '\/', preg_quote(DOC_ROOT . '/cc-core/controllers') . '/(mobile/)') . '?/i',
             '/\//',
             '/\.php$/i'
         );
@@ -132,7 +132,7 @@ class View
     protected function _getViewFileFromRoute(Route $route)
     {
         $patterns = array(
-            '/cc\-core\/controllers\/(mobile\/)?/i',
+            '/' . str_replace('/', '\/', preg_quote(DOC_ROOT . '/cc-core/controllers') . '/(mobile/)') . '?/i',
             '/\.php$/i'
         );
         $replacements = array(
@@ -160,12 +160,14 @@ class View
             // Catch output of body
             ob_start();
             include($this->options->viewFile);
-            $this->_body = ob_get_contents();
+            $this->_body = Plugin::triggerFilter('view.render_body', ob_get_contents());
             ob_end_clean();
+            
+//            exit($this->_body);
 
             // Output page
             if ($this->options->disableLayout) {
-                echo $this->_body;
+                echo $this->body();
             } else {
                 include($this->getFallbackPath('layouts/' . $this->options->layout . '.phtml'));
             }

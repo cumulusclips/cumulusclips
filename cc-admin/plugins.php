@@ -126,48 +126,59 @@ include('header.php');
 
 <?php if (!empty($pluginList)): ?>
 
-    <?php foreach ($pluginList as $plugin): ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Plugin</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
 
-        <div class="block">
+            <?php foreach ($pluginList as $plugin): ?>
 
-            <p>
-                <strong><?=$plugin->name?></strong>
-                <?php if (!empty($plugin->author)): ?>
-                    by: <?=$plugin->author?>
-                <?php endif; ?>
-            </p>
+                <tr>
+                    <td>
+                        <p class="h3"><?=$plugin->name?></p>
+                        
+                        <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
+                            <p>
+                                <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
+                                    <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->getSystemName()?>">Settings</a> &nbsp;|&nbsp;
+                                <?php endif; ?>
 
+                                <?php if (Plugin::isPluginEnabled($plugin->getSystemName())): ?>
+                                    <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->getSystemName()?>">Disable</a>
+                                <?php else: ?>
+                                    <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->getSystemName()?>">Enable</a>
+                                <?php endif; ?>
 
-            <?php if (!empty($plugin->version)): ?>
-            <p><strong>Version:</strong> <?=$plugin->version?></p>
-            <?php endif; ?>
+                                &nbsp;|&nbsp; <a href="<?=ADMIN?>/plugins.php?uninstall=<?=$plugin->getSystemName()?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall</a>
+                            </p>
+                        <?php else: ?>
+                            <a href="<?=ADMIN?>/plugins.php?install=<?=$plugin->getSystemName()?>">Install</a>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        
+                        <?php if (!empty($plugin->description)): ?>
+                            <p><?=$plugin->description?></p>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($plugin->author)): ?>
+                            By: <?=$plugin->author?>
+                        <?php endif; ?>
+                            
+                        <?php if (!empty($plugin->version)): ?>
+                            <p><strong>Version:</strong> <?=$plugin->version?></p>
+                        <?php endif; ?>
+                    </td>
+                </tr>
 
-
-            <?php if (!empty($plugin->description)): ?>
-                <p><?=$plugin->description?></p>
-            <?php endif; ?>
-
-            <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
-                <p>
-                    <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
-                        <a href="<?=ADMIN?>/plugins_settings.php?plugin=<?=$plugin->getSystemName()?>">Settings</a> &nbsp;|&nbsp;
-                    <?php endif; ?>
-
-                    <?php if (Plugin::isPluginEnabled($plugin->getSystemName())): ?>
-                        <a href="<?=ADMIN?>/plugins.php?disable=<?=$plugin->getSystemName()?>">Disable</a>
-                    <?php else: ?>
-                        <a href="<?=ADMIN?>/plugins.php?enable=<?=$plugin->getSystemName()?>">Enable</a>
-                    <?php endif; ?>
-
-                    &nbsp;|&nbsp; <a href="<?=ADMIN?>/plugins.php?uninstall=<?=$plugin->getSystemName()?>" class="delete confirm" data-confirm="This will completely uninstall and remove this plugin from your system. Do you want to proceed?">Uninstall</a>
-                </p>
-            <?php else: ?>
-                <a href="<?=ADMIN?>/plugins.php?install=<?=$plugin->getSystemName()?>">Install</a>
-            <?php endif; ?>
-
-        </div>
-
-    <?php endforeach; ?>
+            <?php endforeach; ?>
+        
+        </tbody>
+    </table>
 
 <?php else: ?>
     <p>No plugins added yet.</p>

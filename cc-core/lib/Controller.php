@@ -19,7 +19,7 @@ class Controller
     public function dispatch(Route $route)
     {
         $this->view->load($route);
-        include(DOC_ROOT . '/' . $route->location);
+        include($route->location);
         $this->view->render();
     }
     

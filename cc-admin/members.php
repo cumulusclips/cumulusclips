@@ -25,7 +25,7 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
     // Validate id
     $user = $userMapper->getUserById($_GET['delete']);
     if ($user && $user->userId != $adminUser->userId) {
-//        $userService->delete($user);
+        $userService->delete($user);
         $message = 'Member has been deleted';
         $message_type = 'success';
     } else if ($user->userId == $adminUser->userId) {

@@ -694,6 +694,10 @@ PLUGIN STYLES
     line-height:14px;
 }
 
+#plugins .table .h3 {
+    margin-top: 0;
+}
+
 
 
 
