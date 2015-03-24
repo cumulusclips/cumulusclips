@@ -82,80 +82,94 @@ include('header.php');
 <div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
-
-<?php foreach ($main_site_themes as $theme): ?>
-
-    <div class="block theme">
-
-        <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
-
-        <p>
-            <strong><?=$theme->xml->name?></strong>
-            <?php if (!empty($theme->xml->author)): ?>
-                by: <strong><?=$theme->xml->author?></strong>
-            <?php endif; ?>
-        </p>
-
-
-        <?php if (!empty($theme->xml->description)): ?>
-            <p><?=$theme->xml->description?></p>
-        <?php endif; ?>
-
-
-        <p>
-            <?php if ($theme->name == Settings::get('active_theme')): ?>
-                <strong>Active Theme</strong>
-            <?php else: ?>
-                <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme->name?>" class="iframe">Preview</a>
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
-            <?php endif; ?>
-        </p>
-
-    </div>
-
-<?php endforeach; ?>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Theme</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    <?php foreach ($main_site_themes as $theme): ?>
+        
+        <tr class="theme">
+            <td>
+                <p class="h3"><?=$theme->xml->name?></p>
+                <p><span class="thumbnail"><img width="200" src="<?=$theme->url?>/screenshot.png" /></span></p>
+                <p style="clear:both;">
+                    <?php if ($theme->name == Settings::get('active_theme')): ?>
+                        <strong>Active Theme</strong>
+                    <?php else: ?>
+                        <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_theme=<?=$theme->name?>" class="iframe">Preview</a>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
+                    <?php endif; ?>
+                </p>
+            </td>
+            <td>
+                <?php if (!empty($theme->xml->description)): ?>
+                    <p><?=$theme->xml->description?></p>
+                <?php endif; ?>
+                    
+                <?php if (!empty($theme->xml->author)): ?>
+                    <p>By: <strong><?=$theme->xml->author?></strong></p>
+                <?php endif; ?>
+            </td>
+        </tr>
+        
+    <?php endforeach; ?>
+        
+    </tbody>
+</table>
 <!-- END MAIN SITE THEMES -->
-
-
 
 
 
 
 <!-- BEGIN MOBILE THEMES -->
 <h1>Mobile Themes</h1>
-<?php foreach ($mobile_themes as $theme): ?>
-
-    <div class="block theme">
-
-        <div class="screenshot"><img width="200" src="<?=$theme->url?>/screenshot.png" /></div>
-
-        <p>
-            <strong><?=$theme->xml->name?></strong>
-            <?php if (!empty($theme->xml->author)): ?>
-                by: <strong><?=$theme->xml->author?></strong>
-            <?php endif; ?>
-        </p>
-
-
-        <?php if (!empty($theme->xml->description)): ?>
-            <p><?=$theme->xml->description?></p>
-        <?php endif; ?>
-
-
-        <p>
-            <?php if ($theme->name == Settings::get('active_mobile_theme')): ?>
-                <strong>Active Theme</strong>
-            <?php else: ?>
-                <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/m/?preview_theme=<?=$theme->name?>" class="iframe-mobile">Preview</a>
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>">Delete</a>
-            <?php endif; ?>
-        </p>
-
-    </div>
-
-<?php endforeach; ?>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Theme</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    <?php foreach ($mobile_themes as $theme): ?>
+        
+        <tr class="theme">
+            <td>
+                <p class="h3"><?=$theme->xml->name?></p>
+                <p><span class="thumbnail"><img width="200" src="<?=$theme->url?>/screenshot.png" /></span></p>
+                <p style="clear:both;">
+                    <?php if ($theme->name == Settings::get('active_mobile_theme')): ?>
+                        <strong>Active Theme</strong>
+                    <?php else: ?>
+                        <a href="<?=ADMIN?>/themes.php?activate=<?=$theme->name?>">Activate</a>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=MOBILE_HOST?>/?preview_theme=<?=$theme->name?>" class="iframe-mobile">Preview</a>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/themes.php?delete=<?=$theme->name?>" class="delete confirm" data-confirm="You're about to delete this theme and all of it's files. This cannot be undone. Do you want to proceed?">Delete</a>
+                    <?php endif; ?>
+                </p>
+            </td>
+            <td>
+                <?php if (!empty($theme->xml->description)): ?>
+                    <p><?=$theme->xml->description?></p>
+                <?php endif; ?>
+                    
+                <?php if (!empty($theme->xml->author)): ?>
+                    <p>By: <strong><?=$theme->xml->author?></strong></p>
+                <?php endif; ?>
+            </td>
+        </tr>
+        
+    <?php endforeach; ?>
+        
+    </tbody>
+</table>
 <!-- END MOBILE THEMES -->
+
 
 <?php include('footer.php'); ?>
