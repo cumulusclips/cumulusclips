@@ -125,44 +125,52 @@ include ('header.php');
 <div class="alert <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Language</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        
 
 <?php foreach ($lang_list as $language): ?>
 
-    <div class="block">
-
-        <p>
-            <strong><?=$language->xml->information->lang_name?></strong>
-            <?php if (!empty($language->xml->information->author)): ?>
-                by: <?=$language->xml->information->author?>
-            <?php endif; ?>
-        </p>
-
-        <p><strong>Sample:</strong> <?=$language->xml->information->sample?></p>
-
-        <?php if (!empty($language->xml->information->notes)): ?>
-            <p><?=$language->xml->information->notes?></p>
-        <?php endif; ?>
-
-
-        <p>
-            <?php if ($language->active && $language->default): ?>
-                <strong>Default Language</strong>
-            <?php else: ?>
-
-                <?php if ($language->active): ?>
-                    <a href="<?=ADMIN?>/languages.php?default=<?=$language->filename?>">Set Default</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="<?=ADMIN?>/languages.php?deactivate=<?=$language->filename?>">Deactivate</a>
+    <tr>
+        <td>
+            <p class="h3"><?=$language->xml->information->lang_name?></p>
+            <p>
+                <?php if ($language->active && $language->default): ?>
+                    <strong>Default Language</strong>
                 <?php else: ?>
-                    <a href="<?=ADMIN?>/languages.php?activate=<?=$language->filename?>">Activate</a>
+
+                    <?php if ($language->active): ?>
+                        <a href="<?=ADMIN?>/languages.php?default=<?=$language->filename?>">Set Default</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="<?=ADMIN?>/languages.php?deactivate=<?=$language->filename?>">Deactivate</a>
+                    <?php else: ?>
+                        <a href="<?=ADMIN?>/languages.php?activate=<?=$language->filename?>">Activate</a>
+                    <?php endif; ?>
+
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
                 <?php endif; ?>
-
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
-                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
+            </p>
+        </td>
+        <td>
+            <p><strong>Sample:</strong> <?=$language->xml->information->sample?></p>
+            <?php if (!empty($language->xml->information->author)): ?>
+                <p>By: <?=$language->xml->information->author?></p>
             <?php endif; ?>
-        </p>
 
-    </div>
+            <?php if (!empty($language->xml->information->notes)): ?>
+                <p><?=$language->xml->information->notes?></p>
+            <?php endif; ?>
+        </td>
+    </tr>
 
 <?php endforeach; ?>
+    </tbody>
+</table>
 
 <?php include('footer.php'); ?>

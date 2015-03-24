@@ -255,12 +255,25 @@ FILTERS
 
 
 
-/***
-GRID
-***/
+/*******************
+RECORD LISTS & GRIDS
+*******************/
 
 .table {
     margin: 0;
+}
+
+.table tr:hover .record-actions {
+    visibility: visible;
+}
+
+.table td .h3:first-child {
+    margin-top: 0;
+}
+
+.record-actions {
+    visibility: hidden;
+    margin-top:7px;
 }
 
 .record-actions a {
@@ -415,74 +428,6 @@ MISC STYLES
     background:url('../images/loading.gif') no-repeat 0 0;
     padding:2px 0 0 20px;
     height:16px;
-}
-
-
-
-
-
-/********************
-RECORD LISTING STYLES
-********************/
-
-#browse-header {
-    margin-top:15px;
-    overflow:hidden;
-}
-
-#browse-header .search {
-    float:right;
-}
-
-#browse-header .jump {
-    float:left;
-}
-
-#browse-header .add {
-    float:left;
-    margin-left:15px;
-}
-
-#browse-header select,
-#browse-header input[type="text"] {
-    border:1px solid #CCC;
-    border-radius:5px;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -moz-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    -webkit-box-shadow:0 0 2px 1px rgba(0,0,0,0.1) inset;
-    padding:5px;
-}
-#browse-header select {
-    padding-right:10px;
-}
-
-.list {
-    padding:0;
-}
-
-.list table {
-    width:100%;
-}
-
-.list td {
-    padding:20px 10px;
-    vertical-align:top;
-    width:30%;
-}
-
-.list .odd td {
-    background-color:#ebebeb;
-}
-
-.record-actions {
-    visibility: hidden;
-    margin-top:7px;
-}
-
-.table tr:hover .record-actions {
-    visibility: visible;
 }
 
 
@@ -692,10 +637,6 @@ PLUGIN STYLES
 
 #enable-options {
     line-height:14px;
-}
-
-#plugins .table .h3 {
-    margin-top: 0;
 }
 
 
