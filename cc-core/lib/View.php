@@ -112,7 +112,7 @@ class View
     protected function _getPageFromRoute(Route $route)
     {
         $patterns = array(
-            '/' . str_replace('/', '\/', preg_quote(DOC_ROOT . '/cc-core/controllers') . '/(mobile/)') . '?/i',
+            '/' . str_replace('/', '\/', preg_quote(DOC_ROOT . '/cc-core/controllers/')) . '?/i',
             '/\//',
             '/\.php$/i'
         );
