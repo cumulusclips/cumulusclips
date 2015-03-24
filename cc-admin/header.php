@@ -7,10 +7,9 @@
 <title><?=$page_title?></title>
 <link rel="shortcut icon" type="image/x-icon" href="<?=HOST?>/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" />
-<?php Functions::AdminOutputCss(); ?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">-->
-<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/admin.css" />
+<?php Functions::adminOutputCss(); ?>
+<link rel="stylesheet" href="<?=ADMIN?>/extras/bootstrap-3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/admin.css?v<?=CURRENT_VERSION?>" />
 </head>
 <body>
     
