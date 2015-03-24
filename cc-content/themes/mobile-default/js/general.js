@@ -22,6 +22,7 @@ $('body').pagecontainer({
         if (ui.prevPage.attr('id') === 'mobile_play') {
             ui.prevPage.find('.tab-blocks > div').hide();
             ui.prevPage.find('.about-container').show();
+            resetVideoPlayer();
             ui.prevPage.find('[data-block="about-container"]').addClass('ui-btn-active');
         }
         
@@ -198,6 +199,15 @@ function resetUploadForm()
     $('#uploaded-file').hide();
     $('#filename').val('');
     $('#private_url').hide();
+}
+
+function resetVideoPlayer()
+{
+    var video = $(document).find('video');
+    if (video.length) {
+        video[0].pause();
+        video[0].currentTime = 0;
+    }
 }
 
 /**

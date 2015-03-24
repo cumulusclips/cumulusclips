@@ -12,8 +12,6 @@ $db = Registry::get('db');
 $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
 $commentService = new CommentService();
-$this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
-$this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 
 // Verify a video was selected
 if (empty($_GET['vid']) || !is_numeric($_GET['vid']) || $_GET['vid'] < 1) App::Throw404();
@@ -22,8 +20,7 @@ if (empty($_GET['vid']) || !is_numeric($_GET['vid']) || $_GET['vid'] < 1) App::T
 $video = $videoMapper->getVideoByCustom(array(
     'video_id' => $_GET['vid'],
     'status' => 'approved',
-    'private' => '0',
-    'gated' => '0'
+    'private' => '0'
 ));
 if (!$video) App::throw404();
 

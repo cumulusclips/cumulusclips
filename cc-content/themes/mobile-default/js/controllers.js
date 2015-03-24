@@ -13,12 +13,6 @@ function playController()
     // Retrieve comments partial
     $.get(cumulusClips.themeUrl + '/blocks/comment.html', function(responseData, textStatus, jqXHR){cumulusClips.commentCardTemplate = responseData;});
     
-    // Play video when play icon is clicked
-    cumulusClips.video = videojs(playPage.find('video')[0]);
-    $('.icon-play').off('click').on('click', function(){
-        cumulusClips.video.play();
-    });
-    
     // Show/hide tab blocks when tabs are clicked on play page
     playPage.find('.play-tabs a').off('tap').on('tap', function(event){
         playPage.find('.tab-blocks > div').hide();
@@ -99,8 +93,9 @@ function playController()
     });
     
     // Display login popup when sign in link is clicked
-    $('.comments-container .login-link').on('click', function(event){
+    $('.login-link').on('click', function(event){
         $('#login').popup('open', {transition: 'pop', positionTo: 'window'});
+        event.preventDefault();
     });
     
     // Load more comments

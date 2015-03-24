@@ -313,33 +313,33 @@ h1 {
     height: 200px;
 }
 
-.video-player-container img {
-    position: absolute;
-    top: 0;
+.video-player .gate {
+    top: 50px;
     left: 0;
-    z-index: 1000;
     width: 100%;
-    height: 100%;
+    padding: 15px;
+    position: absolute;
+    background-color: rgba(0,0,0,0.7);
+    text-align: center;
+    color: #FFF;
+    text-shadow: none;
+    box-sizing: border-box;
 }
 
-.video-player-container .icon-play {
-    z-index: 1100;
-    background: url("../images/icon-play.svg") no-repeat 0 0;
-    background-size: 65px 65px;
-    width: 65px;
-    height: 65px;
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -33px;
-    margin-left: -33px;
-    opacity: .6;
+.video-player .gate p {
+    margin: 0;
+}
+
+.video-player .gate a {
+    margin: 10px 10px 0;
+    display: inline-block;
     text-decoration: none;
 }
 
-.video-player-container .icon-play:active {
-    opacity: .8;
+.video-player .gate a:hover,
+.video-player .gate a:active,
+.video-player .gate a:focus {
+    text-decoration: underline;
 }
 
 .video-player-container h1 {
@@ -348,12 +348,6 @@ h1 {
 
 .video-player-container [data-role="navbar"] {
     margin: .75em .75em 0;
-}
-
-.video-js {
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 

@@ -8,8 +8,6 @@ $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
 $this->view->vars->message = null;
 $this->view->vars->messageType = null;
-$username = null;
-$password = null;
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
@@ -21,12 +19,11 @@ $this->view->vars->meta->title = Language::getText('mobile_heading', array('site
 $this->view->vars->featuredVideos = $videoMapper->getMultipleVideosByCustom(array(
     'status' => 'approved',
     'featured' => '1',
-    'private' => '0',
-    'gated' => '0'
+    'private' => '0'
 ));
 
 // Retrieve Recent Videos
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' ORDER BY video_id DESC LIMIT 3";
+$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC LIMIT 3";
 $recentResults = $db->fetchAll($query);
 $this->view->vars->recentVideos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentResults, 'video_id')
