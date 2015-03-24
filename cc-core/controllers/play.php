@@ -16,7 +16,6 @@ $commentService = new CommentService();
 $videoService = new VideoService();
 $ratingService = new RatingService();
 $this->view->vars->tags = null;
-$this->view->vars->private = null;
 $this->view->vars->playlist = null;
 $this->view->vars->playlistVideos = null;
 $this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
@@ -26,17 +25,18 @@ $this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabl
 if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['vid'], 'status' => 'approved'))) {
 
     $this->view->vars->video = $video;
-    $this->view->vars->comments_url = HOST . '/videos/' . $this->view->vars->video->videoId . '/comments';
 
     // Prevent direct access to video to all users except owner
-    if ($this->view->vars->video->private == '1' && $this->view->vars->loggedInUser->userId != $this->view->vars->video->userId) {
-        App::Throw404();
+    if (
+        $this->view->vars->video->private == '1'
+        && $this->view->vars->loggedInUser
+        && $this->view->vars->loggedInUser->userId != $this->view->vars->video->userId
+    ) {
+        App::throw404();
     }
 
 } else if (!empty($_GET['private']) && $video = $videoMapper->getVideoByCustom(array('status' => 'approved', 'private_url' => $_GET['private']))) {
     $this->view->vars->video = $video;
-    $this->view->vars->private = true;
-    $this->view->vars->comments_url = HOST . '/private/comments/' . $this->view->vars->video->privateUrl;
 } else if (!empty($_GET['get_private'])) {
     exit($videoService->generatePrivate());
 } else {

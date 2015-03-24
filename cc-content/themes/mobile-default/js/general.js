@@ -22,8 +22,8 @@ $('body').pagecontainer({
         if (ui.prevPage.attr('id') === 'mobile_play') {
             ui.prevPage.find('.tab-blocks > div').hide();
             ui.prevPage.find('.about-container').show();
-            resetVideoPlayer();
             ui.prevPage.find('[data-block="about-container"]').addClass('ui-btn-active');
+            resetVideoPlayer();
         }
         
         // Reset video upload form when navigating away
@@ -201,6 +201,9 @@ function resetUploadForm()
     $('#private_url').hide();
 }
 
+/**
+ * Resets video progress
+ */
 function resetVideoPlayer()
 {
     var video = $(document).find('video');

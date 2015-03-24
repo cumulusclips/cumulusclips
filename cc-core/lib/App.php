@@ -122,13 +122,18 @@ class App
             && !isset($_GET['nomobile'])
             && !in_array($route->type, array(Route::MOBILE, Route::AGNOSTIC))
         ) {
-            // Detect if route is for video play page and redirect to mobile version instead
+            // Detect if route is for video or private play page and redirect to mobile version instead
             $router = new Router();
             $playRoute = $router->getStaticRoute('play');
-            if ($playRoute->location == $route->location) {
-                $requestPath = trim($router->getRequestUri(), '/');
+            $privateRoute = $router->getStaticRoute('privateVideoPlay');
+            $requestPath = trim($router->getRequestUri(), '/');
+            if ($playRoute->path == $route->path) {
                 preg_match('#^' . $route->path . '$#i', $requestPath, $matches);
                 header("Location: " . MOBILE_HOST . '/v/' . $matches[1] . '/');
+                exit();
+            } else if ($privateRoute->path == $route->path) {
+                preg_match('#^' . $route->path . '$#i', $requestPath, $matches);
+                header("Location: " . MOBILE_HOST . '/p/' . $matches[1] . '/');
                 exit();
             }
             

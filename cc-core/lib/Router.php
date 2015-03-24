@@ -420,6 +420,13 @@ class Router
             'type' => Route::MOBILE
         ));
         
+        $routes['mobilePrivatePlay'] = new Route(array(
+            'path' => 'm/p/([a-z0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/mobile/play.php',
+            'mappings' => array('private'),
+            'type' => Route::MOBILE
+        ));
+        
         $routes['mobileSearch'] = new Route(array(
             'path' => 'm/s',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/search.php',

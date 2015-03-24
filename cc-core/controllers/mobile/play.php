@@ -13,19 +13,27 @@ $videoMapper = new VideoMapper();
 $commentMapper = new CommentMapper();
 $commentService = new CommentService();
 
-// Verify a video was selected
-if (empty($_GET['vid']) || !is_numeric($_GET['vid']) || $_GET['vid'] < 1) App::Throw404();
+// Validate requested video
+if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['vid'], 'status' => 'approved'))) {
 
-// Verify video exists
-$video = $videoMapper->getVideoByCustom(array(
-    'video_id' => $_GET['vid'],
-    'status' => 'approved',
-    'private' => '0'
-));
-if (!$video) App::throw404();
+    $this->view->vars->video = $video;
+    
+    // Prevent direct access to video to all users except owner
+    if (
+        $this->view->vars->video->private == '1'
+        && $this->view->vars->loggedInUser
+        && $this->view->vars->loggedInUser->userId != $this->view->vars->video->userId
+    ) {
+        App::throw404();
+    }
+
+} else if (!empty($_GET['private']) && $video = $videoMapper->getVideoByCustom(array('status' => 'approved', 'private_url' => $_GET['private']))) {
+    $this->view->vars->video = $video;
+} else {
+    App::throw404();
+}
 
 // Retrieve video
-$this->view->vars->video = $video;
 $this->view->vars->meta->title = $video->title;
 
 // Retrieve comments
