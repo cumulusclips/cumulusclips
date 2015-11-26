@@ -32,11 +32,11 @@
                     <h2>Software</h2>
                     <table>
                         <tr>
-                            <td class="server-setting">PHP 5.2+</td>
+                            <td class="server-setting">PHP 5.3+</td>
                             <td>
                                 <?php if (!$version): ?>
                                     <img src="images/cross.png" />
-                                    CumulusClips requires at least PHP 5.2 to run. (Current version <?php echo $current_version; ?>)
+                                    CumulusClips requires at least PHP 5.3 to run. (Current version <?php echo $current_version; ?>)
                                 <?php elseif (!$php_path): ?>
                                     <img src="images/flag_yellow.png" />
                                     PHP path was not found. Video uploads have been disabled. <a href="#" class="more-info" data-content="php" title="More Info">More Info</a>
@@ -62,6 +62,15 @@
                     
                     <h2>PHP Modules</h2>
                     <table>
+                        <tr>
+                            <td class="server-setting">CURL</td>
+                            <td>
+                                <img src="images/<?php echo ($curl) ? 'tick.png' : 'cross.png'; ?>" />
+                                <?php if (!$curl): ?>
+                                This needs to be enabled
+                                <?php endif; ?>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="server-setting">GD</td>
                             <td>
@@ -113,9 +122,40 @@
                     
                     
                     
+
+
+
+
+                    <h2>PHP Functions</h2>
+                    <table>
+                        <tr>
+                            <td class="server-setting">posix_getuid()</td>
+                            <td>
+                                <img src="images/<?php echo ($posix_getuid) ? 'tick.png' : 'cross.png'; ?>" />
+                                <?php if (!$posix_getuid): ?>
+                                This needs to be enabled
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="server-setting">exec()</td>
+                            <td>
+                                <img src="images/<?php echo ($exec) ? 'tick.png' : 'cross.png'; ?>" />
+                                <?php if (!$exec): ?>
+                                This needs to be enabled
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    </table>                  
                     
+
                     
-                    
+
+
+
+
+
+
                     <h2>PHP Settings</h2>
                     <table>
                         <tr>
