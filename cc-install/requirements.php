@@ -19,7 +19,7 @@ $continue = null;
 
 
 // Check PHP version
-if (version_compare(phpversion(), '5.2.0') >= 0) {
+if (version_compare(phpversion(), '5.3.0') >= 0) {
     $version = true;
 } else {
     $version = false;
@@ -78,6 +78,30 @@ if (empty ($which_results_ffmpeg)) {
 }
 
 
+// Retrieve disabled functions
+$disabledFunctions = explode(',', ini_get('disable_functions'));
+
+// Verify exec function is available
+if (function_exists('exec') && !in_array('exec', $disabledFunctions)) {
+    $exec = true;
+} else {
+    $errors = true;
+    $exec = false;
+}
+
+
+// Verify posix_getuid function is available
+if (function_exists('posix_getuid') && !in_array('posix_getuid', $disabledFunctions)) {
+    $posix_getuid = true;
+} else {
+    $errors = true;
+    $posix_getuid = false;
+}
+
+
+// Verify 'curl' php module is loaded
+$curl = extension_loaded ('curl');
+if (!$curl) $errors = true;
 
 
 // Verify 'gd' php module is loaded

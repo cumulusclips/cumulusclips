@@ -164,7 +164,7 @@ class Router
         ));
         
         $routes['play'] = new Route(array(
-            'path' => 'videos/([0-9]+)/[a-z0-9\-]+',
+            'path' => 'videos/([0-9]+)(/[a-z0-9\-]+)?',
             'location' => DOC_ROOT . '/cc-core/controllers/play.php',
             'mappings' => array('vid')
         ));  

@@ -415,6 +415,8 @@
         ]]></error_upload_system>
         <error_upload_extension>Your file is not in one of the accepted file formats. Please try again.</error_upload_extension>
         <error_upload_empty>No file was uploaded. Please try again.</error_upload_empty>
+        <error_avatar_reset>We were unable to reset your avatar. Please try again later.</error_avatar_reset>
+        <error_generic>We were unable to complete your request. Please try again later. If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.</error_generic>
 
         <success_logout>You have been successfully logged out.</success_logout>
         <success_avatar_reset>Your avatar has been reset.</success_avatar_reset>

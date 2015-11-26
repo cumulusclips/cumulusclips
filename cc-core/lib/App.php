@@ -109,7 +109,7 @@ class App
     {
         // Verify if user opted-out from Mobile site
         if (isset($_GET['nomobile'])) {
-            setcookie('nomobile', md5('nomobile'), time()+3600*24*3);
+            setcookie('nomobile', md5('nomobile'), time()+3600*12);
         }
         
         // Redirect to mobile if user hasn't opted out from mobile site

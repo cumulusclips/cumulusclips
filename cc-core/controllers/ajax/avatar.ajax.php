@@ -37,6 +37,12 @@ try {
         throw new Exception(Language::getText('error_upload_extension'));
     }
 
+    // Validate mime type against extension
+    $mimeType = @exif_imagetype($_FILES['upload']['tmp_name']);
+    if (!$mimeType || Avatar::getMimeTypeFromExtension($extension) != $mimeType) {
+        throw new Exception(Language::getText('error_upload_extension'));
+    }
+
     // Validate image data
     $handle = fopen($_FILES['upload']['tmp_name'],'r');
     $image_data = fread($handle, filesize ($_FILES['upload']['tmp_name']));

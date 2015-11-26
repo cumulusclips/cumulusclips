@@ -45,9 +45,9 @@ class Functions
      */
     public static function getExtension($filename)
     {
-        if (!strrpos ($filename, '.')) return false;
-        $filename_sections = explode ('.', $filename);
-        return array_pop ($filename_sections);
+        if (!strrpos($filename, '.')) return false;
+        $filename_sections = explode('.', $filename);
+        return strtolower(array_pop($filename_sections));
     }
 
     /**

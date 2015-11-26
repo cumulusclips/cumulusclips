@@ -12,7 +12,7 @@ try {
         'video_id' => $_GET['vid'],
         'status' => 'approved',
         'gated' => '0',
-        'private' => '0'
+        'disable_embed' => '0'
     ));
     if (!$video) throw new Exception();
 } catch (Exception $e) {
@@ -22,3 +22,5 @@ try {
 $this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
 $this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 $this->view->vars->video = $video;
+$video->views++;
+$videoMapper->save($video);

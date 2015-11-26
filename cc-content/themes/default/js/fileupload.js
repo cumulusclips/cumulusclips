@@ -91,7 +91,7 @@ $(function(){
                 }
             } else {
                 resetProgress();
-                displayMessage(true, data.result.message);
+                displayMessage(false, data.result.message);
             }
         }
     });
