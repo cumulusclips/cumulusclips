@@ -31,7 +31,7 @@ if (isset($_POST['submitted'])) {
         }
 
         // Validate Username
-        if (!empty($_POST['username']) && preg_match('/[a-z0-9]+/i', $_POST['username'])) {
+        if (!empty($_POST['username']) && preg_match('/^[a-z0-9]+$/i', $_POST['username'])) {
             if (!$userMapper->getUserByUsername($_POST['username'])) {
                 $this->view->vars->user->username = $_POST['username'];
             } else {
