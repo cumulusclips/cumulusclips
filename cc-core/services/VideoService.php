@@ -9,7 +9,12 @@ class VideoService extends ServiceAbstract
      */
     public function getUrl(Video $video)
     {
-        return HOST . '/videos/' . $video->videoId . '/' . Functions::createSlug($video->title);
+        if ($video->private) {
+            return HOST . '/private/videos/' . $video->privateUrl;
+        } else {
+            $slug = Functions::createSlug($video->title);
+            return HOST . '/videos/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
+        }
     } 
     
     /**
