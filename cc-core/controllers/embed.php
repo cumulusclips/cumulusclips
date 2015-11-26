@@ -12,7 +12,7 @@ try {
         'video_id' => $_GET['vid'],
         'status' => 'approved',
         'gated' => '0',
-        'private' => '0'
+        'disable_embed' => '0'
     ));
     if (!$video) throw new Exception();
 } catch (Exception $e) {

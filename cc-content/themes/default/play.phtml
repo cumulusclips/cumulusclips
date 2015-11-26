@@ -117,7 +117,7 @@ $this->setLayout('full');
             <a class="google" href="https://plus.google.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>" onClick="javascript:window.open(this.href, 'sharewindow', 'height=600,width=600');return false;">Share</a>
         </div>
         
-        <?php if ($video->disableEmbed == '0' && $video->gated == '0' && $video->private == '0'): ?>
+        <?php if ($video->disableEmbed == '0' && $video->gated == '0'): ?>
             <!-- EMBED CODE -->
             <div>
                 <p class="big"><?=Language::getText('embed')?></p>
