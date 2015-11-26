@@ -90,14 +90,16 @@ class Avatar
     /**
      * Delete an avatar
      * @param integer $filename Name of file to be deleted
-     * @return void Avatar is deleted from filesystem
+     * @return boolean Returns true if avatar is deleted from filesystem, false otherwise
      */
     public static function delete($filename)
     {
         try {
             Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename);
+            return true;
         } catch (Exception $e) {
             App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
+            return false;
         }
     }
 
