@@ -32,7 +32,7 @@ try {
     }
 
     // Validate avatar extension
-    $extension = strtolower(Functions::getExtension($_FILES['upload']['name']));
+    $extension = Functions::getExtension($_FILES['upload']['name']);
     if (!in_array($extension, array('gif','png','jpg','jpeg'))) {
         throw new Exception(Language::getText('error_upload_extension'));
     }
