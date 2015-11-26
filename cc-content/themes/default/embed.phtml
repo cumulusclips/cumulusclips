@@ -30,10 +30,10 @@ html, body, .video-unavailable, video, img, .video-js {
     <!-- BEGIN VIDEO -->
     <video class="video-js vjs-default-skin" data-setup='{ "controls": true, "autoplay": false, "preload": "auto" }' poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
         <source src="<?=$config->h264Url?>/<?=$video->filename?>.mp4" type="video/mp4" />
-        <?php if ($webmEncodingEenabled): ?>
+        <?php if ($webmEncodingEnabled): ?>
             <source src="<?=$config->webmUrl?>/<?=$video->filename?>.webm" type="video/webm" />
         <?php endif; ?>
-        <?php if ($theoraEncodingEenabled): ?>
+        <?php if ($theoraEncodingEnabled): ?>
             <source src="<?=$config->theoraUrl?>/<?=$video->filename?>.ogv" type="video/ogg" />
         <?php endif; ?>
     </video>
