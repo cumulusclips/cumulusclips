@@ -43,7 +43,7 @@ if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 else if (!empty($_GET['feature']) && is_numeric($_GET['feature'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'featured' => 0, 'status' => 'approved'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['feature'], 'featured' => 0, 'status' => VideoMapper::APPROVED));
     if ($video) {
         $video->featured = true;
         $videoMapper->save($video);
@@ -56,7 +56,7 @@ else if (!empty($_GET['feature']) && is_numeric($_GET['feature'])) {
 else if (!empty($_GET['unfeature']) && is_numeric($_GET['unfeature'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'featured' => 1, 'status' => 'approved'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unfeature'], 'featured' => 1, 'status' => VideoMapper::APPROVED));
     if ($video) {
         $video->featured = false;
         $videoMapper->save($video);
@@ -81,7 +81,7 @@ else if (!empty($_GET['approve']) && is_numeric($_GET['approve'])) {
 else if (!empty($_GET['unban']) && is_numeric($_GET['unban'])) {
 
     // Validate video id
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unban'], 'status' => 'banned'));
+    $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['unban'], 'status' => VideoMapper::BANNED));
     if ($video) {
         $videoService->approve($video, 'approve');
         $message = 'Video has been unbanned';
@@ -94,8 +94,8 @@ else if (!empty($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate video id
     $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['ban']));
-    if ($video && $video->status != 'banned') {
-        $video->status = 'banned';
+    if ($video && $video->status != VideoMapper::BANNED) {
+        $video->status = VideoMapper::BANNED;
         $videoMapper->save($video);
         $flagService = new FlagService();
         $flagService->flagDecision($video, true);
@@ -106,7 +106,7 @@ else if (!empty($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
 // Determine which type (status) of video to display
 $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE";
-$status = (!empty($_GET['status'])) ? $_GET['status'] : 'approved';
+$status = (!empty($_GET['status'])) ? $_GET['status'] : VideoMapper::APPROVED;
 switch ($status) {
     case 'pending':
         $query .= " status IN ('processing', '" . VideoMapper::PENDING_APPROVAL . "', '" . VideoMapper::PENDING_CONVERSION . "')";
@@ -116,21 +116,21 @@ switch ($status) {
         $statusText = 'Pending';
         break;
     case 'banned':
-        $query .= " status = 'banned'";
+        $query .= " status = '" . VideoMapper::BANNED . "'";
         $query_string['status'] = 'banned';
         $header = 'Banned Videos';
         $page_title = 'Banned Videos';
         $statusText = 'Banned';
         break;
     case 'featured':
-        $query .= " status = 'approved' AND featured = 1";
+        $query .= " status = '" . VideoMapper::APPROVED . "' AND featured = 1";
         $query_string['status'] = 'featured';
         $header = 'Featured Videos';
         $page_title = 'Featured Videos';
         $statusText = 'Featured';
         break;
     default:
-        $query .= " status = 'approved'";
+        $query .= " status = '" . VideoMapper::APPROVED . "'";
         $status = 'approved';
         $header = 'Approved Videos';
         $page_title = 'Approved Videos';
