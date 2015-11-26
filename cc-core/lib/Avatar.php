@@ -100,4 +100,23 @@ class Avatar
             App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
         }
     }
+
+    /**
+     * Determines image mime type based on given extension
+     * @param string $extension The file extension to find the mime type for
+     * @return int|boolean Returns image mime type value if found, false otherwise
+     */
+    public static function getMimeTypeFromExtension($extension)
+    {
+        $extensionLower = strtolower($extension);
+        if ($extensionLower == 'jpg' || $extensionLower == 'jpeg') {
+            return IMAGETYPE_JPEG;
+        } else if ($extensionLower == 'gif') {
+            return IMAGETYPE_GIF;
+        } else if ($extensionLower == 'png') {
+            return IMAGETYPE_PNG;
+        } else {
+            return false;
+        }
+    }
 }
