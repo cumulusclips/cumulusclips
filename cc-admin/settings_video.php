@@ -296,7 +296,7 @@ include('header.php');
     </div>
 
     <div class="form-group <?=(isset ($errors['video_size_limit'])) ? 'has-error' : ''?>">
-        <label class="control-label">Video Site Limit:</label>
+        <label class="control-label">Video Size Limit:</label>
         <input class="form-control" type="text" name="video_size_limit" value="<?=$data['video_size_limit']?>" />
         (Bytes)
     </div>
