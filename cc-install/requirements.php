@@ -1,13 +1,13 @@
 <?php
 
 // Send user to appropriate step
-// if (!isset ($settings->completed) || !in_array ('welcome', $settings->completed)) {
-//     header ("Location: " . HOST . '/cc-install/');
-//     exit();
-// } else if (in_array ('requirements', $settings->completed)) {
-//     header ("Location: " . HOST . '/cc-install/?ftp');
-//     exit();
-// }
+if (!isset ($settings->completed) || !in_array ('welcome', $settings->completed)) {
+    header ("Location: " . HOST . '/cc-install/');
+    exit();
+} else if (in_array ('requirements', $settings->completed)) {
+    header ("Location: " . HOST . '/cc-install/?ftp');
+    exit();
+}
 
 
 // Establish needed vars.
