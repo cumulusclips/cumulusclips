@@ -17,14 +17,13 @@ $(function(){
             // Validate file type
             var matches = file.name.match(/\.[a-z0-9]+$/i);
             var fileTypes = $.parseJSON($('input[name="file-types"]').val());
-            var filesizeLimit = $('input[name="upload-limit"]').val();
-            var filename = '';
-            if (!matches || $.inArray(matches[0].substr(1),fileTypes) == -1) {
-                displayMessage(false, cumulusClips.errorFormat);
+            if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), fileTypes) == -1) {
+                displayMessage(false, 'errors occurred');
                 return false;
             }
             
             // Validate filesize
+            var filesizeLimit = $('input[name="upload-limit"]').val();
             if (file.size > filesizeLimit) {
                 displayMessage(false, cumulusClips.errorSize);
                 return false;
@@ -36,7 +35,7 @@ $(function(){
             $('#upload_status .percentage').text('0%');
             
             // Set upload filename
-            filename = file.name;
+            var filename = file.name;
             if (!cumulusClips.ie9) filename += ' (' + formatBytes(file.size, 0) + ')';
             $('#upload_status .title').text(filename);
         },

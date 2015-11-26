@@ -168,7 +168,7 @@ include('header.php');
     </div>
 
     <?php $style = ($videoUploadMessage) ? 'display: block;' : ''; ?>
-    <div class="upload-complete alert alert-info" style="<?=$style?>"><?=$videoUploadMessage?></div>
+    <div class="upload-complete" style="<?=$style?>"><?=$videoUploadMessage?></div>
 
     <div id="upload_status">
         <div class="title"></div>

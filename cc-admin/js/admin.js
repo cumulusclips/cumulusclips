@@ -300,12 +300,12 @@ function formatBytes(bytes, precision)
  */
 function displayMessage(result, message)
 {
-    var cssClass = (result == true) ? 'success' : 'errors';
-    var existingClass = ($('.message').hasClass('success')) ? 'success' : 'errors';
-    $('.message').show();
-    $('.message').html(message);
-    $('.message').removeClass(existingClass);
-    $('.message').addClass(cssClass);
+    var cssClass = (result == true) ? 'alert-success' : 'alert-danger';
+    var existingClass = ($('.alert').hasClass('alert-success')) ? 'alert-success' : 'alert-danger';
+    $('.alert').show();
+    $('.alert').html(message);
+    $('.alert').removeClass(existingClass);
+    $('.alert').addClass(cssClass);
 }
 
 /**
