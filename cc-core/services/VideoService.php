@@ -138,7 +138,7 @@ class VideoService extends ServiceAbstract
                 }
 
                 // Activate & Release
-                $video->status = 'approved';
+                $video->status = VideoMapper::APPROVED;
                 $video->released = true;
                 $videoMapper->save($video);
                 
@@ -152,7 +152,7 @@ class VideoService extends ServiceAbstract
         // Video is being re-approved
         } else if ($action == 'approve' && $video->released) {
             // Approve Video
-            $video->status = 'approved';
+            $video->status = VideoMapper::APPROVED;
             $videoMapper->save($video);
         }
 
@@ -166,8 +166,16 @@ class VideoService extends ServiceAbstract
         }
     }
     
+    /**
+     * Send subscribers notification that a video has been posted by one of their subscribed users
+     */
     protected function _notifySubscribersOfNewVideo(Video $video)
     {
+        // Do not send subscriber notification for private videos
+        if ($video->private) {
+            return;
+        }
+
         $config = Registry::get('config');
         $userService = new UserService();
         $privacyService = new PrivacyService();
