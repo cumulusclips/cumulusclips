@@ -7,7 +7,7 @@ define('LOG', DOC_ROOT . '/cc-core/logs');
 define('CONVERSION_LOG', LOG . '/converter.log');
 define('DATABASE_LOG', LOG . '/database.log');
 define('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
-define('CURRENT_VERSION', '2.2.0');
+define('CURRENT_VERSION', '2.2.1');
 define('LOG_QUERIES', false);
 define('DATE_FORMAT', 'Y-m-d H:i:s');
 define('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
