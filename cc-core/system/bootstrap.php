@@ -26,7 +26,7 @@ if (!set_include_path($includePath)) exit('CC-ERROR-100 CumulusClips has encount
 spl_autoload_register(array('App', 'loadClass'));
 
 // Checks
-App::installCheck();
+// App::installCheck();
 App::maintCheck();
 
 // Load DB & FTP credentials
