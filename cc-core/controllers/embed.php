@@ -22,3 +22,5 @@ try {
 $this->view->vars->webmEncodingEnabled = (Settings::get('webm_encoding_enabled') == '1') ? true : false;
 $this->view->vars->theoraEncodingEnabled = (Settings::get('theora_encoding_enabled') == '1') ? true : false;
 $this->view->vars->video = $video;
+$video->views++;
+$videoMapper->save($video);
