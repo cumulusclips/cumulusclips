@@ -776,3 +776,17 @@ FILE UPLOAD STYLES
     background-color: #d9edf7;
     border: 1px solid #bce8f1;
 }
+
+
+
+
+
+/*************
+CUSTOMIZATIONS
+*************/
+
+#customizations textarea {
+    min-height: 200px;
+    width: 100%;
+    margin-bottom: 10px;
+}

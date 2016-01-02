@@ -97,6 +97,7 @@
             <?php $appearanceMenuOpen = Functions::isPanelOpen('appearance'); ?>
             <a href="#menu-appearance" data-toggle="collapse" class="icon-appearance <?=($appearanceMenuOpen) ? '' : 'collapsed'?>"><span>Appearance</span></a>
             <ul id="menu-appearance" class="collapse <?=($appearanceMenuOpen) ? 'in' : ''?>">
+                <li class="<?=($pageName == 'customizations') ? 'active' : ''?>"><a href="<?=ADMIN?>/customizations.php">Customizations</a></li>
                 <li class="<?=($pageName == 'themes') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes.php">Themes</a></li>
                 <li class="<?=($pageName == 'themes-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></li>
                 <li class="<?=($pageName == 'languages') ? 'active' : ''?>"><a href="<?=ADMIN?>/languages.php">Languages</a></li>
