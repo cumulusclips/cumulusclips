@@ -139,7 +139,7 @@
         <favorites>Favorites</favorites>
         <watch_later>Watch Later</watch_later>
         <playlists>Playlists</playlists>
-        <playlist_login><![CDATA[You must <a href="{HOST}/login/">login</a> to add videos to your playlists.]]></playlist_login>
+        <playlist_login><![CDATA[You must <a href="{URL}">login</a> to add videos to your playlists.]]></playlist_login>
         <create_new_playlist>Create New Playlist</create_new_playlist>
         <playlist_name>Playlist Name</playlist_name>
         <visibility>Visibility</visibility>

@@ -20,7 +20,7 @@ $this->setLayout('full');
             <img width="600" height="337" src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" alt="" />
             <div>
                 <p><?=Language::getText('gated_video')?></p>
-                <a href="<?=HOST?>/login/" class="button_small"><?=Language::getText('login')?></a>
+                <a href="<?=HOST?>/login/?redirect=<?=urlencode($this->getService('Video')->getUrl($video))?>" class="button_small"><?=Language::getText('login')?></a>
                 <a href="<?=HOST?>/register/" class="button_small"><?=Language::getText('register')?></a>
             </div>
         </div>
@@ -165,7 +165,7 @@ $this->setLayout('full');
             </div>
         <?php else: ?>
             <p class="big"><?=Language::getText('add_to')?></p>
-            <p><?=Language::getText('playlist_login', array('host' => HOST))?></p>
+            <p><?=Language::getText('playlist_login', array('url' => HOST . '/login/?redirect=' . urlencode($this->getService('Video')->getUrl($video))))?></p>
         <?php endif; ?>
     </div>
 
@@ -195,7 +195,7 @@ $this->setLayout('full');
                 </div>
                 <!-- END COMMENTS FORM -->
             <?php else: ?>
-                <p class="commentMessage"><?=Language::getText('comments_login', array('login_link' => HOST . '/login/', 'register_link' => HOST . '/register/'))?></p>
+                <p class="commentMessage"><?=Language::getText('comments_login', array('login_link' => HOST . '/login/?redirect=' . urlencode($this->getService('Video')->getUrl($video)), 'register_link' => HOST . '/register/'))?></p>
             <?php endif; ?>
 
 

@@ -13,6 +13,7 @@
         <label class="<?=($login_submit && !$password) ? 'error' : ''?>"><?=Language::getText('password')?>:</label>
         <input type="password" name="password" value="" />
 
+        <input type="hidden" name="redirect" value="<?=urlencode($redirect)?>" />
         <input type="hidden" name="submitted_login" value="TRUE" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('login_button')?>" />
 
