@@ -24,7 +24,8 @@ $this->view->vars->recent_videos = $videoMapper->getVideosFromList(
 );
 
 // Show message if user logged out
-if (isset($_GET['logout'])) {
+if (isset($_SESSION['logout'])) {
+    unset($_SESSION['logout']);
     $this->view->vars->logout = true;
 }
 
