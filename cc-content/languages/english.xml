@@ -418,7 +418,7 @@
         <error_avatar_reset>We were unable to reset your avatar. Please try again later.</error_avatar_reset>
         <error_generic>We were unable to complete your request. Please try again later. If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.</error_generic>
 
-        <success_logout>You have been successfully logged out.</success_logout>
+        <success_logout>You have successfully logged out.</success_logout>
         <success_avatar_reset>Your avatar has been reset.</success_avatar_reset>
         <success_avatar_updated>Your avatar has been updated.</success_avatar_updated>
         <success_rated>Rating has been submitted.</success_rated>

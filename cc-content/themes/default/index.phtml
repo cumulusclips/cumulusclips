@@ -4,6 +4,10 @@ $this->addJs('jcycle.js');
 if (!$loggedInUser) $this->addSidebarBlock('home_login.phtml');
 ?>
 
+<?php if ($logout): ?>
+    <div class="message success"><?=Language::getText('success_logout')?></div>
+<?php endif; ?>
+
 <h1><?=Language::getText('home_header')?></h1>
 
 <!-- BEGIN SLIDESHOW -->

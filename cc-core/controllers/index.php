@@ -1,6 +1,7 @@
 <?php
 
 Plugin::triggerEvent('index.start');
+$this->view->vars->logout = false;
 
 // Verify if user is logged in
 $userService = new UserService();
@@ -21,5 +22,10 @@ $recentVideosResults = $db->fetchAll($query);
 $this->view->vars->recent_videos = $videoMapper->getVideosFromList(
     Functions::arrayColumn($recentVideosResults, 'video_id')
 );
+
+// Show message if user logged out
+if (isset($_GET['logout'])) {
+    $this->view->vars->logout = true;
+}
 
 Plugin::triggerEvent('index.end');

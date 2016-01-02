@@ -55,7 +55,7 @@ body {
 
 #main > .left > h1,
 #main > h1 {
-    margin-top: -10px;
+    margin-top: 0;
 }
 
 #footer {
