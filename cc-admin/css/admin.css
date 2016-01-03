@@ -200,6 +200,11 @@ SIDEBAR
     padding: 2px 0 2px 25px;
 }
 
+#sidebar .menu .icon-library span {
+    background: url("../images/icon-library.png") no-repeat 0 0;
+    padding-left: 25px;
+}
+
 #sidebar .menu .icon-appearance span {
     background: url("../images/icon-appearance.png") no-repeat 0 0;
     padding: 2px 0 2px 25px;
@@ -779,14 +784,33 @@ FILE UPLOAD STYLES
 
 
 
-
-
-/*************
-CUSTOMIZATIONS
-*************/
+/** Customizations **/
 
 #customizations textarea {
     min-height: 200px;
     width: 100%;
     margin-bottom: 10px;
+}
+
+
+
+/** Library **/
+
+#library .table {
+    table-layout: fixed;
+}
+
+#library .table th,
+#library .table td {
+    width: 15%;
+}
+
+#library .table .title {
+    width: 40%;
+}
+
+#library .table .url {
+    width: 30%;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }

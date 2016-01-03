@@ -94,6 +94,15 @@
         </div>
 
         <div class="menu">
+            <?php $libraryMenuOpen = Functions::isPanelOpen('library'); ?>
+            <a href="#menu-library" data-toggle="collapse" class="icon-library <?=($libraryMenuOpen) ? '' : 'collapsed'?>"><span>Library</span></a>
+            <ul id="menu-library" class="collapse <?=($libraryMenuOpen) ? 'in' : ''?>">
+                <li class="<?=($pageName == 'library') ? 'active' : ''?>"><a href="<?=ADMIN?>/library.php">Browse Library</a></li>
+                <li class="<?=($pageName == 'library-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/library_add.php">Add New File</a></li>
+            </ul>
+        </div>
+
+        <div class="menu">
             <?php $appearanceMenuOpen = Functions::isPanelOpen('appearance'); ?>
             <a href="#menu-appearance" data-toggle="collapse" class="icon-appearance <?=($appearanceMenuOpen) ? '' : 'collapsed'?>"><span>Appearance</span></a>
             <ul id="menu-appearance" class="collapse <?=($appearanceMenuOpen) ? 'in' : ''?>">

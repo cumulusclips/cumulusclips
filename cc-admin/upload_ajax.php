@@ -10,27 +10,28 @@ Functions::redirectIf($adminUser, HOST . '/login/');
 Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
-$videoService = new VideoService();
+$validateExtension = true;
+$tempFile = UPLOAD_PATH . '/temp/' . $adminUser->userId . '-';
 
 // Verify post params are valid
-if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], array('addon', 'video'))) {
+if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], array('library', 'addon', 'video'))) {
     App::throw404();
 }
 
 try {
-    // Create vars based on upload type (video | addon)
+    // Create vars based on upload type (video, addon,  library file, etc.)
     if ($_POST['upload-type'] == 'video') {
         $maxFilesize = $config->videoSizeLimit;
         $extensionList = $config->acceptedVideoFormats;
-        $temp = UPLOAD_PATH . '/temp';
-        $fileName = $videoService->generateFilename() . '.';
-        $createDir = false;
+        $tempFile .= 'video';
+    } else if ($_POST['upload-type'] == 'library') {
+        $maxFilesize = $config->fileSizeLimit;
+        $validateExtension = false;
+        $tempFile .= 'library';
     } else {
         $maxFilesize = 1024*1024*100;
         $extensionList = array('zip');
-        $temp = UPLOAD_PATH . '/temp/.' . session_id();
-        $fileName = 'addon' . '.';
-        $createDir = true;
+        $tempFile .= 'addon';
     }
     
     // Verify upload was made
@@ -51,17 +52,13 @@ try {
 
     // Validate file extension
     $extension = Functions::getExtension($_FILES['upload']['name']);
-    if (!in_array($extension, $extensionList)) throw new Exception('Upload file type not allowed');
-
-    // Create temp dir
-    if ($createDir) {
-        Filesystem::createDir($temp);
-        Filesystem::setPermissions($temp, 0777);
+    if ($validateExtension) {
+        if (!in_array($extension, $extensionList)) throw new Exception('Upload file type not allowed');
     }
 
-    // Move zip to temp dir
-    $fileName .= $extension;
-    if (!@move_uploaded_file($_FILES['upload']['tmp_name'], "$temp/$fileName")) {
+    // Move uploaded file to CumulusClips temp directory
+    $tempFile .= '-' . time() . '.' . $extension;
+    if (!@move_uploaded_file($_FILES['upload']['tmp_name'], $tempFile)) {
         App::Alert('Error During Admin File Upload', 'Uploaded file could not be moved from OS temp directory');
         throw new Exception('Uploaded file could not be moved from OS temp directory');
     }
@@ -72,9 +69,9 @@ try {
     )));
 }
 
-// Notify Uploadify of success
+// Notify uploader of success
 exit(json_encode((object) array(
     'result' => true,
     'message' => 'SUCCESS',
-    'other' => (object) array('temp' => "$temp/$fileName")
+    'other' => (object) array('temp' => $tempFile)
 )));

@@ -17,7 +17,6 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
-$clean_up = true;
 
 // Handle Upload Form
 if (isset($_POST['submitted'])) {
@@ -25,21 +24,28 @@ if (isset($_POST['submitted'])) {
     // Validate file upload
     if (!empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
         
-        // Extract zip archive and move theme
         try {
+            // Create extraction directory
+            $tempFile = $_POST['temp-file'];
+            $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($tempFile, '.zip');
+            Filesystem::createDir($extractionDirectory);
+            Filesystem::setPermissions($extractionDirectory, 0777);
+            
+            // Move zip to extraction directory
+            Filesystem::rename($tempFile, $extractionDirectory . '/addon.zip');
+
             // Extract theme
-            $tempDirectory = dirname($_POST['temp-file']);
-            Filesystem::extract($_POST['temp-file']);
+            Filesystem::extract($extractionDirectory . '/addon.zip');
 
             // Check for duplicates
-            $temp_contents = array_diff(scandir($tempDirectory), array('.', '..', 'addon.zip'));
-            $themeName = array_pop($temp_contents);
+            $extractionDirectoryContents = array_diff(scandir($extractionDirectory), array('.', '..', 'addon.zip'));
+            $themeName = array_pop($extractionDirectoryContents);
             if (file_exists(DOC_ROOT . '/cc-content/themes/' . $themeName)) {
                 throw new Exception("Theme cannot be added. It conflicts with another theme.");
             }
 
             // Copy theme contents to themes dir
-            Filesystem::copyDir($tempDirectory . '/' . $themeName, DOC_ROOT . '/cc-content/themes/' . $themeName);
+            Filesystem::copyDir($extractionDirectory . '/' . $themeName, THEMES_DIR . '/' . $themeName);
 
             // Validate theme
             if (!Functions::validTheme($themeName)) {
@@ -47,8 +53,7 @@ if (isset($_POST['submitted'])) {
             }
 
             // Clean up
-            $clean_up = false;
-            Filesystem::delete($tempDirectory);
+            Filesystem::delete($extractionDirectory);
 
             // Display success message
             $xml = simplexml_load_file(THEMES_DIR . '/' . $themeName . '/theme.xml');
@@ -58,21 +63,12 @@ if (isset($_POST['submitted'])) {
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'alert-danger';
+        }
 
-            // Perform clean up if plugin contained errors
-            if ($clean_up) {
-                try {
-                    Filesystem::delete($tempDirectory);
-                } catch (Exception $e) {
-                    $message = $e->getMessage();
-                    $message_type = 'alert-danger';
-                }
-            }
-        }   //  END extract and move theme
     } else {
         $message = 'Invalid file upload';
         $message_type = 'alert-danger';
-    }   // END check for form errors
+    }
 }
 
 // Output Header

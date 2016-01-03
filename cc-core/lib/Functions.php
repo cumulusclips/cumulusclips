@@ -351,4 +351,17 @@ class Functions
             return $newDuration;
         }
     }
+
+    /**
+     * Formats given kilobytes into largest human readable unit size
+     * @param int $kiloBytes Kilobytes to be formatted
+     * @param int $precision (optional) The precision to be used when rounding the final output
+     * @return string Returns the formatted bytes in the calculated units with a units suffixed
+     */
+    public static function formatKiloBytes($kiloBytes, $precision = 2)
+    {
+        $base = log($kiloBytes, 1000);
+        $suffix = array("KB", "MB", "GB", "TB", "PT");
+        return round(pow(1000, $base - floor($base)), $precision) . $suffix[floor($base)];
+    }
 }

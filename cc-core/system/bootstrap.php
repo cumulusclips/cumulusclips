@@ -48,6 +48,7 @@ $config->roles = json_decode(Settings::get('roles'));
 $config->enableUploads = Settings::get('enable_uploads');
 $config->debugConversion = Settings::get('debug_conversion') == '1' ? true : false;
 $config->videoSizeLimit = Settings::get('video_size_limit');
+$config->fileSizeLimit = Settings::get('file_size_limit');
 $config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v', '3gp');
 $config->acceptedAvatarFormats = array('png', 'jpeg', 'jpg', 'gif');
 $config->h264Url = HOST . '/cc-content/uploads/h264';

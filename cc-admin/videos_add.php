@@ -27,8 +27,8 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $private_url = $videoService->generatePrivate();
 $tempFile = null;
-$videoUploadMessage = null;
-$originalVideoName = null;
+$uploadMessage = null;
+$originalName = null;
 
 // Retrieve Category names
 $categoryService = new CategoryService();
@@ -38,10 +38,10 @@ $categories = $categoryService->getCategories();
 if (isset($_POST['submitted'])) {
 
     // Validate video upload
-    if (!empty($_POST['original-video-name']) && !empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
+    if (!empty($_POST['original-name']) && !empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
         $tempFile = $_POST['temp-file'];
-        $originalVideoName = trim($_POST['original-video-name']);
-        $videoUploadMessage = $originalVideoName . ' - has been uploaded.';
+        $originalName = trim($_POST['original-name']);
+        $uploadMessage = $originalName . ' - has been uploaded.';
     } else {
         $errors['video'] = 'Invalid video upload';
     }
@@ -110,32 +110,42 @@ if (isset($_POST['submitted'])) {
 
     // Update video if no errors were made
     if (empty($errors)) {
-        // Create record
-        $video->userId = $adminUser->userId;
-        $video->originalExtension = Functions::getExtension($tempFile);
-        $video->filename = basename($tempFile, '.' . $video->originalExtension);
-        $video->status = VideoMapper::PENDING_CONVERSION;
-        $videoId = $videoMapper->save($video);
 
-        // Begin encoding
-        $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
-        $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
-        exec($converter_cmd);
+        try {
+            // Retrieve video filename and extension
+            $video->filename = $videoService->generateFilename();
+            $video->originalExtension = Functions::getExtension($tempFile);
 
-        // Output message
-        $tempFile = null;
-        $videoUploadMessage = null;
-        $originalVideoName = null;
-        $message = 'Video has been created.';
-        $message_type = 'alert-success';
-        $video = null;
+            // Rename temp video file
+            Filesystem::rename($tempFile, UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension);
+
+            // Create record
+            $video->userId = $adminUser->userId;
+            $video->status = VideoMapper::PENDING_CONVERSION;
+            $videoId = $videoMapper->save($video);
+
+            // Begin encoding
+            $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
+            $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
+            exec($converter_cmd);
+
+            // Output message
+            $tempFile = null;
+            $uploadMessage = null;
+            $originalName = null;
+            $message = 'Video has been created.';
+            $message_type = 'alert-success';
+            $video = null;
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $message_type = 'alert-danger';
+        }
         
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
         $message_type = 'alert-danger';
     }
-
 }
 
 // Output Header
@@ -162,13 +172,13 @@ include('header.php');
         <input type="hidden" name="upload-limit" value="<?=$config->videoSizeLimit?>" />
         <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
         <input type="hidden" name="upload-type" value="video" />
-        <input type="hidden" name="original-video-name" value="<?=htmlspecialchars($originalVideoName)?>" />
+        <input type="hidden" name="original-name" value="<?=htmlspecialchars($originalName)?>" />
         <input type="hidden" name="temp-file" value="<?=$tempFile?>" />
         <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
     </div>
 
-    <?php $style = ($videoUploadMessage) ? 'display: block;' : ''; ?>
-    <div class="upload-complete" style="<?=$style?>"><?=$videoUploadMessage?></div>
+    <?php $style = ($uploadMessage) ? 'display: block;' : ''; ?>
+    <div class="upload-complete" style="<?=$style?>"><?=$uploadMessage?></div>
 
     <div id="upload_status">
         <div class="title"></div>
