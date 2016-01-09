@@ -21,10 +21,10 @@ class Route
     public $location = null;
     
     /**
-     * @var array List of key names to be injected into $_GET
-     * and populated with data from URI pattern matches. Values are mapped to
-     * the corresponding REGEX pattern match found in self::$path.
-     * @example $mappings[0] => 'page' will create $_GET['page']
+     * @var array List of key names that map to regex groups in Route::$path.
+     * These keys are used as the indexes in the $_GET super global
+     * with the value being the corresponding regex group from the URI.
+     * @example Route::$mappings = array('page') will create $_GET['page']
      */
     public $mappings = null;
     
@@ -33,6 +33,11 @@ class Route
      * selector name for the given page 
      */
     public $name = null;
+
+    /**
+     * @var string If route is merely a URI variant of another route, this value lists the original route
+     */
+    public $canonical = null;
     
     /**
      * @var int Intended audience for the route. Defines whether it's Mobile vs Desktop vs Agnostic
