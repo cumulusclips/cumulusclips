@@ -116,7 +116,7 @@ include('header.php');
                 <td class="title">
                     <a href="<?=ADMIN?>/files_edit.php?id=<?=$file->fileId?>" class="h3"><?=$file->title?></a><br />
                     <div class="record-actions">
-                        <a href="<?=ADMIN?>/files_edit.php?id=<?=$file->fileId?>">Edit</a>
+                        <a href="<?=ADMIN?>/library_edit.php?id=<?=$file->fileId?>">Edit</a>
                         <a href="<?=$fileService->getUrl($file)?>" target="_ccsite">View file</a>
                         <a class="delete confirm" href="<?=$pagination->getURL('delete='.$file->fileId)?>" data-confirm="You're about to delete this file. This cannot be undone. Do you want to proceed?">Delete</a>
                     </div>

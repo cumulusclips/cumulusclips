@@ -55,13 +55,6 @@ if (isset($_POST['submitted'])) {
         $file->description = null;
     }
 
-    // Validate disable embed
-    if (!empty($_POST['attachable']) && $_POST['attachable'] == '1') {
-        $file->attachable = true;
-    } else {
-        $file->attachable = false;
-    }
-
     // Update file if no errors were made
     if (empty($errors)) {
 
@@ -149,11 +142,6 @@ include('header.php');
     <div class="form-group">
         <label class="control-label">Description:</label>
         <textarea rows="7" cols="50" class="form-control" name="description"><?=(!empty($file->description)) ? htmlspecialchars($file->description) : ''?></textarea>
-    </div>
-
-    <div class="form-group <?=(isset($errors['attachable'])) ? 'has-error' : ''?>">
-        <input id="attachable" type="checkbox" name="attachable" value="1" <?=(!empty($file->attachable)) ? 'checked="checked"' : ''?> />
-        <label for="attachable">Attachable</label> <em>(File can be attached to videos)</em>
     </div>
 
     <input type="hidden" name="submitted" value="TRUE" />
