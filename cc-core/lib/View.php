@@ -330,7 +330,7 @@ class View
             $js_theme_preview = '<script type="text/javascript">';
             $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . $_GET['preview_theme'] . "';";
             $js_theme_preview .= '</script>';
-            $this->_js[] = $js_theme_preview;
+            echo $js_theme_preview;
         }
 
         // Add language preview JS
@@ -338,7 +338,7 @@ class View
             $js_lang_preview = '<script type="text/javascript">';
             $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . $_GET['preview_lang'] . "';";
             $js_lang_preview .= '</script>';
-            $this->_js[] = $js_lang_preview;
+            echo $js_lang_preview;
         }
         
         // Output system generated JS
