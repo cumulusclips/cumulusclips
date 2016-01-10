@@ -19,6 +19,7 @@ $message = null;
 $data['sitename'] = Settings::get('sitename');
 $data['base_url'] = Settings::get('base_url');
 $data['admin_email'] = Settings::get('admin_email');
+$data['user_uploads'] = Settings::get('user_uploads');
 $data['auto_approve_videos'] = Settings::get('auto_approve_videos');
 $data['user_registrations'] = Settings::get('user_registrations');
 $data['auto_approve_users'] = Settings::get('auto_approve_users');
@@ -51,11 +52,23 @@ if (isset($_POST['submitted'])) {
         $errors['admin_email'] = 'Invalid admin email';
     }
 
-    // Validate auto_approve_videos
-    if (isset($_POST['auto_approve_videos']) && in_array($_POST['auto_approve_videos'], array('1', '0'))) {
-        $data['auto_approve_videos'] = $_POST['auto_approve_videos'];
+    // Validate user_uploads
+    if (isset($_POST['user_uploads']) && in_array($_POST['user_uploads'], array('1', '0'))) {
+        $data['user_uploads'] = $_POST['user_uploads'];
+        if ($data['user_uploads'] == '0') {
+            $data['auto_approve_videos'] = '1';
+        }
     } else {
-        $errors['auto_approve_videos'] = 'Invalid video approval option';
+        $errors['user_uploads'] = 'Invalid user upload option';
+    }
+
+    // Validate auto_approve_videos
+    if ($data['user_uploads'] == '1') {
+        if (isset($_POST['auto_approve_videos']) && in_array($_POST['auto_approve_videos'], array('1', '0'))) {
+            $data['auto_approve_videos'] = $_POST['auto_approve_videos'];
+        } else {
+            $errors['auto_approve_videos'] = 'Invalid video approval option';
+        }
     }
 
     // Validate allow user registrations
@@ -136,7 +149,16 @@ include ('header.php');
         <input class="form-control" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
     </div>
 
-    <div class="form-group <?=(isset ($errors['auto_approve_videos'])) ? 'has-error' : ''?>">
+    <div class="form-group <?=(isset ($errors['user_uploads'])) ? 'has-error' : ''?>">
+        <label class="control-label">Member Video Uploads:</label>
+        <select name="user_uploads" class="form-control" data-toggle="user-video-approval">
+            <option value="1" <?=($data['user_uploads']=='1')?'selected="selected"':''?>>Enabled</option>
+            <option value="0" <?=($data['user_uploads']=='0')?'selected="selected"':''?>>Disabled</option>
+        </select>
+        <a class="more-info" title="Whether to allow standard users to upload videos. If disabled, only Admins and Moderators are allowed to upload videos">More Info</a>
+    </div>
+
+    <div id="user-video-approval" class="form-group <?=($data['user_uploads'] == '1') ? '' : 'hide'?> <?=(isset ($errors['auto_approve_videos'])) ? 'has-error' : ''?>">
         <label class="control-label">Video Approval:</label>
         <select name="auto_approve_videos" class="form-control">
             <option value="1" <?=($data['auto_approve_videos']=='1')?'selected="selected"':''?>>Auto-Approve</option>

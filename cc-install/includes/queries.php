@@ -303,7 +303,9 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('alerts_flags','1'),
 ('from_name',''),
 ('from_address',''),
-('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}')
+('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}'),
+('user_registrations', '1'),
+('user_uploads', '1')
 
 POPULATE_SETTINGS_TABLE;
 

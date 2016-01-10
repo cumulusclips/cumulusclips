@@ -2,6 +2,10 @@
 
 Plugin::triggerEvent('upload_complete.start');
 
+// Verify if user registrations are enabled
+$config = Registry::get('config');
+if (!$config->enableUserUploads) App::throw404();
+
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
