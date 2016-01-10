@@ -558,14 +558,22 @@ class Router
             'name' => 'embed'
         ));
 
-        $routes['language'] = new Route(array(
-            'path' => 'language/([g|s]et)',
+        $routes['language-get'] = new Route(array(
+            'path' => 'language/(get)',
             'location' => DOC_ROOT . '/cc-core/system/language.php',
             'mappings' => array('action'),
             'type' => Route::AGNOSTIC,
-            'name' => 'language'
+            'name' => 'language-get'
         ));
-        
+
+        $routes['language-set'] = new Route(array(
+            'path' => 'language/(set)/([a-z]+)',
+            'location' => DOC_ROOT . '/cc-core/system/language.php',
+            'mappings' => array('action', 'language'),
+            'type' => Route::AGNOSTIC,
+            'name' => 'language-set'
+        ));
+
         $routes['system-css'] = new Route(array(
             'path' => 'css/system\.css',
             'location' => DOC_ROOT . '/cc-core/system/css.php',
