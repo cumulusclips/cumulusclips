@@ -113,12 +113,23 @@ if (isset ($_POST['submitted'])) {
             $perm_config_file = DOC_ROOT . '/cc-core/system/config.php';
             FilesystemInstaller::Create ($perm_config_file);
             FilesystemInstaller::Write ($perm_config_file, $config_content);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/bin', 0777);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
-            FilesystemInstaller::SetPermissions (DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0755);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit', 0755);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0644);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0644
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit', 0755);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0644);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0644);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/logs', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/temp', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/h264', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/mobile', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/theora', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/webm', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/files', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/avatars', 0777);
 
 
             // Store information & redirect user

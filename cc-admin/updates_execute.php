@@ -155,13 +155,15 @@ try {
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/thumbs', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/temp', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/avatars', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-content/uploads/files', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-core/logs', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/qtfaststart', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/exceptions.py', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/__init__.py', 0777);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/qtfaststart/processor.py', 0777);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0755);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit', 0755);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0644);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0644);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit', 0755);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0644);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0644);
 
     ### Delete temp. dir.
     Filesystem::delete($tmp);

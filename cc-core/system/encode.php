@@ -7,7 +7,7 @@ include_once(dirname(__FILE__) . '/bootstrap.php');
 if (!isset($argv[1]) || !preg_match('/--video=([0-9]+)$/i', $argv[1], $arg_matches)) exit();
 $video_id = $arg_matches[1];
 $ffmpegPath = Settings::get('ffmpeg');
-$qt_faststart_path = DOC_ROOT . '/cc-core/system/bin/qtfaststart';
+$qtFaststartPath = Settings::get('qtfaststart');
 $videoMapper = new VideoMapper();
 
 // Set MySQL wait_timeout to 10 hours to prevent 'MySQL server has gone away' errors
@@ -115,21 +115,10 @@ try {
     /////////////////////////////////////////////////////////////
 
     // Debug Log
-    $config->debugConversion ? App::log(CONVERSION_LOG, "\nChecking qt-faststart permissions...") : null;
-
-    if ((string) substr(sprintf('%o', fileperms($qt_faststart_path)), -4) != '0777') {
-        try {
-            Filesystem::setPermissions($qt_faststart_path, 0777);
-        } catch (Exception $e) {
-            throw new Exception("Unable to update permissions for qt-faststart. Please make sure it ($qt_faststart_path) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
-        }
-    }
-
-    // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, "\nShifting moov atom on H.264 video...") : null;
 
     // Prepare shift moov atom command
-    $h264ShiftMoovAtomCommand = "$qt_faststart_path $h264TempFilePath $h264FilePath >> $debugLog 2>&1";
+    $h264ShiftMoovAtomCommand = "$qtFaststartPath $h264TempFilePath $h264FilePath >> $debugLog 2>&1";
 
     // Debug Log
     $logMessage = "\n\n\n\n==================================================================\n";
@@ -296,7 +285,7 @@ try {
         $config->debugConversion ? App::log(CONVERSION_LOG, "\nShifting moov atom on Mobile video...") : null;
 
         // Execute Faststart Command
-        $faststartCommand = "$qt_faststart_path $mobileTempFilePath $mobileFilePath >> $debugLog 2>&1";
+        $faststartCommand = "$qtFaststartPath $mobileTempFilePath $mobileFilePath >> $debugLog 2>&1";
 
         // Debug Log
         $logMessage = "\n\n\n\n==================================================================\n";
@@ -326,7 +315,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 5                           //
+    //                        STEP 8                           //
     //                  Get Video Duration                     //
     /////////////////////////////////////////////////////////////
 
@@ -362,7 +351,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 6                           //
+    //                        STEP 9                           //
     //                Create Thumbnail Image                   //
     /////////////////////////////////////////////////////////////
 
@@ -398,7 +387,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 7                           //
+    //                        STEP 10                          //
     //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
@@ -422,7 +411,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                         STEP 8                          //
+    //                         STEP 11                         //
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 

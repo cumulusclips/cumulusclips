@@ -25,8 +25,6 @@ if (version_compare(phpversion(), '5.3.0') >= 0) {
     $version = false;
     $errors = true;
 }
-    
-
 
 
 // Retrieve php-cli path
@@ -54,30 +52,6 @@ if (!isset($php_path)) {
 
 
 
-
-// Check if FFMPEG is installed (using which)
-@exec ('which ffmpeg', $which_results_ffmpeg);
-if (empty ($which_results_ffmpeg)) {
-    
-    // Check if FFMPEG is installed (using whereis)
-    @exec ('whereis ffmpeg', $whereis_results_ffmpeg);
-    $whereis_results_ffmpeg = preg_replace ('/^ffmpeg:\s?/','', $whereis_results_ffmpeg[0]);
-    if (empty ($whereis_results_ffmpeg)) {
-        $settings->ffmpeg = '';
-        $ffmpeg = false;
-        $disable_uploads = true;
-        $warnings = true;
-    } else {
-        $settings->ffmpeg = $whereis_results_ffmpeg;
-        $ffmpeg = true;
-    }
-    
-} else {
-    $settings->ffmpeg = $which_results_ffmpeg[0];
-    $ffmpeg = true;
-}
-
-
 // Retrieve disabled functions
 $disabledFunctions = explode(',', ini_get('disable_functions'));
 
@@ -90,13 +64,9 @@ if (function_exists('exec') && !in_array('exec', $disabledFunctions)) {
 }
 
 
-// Verify posix_getuid function is available
-if (function_exists('posix_getuid') && !in_array('posix_getuid', $disabledFunctions)) {
-    $posix_getuid = true;
-} else {
-    $errors = true;
-    $posix_getuid = false;
-}
+// Verify 'posix' php module is loaded
+$posix = extension_loaded ('posix');
+if (!$posix) $errors = true;
 
 
 // Verify 'curl' php module is loaded
@@ -165,14 +135,17 @@ if (substr ($upload_max_filesize, -1) != 'M' || 99 > (int) rtrim ($upload_max_fi
 }
 
 
-// Verify logs dir. is writeable by the webserver
-$logs = is_writable (DOC_ROOT . '/cc-core/logs');
-if (!$logs) $errors = true;
-
-
-// Verify uploads dir. is writeable by the webserver
-$uploads = is_writable (DOC_ROOT . '/cc-content/uploads');
-if (!$uploads) $errors = true;
+// Determine FFMPEG & qt-faststart paths according to proccessor architecture
+if ($posix) {
+    $systemInfo = posix_uname();
+    if (strpos($systemInfo['machine'], '64') !== false) {
+        $settings->ffmpeg = DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg';
+        $settings->qtfaststart = DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart';
+    } else {
+        $settings->ffmpeg = DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg';
+        $settings->qtfaststart = DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart';
+    }
+}
 
 
 // Continue to next step if no errors
