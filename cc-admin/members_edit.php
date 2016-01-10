@@ -35,7 +35,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 
     // Retrieve member information
     $user = $userMapper->getUserById($_GET['id']);
-    if ($user && ($user->role == 'admin' && $admin->role != 'admin')) {
+    if ($user && ($user->role == 'admin' && $adminUser->role != 'admin')) {
         header('Location: ' . ADMIN . '/members.php?denied');
         exit();
     } else if (!$user) {
