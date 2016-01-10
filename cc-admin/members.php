@@ -17,6 +17,11 @@ $query_string = array();
 $message = null;
 $sub_header = null;
 
+// Display permission denied message if requested
+if (isset($_GET['denied'])) {
+    $message = 'Permission Denied';
+    $message_type = 'danger';
+}
 
 
 ### Handle "Delete" member
@@ -24,7 +29,10 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
 
     // Validate id
     $user = $userMapper->getUserById($_GET['delete']);
-    if ($user && $user->userId != $adminUser->userId) {
+    if ($user->role == 'admin' && $adminUser->role != 'admin') {
+        $message = 'Permission Denied';
+        $message_type = 'danger';
+    } else if ($user && $user->userId != $adminUser->userId) {
         $userService->delete($user);
         $message = 'Member has been deleted';
         $message_type = 'success';
@@ -32,7 +40,6 @@ if (!empty ($_GET['delete']) && is_numeric ($_GET['delete'])) {
         $message = 'You can\'t delete yourself, silly!';
         $message_type = 'danger';
     }
-
 }
 
 
@@ -47,7 +54,6 @@ else if (!empty ($_GET['activate']) && is_numeric ($_GET['activate'])) {
         $message = 'Member has been activated';
         $message_type = 'success';
     }
-
 }
 
 
@@ -62,7 +68,6 @@ else if (!empty ($_GET['unban']) && is_numeric ($_GET['unban'])) {
         $message = 'Member has been unbanned';
         $message_type = 'success';
     }
-
 }
 
 
@@ -71,7 +76,10 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
 
     // Validate id
     $user = $userMapper->getUserById($_GET['ban']);
-    if ($user) {
+    if ($user && $user->role == 'admin' && $adminUser->role != 'admin') {
+        $message = 'Permission Denied';
+        $message_type = 'danger';
+    } else if ($user) {
         $user->status = 'banned';
         $userMapper->save($user);
         $userService->updateContentStatus($user, 'banned');
@@ -80,7 +88,6 @@ else if (!empty ($_GET['ban']) && is_numeric ($_GET['ban'])) {
         $message = 'Member has been banned';
         $message_type = 'success';
     }
-
 }
 
 

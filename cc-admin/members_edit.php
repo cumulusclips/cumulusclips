@@ -16,6 +16,12 @@ $pageName = 'members-edit';
 $data = array();
 $errors = array();
 $message = null;
+$allowedRoles = $config->roles;
+
+// Remove admin from allowed roles if user is not an admin
+if ($adminUser->role != 'admin') {
+    unset($allowedRoles->admin, $allowedRoles->mod);
+}
 
 // Build return to list link
 if (!empty($_SESSION['list_page'])) {
@@ -29,7 +35,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 
     // Retrieve member information
     $user = $userMapper->getUserById($_GET['id']);
-    if (!$user) {
+    if ($user && ($user->role == 'admin' && $admin->role != 'admin')) {
+        header('Location: ' . ADMIN . '/members.php?denied');
+        exit();
+    } else if (!$user) {
         header('Location: ' . ADMIN . '/members.php');
         exit();
     }
@@ -49,7 +58,7 @@ if (isset($_POST['submitted'])) {
     }
 
     // Validate role
-    if (!empty($_POST['role'])) {
+    if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
         $user->role = trim($_POST['role']);
     } else {
         $errors['role'] = 'Invalid role';
@@ -176,7 +185,7 @@ include ('header.php');
     <div class="form-group <?=(isset($errors['status'])) ? 'has-error' : ''?>">
         <label class="control-label">*Role:</label>
         <select name="role" class="form-control">
-        <?php foreach ((array) $config->roles as $key => $value): ?>
+        <?php foreach ((array) $allowedRoles as $key => $value): ?>
             <option value="<?=$key?>" <?=($user->role == $key) ? 'selected="selected"' : ''?>><?=$value->name?></option>
         <?php endforeach; ?>
         </select>

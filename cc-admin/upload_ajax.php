@@ -12,9 +12,15 @@ Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $validateExtension = true;
 $tempFile = UPLOAD_PATH . '/temp/' . $adminUser->userId . '-';
+$uploadTypes = array('video', 'library');
+
+// Determine if user is allowed to upload addons
+if ($userService->checkPermissions('manage_settings', $adminUser)) {
+    $uploadTypes[] = 'addon';
+}
 
 // Verify post params are valid
-if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], array('library', 'addon', 'video'))) {
+if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], $uploadTypes)) {
     App::throw404();
 }
 

@@ -279,7 +279,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_languages', '[{"system_name":"english","lang_name":"English","native_name":"English"}]'),
 ('installed_plugins','[]'),
 ('enabled_plugins','[]'),
-('roles','{"admin":{"name":"Administrator","permissions":["admin_panel"]},"user":{"name":"User","permissions":[]}}'),
+('roles','{"admin":{"name":"Administrator","permissions":["admin_panel","manage_settings"]},"mod":{"name":"Moderator","permissions":["admin_panel"]},user":{"name":"User","permissions":[]}}'),
 ('debug_conversion','0'),
 ('video_size_limit','102000000'),
 ('file_size_limit','102000000'),

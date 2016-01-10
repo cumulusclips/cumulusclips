@@ -7,7 +7,7 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::redirectIf($adminUser, HOST . '/login/');
-Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::redirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $page_title = 'Add New Plugin';

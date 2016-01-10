@@ -39,8 +39,10 @@
             <a href="#menu-dashboard" data-toggle="collapse" class="icon-dashboard <?=($dashboardMenuOpen) ? '' : 'collapsed'?>"><span>Dashboard</span></a>
             <ul id="menu-dashboard" class="collapse <?=($dashboardMenuOpen) ? 'in' : ''?>">
                 <li class="<?=($pageName == 'dashboard') ? 'active' : ''?>"><a href="<?=ADMIN?>/">Dashboard</a></li>
-                <li class="<?=($pageName == 'logs') ? 'active' : ''?>"><a href="<?=ADMIN?>/logs.php">System Logs</a></li>
-                <li class="<?=($pageName == 'updates') ? 'active' : ''?>"><a href="<?=ADMIN?>/updates.php">Updates</a></li>
+                <?php if ($userService->checkPermissions('manage_settings')): ?>
+                    <li class="<?=($pageName == 'logs') ? 'active' : ''?>"><a href="<?=ADMIN?>/logs.php">System Logs</a></li>
+                    <li class="<?=($pageName == 'updates') ? 'active' : ''?>"><a href="<?=ADMIN?>/updates.php">Updates</a></li>
+                <?php endif; ?>
             </ul>
         </div>
 
@@ -102,35 +104,37 @@
             </ul>
         </div>
 
-        <div class="menu">
-            <?php $appearanceMenuOpen = Functions::isPanelOpen('appearance'); ?>
-            <a href="#menu-appearance" data-toggle="collapse" class="icon-appearance <?=($appearanceMenuOpen) ? '' : 'collapsed'?>"><span>Appearance</span></a>
-            <ul id="menu-appearance" class="collapse <?=($appearanceMenuOpen) ? 'in' : ''?>">
-                <li class="<?=($pageName == 'customizations') ? 'active' : ''?>"><a href="<?=ADMIN?>/customizations.php">Customizations</a></li>
-                <li class="<?=($pageName == 'themes') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes.php">Themes</a></li>
-                <li class="<?=($pageName == 'themes-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></li>
-                <li class="<?=($pageName == 'languages') ? 'active' : ''?>"><a href="<?=ADMIN?>/languages.php">Languages</a></li>
-            </ul>
-        </div>
+        <?php if ($userService->checkPermissions('manage_settings')): ?>
+            <div class="menu">
+                <?php $appearanceMenuOpen = Functions::isPanelOpen('appearance'); ?>
+                <a href="#menu-appearance" data-toggle="collapse" class="icon-appearance <?=($appearanceMenuOpen) ? '' : 'collapsed'?>"><span>Appearance</span></a>
+                <ul id="menu-appearance" class="collapse <?=($appearanceMenuOpen) ? 'in' : ''?>">
+                    <li class="<?=($pageName == 'customizations') ? 'active' : ''?>"><a href="<?=ADMIN?>/customizations.php">Customizations</a></li>
+                    <li class="<?=($pageName == 'themes') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes.php">Themes</a></li>
+                    <li class="<?=($pageName == 'themes-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/themes_add.php">Add New Theme</a></li>
+                    <li class="<?=($pageName == 'languages') ? 'active' : ''?>"><a href="<?=ADMIN?>/languages.php">Languages</a></li>
+                </ul>
+            </div>
 
-        <div class="menu">
-            <?php $pluginsMenuOpen = Functions::isPanelOpen('plugins'); ?>
-            <a href="#menu-plugins" data-toggle="collapse" class="icon-plugin <?=($pluginsMenuOpen) ? '' : 'collapsed'?>"><span>Plugins</span></a>
-            <ul id="menu-plugins" class="collapse <?=($pluginsMenuOpen) ? 'in' : ''?>">
-                <li class="<?=($pageName == 'plugins') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins.php">Plugins</a></li>
-                <li class="<?=($pageName == 'plugins-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins_add.php">Add New Plugin</a></li>
-            </ul>
-        </div>
+            <div class="menu">
+                <?php $pluginsMenuOpen = Functions::isPanelOpen('plugins'); ?>
+                <a href="#menu-plugins" data-toggle="collapse" class="icon-plugin <?=($pluginsMenuOpen) ? '' : 'collapsed'?>"><span>Plugins</span></a>
+                <ul id="menu-plugins" class="collapse <?=($pluginsMenuOpen) ? 'in' : ''?>">
+                    <li class="<?=($pageName == 'plugins') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins.php">Plugins</a></li>
+                    <li class="<?=($pageName == 'plugins-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/plugins_add.php">Add New Plugin</a></li>
+                </ul>
+            </div>
 
-        <div class="menu">
-            <?php $settingsMenuOpen = Functions::isPanelOpen('settings'); ?>
-            <a href="#menu-settings" data-toggle="collapse" class="icon-settings <?=($settingsMenuOpen) ? '' : 'collapsed'?>"><span>Settings</span></a>
-            <ul id="menu-settings" class="collapse <?=($settingsMenuOpen) ? 'in' : ''?>">
-                <li class="<?=($pageName == 'settings') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings.php">General</a></li>
-                <li class="<?=($pageName == 'settings-videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_video.php">Video</a></li>
-                <li class="<?=($pageName == 'settings-email') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_email.php">Email</a></li>
-            </ul>
-        </div>
+            <div class="menu">
+                <?php $settingsMenuOpen = Functions::isPanelOpen('settings'); ?>
+                <a href="#menu-settings" data-toggle="collapse" class="icon-settings <?=($settingsMenuOpen) ? '' : 'collapsed'?>"><span>Settings</span></a>
+                <ul id="menu-settings" class="collapse <?=($settingsMenuOpen) ? 'in' : ''?>">
+                    <li class="<?=($pageName == 'settings') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings.php">General</a></li>
+                    <li class="<?=($pageName == 'settings-videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_video.php">Video</a></li>
+                    <li class="<?=($pageName == 'settings-email') ? 'active' : ''?>"><a href="<?=ADMIN?>/settings_email.php">Email</a></li>
+                </ul>
+            </div>
+        <?php endif; ?>
         
     </div>
     <!-- End Sidebar -->

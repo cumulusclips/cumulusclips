@@ -7,7 +7,7 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::RedirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $message = null;
