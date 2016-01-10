@@ -20,6 +20,7 @@ $data['sitename'] = Settings::get('sitename');
 $data['base_url'] = Settings::get('base_url');
 $data['admin_email'] = Settings::get('admin_email');
 $data['auto_approve_videos'] = Settings::get('auto_approve_videos');
+$data['user_registrations'] = Settings::get('user_registrations');
 $data['auto_approve_users'] = Settings::get('auto_approve_users');
 $data['auto_approve_comments'] = Settings::get('auto_approve_comments');
 $data['mobile_site'] = Settings::get('mobile_site');
@@ -57,11 +58,24 @@ if (isset($_POST['submitted'])) {
         $errors['auto_approve_videos'] = 'Invalid video approval option';
     }
 
-    // Validate auto_approve_users
-    if (isset($_POST['auto_approve_users']) && in_array($_POST['auto_approve_users'], array ('1', '0'))) {
-        $data['auto_approve_users'] = $_POST['auto_approve_users'];
+    // Validate allow user registrations
+    if (isset($_POST['user_registrations']) && in_array($_POST['user_registrations'], array('1', '0'))) {
+        $data['user_registrations'] = $_POST['user_registrations'];
+        if ($data['user_registrations'] == '0') {
+            $data['auto_approve_users'] = '1';
+        }
     } else {
-        $errors['auto_approve_users'] = 'Invalid member approval option';
+        $errors['user_registrations'] = 'Invalid user registration option';
+    }
+
+    // Validate auto_approve_users
+    if ($data['user_registrations'] == '1') {
+        if (isset($_POST['auto_approve_users']) && in_array($_POST['auto_approve_users'], array ('1', '0'))) {
+            $data['auto_approve_users'] = $_POST['auto_approve_users'];
+        } else {
+            $errors['auto_approve_users'] = 'Invalid member approval option';
+        }
+        $data['auto_approve_users'] = '1';
     }
 
     // Validate auto_approve_comments
@@ -130,7 +144,15 @@ include ('header.php');
         </select>
     </div>
 
-    <div class="form-group <?=(isset ($errors['auto_approve_users'])) ? 'has-error' : ''?>">
+    <div class="form-group <?=(isset ($errors['user_registrations'])) ? 'has-error' : ''?>">
+        <label class="control-label">Member Registrations:</label>
+        <select name="user_registrations" class="form-control" data-toggle="user-registration-approval">
+            <option value="1" <?=($data['user_registrations']=='1')?'selected="selected"':''?>>Enabled</option>
+            <option value="0" <?=($data['user_registrations']=='0')?'selected="selected"':''?>>Disabled</option>
+        </select>
+    </div>
+
+    <div id="user-registration-approval" class="form-group <?=($data['user_registrations'] == '1') ? '' : 'hide'?> <?=(isset($errors['auto_approve_users'])) ? 'has-error' : ''?>">
         <label class="control-label">Member Approval:</label>
         <select name="auto_approve_users" class="form-control">
             <option value="1" <?=($data['auto_approve_users']=='1')?'selected="selected"':''?>>Auto-Approve</option>

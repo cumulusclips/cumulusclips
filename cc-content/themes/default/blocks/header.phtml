@@ -16,7 +16,9 @@
 
         <?php else: ?>
             <a href="<?=HOST?>/login/" title="<?=Language::GetText('login')?>"><?=Language::GetText('login')?></a>
-            <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
+            <?php if ($config->enableRegistrations): ?>
+                <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
+            <?php endif; ?>
         <?php endif; ?>       
 
             <form action="<?=HOST?>/search/" method="post">

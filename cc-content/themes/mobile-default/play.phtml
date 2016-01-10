@@ -14,7 +14,9 @@ cumulusClips.commentCount = <?=$commentCount?>;
             <div class="gate">
                 <p><?=Language::getText('gated_video')?></p>
                 <a class="login-link" href=""><?=Language::getText('login')?></a>
-                <a href="<?=HOST?>/register/"><?=Language::getText('register')?></a>
+                <?php if ($config->enableRegistrations): ?>
+                    <a href="<?=HOST?>/register/"><?=Language::getText('register')?></a>
+                <?php endif; ?>
             </div>
         <?php else: ?>
             <video width="100%" height="100%" controls poster="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg">
@@ -73,7 +75,11 @@ cumulusClips.commentCount = <?=$commentCount?>;
             <?php if ($loggedInUser): ?>
                 <a href="#post-comment-<?=$video->videoId?>" data-transition="pop" data-rel="popup" data-position-to="window"><?=Language::getText('comments_button')?></a>
             <?php else: ?>
-                <p><?=Language::getText('comments_login', array('login_link' => '', 'register_link' => HOST . '/register/'))?></p>
+                <?php if ($config->enableRegistrations): ?>
+                    <p><?=Language::getText('comments_login_register', array('login_link' => '', 'register_link' => HOST . '/register/'))?></p>
+                <?php else: ?>
+                    <p><?=Language::getText('comments_login', array('login_link' => ''))?></p>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
 

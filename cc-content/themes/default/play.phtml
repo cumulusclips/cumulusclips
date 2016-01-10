@@ -21,7 +21,9 @@ $this->setLayout('full');
             <div>
                 <p><?=Language::getText('gated_video')?></p>
                 <a href="<?=HOST?>/login/?redirect=<?=urlencode($this->getService('Video')->getUrl($video))?>" class="button_small"><?=Language::getText('login')?></a>
-                <a href="<?=HOST?>/register/" class="button_small"><?=Language::getText('register')?></a>
+                <?php if ($config->enableRegistrations): ?>
+                    <a href="<?=HOST?>/register/" class="button_small"><?=Language::getText('register')?></a>
+                <?php endif; ?>
             </div>
         </div>
     
@@ -195,7 +197,11 @@ $this->setLayout('full');
                 </div>
                 <!-- END COMMENTS FORM -->
             <?php else: ?>
-                <p class="commentMessage"><?=Language::getText('comments_login', array('login_link' => HOST . '/login/?redirect=' . urlencode($this->getService('Video')->getUrl($video)), 'register_link' => HOST . '/register/'))?></p>
+                <?php if ($config->enableRegistrations): ?>
+                    <p class="commentMessage"><?=Language::getText('comments_login_register', array('login_link' => HOST . '/login/?redirect=' . urlencode($this->getService('Video')->getUrl($video)), 'register_link' => HOST . '/register/'))?></p>
+                <?php else: ?>
+                    <p class="commentMessage"><?=Language::getText('comments_login', array('login_link' => HOST . '/login/?redirect=' . urlencode($this->getService('Video')->getUrl($video))))?></p>
+                <?php endif; ?>
             <?php endif; ?>
 
 

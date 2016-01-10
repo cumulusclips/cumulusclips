@@ -636,14 +636,11 @@ SETTINGS STYLES
 **************/
 
 #settings form { margin-top:15px; }
-#settings label { width: 120px; }
 #settings .row-shift { margin-left:135px; }
 
 #settings-video form { margin-top: 15px; }
-#settings-video label { width: 155px; }
 #settings-video .row-shift { margin-left:170px; }
 
-#settings-email label { width: 150px; }
 #settings-email .row-shift { margin-left:165px; }
 
 

@@ -46,7 +46,7 @@ $config = new stdClass();
 $config->sitename = Settings::get('sitename');
 $config->roles = json_decode(Settings::get('roles'));
 $config->enableUploads = Settings::get('enable_uploads');
-$config->debugConversion = Settings::get('debug_conversion') == '1' ? true : false;
+$config->debugConversion = (boolean) Settings::get('debug_conversion');
 $config->videoSizeLimit = Settings::get('video_size_limit');
 $config->fileSizeLimit = Settings::get('file_size_limit');
 $config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v', '3gp');
@@ -56,6 +56,7 @@ $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->webmUrl = HOST . '/cc-content/uploads/webm';
 $config->mobileUrl = HOST . '/cc-content/uploads/mobile';
 $config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
+$config->enableRegistrations = (boolean) Settings::get('user_registrations');
 Registry::set('config', $config);
 
 // Start session
