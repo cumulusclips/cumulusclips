@@ -95,9 +95,9 @@
 
         <div class="menu">
             <?php $libraryMenuOpen = Functions::isPanelOpen('library'); ?>
-            <a href="#menu-library" data-toggle="collapse" class="icon-library <?=($libraryMenuOpen) ? '' : 'collapsed'?>"><span>Library</span></a>
+            <a href="#menu-library" data-toggle="collapse" class="icon-library <?=($libraryMenuOpen) ? '' : 'collapsed'?>"><span>File Library</span></a>
             <ul id="menu-library" class="collapse <?=($libraryMenuOpen) ? 'in' : ''?>">
-                <li class="<?=($pageName == 'library') ? 'active' : ''?>"><a href="<?=ADMIN?>/library.php">Browse Library</a></li>
+                <li class="<?=($pageName == 'library') ? 'active' : ''?>"><a href="<?=ADMIN?>/library.php">Browse File Library</a></li>
                 <li class="<?=($pageName == 'library-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/library_add.php">Add New File</a></li>
             </ul>
         </div>

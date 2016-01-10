@@ -12,7 +12,7 @@ Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $fileMapper = new FileMapper();
 $fileService = new FileService();
-$page_title = 'Library';
+$page_title = 'File Library';
 $records_per_page = 12;
 $url = ADMIN . '/library.php';
 $query_string = array();
@@ -75,7 +75,7 @@ include('header.php');
 
 ?>
 
-<h1>Library</h1>
+<h1>File Library</h1>
 
 <?php if ($sub_header): ?>
     <h3><?=$sub_header?></h3>
