@@ -26,11 +26,10 @@ if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video
 
     $this->view->vars->video = $video;
 
-    // Prevent direct access to video to all users except owner
+    // Prevent public URL access to private video for all users except owner
     if (
-        $this->view->vars->video->private == '1'
-        && $this->view->vars->loggedInUser
-        && $this->view->vars->loggedInUser->userId != $this->view->vars->video->userId
+        ($this->view->vars->video->private == '1' && !$this->view->vars->loggedInUser)
+        || ($this->view->vars->video->private == '1' && $this->view->vars->loggedInUser->userId != $this->view->vars->video->userId)
     ) {
         App::throw404();
     }
