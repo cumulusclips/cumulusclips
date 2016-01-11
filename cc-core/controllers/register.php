@@ -2,6 +2,10 @@
 
 Plugin::triggerEvent('register.start');
 
+// Verify if user registrations are enabled
+$config = Registry::get('config');
+if (!$config->enableRegistrations) App::throw404();
+
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();

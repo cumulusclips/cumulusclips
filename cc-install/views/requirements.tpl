@@ -63,7 +63,16 @@
                     <h2>PHP Modules</h2>
                     <table>
                         <tr>
-                            <td class="server-setting">CURL</td>
+                            <td class="server-setting">POSIX</td>
+                            <td>
+                                <img src="images/<?php echo ($posix) ? 'tick.png' : 'cross.png'; ?>" />
+                                <?php if (!$posix): ?>
+                                This needs to be enabled
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="server-setting">cURL</td>
                             <td>
                                 <img src="images/<?php echo ($curl) ? 'tick.png' : 'cross.png'; ?>" />
                                 <?php if (!$curl): ?>
@@ -129,15 +138,6 @@
                     <h2>PHP Functions</h2>
                     <table>
                         <tr>
-                            <td class="server-setting">posix_getuid()</td>
-                            <td>
-                                <img src="images/<?php echo ($posix_getuid) ? 'tick.png' : 'cross.png'; ?>" />
-                                <?php if (!$posix_getuid): ?>
-                                This needs to be enabled
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <tr>
                             <td class="server-setting">exec()</td>
                             <td>
                                 <img src="images/<?php echo ($exec) ? 'tick.png' : 'cross.png'; ?>" />
@@ -200,36 +200,6 @@
                                 <img src="images/<?php echo ($max_execution_time) ? 'tick.png' : 'flag_yellow.png'; ?>" />
                                 <?php if (!$max_execution_time): ?>
                                 Too short, currently <?php echo ini_get('max_execution_time'); ?> seconds. <a href="#" class="more-info" data-content="max_execution_time" title="More Info">More Info</a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    </table>
-                    
-                    
-                    
-
-
-
-
-
-                    
-                    <h2>Write Access</h2>
-                    <table>
-                        <tr>
-                            <td class="server-setting">cc-core/logs</td>
-                            <td>
-                                <img src="images/<?php echo ($logs) ? 'tick.png' : 'cross.png'; ?>" />
-                                <?php if (!$logs): ?>
-                                This needs to be writable by the webserver
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>cc-content/uploads</td>
-                            <td>
-                                <img src="images/<?php echo ($uploads) ? 'tick.png' : 'cross.png'; ?>" />
-                                <?php if (!$uploads): ?>
-                                This needs to be writable by the webserver
                                 <?php endif; ?>
                             </td>
                         </tr>

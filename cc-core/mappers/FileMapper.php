@@ -71,7 +71,7 @@ class FileMapper extends MapperAbstract
                 ':userId' => $file->userId,
                 ':title' => $file->title,
                 ':description' => (!empty($file->description)) ? $file->description : null,
-                ':filesize' => $file->filesize,
+                ':filesize' => ($file->filesize < 1) ? 1 : $file->filesize,
                 ':extension' => $file->extension,
                 ':attachable' => (isset($file->attachable) && $file->attachable === true) ? 1 : 0,
                 ':dateCreated' => date(DATE_FORMAT, strtotime($file->dateCreated))
@@ -86,7 +86,7 @@ class FileMapper extends MapperAbstract
                 ':userId' => $file->userId,
                 ':title' => $file->title,
                 ':description' => (!empty($file->description)) ? $file->description : null,
-                ':filesize' => $file->filesize,
+                ':filesize' => ($file->filesize < 1) ? 1 : $file->filesize,
                 ':extension' => $file->extension,
                 ':attachable' => (isset($file->attachable) && $file->attachable === true) ? 1 : 0,
                 ':dateCreated' => gmdate(DATE_FORMAT)

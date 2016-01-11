@@ -16,12 +16,18 @@ $page_title = 'Add New Member';
 $data = array();
 $errors = array();
 $message = null;
+$allowedRoles = $config->roles;
+
+// Remove admin from allowed roles if user is not an admin
+if ($adminUser->role != 'admin') {
+    unset($allowedRoles->admin, $allowedRoles->mod);
+}
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
     // Validate role
-    if (!empty($_POST['role'])) {
+    if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
         $user->role = trim($_POST['role']);
     } else {
         $errors['role'] = 'Invalid role';
@@ -122,7 +128,7 @@ include('header.php');
     <div class="form-group <?=(isset ($errors['status'])) ? 'has-error' : ''?>">
         <label class="control-label">*Role:</label>
         <select name="role" class="form-control">
-        <?php foreach ((array) $config->roles as $key => $value): ?>
+        <?php foreach ((array) $allowedRoles as $key => $value): ?>
             <option value="<?=$key?>" <?=(isset ($user->role) && $user->role == $key)?'selected="selected"':''?>><?=$value->name?></option>
         <?php endforeach; ?>
         </select>

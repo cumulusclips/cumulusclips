@@ -15,11 +15,13 @@ $(function(){
             var file = data.files[0];
             
             // Validate file type
-            var matches = file.name.match(/\.[a-z0-9]+$/i);
-            var fileTypes = $.parseJSON($('input[name="file-types"]').val());
-            if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), fileTypes) == -1) {
-                displayMessage(false, 'errors occurred');
-                return false;
+            if (cumulusClips.uploadType !== 'library') {
+                var matches = file.name.match(/\.[a-z0-9]+$/i);
+                var fileTypes = $.parseJSON($('input[name="file-types"]').val());
+                if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), fileTypes) == -1) {
+                    displayMessage(false, 'errors occurred');
+                    return false;
+                }
             }
             
             // Validate filesize
@@ -60,12 +62,19 @@ $(function(){
         {
             // Determine result from server validation
             if (data.result.result === true) {
-                // Perform success actions based on what was being uploaded
-                var fileName = cumulusClips.uploadFileData.files[0].name;
+
+                // Update form with temp path to uploaded file
                 $('input[name="temp-file"]').val(data.result.other.temp);
-                if (cumulusClips.uploadType == 'video') {
-                    $('input[name="original-video-name"]').val(fileName);
-                    $('.upload-complete').show().text(fileName + ' - has been uploaded');
+                $('input[name="filesize"]').val(cumulusClips.uploadFileData.files[0].size);
+
+                // Perform success actions based on what was being uploaded
+                if ($.inArray(cumulusClips.uploadType, ['video', 'library']) !== -1 ) {
+                    var fileName = cumulusClips.uploadFileData.files[0].name;
+                    $('input[name="original-name"]').val(fileName);
+                    $('.upload-complete')
+                        .removeClass('hidden')
+                        .addClass('show')
+                        .text(fileName + ' - has been uploaded');
                     resetProgress();
                 } else {
                     $('form').submit();

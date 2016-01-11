@@ -203,6 +203,16 @@ class Filesystem
     }
 
     /**
+     * Retrieves the permissions of given file
+     * @param string $filename The path of the file to retrieve permissions for
+     * @return string Returns the permissions as an octal string
+     */
+    public static function getPermissions($filename)
+    {
+        return (string) substr(sprintf('%o', fileperms($filename)), -4);
+    }
+
+    /**
      * Change the permissions on a file or directory
      * @param string $filename Complete path of the object to be changed
      * @param int $permissions New permissions to be applied to object in octal format, prefix with '0', i.e. 0777

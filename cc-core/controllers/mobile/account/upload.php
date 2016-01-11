@@ -1,5 +1,9 @@
 <?php
 
+// Verify if user registrations are enabled
+$config = Registry::get('config');
+if (!$config->enableUserUploads) App::throw404();
+
 Plugin::triggerEvent('mobile_upload.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 

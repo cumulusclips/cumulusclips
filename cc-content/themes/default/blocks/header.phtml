@@ -16,7 +16,9 @@
 
         <?php else: ?>
             <a href="<?=HOST?>/login/" title="<?=Language::GetText('login')?>"><?=Language::GetText('login')?></a>
-            <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
+            <?php if ($config->enableRegistrations): ?>
+                <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
+            <?php endif; ?>
         <?php endif; ?>       
 
             <form action="<?=HOST?>/search/" method="post">
@@ -35,7 +37,9 @@
         <nav>
             <a href="<?=HOST?>/videos/"><?=Language::GetText('videos')?></a>
             <a href="<?=HOST?>/members/"><?=Language::GetText('members')?></a>
-            <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
+            <?php if ($config->enableUserUploads): ?>
+                <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
+            <?php endif; ?>
         </nav>
         
         <?php $activeLanguages = Language::getActiveLanguages(); ?>

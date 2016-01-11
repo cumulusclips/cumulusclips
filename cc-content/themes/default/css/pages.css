@@ -11,14 +11,18 @@ HOMEPAGE
 }
 
 .index .form form {
-    border-bottom: 1px solid #b7b6b6;
-    padding-bottom: 20px;
+    /*padding-bottom: 20px;*/
+}
+
+.index .form .divider {
+    border-top: 1px solid #b7b6b6;
+    border-bottom: 1px solid #e9e8e8;
+    margin: 20px 0 15px;
 }
 
 .index .form p {
     margin: 0;
-    padding-top: 15px;
-    border-top: 1px solid #e9e8e8;
+    /*padding-top: 15px;*/
 }
 
 #slideshow {

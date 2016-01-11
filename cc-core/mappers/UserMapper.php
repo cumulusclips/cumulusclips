@@ -145,18 +145,6 @@ class UserMapper extends MapperAbstract
         return $userList;
     }
     
-    /**
-     * Get video count Method
-     * @return integer Returns the number of approved videos uploaded by the user
-     */
-    public function getVideoCount($userId)
-    {
-        $db = Registry::get('db');
-        $query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE user_id = $userId AND status = 'approved'";
-        $result = $db->fetchRow($query);
-        return $result['count'];
-    }
-    
     public function delete($userId)
     {
         $db = Registry::get('db');

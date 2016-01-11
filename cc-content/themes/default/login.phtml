@@ -18,7 +18,9 @@
         <input class="button" type="submit" name="button" value="<?=Language::getText('login_button')?>" />
 
     </form>
-    <p><a href="<?=HOST?>/register/"><?=Language::getText('no_account')?></a></p>
+    <?php if ($config->enableRegistrations): ?>
+        <p><a href="<?=HOST?>/register/"><?=Language::getText('no_account')?></a></p>
+    <?php endif; ?>
     <p><a href="#" data-block="login_forgot_form" class="showhide"><?=Language::getText('forgot_your_login')?></a></p>
 </div>
 

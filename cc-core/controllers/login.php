@@ -64,7 +64,6 @@ if (isset($_POST['submitted_login'])) {
         } else {
             $this->view->vars->message = Language::getText('error_invalid_login');
             $this->view->vars->message_type = 'errors';
-            $this->view->vars->login_submit = null;
         }
 
     } else {
@@ -88,7 +87,6 @@ if (isset($_POST['submitted_forgot'])) {
             $new_password = $userService->resetPassword($user);
             $this->view->vars->message = Language::getText('success_login_sent');
             $this->view->vars->message_type = 'success';
-            $this->view->vars->forgot_submit = null;
 
             $replacements = array (
                 'sitename'  => $config->sitename,

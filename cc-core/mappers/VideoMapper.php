@@ -175,4 +175,17 @@ class VideoMapper extends MapperAbstract
         $query = 'DELETE FROM ' . DB_PREFIX . 'videos WHERE video_id = :videoId';
         $db->query($query, array(':videoId' => $videoId));
     }
+
+    /**
+     * Get video count Method
+     * @param int $userId Id of user to retrieve video count for
+     * @return integer Returns the number of approved videos uploaded by the user
+     */
+    public function getVideoCount($userId)
+    {
+        $db = Registry::get('db');
+        $query = "SELECT COUNT(video_id) AS count FROM " . DB_PREFIX . "videos WHERE user_id = $userId AND status = 'approved' AND private = 0";
+        $result = $db->fetchRow($query);
+        return $result['count'];
+    }
 }

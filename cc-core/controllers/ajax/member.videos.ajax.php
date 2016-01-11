@@ -1,5 +1,9 @@
 <?php
 
+// Verify if user registrations are enabled
+$config = Registry::get('config');
+if (!$config->enableUserUploads) App::throw404();
+
 $this->view->options->disableView = true;
 $userMapper = new UserMapper();
 $videoMapper = new VideoMapper();

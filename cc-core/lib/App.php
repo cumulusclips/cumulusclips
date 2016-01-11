@@ -12,7 +12,7 @@ class App
         $controller = Registry::get('controller');
         $router = new Router();
         $controller->view->options->disableView = false;
-        $controller->dispatch($router->getStaticRoute('system404'));
+        $controller->dispatch($router->getStaticRoute('system-404'));
         exit();
     }
 
@@ -125,7 +125,7 @@ class App
             // Detect if route is for video or private play page and redirect to mobile version instead
             $router = new Router();
             $playRoute = $router->getStaticRoute('play');
-            $privateRoute = $router->getStaticRoute('privateVideoPlay');
+            $privateRoute = $router->getStaticRoute('play-private');
             $requestPath = trim($router->getRequestUri(), '/');
             if ($playRoute->path == $route->path) {
                 preg_match('#^' . $route->path . '$#i', $requestPath, $matches);

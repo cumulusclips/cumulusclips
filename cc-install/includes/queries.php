@@ -129,6 +129,36 @@ POPULATE_PAGES_TABLE;
 
 
 
+/*Table structure for table `files` */
+
+$_DROP_FILES_TABLE = <<<DROP_FILES_TABLE
+DROP TABLE IF EXISTS `{DB_PREFIX}files`
+DROP_FILES_TABLE;
+
+$_CREATE_FILES_TABLE = <<<CREATE_FILES_TABLE
+
+CREATE TABLE `{DB_PREFIX}files` (
+  `file_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `title` text NOT NULL,
+  `description` text,
+  `filesize` bigint(20) NOT NULL,
+  `extension` varchar(255) NOT NULL DEFAULT '',
+  `attachable` tinyint(1) NOT NULL DEFAULT '0',
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`file_id`),
+  KEY `tenant_id` (`user_id`),
+  KEY `user_id` (`user_id`),
+  KEY `filename` (`filename`)
+) DEFAULT CHARSET=utf8;
+
+CREATE_FILES_TABLE;
+
+
+
+
+
 /*Table structure for table `playlists` */
 
 $_DROP_PLAYLISTS_TABLE = <<<DROP_PLAYLISTS_TABLE
@@ -249,13 +279,14 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_languages', '[{"system_name":"english","lang_name":"English","native_name":"English"}]'),
 ('installed_plugins','[]'),
 ('enabled_plugins','[]'),
-('roles','{"admin":{"name":"Administrator","permissions":["admin_panel"]},"user":{"name":"User","permissions":[]}}'),
+('roles','{"admin":{"name":"Administrator","permissions":["admin_panel","manage_settings"]},"mod":{"name":"Moderator","permissions":["admin_panel"]},user":{"name":"User","permissions":[]}}'),
 ('debug_conversion','0'),
 ('video_size_limit','102000000'),
+('file_size_limit','102000000'),
 ('keep_original_video','1'),
 ('enable_encoding','1'),
 ('mobile_site','1'),
-('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libfaac -ab 96k -ar 44100 -f mp4'),
+('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvo_aacenc -ab 96k -ar 44100 -f mp4'),
 ('webm_encoding_enabled','0'),
 ('webm_encoding_options','-vcodec libvpx -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f webm'),
 ('theora_encoding_enabled','0'),
@@ -272,7 +303,9 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('alerts_flags','1'),
 ('from_name',''),
 ('from_address',''),
-('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}')
+('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}'),
+('user_registrations', '1'),
+('user_uploads', '1')
 
 POPULATE_SETTINGS_TABLE;
 
@@ -391,6 +424,8 @@ $install_queries = array (
     $_DROP_PAGES_TABLE,
     $_CREATE_PAGES_TABLE,
     $_POPULATE_PAGES_TABLE,
+    $_DROP_FILES_TABLE,
+    $_CREATE_FILES_TABLE,
     $_DROP_PLAYLISTS_TABLE,
     $_CREATE_PLAYLISTS_TABLE,
     $_DROP_PLAYLIST_ENTRIES_TABLE,

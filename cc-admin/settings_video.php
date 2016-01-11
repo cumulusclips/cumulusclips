@@ -7,7 +7,7 @@ include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php')
 $userService = new UserService();
 $adminUser = $userService->loginCheck();
 Functions::RedirectIf($adminUser, HOST . '/login/');
-Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
+Functions::RedirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
 $page_title = 'Video Settings';
@@ -18,6 +18,7 @@ $message = null;
 
 $data['php'] = Settings::get('php');
 $data['ffmpeg'] = Settings::get('ffmpeg');
+$data['qtfaststart'] = Settings::get('qtfaststart');
 $data['thumb_encoding_options'] = Settings::get('thumb_encoding_options');
 $data['debug_conversion'] = Settings::get('debug_conversion');
 $data['video_size_limit'] = Settings::get('video_size_limit');
@@ -148,30 +149,37 @@ if (isset ($_POST['submitted'])) {
     }
         
     // Validate ffmpeg path
-    if (empty ($_POST['ffmpeg'])) {
+    if (empty($_POST['ffmpeg'])) {
 
-        // Check if FFMPEG is installed (using which)
-        @exec ('which ffmpeg', $which_results_ffmpeg);
-        if (empty ($which_results_ffmpeg)) {
-
-            // Check if FFMPEG is installed (using whereis)
-            @exec ('whereis ffmpeg', $whereis_results_ffmpeg);
-            $whereis_results_ffmpeg = preg_replace ('/^ffmpeg:\s?/','', $whereis_results_ffmpeg[0]);
-            if (empty ($whereis_results_ffmpeg)) {
-                $warnings['ffmpeg'] = 'Unable to locate FFMPEG';
-                $data['ffmpeg'] = '';
-            } else {
-                $data['ffmpeg'] = $whereis_results_ffmpeg;
-            }
-
+        // Determine FFMPEG path according to proccessor architecture
+        $systemInfo = posix_uname();
+        if (strpos($systemInfo['machine'], '64') !== false) {
+            $data['ffmpeg'] = DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg';
         } else {
-            $data['ffmpeg'] = $which_results_ffmpeg[0];
+            $data['ffmpeg'] = DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg';
         }
 
-    } else if (file_exists ($_POST['ffmpeg'])) {
-        $data['ffmpeg'] = rtrim ($_POST['ffmpeg'], '/');
+    } else if (file_exists($_POST['ffmpeg'])) {
+        $data['ffmpeg'] = rtrim($_POST['ffmpeg'], '/');
     } else {
         $errors['ffmpeg'] = 'Invalid path to FFMPEG';
+    } 
+
+    // Validate qt-faststart path
+    if (empty($_POST['qtfaststart'])) {
+
+        // Determine qt-faststart path according to proccessor architecture
+        $systemInfo = posix_uname();
+        if (strpos($systemInfo['machine'], '64') !== false) {
+            $data['qtfaststart'] = DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart';
+        } else {
+            $data['qtfaststart'] = DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart';
+        }
+
+    } else if (file_exists($_POST['qtfaststart'])) {
+        $data['qtfaststart'] = rtrim($_POST['qtfaststart'], '/');
+    } else {
+        $errors['qtfaststart'] = 'Invalid path to qt-faststart';
     }
 
     // Update video if no errors were made
@@ -243,7 +251,13 @@ include('header.php');
     <div class="form-group <?=(isset ($errors['ffmpeg'])) ? 'has-error' : ''?>">
         <label class="control-label">FFMPEG Path:</label>
         <input class="form-control" type="text" name="ffmpeg" value="<?=$data['ffmpeg']?>" />
-        <a class="more-info" title="If left blank, CumulusClips will attempt to detect its location">More Info</a>
+        <a class="more-info" title="If left blank, CumulusClips will use it's built in FFMPEG binary">More Info</a>
+    </div>
+
+    <div class="form-group <?=(isset ($errors['qtfaststart'])) ? 'has-error' : ''?>">
+        <label class="control-label">qt-faststart Path:</label>
+        <input class="form-control" type="text" name="qtfaststart" value="<?=$data['qtfaststart']?>" />
+        <a class="more-info" title="If left blank, CumulusClips will use it's built-in qt-faststart">More Info</a>
     </div>
 
     <div class="form-group <?=(isset($errors['h264_encoding_options'])) ? 'has-error' : ''?>">

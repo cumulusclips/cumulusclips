@@ -43,7 +43,7 @@ if ((isset($_POST['submitted']))) {
         } else {
             $this->view->vars->errors['match'] = TRUE;
             $this->view->vars->message = Language::GetText('error_password_match');
-            $this->view->vars->message_type = 'error';
+            $this->view->vars->message_type = 'errors';
         }
 
     } else {

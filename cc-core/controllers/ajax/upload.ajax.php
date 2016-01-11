@@ -1,5 +1,9 @@
 <?php
 
+// Verify if user registrations are enabled
+$config = Registry::get('config');
+if (!$config->enableUserUploads) App::throw404();
+
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();

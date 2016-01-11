@@ -63,7 +63,7 @@ if ($videoCount > 0) {
 // Retrieve user's playlists
 if ($playlistCount > 0) {
     $playlistMapper = new PlaylistMapper();
-    $query = "SELECT playlist_id FROM " . DB_PREFIX . "playlists WHERE user_id = " . $profileUser->userId . " AND public = 1 AND type = 'playlist' LIMIT 9";
+    $query = "SELECT playlist_id FROM " . DB_PREFIX . "playlists WHERE user_id = " . $profileUser->userId . " AND public = 1 AND type = 'playlist' ORDER BY date_created DESC LIMIT 9";
     $memberPlaylistResults = $db->fetchAll($query);
     $this->view->vars->playlist_list = $playlistMapper->getPlaylistsFromList(
         Functions::arrayColumn($memberPlaylistResults, 'playlist_id')

@@ -72,10 +72,8 @@ class UserService extends ServiceAbstract
      */
     public function getVideoCount(User $user)
     {
-        $db = Registry::get('db');
-        $query = "SELECT COUNT(video_id) as count FROM " . DB_PREFIX . "videos WHERE user_id = $user->userId AND status = 'approved'";
-        $row = $db->fetchRow($query);
-        return (int) $row['count'];
+        $videoMapper = new VideoMapper();
+        return $videoMapper->getVideoCount($user->userId);
     }
     
     /**
