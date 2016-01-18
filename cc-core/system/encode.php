@@ -22,6 +22,39 @@ if ($config->debugConversion) {
 try {
     /////////////////////////////////////////////////////////////
     //                        STEP 1                           //
+    //       Check Permissions on Transcoding Binaries         //
+    /////////////////////////////////////////////////////////////
+
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nChecking FFMPEG permissions...") : null;
+    if (strpos($ffmpegPath, DOC_ROOT) !== false && Filesystem::getPermissions($ffmpegPath) != '0777') {
+        try {
+            Filesystem::setPermissions($ffmpegPath, 0777);
+        } catch (Exception $e) {
+            throw new Exception("Unable to update permissions for FFMPEG. Please make sure it ($ffmpegPath) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
+        }
+    }
+
+    // Debug Log
+    $config->debugConversion ? App::log(CONVERSION_LOG, "\nChecking qt-faststart permissions...") : null;
+    if (strpos($qtFaststartPath, DOC_ROOT) !== false && Filesystem::getPermissions($qtFaststartPath) != '0777') {
+        try {
+            Filesystem::setPermissions($qtFaststartPath, 0777);
+        } catch (Exception $e) {
+            throw new Exception("Unable to update permissions for qt-faststart. Please make sure it ($qtFaststartPath) has 777 executeable permissions.\n\nAdditional information: " . $e->getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    //                        STEP 2                           //
     //               Validate Requested Video                  //
     /////////////////////////////////////////////////////////////
 
@@ -29,7 +62,6 @@ try {
     $config->debugConversion ? App::log(CONVERSION_LOG, 'Validating requested video...') : null;
 
     // Validate requested video
-    
     $video = $videoMapper->getVideoByCustom(array('video_id' => $video_id, 'status' => VideoMapper::PENDING_CONVERSION));
     if (!$video) throw new Exception("An invalid video was passed to the video encoder.");
 
@@ -71,7 +103,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 2                           //
+    //                        STEP 3                           //
     //              Encode raw video to H.264                  //
     /////////////////////////////////////////////////////////////
 
@@ -110,7 +142,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 3                           //
+    //                        STEP 4                           //
     //            Shift Moov atom on H.264 video               //
     /////////////////////////////////////////////////////////////
 
@@ -149,7 +181,7 @@ try {
     
     
     /////////////////////////////////////////////////////////////
-    //                        STEP 4                           //
+    //                        STEP 5                           //
     //               Encode raw video to WebM                  //
     /////////////////////////////////////////////////////////////
 
@@ -192,7 +224,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 5                           //
+    //                        STEP 6                           //
     //              Encode raw video to Theora                 //
     /////////////////////////////////////////////////////////////
 
@@ -235,7 +267,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 6                           //
+    //                        STEP 7                           //
     //              Encode raw video to Mobile                 //
     /////////////////////////////////////////////////////////////
 
@@ -277,7 +309,7 @@ try {
 
     
         /////////////////////////////////////////////////////////////
-        //                        STEP 7                           //
+        //                        STEP 8                           //
         //            Shift Moov atom on Mobile video              //
         /////////////////////////////////////////////////////////////
 
@@ -315,7 +347,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 8                           //
+    //                        STEP 9                           //
     //                  Get Video Duration                     //
     /////////////////////////////////////////////////////////////
 
@@ -351,7 +383,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 9                           //
+    //                        STEP 10                          //
     //                Create Thumbnail Image                   //
     /////////////////////////////////////////////////////////////
 
@@ -387,7 +419,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                        STEP 10                          //
+    //                        STEP 11                          //
     //               Update Video Information                  //
     /////////////////////////////////////////////////////////////
 
@@ -411,7 +443,7 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                         STEP 11                         //
+    //                         STEP 12                         //
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 

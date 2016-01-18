@@ -159,11 +159,11 @@ try {
     Filesystem::setPermissions(DOC_ROOT . '/cc-core/logs', 0777);
     Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0755);
     Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit', 0755);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0644);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0644);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0755);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0755);
     Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit', 0755);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0644);
-    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0644);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0755);
+    Filesystem::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0755);
 
     ### Delete temp. dir.
     Filesystem::delete($tmp);

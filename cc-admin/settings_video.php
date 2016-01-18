@@ -10,6 +10,7 @@ Functions::RedirectIf($adminUser, HOST . '/login/');
 Functions::RedirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
+clearstatcache();
 $page_title = 'Video Settings';
 $data = array();
 $errors = array();

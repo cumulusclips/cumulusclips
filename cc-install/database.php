@@ -115,11 +115,11 @@ if (isset ($_POST['submitted'])) {
             FilesystemInstaller::Write ($perm_config_file, $config_content);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin', 0755);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit', 0755);
-            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0644);
-            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0644
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/ffmpeg', 0755);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-32-bit/qt-faststart', 0755);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit', 0755);
-            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0644);
-            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0644);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/ffmpeg', 0755);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/system/bin/ffmpeg-64-bit/qt-faststart', 0755);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-core/logs', 0777);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads', 0777);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/temp', 0777);
