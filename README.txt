@@ -29,20 +29,11 @@ SERVER REQUIREMENTS
 
 CumulusClips requires:
 
-- Linux operating system
+- Linux operating system (Kernel 2.6.32 or greater)
 - Apache web server version 2.0 (or greater) (http://httpd.apache.org/)
     - Apache mod_rewrite module
-- PHP 5.2 (or greater) (http://www.php.net/)
+- PHP 5.3 (or greater) (http://www.php.net/)
 - MySQL 5.0 (or greater) (http://www.mysql.com/)
-
-For video encoding:
-
-- FFMPEG (http://ffmpeg.org/ - videolan mirror recommended).
-- x264 (http://www.videolan.org/)
-- faac (http://www.audiocoding.com/)
-- WebM (http://www.webmproject.org/)
-- Theora (http://www.theora.org/)
-- Vorbis (http://www.vorbis.com/)
 
 
 
@@ -55,6 +46,7 @@ PHP REQUIREMENTS
 The following PHP modules are required:
 
 - GD
+- POSIX
 - SimpleXML
 - ZIP
 - CURL
@@ -65,6 +57,8 @@ short_open_tags = on
 upload_max_filesize = 110M
 post_max_size = 110M
 max_execution_time = 1500
+safe_mode = off
+register _globals = off
 
 
 
@@ -74,13 +68,13 @@ max_execution_time = 1500
 FILE PERMISSIONS
 ----------------
 
-Make sure the following directories are writeable by PHP and the webserver:
+CumulusClips needs to modify files occasionally. To do this it needs access
+to the filesystem. There are two options to achive this:
 
-/cc-core/log
-/cc-content/uploads/temp
-/cc-content/uploads/h264
-/cc-content/uploads/webm
-/cc-content/uploads/theora
-/cc-content/uploads/mobile
-/cc-content/uploads/thumbs
-/cc-content/uploads/avatars
+1) Make the CumulusClips be owned by the user PHP is running as. Typically
+this the Apache user (www-data, apache, nobody, etc.) Giving the files
+777 permissions is not enough. The files have to be owned by PHP.
+
+2) Alternatively, if there is an FTP server installed, simply provide the
+FTP credentials to the installer. The user provided needs access to modify
+the CumulusClips via FTP.

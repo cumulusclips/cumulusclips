@@ -1,4 +1,4 @@
-All CumulusClips code is Copyright 2014 by the original authors.
+All CumulusClips code is Copyright 2016 by the original authors.
 
 CumulusClips is released under the GPL
 
