@@ -15,100 +15,107 @@ $page_title = 'Languages';
 $lang_list = array();
 $admin_js[] = ADMIN . '/extras/fancybox/jquery.fancybox-1.3.4.js';
 $admin_js[] = ADMIN . '/js/fancybox.js';
-$active_languages = Language::getActiveLanguages();
-$languageSystemNames = Functions::arrayColumn($active_languages, 'system_name');
+$missing = array();
+$languageList = array();
+$availableLanguages = array();
+$installedLanguages = Language::getInstalled();
+$defaultLanguage = Settings::get('default_language');
 
-// Remove any orphaned languages
-foreach ($active_languages as $key => $language) {
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $language->system_name . '.xml';
-    if (!file_exists($language_file)) {
-        unset ($active_languages[$key]);
-    }
+// Handle "Install" language if requested
+if (
+    !empty($_GET['install'])
+    && !isset($installedLanguages->{$_GET['install']})
+) {
+    $installedLanguages = Language::install($_GET['install']);
+    $message = $installedLanguages->{$_GET['install']}->lang_name . ' has been installed.';
+    $messageType = 'alert-success';
 }
-Settings::set('active_languages', json_encode(array_values($active_languages)));
 
-// Handle "Delete" language if requested
-if (!empty($_GET['delete']) && !ctype_space($_GET['delete'])) {
-
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['delete'] . '.xml';
-    if (file_exists($language_file) && $_GET['delete'] != Settings::get('default_language')) {
-
-        // Deactivate language if applicable
-        $key = array_search($_GET['delete'], $languageSystemNames);
-        if ($key !== false) {
-            unset($active_languages[$key]);
-            Settings::set('active_languages', json_encode(array_values($active_languages)));
-        }
-        
-        // Delete language file
-        $xml = simplexml_load_file($language_file);
-        $message = $xml->information->lang_name . ' language has been deleted';
-        $message_type = 'alert-success';
-        try {
-            Filesystem::delete($language_file);
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-            $message_type = 'alert-danger';
-        }
+// Handle "Uninstall" language if requested
+if (!empty($_GET['uninstall'])) {
+    try {
+        $languageName = $installedLanguages->{$_GET['uninstall']}->lang_name;
+        $installedLanguages = Language::uninstall($_GET['uninstall']);
+        $message = $languageName . ' has been uninstalled.';
+        $messageType = 'alert-success';
+    } catch (Exception $exception) {
+        $message = $exception->getMessage();
+        $messageType = 'alert-danger';
     }
 }
 
 // Handle "Activate" language if requested
-else if (!empty($_GET['activate']) && !ctype_space($_GET['activate'])) {
-
-    // Validate theme
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['activate'] . '.xml';
-    if (file_exists($language_file)) {
-        $xml = simplexml_load_file($language_file);
-        $active_languages[] = (object) array (
-            'system_name' => $_GET['activate'],
-            'lang_name' => (string) $xml->information->lang_name,
-            'native_name' => (string) $xml->information->native_name
-        );
-        $languageSystemNames[] = $_GET['activate'];
-        Settings::set('active_languages', json_encode($active_languages));
-        $message = $xml->information->lang_name . ' has been activated.';
-        $message_type = 'alert-success';
-    }
+if (
+    !empty($_GET['activate'])
+    && isset($installedLanguages->{$_GET['activate']})
+    && !$installedLanguages->{$_GET['activate']}->active
+) {
+    $installedLanguages->{$_GET['activate']}->active = true;
+    Language::save($installedLanguages);
+    $message = $installedLanguages->{$_GET['activate']}->lang_name . ' has been activated.';
+    $messageType = 'alert-success';
 }
 
 // Handle "Deactivate" language if requested
-else if (!empty($_GET['deactivate']) && !ctype_space($_GET['deactivate'])) {
-
-    // Validate theme
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['deactivate'] . '.xml';
-    $key = array_search($_GET['deactivate'], $languageSystemNames);
-    if ($key !== false) {
-        $xml = simplexml_load_file($language_file);
-        unset($active_languages[$key]);
-        Settings::set('active_languages', json_encode(array_values($active_languages)));
-        $message = $xml->information->lang_name . ' has been deactivated.';
-        $message_type = 'alert-success';
-    }
+if (
+    !empty($_GET['deactivate'])
+    && isset($installedLanguages->{$_GET['deactivate']})
+    && $installedLanguages->{$_GET['deactivate']}->active
+) {
+    $installedLanguages->{$_GET['deactivate']}->active = false;
+    Language::save($installedLanguages);
+    $message = $installedLanguages->{$_GET['deactivate']}->lang_name . ' has been deactivated.';
+    $messageType = 'alert-success';
 }
 
 // Handle "Set Default" language if requested
-else if (!empty($_GET['default']) && !ctype_space($_GET['default'])) {
+if (
+    !empty($_GET['default'])
+    && isset($installedLanguages->{$_GET['default']})
+    && $defaultLanguage !== $_GET['default']
+) {
+    Settings::set('default_language', $_GET['default']);
+    $defaultLanguage = $_GET['default'];
+    $message = $installedLanguages->{$_GET['default']}->lang_name . ' is now the default language.';
+    $messageType = 'alert-success';
+}
 
-    // Validate language
-    $language_file = DOC_ROOT . '/cc-content/languages/' . $_GET['default'] . '.xml';
-    $key = array_search($_GET['default'], $languageSystemNames);
-    if ($key !== false) {
-        $xml = simplexml_load_file($language_file);
-        Settings::set('default_language', $_GET['default']);
-        $message = $xml->information->lang_name . ' is now the default language.';
-        $message_type = 'alert-success';
+// Build list of available languages
+foreach ($installedLanguages as $key => $language) {
+
+    if (!file_exists(DOC_ROOT . '/cc-content/languages/' . $key . '.xml')) {
+        $installedLanguages->{$key}->active = false;
+        $isMissing = true;
+        $missing[] = $key;
+    } else {
+        $isMissing = null;
+    }
+
+    $languageList[$key] = (object) array(
+        'installed' => true,
+        'missing' => $isMissing,
+        'information' => $language
+    );
+}
+
+// Add uninstalled languages files to list of available languages
+foreach (glob(DOC_ROOT . '/cc-content/languages/*.xml') as $language) {
+    $systemName = basename($language, '.xml');
+    if (!isset($installedLanguages->{$systemName})) {
+        $xml = simplexml_load_file($language);
+        $languageList[$systemName] = (object) array(
+            'installed' => false,
+            'missing' => null,
+            'information' => $xml->information
+        );
     }
 }
 
-// Retrieve languages
-foreach (glob(DOC_ROOT . '/cc-content/languages/*') as $language) {
-    $lang = new stdClass();
-    $lang->filename = basename($language, '.xml');
-    $lang->active = (in_array($lang->filename, $languageSystemNames)) ? true : false;
-    $lang->default = ($lang->filename == Settings::get('default_language')) ? true : false;
-    $lang->xml = simplexml_load_file($language);
-    $lang_list[] = $lang;
+// Detect if any languages pack files are missing and display warning
+if (!empty($missing)) {
+    Language::save($installedLanguages);
+    $message = 'Some installed languages files are missing (in /cc-content/languages). As a result they have been disabled.';
+    $messageType = 'alert-warning';
 }
 
 // Output Header
@@ -122,7 +129,7 @@ include ('header.php');
 <h1>Languages</h1>
 
 <?php if ($message): ?>
-<div class="alert <?=$message_type?>"><?=$message?></div>
+<div class="alert <?=$messageType?>"><?=$message?></div>
 <?php endif; ?>
 
 <table class="table table-striped">
@@ -133,38 +140,55 @@ include ('header.php');
         </tr>
     </thead>
     <tbody>
-        
 
-<?php foreach ($lang_list as $language): ?>
+
+<?php foreach ($languageList as $systemName => $language): ?>
 
     <tr>
         <td>
-            <p class="h3"><?=$language->xml->information->lang_name?></p>
+            <p class="h3"><?=($language->missing) ? '(Disabled) ' : ''?><?=$language->information->lang_name?></p>
+
             <p>
-                <?php if ($language->active && $language->default): ?>
+            <?php if ($language->installed): ?>
+
+                <?php if ($systemName === $defaultLanguage): ?>
                     <strong>Default Language</strong>
-                <?php else: ?>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages_edit.php?language=<?=$systemName?>">Edit</a>
+                <?php elseif ($language->missing): ?>
+                    <a href="<?=ADMIN?>/languages.php?uninstall=<?=$systemName?>" class="delete confirm" data-confirm="This will completely uninstall and remove this language from your system. Do you want to proceed?">Uninstall</a>
+                <?php elseif ($language->information->active): ?>
+                    <a href="<?=ADMIN?>/languages_edit.php?language=<?=$systemName?>">Edit</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?default=<?=$systemName?>">Set Default</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?deactivate=<?=$systemName?>">Deactivate</a>
+                    <!-- &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$systemName?>" class="iframe">Preview</a> -->
 
-                    <?php if ($language->active): ?>
-                        <a href="<?=ADMIN?>/languages.php?default=<?=$language->filename?>">Set Default</a> &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="<?=ADMIN?>/languages.php?deactivate=<?=$language->filename?>">Deactivate</a>
-                    <?php else: ?>
-                        <a href="<?=ADMIN?>/languages.php?activate=<?=$language->filename?>">Activate</a>
+                    <?php if ($systemName !== 'english'): ?>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?uninstall=<?=$systemName?>" class="delete confirm" data-confirm="This will completely uninstall and remove this language from your system. Do you want to proceed?">Uninstall</a>
                     <?php endif; ?>
+                <?php else: ?>
+                    <a href="<?=ADMIN?>/languages_edit.php?language=<?=$systemName?>">Edit</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?activate=<?=$systemName?>">Activate</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$systemName?>" class="iframe">Preview</a>
 
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$language->filename?>" class="iframe">Preview</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?delete=<?=$language->filename?>" class="delete confirm" data-confirm="You're about to delete this language file. This cannot be undone. Do you want to proceed?">Delete</a>
+                    <?php if ($systemName !== 'english'): ?>
+                        &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?uninstall=<?=$systemName?>" class="delete confirm" data-confirm="This will completely uninstall and remove this language from your system. Do you want to proceed?">Uninstall</a>
+                    <?php endif; ?>
                 <?php endif; ?>
+
+            <?php else: ?>
+                <a href="<?=ADMIN?>/languages.php?install=<?=$systemName?>">Install</a>
+            <?php endif; ?>
             </p>
+
         </td>
         <td>
-            <p><strong>Sample:</strong> <?=$language->xml->information->sample?></p>
-            <?php if (!empty($language->xml->information->author)): ?>
-                <p>By: <?=$language->xml->information->author?></p>
+            <p><strong>Sample:</strong> <?=$language->information->sample?></p>
+            <?php if (!empty($language->information->author)): ?>
+                <p>By: <?=$language->information->author?></p>
             <?php endif; ?>
 
-            <?php if (!empty($language->xml->information->notes)): ?>
-                <p><?=$language->xml->information->notes?></p>
+            <?php if (!empty($language->information->notes)): ?>
+                <p><?=$language->information->notes?></p>
             <?php endif; ?>
         </td>
     </tr>
