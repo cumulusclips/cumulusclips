@@ -63,9 +63,9 @@ Registry::set('config', $config);
 // Start session
 if (!headers_sent() && session_id() == '') @session_start();
 
+// Initialize language
+Language::init();
+
 // Initialize plugin system
 Plugin::init();
 Plugin::triggerEvent('app.start');
-
-// Load language
-Language::loadLangPack(App::currentLang());

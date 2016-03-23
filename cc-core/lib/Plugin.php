@@ -6,15 +6,15 @@ class Plugin
      * @var array List of events hooks with plugins attached to them
      */
     private static $_events = array();
-    
+
     /**
-     * @var array List of filter hooks with plugins attached to them 
+     * @var array List of filter hooks with plugins attached to them
      */
     private static $_filters = array();
-    
+
     private static $_enabledPlugins = array();
     private static $_installedPlugins = array();
-    
+
     /**
      * Add plugin method (code) to specified event in system
      * @param string $eventName The event to attach plugin method to
@@ -46,7 +46,7 @@ class Plugin
         // Add callback to filter list
         self::$_filters[$filterName][] = $callbackMethod;
     }
-    
+
     /**
      * Execute methods (code) attached to specified event
      * @param string $eventName Event for which attached events are fired
@@ -92,13 +92,14 @@ class Plugin
         // Retrieve all enabled plugins
         $installedPlugins = json_decode(Settings::get('installed_plugins'));
         $enabledPlugins = json_decode(Settings::get('enabled_plugins'));
-        
+
         // Load enabled plugins and attach their code to code to corresponding hooks
         $pluginsWereDisabled = false;
         foreach ($enabledPlugins as $key => $pluginName) {
             if (self::isPluginValid($pluginName)) {
                 $plugin = self::getPlugin($pluginName);
                 $plugin->load();
+                Language::loadPluginLanguage($pluginName);
             } else {
                 $pluginsWereDisabled = true;
                 unset($enabledPlugins[$key]);
@@ -107,7 +108,7 @@ class Plugin
         reset($enabledPlugins);
         self::$_installedPlugins = $installedPlugins;
         self::$_enabledPlugins = $enabledPlugins;
-        
+
         // Update enabled plugin list if any plugins were enabled but were not valid
         if ($pluginsWereDisabled) {
             Settings::set('enabled_plugins', json_encode($enabledPlugins));
@@ -126,32 +127,32 @@ class Plugin
         if (!file_exists($pluginFile)) {
             return false;
         }
-        
+
         // Load plugin
         include_once($pluginFile);
         if (!class_exists($pluginName, false)) return false;
         $plugin = new $pluginName();
-        
+
         // Verify plugin adheres to plugin API
         if (!$plugin instanceof PluginAbstract) return false;
         return true;
     }
-    
+
     /**
      * Load and retrieve instance of given plugin
      * @param string $pluginName Name of plugin to be retireved
-     * @return PluginAbstract Returns instance of given plugin 
+     * @return PluginAbstract Returns instance of given plugin
      */
     public static function getPlugin($pluginName)
     {
         include_once(DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/' . $pluginName . '.php');
         return new $pluginName();
     }
-    
+
     /**
      * Checks if given plugin has a settings method
      * @param PluginAbstract $plugin Plugin to be checked
-     * @return boolean Returns true if settings method exists, false otherwise 
+     * @return boolean Returns true if settings method exists, false otherwise
      */
     public static function hasSettingsMethod(PluginAbstract $plugin)
     {
@@ -159,16 +160,16 @@ class Plugin
         $pluginReflectionMethod = $pluginReflection->getMethod('settings');
         return ($pluginReflectionMethod->getDeclaringClass()->name == 'PluginAbstract') ? false : true;
     }
-    
+
     /**
      * Retrieves a list of plugins which have been installed
-     * @return array Returns list of installed plugin names 
+     * @return array Returns list of installed plugin names
      */
     public static function getInstalledPlugins()
     {
         return json_decode(Settings::get('installed_plugins'));
     }
-    
+
     /**
      * Retrieve a list of valid enabled plugins
      * @return array Returns a list of enabled plugins, any orphaned plugins are disabled
@@ -177,27 +178,27 @@ class Plugin
     {
         return self::$_enabledPlugins;
     }
-    
+
     /**
      * Checks if a given plugin is enabled
      * @param string $pluginName Name of plugin to be checked
-     * @return boolean Returns true if plugin is enabled, false otherwise 
+     * @return boolean Returns true if plugin is enabled, false otherwise
      */
     public static function isPluginEnabled($pluginName)
     {
         return (in_array($pluginName, self::$_enabledPlugins)) ? true : false;
     }
-    
+
     /**
      * Checks if given plugin is installed
      * @param string $pluginName Name of plugin to be checked
-     * @return boolean Returns true if plugin is installed, false otherwise 
+     * @return boolean Returns true if plugin is installed, false otherwise
      */
     public static function isPluginInstalled($pluginName)
     {
         return (in_array($pluginName, self::$_installedPlugins)) ? true : false;
     }
-    
+
     /**
      * Installs and enables given plugin
      * @param string $pluginName Name of plugin to be installed
@@ -210,7 +211,7 @@ class Plugin
         Settings::set('installed_plugins', json_encode(self::$_installedPlugins));
         self::enablePlugin($pluginName);
     }
-    
+
     /**
      * Disables and uninstalls given plugin
      * @param string $pluginName Name of plugin to be uninstalled
@@ -224,7 +225,7 @@ class Plugin
         Settings::set('installed_plugins', json_encode(self::$_installedPlugins));
         self::disablePlugin($pluginName);
     }
-    
+
     /**
      * Marks given plugin as enabled
      * @param string $pluginName Name of plugin to be enabled
@@ -234,7 +235,7 @@ class Plugin
         self::$_enabledPlugins[] = $pluginName;
         Settings::set('enabled_plugins', json_encode(self::$_enabledPlugins));
     }
-    
+
     /*
      * Marks given plugin as disabled
      * @param string $pluginName Name of plugin to be disabled
