@@ -31,7 +31,7 @@ if (isset($_POST['submitted_login'])) {
         if (!empty($redirectUrlParts['path'])) {
             $this->view->vars->redirect .= '/' . trim($redirectUrlParts['path'], '/') . '/';
         }
-        
+
         // Append redirect url query
         if (!empty($redirectUrlParts['query'])) {
             $this->view->vars->redirect .= '?' . $redirectUrlParts['query'];
@@ -52,7 +52,7 @@ if (isset($_POST['submitted_login'])) {
     if (!empty($_POST['password'])) {
         $this->view->vars->password = $_POST['password'];
     }
-	
+
     // login if no errors were found
     if ($this->view->vars->username && $this->view->vars->password) {
 
@@ -74,7 +74,7 @@ if (isset($_POST['submitted_login'])) {
 
 // Handle forgot login form
 if (isset($_POST['submitted_forgot'])) {
-	
+
     $this->view->vars->forgot_submit = true;
 
     // validate email
@@ -93,8 +93,8 @@ if (isset($_POST['submitted_forgot'])) {
                 'username'  => $user->username,
                 'password'  => $new_password
             );
-            $mailer = new Mailer();
-            $mailer->LoadTemplate ('forgot_password', $replacements);
+            $mailer = new Mailer($config);
+            $mailer->setTemplate ('forgot_password', $replacements);
             $mailer->Send ($user->email);
         } else {
             $this->view->vars->message = Language::getText('error_no_users_email');

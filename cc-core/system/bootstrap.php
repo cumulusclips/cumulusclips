@@ -43,6 +43,7 @@ define('MOBILE_HOST', Settings::get('base_url') . '/m');
 define('SECRET_KEY', Settings::get('secret_key'));
 
 $config = new stdClass();
+$config->baseUrl = HOST;
 $config->sitename = Settings::get('sitename');
 $config->roles = json_decode(Settings::get('roles'));
 $config->enableUploads = Settings::get('enable_uploads');
@@ -58,6 +59,9 @@ $config->mobileUrl = HOST . '/cc-content/uploads/mobile';
 $config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
 $config->enableRegistrations = (boolean) Settings::get('user_registrations');
 $config->enableUserUploads = (boolean) Settings::get('user_uploads');
+$config->smtp = json_decode(Settings::get('smtp'));
+$config->from_name = Settings::get('from_name');
+$config->from_address = Settings::get('from_address');
 Registry::set('config', $config);
 
 // Start session

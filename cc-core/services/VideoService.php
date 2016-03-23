@@ -15,8 +15,8 @@ class VideoService extends ServiceAbstract
             $slug = Functions::createSlug($video->title);
             return HOST . '/videos/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
         }
-    } 
-    
+    }
+
     /**
      * Delete a video
      * @param Video $video Instance of video to be deleted
@@ -29,13 +29,13 @@ class VideoService extends ServiceAbstract
         $commentMapper = new CommentMapper();
         $comments = $commentMapper->getMultipleCommentsByCustom(array('video_id' => $video->videoId));
         foreach ($comments as $comment) $commentService->delete($comment);
-        
+
         // Delete video's ratings
         $ratingService = new RatingService();
         $ratingMapper = new RatingMapper();
         $ratings = $ratingMapper->getMultipleRatingsByCustom(array('video_id' => $video->videoId));
         foreach ($ratings as $rating) $ratingService->delete($rating);
-        
+
         // Delete playlist entries for video
         $playlistService = new PlaylistService();
         $playlistEntryMapper = new PlaylistEntryMapper();
@@ -47,7 +47,7 @@ class VideoService extends ServiceAbstract
             $playlist = $playlistMapper->getPlaylistById($playlistEntry->playlistId);
             $playlistService->deleteVideo($video, $playlist);
         }
-        
+
         // Delete video flags
         $flagService = new FlagService();
         $flagMapper = new FlagMapper();
@@ -57,7 +57,7 @@ class VideoService extends ServiceAbstract
         // Delete video
         $videoMapper = $this->_getMapper();
         $videoMapper->delete($video->videoId);
-        
+
         // Delete files
         try {
             Filesystem::delete(UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
@@ -119,7 +119,7 @@ class VideoService extends ServiceAbstract
 
             // User uploaded video but needs admin approval
             if ($action == 'activate' && Settings::Get ('auto_approve_videos') == '0') {
-                
+
                 // Send Admin Approval Alert
                 $send_alert = true;
                 $subject = 'New Video Awaiting Approval';
@@ -141,7 +141,7 @@ class VideoService extends ServiceAbstract
                 $video->status = VideoMapper::APPROVED;
                 $video->released = true;
                 $videoMapper->save($video);
-                
+
                 // Send video owner notification if opted-in
                 $this->_notifyUserVideoIsReady($video);
 
@@ -165,7 +165,7 @@ class VideoService extends ServiceAbstract
             App::Alert ($subject, $body);
         }
     }
-    
+
     /**
      * Send subscribers notification that a video has been posted by one of their subscribed users
      */
@@ -191,15 +191,15 @@ class VideoService extends ServiceAbstract
                     'title'     => $video->title,
                     'video_url' => $this->getUrl($video)
                 );
-                $mailer = new Mailer();
-                $mailer->LoadTemplate ('new_video', $replacements);
+                $mailer = new Mailer($config);
+                $mailer->setTemplate ('new_video', $replacements);
                 $mailer->Send ($subscriber->email);
             }
         }
     }
-    
+
     /**
-     * Send video owner notification that video is now available 
+     * Send video owner notification that video is now available
      */
     protected function _notifyUserVideoIsReady(Video $video)
     {
@@ -214,12 +214,12 @@ class VideoService extends ServiceAbstract
                 'title'     => $video->title,
                 'video_url' => $this->getUrl($video)
             );
-            $mailer = new Mailer();
-            $mailer->LoadTemplate('video_ready', $replacements);
+            $mailer = new Mailer($config);
+            $mailer->setTemplate('video_ready', $replacements);
             $mailer->Send($user->email);
         }
     }
-    
+
     /**
      * Retrieve instance of Video mapper
      * @return VideoMapper Mapper is returned
@@ -228,11 +228,11 @@ class VideoService extends ServiceAbstract
     {
         return new VideoMapper();
     }
-    
+
     /**
      * Retrieve user who owns given video
      * @param Video $video
-     * @return User Returns instance of user 
+     * @return User Returns instance of user
      */
     protected function _getVideoUser(Video $video)
     {

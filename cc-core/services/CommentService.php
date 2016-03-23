@@ -32,10 +32,10 @@ class CommentService extends ServiceAbstract
         $videoService = new VideoService();
         $video = $videoMapper->getVideoById($comment->videoId);
         $commentMapper = $this->_getMapper();
-        
+
         // Determine which comment action is being performed
         if ($action == 'create') {
-            
+
             // Check if auto-approval of comments is turned on
             if (Settings::get('auto_approve_comments') == '1') {
                 $this->_releaseComment($comment);
@@ -60,7 +60,7 @@ class CommentService extends ServiceAbstract
                     App::alert($subject, $body);
                 }
             }
-            
+
         } else if ($action == 'approve') {
             // Check if comment has been approved in the past
             if (!$comment->released) {
@@ -70,12 +70,12 @@ class CommentService extends ServiceAbstract
                 $comment->status = 'approved';
                 $commentMapper->save($comment);
             }
-                
+
         } else {
             throw new Exception('Invalid comment approval action');
         }
     }
-    
+
     /**
      * Mark comment as approved and notify any stakeholders of new comment
      * @param Comment $comment Comment being approved
@@ -88,12 +88,12 @@ class CommentService extends ServiceAbstract
         $videoService = new VideoService();
         $video = $videoMapper->getVideoById($comment->videoId);
         $commentMapper = $this->_getMapper();
-        
+
         // Approve comment
         $comment->status = 'approved';
         $comment->released = true;
         $commentMapper->save($comment);
-        
+
         // Send admin alert
         if (Settings::get('alerts_comments') == '1') {
             $subject = 'New Comment Posted';
@@ -117,8 +117,8 @@ class CommentService extends ServiceAbstract
                 'email'     => $user->email,
                 'title'     => $video->title
             );
-            $mailer = new Mailer();
-            $mailer->loadTemplate('video_comment', $replacements);
+            $mailer = new Mailer($config);
+            $mailer->setTemplate('video_comment', $replacements);
             $mailer->send($user->email);
         }
 
@@ -137,14 +137,14 @@ class CommentService extends ServiceAbstract
                     'videoUrl'  => $videoService->getUrl($video),
                     'comments'  => $comment->comments
                 );
-                $mailer = new Mailer();
-                $mailer->loadTemplate('comment_reply', $replacements);
+                $mailer = new Mailer($config);
+                $mailer->setTemplate('comment_reply', $replacements);
                 $mailer->send($parentAuthor->email);
             }
         }
         return $this;
     }
-    
+
     /**
      * Generate a comment card for a given comment
      * @param Comment $comment The comment to generate the comment card for
@@ -216,10 +216,10 @@ class CommentService extends ServiceAbstract
             // Get children of starting comment's sibblings (nephews)
             $thread = $this->_getChildCommentThread($videoId, $limit, $sibblingId, $thread);
         }
-        
+
         // Verify we're not at the root of the thread
         if ($startingPointParentId != 0) {
-            
+
             // Find sibblings of parent comment(uncles)
             // Recursively bubble up - stop when no more comments or limit is reached
             $bubbleUpParentId = $startingPointParentId;
@@ -274,7 +274,7 @@ class CommentService extends ServiceAbstract
     }
 
     /**
-     * Retrieve author of a comment 
+     * Retrieve author of a comment
      * @param Comment $comment Comment to retrieve author for
      * @return User Returns instance of User for comment's author
      */

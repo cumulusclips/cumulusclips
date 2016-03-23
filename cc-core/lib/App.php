@@ -52,7 +52,7 @@ class App
      */
     public static function alert($subject, $body)
     {
-        $mailer = new Mailer();
+        $mailer = new Mailer(Registry::get('config'));
         $mailer->subject = $subject;
         $mailer->body = $body;
         $mailer->send(Settings::get('admin_email'));
@@ -111,7 +111,7 @@ class App
         if (isset($_GET['nomobile'])) {
             setcookie('nomobile', md5('nomobile'), time()+3600*12);
         }
-        
+
         // Redirect to mobile if user hasn't opted out from mobile site
         $agent = '/ip(ad|hone|od)|android|Windows Phone/i';
         if (
@@ -136,7 +136,7 @@ class App
                 header("Location: " . MOBILE_HOST . '/p/' . $matches[1] . '/');
                 exit();
             }
-            
+
             // Redirect to mobile homepage
             header("Location: " . MOBILE_HOST . "/");
             exit();

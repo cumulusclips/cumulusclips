@@ -75,7 +75,7 @@ class UserService extends ServiceAbstract
         $videoMapper = new VideoMapper();
         return $videoMapper->getVideoCount($user->userId);
     }
-    
+
     /**
      * Get count of a member's public non-special playlists
      * @param User $user User to retrieve playlist count for
@@ -88,7 +88,7 @@ class UserService extends ServiceAbstract
         $row = $db->fetchRow($query);
         return (int) $row['count'];
     }
-    
+
     /**
      * Generate and save a new password for user
      * @param User $user Instance of user to have password reset
@@ -102,7 +102,7 @@ class UserService extends ServiceAbstract
         $userMapper->save($user);
         return $password;
     }
-	
+
     /**
      * Generate a unique random string for a user account activation token
      * @return string Random user account activation token
@@ -116,7 +116,7 @@ class UserService extends ServiceAbstract
         } while (empty($tokenAvailable));
         return $token;
     }
-    
+
     /**
      * Login a user
      * @param string $username Username of user to login
@@ -174,7 +174,7 @@ class UserService extends ServiceAbstract
     public function checkPermissions($permission, $userToCheck = null)
     {
         $config = Registry::get('config');
-        
+
         // Retrieve user information
         if (!empty($userToCheck) && $userToCheck instanceof User) {
             $user = $userToCheck;
@@ -230,11 +230,11 @@ class UserService extends ServiceAbstract
                 break;
         }
     }
-    
+
     /**
      * Creates a new user in the system
      * @param User $user User to be created
-     * @return returns newly created user 
+     * @return returns newly created user
      */
     public function create(User $user)
     {
@@ -244,7 +244,7 @@ class UserService extends ServiceAbstract
         $user->confirmCode = $this->createToken();
         $user->status = 'new';
         $userId = $userMapper->save($user);
-        
+
         // Create user's privacy record
         $privacy = new Privacy();
         $privacy->userId = $userId;
@@ -255,7 +255,7 @@ class UserService extends ServiceAbstract
         $privacy->commentReply = true;
         $privacyMapper = new PrivacyMapper();
         $privacyMapper->save($privacy);
-        
+
         // Create user's favorites playlist
         $playlistMapper = new PlaylistMapper();
         $favorites = new Playlist();
@@ -263,14 +263,14 @@ class UserService extends ServiceAbstract
         $favorites->public = false;
         $favorites->type = 'favorites';
         $playlistMapper->save($favorites);
-        
+
         // Create user's watch later playlist
         $watchLater = new Playlist();
         $watchLater->userId = $userId;
         $watchLater->public = false;
         $watchLater->type = 'watch_later';
         $playlistMapper->save($watchLater);
-        
+
         return $userMapper->getUserById($userId);
     }
 
@@ -318,8 +318,9 @@ class UserService extends ServiceAbstract
 
                 // Send Welcome email
                 if ($action == 'approve') {
-                    $mailer = new Mailer();
-                    $mailer->LoadTemplate ('account_approved', array('sitename' => Registry::get('config')->sitename));
+                    $config = Registry::get('config');
+                    $mailer = new Mailer($config);
+                    $mailer->setTemplate ('account_approved', array('sitename' => $config->sitename));
                     $mailer->Send ($user->email);
                 }
             }
@@ -340,7 +341,7 @@ class UserService extends ServiceAbstract
             App::Alert ($subject, $body);
         }
     }
-    
+
     /**
      * Retrieve URL to current user's avatar
      * @param User Instance of user who's avatar is wanted
@@ -350,11 +351,11 @@ class UserService extends ServiceAbstract
     {
         return (!empty($user->avatar)) ? HOST . "/cc-content/uploads/avatars/$user->avatar" : null;
     }
-    
+
     /**
      * Retrieve a list of users who are subscribed to given member
      * @param User $member Instance of user whose subscribers will be retrieved
-     * @return array Returns list of User objects 
+     * @return array Returns list of User objects
      */
     public function getSubscribedUsers(User $member)
     {
@@ -367,7 +368,7 @@ class UserService extends ServiceAbstract
         }
         return $userMapper->getUsersFromList($userIdList);
     }
-    
+
     /**
      * Retrieve instance of User mapper
      * @return UserMapper Mapper is returned

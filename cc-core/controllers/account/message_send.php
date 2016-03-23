@@ -21,12 +21,12 @@ $config = Registry::get('config');
 
 // Verify if request came from outside page
 if (!empty($_GET['username'])) {
-    
+
     $recipient = $userMapper->getUserByUsername($_GET['username']);
     if ($recipient) {
         $this->view->vars->to = $recipient->username;
     }
-    
+
 // Verify if request came from reply
 } elseif (!empty($_GET['msg'])) {
     $data = array('message_id' => $_GET['msg'], 'recipient' => $this->view->vars->loggedInUser->userId);
@@ -52,7 +52,7 @@ if (isset($_POST['submitted'])) {
                 $message->recipient = $recipient->userId;
             } else {
                 $this->view->vars->errors['recipient'] = Language::getText('error_recipient_self');
-            }    
+            }
         } else {
             $this->view->vars->errors['recipient'] = Language::getText('error_recipient_exist');
         }
@@ -93,8 +93,8 @@ if (isset($_POST['submitted'])) {
                 'sender'    => $this->view->vars->loggedInUser->username,
                 'email'     => $recipient->email
             );
-            $mailer = new Mailer();
-            $mailer->loadTemplate('new_message', $replacements);
+            $mailer = new Mailer($config);
+            $mailer->setTemplate('new_message', $replacements);
             $mailer->send($recipient->email);
         }
         $this->view->vars->message = Language::getText('success_message_sent');
