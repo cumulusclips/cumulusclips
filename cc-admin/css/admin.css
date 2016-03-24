@@ -645,6 +645,22 @@ SETTINGS STYLES
 
 
 
+/** Email Settings **/
+
+#settings-email .panel-title a:hover,
+#settings-email .panel-title a:focus {
+    text-decoration: none;
+    color: #333;
+}
+
+#settings-email .panel .glyphicon {
+    font-size: 10px;
+    top: -2px;
+    margin-right: 10px;
+}
+
+
+
 
 
 /**********

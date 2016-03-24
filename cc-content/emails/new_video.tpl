@@ -2,6 +2,9 @@
 New video by a subscribed member - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+New Video
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

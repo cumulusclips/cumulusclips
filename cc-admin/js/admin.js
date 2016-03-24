@@ -338,6 +338,20 @@ $(function(){
             }
         });
     });
+
+    // Toggle "+" icon when expanding an accordion panel
+    $('#accordion .panel').on('show.bs.collapse', function() {
+        $(this).find('.glyphicon-plus')
+            .removeClass('glyphicon-plus')
+            .addClass('glyphicon-minus');
+    });
+
+    // Toggle "-" icon when collapsing an accordion panel
+    $('#accordion .panel').on('hide.bs.collapse', function() {
+        $(this).find('.glyphicon-minus')
+            .removeClass('glyphicon-minus')
+            .addClass('glyphicon-plus');
+    });
 });
 
 /**

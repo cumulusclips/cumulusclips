@@ -2,6 +2,9 @@
 Your video is ready! - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Video Ready
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

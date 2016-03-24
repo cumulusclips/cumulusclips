@@ -2,6 +2,9 @@
 Your comment has been replied to - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Comment Reply
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,
