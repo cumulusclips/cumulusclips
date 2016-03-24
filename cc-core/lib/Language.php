@@ -166,7 +166,7 @@ class Language
         // Locate meta entries for given page
         $termKeys = array_keys(self::$entries['terms']);
         $pageMetaKeys = array_flip(array_filter($termKeys, function($value) use ($page) {
-            return (strpos($value, 'meta.' . $page) === 0) ? true : false;
+            return (strpos($value, 'meta.' . $page . '.') === 0) ? true : false;
         }));
 
         // Extract page's meta entries from entries list and from custom entries list

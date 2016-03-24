@@ -366,6 +366,8 @@
         <confirm_remove_playlist_video>Video will be removed from your playlist. Do you want to proceed?</confirm_remove_playlist_video>
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
+        <confirm_purge_messages>Selected messages will be permanently be deleted. Do you want to proceed?</confirm_purge_messages>
+        <confirm_delete_message>Message will be permanently be deleted. Do you want to proceed?</confirm_delete_message>
 
         <error_username>Invalid username</error_username>
         <error_username_unavailable>Username is unavailable</error_username_unavailable>
@@ -443,6 +445,7 @@
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
         <success_password_updated>Your password has been updated.</success_password_updated>
         <success_messages_purged>Messages successfully deleted!</success_messages_purged>
+        <success_message_deleted>Message has been deleted.</success_message_deleted>
         <success_message_sent>Your message has been delivered.</success_message_sent>
 
         <!-- Page Meta Tags -->

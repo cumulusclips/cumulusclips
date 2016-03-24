@@ -373,8 +373,8 @@ class View
     public function writeMeta()
     {
         $this->addMeta('generator', 'CumulusClips');
-        if (!empty($this->_meta->keywords)) $this->addMeta('keywords', $this->_meta->keywords);
-        if (!empty($this->_meta->description)) $this->addMeta('description', $this->_meta->description);
+        if (!empty($this->vars->meta->keywords)) $this->addMeta('keywords', $this->vars->meta->keywords);
+        if (!empty($this->vars->meta->description)) $this->addMeta('description', $this->vars->meta->description);
 
         if (isset($this->_meta)) {
             foreach ($this->_meta as $_value) {
