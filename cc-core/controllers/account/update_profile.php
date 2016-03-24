@@ -18,6 +18,8 @@ $_SESSION['upload_key'] = md5(md5($this->view->vars->timestamp) . SECRET_KEY);
 // Update profile if requested
 if (isset($_POST['submitted'])) {
 
+    $this->view->vars->profile_submit = true;
+
     // Validate First Name
     if (!empty($this->view->vars->loggedInUser->firstName) && $_POST['first_name'] == '') {
         $this->view->vars->loggedInUser->firstName = '';
@@ -78,6 +80,9 @@ if (isset($_POST['submitted'])) {
 
 // Reset avatar if requested
 if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view->vars->loggedInUser->avatar)) {
+
+    $this->view->vars->avatar_submit = true;
+
     $deleteResult = Avatar::delete($this->view->vars->loggedInUser->avatar);
     if ($deleteResult) {
         $this->view->vars->loggedInUser->avatar = null;
