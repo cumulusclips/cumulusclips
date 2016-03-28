@@ -96,12 +96,16 @@ class Language
 
         $languageEntries = array();
 
-        // Clean up general terms entries
-        $languageEntries['terms'] = preg_replace(
-            array('/^\s+/', '/\s{2,}/', '/\s+$/'),
-            array('', ' ', ''),
-            (array) $xml->terms
-        );
+        // Strip spaces and duplicate entries from general entries
+        $languageEntries['terms'] = array();
+        foreach ((array) $xml->terms as $key => $value) {
+            $text = (is_array($value)) ? $value[0] : $value;
+            $languageEntries['terms'][$key] = preg_replace(
+                array('/^\s+/', '/\s{2,}/', '/\s+$/'),
+                array('', ' ', ''),
+                $text
+            );
+        }
 
         // Clean up information entries if available
         if (isset($xml->information)) {
@@ -198,9 +202,9 @@ class Language
     {
         $active = array();
         $installed = self::getInstalled();
-        foreach ($installed as $language) {
+        foreach ($installed as $systemName => $language) {
             if ($language->active) {
-                $active[] = $language;
+                $active[$systemName] = $language;
             }
         }
         return $active;

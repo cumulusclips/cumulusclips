@@ -19,7 +19,7 @@
             <?php if ($config->enableRegistrations): ?>
                 <a href="<?=HOST?>/register/" title="<?=Language::GetText('register')?>"><?=Language::GetText('register')?></a>
             <?php endif; ?>
-        <?php endif; ?>       
+        <?php endif; ?>
 
             <form action="<?=HOST?>/search/" method="post">
                 <input class="defaultText" title="<?=Language::GetText('search_text')?>" type="text" name="keyword" value="<?=Language::GetText('search_text')?>" />
@@ -41,23 +41,23 @@
                 <a href="<?=HOST?>/account/upload/"><?=Language::GetText('upload')?></a>
             <?php endif; ?>
         </nav>
-        
+
         <?php $activeLanguages = Language::getActiveLanguages(); ?>
         <?php if (count($activeLanguages) > 1): ?>
 
             <div id="languages">
                 <a class="active-language" href=""><?=Language::getLanguage(true)?></a>
                 <ul>
-                    <?php foreach ($activeLanguages as $language): ?>
-                        <li><a href="<?=HOST?>/language/set/<?=$language->system_name?>/"><?=$language->native_name?></a></li>
+                    <?php foreach ($activeLanguages as $systemName => $language): ?>
+                        <li><a href="<?=HOST?>/language/set/<?=$systemName?>/"><?=$language->native_name?></a></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
 
         <?php endif; ?>
-        
+
     </div>
-    
+
 </div>
 <!-- END NAV -->
 
