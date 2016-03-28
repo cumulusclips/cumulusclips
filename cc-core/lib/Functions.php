@@ -3,39 +3,6 @@
 class Functions
 {
     /**
-     * Converts an object to an array recursively
-     * @param mixed &$object The object being converted
-     * @return void Original argument is converted, nothing is returned
-     */
-    public static function objectToArray(&$object)
-    {
-        // Verify an array or object was provided
-        if (!is_object($object) && !is_array($object)) {
-            throw new InvalidArgumentException('Method must be provided either an array or object');
-        }
-
-        // Convert first level object to array
-        if (is_object($object)) {
-            $object = (array) $object;
-        }
-
-        // Convert children to arrays
-        array_walk($object, function(&$value, $index){
-
-            // Don't do anything if value is neither an object nor an array
-            if (!is_object($value) && !is_array($value)) return;
-
-            // Convert object to an array
-            if (is_object($value)) {
-                $value = (array) $value;
-            }
-
-            // Convert values recursively
-            Functions::objectToArray($value);
-        });
-    }
-
-    /**
      * Return the values from a single column in the input array
      * Used for PHP versions prior to PHP 5.5
      * @see http://us2.php.net/manual/en/function.array-column.php

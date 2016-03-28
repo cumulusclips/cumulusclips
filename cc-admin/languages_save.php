@@ -18,7 +18,8 @@ if (
     !empty($_POST['language'])
     && isset($installedLanguages->{$_POST['language']})
 ) {
-    $language = $installedLanguages->{$_POST['language']};
+    $systemName = $_POST['language'];
+    $language = $installedLanguages->{$systemName};
 } else {
     header("Location: " . ADMIN . '/languages.php');
     exit();
@@ -51,21 +52,18 @@ if (!empty($_POST['key'])) {
 
 // Load system entries
 $entries = Language::loadEntries(
-    DOC_ROOT . '/cc-content/languages',
-    $language->system_name
+    DOC_ROOT . '/cc-content/languages/' . $systemName . '.xml'
 );
 
 // Load desktop theme entries
 $desktopThemeEntries = Language::loadEntries(
-    THEMES_DIR . '/' . Settings::get('active_theme') . '/languages',
-    $language->system_name
+    THEMES_DIR . '/' . Settings::get('active_theme') . '/languages/' . $systemName . '.xml'
 );
 $entries = array_replace_recursive($entries, $desktopThemeEntries);
 
 // Load mobile theme entries
 $mobileThemeEntries = Language::loadEntries(
-    THEMES_DIR . '/' . Settings::get('active_mobile_theme') . '/languages',
-    $language->system_name
+    THEMES_DIR . '/' . Settings::get('active_mobile_theme') . '/languages/' . $systemName . '.xml'
 );
 $entries = array_replace_recursive($entries, $mobileThemeEntries);
 
@@ -73,8 +71,7 @@ $entries = array_replace_recursive($entries, $mobileThemeEntries);
 $enabledPlugins = Plugin::getEnabledPlugins();
 foreach ($enabledPlugins as $pluginName) {
     $pluginEntries = Language::loadEntries(
-        DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/languages',
-        $language->system_name
+        DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/languages/' . $systemName . '.xml'
     );
     $entries = array_replace_recursive($entries, $pluginEntries);
 }
@@ -91,7 +88,7 @@ $originalText = $entries['terms'][$key];
 // Retrieve custom entry
 $textEntry = $textMapper->getByCustom(array(
     'type' => TextMapper::TYPE_LANGUAGE,
-    'language' => $language->system_name,
+    'language' => $systemName,
     'name' => $key
 ));
 
@@ -125,7 +122,7 @@ if ($originalText === $text) {
         $textEntry = new Text();
         $textEntry->name = $key;
         $textEntry->type = TextMapper::TYPE_LANGUAGE;
-        $textEntry->language = $language->system_name;
+        $textEntry->language = $systemName;
     }
 
     // Save custom text entry

@@ -29,8 +29,9 @@ if (
     !empty($_GET['language'])
     && isset($installedLanguages->{$_GET['language']})
 ) {
-    $language = $installedLanguages->{$_GET['language']};
-    $queryString['language'] = $language->system_name;
+    $systemName = $_GET['language'];
+    $language = $installedLanguages->{$systemName};
+    $queryString['language'] = $systemName;
 } else {
     header("Location: " . ADMIN . '/languages.php');
     exit();
@@ -38,21 +39,18 @@ if (
 
 // Load system entries
 $entries = Language::loadEntries(
-    DOC_ROOT . '/cc-content/languages',
-    $language->system_name
+    DOC_ROOT . '/cc-content/languages/' . $systemName . '.xml'
 );
 
 // Load desktop theme entries
 $desktopThemeEntries = Language::loadEntries(
-    THEMES_DIR . '/' . Settings::get('active_theme') . '/languages',
-    $language->system_name
+    THEMES_DIR . '/' . Settings::get('active_theme') . '/languages/' . $systemName . '.xml'
 );
 $entries = array_replace_recursive($entries, $desktopThemeEntries);
 
 // Load mobile theme entries
 $mobileThemeEntries = Language::loadEntries(
-    THEMES_DIR . '/' . Settings::get('active_mobile_theme') . '/languages',
-    $language->system_name
+    THEMES_DIR . '/' . Settings::get('active_mobile_theme') . '/languages/' . $systemName . '.xml'
 );
 $entries = array_replace_recursive($entries, $mobileThemeEntries);
 
@@ -60,8 +58,7 @@ $entries = array_replace_recursive($entries, $mobileThemeEntries);
 $enabledPlugins = Plugin::getEnabledPlugins();
 foreach ($enabledPlugins as $pluginName) {
     $pluginEntries = Language::loadEntries(
-        DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/languages',
-        $language->system_name
+        DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/languages/' . $systemName . '.xml'
     );
     $entries = array_replace_recursive($entries, $pluginEntries);
 }
@@ -71,7 +68,7 @@ $originals = $entries;
 
 // Retrieve custom language entries
 $textService = new TextService();
-$customEntries = $textService->getLanguageEntries($language->system_name);
+$customEntries = $textService->getLanguageEntries($systemName);
 
 // Parse language entries for final text values
 foreach ($customEntries as $entry) {
@@ -140,7 +137,7 @@ include ('header.php');
 
 <div class="filters">
     <div class="search">
-        <form method="POST" action="<?=ADMIN?>/languages_edit.php?language=<?=$language->system_name?>">
+        <form method="POST" action="<?=ADMIN?>/languages_edit.php?language=<?=$systemName?>">
             <input type="hidden" name="search_submitted" value="true" />
             <input class="form-control" type="text" name="search" value="<?=$search?>" />
             <input type="submit" name="submit" class="button" value="Search" />
@@ -159,7 +156,7 @@ include ('header.php');
     <?php foreach ($records as $index => $entry): ?>
         <tr>
             <td class="col-xs-3"><?=$entry->key?></td>
-            <td class="col-xs-9" data-language="<?=$language->system_name?>" data-key="<?=$entry->key?>" data-original="<?=htmlspecialchars($entry->original)?>">
+            <td class="col-xs-9" data-language="<?=$systemName?>" data-key="<?=$entry->key?>" data-original="<?=htmlspecialchars($entry->original)?>">
                 <div class="entry">
                     <span class="text"><?=htmlspecialchars(Functions::cutOff($entry->text, 70))?></span>
                     <a href="" class="pull-right delete reset">Reset</a>

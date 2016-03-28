@@ -83,7 +83,8 @@ if (
 // Build list of available languages
 foreach ($installedLanguages as $key => $language) {
 
-    if (!file_exists(DOC_ROOT . '/cc-content/languages/' . $key . '.xml')) {
+    $installedLanguageFile = DOC_ROOT . '/cc-content/languages/' . $key . '.xml';
+    if (!file_exists($installedLanguageFile)) {
         $installedLanguages->{$key}->active = false;
         $isMissing = true;
         $missing[] = $key;
@@ -99,10 +100,10 @@ foreach ($installedLanguages as $key => $language) {
 }
 
 // Add uninstalled languages files to list of available languages
-foreach (glob(DOC_ROOT . '/cc-content/languages/*.xml') as $language) {
-    $systemName = basename($language, '.xml');
+foreach (glob(DOC_ROOT . '/cc-content/languages/*.xml') as $availableLanguageFile) {
+    $systemName = basename($availableLanguageFile, '.xml');
     if (!isset($installedLanguages->{$systemName})) {
-        $xml = simplexml_load_file($language);
+        $xml = simplexml_load_file($availableLanguageFile);
         $languageList[$systemName] = (object) array(
             'installed' => false,
             'missing' => null,
@@ -181,16 +182,21 @@ include ('header.php');
             </p>
 
         </td>
-        <td>
-            <p><strong>Sample:</strong> <?=$language->information->sample?></p>
-            <?php if (!empty($language->information->author)): ?>
-                <p>By: <?=$language->information->author?></p>
-            <?php endif; ?>
 
-            <?php if (!empty($language->information->notes)): ?>
-                <p><?=$language->information->notes?></p>
-            <?php endif; ?>
-        </td>
+        <?php if ($language->missing): ?>
+            <td>Language file has been disabled.</td>
+        <?php else: ?>
+            <td>
+                <p><strong>Sample:</strong> <?=$language->information->sample?></p>
+                <?php if (!empty($language->information->author)): ?>
+                    <p>By: <?=$language->information->author?></p>
+                <?php endif; ?>
+
+                <?php if (!empty($language->information->notes)): ?>
+                    <p><?=$language->information->notes?></p>
+                <?php endif; ?>
+            </td>
+        <?php endif; ?>
     </tr>
 
 <?php endforeach; ?>

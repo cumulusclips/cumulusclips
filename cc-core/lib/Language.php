@@ -11,6 +11,11 @@
 class Language
 {
     /**
+     * @var string System name of the currently loaded language
+     */
+    protected static $systemName = '';
+
+    /**
      * @var array List of language entries keyed by the entry name
      */
     protected static $entries = array();
@@ -55,16 +60,17 @@ class Language
         }
 
         // Load active language pack into memory
-        $languagePath = DOC_ROOT . '/cc-content/languages';
-        self::$entries = self::loadEntries($languagePath, $activeLanguage);
+        $languageFileEntries = self::loadEntries(
+            DOC_ROOT . '/cc-content/languages/' . $activeLanguage . '.xml'
+        );
+        self::$systemName = $activeLanguage;
+        self::$information = (object) $languageFileEntries['information'];
+        self::$entries = $languageFileEntries['terms'];
 
         // Verify entries were loaded
         if (empty(self::$entries)) {
             exit('CC-ERROR-300 CumulusClips has encountered an error and cannot continue.');
         }
-
-        // Set active language
-        self::$information = $installedLanguages->{$activeLanguage};
 
         // Retrieve custom language entries
         $textService = new TextService();
@@ -72,7 +78,7 @@ class Language
 
         // Parse language entries for final text values
         foreach ($customEntries as $entry) {
-            self::$customEntries['terms'][$entry->name] = $entry->content;
+            self::$customEntries[$entry->name] = $entry->content;
         }
     }
 
@@ -88,47 +94,25 @@ class Language
         $strippedOfComments = preg_replace('/<\!--.*?-->/', '', $fileContents);
         $xml = new SimpleXMLElement($strippedOfComments, LIBXML_NOCDATA + LIBXML_COMPACT);
 
-        // Convert XML entry objects to arrays
-        $languageEntries = json_decode(json_encode($xml));
-        Functions::objectToArray($languageEntries);
+        $languageEntries = array();
 
         // Clean up general terms entries
-        $languageEntries['terms'] = self::cleanUp($languageEntries['terms']);
+        $languageEntries['terms'] = preg_replace(
+            array('/^\s+/', '/\s{2,}/', '/\s+$/'),
+            array('', ' ', ''),
+            (array) $xml->terms
+        );
 
         // Clean up information entries if available
-        if (isset($languageEntries['information'])) {
-            $languageEntries['information'] = self::cleanUp($languageEntries['information']);
+        if (isset($xml->information)) {
+            $languageEntries['information'] = preg_replace(
+                array('/^\s+/', '/\s{2,}/', '/\s+$/'),
+                array('', ' ', ''),
+                (array) $xml->information
+            );
         }
 
         return $languageEntries;
-    }
-
-    /**
-     * Cleans up and validates given list of entries
-     * @param array $entries List of entries to clean up keyed by entry name
-     * @return array Returns cleaned entries
-     * @throws Exception Thrown if an entry is duplicated
-     */
-    protected static function cleanUp($entries)
-    {
-        // Cycle through entries cleaining theme up
-        foreach ($entries as $key => $value) {
-
-            // Verify entries aren't duplicated
-            if (is_array($value)) {
-                if (!empty($value)) {
-                    throw new Exception("Duplicate language entries for key: '$key'");
-                } else {
-                    unset($entries[$key]);
-                    continue;
-                }
-            }
-
-            // Remove excess white space from content
-            $entries[$key] = preg_replace(array('/^\s+/', '/\s{2,}/', '/\s+$/'), array('', ' ', ''), $value);
-        }
-
-        return $entries;
     }
 
     /**
@@ -140,10 +124,10 @@ class Language
     public static function getText($key, $replace = array())
     {
         // Retrieve entry text if it exists
-        if (!empty(self::$customEntries['terms'][$key])) {
-            $string = self::$customEntries['terms'][$key];
-        } elseif (!empty(self::$entries['terms'][$key])) {
-            $string = self::$entries['terms'][$key];
+        if (!empty(self::$customEntries[$key])) {
+            $string = self::$customEntries[$key];
+        } elseif (!empty(self::$entries[$key])) {
+            $string = self::$entries[$key];
         } else {
             return false;
         }
@@ -164,13 +148,13 @@ class Language
     public static function getMeta($page)
     {
         // Locate meta entries for given page
-        $termKeys = array_keys(self::$entries['terms']);
+        $termKeys = array_keys(self::$entries);
         $pageMetaKeys = array_flip(array_filter($termKeys, function($value) use ($page) {
             return (strpos($value, 'meta.' . $page . '.') === 0) ? true : false;
         }));
 
         // Extract page's meta entries from entries list and from custom entries list
-        $originalMeta = array_intersect_key(self::$entries['terms'], $pageMetaKeys);
+        $originalMeta = array_intersect_key(self::$entries, $pageMetaKeys);
         $customMeta = array_intersect_key(self::$customEntries, $pageMetaKeys);
 
         // Overwrite XML entries with custom entries
@@ -194,7 +178,7 @@ class Language
      */
     public static function getLanguage($native = false)
     {
-        return ($native) ? self::$information->native_name : self::$information->system_name;
+        return ($native) ? self::$information->native_name : self::$systemName;
     }
 
     /**
@@ -255,7 +239,6 @@ class Language
 
         // Save new language pack
         $installedLanguages->{$language} = (object) array(
-            'system_name' => $language,
             'active' => true,
             'lang_name' => $entries['information']['lang_name'],
             'native_name' => $entries['information']['native_name'],
@@ -336,8 +319,10 @@ class Language
      */
     public static function loadThemeLanguage($theme)
     {
-        $themeLanguagePath = THEMES_DIR . '/' . $theme . '/languages';
-        $themeEntries = self::loadEntries($themeLanguagePath, self::$information->system_name);
+        $themeLanguagePath = THEMES_DIR . '/' . $theme . '/languages/';
+        $themeEntries = self::loadEntries(
+            $themeLanguagePath . self::$systemName . '.xml'
+        );
         self::$entries = array_replace_recursive(self::$entries, $themeEntries);
     }
 
@@ -348,20 +333,24 @@ class Language
      */
     public static function loadPluginLanguage($pluginName)
     {
-        $pluginLanguagePath = DOC_ROOT . '/cc-content/plugins/' . $plugin . '/languages';
-        $pluginEntries = self::loadEntries($pluginLanguagePath, self::$information->system_name);
+        $pluginLanguagePath = DOC_ROOT . '/cc-content/plugins/' . $plugin . '/languages/';
+        $pluginEntries = self::loadEntries(
+            $pluginLanguagePath . self::$systemName . '.xml'
+        );
         self::$entries = array_replace_recursive(self::$entries, $pluginEntries);
     }
 
     /**
-     * Searches a path for given language file and loads language entries
-     * @param string $path The path to search for language files in
-     * @param string $language System name of language to load entries for
+     * Loads and extracts language entries from given languange XML file
+     * @param string $languageFile The path to the language file to load
      * @return array Returns list of entries keyed by entry name
      */
-    public function loadEntries($path, $language)
+    public function loadEntries($languageFile)
     {
         $entries = array();
+
+        $path = dirname($languageFile);
+        $language = basename($languageFile, '.xml');
 
         // Load system language file into memory
         $systemLanguageFile = $path . '/english.xml';
