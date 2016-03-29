@@ -8,5 +8,5 @@
     <p><strong><?=Language::GetText('subject')?>: </strong>&nbsp;&nbsp;&nbsp;<?=htmlspecialchars($message->subject)?></p>
     <div id="message_body"><?=nl2br(htmlspecialchars($message->message))?></div>
     <a class="button" href="<?=HOST?>/account/message/reply/<?=$message->messageId?>/"><?=Language::GetText('reply')?></a>
-    <a class="button" href="<?=HOST?>/account/message/inbox/<?=$message->messageId?>/"><?=Language::GetText('delete')?></a>
+    <a class="button confirm" data-node="confirm_delete_message" href="<?=HOST?>/account/message/inbox/<?=$message->messageId?>/"><?=Language::GetText('delete')?></a>
 </div>

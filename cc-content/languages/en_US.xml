@@ -3,11 +3,11 @@
     <information>
         <lang_name>English</lang_name>
         <native_name>English</native_name>
-        <css_name>english</css_name>
+        <locale>en_US</locale>
         <author>CumulusClips</author>
         <sample>The quick brown fox jumps over the lazy dog</sample>
-        <version>1.2</version>
-        <update>http://mothership.cumulusclips.org/updates/languages/english/</update>
+        <version>2.4</version>
+        <update>http://mothership.cumulusclips.org/updates/languages/en_US/</update>
         <notes></notes>
     </information>
     <terms>
@@ -28,6 +28,8 @@
         <quick_links>Quick Links</quick_links>
         <upload_supported_formats>Supported Formats</upload_supported_formats>
         <video_feed>Video Feed</video_feed>
+        <contact>Contact</contact>
+        <sitemap>Sitemap</sitemap>
 
         <!-- Mobile -->
         <mobile_heading>{SITENAME} Mobile</mobile_heading>
@@ -38,7 +40,7 @@
         <loading>Loading</loading>
         <featured>Featured</featured>
         <featured_videos>Featured Videos</featured_videos>
-        <recent_videos>Recently Added Videos</recent_videos>
+        <recent_videos>Recent Videos</recent_videos>
         <search>Search</search>
         <standard_site>Standard Site</standard_site>
         <device_not_supported>Your device is not supported for video playback.</device_not_supported>
@@ -49,7 +51,7 @@
         <upload_button>Upload</upload_button>
         <post_video_button>Post Video</post_video_button>
         <mobile_upload_header>Upload a Video</mobile_upload_header>
-        
+
         <!-- Home Page -->
         <home_header>Fresh Out The Oven!</home_header>
         <advertisement>Advertisement</advertisement>
@@ -116,7 +118,6 @@
         <profile_views>Profile Views</profile_views>
         <subscribers>Subscribers</subscribers>
         <website>Website</website>
-        <recent_videos>Recent Videos</recent_videos>
         <view_all_videos>View all Videos</view_all_videos>
         <no_member_videos>Member currently has no videos.</no_member_videos>
         <no_member_playlists>Member currently has no playlists.</no_member_playlists>
@@ -173,11 +174,6 @@
             Embedding is disabled for this video. You can view it at <a target="_top" href="{LINK}">{SITENAME}</a>.
         ]]></embed_disabled>
         <no_playback>No video playback capabilities.</no_playback>
-
-        <!-- Comments Page -->
-        <comments_header>View All Comments</comments_header>
-        <comments_for>Viewing comments for</comments_for>
-        <no_comments>No comments have been posted for this video yet.</no_comments>
 
         <!-- Search Page -->
         <search_header>Search Results</search_header>
@@ -245,7 +241,7 @@
         <pending_conversion>Pending Conversion</pending_conversion>
         <processing>Processing</processing>
         <pending_approval>Pending Approval</pending_approval>
-        
+
         <!-- My Account / Playlists Page -->
         <playlists_header>My Playlists</playlists_header>
         <delete_playlist>Delete Playlist</delete_playlist>
@@ -365,11 +361,13 @@
         <errors_below>Errors were found. Please correct the errors below and try again.</errors_below>
         <error_invalid_login>Invalid login! Please make sure you typed your username and password correctly and try again.</error_invalid_login>
         <error_no_users_email>No users were found with that email! Please try again.</error_no_users_email>
-        
+
         <confirm_delete_playlist>Playlist will be deleted. Do you want to proceed?</confirm_delete_playlist>
         <confirm_remove_playlist_video>Video will be removed from your playlist. Do you want to proceed?</confirm_remove_playlist_video>
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
+        <confirm_purge_messages>Selected messages will be permanently be deleted. Do you want to proceed?</confirm_purge_messages>
+        <confirm_delete_message>Message will be permanently be deleted. Do you want to proceed?</confirm_delete_message>
 
         <error_username>Invalid username</error_username>
         <error_username_unavailable>Username is unavailable</error_username_unavailable>
@@ -408,7 +406,7 @@
         <error_rate_login>You must login to rate videos.</error_rate_login>
         <error_rate_own>You can't rate your own videos.</error_rate_own>
         <error_rate_duplicate>You have already rated this video.</error_rate_duplicate>
-        
+
 
         <error_upload_filesize>Your file exceeded the maximum filesize limit. Please try again.</error_upload_filesize>
         <error_upload_system><![CDATA[
@@ -447,198 +445,125 @@
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
         <success_password_updated>Your password has been updated.</success_password_updated>
         <success_messages_purged>Messages successfully deleted!</success_messages_purged>
+        <success_message_deleted>Message has been deleted.</success_message_deleted>
         <success_message_sent>Your message has been delivered.</success_message_sent>
 
+        <!-- Page Meta Tags -->
+        <meta.index.title>CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.title>
+        <meta.index.keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.keywords>
+        <meta.index.description>Free video sharing cms software that allows you to have your own video sharing website and community</meta.index.description>
+
+        <meta.videos.title>Browse Videos:</meta.videos.title>
+        <meta.videos.keywords>Browse Videos, Browse, Videos</meta.videos.keywords>
+        <meta.videos.description>Browse videos on the video sharing community</meta.videos.description>
+
+        <meta.members.title>Browse Members</meta.members.title>
+        <meta.members.keywords>Browse Members, Browse, Members</meta.members.keywords>
+        <meta.members.description>Browse through registered members.</meta.members.description>
+
+        <meta.profile.title>{MEMBER}'s Profile</meta.profile.title>
+        <meta.profile.keywords>Member Profile, Member, Profile</meta.profile.keywords>
+        <meta.profile.description>Member profile for this member.</meta.profile.description>
+
+        <meta.contact.title>Contact Us</meta.contact.title>
+        <meta.contact.keywords>Contact Us, Contact, Send us a message</meta.contact.keywords>
+        <meta.contact.description>Get in contact with us.</meta.contact.description>
+
+        <meta.activate.title>Activate your Account</meta.activate.title>
+        <meta.activate.keywords>Activate your Account, Account Activation</meta.activate.keywords>
+        <meta.activate.description>Activate your Account</meta.activate.description>
+
+        <meta.opt_out.title>Opt-out From All Mailing Lists</meta.opt_out.title>
+        <meta.opt_out.keywords>Opt-out, Email, Mailing list</meta.opt_out.keywords>
+        <meta.opt_out.description>Opt-out from all mailing lists.</meta.opt_out.description>
+
+        <meta.search.title>Search results for: '{KEYWORD}'</meta.search.title>
+        <meta.search.keywords>Search Videos, Search, Video, Search Results</meta.search.keywords>
+        <meta.search.description>Search for videos using keywords likely to appear in the title, description, or video tags.</meta.search.description>
+
+        <meta.login.title>Login to your Account</meta.login.title>
+        <meta.login.keywords>Login, Account</meta.login.keywords>
+        <meta.login.description>Log into your account.</meta.login.description>
+
+        <meta.register.title>Sign Up for an Account</meta.register.title>
+        <meta.register.keywords>Sign up, Register, Account</meta.register.keywords>
+        <meta.register.description>Sign up for an account.</meta.register.description>
+
+        <meta.system_404.title>Page Not Found</meta.system_404.title>
+        <meta.system_404.keywords>Page Not Found, 404 Error</meta.system_404.keywords>
+        <meta.system_404.description>404 Error, Page Not Found.</meta.system_404.description>
+
+        <meta.system_error.title>System Error</meta.system_error.title>
+        <meta.system_error.keywords>System Error</meta.system_error.keywords>
+        <meta.system_error.description>A system error has occurred.</meta.system_error.description>
+
+        <meta.account_account.title>Welcome - {USERNAME}</meta.account_account.title>
+        <meta.account_account.keywords>Welcome</meta.account_account.keywords>
+        <meta.account_account.description>Welcome</meta.account_account.description>
+
+        <meta.account_upload.title>Upload Step 1 - Video Information</meta.account_upload.title>
+        <meta.account_upload.keywords>Upload Video, Step 1, Video Information</meta.account_upload.keywords>
+        <meta.account_upload.description>Upload Step 1 - Video Information.</meta.account_upload.description>
+
+        <meta.account_upload_video.title>Upload Step 2 - Upload Video</meta.account_upload_video.title>
+        <meta.account_upload_video.keywords>Upload Video, Step 2</meta.account_upload_video.keywords>
+        <meta.account_upload_video.description>Upload Step 2 - Upload Video.</meta.account_upload_video.description>
+
+        <meta.account_upload_complete.title>Upload Step 3 - Upload Complete!</meta.account_upload_complete.title>
+        <meta.account_upload_complete.keywords>Upload Video, Step 3, Upload Complete</meta.account_upload_complete.keywords>
+        <meta.account_upload_complete.description>Upload Step 3 - Upload Complete!</meta.account_upload_complete.description>
+
+        <meta.account_videos_edit.title>Edit Video</meta.account_videos_edit.title>
+        <meta.account_videos_edit.keywords>Edit Video, Video Information</meta.account_videos_edit.keywords>
+        <meta.account_videos_edit.description>Edit video information.</meta.account_videos_edit.description>
+
+        <meta.account_videos.title>My Videos</meta.account_videos.title>
+        <meta.account_videos.keywords>My Videos, Videos</meta.account_videos.keywords>
+        <meta.account_videos.description>View all videos uploaded by this member.</meta.account_videos.description>
+
+        <meta.account_playlists.title>My Playlists</meta.account_playlists.title>
+        <meta.account_playlists.keywords>My Playlists, Playlist</meta.account_playlists.keywords>
+        <meta.account_playlists.description>View all my playlists.</meta.account_playlists.description>
+
+        <meta.account_playlists_edit.title>Edit Playlist: {PLAYLIST_NAME}</meta.account_playlists_edit.title>
+        <meta.account_playlists_edit.keywords>Playlist Videos, Videos, Playlist, Edit</meta.account_playlists_edit.keywords>
+        <meta.account_playlists_edit.description>Update playlist, and view all videos in playlist.</meta.account_playlists_edit.description>
+
+        <meta.account_update_profile.title>Update Profile</meta.account_update_profile.title>
+        <meta.account_update_profile.keywords>Update profile, profile</meta.account_update_profile.keywords>
+        <meta.account_update_profile.description>Update user profile information.</meta.account_update_profile.description>
+
+        <meta.account_privacy_settings.title>Privacy Settings</meta.account_privacy_settings.title>
+        <meta.account_privacy_settings.keywords>Privacy Settings, Update Privacy Settings</meta.account_privacy_settings.keywords>
+        <meta.account_privacy_settings.description>Update privacy settings.</meta.account_privacy_settings.description>
+
+        <meta.account_change_password.title>Change Password</meta.account_change_password.title>
+        <meta.account_change_password.keywords>Change Password, Password, Update Password</meta.account_change_password.keywords>
+        <meta.account_change_password.description>Change account password.</meta.account_change_password.description>
+
+        <meta.account_subscriptions.title>My Subscriptions</meta.account_subscriptions.title>
+        <meta.account_subscriptions.keywords>Subscriptions, Member Subscriptions</meta.account_subscriptions.keywords>
+        <meta.account_subscriptions.description>View all users member is subscribed to.</meta.account_subscriptions.description>
+
+        <meta.account_subscribers.title>My Subscribers</meta.account_subscribers.title>
+        <meta.account_subscribers.keywords>Subscribers, Subscribing Members</meta.account_subscribers.keywords>
+        <meta.account_subscribers.description>View all members that are subscribed to this member.</meta.account_subscribers.description>
+
+        <meta.account_message_inbox.title>Message Inbox</meta.account_message_inbox.title>
+        <meta.account_message_inbox.keywords>Message Inbox, Message, Inbox</meta.account_message_inbox.keywords>
+        <meta.account_message_inbox.description>View all messages.</meta.account_message_inbox.description>
+
+        <meta.account_message_read.title>Read Message</meta.account_message_read.title>
+        <meta.account_message_read.keywords>Read Message, Message</meta.account_message_read.keywords>
+        <meta.account_message_read.description>Read a message.</meta.account_message_read.description>
+
+        <meta.account_message_send.title>Send a Message</meta.account_message_send.title>
+        <meta.account_message_send.keywords>Send Message, Message</meta.account_message_send.keywords>
+        <meta.account_message_send.description>Send another member a message.</meta.account_message_send.description>
+
+        <meta.mobile_videos.title>Browse Videos</meta.mobile_videos.title>
+
+        <meta.mobile_search.title>Search Videos</meta.mobile_search.title>
     </terms>
 
-    <custom>
-        <your_ad_goes_here>Your Ad Goes Here</your_ad_goes_here>
-        <most_discussed_videos>Most Discussed Videos</most_discussed_videos>
-        <highest_rated_videos>Highest Rated Videos</highest_rated_videos>
-        <documentation>Documentation</documentation>
-        <rss>RSS</rss>
-        <contact>Contact</contact>
-        <sample>Sample</sample>
-        <sitemap>Sitemap</sitemap>
-    </custom>
-
-
-    <meta>
-        <index>
-            <title>CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</title>
-            <keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</keywords>
-            <description>Free video sharing cms software that allows you to have your own video sharing website and community</description>
-        </index>
-
-        <videos>
-            <title>Browse Videos:</title>
-            <keywords>Browse Videos, Browse, Videos</keywords>
-            <description>Browse videos on the video sharing community</description>
-        </videos>
-
-        <members>
-            <title>Browse Members</title>
-            <keywords>Browse Members, Browse, Members</keywords>
-            <description>Browse through registered members.</description>
-        </members>
-
-        <profile>
-            <title>{MEMBER}'s Profile</title>
-            <keywords>Member Profile, Member, Profile</keywords>
-            <description>Member profile for this member.</description>
-        </profile>
-
-        <contact>
-            <title>Contact Us</title>
-            <keywords>Contact Us, Contact, Send us a message</keywords>
-            <description>Get in contact with us.</description>
-        </contact>
-
-        <activate>
-            <title>Activate your Account</title>
-            <keywords>Activate your Account, Account Activation</keywords>
-            <description>Activate your Account</description>
-        </activate>
-
-        <opt_out>
-            <title>Opt-out From All Mailing Lists</title>
-            <keywords>Opt-out, Email, Mailing list</keywords>
-            <description>Opt-out from all mailing lists.</description>
-        </opt_out>
-
-        <search>
-            <title>Search results for: '{KEYWORD}'</title>
-            <keywords>Search Videos, Search, Video, Search Results</keywords>
-            <description>Search for videos using keywords likely to appear in the title, description, or video tags.</description>
-        </search>
-
-        <login>
-            <title>Login to your Account</title>
-            <keywords>Login, Account</keywords>
-            <description>Log into your account.</description>
-        </login>
-
-        <register>
-            <title>Sign Up for an Account</title>
-            <keywords>Sign up, Register, Account</keywords>
-            <description>Sign up for an account.</description>
-        </register>
-
-        <system_404>
-            <title>Page Not Found</title>
-            <keywords>Page Not Found, 404 Error</keywords>
-            <description>404 Error, Page Not Found.</description>
-        </system_404>
-
-        <system_error>
-            <title>System Error</title>
-            <keywords>System Error</keywords>
-            <description>A system error has occurred.</description>
-        </system_error>
-
-        <account_account>
-            <title>Welcome - {USERNAME}</title>
-            <keywords>Welcome</keywords>
-            <description>Welcome</description>
-        </account_account>
-
-        <account_upload>
-            <title>Upload Step 1 - Video Information</title>
-            <keywords>Upload Video, Step 1, Video Information</keywords>
-            <description>Upload Step 1 - Video Information.</description>
-        </account_upload>
-
-        <account_upload_video>
-            <title>Upload Step 2 - Upload Video</title>
-            <keywords>Upload Video, Step 2</keywords>
-            <description>Upload Step 2 - Upload Video.</description>
-        </account_upload_video>
-
-        <account_upload_complete>
-            <title>Upload Step 3 - Upload Complete!</title>
-            <keywords>Upload Video, Step 3, Upload Complete</keywords>
-            <description>Upload Step 3 - Upload Complete!</description>
-        </account_upload_complete>
-
-        <account_videos_edit>
-            <title>Edit Video</title>
-            <keywords>Edit Video, Video Information</keywords>
-            <description>Edit video information.</description>
-        </account_videos_edit>
-
-        <account_videos>
-            <title>My Videos</title>
-            <keywords>My Videos, Videos</keywords>
-            <description>View all videos uploaded by this member.</description>
-        </account_videos>
-
-        <account_playlists>
-            <title>My Playlists</title>
-            <keywords>My Playlists, Playlist</keywords>
-            <description>View all my playlists.</description>
-        </account_playlists>
-
-        <account_playlists_edit>
-            <title>Edit Playlist: {PLAYLIST_NAME}</title>
-            <keywords>Playlist Videos, Videos, Playlist, Edit</keywords>
-            <description>Update playlist, and view all videos in playlist.</description>
-        </account_playlists_edit>
-
-        <account_update_profile>
-            <title>Update Profile</title>
-            <keywords>Update profile, profile</keywords>
-            <description>Update user profile information.</description>
-        </account_update_profile>
-
-        <account_privacy_settings>
-            <title>Privacy Settings</title>
-            <keywords>Privacy Settings, Update Privacy Settings</keywords>
-            <description>Update privacy settings.</description>
-        </account_privacy_settings>
-
-        <account_change_password>
-            <title>Change Password</title>
-            <keywords>Change Password, Password, Update Password</keywords>
-            <description>Change account password.</description>
-        </account_change_password>
-
-        <account_subscriptions>
-            <title>My Subscriptions</title>
-            <keywords>Subscriptions, Member Subscriptions</keywords>
-            <description>View all users member is subscribed to.</description>
-        </account_subscriptions>
-
-        <account_subscribers>
-            <title>My Subscribers</title>
-            <keywords>Subscribers, Subscribing Members</keywords>
-            <description>View all members that are subscribed to this member.</description>
-        </account_subscribers>
-
-        <account_message_inbox>
-            <title>Message Inbox</title>
-            <keywords>Message Inbox, Message, Inbox</keywords>
-            <description>View all messages.</description>
-        </account_message_inbox>
-
-        <account_message_read>
-            <title>Read Message</title>
-            <keywords>Read Message, Message</keywords>
-            <description>Read a message.</description>
-        </account_message_read>
-
-        <account_message_send>
-            <title>Send a Message</title>
-            <keywords>Send Message, Message</keywords>
-            <description>Send another member a message.</description>
-        </account_message_send>
-
-        <mobile_videos>
-            <title>Browse Videos</title>
-        </mobile_videos>
-
-        <mobile_search>
-            <title>Search Videos</title>
-        </mobile_search>
-
-    </meta>
 </language>

@@ -41,7 +41,7 @@ class Router
         }
         return $mappedData;
     }
-    
+
     /**
      * Return the Apache request uri with the site base URL and query string removed
      * @return string Returns the intended request uri
@@ -59,12 +59,12 @@ class Router
             return $apacheRequestUri;
         }
     }
-    
+
     /**
      * Detect which route matches current request URI, and merge it's pattern
      * matches into $_GET superglobal. URI is compared to ALL routes, and the
      * last matching route is used.
-     * @return Route 
+     * @return Route
      */
     public function getRoute()
     {
@@ -86,8 +86,8 @@ class Router
             $additionalGetVars = $this->_mapPatternMatches($matchedRoute->route, $matchedRoute->matches);
             $_GET = array_merge($_GET, $additionalGetVars);
         }
-        
-        return $matchedRoute->route;   
+
+        return $matchedRoute->route;
     }
 
     /**
@@ -120,10 +120,10 @@ class Router
             'location' => DOC_ROOT . '/cc-core/controllers/page.php',
             'name' => 'pages'
         ));
-        
-        
+
+
         /** General Routes **/
-        
+
         $routes['index'] = new Route(array(
             'path' => '/',
             'location' => DOC_ROOT . '/cc-core/controllers/index.php',
@@ -175,13 +175,13 @@ class Router
             'name' => 'browse-videos-sorted-paginated',
             'canonical' => 'browse-videos'
         ));
-        
+
         $routes['play'] = new Route(array(
             'path' => 'videos/([0-9]+)(/[a-z0-9\-]+)?',
             'location' => DOC_ROOT . '/cc-core/controllers/play.php',
             'mappings' => array('vid'),
             'name' => 'play'
-        ));  
+        ));
 
         $routes['browse-members'] = new Route(array(
             'path' => 'members',
@@ -196,7 +196,7 @@ class Router
             'name' => 'browse-members-paginated',
             'canonical' => 'browse-members'
         ));
-        
+
         $routes['profile'] = new Route(array(
             'path' => 'members/([a-z0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/profile.php',
@@ -256,8 +256,8 @@ class Router
             'location' => DOC_ROOT . '/cc-core/controllers/contact.php',
             'name' => 'contact'
         ));
-        
-        
+
+
         /** Private Videos Routes **/
 
         $routes['get-private-code'] = new Route(array(
@@ -276,9 +276,9 @@ class Router
             'canonical' => 'play'
         ));
 
-        
+
         /** Account Routes **/
-        
+
         $routes['account-index'] = new Route(array(
             'path' => 'account',
             'location' => DOC_ROOT . '/cc-core/controllers/account/account.php',
@@ -457,24 +457,24 @@ class Router
             'name' => 'account-message-reply',
             'canonical' => 'account-message-send'
         ));
-        
-        
+
+
         /** Mobile Routes **/
-        
+
         $routes['mobile-index'] = new Route(array(
             'path' => 'm',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/index.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-index'
         ));
-        
+
         $routes['mobile-browse-videos'] = new Route(array(
             'path' => 'm/v',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/videos.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-browse-videos'
         ));
-        
+
         $routes['mobile-play'] = new Route(array(
             'path' => 'm/v/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/play.php',
@@ -482,7 +482,7 @@ class Router
             'type' => Route::MOBILE,
             'name' => 'mobile-play'
         ));
-        
+
         $routes['mobile-play-private'] = new Route(array(
             'path' => 'm/p/([a-z0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/play.php',
@@ -491,66 +491,66 @@ class Router
             'name' => 'mobile-play-private',
             'canonical' => 'mobile-play'
         ));
-        
+
         $routes['mobile-search'] = new Route(array(
             'path' => 'm/s',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/search.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-search'
         ));
-        
+
         $routes['mobile-languages'] = new Route(array(
             'path' => 'm/l',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/languages.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-languages'
         ));
-        
+
         $routes['mobile-watch-later'] = new Route(array(
             'path' => 'm/a/wl',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/account/watch_later.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-watch-later'
         ));
-        
+
         $routes['mobile-favorites'] = new Route(array(
             'path' => 'm/a/f',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/account/favorites.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-favorites'
         ));
-        
+
         $routes['mobile-my-videos'] = new Route(array(
             'path' => 'm/a/v',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/account/videos.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-my-videos'
         ));
-        
+
         $routes['mobile-upload'] = new Route(array(
             'path' => 'm/a/u',
             'location' => DOC_ROOT . '/cc-core/controllers/mobile/account/upload.php',
             'type' => Route::MOBILE,
             'name' => 'mobile-upload'
         ));
-        
-        
+
+
         /** System Routes **/
-        
+
         $routes['system-404'] = new Route(array(
             'path' => 'not-found',
             'location' => DOC_ROOT . '/cc-core/controllers/system_404.php',
             'type' => Route::AGNOSTIC,
             'name' => 'system-404'
         ));
-        
+
         $routes['system-500'] = new Route(array(
             'path' => 'system-error',
             'location' => DOC_ROOT . '/cc-core/controllers/system_error.php',
             'type' => Route::AGNOSTIC,
             'name' => 'system-500'
         ));
-                
+
         $routes['embed'] = new Route(array(
             'path' => 'embed/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/embed.php',
@@ -567,7 +567,7 @@ class Router
         ));
 
         $routes['language-set'] = new Route(array(
-            'path' => 'language/(set)/([a-z]+)',
+            'path' => 'language/(set)/([a-z_]+)',
             'location' => DOC_ROOT . '/cc-core/system/language.php',
             'mappings' => array('action', 'language'),
             'type' => Route::AGNOSTIC,
@@ -580,7 +580,7 @@ class Router
             'type' => Route::AGNOSTIC,
             'name' => 'system-css'
         ));
-        
+
         $routes['system-js'] = new Route(array(
             'path' => 'js/system\.js',
             'location' => DOC_ROOT . '/cc-core/system/js.php',
@@ -600,8 +600,8 @@ class Router
             'mappings' => array('page'),
             'name' => 'sitemap-video-paginated'
         ));
-        
-        
+
+
         /** AJAX Routes **/
 
         $routes['ajax-login'] = new Route(array(
@@ -622,7 +622,7 @@ class Router
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/member.playlists.ajax.php',
             'name' => 'ajax-member-playlists'
         ));
-        
+
         $routes['ajax-search'] = new Route(array(
             'path' => 'search/load-more',
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/search.php',
@@ -636,7 +636,7 @@ class Router
             'type' => Route::AGNOSTIC,
             'name' => 'ajax-search-suggest'
         ));
-        
+
         $routes['ajax-videos-more'] = new Route(array(
             'path' => 'videos/load-more',
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/videos.php',

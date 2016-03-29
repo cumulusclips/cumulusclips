@@ -1,7 +1,7 @@
 /**
  * Notes
  * Overall Width: 980px
- * Adjusted Width: 930px 
+ * Adjusted Width: 930px
  * Left Column: 600px
  * Right Column: 300px
  * Space Between Columns: 30px
@@ -20,7 +20,7 @@ body {
 }
 
 #wrapper {
-    min-height: 100%;  
+    min-height: 100%;
 }
 
 #retainer {
@@ -64,7 +64,7 @@ body {
     background: url('../images/footer_background.png') repeat-x #333;
     position: relative;
     margin-top: -80px;
-    clear:both;  
+    clear:both;
 }
 
 #footer a {
@@ -349,6 +349,12 @@ input::-moz-focus-inner {
     cursor: pointer;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAzNGU5YSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMjNlN2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
     background: linear-gradient(to bottom,  #034e9a 0%,#023e7b 100%);
+}
+
+.button[disabled] {
+    color: #FFF;
+    background: #999;
+    cursor: not-allowed;
 }
 
 .button_small {

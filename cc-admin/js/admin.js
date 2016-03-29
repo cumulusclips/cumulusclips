@@ -37,7 +37,7 @@ $(function(){
 
         // Page title is empty
         if ($.trim($(this).val()) == '') return emptyCallback();
-        
+
         // Retrieve id of current page if any
         var pageId = ($('input[name="pageId"]').val() != '') ? $('input[name="pageId"]').val() : 0;
 
@@ -60,7 +60,7 @@ $(function(){
                 $('#page-slug input[name="slug"]').val(data.msg);
             }
         });
-        
+
     });
 
     // Validate custom page slug when done editing
@@ -78,7 +78,7 @@ $(function(){
 
         // Custom slug is empty
         if ($.trim(editField.val()) == '') return emptyCallback();
-        
+
         // Retrieve id of current page if any
         var pageId = ($('input[name="pageId"]').val() != '') ? $('input[name="pageId"]').val() : 0;
 
@@ -166,7 +166,7 @@ $(function(){
         var parent = $(this).parents('li');
         var show = (action == 'move') ? '.move-videos' : '.delete-category';
         var hide = (action == 'move') ? '.delete-category' : '.move-videos';
-        
+
         $('.category-action-effect').addClass('hide');
         parent.find('.category-action-effect').removeClass('hide');
         parent.find('input[name="action"]').val(action);
@@ -247,6 +247,111 @@ $(function(){
         });
         return false;
     });
+
+    // Display edit language entry form
+    $('#languages-edit .edit').on('click', function(event) {
+        var cell = $(this).parents('td');
+        var originalText = cell.data('original');
+        cell.find('.entry').addClass('hidden');
+
+        // Append edit form
+        cell.append(
+            '<div class="form-group edit-form">'
+                + '<textarea class="form-control">' + originalText + '</textarea>'
+                + '<input type="button" class="button submit" value="Save" />'
+                + '<input type="button" class="button cancel" value="Cancel" />'
+            + '</div>'
+        );
+        cell.find('textarea').focus();
+        event.preventDefault();
+    });
+
+    // Reset language entry to it's original value
+    $('#languages-edit .reset').on('click', function(event) {
+
+        var cell = $(this).parents('td');
+        var key = cell.data('key');
+        var language = cell.data('language');
+
+        // Make AJAX call to remove the custom entry if any
+        $.ajax({
+            url: cumulusClips.baseUrl + '/cc-admin/languages_save.php',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                language: language,
+                key: key,
+                text: '',
+                action: 'reset'
+            },
+            success: function(data, textStatus, jqXHR) {
+                cell.find('.entry').removeClass('hidden');
+                cell.find('.form-group').remove();
+                cell.find('.text').text(data.data.original.truncate(70, '...'));
+                displayMessage(true, '"' + data.data.key + '" has been reset to it\'s original value');
+                window.scrollTo(0, 0);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                displayMessage(false, 'Errors occurred while reseting the language entry. It cannot be reset at this time. '
+                    + 'Please contact <a href="https://support.cumulusclips.com/">CumulusClips Support</a> if this issue continues.');
+            }
+        });
+        event.preventDefault();
+    });
+
+    // Cancel edit language entry form
+    $('#languages-edit').on('click', '.cancel', function(event) {
+        var cell = $(this).parents('td');
+        cell.find('.entry').removeClass('hidden');
+        cell.find('.form-group').remove();
+    });
+
+    // Handle submission of edit language entry form
+    $('#languages-edit').on('click', '.submit', function(event) {
+
+        var cell = $(this).parents('td');
+        var key = cell.data('key');
+        var language = cell.data('language');
+        var text = cell.find('textarea').val().trim();
+
+        // Make AJAX call to save custom entry value
+        $.ajax({
+            url: cumulusClips.baseUrl + '/cc-admin/languages_save.php',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                language: language,
+                key: key,
+                text: text,
+                action: 'edit'
+            },
+            success: function(data, textStatus, jqXHR) {
+                cell.find('.entry').removeClass('hidden');
+                cell.find('.form-group').remove();
+                cell.find('.text').text(data.data.text.truncate(70, '...'));
+                displayMessage(true, '"' + data.data.key + '" has been updated');
+                window.scrollTo(0, 0);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                displayMessage(false, 'Errors occurred while updating the language entry. It cannot be updated at this time. '
+                    + 'Please contact <a href="https://support.cumulusclips.com/">CumulusClips Support</a> if this issue continues.');
+            }
+        });
+    });
+
+    // Toggle "+" icon when expanding an accordion panel
+    $('#accordion .panel').on('show.bs.collapse', function() {
+        $(this).find('.glyphicon-plus')
+            .removeClass('glyphicon-plus')
+            .addClass('glyphicon-minus');
+    });
+
+    // Toggle "-" icon when collapsing an accordion panel
+    $('#accordion .panel').on('hide.bs.collapse', function() {
+        $(this).find('.glyphicon-minus')
+            .removeClass('glyphicon-minus')
+            .addClass('glyphicon-plus');
+    });
 });
 
 /**
@@ -306,6 +411,20 @@ function displayMessage(result, message)
     $('.alert').html(message);
     $('.alert').removeClass(existingClass);
     $('.alert').addClass(cssClass);
+}
+
+/**
+ * Truncates string to given length and appends decorator to end if provided
+ * @param {int} length The maximum allowed length of the string before truncating it
+ * @params {string} decorator (optional) The string to append to the resulting string in the event of truncating
+ * @return {string} Returns the original string if it's length was <= length, truncated string otherwise
+ */
+String.prototype.truncate = function(length, decorator) {
+    if (this.length > length) {
+        return this.substring(0, length) + (typeof decorator !== 'undefined' ? decorator : '');
+    } else {
+        return this;
+    }
 }
 
 /**

@@ -2,6 +2,9 @@
 Welcome to {sitename} - Account Activation
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Welcome
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

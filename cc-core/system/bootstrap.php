@@ -7,7 +7,7 @@ define('LOG', DOC_ROOT . '/cc-core/logs');
 define('CONVERSION_LOG', LOG . '/converter.log');
 define('DATABASE_LOG', LOG . '/database.log');
 define('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
-define('CURRENT_VERSION', '2.3.1');
+define('CURRENT_VERSION', '2.4.0');
 define('LOG_QUERIES', false);
 define('DATE_FORMAT', 'Y-m-d H:i:s');
 define('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
@@ -43,6 +43,7 @@ define('MOBILE_HOST', Settings::get('base_url') . '/m');
 define('SECRET_KEY', Settings::get('secret_key'));
 
 $config = new stdClass();
+$config->baseUrl = HOST;
 $config->sitename = Settings::get('sitename');
 $config->roles = json_decode(Settings::get('roles'));
 $config->enableUploads = Settings::get('enable_uploads');
@@ -58,14 +59,17 @@ $config->mobileUrl = HOST . '/cc-content/uploads/mobile';
 $config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
 $config->enableRegistrations = (boolean) Settings::get('user_registrations');
 $config->enableUserUploads = (boolean) Settings::get('user_uploads');
+$config->smtp = json_decode(Settings::get('smtp'));
+$config->from_name = Settings::get('from_name');
+$config->from_address = Settings::get('from_address');
 Registry::set('config', $config);
 
 // Start session
 if (!headers_sent() && session_id() == '') @session_start();
 
+// Initialize language
+Language::init();
+
 // Initialize plugin system
 Plugin::init();
 Plugin::triggerEvent('app.start');
-
-// Load language
-Language::loadLangPack(App::currentLang());

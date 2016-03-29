@@ -21,8 +21,8 @@ $(document).ready(function(){
             $(this).val($(this).attr('title'));
         }
     });
-    
-    
+
+
     // Search Auto-Complete
     $('#header form input[type="text"]').autocomplete({
         source: cumulusClips.baseUrl + '/search/suggest/',
@@ -34,11 +34,11 @@ $(document).ready(function(){
     $('.tabs a').click(function(event){
         // Skip for non show/hide tabs
         if ($(this).data('block') == 'undefined') return;
-        
+
         // Hide all blocks except for targeted block
         var block = '#' + $(this).data('block');
         $('.tab_block').not(block).hide();
-        
+
         // Toggle targeted block
         if ($(this).parent().hasClass('keepOne')) {
             $(block).show();
@@ -49,7 +49,7 @@ $(document).ready(function(){
             });
         }
         event.preventDefault();
-    });  
+    });
 
 
     // Show/Hide Block
@@ -75,6 +75,21 @@ $(document).ready(function(){
         // Retrieve confirm string
         getText(callback, $(this).data('node'), $(this).data('replacements'));
         event.preventDefault();
+    });
+
+
+    // Disable button until associated checkbox is checked
+    $.each($('.checkbox-disable'), function(index, value) {
+        var $element = $(value);
+        var checkboxFieldName = $element.data('checkbox');
+
+        // Set button's initial state
+        $element.prop('disabled', !$('input[name="' + checkboxFieldName + '"]:checked').length > 0);
+
+        // Toggle buttons disabled state based on checkbox's checked status
+        $(document).on('change', 'input[name="' + checkboxFieldName + '"]', function(event) {
+            $element.prop('disabled', !$('input[name="' + checkboxFieldName + '"]:checked').length > 0);
+        });
     });
 
 
@@ -169,7 +184,7 @@ $(document).ready(function(){
         cumulusClips.videoCount = Number($('meta[name="videoCount"]').attr('content'));
         cumulusClips.playlistCount = Number($('meta[name="playlistCount"]').attr('content'));
         cumulusClips.watchLaterPlaylistId = $('meta[name="watchLaterPlaylistId"]').attr('content');
-        
+
         // Load More Videos
         $('#member-videos .loadMore').click(function(event){
             var loadMoreButton = $(this);
@@ -186,7 +201,7 @@ $(document).ready(function(){
                         var videoCard = buildVideoCard(cumulusClips.videoCardTemplate, value);
                         $('.videos_list').append(videoCard);
                     });
-                    
+
                     // Remove load more button
                     if ($('#member-videos .video').length === cumulusClips.videoCount) {
                         loadMoreButton.remove();
@@ -195,21 +210,21 @@ $(document).ready(function(){
             });
             event.preventDefault();
         });
-        
+
         // Load More Playlists
         $('#member-playlists .loadMore').click(function(event){
             var loadMoreButton = $(this);
             var userId = loadMoreButton.data('user');
             var retrieveOffset = $('#member-playlists .playlist').length;
             var retrieveLimit = Number(loadMoreButton.data('limit'));
-            
+
             // Retrieve next set of user's playlists
             $.ajax({
                 url: cumulusClips.baseUrl + '/members/playlists',
                 data: {userId: userId, start: retrieveOffset, limit: retrieveLimit},
                 dataType: 'json',
                 success: function(playlistResponseData, textStatus, jqXHR){
-                    
+
                     // Determine if playlist thumbnails are needed
                     var thumbnailVideos = [];
                     $.each(playlistResponseData.data.playlistList, function(index, playlist){
@@ -217,7 +232,7 @@ $(document).ready(function(){
                             thumbnailVideos.push(playlist.entries[0].videoId);
                         }
                     });
-                    
+
                     // Append playlist cards to list (callback)
                     var playlistAppendCallback = function(playlistList, videoList) {
                         $.each(playlistList, function(index, playlist){
@@ -229,13 +244,13 @@ $(document).ready(function(){
                             var playlistCard = buildPlaylistCard(cumulusClips.playlistCardTemplate, playlist);
                             $('.playlist-list').append(playlistCard);
                         });
-                        
+
                         // Remove load more button
                         if ($('#member-playlists .playlist').length === cumulusClips.playlistCount) {
                             loadMoreButton.remove();
                         }
                     }
-                    
+
                     // Retrieve playlist thumbnails if applicable
                     if (thumbnailVideos.length !== 0) {
                         $.ajax({
@@ -256,7 +271,7 @@ $(document).ready(function(){
             event.preventDefault();
         });
     }
-        
+
 
 
 
@@ -373,13 +388,13 @@ $(document).ready(function(){
                     if (responseData.other.autoApprove === true) {
                         var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, responseData.other.commentCard);
                         var commentCard = responseData.other.commentCard;
-                        
+
                         // Remove 'no comments' message if this is first comment
                         $('.commentList > p:first-child').remove();
-                        
+
                         // Update comment count text
                         $('#comments .totals span').text(responseData.other.commentCount);
-                        
+
                         // Append comment to list
                         if (commentCard.comment.parentId !== 0) {
                             var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
@@ -470,12 +485,12 @@ $(document).ready(function(){
                     url         : cumulusClips.baseUrl + '/actions/comments/get/',
                     success     : function(responseData, textStatus, jqXHR){
                         var lastCommentKey = responseData.other.commentCardList.length-1;
-                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;                    
+                        cumulusClips.lastCommentId = responseData.other.commentCardList[lastCommentKey].comment.commentId;
                         // Loop through comment data set, inject into comment template and append to list
                         $.each(responseData.other.commentCardList, function(key, commentCard){
                             $('.commentList').find('div[data-comment="' + commentCard.comment.commentId + '"]').remove();
                             var commentCardElement = buildCommentCard(cumulusClips.commentCardTemplate, commentCard);
-                            
+
                             // Determine indentation
                             if (commentCard.comment.parentId !== 0) {
                                 var parentComment = $('[data-comment="' + commentCard.comment.parentId + '"]');
@@ -490,7 +505,7 @@ $(document).ready(function(){
                                 }
                                 commentCardElement.addClass(indentClass);
                             }
-                            
+
                             // Append comment to list
                             $('.commentList').append(commentCardElement);
                         });
@@ -527,7 +542,7 @@ $(document).ready(function(){
 
     // Add to Watch Later actions
     $('.videos_list').on('click', '.video .watchLater a', function(event){
-        
+
         var video = $(this).parents('.video');
         var url = cumulusClips.baseUrl+'/actions/playlist/';
         var data = {
@@ -536,7 +551,7 @@ $(document).ready(function(){
             video_id: $(this).data('video'),
             playlist_id: $(this).data('playlist')
         };
-        
+
         // Make call to API to attempt to add video to playlist
         $.ajax({
             type: 'POST',
@@ -549,7 +564,7 @@ $(document).ready(function(){
                     .addClass('message')
                     .html('<p>' + responseData.message + '</p>');
                 video.find('.thumbnail').append(resultMessage);
-                
+
                 // Style message according to add results
                 if (responseData.result === true) {
                     resultMessage.addClass('success');
@@ -661,31 +676,31 @@ function buildCommentCard(commentCardTemplate, commentCardData)
 {
     var commentCard = $(commentCardTemplate);
     commentCard.attr('data-comment', commentCardData.comment.commentId);
-    
+
     // Set comment avatar
     if (commentCardData.avatar !== null) {
         commentCard.find('img').attr('src', commentCardData.avatar);
     } else {
         commentCard.find('img').attr('src', cumulusClips.themeUrl + '/images/avatar.gif');
     }
-    
+
     // Set comment author
     commentCard.find('.commentAuthor a')
         .attr('href', cumulusClips.baseUrl + '/members/' + commentCardData.author.username)
         .text(commentCardData.author.username);
-    
+
     // Set comment date
     var commentDate = new Date(commentCardData.comment.dateCreated.split(' ')[0]);
     monthPadding = (String(commentDate.getMonth()+1).length === 1) ? '0' : '';
     datePadding = (String(commentDate.getDate()).length === 1) ? '0' : '';
     commentCard.find('.commentDate').text(monthPadding + (commentDate.getMonth()+1) + '/' + datePadding + commentDate.getDate() + '/' + commentDate.getFullYear());
-    
+
     // Set comment action links
     commentCard.find('.commentAction .reply').text(cumulusClips.replyText);
     commentCard.find('.flag')
         .text(cumulusClips.reportAbuseText)
         .attr('data-id', commentCardData.comment.commentId);
-        
+
     // Set reply to text if apl.
     if (commentCardData.comment.parentId !== 0) {
         commentCard.find('.commentReply').text(cumulusClips.replyToText + ' ');
@@ -698,12 +713,12 @@ function buildCommentCard(commentCardTemplate, commentCardData)
     } else {
         commentCard.find('.commentReply').remove();
     }
- 
+
     // Set comment text
     commentCardData.comment.comments = commentCardData.comment.comments.replace(/</g, '&lt;');
     commentCardData.comment.comments = commentCardData.comment.comments.replace(/>/g, '&gt;');
     commentCard.find('> div p:last-child').html(commentCardData.comment.comments.replace(/\r\n|\n|\r/g, '<br>'));
-    
+
     return commentCard;
 }
 

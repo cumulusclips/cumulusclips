@@ -107,7 +107,7 @@ class Functions
         sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
         return $hours * 3600 + $minutes * 60 + $seconds;
     }
-    
+
     /**
      * Truncate a string at desired length
      * @param string $string String to be truncated
@@ -152,7 +152,7 @@ class Functions
             } else {
                 return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '') . ' ago';
             }
-        } 
+        }
     }
 
     /**
@@ -339,7 +339,12 @@ class Functions
         $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
         return $date->format ($format);
     }
-    
+
+    /**
+     * Trims extraneous "0:" from the beginning of an hms formatted duration
+     * @param string $duration The duration to be trimmed
+     * @return string Returns duration without leading 0 & :
+     */
     public static function formatDuration($duration)
     {
         $newDuration = ltrim($duration, '0:');

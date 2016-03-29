@@ -12,9 +12,9 @@ class View
     protected $_css;
     protected $_blocks;
     protected $_bodyClasses = array();
-    
+
     /**
-     * Creates a new view 
+     * Creates a new view
      */
     public function __construct()
     {
@@ -34,7 +34,7 @@ class View
         $this->_css = array();
         $this->_js = array();
     }
-    
+
     /**
      * Loads theme, meta language, and prepares view to render a given route
      * @param Route $route Route to be rendered
@@ -43,31 +43,34 @@ class View
     public function load(Route $route)
     {
         $this->_route = $route;
-        
+
         // Define theme configuration
         $this->options->theme = $this->_currentTheme($this->_route->isMobile());
         $this->options->themeUrl = HOST . '/cc-content/themes/' . $this->options->theme;
         $this->options->themePath = THEMES_DIR . '/' . $this->options->theme;
-        
+
         // Set default theme settings
         $this->options->defaultTheme = ($this->_route->isMobile()) ? 'mobile-default' : 'default';
         $this->options->defaultThemeUrl = HOST . '/cc-content/themes/' . $this->options->defaultTheme;
         $this->options->defaultThemePath = THEMES_DIR . '/' . $this->options->defaultTheme;
-        
+
+        // Load theme specific language entries
+        Language::loadThemeLanguage($this->options->theme);
+
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
         if ($viewHelper && file_exists($viewHelper)) include_once($viewHelper);
-        
+
         // Retrieve page
         $this->options->page = $this->_getPageFromRoute($this->_route);
 
         // Retrieve meta data
         $this->vars->meta = Language::getMeta($this->options->page);
         if (empty($this->vars->meta->title)) $this->vars->meta->title = $this->vars->config->sitename;
-        
+
         return $this;
     }
-    
+
     /**
      * Determine which theme to obtain requested file path from.
      * @param string $file Path of file to check relative to theme root
@@ -85,7 +88,7 @@ class View
             return false;
         }
     }
-    
+
     /**
      * Determine which theme to obtain requested file URL from.
      * @param string $file Path of file to check relative to theme root
@@ -103,11 +106,11 @@ class View
             return false;
         }
     }
-    
+
     /**
      * Retrieve or generate a page name from a route
      * @param Route $route Route to get page name for
-     * @return string Returns Route's page name in route if it exists, generated based on path otherwise 
+     * @return string Returns Route's page name in route if it exists, generated based on path otherwise
      */
     protected function _getPageFromRoute(Route $route)
     {
@@ -123,12 +126,12 @@ class View
         );
         return (!empty($route->name)) ? $route->name : preg_replace($patterns, $replacements, $route->location);
     }
-    
+
     /**
      * Generate a theme file from a route's location path
      * @param Route $route Route to extract location from
      * @return string Theme file is returned
-     */ 
+     */
     protected function _getViewFileFromRoute(Route $route)
     {
         $patterns = array(
@@ -141,7 +144,7 @@ class View
         );
         return preg_replace($patterns, $replacements, $route->location);
     }
-    
+
     /**
      * Output to the browser the view corresponding to the requested script
      * @return mixed View is output to browser
@@ -156,13 +159,13 @@ class View
                 if ($this->options->viewFile === false) throw new Exception('Missing theme file');
             }
             extract(get_object_vars($this->vars));
-            
+
             // Catch output of body
             ob_start();
             include($this->options->viewFile);
             $this->_body = Plugin::triggerFilter('view.render_body', ob_get_contents());
             ob_end_clean();
-            
+
 //            exit($this->_body);
 
             // Output page
@@ -173,7 +176,7 @@ class View
             }
         }
     }
-    
+
     /**
      * Retrieve the HTML for the body of a page
      * @return string Returns the HTML for the body of a page
@@ -182,7 +185,7 @@ class View
     {
         return $this->_body;
     }
-    
+
     /**
      * Switch the layout to be used
      * @param string $layout The new layout to switch to
@@ -197,7 +200,7 @@ class View
             throw new Exception('Unknown layout "' . $layout . '"');
         }
     }
-    
+
     /**
      * Output a custom block to the browser
      * @param string $viewFile Name of the block to be output
@@ -212,7 +215,7 @@ class View
         extract(get_object_vars($this->vars));
         include($block);
     }
-    
+
     /**
      * Repeat output of a block based on list of records
      * @param string $viewFile Name of the block to be repeated
@@ -224,14 +227,14 @@ class View
         // Detect correct block path
         $request_block = $this->getFallbackPath("blocks/$viewFile");
         $block = ($request_block) ? $request_block : $viewFile;
-        
+
         extract(get_object_vars($this->vars));
 
         foreach ($records as $model) {
             include($block);
         }
     }
-    
+
     /**
      * Add specified block to sidebar queue for later output
      * @param string $viewFile The block to be loaded into the sidebar queue
@@ -241,7 +244,7 @@ class View
     {
         $this->_blocks[] = $viewFile;
     }
-    
+
     /**
      * Write queued sidebar blocks to the browser
      * @return mixed Sidebar blocks are output
@@ -297,7 +300,7 @@ class View
     {
         // Output system generated CSS
         echo '<link rel="stylesheet" href="' . HOST . '/css/system.css" />' . "\n";
-        
+
         // Output queued CSS files
         if (isset($this->_css)) {
             foreach ($this->_css as $_value) {
@@ -334,13 +337,13 @@ class View
         }
 
         // Add language preview JS
-        if (isset($_GET['preview_lang'])) {
+        if (defined('PREVIEW_LANG')) {
             $js_lang_preview = '<script type="text/javascript">';
-            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . $_GET['preview_lang'] . "';";
+            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
             $js_lang_preview .= '</script>';
             echo $js_lang_preview;
         }
-        
+
         // Output system generated JS
         echo '<script type="text/javascript" src="' . HOST . '/js/system.js"></script>' . "\n";
 
@@ -370,16 +373,16 @@ class View
     public function writeMeta()
     {
         $this->addMeta('generator', 'CumulusClips');
-        if (!empty($this->_meta->keywords)) $this->addMeta('keywords', $this->_meta->keywords);
-        if (!empty($this->_meta->description)) $this->addMeta('description', $this->_meta->description);
-        
+        if (!empty($this->vars->meta->keywords)) $this->addMeta('keywords', $this->vars->meta->keywords);
+        if (!empty($this->vars->meta->description)) $this->addMeta('description', $this->vars->meta->description);
+
         if (isset($this->_meta)) {
             foreach ($this->_meta as $_value) {
                 echo $_value, "\n";
             }
         }
     }
-    
+
     /**
      * Determine which theme should be used
      * @param boolean $isMobile Whether or not the platform being loaded is mobile
@@ -400,7 +403,7 @@ class View
 //        define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
     }
-    
+
     /**
      * Retrieve an instance of a view
      * @return View Returns existing view or new one if none has been created

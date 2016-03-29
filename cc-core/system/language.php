@@ -20,8 +20,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'get') {
 
     // Set language to user's request
     $activeLanguages = Language::getActiveLanguages();
-    $languageSystemNames = Functions::arrayColumn($activeLanguages, 'system_name');
-    if (array_search($_GET['language'], $languageSystemNames) !== false) {
+    if (isset($activeLanguages[$_GET['language']])) {
         $_SESSION['user_lang'] = $_GET['language'];
     }
 

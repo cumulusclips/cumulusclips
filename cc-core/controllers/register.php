@@ -21,7 +21,7 @@ $userMapper = new UserMapper();
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
-    
+
     if (
         !empty($_POST['token'])
         && !empty($_SESSION['formToken'])
@@ -72,19 +72,19 @@ if (isset($_POST['submitted'])) {
             }
         } else {
             $this->view->vars->errors['email'] = Language::getText('error_email');
-        }   
-        
+        }
+
     } else {
         $this->view->vars->errors['token'] = 'Invalid or Expired Session';
     }
-    
+
     $this->view->vars->errors = Plugin::triggerFilter('register.validation', $this->view->vars->errors, $_POST);
 
     // Create user if no errors were found
     if (empty ($this->view->vars->errors)) {
         // Create new user
         $newUser = $userService->create($this->view->vars->user);
-        
+
         // Send welcome email
         $config = Registry::get('config');
         $replacements = array (
@@ -92,10 +92,10 @@ if (isset($_POST['submitted'])) {
             'host' => HOST,
             'sitename' => $config->sitename
         );
-        $mailer = new Mailer();
-        $mailer->loadTemplate('welcome', $replacements);
+        $mailer = new Mailer($config);
+        $mailer->setTemplate('welcome', $replacements);
         $mailer->send($newUser->email);
-        
+
         // Prepare message
         unset($this->view->vars->user);
         $this->view->vars->message = Language::getText('success_registered');

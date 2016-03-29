@@ -2,6 +2,9 @@
 Your video has been commented on - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Comment Posted
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

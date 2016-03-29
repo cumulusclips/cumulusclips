@@ -2,6 +2,9 @@
 Your Account Login Information - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Forgot Password
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

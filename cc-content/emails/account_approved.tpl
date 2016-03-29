@@ -2,6 +2,9 @@
 Your Account Has Been Approved! - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Account Approved
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,

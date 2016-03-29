@@ -2,6 +2,9 @@
 You have new messages - {sitename}
 <!-- End: Subject -->
 
+<!-- Begin: Name -->
+Private Message
+<!-- End: Name -->
 
 <!-- Begin: Message -->
 Hello,
