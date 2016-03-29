@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<?=Language::getLocale()?>">
 <head>
 <title><?=$meta->title?></title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,25 +17,25 @@
 </head>
 <body class="<?=$this->cssHooks()?>">
 <?php Plugin::triggerEvent('theme.body'); ?>
-    
+
 <!-- BEGIN WRAPPER -->
 <div id="wrapper">
-    
+
     <?php $this->block('header.phtml'); ?>
-    
+
     <!-- BEGIN MAIN CONTAINER -->
     <div id="retainer">
         <div id="main">
-                
+
             <?=$this->body()?>
-            
+
         </div>
     </div>
     <!-- END MAIN CONTAINER -->
-    
+
 </div>
 <!-- END WRAPPER -->
-    
+
 <?php $this->block('footer.phtml'); ?>
 
 <script type="text/javascript" src="<?=$this->options->themeUrl?>/js/jquery.min.js"></script>

@@ -176,6 +176,15 @@ class Language
     }
 
     /**
+     * Retrieves locale of the currently loaded language file
+     * @return string Returns HTML/W3C friendly language locale
+     */
+    public static function getLocale()
+    {
+        return str_replace('_', '-', self::$systemName);
+    }
+
+    /**
      * Retrieves the name of currently loaded language
      * @param boolean $native (optional) Return language's native name rather than it's system name
      * @return string The name of the loaded language is returned
@@ -191,7 +200,7 @@ class Language
      */
     public static function getCSSName()
     {
-        return self::$information->css_name;
+        return self::$systemName;
     }
 
     /**
@@ -246,7 +255,6 @@ class Language
             'active' => true,
             'lang_name' => $entries['information']['lang_name'],
             'native_name' => $entries['information']['native_name'],
-            'css_name' => $entries['information']['css_name'],
             'author' => (!empty($entries['information']['author'])) ? $entries['information']['author'] : '',
             'sample' => $entries['information']['sample'],
             'version' => (!empty($entries['information']['version'])) ? $entries['information']['version'] : '',
@@ -267,7 +275,7 @@ class Language
     public static function uninstall($language)
     {
         // Verify system default isn't being uninstalled
-        if ($language === 'english') {
+        if ($language === 'en_US') {
             throw new Exception('Cannot uninstall system default language');
         }
 
@@ -357,7 +365,7 @@ class Language
         $language = basename($languageFile, '.xml');
 
         // Load system language file into memory
-        $systemLanguageFile = $path . '/english.xml';
+        $systemLanguageFile = $path . '/en_US.xml';
         if (file_exists($systemLanguageFile)) {
             $entries = self::loadLanguageFile($systemLanguageFile);
         } else {
@@ -366,7 +374,7 @@ class Language
 
         // Load active language pack into memory if different from system language
         $languageFile = $path. '/' . $language . '.xml';
-        if ($language !== 'english' && file_exists($languageFile)) {
+        if ($language !== 'en_US' && file_exists($languageFile)) {
             $entries = array_replace_recursive($entries, self::loadLanguageFile($languageFile));
         }
 

@@ -81,18 +81,18 @@ if (
 }
 
 // Build list of available languages
-foreach ($installedLanguages as $key => $language) {
+foreach ($installedLanguages as $systemName => $language) {
 
-    $installedLanguageFile = DOC_ROOT . '/cc-content/languages/' . $key . '.xml';
+    $installedLanguageFile = DOC_ROOT . '/cc-content/languages/' . $systemName . '.xml';
     if (!file_exists($installedLanguageFile)) {
-        $installedLanguages->{$key}->active = false;
+        $installedLanguages->{$systemName}->active = false;
         $isMissing = true;
-        $missing[] = $key;
+        $missing[] = $systemName;
     } else {
         $isMissing = null;
     }
 
-    $languageList[$key] = (object) array(
+    $languageList[$systemName] = (object) array(
         'installed' => true,
         'missing' => $isMissing,
         'information' => $language
@@ -163,7 +163,7 @@ include ('header.php');
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?deactivate=<?=$systemName?>">Deactivate</a>
                     <!-- &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$systemName?>" class="iframe">Preview</a> -->
 
-                    <?php if ($systemName !== 'english'): ?>
+                    <?php if ($systemName !== 'en_US'): ?>
                         &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?uninstall=<?=$systemName?>" class="delete confirm" data-confirm="This will completely uninstall and remove this language from your system. Do you want to proceed?">Uninstall</a>
                     <?php endif; ?>
                 <?php else: ?>
@@ -171,7 +171,7 @@ include ('header.php');
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?activate=<?=$systemName?>">Activate</a>
                     &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=HOST?>/?preview_lang=<?=$systemName?>" class="iframe">Preview</a>
 
-                    <?php if ($systemName !== 'english'): ?>
+                    <?php if ($systemName !== 'en_US'): ?>
                         &nbsp;&nbsp;|&nbsp;&nbsp; <a href="<?=ADMIN?>/languages.php?uninstall=<?=$systemName?>" class="delete confirm" data-confirm="This will completely uninstall and remove this language from your system. Do you want to proceed?">Uninstall</a>
                     <?php endif; ?>
                 <?php endif; ?>
