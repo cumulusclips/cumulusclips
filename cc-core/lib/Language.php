@@ -345,7 +345,7 @@ class Language
      */
     public static function loadPluginLanguage($pluginName)
     {
-        $pluginLanguagePath = DOC_ROOT . '/cc-content/plugins/' . $plugin . '/languages/';
+        $pluginLanguagePath = DOC_ROOT . '/cc-content/plugins/' . $pluginName . '/languages/';
         $pluginEntries = self::loadEntries(
             $pluginLanguagePath . self::$systemName . '.xml'
         );
