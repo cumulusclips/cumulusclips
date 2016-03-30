@@ -253,6 +253,29 @@ CREATE_RATINGS_TABLE;
 
 
 
+/*Table structure for table `text` */
+
+$_DROP_TEXT_TABLE = <<<DROP_TEXT_TABLE
+DROP TABLE IF EXISTS `{DB_PREFIX}text`
+DROP_TEXT_TABLE;
+
+$_CREATE_TEXT_TABLE <<< CREATE_TEXT_TABLE
+
+CREATE TABLE `{DB_PREFIX}text` (
+  `text_id` BIGINT NOT NULL AUTO_INCREMENT
+  `type` VARCHAR(20) NOT NULL,
+  `language` VARCHAR(20) NULL DEFAULT 'english',
+  `name` VARCHAR(70) NOT NULL,
+  `content` LONGTEXT NOT NULL,
+  PRIMARY KEY (`text_id`)
+) DEFAULT CHARSET=utf8
+
+CREATE_TEXT_TABLE;
+
+
+
+
+
 /*Table structure for table `settings` */
 
 $_DROP_SETTINGS_TABLE = <<<DROP_SETTINGS_TABLE
@@ -275,8 +298,8 @@ $_POPULATE_SETTINGS_TABLE = <<<POPULATE_SETTINGS_TABLE
 INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('active_theme','default'),
 ('active_mobile_theme','mobile-default'),
-('default_language', 'english'),
-('active_languages', '[{"system_name":"english","lang_name":"English","native_name":"English"}]'),
+('default_language', 'en_US'),
+('installed_languages', '{"en_US":{"active":true,"lang_name":"English","native_name":"English","author":"CumulusClips","sample":"The quick brown fox jumps over the lazy dog","version":"2.4","update":"http://mothership.cumulusclips.org/updates/languages/en_US/","notes":""}}'),
 ('installed_plugins','[]'),
 ('enabled_plugins','[]'),
 ('roles','{"admin":{"name":"Administrator","permissions":["admin_panel","manage_settings"]},"mod":{"name":"Moderator","permissions":["admin_panel"]},"user":{"name":"User","permissions":[]}}'),
