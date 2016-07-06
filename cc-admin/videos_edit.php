@@ -200,9 +200,9 @@ include ('header.php');
         <label>Status:</label>
         <?php if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))): ?>
             <select name="status" class="form-control">
-                <option value="approved"<?=(isset ($video->status) && $video->status == 'approved') || (!isset ($video->status) && $video->status == 'approved')?' selected="selected"':''?>>Approved</option>
-                <option value="pendingApproval"<?=(isset ($video->status) && $video->status == VideoMapper::PENDING_APPROVAL) || (!isset ($video->status) && $video->status == VideoMapper::PENDING_APPROVAL)?' selected="selected"':''?>>Pending</option>
-                <option value="banned"<?=(isset ($video->status) && $video->status == 'banned') || (!isset ($video->status) && $video->status == 'banned')?' selected="selected"':''?>>Banned</option>
+                <option value="<?= VideoMapper::APPROVED ?>"<?=(isset ($video->status) && $video->status == VideoMapper::APPROVED) ?' selected="selected"':''?>>Approved</option>
+                <option value="<?= VideoMapper::PENDING_APPROVAL ?>"<?=(empty ($video->status) || $video->status == VideoMapper::PENDING_APPROVAL) ?' selected="selected"':''?>>Pending</option>
+                <option value="<?= VideoMapper::BANNED ?>"<?=(isset ($video->status) && $video->status == VideoMapper::BANNED) ?' selected="selected"':''?>>Banned</option>
             </select>
         <?php else: ?>
             <?=($video->status == 'processing') ? 'Processing' : 'Pending Conversion'?>
