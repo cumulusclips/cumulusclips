@@ -80,7 +80,7 @@ if (!$loggedInUser) $this->addSidebarBlock('home_login.phtml');
 <!-- BEGIN RECENT VIDEOS -->
 <div class="recent_videos">
 
-    <h1>Recent Videos</h1>
+    <h1><?=Language::getText('recent_videos')?></h1>
 
     <div class="videos_list">
         <?php if (!empty ($recent_videos)): ?>
