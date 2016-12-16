@@ -24,22 +24,28 @@ if (isset($_POST['submitted'])) {
 
     // Validate file upload
     if (!empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
-        
+
         // Extract zip archive and move plugin
         try {
+
+            // Create extraction directory
+            $extractionDirectory = UPLOAD_PATH . '/temp/' . basename($_POST['temp-file'], '.zip');
+            $uploadedFilename = $extractionDirectory . '/' . basename($_POST['temp-file']);
+            Filesystem::createDir($extractionDirectory);
+            Filesystem::rename($_POST['temp-file'], $uploadedFilename);
+
             // Extract plugin
-            $tempDirectory = dirname($_POST['temp-file']);
-            Filesystem::extract($_POST['temp-file']);
+            Filesystem::extract($uploadedFilename);
 
             // Check for duplicates
-            $temp_contents = array_diff(scandir($tempDirectory), array('.', '..', 'addon.zip'));
+            $temp_contents = array_diff(scandir($extractionDirectory), array('.', '..', $uploadedFilename));
             $pluginName = array_pop($temp_contents);
             if (file_exists(DOC_ROOT . '/cc-content/plugins/' . $pluginName)) {
                 throw new Exception("Plugin cannot be added. It conflicts with another plugin.");
             }
 
             // Copy plugin contents to plugins dir
-            Filesystem::copyDir($tempDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
+            Filesystem::copyDir($extractionDirectory . '/' . $pluginName, DOC_ROOT . '/cc-content/plugins/' . $pluginName);
 
             // Validate Plugin
             if (!Plugin::isPluginValid($pluginName)) {
@@ -48,7 +54,7 @@ if (isset($_POST['submitted'])) {
 
             // Clean up
             $clean_up = false;
-            Filesystem::delete($tempDirectory);
+            Filesystem::delete($extractionDirectory);
 
             // Display success message
             $plugin = Plugin::getPlugin($pluginName);
