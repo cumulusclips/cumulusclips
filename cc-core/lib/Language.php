@@ -335,7 +335,7 @@ class Language
         $themeEntries = self::loadEntries(
             $themeLanguagePath . self::$systemName . '.xml'
         );
-        self::$entries = array_replace_recursive(self::$entries, $themeEntries);
+        self::$entries = array_replace_recursive(self::$entries, $themeEntries['terms']);
     }
 
     /**
@@ -349,7 +349,7 @@ class Language
         $pluginEntries = self::loadEntries(
             $pluginLanguagePath . self::$systemName . '.xml'
         );
-        self::$entries = array_replace_recursive(self::$entries, $pluginEntries);
+        self::$entries = array_replace_recursive(self::$entries, $pluginEntries['terms']);
     }
 
     /**
