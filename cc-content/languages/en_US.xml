@@ -151,6 +151,7 @@
         <comments_header>Comments</comments_header>
         <view_all_comments>View All Comments</view_all_comments>
         <comments_total>Comments total</comments_total>
+        <no_comments>No comments have been posted for this video yet.</no_comments>
         <posted>Posted By</posted>
         <date_posted>Date Posted</date_posted>
         <comments_post_header>Post a Comment</comments_post_header>
