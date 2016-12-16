@@ -166,8 +166,6 @@ class View
             $this->_body = Plugin::triggerFilter('view.render_body', ob_get_contents());
             ob_end_clean();
 
-//            exit($this->_body);
-
             // Output page
             if ($this->options->disableLayout) {
                 echo $this->body();
@@ -330,17 +328,36 @@ class View
     {
         // Add theme preview JS
         if (isset($_GET['preview_theme'])) {
-            $js_theme_preview = '<script type="text/javascript">';
-            $js_theme_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_theme=" . $_GET['preview_theme'] . "';";
-            $js_theme_preview .= '</script>';
+            $js_theme_preview = <<<JS
+<script type="text/javascript">';
+    for (var i = 0; i < document.links.length; i++) {
+        var link = document.links[i].href;
+        var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
+        var query = (parts[2] || '');
+        var hash = parts[3] || '';
+        query = (query !== '' ? '&' : '?') + 'preview_theme={$_GET['preview_theme']}';
+        document.links[i].href = parts[1] + query + hash;
+    }
+</script>
+JS;
             echo $js_theme_preview;
         }
 
         // Add language preview JS
         if (defined('PREVIEW_LANG')) {
-            $js_lang_preview = '<script type="text/javascript">';
-            $js_lang_preview .= "for (var i = 0; i < document.links.length; i++) document.links[i].href = document.links[i].href + '?preview_lang=" . PREVIEW_LANG . "';";
-            $js_lang_preview .= '</script>';
+
+            $js_lang_preview = <<<JS
+<script type="text/javascript">';
+    for (var i = 0; i < document.links.length; i++) {
+        var link = document.links[i].href;
+        var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
+        var query = (parts[2] || '');
+        var hash = parts[3] || '';
+        query = (query !== '' ? '&' : '?') + 'preview_theme={PREVIEW_LANG}';
+        document.links[i].href = parts[1] + query + hash;
+    }
+</script>
+JS;
             echo $js_lang_preview;
         }
 
