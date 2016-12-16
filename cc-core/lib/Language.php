@@ -325,7 +325,8 @@ class Language
     }
 
     /**
-     * Loads the language file for the active language belonging to the given theme
+     * Loads the given theme's language entries for the active language
+     *
      * @param string $theme System name of theme to load language pack for
      * @return void Theme's language file is loaded for active language
      */
@@ -335,11 +336,16 @@ class Language
         $themeEntries = self::loadEntries(
             $themeLanguagePath . self::$systemName . '.xml'
         );
-        self::$entries = array_replace_recursive(self::$entries, $themeEntries['terms']);
+
+        // If theme language entries exist overwrite the general entries with them
+        if (isset($themeEntries['terms'])) {
+            self::$entries = array_replace_recursive(self::$entries, $themeEntries['terms']);
+        }
     }
 
     /**
-     * Loads the language file for the active language belonging to the given plugin
+     * Loads the given plugin's language entries for the active language
+     *
      * @param string $pluginName System name of plugin to load language pack for
      * @return void Plugin's language file is loaded for active language
      */
@@ -349,7 +355,11 @@ class Language
         $pluginEntries = self::loadEntries(
             $pluginLanguagePath . self::$systemName . '.xml'
         );
-        self::$entries = array_replace_recursive(self::$entries, $pluginEntries['terms']);
+
+        // If plugin language entries exist overwrite the general entries with them
+        if (isset($pluginEntries['terms'])) {
+            self::$entries = array_replace_recursive(self::$entries, $pluginEntries['terms']);
+        }
     }
 
     /**
