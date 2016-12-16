@@ -6,24 +6,24 @@ class UserMapper extends MapperAbstract
     {
         return $this->getUserByCustom(array('user_id' => $userId));
     }
-    
+
     public function getUserByUsername($username)
     {
         return $this->getUserByCustom(array('username' => $username));
     }
-    
+
     public function getUserByCustom(array $params)
     {
         $db = Registry::get('db');
         $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE ';
-        
+
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
             $query .= "$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
-        
+
         $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() > 0) {
             return $this->_map($dbResults);
@@ -31,12 +31,12 @@ class UserMapper extends MapperAbstract
             return false;
         }
     }
-    
+
     public function getMultipleUsersByCustom(array $params)
     {
         $db = Registry::get('db');
         $query = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE ';
-        
+
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
             $query .= "$fieldName = :$fieldName AND ";
@@ -44,7 +44,7 @@ class UserMapper extends MapperAbstract
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
         $dbResults = $db->fetchAll($query, $queryParams);
-        
+
         $userList = array();
         foreach($dbResults as $record) {
             $userList[] = $this->_map($record);
@@ -112,7 +112,7 @@ class UserMapper extends MapperAbstract
                 ':status' => (!empty($user->status)) ? $user->status : 'new',
                 ':role' => (!empty($user->role)) ? $user->role : 'user',
                 ':dateCreated' => gmdate(DATE_FORMAT),
-                ':firstName' => (!empty($user->duration)) ? $user->firstName : null,
+                ':firstName' => (!empty($user->firstName)) ? $user->firstName : null,
                 ':lastName' => (!empty($user->lastName)) ? $user->lastName : null,
                 ':aboutMe' => (!empty($user->aboutMe)) ? $user->aboutMe : null,
                 ':website' => (!empty($user->website)) ? $user->website : null,
@@ -123,17 +123,17 @@ class UserMapper extends MapperAbstract
                 ':released' => (isset($user->released) && $user->released === true) ? 1 : 0,
             );
         }
-            
+
         $db->query($query, $bindParams);
         $userId = (!empty($user->userId)) ? $user->userId : $db->lastInsertId();
         return $userId;
     }
-    
+
     public function getUsersFromList(array $userIds)
     {
         $userList = array();
         if (empty($userIds)) return $userList;
-        
+
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($userIds), '?'));
         $sql = 'SELECT * FROM ' . DB_PREFIX . 'users WHERE user_id IN (' . $inQuery . ')';
@@ -144,7 +144,7 @@ class UserMapper extends MapperAbstract
         }
         return $userList;
     }
-    
+
     public function delete($userId)
     {
         $db = Registry::get('db');
