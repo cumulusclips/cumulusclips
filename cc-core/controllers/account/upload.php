@@ -23,7 +23,7 @@ $video = new Video();
 $this->view->vars->privateUrl = $videoService->generatePrivate();
 unset($_SESSION['upload']);
 
-// Retrieve Categories	
+// Retrieve Categories
 $categoryService = new CategoryService();
 $this->view->vars->categoryList = $categoryService->getCategories();
 
@@ -101,7 +101,7 @@ if (isset ($_POST['submitted'])) {
     if (empty($this->view->vars->errors)) {
         $video->userId = $this->view->vars->loggedInUser->userId;
         $video->filename = $videoService->generateFilename();
-        $video->status = 'new';
+        $video->status = VideoMapper::NEW_VIDEO;
         $_SESSION['upload'] = $videoMapper->save($video);
         header('Location: ' . HOST . '/account/upload/video/');
         exit();

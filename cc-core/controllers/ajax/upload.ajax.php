@@ -19,7 +19,11 @@ $config = Registry::get('config');
 if (!isset ($_SESSION['upload'])) App::Throw404();
 
 // Validate video
-$video = $videoMapper->getVideoByCustom(array('video_id' => $_SESSION['upload'], 'status' => 'new'));
+$video = $videoMapper->getVideoByCustom(array(
+    'video_id' => $_SESSION['upload'],
+    'status' => VideoMapper::NEW_VIDEO
+));
+
 if (!$video) {
     header('Location: ' . HOST . '/account/upload/');
     exit();
@@ -70,7 +74,7 @@ try {
 
     // Initilize Encoder
     $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
-    
+
     // Check if encoding is enabled
     if (Settings::get('enable_encoding') == '1') {
         $converter_cmd = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $video->videoId . '" >> ' .  $cmd_output . ' 2>&1 &';

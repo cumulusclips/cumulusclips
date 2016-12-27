@@ -853,3 +853,34 @@ FILE UPLOAD STYLES
 #languages-edit .edit-form input[type="button"] {
     margin-right: 10px;
 }
+
+
+
+/** Bulk Video Import **/
+
+#videos-bulk-import .panel-body {
+    padding: 0;
+}
+
+#videos-bulk-import .panel-title ~ p {
+    margin: 5px 0 0;
+    line-height: 1.3em;
+}
+
+#videos-bulk-import .panel-title {
+    margin-bottom: 10px;
+}
+
+#videos-bulk-import .panel-heading a:hover {
+    text-decoration: none;
+}
+
+#videos-bulk-import .job-status .panel-title {
+    margin-right: 5px;
+}
+
+#videos-bulk-import .job-status a {
+    margin-left: 5px;
+}
+
+

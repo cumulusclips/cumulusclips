@@ -65,7 +65,13 @@ $config->from_address = Settings::get('from_address');
 Registry::set('config', $config);
 
 // Start session
-if (!headers_sent() && session_id() == '') @session_start();
+if (
+    php_sapi_name() != 'cli'
+    && !headers_sent()
+    && session_id() == '')
+{
+    session_start();
+}
 
 // Initialize language
 Language::init();

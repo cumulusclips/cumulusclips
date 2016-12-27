@@ -3,32 +3,32 @@
 class Filesystem
 {
     /**
-     * @var resource Resource id of FTP connection 
+     * @var resource Resource id of FTP connection
      */
     protected static $_ftp_stream;
-    
+
     /**
-     * @var string FTP hostname 
+     * @var string FTP hostname
      */
     protected static $_ftp_hostname;
-    
+
     /**
-     * @var string FTP username 
+     * @var string FTP username
      */
     protected static $_ftp_username;
-    
+
     /**
-     * @var string FTP password 
+     * @var string FTP password
      */
     protected static $_ftp_password;
-    
+
     /**
-     * @var string Path to CumulusClips from FTP 
+     * @var string Path to CumulusClips from FTP
      */
     protected static $_ftp_path;
-    
+
     /**
-     * @var boolean Flag to use SSL in FTP connection 
+     * @var boolean Flag to use SSL in FTP connection
      */
     protected static $_ftp_ssl;
 
@@ -93,23 +93,31 @@ class Filesystem
      * Append content to an existing file
      * @param string $filename Complete path of file to be written to
      * @param string $content Text to be appended to file
+     * @param boolean $append True to append new content, false to overwrite existing content
      * @return boolean Returns true if file is successfully modified
      * @throws Exception If errors are encountered while writting to file
      */
-    public static function write($filename, $content)
+    public static function write($filename, $content, $append = true)
     {
         // Perform action directly if able, use FTP otherwise
-        if (self::_canUseNative($filename)) {
-            if (@file_put_contents($filename, $content, FILE_APPEND) === false) {
+        if (self::_canUseNative($filename, false)) {
+
+            $flag = $append ? FILE_APPEND : 0;
+            if (@file_put_contents($filename, $content, $flag) === false) {
                 throw new Exception("Unable to write content to file ($filename)");
             }
+
         } else {
             // Load existing content
             self::_open();
             $stream = tmpfile();
             $ftp_filename = str_replace(DOC_ROOT, self::$_ftp_path, $filename);
-            if (!@ftp_fget(self::$_ftp_stream, $stream, $ftp_filename, FTP_BINARY)) {
-                throw new Exception("Unable to open file for reading/writing via FTP ($ftp_filename)");
+
+            // Load existing content if appending
+            if ($append) {
+                if (!@ftp_fget(self::$_ftp_stream, $stream, $ftp_filename, FTP_BINARY)) {
+                    throw new Exception("Unable to open file for reading/writing via FTP ($ftp_filename)");
+                }
             }
 
             // Append new content
@@ -124,7 +132,7 @@ class Filesystem
             fclose($stream);
             self::_close();
         }
-        
+
         return true;
     }
 
@@ -180,10 +188,10 @@ class Filesystem
 
         // Create empty dst directory
         self::createDir($destination);
-        
+
         // Retrieve directory contents, minus . & ..
         $contents = array_diff(scandir($source), array('.', '..'));
-        
+
         // Check & copy directory contents
         foreach ($contents as $child_item) {
             // Generate new src & dest locations
@@ -198,7 +206,7 @@ class Filesystem
                 self::copy($new_src_dirname, $new_dst_dirname);
             }
         }
-        
+
         return true;
     }
 
@@ -222,7 +230,7 @@ class Filesystem
     public static function setPermissions($filename, $permissions)
     {
         // Perform action directly if able, use FTP otherwise
-        if (self::_canUseNative($filename, true)) {
+        if (self::_canUseNative($filename)) {
             if (!@chmod($filename, $permissions)) {
                 throw new Exception("Unable to set permissions ($permissions on $filename)");
             }
@@ -234,7 +242,7 @@ class Filesystem
             }
             self::_close();
         }
-        
+
         return true;
     }
 
@@ -259,10 +267,10 @@ class Filesystem
             }
             self::_close();
         }
-        
+
         return true;
     }
-    
+
     /**
      * Delete a file or directory
      * @param string $filename Complete path of the object to be deleted
@@ -272,7 +280,7 @@ class Filesystem
     public static function delete($filename)
     {
         if (!file_exists($filename)) return true;
-        
+
         // If dir. delete contents then dir., if file simply delete
         if (is_dir($filename)) {
 
@@ -305,7 +313,7 @@ class Filesystem
                 self::_close();
             }
         }
-        
+
         return true;
     }
 
@@ -329,13 +337,26 @@ class Filesystem
     }
 
     /**
+     * Determines whether given directory is empty or not
+     *
+     * @param string $directory Path to directory to check
+     * @return boolean Returns true if directory is emtpy false otherwise
+     */
+    public static function isEmpty($directory)
+    {
+        $contents = array_diff(scandir($directory), array('.', '..'));
+        return !(boolean) count($contents);
+    }
+
+    /**
      * Determine which type of filesytem functions to use (PHP native vs FTP)
+     *
      * @param string $filename Complete path of object to be checked
      * @param boolean $strictCheck (optional) Whether or not to perform a strict
-     * check comparing Apache process owner with file owner
+     * check comparing PHP process owner with file owner
      * @return boolean Returns true if native functions can be used, false othewise
      */
-    protected static function _canUseNative($filename, $strictCheck = false)
+    protected static function _canUseNative($filename, $strictCheck = true)
     {
         $native = false;
         if (is_writeable($filename)) {
@@ -347,10 +368,10 @@ class Filesystem
         } else {
             $native = false;
         }
-        
+
         return $native;
     }
-    
+
     /**
      * Open an FTP connection to filesystem with FTP settings from config
      * @throws Exception If errors are encountered while connecting or logging in
@@ -384,7 +405,7 @@ class Filesystem
     }
 
     /**
-     * Close any open FTP connections to filesystem 
+     * Close any open FTP connections to filesystem
      */
     protected static function _close()
     {

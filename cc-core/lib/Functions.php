@@ -369,4 +369,19 @@ class Functions
         $suffix = array("KB", "MB", "GB", "TB", "PT");
         return round(pow(1000, $base - floor($base)), $precision) . $suffix[floor($base)];
     }
+
+    /**
+     * Calculates filesize of given file in human readable format
+     *
+     * @param string $file Path to file to calculate filesize for
+     * @param int $decimal Number of decimal places to include in filesize
+     * @return string Returns filesize
+     */
+    public static function humanFilesize($file, $decimals = 2)
+    {
+        $bytes = filesize($file);
+        $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+    }
 }

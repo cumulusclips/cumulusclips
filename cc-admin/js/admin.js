@@ -352,7 +352,80 @@ $(function(){
             .removeClass('glyphicon-minus')
             .addClass('glyphicon-plus');
     });
+
+    // Start duration counter for bulk video imports
+    if ($('#videos-import .time-since').length) {
+        var startDateString = $('.time-since').data('start');
+        var startDate = new Date(startDateString);
+
+        setInterval(function(){
+            $('.time-since').text(timeSince(startDate));
+        }, 1000);
+    }
 });
+
+/**
+ * Pads a string to the right with the given characted
+ *
+ * @param {String} string The string to be padded
+ * @param {Number} size The final desired length of the output string
+ * @param {String} character The string to pad with
+ * @return {String} Returns the original string with padding
+ */
+function padRight(string, size, character)
+{
+    var s = string + "";
+    while (s.length < size) s = character + s;
+    return s;
+}
+
+/**
+ * Calculates elapsed time since given date
+ *
+ * @param {Date} startDate Starting date
+ * @return {String} Returns elapsed time in format "D Days HH:MM:SS"
+ */
+function timeSince(startDate)
+{
+    var display = '';
+    var currentDate = new Date();
+    var diffMilliseconds = currentDate - startDate;
+    var remainingSeconds = Math.floor(diffMilliseconds/1000);
+
+    // Generate days
+    if (remainingSeconds >= 86400) {
+        var days = Math.floor(remainingSeconds/86400);
+        display += days + ' Days ';
+        remainingSeconds = remainingSeconds%86400;
+    }
+
+    // Generate hours
+    if (remainingSeconds >= 3600) {
+        var hours = Math.floor(remainingSeconds/3600);
+        display += padRight(hours, 2, '0') + ':';
+        remainingSeconds = remainingSeconds%3600;
+    } else {
+        display += '00:';
+    }
+
+    // Generate minutes
+    if (remainingSeconds >= 60) {
+        var minutes = Math.floor(remainingSeconds/60);
+        display += padRight(minutes, 2, '0') + ':';
+        remainingSeconds = remainingSeconds%60;
+    } else {
+        display += '00:';
+    }
+
+    // Generate seconds
+    if (remainingSeconds > 0) {
+        display += padRight(remainingSeconds, 2, '0');
+    } else {
+        display += '00';
+    }
+
+    return display;
+}
 
 /**
  * Retrieve the admin settings from the settings cookie

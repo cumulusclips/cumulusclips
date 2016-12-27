@@ -18,7 +18,12 @@ $videoMapper = new VideoMapper();
 
 // Verify user entered video information
 if (isset($_SESSION['upload'])) {
-    $video = $videoMapper->getVideoByCustom(array('video_id' => $_SESSION['upload']));//, 'status' => 'new'));
+
+    $video = $videoMapper->getVideoByCustom(array(
+        'video_id' => $_SESSION['upload']),
+        'status' => VideoMapper::NEW_VIDEO
+    ));
+
     if ($video) {
         $this->view->video = $video;
     } else {

@@ -4,8 +4,21 @@
 include_once(dirname(__FILE__) . '/bootstrap.php');
 
 // Establish page variables, objects, arrays, etc
-if (!isset($argv[1]) || !preg_match('/--video=([0-9]+)$/i', $argv[1], $arg_matches)) exit();
-$video_id = $arg_matches[1];
+$arguments = getopt('', array('video:', 'import::'));
+if (!$arguments || !preg_match('/^[0-9]+$/', $arguments['video'])) exit();
+
+// Validate provided import job
+if (!empty($arguments['import'])) {
+    if (file_exists(UPLOAD_PATH . '/temp/import-' . $arguments['import'])) {
+        $importJobId = $arguments['import'];
+    } else {
+        exit('An invalid import job was passed to the video encoder.');
+    }
+} else {
+    $importJobId = null;
+}
+
+$video_id = $arguments['video'];
 $ffmpegPath = Settings::get('ffmpeg');
 $qtFaststartPath = Settings::get('qtfaststart');
 $videoMapper = new VideoMapper();
@@ -20,6 +33,7 @@ if ($config->debugConversion) {
 }
 
 try {
+
     /////////////////////////////////////////////////////////////
     //                        STEP 1                           //
     //       Check Permissions on Transcoding Binaries         //
@@ -70,6 +84,7 @@ try {
 
     // Retrieve video information
     $video->status = VideoMapper::PROCESSING;
+    $video->jobId = posix_getpid();
     $videoMapper->save($video);
     $debugLog = LOG . '/' . $video->filename . '.log';
     $rawVideo = UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension;
@@ -171,15 +186,15 @@ try {
     if (!file_exists($h264FilePath) || filesize($h264FilePath) < 1024*5) {
         throw new Exception("The final H.264 file was not created. The id of the video is: $video->videoId");
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
     /////////////////////////////////////////////////////////////
     //                        STEP 5                           //
     //               Encode raw video to WebM                  //
@@ -307,7 +322,7 @@ try {
 
 
 
-    
+
         /////////////////////////////////////////////////////////////
         //                        STEP 8                           //
         //            Shift Moov atom on Mobile video              //
@@ -428,6 +443,7 @@ try {
 
     // Update database with new video status information
     $video->duration = Functions::formatDuration($duration[0]);
+    $video->jobId = null;
     $videoMapper->save($video);
 
     // Activate video
@@ -443,7 +459,27 @@ try {
 
 
     /////////////////////////////////////////////////////////////
-    //                         STEP 12                         //
+    //                        STEP 12                          //
+    //                 Notify Import Script                    //
+    /////////////////////////////////////////////////////////////
+
+    if ($importJobId) {
+
+        // Debug Log
+        $config->debugConversion ? App::log(CONVERSION_LOG, "\nNotifying import script of completed video...") : null;
+        \ImportManager::executeImport($importJobId);
+    }
+
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////
+    //                         STEP 13                         //
     //                        Clean up                         //
     /////////////////////////////////////////////////////////////
 
@@ -472,6 +508,19 @@ try {
     }
 
 } catch (Exception $e) {
+
+    // Update video status
+    if ($video) {
+        $video->status = \VideoMapper::FAILED;
+        $video->jobId = null;
+        $videoMapper->save($video);
+    }
+
+    // Notify import script of error
+    if ($importJobId) {
+        \ImportManager::executeImport($importJobId);
+    }
+
     App::alert('Error During Video Encoding', $e->getMessage());
     App::log(CONVERSION_LOG, $e->getMessage());
     exit();
