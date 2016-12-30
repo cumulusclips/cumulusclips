@@ -16,7 +16,11 @@ $records_per_page = 9;
 $url = HOST . '/account/videos';
 $this->view->vars->message = null;
 $videoMapper = new VideoMapper();
+$videoService = new \VideoService();
 $db = Registry::get('db');
+
+// Update any failed videos that are still marked processing
+$videoService->updateFailedVideos();
 
 // Delete video if requested
 if (!empty($_GET['vid'])) {

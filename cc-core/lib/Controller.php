@@ -5,10 +5,16 @@ class Controller
     public $view;
 
     /**
-     * Create new controller instance 
+     * Create new controller instance
      */
     public function __construct()
     {
+        // Start session
+        if (!headers_sent() && session_id() == '') {
+            session_start();
+        }
+
+        // Start view layer
         $this->_initView();
     }
 
@@ -22,7 +28,7 @@ class Controller
         include($route->location);
         $this->view->render();
     }
-    
+
     /**
      * Setup view instance for use by controller
      */

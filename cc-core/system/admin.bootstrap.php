@@ -3,6 +3,11 @@
 // Include Main Bootstrap
 include ('bootstrap.php');
 
+// Start session
+if (!headers_sent() && session_id() == '') {
+    session_start();
+}
+
 // Pre-Output Work
 define ('ADMIN', HOST . '/cc-admin');
 if (!headers_sent()) {
@@ -29,3 +34,7 @@ if (!isset ($_SESSION['updates_available'])) {
     $updates_available = Functions::UpdateCheck();
     $_SESSION['updates_available'] = ($updates_available) ? serialize ($updates_available) : false;
 }
+
+// Update any failed videos that are still marked processing
+$videoService = new \VideoService();
+$videoService->updateFailedVideos();

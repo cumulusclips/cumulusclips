@@ -221,6 +221,39 @@ class VideoService extends ServiceAbstract
     }
 
     /**
+     * Updates failed videos that are still marked as processing
+     */
+    public function updateFailedVideos()
+    {
+        $videoMapper = $this->_getMapper();
+
+        // Retrieve videos marked as processing
+        $processingVideos = $videoMapper->getMultipleVideosByCustom(array(
+            'status' => \VideoMapper::PROCESSING
+        ));
+
+        foreach ($processingVideos as $video) {
+
+            // Check if transcoder process is still running
+            $command = 'ps ' . $video->jobId . ' | grep "php.*encode\.php"';
+            $result = exec($command);
+
+            // Mark video as failed
+            if (empty($result)) {
+                $video->status = \VideoMapper::FAILED;
+                $video->jobId = null;
+                $videoMapper->save($video);
+
+                // Notify associated import job of video failure
+                $importJobId = \ImportManager::getAssociatedImport($video->videoId);
+                if ($importJobId) {
+                    \ImportManager::executeImport($importJobId);
+                }
+            }
+        }
+    }
+
+    /**
      * Retrieve instance of Video mapper
      * @return VideoMapper Mapper is returned
      */

@@ -354,13 +354,19 @@ $(function(){
     });
 
     // Start duration counter for bulk video imports
-    if ($('#videos-import .time-since').length) {
-        var startDateString = $('.time-since').data('start');
-        var startDate = new Date(startDateString);
+    if ($('#videos-bulk-import .time-since').length) {
 
-        setInterval(function(){
-            $('.time-since').text(timeSince(startDate));
-        }, 1000);
+        $('#videos-bulk-import .time-since').each(function(index, element){
+
+            var self = this;
+            var startDateString = $(this).data('start');
+            var startDate = new Date(startDateString);
+
+            // Refresh counter each second
+            setInterval(function(){
+                $(self).text(timeSince(startDate));
+            }, 1000);
+        });
     }
 });
 

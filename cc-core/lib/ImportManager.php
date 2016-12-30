@@ -18,11 +18,6 @@ class ImportManager
     const JOB_COMPLETED_FAILURES = 'completed_failures';
 
     /**
-     * @var string Status for import jobs that have stopped running
-     */
-    const JOB_DEFUNCT = 'defunct';
-
-    /**
      * @var string Import status for videos waiting to be imported
      */
     const VIDEO_QUEUED = 'queued';
@@ -49,6 +44,7 @@ class ImportManager
      * @param string|null $metaDataFile Path to import meta data file
      * @return string Returns the job ID of the newly created import
      * @throws \Exception Thrown if no files were available for import
+     * @throws \Exception Thrown if invalid video files are attempted to be imported
      */
     public static function createImport(\User $user, $metaDataFile = null)
     {
@@ -61,6 +57,7 @@ class ImportManager
             // Create manifest
             $manifest = (object) array(
                 'dateCreated' => gmdate('F j, Y H:i:s'),
+                'dateCompleted' => null,
                 'userId' => $user->userId,
                 'status' => static::JOB_PROGRESS,
                 'current' => null,
@@ -78,7 +75,13 @@ class ImportManager
 
             // Build manifest's video list
             $filesystemIterator = new FilesystemIterator(UPLOAD_PATH . '/import', FilesystemIterator::SKIP_DOTS);
+            $config = \Registry::get('config');
             foreach ($filesystemIterator as $videoFile) {
+
+                // Validate video file is allowed for import
+                if (!in_array(\Functions::getExtension($videoFile), $config->acceptedVideoFormats)) {
+                    throw new \Exception('Invalid video type encountered in import files: ' . $videoFile);
+                }
 
                 $manifest->videos[] = (object) array(
                     'file' => basename($videoFile),
@@ -88,7 +91,7 @@ class ImportManager
                 );
 
                 // Move videos to be imported to job directory
-                \Filesystem::copy($videoFile, $importDirectory . '/' . basename($videoFile));
+                \Filesystem::rename($videoFile, $importDirectory . '/' . basename($videoFile));
             }
 
             // Create job manifest file
@@ -112,7 +115,7 @@ class ImportManager
      * @param string $jobId ID of import job to being restarted
      * @return string Returns the job ID of the newly created import
      * @throws \Exception thrown if import job does not exist
-     * @throws \Exception thrown if import job is not defunct or previously had failures
+     * @throws \Exception thrown if import job has not completed with failures
      */
     public static function restartImport($jobId)
     {
@@ -123,9 +126,9 @@ class ImportManager
 
         $manifest = self::getManifest($jobId);
 
-        // Verify import is not in progress or queued
-        if (!in_array($manifest->status, array(\ImportManager::JOB_COMPLETED_FAILURES, \ImportManager::JOB_DEFUNCT))) {
-            throw new \Exception('Only import jobs that are defunct or previously had failures can be restarted');
+        // Verify import can be restarted
+        if ($manifest->status !== \ImportManager::JOB_COMPLETED_FAILURES) {
+            throw new \Exception('Only import jobs that previously had failures can be restarted');
         }
 
         // Mark import job's uncompleted videos as queued
@@ -276,15 +279,13 @@ class ImportManager
     }
 
     /**
-     * Retrieves next job in queue of import jobs
+     * Retrieves import job associated with given video
      *
-     * @return string|null Returns import job ID of next import job in queue, null if end of queue is reached
+     * @param int $videoId ID of video to get import job for
+     * @return string|null Returns import job ID of video, null if no associated import job was found
      */
-    public static function getNextJobInQueue()
+    public static function getAssociatedImport($videoId)
     {
-        $nextImportJobId = null;
-        $nextImportDateCreated = null;
-
         // Cycle through existing import jobs
         foreach (glob(UPLOAD_PATH . '/temp/import-*') as $import) {
 
@@ -293,19 +294,15 @@ class ImportManager
             $importJobId = $matches[1];
             $manifest = self::getManifest($importJobId);
 
-            $dateCreated = new \DateTime($manifest->dateCreated);
-
-            // Verify if import job is next in queue
-            if (
-                $manifest->status === \ImportManager::JOB_QUEUED
-                && ($nextImportDateCreated === null || $nextImportDateCreated > $dateCreated)
-            ) {
-                $nextImportJobId = $importJobId;
-                $nextImportDateCreated = $dateCreated;
+            // Cycle through import's videos to find matching video
+            foreach ($manifest->videos as $video) {
+                if ($video->videoId == $videoId) {
+                    return $importJobId;
+                }
             }
         }
 
-        return $nextImportJobId;
+        return null;
     }
 
     /**
@@ -348,59 +345,6 @@ class ImportManager
         $video->categoryId = $importVideo->meta->category;
         $videoId = $videoMapper->save($video);
         return $videoMapper->getVideoById($videoId);
-    }
-
-    /**
-     * Calculates elapsed time since given date
-     *
-     * @param string $dateStartString Starting date in UTC timezone. Any date string accepcted by PHP SPL strtotime.
-     * @return string Returns elapsed time in format "D Days HH:MM:SS"
-     */
-    public function getTimeSince($dateStartString)
-    {
-        $display = '';
-        $dateTimeZone = new \DateTimeZone('UTC');
-        $dateStart = new \DateTime($dateStartString, $dateTimeZone);
-
-        // Retrieve current UTC Time
-        $currentDate = new \DateTime();
-        $currentDate->setTimeZone($dateTimeZone);
-
-        $remainingSeconds = (int) $currentDate->format('U') - (int) $dateStart->format('U');
-
-        // Generate days
-        if ($remainingSeconds >= 86400) {
-            $days = floor($remainingSeconds/86400);
-            $display = $days . ' Days ';
-            $remainingSeconds = $remainingSeconds%86400;
-        }
-
-        // Generate hours
-        if ($remainingSeconds >= 3600) {
-            $hours = floor($remainingSeconds/3600);
-            $display .= str_pad($hours, 2, "0", STR_PAD_LEFT) . ':';
-            $remainingSeconds = $remainingSeconds%3600;
-        } else {
-            $display .= '00:';
-        }
-
-        // Generate minutes
-        if ($remainingSeconds >= 60) {
-            $minutes = floor($remainingSeconds/60);
-            $display .= str_pad($minutes, 2, '0', STR_PAD_LEFT) . ':';
-            $remainingSeconds = $remainingSeconds%60;
-        } else {
-            $display .= '00:';
-        }
-
-        // Generate seconds
-        if ($remainingSeconds > 0) {
-            $display .= str_pad($remainingSeconds, 2, '0', STR_PAD_LEFT);
-        } else {
-            $display .= '00';
-        }
-
-        return $display;
     }
 
     /**

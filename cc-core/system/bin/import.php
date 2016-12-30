@@ -43,7 +43,8 @@ if ($manifest->current !== null) {
         exit('Invalid next request on import that is in progress.');
     }
 
-    App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Active video status: ' . $currentVideo->status);
+    App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Updating current video with new status (' . $currentImportVideo->status . ') in manifest...');
+    \ImportManager::saveManifest($jobId, $manifest);
 }
 
 
@@ -97,6 +98,7 @@ if ($nextImportVideoKey !== false) {
     // Mark import job as complete
     App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Marking import job as complete...');
     $manifest->current = null;
+    $manifest->dateCompleted = gmdate('F j, Y H:i:s');
     $manifest->status = ($importJobHasFailures) ? \ImportManager::JOB_COMPLETED_FAILURES : \ImportManager::JOB_COMPLETED;
     \ImportManager::saveManifest($jobId, $manifest);
     App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Import Job ' . $jobId . ' Complete!');

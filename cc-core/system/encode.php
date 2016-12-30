@@ -3,7 +3,7 @@
 // Startup application
 include_once(dirname(__FILE__) . '/bootstrap.php');
 
-// Establish page variables, objects, arrays, etc
+// Validate CLI parameters passed to script
 $arguments = getopt('', array('video:', 'import::'));
 if (!$arguments || !preg_match('/^[0-9]+$/', $arguments['video'])) exit();
 
@@ -18,10 +18,15 @@ if (!empty($arguments['import'])) {
     $importJobId = null;
 }
 
+// Establish page variables, objects, arrays, etc
 $video_id = $arguments['video'];
 $ffmpegPath = Settings::get('ffmpeg');
 $qtFaststartPath = Settings::get('qtfaststart');
 $videoMapper = new VideoMapper();
+$videoService = new \VideoService();
+
+// Update any failed videos that are still marked processing
+$videoService->updateFailedVideos();
 
 // Set MySQL wait_timeout to 10 hours to prevent 'MySQL server has gone away' errors
 $db->query("SET @@session.wait_timeout=36000");
@@ -29,7 +34,7 @@ $db->query("SET @@session.wait_timeout=36000");
 // Debug Log
 if ($config->debugConversion) {
     App::log(CONVERSION_LOG, "\n\n// Converter Called...");
-    App::log(CONVERSION_LOG, "Values passed to encoder:\n" . print_r ($argv, TRUE));
+    App::log(CONVERSION_LOG, "Values passed to encoder:\n" . print_r ($arguments, TRUE));
 }
 
 try {
@@ -443,11 +448,11 @@ try {
 
     // Update database with new video status information
     $video->duration = Functions::formatDuration($duration[0]);
+    $video->status = \VideoMapper::PENDING_APPROVAL;
     $video->jobId = null;
     $videoMapper->save($video);
 
     // Activate video
-    $videoService = new VideoService();
     $videoService->approve($video, 'activate');
 
 

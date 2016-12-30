@@ -45,9 +45,8 @@ class Functions
      */
     public static function getExtension($filename)
     {
-        if (!strrpos($filename, '.')) return false;
-        $filename_sections = explode('.', $filename);
-        return strtolower(array_pop($filename_sections));
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        return (empty($extension)) ? false : strtolower($extension);
     }
 
     /**
@@ -341,6 +340,57 @@ class Functions
     }
 
     /**
+     * Calculates elapsed time between given dates
+     *
+     * @param \DateTime $dateStart Starting date
+     * @param \DateTime $dateEnd (optional) Ending date, uses "now" if ommited
+     * @return string Returns elapsed time in format "D Days HH:MM:SS"
+     */
+    public function getTimeSince(\DateTime $dateStart, \DateTime $dateEnd = null)
+    {
+        $display = '';
+
+        // Retrieve current date/time
+        $endDateTime = ($dateEnd) ?: new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $remainingSeconds = $endDateTime->getTimestamp() - $dateStart->getTimestamp();
+
+        // Generate days
+        if ($remainingSeconds >= 86400) {
+            $days = floor($remainingSeconds/86400);
+            $display = $days . ' Days ';
+            $remainingSeconds = $remainingSeconds%86400;
+        }
+
+        // Generate hours
+        if ($remainingSeconds >= 3600) {
+            $hours = floor($remainingSeconds/3600);
+            $display .= str_pad($hours, 2, "0", STR_PAD_LEFT) . ':';
+            $remainingSeconds = $remainingSeconds%3600;
+        } else {
+            $display .= '00:';
+        }
+
+        // Generate minutes
+        if ($remainingSeconds >= 60) {
+            $minutes = floor($remainingSeconds/60);
+            $display .= str_pad($minutes, 2, '0', STR_PAD_LEFT) . ':';
+            $remainingSeconds = $remainingSeconds%60;
+        } else {
+            $display .= '00:';
+        }
+
+        // Generate seconds
+        if ($remainingSeconds > 0) {
+            $display .= str_pad($remainingSeconds, 2, '0', STR_PAD_LEFT);
+        } else {
+            $display .= '00';
+        }
+
+        return $display;
+    }
+
+    /**
      * Trims extraneous "0:" from the beginning of an hms formatted duration
      * @param string $duration The duration to be trimmed
      * @return string Returns duration without leading 0 & :
@@ -380,8 +430,8 @@ class Functions
     public static function humanFilesize($file, $decimals = 2)
     {
         $bytes = filesize($file);
-        $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
+        $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB');
         $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . '' . @$size[$factor];
     }
 }

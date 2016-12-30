@@ -39,7 +39,7 @@ if (isset($_GET['clear'])) {
 // Handle restart request
 if (!empty($_GET['restart']) && file_exists(UPLOAD_PATH . '/temp/import-' . $_GET['restart'])) {
 
-    if (in_array($importList[$_GET['restart']]->status, array(\ImportManager::JOB_COMPLETED_FAILURES, \ImportManager::JOB_DEFUNCT))) {
+    if ($importList[$_GET['restart']]->status === \ImportManager::JOB_COMPLETED_FAILURES) {
 
         try {
             \ImportManager::restartImport($_GET['restart']);
@@ -91,26 +91,32 @@ include('header.php');
 
 <?php if (count($importList) > 0): ?>
 
-    <?php foreach ($importList as $key => $import): ?>
+    <?php foreach ($importList as $jobId => $import): ?>
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
             <div class="col-xs-6">
                 <h3 class="panel-title">
-                    Import Job ID: <?php echo $key; ?>
+                    Import Job ID: <?php echo $jobId; ?>
 
                 </h3>
 
-                <?php if ($import->status === \ImportManager::JOB_PROGRESS): ?>
-                    <p>
-                        Duration:
+                <p>Started On: <?php echo \Functions::gmtToLocal($import->dateCreated, 'M d, Y g:i A T'); ?></p>
+                <p>
+                    Duration:
+                    <?php if ($import->status === \ImportManager::JOB_PROGRESS): ?>
                         <span class="time-since" data-start="<?php echo $import->dateCreated . ' UTC'; ?>">
-                            <?php echo \ImportManager::getTimeSince($import->dateCreated); ?>
+                            <?php $dateStart = new \DateTime($import->dateCreated, new \DateTimeZone('UTC')); ?>
+                            <?php echo \Functions::getTimeSince($dateStart); ?>
                         </span>
-                    </p>
-                <?php endif; ?>
-
-                <p>Created On: <?php echo \Functions::gmtToLocal($import->dateCreated, 'M d, Y g:i A T'); ?></p>
+                    <?php else: ?>
+                        <?php
+                            $dateStart = new \DateTime($import->dateCreated, new \DateTimeZone('UTC'));
+                            $dateCompleted = new \DateTime($import->dateCompleted, new \DateTimeZone('UTC'));
+                            echo \Functions::getTimeSince($dateStart, $dateCompleted);
+                        ?>
+                    <?php endif; ?>
+                </p>
                 <p>Started By: <?php echo $userMapper->getUserById($import->userId)->username; ?></p>
 
             </div>
@@ -123,23 +129,18 @@ include('header.php');
                             <i class="fa fa-check"></i> Completed
                         <?php elseif ($import->status === \ImportManager::JOB_COMPLETED_FAILURES): ?>
                             <i class="fa fa-exclamation-circle"></i> Completed with Failures
-                        <?php elseif ($import->status === \ImportManager::JOB_DEFUNCT): ?>
-                            <i class="fa fa-exclamation-triangle"></i> Defunct
                         <?php elseif ($import->status === \ImportManager::JOB_PROGRESS): ?>
                             <i class="fa fa-refresh fa-spin"></i> In Progress
                         <?php endif; ?>
                     </span>
 
-                    <?php if (in_array($import->status, array(
-                        \ImportManager::JOB_COMPLETED_FAILURES,
-                        \ImportManager::JOB_DEFUNCT
-                    ))): ?>
-                        <a href="<?php echo ADMIN; ?>/videos_bulk_import.php?restart=<?php echo $key; ?>" class="fa fa-repeat" title="Restart Import Job"></a>
+                    <?php if ($import->status === \ImportManager::JOB_COMPLETED_FAILURES): ?>
+                        <a href="<?php echo ADMIN; ?>/videos_bulk_import.php?restart=<?php echo $jobId; ?>" class="fa fa-repeat" title="Restart Import Job"></a>
                     <?php endif; ?>
 
                     <?php if ($import->status !== \ImportManager::JOB_PROGRESS): ?>
                         <a
-                            href="<?php echo ADMIN; ?>/videos_bulk_import.php?delete=<?php echo $key; ?>"
+                            href="<?php echo ADMIN; ?>/videos_bulk_import.php?delete=<?php echo $jobId; ?>"
                             class="fa fa-trash delete confirm"
                             data-confirm="Import job and associated files will be permanently delete. Do you wish to continue?"
                             title="Delete Import Job"
@@ -159,6 +160,7 @@ include('header.php');
                 <thead>
                     <tr>
                         <th>Status</th>
+                        <th>Filesize</th>
                         <th>Filename</th>
                         <th>Title</th>
                     </tr>
@@ -177,8 +179,9 @@ include('header.php');
                                 <i class="fa fa-refresh fa-spin"></i> Transcoding
                             <?php endif; ?>
                         </td>
-                        <td><?php echo $video->file; ?></td>
-                        <td><?php echo $video->meta->title; ?></td>
+                        <td><?php echo \Functions::humanFilesize(UPLOAD_PATH . '/temp/import-' . $jobId . '/' . $video->file, 1); ?></td>
+                        <td><?php echo \Functions::cutOff($video->file, 30); ?></td>
+                        <td><?php echo \Functions::cutOff($video->meta->title, 40); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

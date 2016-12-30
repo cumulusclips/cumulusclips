@@ -95,28 +95,19 @@ if (isset($_POST['submitted'])) {
         }
     }
 
-    // Check if files are available for import
-    if (!\Filesystem::isEmpty(UPLOAD_PATH . '/import')) {
+    try {
 
-        try {
+        $jobId = \ImportManager::createImport($adminUser, $tempFile);
+        \Filesystem::delete($tempFile);
 
-            $jobId = \ImportManager::createImport($adminUser, $tempFile);
-            \Filesystem::delete($tempFile);
+        // Output message
+        $tempFile = null;
+        $uploadMessage = null;
+        $message = 'Import job (' . $jobId . ') has been created.';
+        $message_type = 'alert-success';
 
-            // Output message
-            $tempFile = null;
-            $uploadMessage = null;
-            $message = 'Import job (' . $jobId . ') has been created.';
-            $message_type = 'alert-success';
-
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            $message_type = 'alert-danger';
-        }
-
-    } else {
-        $message = 'No files were found for import. Please make sure you uploaded the videos to be imported to the '
-            . '/cc-content/uploads/import directory.';
+    } catch (Exception $exception) {
+        $message = $exception->getMessage();
         $message_type = 'alert-danger';
     }
 }
@@ -133,6 +124,8 @@ include('header.php');
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
 
+<p><a href="<?php echo ADMIN; ?>/videos_bulk_import.php">Return to previous screen</a></p>
+
 <form action="<?=ADMIN?>/videos_bulk_import_create.php" method="post">
 
 
@@ -146,7 +139,7 @@ include('header.php');
         importing, you may do so by providing a meta data XML file below.</p>
 
     <div class="form-group select-file <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
-        <label class="control-label">Meta Data XML:</label>
+        <label class="control-label">Meta Data XML (Optional):</label>
         <div class="button button-browse">
             <span>Browse</span>
             <input id="upload" type="file" name="upload" />
