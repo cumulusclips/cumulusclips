@@ -374,4 +374,34 @@ class ImportManager
         $command = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/bin/import.php --job="' . $jobId . '" >> ' .  $importLog . ' 2>&1 &';
         exec($command);
     }
+
+    /**
+     * Sends admin alert notifying them import job has completed
+     *
+     * @param string $jobId The ID of the import job that has completed
+     */
+    public function sendAlert($jobId)
+    {
+        // Check if admin alerts are turned on
+        if (\Settings::get('alerts_imports') === '1') {
+
+            $manifest = self::getManifest($jobId);
+            $userMapper = new \UserMapper();
+            $dateStart = new \DateTime($manifest->dateCreated, new \DateTimeZone('UTC'));
+            $dateCompleted = new \DateTime($manifest->dateCompleted, new \DateTimeZone('UTC'));
+
+            // Build message
+            $subject = 'Video Import Complete';
+            $body = 'Video import job ' . $jobId . ' has completed';
+            $body .= ($manifest->status === static::JOB_COMPLETED_FAILURES) ? ' with failures.' : '.';
+            $body .= "\n\n=======================================================\n";
+            $body .= 'Started On: ' . \Functions::gmtToLocal($manifest->dateCreated, 'M d, Y g:i A T') . "\n";
+            $body .= 'Duration: ' . \Functions::getTimeSince($dateStart, $dateCompleted) . "\n";
+            $body .= 'Started By: ' . $userMapper->getUserById($manifest->userId)->username . "\n";
+            $body .= "=======================================================";
+
+            // Send alert
+            App::alert($subject, $body);
+        }
+    }
 }

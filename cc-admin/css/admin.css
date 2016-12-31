@@ -856,30 +856,30 @@ FILE UPLOAD STYLES
 
 
 
-/** Bulk Video Import **/
+/** Video Import **/
 
-#videos-bulk-import .panel-body {
+#videos-imports .panel-body {
     padding: 0;
 }
 
-#videos-bulk-import .panel-title ~ p {
+#videos-imports .panel-title ~ p {
     margin: 5px 0 0;
     line-height: 1.3em;
 }
 
-#videos-bulk-import .panel-title {
+#videos-imports .panel-title {
     margin-bottom: 10px;
 }
 
-#videos-bulk-import .panel-heading a:hover {
+#videos-imports .panel-heading a:hover {
     text-decoration: none;
 }
 
-#videos-bulk-import .job-status .panel-title {
+#videos-imports .job-status .panel-title {
     margin-right: 5px;
 }
 
-#videos-bulk-import .job-status a {
+#videos-imports .job-status a {
     margin-left: 5px;
 }
 

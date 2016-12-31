@@ -101,5 +101,6 @@ if ($nextImportVideoKey !== false) {
     $manifest->dateCompleted = gmdate('F j, Y H:i:s');
     $manifest->status = ($importJobHasFailures) ? \ImportManager::JOB_COMPLETED_FAILURES : \ImportManager::JOB_COMPLETED;
     \ImportManager::saveManifest($jobId, $manifest);
+    \ImportManager::sendAlert($jobId);
     App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Import Job ' . $jobId . ' Complete!');
 }

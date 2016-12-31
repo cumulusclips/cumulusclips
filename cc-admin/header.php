@@ -53,7 +53,7 @@
             <ul id="menu-videos" class="collapse <?=($videoMenuOpen) ? 'in' : ''?>">
                 <li class="<?=($pageName == 'videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos.php">Browse Videos</a></li>
                 <li class="<?=($pageName == 'videos-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></li>
-                <li class="<?=($pageName == 'videos-bulk-import') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_bulk_import.php">Bulk Video Import</a></li>
+                <li class="<?=($pageName == 'videos-imports') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_imports.php">Video Imports</a></li>
                 <li class="<?=($pageName == 'videos-categories') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></li>
             </ul>
         </div>

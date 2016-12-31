@@ -25,6 +25,7 @@ $data['alerts_videos'] = Settings::get('alerts_videos');
 $data['alerts_comments'] = Settings::get('alerts_comments');
 $data['alerts_users'] = Settings::get('alerts_users');
 $data['alerts_flags'] = Settings::get('alerts_flags');
+$data['alerts_imports'] = Settings::get('alerts_imports');
 $data['from_name'] = $config->from_name;
 $data['from_address'] = $config->from_address;
 $data['smtp'] = $config->smtp;
@@ -184,6 +185,13 @@ if (isset($_POST['submitted_alerts'])) {
         $data['alerts_videos'] = $_POST['alerts_videos'];
     } else {
         $errors['alerts_videos'] = 'Invalid video alert option';
+    }
+
+    // Validate video imports alerts
+    if (isset($_POST['alerts_imports']) && in_array($_POST['alerts_imports'], array('1', '0'))) {
+        $data['alerts_imports'] = $_POST['alerts_imports'];
+    } else {
+        $errors['alerts_imports'] = 'Invalid video imports alert option';
     }
 
     // Validate video comment alerts
@@ -404,6 +412,14 @@ include('header.php');
                 <select name="alerts_videos" class="form-control">
                     <option value="1" <?=($data['alerts_videos']=='1')?'selected="selected"':''?>>Enabled</option>
                     <option value="0" <?=($data['alerts_videos']=='0')?'selected="selected"':''?>>Disabled</option>
+                </select>
+            </div>
+
+            <div class="form-group <?=(isset ($errors['alerts_imports'])) ? 'has-error' : ''?>">
+                <label class="control-label">Video Import Complete Alerts:</label>
+                <select name="alerts_imports" class="form-control">
+                    <option value="1" <?=($data['alerts_imports']=='1')?'selected="selected"':''?>>Enabled</option>
+                    <option value="0" <?=($data['alerts_imports']=='0')?'selected="selected"':''?>>Disabled</option>
                 </select>
             </div>
 

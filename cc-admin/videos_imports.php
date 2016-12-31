@@ -12,7 +12,7 @@ Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser),
 // Establish page variables, objects, arrays, etc
 $userMapper = new userMapper();
 $message = null;
-$page_title = 'Bulk Video Imports';
+$page_title = 'Video Imports';
 
 $importList = array();
 
@@ -67,18 +67,18 @@ if (!empty($_GET['delete']) && file_exists(UPLOAD_PATH . '/temp/import-' . $_GET
 }
 
 // Output Header
-$pageName = 'videos-bulk-import';
+$pageName = 'videos-imports';
 include('header.php');
 
 ?>
 
-<h1>Bulk Video Imports</h1>
+<h1>Video Imports</h1>
 
 <div class="filters">
-    <a href="<?php echo ADMIN; ?>/videos_bulk_import_create.php" class="button">Create New Import</a>
+    <a href="<?php echo ADMIN; ?>/videos_imports_create.php" class="button">Create New Import</a>
     <?php if (count($importList) > 0): ?>
         <a
-            href="<?php echo ADMIN; ?>/videos_bulk_import.php?clear"
+            href="<?php echo ADMIN; ?>/videos_imports.php?clear"
             class="button pull-right confirm"
             data-confirm="Import jobs that have completed and their associated files, will be removed. Do you wish to continue?"
         >Clear Completed</a>
@@ -135,12 +135,12 @@ include('header.php');
                     </span>
 
                     <?php if ($import->status === \ImportManager::JOB_COMPLETED_FAILURES): ?>
-                        <a href="<?php echo ADMIN; ?>/videos_bulk_import.php?restart=<?php echo $jobId; ?>" class="fa fa-repeat" title="Restart Import Job"></a>
+                        <a href="<?php echo ADMIN; ?>/videos_imports.php?restart=<?php echo $jobId; ?>" class="fa fa-repeat" title="Restart Import Job"></a>
                     <?php endif; ?>
 
                     <?php if ($import->status !== \ImportManager::JOB_PROGRESS): ?>
                         <a
-                            href="<?php echo ADMIN; ?>/videos_bulk_import.php?delete=<?php echo $jobId; ?>"
+                            href="<?php echo ADMIN; ?>/videos_imports.php?delete=<?php echo $jobId; ?>"
                             class="fa fa-trash delete confirm"
                             data-confirm="Import job and associated files will be permanently delete. Do you wish to continue?"
                             title="Delete Import Job"

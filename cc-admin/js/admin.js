@@ -354,9 +354,9 @@ $(function(){
     });
 
     // Start duration counter for bulk video imports
-    if ($('#videos-bulk-import .time-since').length) {
+    if ($('#videos-imports .time-since').length) {
 
-        $('#videos-bulk-import .time-since').each(function(index, element){
+        $('#videos-imports .time-since').each(function(index, element){
 
             var self = this;
             var startDateString = $(this).data('start');

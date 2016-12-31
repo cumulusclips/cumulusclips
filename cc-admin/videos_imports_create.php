@@ -11,7 +11,7 @@ Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser),
 App::enableUploadsCheck();
 
 // Establish page variables, objects, arrays, etc
-$page_title = 'Create New Bulk Video Import';
+$page_title = 'Create New Video Import';
 $message = null;
 $message_type = null;
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
@@ -113,20 +113,20 @@ if (isset($_POST['submitted'])) {
 }
 
 // Output Header
-$pageName = 'videos-bulk-import-create';
+$pageName = 'videos-imports-create';
 include('header.php');
 
 ?>
 
 <!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
 
-<h1>Create New Bulk Video Import</h1>
+<h1>Create New Video Import</h1>
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
 
-<p><a href="<?php echo ADMIN; ?>/videos_bulk_import.php">Return to previous screen</a></p>
+<p><a href="<?php echo ADMIN; ?>/videos_imports.php">Return to previous screen</a></p>
 
-<form action="<?=ADMIN?>/videos_bulk_import_create.php" method="post">
+<form action="<?=ADMIN?>/videos_imports_create.php" method="post">
 
 
     <p>Use this feature to bulk import multiple videos into your system. Upload the videos to the
@@ -167,7 +167,7 @@ include('header.php');
         </div>
     </div>
 
-    <p>Need a blank meta data XML template? You can <a href="<?php echo ADMIN; ?>/videos_bulk_import_create.php?download">download one here</a>.</p>
+    <p>Need a blank meta data XML template? You can <a href="<?php echo ADMIN; ?>/videos_imports_create.php?download">download one here</a>.</p>
 
     <input type="hidden" name="submitted" value="TRUE" />
     <input type="submit" class="button" value="Begin Import" />
