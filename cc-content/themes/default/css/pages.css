@@ -113,11 +113,11 @@ HOMEPAGE
 BROWSE VIDEOS
 ************/
 
-.videos h1, .videos h1 + .large  {
+.browse h1, .browse h1 + .large  {
     margin: 5px 0;
 }
 
-.videos .large + div {
+.browse .large + div {
     margin: 15px 0 25px;
     border-top: 1px solid #D2D2D2;
     border-bottom: 1px solid #D2D2D2;
@@ -125,7 +125,7 @@ BROWSE VIDEOS
     overflow: hidden;
 }
 
-.videos .large + div p {
+.browse .large + div p {
     margin-top: 0;
 }
 

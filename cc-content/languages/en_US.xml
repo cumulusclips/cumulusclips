@@ -93,7 +93,7 @@
         <contact_button>Contact Us</contact_button>
 
         <!-- Browse Videos Page -->
-        <videos_header>Browse Videos</videos_header>
+        <browse_header>Browse Videos</browse_header>
         <viewing>Viewing</viewing>
         <sorting>Sorting</sorting>
         <most_recent>Most Recent</most_recent>
@@ -127,7 +127,7 @@
         <videos_by>Videos By</videos_by>
         <go_to_profile>Go to Profile</go_to_profile>
 
-        <!-- Play Video Page -->
+        <!-- Watch Video Page -->
         <like>Like</like>
         <dislike>Dislike</dislike>
         <about>About</about>
@@ -454,9 +454,9 @@
         <meta.index.keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.keywords>
         <meta.index.description>Free video sharing cms software that allows you to have your own video sharing website and community</meta.index.description>
 
-        <meta.videos.title>Browse Videos:</meta.videos.title>
-        <meta.videos.keywords>Browse Videos, Browse, Videos</meta.videos.keywords>
-        <meta.videos.description>Browse videos on the video sharing community</meta.videos.description>
+        <meta.browse.title>Browse Videos:</meta.browse.title>
+        <meta.browse.keywords>Browse Videos, Browse, Videos</meta.browse.keywords>
+        <meta.browse.description>Browse videos on the video sharing community</meta.browse.description>
 
         <meta.members.title>Browse Members</meta.members.title>
         <meta.members.keywords>Browse Members, Browse, Members</meta.members.keywords>
@@ -565,6 +565,11 @@
         <meta.mobile_videos.title>Browse Videos</meta.mobile_videos.title>
 
         <meta.mobile_search.title>Search Videos</meta.mobile_search.title>
+
+
+        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse_header instead -->
+        <videos_header>Browse Videos</videos_header>
+
     </terms>
 
 </language>

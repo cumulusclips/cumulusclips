@@ -130,12 +130,18 @@ class Router
             'name' => 'index'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse instead
+         */
         $routes['browse-videos'] = new Route(array(
             'path' => 'videos',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
             'name' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-paginated instead
+         */
         $routes['browse-videos-paginated'] = new Route(array(
             'path' => 'videos/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -144,6 +150,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-categories instead
+         */
         $routes['browse-videos-categories'] = new Route(array(
             'path' => 'videos/([a-z0-9\-]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -152,6 +161,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-categories-paginated instead
+         */
         $routes['browse-videos-categories-paginated'] = new Route(array(
             'path' => 'videos/([a-z0-9\-]+)/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -160,6 +172,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-sorted instead
+         */
         $routes['browse-videos-sorted'] = new Route(array(
             'path' => 'videos/(most-recent|most-viewed|most-discussed|most-rated)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -168,6 +183,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-sorted-paginated instead
+         */
         $routes['browse-videos-sorted-paginated'] = new Route(array(
             'path' => 'videos/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -176,6 +194,55 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        $routes['browse'] = new Route(array(
+            'path' => 'browse',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'name' => 'browse'
+        ));
+
+        $routes['browse-paginated'] = new Route(array(
+            'path' => 'browse/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('page'),
+            'name' => 'browse-paginated',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-categories'] = new Route(array(
+            'path' => 'browse/([a-z0-9\-]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('category'),
+            'name' => 'browse-categories',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-categories-paginated'] = new Route(array(
+            'path' => 'browse/([a-z0-9\-]+)/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('category', 'page'),
+            'name' => 'browse-categories-paginated',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-sorted'] = new Route(array(
+            'path' => 'browse/(most-recent|most-viewed|most-discussed|most-rated)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('load'),
+            'name' => 'browse-sorted',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-sorted-paginated'] = new Route(array(
+            'path' => 'browse/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('load', 'page'),
+            'name' => 'browse-sorted-paginated',
+            'canonical' => 'browse'
+        ));
+
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use watch instead
+         */
         $routes['play'] = new Route(array(
             'path' => 'videos/([0-9]+)(/[a-z0-9\-]+)?',
             'location' => DOC_ROOT . '/cc-core/controllers/play.php',
