@@ -183,6 +183,13 @@ class Router
             'name' => 'play'
         ));
 
+        $routes['watch'] = new Route(array(
+            'path' => 'watch/([0-9]+)(/[a-z0-9\-]+)?',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
+            'mappings' => array('video_id'),
+            'name' => 'watch'
+        ));
+
         $routes['browse-members'] = new Route(array(
             'path' => 'members',
             'location' => DOC_ROOT . '/cc-core/controllers/members.php',

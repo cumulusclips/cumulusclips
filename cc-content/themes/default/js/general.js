@@ -275,8 +275,8 @@ $(document).ready(function(){
 
 
 
-    // Play Video Page
-    if ($('.play').length > 0) {
+    // Watch Video Page
+    if ($('.watch').length > 0) {
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyToText = responseData;}, 'reply_to');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.replyText = responseData;}, 'reply');
         getText(function(responseData, textStatus, jqXHR){cumulusClips.reportAbuseText = responseData;}, 'report_abuse');
@@ -763,7 +763,7 @@ function buildVideoCard(videoCardTemplate, video)
 function getVideoUrl(video)
 {
     var url = cumulusClips.baseUrl;
-    url += '/videos/' + video.videoId + '/';
+    url += '/watch/' + video.videoId + '/';
     url += generateSlug(video.title) + '/';
     return url;
 }

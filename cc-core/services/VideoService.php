@@ -13,7 +13,7 @@ class VideoService extends ServiceAbstract
             return HOST . '/private/videos/' . $video->privateUrl;
         } else {
             $slug = Functions::createSlug($video->title);
-            return HOST . '/videos/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
+            return HOST . '/watch/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
         }
     }
 

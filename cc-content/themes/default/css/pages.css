@@ -316,19 +316,19 @@ SEARCH RESULTS
 
 
 /*********
-PLAY VIDEO
+Watch VIDEO
 *********/
 
-.play #main .right {
+.watch #main .right {
     overflow: hidden;
     float: none;
 }
 
-.play #main .right > p:first-child {
+.watch #main .right > p:first-child {
     margin-top: 0;
 }
 
-.play h1 {
+.watch h1 {
     width: 600px;
     float: left;
     padding-right: 330px;
@@ -365,24 +365,24 @@ PLAY VIDEO
     margin: 10px 10px 0;
 }
 
-.play .actions {
+.watch .actions {
     overflow: hidden;
     margin-bottom: 4px;
 }
 
-.play .actions .left {
+.watch .actions .left {
     float: left;
     width: 300px;
 }
 
-.play .actions .right {
+.watch .actions .right {
     float: right;
     width: 300px;
     margin-top: 15px;
     text-align: right;
 }
 
-.play .actions .large {
+.watch .actions .large {
     margin-bottom: 3px;
 }
 
@@ -410,7 +410,7 @@ PLAY VIDEO
 
 /** TAB BLOCKS **/
 
-.play .tab_block {
+.watch .tab_block {
     margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #CCC;
