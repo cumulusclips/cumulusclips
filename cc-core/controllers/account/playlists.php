@@ -24,7 +24,7 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
 if (!empty($_POST['submitted'])) {
     $playlist = new Playlist();
     $playlist->userId = $this->view->vars->loggedInUser->userId;
-    
+
     // Validate playlist name
     if (!empty($_POST['name'])) {
         $playlist->name = trim($_POST['name']);
@@ -32,14 +32,14 @@ if (!empty($_POST['submitted'])) {
         $this->view->vars->message = Language::GetText('error_playlist_name');
         $this->view->vars->message_type = 'errors';
     }
-    
+
     // Validate playlist visibility
     if (!empty($_POST['visibility']) && $_POST['visibility'] == 'public') {
         $playlist->public = true;
     } else {
         $playlist->public = false;
     }
-    
+
     // Create playlist if no errors were found
     if (!empty($playlist->name) && isset($playlist->public)) {
         $playlistMapper->save($playlist);
@@ -54,13 +54,13 @@ $this->view->vars->userPlaylists = array();
 foreach ($userLists as $playlist) {
     switch ($playlist->type)
     {
-        case 'playlist':
+        case \PlaylistMapper::TYPE_PLAYLIST:
             $this->view->vars->userPlaylists[] = $playlist;
             break;
-        case 'favorites':
+        case \PlaylistMapper::TYPE_FAVORITES:
             $this->view->vars->favoritesList = $playlist;
             break;
-        case 'watch_later':
+        case \PlaylistMapper::TYPE_WATCH_LATER:
             $this->view->vars->watchLaterList = $playlist;
             break;
     }

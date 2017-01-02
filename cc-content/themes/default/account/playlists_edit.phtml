@@ -3,12 +3,12 @@
 
 <h1><?=Language::GetText('playlists_edit_header')?>: <?=$playlistService->getPlaylistName($playlist)?></h1>
 <p><a href="<?=HOST?>/account/playlists/"><?=Language::GetText('back_to_playlists')?></a></p>
-        
+
 <?php if ($message): ?>
     <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
- 
-    
+
+
 <?php if ($playlist->type == 'playlist'): ?>
     <!-- BEGIN UPDATE PLAYLIST FORM -->
     <h2><?=Language::GetText('update_playlist_header')?></h2>
@@ -31,7 +31,7 @@
     </div>
     <!-- END UPDATE PLAYLIST FORM -->
 <?php endif; ?>
-    
+
 
 <h2><?=Language::GetText('playlist_videos')?></h2>
 <?php if (count($playlist->entries) > 0): ?>
@@ -44,7 +44,7 @@
                 <a href="<?=$videoService->getUrl($video)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$video->title?>">
                     <img width="165" height="92" src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
                 </a>
-                <?php $playlistId = ($loggedInUser) ? $playlistService->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                <?php $playlistId = ($loggedInUser) ? $playlistService->getUserSpecialPlaylist($loggedInUser, \PlaylistMapper::TYPE_WATCH_LATER)->playlistId : ''; ?>
                 <span class="watchLater"><a data-video="<?=$video->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></span>
                 <span class="duration"><?=$video->duration?></span>
             </div>

@@ -332,24 +332,28 @@ $(document).ready(function(){
         });
 
 
-        // Add video to playlist on play page
+        // Add/remove video to playlist on play page
         $('#addToPlaylist').on('click', 'li a', function(event){
             var link = $(this);
+            var action = $(this).data('action');
             var url = cumulusClips.baseUrl+'/actions/playlist/';
             var data = {
-                action: 'add',
+                action: action,
                 video_id: cumulusClips.videoId,
                 playlist_id: $(this).data('playlist_id')
             };
-            var callback = function(addToPlaylistResponse){
-                if (addToPlaylistResponse.result) {
-                    var newNameAndCount = link.text().replace(/\([0-9]+\)/, '(' + addToPlaylistResponse.other.count + ')');
-                    link.text(newNameAndCount);
-                    link.addClass('added');
+
+            var callback = function(response){
+                if (response.result) {
+                    var nameAndCount = link.text().replace(/\([0-9]+\)/, '(' + response.other.count + ')');
+                    link.text(nameAndCount);
+                    link.toggleClass('added');
+                    link.data('action', action === 'add' ? 'remove' : 'add');
                 } else {
                     window.scrollTo(0, 0);
                 }
             };
+
             executeAction(url, data, callback);
             event.preventDefault();
         });
@@ -558,7 +562,8 @@ $(document).ready(function(){
             data: data,
             dataType: 'json',
             url: url,
-            success: function(responseData, textStatus, jqXHR){
+            success: function(responseData, textStatus, jqXHR)
+            {
                 // Append message to video thumbnail
                 var resultMessage = $('<div></div>')
                     .addClass('message')
@@ -566,11 +571,7 @@ $(document).ready(function(){
                 video.find('.thumbnail').append(resultMessage);
 
                 // Style message according to add results
-                if (responseData.result === true) {
-                    resultMessage.addClass('success');
-                } else {
-                    if (responseData.other.status === 'DUPLICATE') resultMessage.addClass('errors');
-                }
+                resultMessage.addClass('success');
 
                 // FadeIn message, pause, then fadeOut and remove
                 resultMessage.fadeIn(function(){
@@ -578,6 +579,31 @@ $(document).ready(function(){
                         resultMessage.fadeOut(function(){resultMessage.remove();});
                     }, 2000);
                 });
+            },
+            error: function(jqXHR, textStatus)
+            {
+                if (jqXHR.status === 409 || jqXHR.status === 401) {
+
+                    var responseData = $.parseJSON(jqXHR.responseText);
+
+                    // Append message to video thumbnail
+                    var resultMessage = $('<div></div>')
+                        .addClass('message')
+                        .html('<p>' + responseData.message + '</p>');
+                    video.find('.thumbnail').append(resultMessage);
+
+                    // Add error highlight in case of duplicate error
+                    if (jqXHR.status === 409) {
+                        resultMessage.addClass('errors');
+                    }
+
+                    // FadeIn message, pause, then fadeOut and remove
+                    resultMessage.fadeIn(function(){
+                        setTimeout(function(){
+                            resultMessage.fadeOut(function(){resultMessage.remove();});
+                        }, 2000);
+                    });
+                }
             }
         });
         event.preventDefault();

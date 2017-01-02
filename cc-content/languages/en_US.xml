@@ -399,6 +399,7 @@
         <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
         <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
         <error_playlist_duplicate>Video is already in this playlist.</error_playlist_duplicate>
+        <error_playlist_video_not_found>Video is not found in playlist.</error_playlist_video_not_found>
         <error_playlist_name>Invalid playlist name</error_playlist_name>
         <error_subscribe_login>You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>You can't subscribe to yourself.</error_subscribe_own>
@@ -440,7 +441,8 @@
         <success_playlist_added_short>Video Added</success_playlist_added_short>
         <success_playlist_created>Playlist has been created.</success_playlist_created>
         <success_playlist_updated>Playlist has been updated.</success_playlist_updated>
-        <success_playlist_video_removed>Video removed from playlist.</success_playlist_video_removed>
+        <success_playlist_video_removed>Video removed from {LIST_NAME}.</success_playlist_video_removed>
+        <success_playlist_video_removed_short>Video Removed</success_playlist_video_removed_short>
         <success_playlist_deleted>Playlist has been deleted.</success_playlist_deleted>
         <success_profile_updated>Your profile has been successfully updated.</success_profile_updated>
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>

@@ -3,32 +3,37 @@
 class Playlist
 {
     /**
-     * @var int 
+     * @var int
      */
     public $playlistId;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $name;
-    
+
     /**
-     * @var int 
+     * @var int
      */
     public $userId;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $type;
-    
+
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $public;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $dateCreated;
+
+    /**
+     * @var \PlaylistEntry[]
+     */
+    public $entries;
 }

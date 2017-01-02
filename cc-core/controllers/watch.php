@@ -15,6 +15,7 @@ $playlistMapper = new PlaylistMapper();
 $commentService = new CommentService();
 $videoService = new VideoService();
 $ratingService = new RatingService();
+$playlistService = new \PlaylistService();
 $this->view->vars->tags = null;
 $this->view->vars->playlist = null;
 $this->view->vars->playlistVideos = null;
@@ -71,9 +72,11 @@ if ($this->view->vars->loggedInUser) {
                 break;
             case 'favorites':
                 $this->view->vars->favoritesList = $list;
+                $this->view->vars->favoritesListed = $playlistService->checkListing($video, $list);
                 break;
             case 'watch_later':
                 $this->view->vars->watchLaterList = $list;
+                $this->view->vars->watchLaterListed = $playlistService->checkListing($video, $list);
                 break;
         }
     }

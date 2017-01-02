@@ -1,13 +1,13 @@
 <?php $this->setLayout('account'); ?>
 
 <h1><?=Language::getText('my_videos_header')?></h1>
-        
+
 <?php if ($message): ?>
     <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
 
 <?php if (count($userVideos) > 0): ?>
-    
+
     <div class="videos_list">
     <?php foreach($userVideos as $video): ?>
 
@@ -20,7 +20,7 @@
                     <a href="<?=$this->getService('Video')->getUrl($video)?>/" title="<?=$video->title?>">
                         <img width="165" height="92" src="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
                     </a>
-                    <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, 'watch_later')->playlistId : ''; ?>
+                    <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, \PlaylistMapper::TYPE_WATCH_LATER)->playlistId : ''; ?>
                     <span class="watchLater"><a data-video="<?=$video->videoId?>" data-playlist="<?=$playlistId?>" href="" title="<?=Language::GetText('watch_later')?>"><?=Language::GetText('watch_later')?></a></span>
                     <span class="duration"><?=$video->duration?></span>
                 </div>
@@ -37,6 +37,6 @@
 
     <?=$pagination->paginate()?>
 
-<?php else: ?>		        
+<?php else: ?>
     <p><strong><?=Language::getText('no_user_videos')?></strong></p>
 <?php endif; ?>
