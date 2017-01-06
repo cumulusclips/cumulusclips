@@ -117,7 +117,7 @@ FILE UPLOAD
     font-family: arial;
     background-color: #F0F0F0;
     border: 3px solid #E1E1E1;
-    width: 465px;
+    max-width: 465px;
     margin: 7px 0 15px;
     padding: 7px;
     font-size: 13px;
@@ -407,9 +407,7 @@ UPDATE PROFILE
     margin-top: 15px;
 }
 
-#upload-select-file + .button {
-    float: none;
-}
+
 
 
 

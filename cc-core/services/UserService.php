@@ -349,7 +349,7 @@ class UserService extends ServiceAbstract
      */
     public function getAvatarUrl(User $user)
     {
-        return (!empty($user->avatar)) ? HOST . "/cc-content/uploads/avatars/$user->avatar" : null;
+        return (!empty($user->avatar)) ? HOST . "/cc-content/uploads/avatars/$user->avatar.png" : null;
     }
 
     /**

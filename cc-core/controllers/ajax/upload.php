@@ -69,6 +69,15 @@ try {
         throw new Exception(Language::getText('error_upload_filesize'), \ApiResponse::HTTP_BAD_REQUEST);
     }
 
+    // Validate image contents
+    if ($_POST['upload-type'] === 'image') {
+        $handle = fopen($_FILES['upload']['tmp_name'],'r');
+        $imageData = fread($handle, filesize($_FILES['upload']['tmp_name']));
+        if (!@imagecreatefromstring($imageData)) {
+            throw new Exception(Language::getText('error_upload_extension'), \ApiResponse::HTTP_BAD_REQUEST);
+        }
+    }
+
     // Validate file extension
     $extension = Functions::getExtension($_FILES['upload']['name']);
     if ($validateExtension) {

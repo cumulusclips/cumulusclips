@@ -11,9 +11,7 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 $userMapper = new UserMapper();
 $this->view->vars->Errors = array();
 $this->view->vars->message = null;
-$this->view->config = Registry::get('config');
-$this->view->vars->timestamp = time();
-$_SESSION['upload_key'] = md5(md5($this->view->vars->timestamp) . SECRET_KEY);
+$tempFilePrefix = UPLOAD_PATH . '/temp/' . $this->view->vars->loggedInUser->userId . '-image-';
 
 // Update profile if requested
 if (isset($_POST['submitted'])) {
@@ -91,6 +89,42 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view-
         $this->view->vars->message_type = 'success';
     } else {
         $this->view->vars->message = Language::getText('error_avatar_reset');
+        $this->view->vars->message_type = 'errors';
+    }
+}
+
+// Update avatar if requested
+if (
+    isset($_POST['submitted_avatar'])
+    && !empty($_POST['upload']['temp'])
+    && preg_match(
+        '/^' . preg_quote($tempFilePrefix, '/') . '[0-9]+/',
+        $_POST['upload']['temp']
+    )
+    && file_exists($_POST['upload']['temp'])
+) {
+
+    $this->view->vars->avatar_submit = true;
+    $filename = Avatar::generateFilename();
+    $avatar = UPLOAD_PATH . '/avatars/' . $filename . '.png';
+
+    // Attempt to save avatar
+    if (Avatar::saveAvatar($_POST['upload']['temp'], $filename)) {
+
+        // Check for existing avatar
+        if (!empty($this->view->vars->loggedInUser->avatar)) Avatar::delete($this->view->vars->loggedInUser->avatar);
+
+        // Update User
+        $userMapper = new UserMapper();
+        $this->view->vars->loggedInUser->avatar = $filename;
+        $userMapper->save($this->view->vars->loggedInUser);
+
+        $this->view->vars->message = Language::getText('success_profile_updated');
+        $this->view->vars->message_type = 'success';
+        $userMapper->save($this->view->vars->loggedInUser);
+
+    } else {
+        $this->view->vars->message = Language::getText('error_upload_system', array ('host' => HOST));
         $this->view->vars->message_type = 'errors';
     }
 }

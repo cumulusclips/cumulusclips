@@ -38,9 +38,15 @@ Registry::set('db', $db);
 Settings::loadSettings();
 
 // General Site Settings from DB
-define('HOST', Settings::get('base_url'));
-define('MOBILE_HOST', Settings::get('base_url') . '/m');
+define('BASE_URL', Settings::get('base_url'));
+define('MOBILE_BASE_URL', Settings::get('base_url') . '/m');
 define('SECRET_KEY', Settings::get('secret_key'));
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use BASE_URL instead
+define('HOST', Settings::get('base_url'));
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use MOBILE_BASE_URL instead
+define('MOBILE_HOST', Settings::get('base_url') . '/m');
 
 $config = new stdClass();
 $config->baseUrl = HOST;
@@ -51,7 +57,7 @@ $config->debugConversion = (boolean) Settings::get('debug_conversion');
 $config->videoSizeLimit = Settings::get('video_size_limit');
 $config->fileSizeLimit = Settings::get('file_size_limit');
 $config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v', '3gp');
-$config->acceptedAvatarFormats = array('png', 'jpeg', 'jpg', 'gif');
+$config->acceptedImageFormats = array('png', 'jpeg', 'jpg', 'gif');
 $config->h264Url = HOST . '/cc-content/uploads/h264';
 $config->theoraUrl = HOST . '/cc-content/uploads/theora';
 $config->webmUrl = HOST . '/cc-content/uploads/webm';

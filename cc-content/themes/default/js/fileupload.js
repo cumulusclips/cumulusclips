@@ -49,6 +49,7 @@ $(function(){
                 var matches = selectedFile.name.match(/\.[a-z0-9]+$/i);
                 if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), allowedExtensions) === -1) {
                     displayMessage(false, cumulusClips.errorFormat);
+                    window.scrollTo(0, 0);
                     return false;
                 }
             }
@@ -56,6 +57,7 @@ $(function(){
             // Validate filesize
             if (selectedFile.size > filesizeLimit) {
                 displayMessage(false, cumulusClips.errorSize);
+                window.scrollTo(0, 0);
                 return false;
             }
 
@@ -100,6 +102,7 @@ $(function(){
             } else {
                 resetProgress(getProgressWidget(this));
                 displayMessage(false, cumulusClips.errorGeneral);
+                window.scrollTo(0, 0);
             }
         },
         done: function(event, data)
@@ -132,6 +135,7 @@ $(function(){
             } else {
                 resetProgress($uploadProgressWidget);
                 displayMessage(false, data.result.message);
+                window.scrollTo(0, 0);
             }
         }
     });

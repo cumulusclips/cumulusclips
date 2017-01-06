@@ -4,120 +4,100 @@ class Avatar
 {
     /**
      * Save an uploaded image to a new location
-     * @param string $original_file Path to the temporary image
-     * @param string $original_extension Original file extension of temporary image
-     * @param string $save_as Filename to save the new image as
-     * @return void Temporary image is resampled, resized, and saved in its final location
+     *
+     * @param string $sourceFile Path to the temporary image
+     * @param string $filename Unique filename for the new avatar
+     * @return boolean Returns true if avatar is saved, false for failures
      */
-    public static function saveAvatar($original_file, $original_extension, $save_as)
+    public static function saveAvatar($sourceFile, $filename)
     {
-        $avatar_size = 100;
-        $save_as = UPLOAD_PATH . '/avatars/' . $save_as;
-        list($width_src, $height_src) = getimagesize($original_file);
+        $avatarSize = 100;
+        $saveAs = UPLOAD_PATH . '/avatars/' . $filename . '.png';
+        list($widthSrc, $heightSrc) = getimagesize($sourceFile);
 
         // Determine new image dimensions
-        $ratio = $width_src / $height_src;
+        $ratio = $widthSrc / $heightSrc;
 
         // Check for dimension overage
-        if ($width_src > $height_src && $width_src > $avatar_size) {
-            $width_dst = $avatar_size;   // Resize width
-            $height_dst = floor($width_dst / $ratio); // Resize height based on ratio
+        if ($widthSrc > $avatarSize && $widthSrc > $heightSrc) {
+            $widthDst = $avatarSize;   // Resize width
+            $heightDst = floor($widthDst / $ratio); // Resize height based on ratio
 
-        } else  if ($width_src < $height_src && $height_src > $avatar_size) {
-            $height_dst = $avatar_size;  // Resize height
-            $width_dst = floor($height_dst * $ratio); // Resize width based on ratio
+        } elseif ($heightSrc > $avatarSize && $heightSrc > $widthSrc) {
+            $heightDst = $avatarSize;  // Resize height
+            $widthDst = floor($heightDst * $ratio); // Resize width based on ratio
 
-        } else if ($width_src == $height_src && $width_src > $avatar_size) {
-            $width_dst = $avatar_size;  // Resize width
-            $height_dst = $avatar_size;  // Resize height
-
-        } else {
-            $width_dst = $width_src;
-            $height_dst = $height_src;
-        }
-
-        // Determin which type of image object to create (and how to process it) based on file extension
-        if (in_array($original_extension, array('jpg', 'jpeg'))) {
-
-            // Create image object from original image
-            $image = imagecreatefromjpeg($original_file);
-
-            // Resize image & Resample (To corrupt any possible injections)
-            $image_dst = imagecreatetruecolor($width_dst, $height_dst);
-            imagecopyresampled($image_dst, $image, 0, 0, 0, 0, $width_dst, $height_dst, $width_src, $height_src);
-
-            // Save image to HDD as JPG
-            imagejpeg($image_dst, $save_as, 100);
+        } elseif ($widthSrc > $avatarSize && $widthSrc === $heightSrc) {
+            $widthDst = $heightDst = $avatarSize;  // Resize width & height
 
         } else {
-
-            // Create image object from original image
-            if ($original_extension == 'gif') {
-                // GIFs are converted to PNGs
-                $image = imagecreatefromgif($original_file);
-            } else {
-                $image = imagecreatefrompng($original_file);
-            }
-
-            // Create empty resized image & turn off transparency
-            $image_dst = imagecreatetruecolor($width_dst, $height_dst);
-            imagealphablending($image_dst, false);
-            imagesavealpha($image_dst, true);
-
-            // Resize image & Resample (To corrupt any possible injections)
-            imagecopyresampled($image_dst, $image, 0, 0, 0, 0, $width_dst, $height_dst, $width_src, $height_src);
-
-            // Save image to HDD as PNG
-            imagepng($image_dst, $save_as);
+            $widthDst = $widthSrc;
+            $heightDst = $heightSrc;
         }
-    }
 
-    /**
-     * Generate a unique random string for an avatar filename
-     * @param string $extension The file extension for the avatar
-     * @return string Random avatar filename
-     */
-    public static function createFilename($extension)
-    {
-        $extension = $extension == 'gif' ? 'png' : $extension;  // GIFs are converted to PNGs
-        do {
-            $filename = Functions::random(20) . '.' . $extension;
-            if (!file_exists(UPLOAD_PATH . '/avatars/' . $filename)) $filename_available = true;
-        } while (empty($filename_available));
-        return $filename;
-    }
+        // Create image resource from source file
+        $handle = fopen($sourceFile, 'r');
+        $imageData = fread($handle, filesize($sourceFile));
+        if (!$imageSrc = @imagecreatefromstring($imageData)) {
+            return false;
+        }
 
-    /**
-     * Delete an avatar
-     * @param integer $filename Name of file to be deleted
-     * @return boolean Returns true if avatar is deleted from filesystem, false otherwise
-     */
-    public static function delete($filename)
-    {
+        // Create empty resized image & turn off transparency
+        $imageDst = imagecreatetruecolor($widthDst, $heightDst);
+        imagealphablending($imageDst, false);
+        imagesavealpha($imageDst, true);
+
+        // Resize image & Resample (To corrupt any possible injections)
+        imagecopyresampled($imageDst, $imageSrc, 0, 0, 0, 0, $widthDst, $heightDst, $widthSrc, $heightSrc);
+
+        // Convert image to PNG and capture into string
+        ob_start();
+        imagepng($imageDst, null, 0);
+        $imageData = ob_get_clean();
+
+        // Save image to system and remove temp file
         try {
-            Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename);
+            Filesystem::create($saveAs);
+            Filesystem::write($saveAs, $imageData);
+            Filesystem::setPermissions($saveAs, 0644);
+            Filesystem::delete($sourceFile);
+
             return true;
-        } catch (Exception $e) {
-            App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
+
+        } catch (Exception $exception) {
+            App::alert('Error During Avatar Upload', $exception->getMessage());
             return false;
         }
     }
 
     /**
-     * Determines image mime type based on given extension
-     * @param string $extension The file extension to find the mime type for
-     * @return int|boolean Returns image mime type value if found, false otherwise
+     * Generate a unique random string for an avatar filename
+     *
+     * @return string Random avatar filename
      */
-    public static function getMimeTypeFromExtension($extension)
+    public static function generateFilename()
     {
-        $extensionLower = strtolower($extension);
-        if ($extensionLower == 'jpg' || $extensionLower == 'jpeg') {
-            return IMAGETYPE_JPEG;
-        } else if ($extensionLower == 'gif') {
-            return IMAGETYPE_GIF;
-        } else if ($extensionLower == 'png') {
-            return IMAGETYPE_PNG;
-        } else {
+        $filenameAvailable = null;
+        do {
+            $filename = Functions::random(20);
+            if (!file_exists(UPLOAD_PATH . '/avatars/' . $filename . '.png')) $filenameAvailable = true;
+        } while (empty($filenameAvailable));
+        return $filename;
+    }
+
+    /**
+     * Delete an avatar
+     *
+     * @param integer $filename Filename of avatar to be deleted
+     * @return boolean Returns true if avatar is deleted from filesystem, false otherwise
+     */
+    public static function delete($filename)
+    {
+        try {
+            Filesystem::delete(UPLOAD_PATH . '/avatars/' . $filename . '.png');
+            return true;
+        } catch (Exception $e) {
+            App::alert('Error During Avatar Removal', "Unable to delete avatar: $filename. Error: " . $e->getMessage());
             return false;
         }
     }

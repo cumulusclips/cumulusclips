@@ -727,12 +727,6 @@ class Router
             'name' => 'ajax-videos-more'
         ));
 
-        $routes['ajax-upload-avatar'] = new Route(array(
-            'path' => 'account/upload/avatar',
-            'location' => DOC_ROOT . '/cc-core/controllers/ajax/avatar.ajax.php',
-            'name' => 'ajax-upload-avatar'
-        ));
-
         $routes['ajax-upload'] = new Route(array(
             'path' => 'ajax/upload',
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/upload.php',
