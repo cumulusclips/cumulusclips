@@ -75,6 +75,111 @@ GENERAL account STYLES
 
 
 
+/**********
+FILE UPLOAD
+**********/
+
+.uploader-container * {
+    box-sizing: border-box;
+}
+
+.uploader-container .button {
+    float: none;
+}
+
+.button-upload {
+    height: auto;
+    padding: 0 10px;
+    margin: 0 0 0 10px;
+    vertical-align: top;
+    float: none;
+}
+
+.button-browse {
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.button-browse input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
+}
+
+.upload-progress {
+    font-family: arial;
+    background-color: #F0F0F0;
+    border: 3px solid #E1E1E1;
+    width: 465px;
+    margin: 7px 0 15px;
+    padding: 7px;
+    font-size: 13px;
+    box-sizing: content-box;
+}
+
+.upload-progress .title {
+    color: #005acc;
+    font-weight: bold;
+}
+
+.upload-progress .cancel {
+    color: #999;
+    margin-right: 5px;
+}
+
+.upload-progress .cancel .glyphicon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url("../images/cancel.png") no-repeat 0 0;
+    vertical-align: top;
+}
+
+.upload-progress .cancel:hover {
+    color: #777;
+}
+
+.upload-progress .cancel:focus,
+.upload-progress .cancel:active, {
+    color: #555;
+}
+
+.upload-progress .glyphicon-ok {
+    color: #023e7b;
+    font-size: 16px;
+    background: url("../images/icon_check.png") no-repeat 0 0;
+    float: right;
+    width: 16px;
+    height: 12px;
+    margin-top: 2px;
+}
+
+.upload-progress .progress-track {
+    width: 145px;
+    height: 14px;
+    border: 1px solid #023e7b;
+    float: right;
+    padding: 1px;
+    margin-top: 1px;
+}
+
+.upload-progress .progress-fill {
+    background-color: #023e7b;
+    width: 0%;
+    height: 10px;
+}
+
+
+
+
+
 /**************
 MY ACCOUNT HOME
 **************/
@@ -115,26 +220,38 @@ MY ACCOUNT HOME
 
 
 
+/*************
+UPLOAD - VIDEO
+*************/
+
+.account_upload_video .uploader-container {
+    margin-top: 15px;
+}
+
+
+
+
+
 /************
 UPLOAD - INFO
 ************/
 
-.account_upload .wide,
+.account_upload_info .wide,
 .account_edit_video .wide {
     width: 470px;
 }
 
-.account_upload .wide input[type="text"],
+.account_upload_info .wide input[type="text"],
 .account_edit_video .wide input[type="text"] {
     width: 260px;
 }
 
-.account_upload select,
+.account_upload_info select,
 .account_edit_video select {
     width: 280px;
 }
 
-.account_upload textarea,
+.account_upload_info textarea,
 .account_edit_video textarea {
     width: 450px;
     margin-bottom: 22px;
@@ -167,104 +284,9 @@ input[type="checkbox"] + label + em + br {
     margin-left:15px;
 }
 
-.account_upload .form input[type="submit"],
+.account_upload_info .form input[type="submit"],
 .account_edit_video .form input[type="submit"] {
     margin-top: 15px;
-}
-
-
-
-
-
-/*************
-UPLOAD - VIDEO
-*************/
-
-.account_upload_video form[name="upload"] {
-    margin-top: 15px;
-}
-
-#upload-select-file {
-    float: left;
-    margin-right: 15px;
-    height: auto;
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-}
-
-#upload-select-file input {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: block;
-    font-size: 200px;
-    opacity: 0;
-}
-
-#upload_status {
-    font-family: arial;
-    background-color: #F0F0F0;
-    border: 3px solid #E1E1E1;
-    margin: 10px 0;
-    padding: 10px;
-    width: 330px;
-    display: none;
-    font-size: 12px;
-    clear: both;
-}
-
-#upload_status .title {
-    margin: 0 0 10px;
-}
-
-#upload_status .progress {
-    width: 330px;
-    overflow: hidden;
-}
-
-#upload_status a {
-    float: left;
-    display: block;
-    text-indent: -9999px;
-    background: url('../images/cancel.png') no-repeat 0 0;
-    height: 16px;
-    width: 16px;
-}
-
-#upload_status .meter {
-    width: 250px;
-    height: 10px;
-    background-color: #E1E1E1;
-    float: left;
-    margin: 3px 15px 0 14px;
-}
-
-#upload_status .fill {
-    background-color: #023e7b;
-    width: 0%;
-    height: 10px;
-}
-
-.ie9 #upload_status {
-    width: 285px;
-}
-
-.ie9 #upload_status .fill {
-    width: 100% !important;
-    background-color: #E1E1E1;
-}
-
-.ie9 #upload_status .in-progress {
-    background: url('../images/jquery-ui/animated-overlay.gif');
-    opacity: 0.3;
-}
-
-#upload_status .percentage {
-    width: 35px;
-    float: right;
-    line-height: 16px;
 }
 
 

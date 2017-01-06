@@ -31,7 +31,7 @@ if (isset($_POST['submitted'])) {
 
         // Validate Post Speed
         if (time()-$_SESSION['time'] < 5) {
-            $this->view->vars->errors['token'] = 'Invalid or Expired Session';
+            $this->view->vars->errors['token'] = Language::getText('invalid_session');
         }
 
         // Validate Username
@@ -75,7 +75,7 @@ if (isset($_POST['submitted'])) {
         }
 
     } else {
-        $this->view->vars->errors['token'] = 'Invalid or Expired Session';
+        $this->view->vars->errors['token'] = Language::getText('invalid_session');
     }
 
     $this->view->vars->errors = Plugin::triggerFilter('register.validation', $this->view->vars->errors, $_POST);

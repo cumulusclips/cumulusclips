@@ -30,6 +30,7 @@
         <video_feed>Video Feed</video_feed>
         <contact>Contact</contact>
         <sitemap>Sitemap</sitemap>
+        <invalid_session>Expired or invalid session</invalid_session>
 
         <!-- Mobile -->
         <mobile_heading>{SITENAME} Mobile</mobile_heading>
@@ -324,8 +325,8 @@
         <members_username>Member's username</members_username>
         <message_send_button>Send Message</message_send_button>
 
-        <!-- My Account / Upload - Video Information Page -->
-        <upload_header>Upload Step 1 - Video Information</upload_header>
+        <!-- My Account / Upload Video - Video Information Page -->
+        <upload_header>Upload Video - Video Information</upload_header>
         <title>Title</title>
         <description>Description</description>
         <tags>Tags</tags>
@@ -344,14 +345,14 @@
         <submit_button>Submit</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->
-        <upload_video_header>Upload Step 2 - Upload Video</upload_video_header>
+        <upload_video_header>Upload Video</upload_video_header>
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
         <cancel>Cancel</cancel>
-        <upload_video_button>Upload Video</upload_video_button>
+        <start_upload_button>Start Upload</start_upload_button>
 
         <!-- My Account / Upload - Complete Page -->
-        <upload_complete_header>Upload Step 3 - Upload Complete!</upload_complete_header>
+        <upload_complete_header>Upload Complete!</upload_complete_header>
         <upload_complete_text>Your video has been successfully uploaded. Please allow several minutes for processing before it is available on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
 
 
@@ -504,17 +505,17 @@
         <meta.account_account.keywords>Welcome</meta.account_account.keywords>
         <meta.account_account.description>Welcome</meta.account_account.description>
 
-        <meta.account_upload.title>Upload Step 1 - Video Information</meta.account_upload.title>
-        <meta.account_upload.keywords>Upload Video, Step 1, Video Information</meta.account_upload.keywords>
-        <meta.account_upload.description>Upload Step 1 - Video Information.</meta.account_upload.description>
+        <meta.account_upload_video.title>Upload Video</meta.account_upload_video.title>
+        <meta.account_upload_video.keywords>Upload Video</meta.account_upload_video.keywords>
+        <meta.account_upload_video.description>Upload Video</meta.account_upload_video.description>
 
-        <meta.account_upload_video.title>Upload Step 2 - Upload Video</meta.account_upload_video.title>
-        <meta.account_upload_video.keywords>Upload Video, Step 2</meta.account_upload_video.keywords>
-        <meta.account_upload_video.description>Upload Step 2 - Upload Video.</meta.account_upload_video.description>
+        <meta.account_upload_info.title>Upload Video - Video Information</meta.account_upload_info.title>
+        <meta.account_upload_info.keywords>Upload Video, Video Information</meta.account_upload_info.keywords>
+        <meta.account_upload_info.description>Upload Video - Video Information.</meta.account_upload_info.description>
 
-        <meta.account_upload_complete.title>Upload Step 3 - Upload Complete!</meta.account_upload_complete.title>
-        <meta.account_upload_complete.keywords>Upload Video, Step 3, Upload Complete</meta.account_upload_complete.keywords>
-        <meta.account_upload_complete.description>Upload Step 3 - Upload Complete!</meta.account_upload_complete.description>
+        <meta.account_upload_complete.title>Upload Complete!</meta.account_upload_complete.title>
+        <meta.account_upload_complete.keywords>Upload Video, Upload Complete</meta.account_upload_complete.keywords>
+        <meta.account_upload_complete.description>Upload Complete!</meta.account_upload_complete.description>
 
         <meta.account_videos_edit.title>Edit Video</meta.account_videos_edit.title>
         <meta.account_videos_edit.keywords>Edit Video, Video Information</meta.account_videos_edit.keywords>
@@ -571,6 +572,9 @@
 
         <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse_header instead -->
         <videos_header>Browse Videos</videos_header>
+
+        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use start_upload_button instead -->
+        <upload_video_button>Upload Video</upload_video_button>
 
     </terms>
 

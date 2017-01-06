@@ -2,6 +2,9 @@
 
 Plugin::triggerEvent('watch.start');
 
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use watch.start instead
+Plugin::triggerEvent('play.start');
+
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
@@ -128,3 +131,6 @@ $this->view->vars->commentCount = $commentMapper->getVideoCommentCount($video->v
 $this->view->vars->commentCardList = $commentService->getVideoComments($video, 5);
 
 Plugin::triggerEvent('watch.end');
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use watch.end instead
+Plugin::triggerEvent('play.end');

@@ -359,6 +359,9 @@ class Router
             'name' => 'account-index'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use account-upload-info instead
+         */
         $routes['account-upload'] = new Route(array(
             'path' => 'account/upload',
             'location' => DOC_ROOT . '/cc-core/controllers/account/upload.php',
@@ -369,6 +372,12 @@ class Router
             'path' => 'account/upload/video',
             'location' => DOC_ROOT . '/cc-core/controllers/account/upload_video.php',
             'name' => 'account-upload-video'
+        ));
+
+        $routes['account-upload-info'] = new Route(array(
+            'path' => 'account/upload/info',
+            'location' => DOC_ROOT . '/cc-core/controllers/account/upload_info.php',
+            'name' => 'account-upload-info'
         ));
 
         $routes['account-upload-complete'] = new Route(array(
@@ -729,12 +738,6 @@ class Router
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/upload.php',
             'type' => Route::AGNOSTIC,
             'name' => 'ajax-upload'
-        ));
-
-        $routes['ajax-upload-video'] = new Route(array(
-            'path' => 'account/upload/validate',
-            'location' => DOC_ROOT . '/cc-core/controllers/ajax/upload.ajax.php',
-            'name' => 'ajax-upload-video'
         ));
 
         $routes['ajax-username-exists'] = new Route(array(

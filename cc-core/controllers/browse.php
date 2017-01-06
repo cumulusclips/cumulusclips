@@ -2,6 +2,9 @@
 
 Plugin::triggerEvent('browse.start');
 
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse.start instead
+Plugin::triggerEvent('videos.start');
+
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
@@ -73,3 +76,6 @@ $this->view->vars->browse_videos = $videoMapper->getVideosFromList(
 
 $this->view->vars->meta->title = $this->view->vars->meta->title . ' ' . $this->view->vars->sub_header;
 Plugin::triggerEvent('browse.end');
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse.end instead
+Plugin::triggerEvent('videos.start');

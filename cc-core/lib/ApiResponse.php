@@ -38,6 +38,11 @@ class ApiResponse
     const HTTP_CONFLICT = 409;
 
     /**
+     * @var int HTTP status code when internal errors occur
+     */
+    const HTTP_SERVER_ERROR = 500;
+
+    /**
      * @var int HTTP status code for response
      */
     public $statusCode;

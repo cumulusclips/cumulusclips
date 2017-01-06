@@ -1,5 +1,5 @@
 // Global vars
-var cumulusClips = {};
+var cumulusClips = cumulusClips || {};
 cumulusClips.baseUrl = $('meta[name="baseUrl"]').attr('content');
 cumulusClips.themeUrl = $('meta[name="themeUrl"]').attr('content');
 cumulusClips.loggedIn = $('meta[name="loggedIn"]').attr('content');
