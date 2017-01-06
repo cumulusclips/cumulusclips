@@ -19,11 +19,12 @@ cumulusClips.lang.error_category = <?=json_encode(Language::getText('error_categ
                 <input data-role="none" id="upload" type="file" name="upload" />
             </div>
             <button id="upload-button" class="button ui-btn ui-btn-inline"><?=Language::getText('upload_button')?></button>
-            
+
+            <input type="hidden" name="upload-type" id="upload-type" value="video" />
             <input type="hidden" name="upload-limit" id="upload-limit" value="<?=$config->videoSizeLimit?>" />
             <input type="hidden" name="file-types" id="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
         </div>
-        
+
         <div id="upload-status">
             <div class="title"></div>
             <div class="progress">
@@ -36,10 +37,10 @@ cumulusClips.lang.error_category = <?=json_encode(Language::getText('error_categ
         </div>
     </form>
 
-    
-    
+
+
     <p id="uploaded-file"><a href="" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-btn-inline"><?=Language::getText('cancel')?></a><span></span></p>
-        
+
     <form id="upload-form" action="<?=MOBILE_HOST?>/a/u/" method="post" data-ajax="false">
         <input type="hidden" id="filename" name="filename" value="" />
         <input type="hidden" name="submitted" value="true" />

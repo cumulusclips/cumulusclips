@@ -16,8 +16,6 @@ Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
 $db = Registry::get('db');
-$config = Registry::get('config');
-$php_path = Settings::get('php');
 $errors = array();
 $this->view->vars->private_url = $videoService->generatePrivate();
 
@@ -40,12 +38,12 @@ $this->view->vars->categories = $categoryService->getCategories();
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
-    
+
     $this->view->options->disableView = true;
     $video = new Video();
 
     // Validate video upload
-    if (!empty($_POST['filename']) && file_exists(UPLOAD_PATH . '/temp/' . $_POST['filename'])) {
+    if (!empty($_POST['filename']) && file_exists($_POST['filename'])) {
         $tempFile = $_POST['filename'];
     } else {
         $errors['video'] = 'Invalid video upload';
@@ -115,21 +113,42 @@ if (isset($_POST['submitted'])) {
 
     // Update video if no errors were made
     if (empty($errors)) {
-        // Create record
+
+        // Create video in system
         $video->userId = $this->view->vars->loggedInUser->userId;
+        $video->filename = $videoService->generateFilename();
         $video->originalExtension = Functions::getExtension($tempFile);
-        $video->filename = basename($tempFile, '.' . $video->originalExtension);
         $video->status = VideoMapper::PENDING_CONVERSION;
         $videoId = $videoMapper->save($video);
 
-        // Begin encoding
-        $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
-        $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
-        exec($converter_cmd);
+        try {
 
-        // Output message
-        echo json_encode(array('result' => true, 'message' => Language::getText('success_video_upload'), 'other' => array('videoId' => $videoId)));
-        
+            // Move temp file to raw video location
+            Filesystem::rename(
+                $tempFile,
+                UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension
+            );
+
+            // Begin transcoding
+            $commandOutput = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
+            $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $commandOutput . ' 2>&1 &';
+            exec($command);
+
+            // Output message
+            echo json_encode(array(
+                'result' => true,
+                'message' => Language::getText('success_video_upload'),
+                'other' => array('videoId' => $videoId)
+            ));
+
+        } catch (Exception $exception) {
+            echo json_encode(array(
+                'result' => false,
+                'message' => Language::getText('error_upload_system'),
+                'errors' => array_keys($errors)
+            ));
+        }
+
     } else {
         $message = Language::getText('errors_below');
         $message .= '<br><br> - ' . implode('<br> - ', $errors);

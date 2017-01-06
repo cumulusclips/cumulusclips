@@ -1,8 +1,8 @@
 $(function(){
-    
+
     // Attach upload plugin events to upload browse field
     $(document).on('click', '#upload', function(event){
-    
+
         $('#upload').fileupload({
             url: $('form[name="upload"]').attr('action'),
             dataType: 'json',
@@ -95,13 +95,13 @@ $(function(){
                     var file = data.files[0];
                     $('#uploaded-file span').text(file.name + ' (' + formatBytes(file.size, 0) + ')');
                     $('#uploaded-file').show();
-                    $('#filename').val(response.other.filename).valid();
+                    $('#filename').val(response.other.temp).valid();
                 } else {
                     displayMessage(false, response.message);
                 }
             }
         });
-    
+
     });
 
     // Attach upload event to upload button
@@ -112,13 +112,13 @@ $(function(){
         }
         event.preventDefault();
     });
-    
+
     // Cancel queued video upload
     $(document).on('click', '#upload-status a', function(event){
         removeQueuedVideoUpload();
         event.preventDefault();
     });
-    
+
     // Cancel already uploaded video
     $(document).on('click', '#uploaded-file a', function(event){
         $('#filename').val('');
