@@ -1,5 +1,8 @@
 <?php
 
+Plugin::triggerEvent('upload_info.start');
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use upload_info.end instead
 Plugin::triggerEvent('upload.start');
 
 // Verify if user registrations are enabled
@@ -21,7 +24,12 @@ $videoService = new VideoService();
 $videoMapper = new VideoMapper();
 $video = new Video();
 $this->view->vars->privateUrl = $videoService->generatePrivate();
-unset($_SESSION['upload']);
+
+// Send user video upload page if upload has not been completed first
+if (!isset($_SESSION['upload'])) {
+    header('Location: ' . HOST . '/account/upload/video/');
+    exit();
+}
 
 // Retrieve Categories
 $categoryService = new CategoryService();
@@ -97,14 +105,38 @@ if (isset ($_POST['submitted'])) {
         $video->commentsClosed = false;
     }
 
-    // Validate Video Upload last (only if other fields were valid)
+    // Verify no errors were found
     if (empty($this->view->vars->errors)) {
+
+        // Create video in system
         $video->userId = $this->view->vars->loggedInUser->userId;
         $video->filename = $videoService->generateFilename();
-        $video->status = VideoMapper::NEW_VIDEO;
-        $_SESSION['upload'] = $videoMapper->save($video);
-        header('Location: ' . HOST . '/account/upload/video/');
-        exit();
+        $video->originalExtension = Functions::getExtension($_SESSION['upload']->temp);
+        $video->status = VideoMapper::PENDING_CONVERSION;
+        $_SESSION['upload']->videoId = $videoId = $videoMapper->save($video);
+
+        try {
+
+            // Move temp file to raw video location
+            Filesystem::rename(
+                $_SESSION['upload']->temp,
+                UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension
+            );
+
+            // Begin transcoding
+            $commandOutput = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
+            $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $commandOutput . ' 2>&1 &';
+            exec($command);
+
+            // Move to upload complete page
+            header('Location: ' . HOST . '/account/upload/complete/');
+            exit();
+
+        } catch (Exception $exception) {
+            $this->view->vars->message = Language::getText('error_upload_system');
+            $this->view->vars->message_type = 'errors';
+        }
+
     } else {
         $this->view->vars->message = Language::getText('errors_below');
         $this->view->vars->message .= '<br /><br /> - ' . implode ('<br /> - ', $this->view->vars->errors);
@@ -113,4 +145,8 @@ if (isset ($_POST['submitted'])) {
 }
 
 $this->view->vars->video = $video;
+
+Plugin::triggerEvent('upload_info.end');
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use upload_info.end instead
 Plugin::triggerEvent('upload.end');

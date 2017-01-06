@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 <div class="form wide">
-    <form action="<?=HOST?>/account/upload/" method="post">
+    <form action="<?=HOST?>/account/upload/info/" method="post">
         <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
         <input class="text" type="text" name="title" value="<?=(!empty($video->title)) ? $video->title : ''?>" />
 
@@ -33,7 +33,7 @@
 
         <input id="private_video" data-block="private_url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty($video->private)) ? 'checked="checked"' : ''?> />
         <label for="private_video"><?=Language::getText('private')?></label> <em>(<?=Language::getText('private_description')?>)</em><br>
-            
+
         <p id="private_url" class="<?=(!empty($video->private)) ? '' : 'hide'?>">
             <label class="<?=(isset($errors['private_url'])) ? 'error' : ''?>"><?=Language::getText('private_url')?>:</label>
             <?=HOST?>/private/videos/<span><?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?></span>/

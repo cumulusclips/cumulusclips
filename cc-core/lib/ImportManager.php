@@ -358,7 +358,7 @@ class ImportManager
         // Determine output location
         $cmdOutput = Registry::get('config')->debugConversion ? CONVERSION_LOG : '/dev/null';
 
-        $command = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" --import="' . $jobId . '" >> ' .  $cmdOutput . ' 2>&1 &';
+        $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" --import="' . $jobId . '" >> ' .  $cmdOutput . ' 2>&1 &';
         exec($command);
     }
 
@@ -371,7 +371,7 @@ class ImportManager
     public static function executeImport($jobId)
     {
         $importLog = LOG . '/import-' . $jobId . '.log';
-        $command = 'nohup ' . Settings::Get('php') . ' ' . DOC_ROOT . '/cc-core/system/bin/import.php --job="' . $jobId . '" >> ' .  $importLog . ' 2>&1 &';
+        $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/bin/import.php --job="' . $jobId . '" >> ' .  $importLog . ' 2>&1 &';
         exec($command);
     }
 

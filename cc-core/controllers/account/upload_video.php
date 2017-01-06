@@ -9,29 +9,31 @@ if (!$config->enableUserUploads) App::throw404();
 // Verify if user is logged in
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
-App::EnableUploadsCheck();
-$this->view->vars->timestamp = time();
-$videoMapper = new VideoMapper();
+$tempFilePrefix = UPLOAD_PATH . '/temp/' . $this->view->vars->loggedInUser->userId . '-video-';
+App::enableUploadsCheck();
+unset($_SESSION['upload']);
 
-// Verify user entered video information
-if (isset($_SESSION['upload'])) {
+// Handle form if submitted
+if (
+    isset($_POST['submitted'])
+    && !empty($_POST['upload']['temp'])
+    && preg_match(
+        '/^' . preg_quote($tempFilePrefix, '/') . '[0-9]+/',
+        $_POST['upload']['temp']
+    )
+    && file_exists($_POST['upload']['temp'])
+) {
+    // Store uploaded file into session
+    $_SESSION['upload'] = (object) array(
+        'temp' => $_POST['upload']['temp'],
+        'time' => time()
+    );
 
-    $video = $videoMapper->getVideoByCustom(array(
-        'video_id' => $_SESSION['upload']),
-        'status' => VideoMapper::NEW_VIDEO
-    ));
-
-    if ($video) {
-        $this->view->video = $video;
-    } else {
-        header('Location: ' . HOST . '/account/upload/');
-        exit();
-    }
-} else {
-    header('Location: ' . HOST . '/account/upload/');
+    // Move to video information page
+    header('Location: ' . HOST . '/account/upload/info/');
     exit();
 }
 
