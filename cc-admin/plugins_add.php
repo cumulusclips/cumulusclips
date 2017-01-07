@@ -17,29 +17,31 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
-$clean_up = true;
 
 // Handle Upload Form
 if (isset($_POST['submitted'])) {
 
     // Validate file upload
-    if (!empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
+    if (
+        !empty($_POST['upload']['temp'])
+        && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'addon')
+    ) {
 
-        // Extract zip archive and move plugin
         try {
-
             // Create extraction directory
-            $extractionDirectory = UPLOAD_PATH . '/temp/' . basename($_POST['temp-file'], '.zip');
-            $uploadedFilename = $extractionDirectory . '/' . basename($_POST['temp-file']);
+            $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($_POST['upload']['temp'], '.zip');
             Filesystem::createDir($extractionDirectory);
-            Filesystem::rename($_POST['temp-file'], $uploadedFilename);
+            Filesystem::setPermissions($extractionDirectory, 0777);
 
-            // Extract plugin
-            Filesystem::extract($uploadedFilename);
+            // Move zip to extraction directory
+            Filesystem::rename($_POST['upload']['temp'], $extractionDirectory . '/addon.zip');
+
+            // Extract theme
+            Filesystem::extract($extractionDirectory . '/addon.zip');
 
             // Check for duplicates
-            $temp_contents = array_diff(scandir($extractionDirectory), array('.', '..', $uploadedFilename));
-            $pluginName = array_pop($temp_contents);
+            $extractionDirectoryContents = array_diff(scandir($extractionDirectory), array('.', '..', 'addon.zip'));
+            $pluginName = array_pop($extractionDirectoryContents);
             if (file_exists(DOC_ROOT . '/cc-content/plugins/' . $pluginName)) {
                 throw new Exception("Plugin cannot be added. It conflicts with another plugin.");
             }
@@ -53,31 +55,22 @@ if (isset($_POST['submitted'])) {
             }
 
             // Clean up
-            $clean_up = false;
             Filesystem::delete($extractionDirectory);
 
             // Display success message
             $plugin = Plugin::getPlugin($pluginName);
             $message = $plugin->name . ' has been uploaded and is available for use.';
             $message_type = 'alert-success';
+
         } catch (Exception $e) {
             $message = $e->getMessage();
             $message_type = 'alert-danger';
+        }
 
-            // Perform clean up if plugin contained errors
-            if ($clean_up) {
-                try {
-                    Filesystem::delete($tempDirectory);
-                } catch (Exception $e) {
-                    $message = $e->getMessage();
-                    $message_type = 'alert-danger';
-                }
-            }
-        }   //  END extract and move plugin
     } else {
         $message = 'Invalid file upload';
         $message_type = 'alert-danger';
-    }   // END check for form errors
+    }
 }
 
 // Output Header
@@ -86,8 +79,6 @@ include('header.php');
 
 ?>
 
-<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
-
 <h1>Add New Plugin</h1>
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
@@ -95,33 +86,23 @@ include('header.php');
 <p>If you have a plugin in .zip format use this form
 to upload and add it to the system.</p>
 
-<form name="uploadify" action="<?=ADMIN?>/plugins_add.php" method="post">
+<form action="<?php echo ADMIN; ?>/plugins_add.php" method="post">
 
-    <div class="form-group select-file">
-        <label class="control-label">Plugin Zip File:</label>
-        <div class="button button-browse">
-            <span>Browse</span>
-            <input id="upload" type="file" name="upload" />
-        </div>
-        <input type="button" class="button button-upload" value="Upload" />
-        <input type="hidden" name="upload-limit" value="<?=1024*1024*100?>" />
-        <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode(array('zip')))?>" />
-        <input type="hidden" name="upload-type" value="addon" />
-        <input type="hidden" name="temp-file" value="" />
-        <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
-        <input type="hidden" name="submitted" value="true" />
+    <div class="form-group">
+        <input
+            class="uploader"
+            type="file"
+            name="upload"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+            data-text="<?php echo Language::getText('browse_files_button'); ?>"
+            data-limit="<?php echo $config->fileSizeLimit; ?>"
+            data-extensions="<?php echo urlencode(json_encode(array('zip'))); ?>"
+            data-type="addon"
+            data-auto-submit="true"
+        />
     </div>
 
-    <div id="upload_status">
-        <div class="title"></div>
-        <div class="progress">
-            <a href="" title="Cancel">Cancel</a>
-            <div class="meter">
-                <div class="fill"></div>
-            </div>
-            <div class="percentage">0%</div>
-        </div>
-    </div>
+    <input type="hidden" name="submitted" value="true" />
 
 </form>
 

@@ -4,8 +4,8 @@
  * File Upload Validator
  *
  * Uploaded file is validated for filesize, and extension according to the
- * upload type. There are only 3 upload types, these are videos, images, and
- * library files.
+ * upload type. There are only 4 upload types, these are videos, images,
+ * library/attachment files, and addons.
  *
  * If the uploaded file is valid, the uploaded file is moved to the
  * CumulusClips temp directory with a temporary name. The temporary name
@@ -15,19 +15,21 @@
  * file is invalid, the client is provided with a reason why.
  */
 
-// Verify if user registrations are enabled
-$config = Registry::get('config');
-if (!$config->enableUserUploads) App::throw404();
-
 // Verify if user is logged in
 $userService = new UserService();
 $loggedInUser = $userService->loginCheck();
 Functions::redirectIf($loggedInUser, HOST . '/login/');
 
 // Establish page variables, objects, arrays, etc
+$config = Registry::get('config');
 $validateExtension = true;
 $tempFile = UPLOAD_PATH . '/temp/' . $loggedInUser->userId . '-';
 $uploadTypes = array('video', 'library', 'image');
+
+// Determine if user is allowed to upload addons
+if ($userService->checkPermissions('manage_settings', $loggedInUser)) {
+    $uploadTypes[] = 'addon';
+}
 
 // Verify post params are valid
 if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], $uploadTypes)) {
@@ -35,18 +37,27 @@ if (empty($_POST['upload-type']) || !in_array($_POST['upload-type'], $uploadType
 }
 
 try {
+
     // Create vars based on upload type (video, image, library file, etc.)
-    if ($_POST['upload-type'] == 'video') {
+    if ($_POST['upload-type'] === 'video') {
+
+        App::enableUploadsCheck();
+        if (!$config->enableUserUploads) App::throw404();
+
         $maxFilesize = $config->videoSizeLimit;
         $extensionList = $config->acceptedVideoFormats;
         $tempFile .= 'video';
-    } elseif ($_POST['upload-type'] == 'image') {
+    } elseif ($_POST['upload-type'] === 'image') {
         $maxFilesize = $config->fileSizeLimit;
-        $tempFile .= 'image';
         $extensionList = $config->acceptedImageFormats;
+        $tempFile .= 'image';
+    } elseif ($_POST['upload-type'] === 'addon') {
+        $maxFilesize = $config->fileSizeLimit;
+        $extensionList = array('zip');
+        $tempFile .= 'addon';
     } else {
         $maxFilesize = $config->fileSizeLimit;
-        $validateExtension = false;
+        $extensionList = array();
         $tempFile .= 'library';
     }
 
@@ -80,7 +91,7 @@ try {
 
     // Validate file extension
     $extension = Functions::getExtension($_FILES['upload']['name']);
-    if ($validateExtension) {
+    if (!empty($extensionList)) {
         if (!in_array($extension, $extensionList)) {
             throw new Exception(Language::getText('error_upload_extension'), \ApiResponse::HTTP_BAD_REQUEST);
         }

@@ -390,6 +390,12 @@ textarea.form-control {
     cursor:pointer;
 }
 
+.button[disabled] {
+    color: #FFF;
+    background: #999;
+    cursor: not-allowed;
+}
+
 
 
 
@@ -688,16 +694,15 @@ LOGS STYLES
 
 
 /*****************
-FILE UPLOAD STYLES
+FILE UPLOAD WIDGET
 *****************/
 
-.select-file label {
-    display: block;
+.button-upload {
+    margin: 0 0 0 10px;
+    vertical-align: top;
 }
 
 .button-browse {
-    float: left;
-    margin-right: 15px;
     height: auto;
     display: inline-block;
     position: relative;
@@ -715,84 +720,58 @@ FILE UPLOAD STYLES
     opacity: 0;
 }
 
-#upload_status {
+.upload-progress {
     font-family: arial;
     background-color: #F0F0F0;
     border: 3px solid #E1E1E1;
-    margin: 10px 0 15px;
-    padding: 10px;
-    width: 330px;
-    display: none;
-    font-size: 12px;
+    margin: 7px 0 15px;
+    padding: 7px;
+    width: 465px;
+    font-size: 13px;
     box-sizing: content-box;
 }
 
-#upload_status .title {
-    margin: 0 0 10px;
+.upload-progress .title {
+    color: #005acc;
+    font-weight: bold;
 }
 
-#upload_status .progress {
-    width: 330px;
-    height: auto;
-    margin: 0;
-    overflow: hidden;
-    box-shadow: none;
-    background: none;
-    border-radius: 0;
+.upload-progress .cancel {
+    color: #999;
+    margin-right: 5px;
 }
 
-#upload_status a {
-    float: left;
-    display: block;
-    text-indent: -9999px;
-    background: url('../images/cancel.png') no-repeat 0 0;
-    height: 16px;
-    width: 16px;
+.upload-progress .cancel .glyphicon {
+    top: 2px;
 }
 
-#upload_status .meter {
-    width: 250px;
-    height: 10px;
-    background-color: #E1E1E1;
-    float: left;
-    margin: 3px 15px 0 14px;
+.upload-progress .cancel:hover {
+    color: #777;
 }
 
-#upload_status .fill {
+.upload-progress .cancel:focus,
+.upload-progress .cancel:active, {
+    color: #555;
+}
+
+.upload-progress .glyphicon-ok {
+    color: #023e7b;
+    font-size: 16px;
+}
+
+.upload-progress .progress-track {
+    width: 145px;
+    height: 14px;
+    border: 1px solid #023e7b;
+    float: right;
+    padding: 1px;
+    margin-top: 1px;
+}
+
+.upload-progress .progress-fill {
     background-color: #023e7b;
     width: 0%;
     height: 10px;
-}
-
-.ie9 #upload_status {
-    width: 285px;
-}
-
-.ie9 #upload_status .fill {
-    width: 100% !important;
-    background-color: #E1E1E1;
-}
-
-.ie9 #upload_status .in-progress {
-    background: url('../images/animated-overlay.gif');
-    opacity: 0.3;
-}
-
-#upload_status .percentage {
-    width: 35px;
-    float: right;
-    line-height: 16px;
-}
-
-.upload-complete {
-    margin: 15px 0;
-    border-radius: 4px;
-    display: none;
-    width: 300px;
-    padding: 15px;
-    color: #31708f;
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
 }
 
 

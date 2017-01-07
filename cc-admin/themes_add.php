@@ -22,17 +22,19 @@ $admin_js[] = ADMIN . '/js/fileupload.js';
 if (isset($_POST['submitted'])) {
 
     // Validate file upload
-    if (!empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
-        
+    if (
+        !empty($_POST['upload']['temp'])
+        && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'addon')
+    ) {
+
         try {
             // Create extraction directory
-            $tempFile = $_POST['temp-file'];
-            $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($tempFile, '.zip');
+            $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($_POST['upload']['temp'], '.zip');
             Filesystem::createDir($extractionDirectory);
             Filesystem::setPermissions($extractionDirectory, 0777);
-            
+
             // Move zip to extraction directory
-            Filesystem::rename($tempFile, $extractionDirectory . '/addon.zip');
+            Filesystem::rename($_POST['upload']['temp'], $extractionDirectory . '/addon.zip');
 
             // Extract theme
             Filesystem::extract($extractionDirectory . '/addon.zip');
@@ -77,8 +79,6 @@ include('header.php');
 
 ?>
 
-<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
-
 <h1>Add New Theme</h1>
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
@@ -86,33 +86,23 @@ include('header.php');
 <p class="row-shift">If you have a theme in .zip format use this form
 to upload and add it to the system.</p>
 
-<form action="<?=ADMIN?>/themes_add.php" method="post">
+<form action="<?php echo ADMIN; ?>/themes_add.php" method="post">
 
-    <div class="form-group select-file">
-        <label>Theme Zip File:</label>
-        <div class="button button-browse">
-            <span>Browse</span>
-            <input id="upload" type="file" name="upload" />
-        </div>
-        <input type="button" class="button button-upload" value="Upload" />
-        <input type="hidden" name="upload-limit" value="<?=1024*1024*100?>" />
-        <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode(array('zip')))?>" />
-        <input type="hidden" name="upload-type" value="addon" />
-        <input type="hidden" name="temp-file" value="" />
-        <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
-        <input type="hidden" name="submitted" value="true" />
+    <div class="form-group">
+        <input
+            class="uploader"
+            type="file"
+            name="upload"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+            data-text="<?php echo Language::getText('browse_files_button'); ?>"
+            data-limit="<?php echo $config->fileSizeLimit; ?>"
+            data-extensions="<?php echo urlencode(json_encode(array('zip'))); ?>"
+            data-type="addon"
+            data-auto-submit="true"
+        />
     </div>
 
-    <div id="upload_status">
-        <div class="title"></div>
-        <div class="progress">
-            <a href="" title="Cancel">Cancel</a>
-            <div class="meter">
-                <div class="fill"></div>
-            </div>
-            <div class="percentage">0%</div>
-        </div>
-    </div>
+    <input type="hidden" name="submitted" value="true" />
 
 </form>
 

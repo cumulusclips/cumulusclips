@@ -166,4 +166,44 @@ class App
         define('PREVIEW_LANG', $preview_lang);
         return $default_lang;
     }
+
+    /**
+     * Determines whether file is a valid upload file
+     *
+     * @param string $file Absolute path to uploaded file
+     * @param \User $user User the uploaded file should belong to
+     * @param string $uploadType Type of upload the file is supposed to be
+     * @return boolean Returns true if file is valid upload file, false otherwise
+     */
+    public static function isValidUpload($file, \User $user, $uploadType)
+    {
+        // Verify file exists
+        if (!file_exists($file)) {
+            return false;
+        }
+
+        if (!in_array($uploadType, array('video', 'image', 'library', 'addon'))) {
+            throw new Exception('Invalid upload type');
+        }
+
+        // Determine if user is allowed to upload addons
+        $userService = new \UserService();
+        if ($uploadType === 'addon' && !$userService->checkPermissions('manage_settings', $user)) {
+            return false;
+        }
+
+        // Verify file has a valid upload filename
+        $path = preg_quote(UPLOAD_PATH . '/temp/', '/');
+        $regex = '/^' . $path . '([0-9]+)\-' . $uploadType . '\-[0-9]+/';
+        if (!preg_match($regex, $file, $matches)) {
+            return false;
+        }
+
+        // Verify file was uploaded by user
+        if ((int) $matches[1] !== $user->userId) {
+            return false;
+        }
+
+        return true;
+    }
 }

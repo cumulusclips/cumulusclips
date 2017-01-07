@@ -20,15 +20,12 @@ $data = array();
 $errors = array();
 $message = null;
 $message_type = null;
-$php_path = Settings::get('php');
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $private_url = $videoService->generatePrivate();
-$tempFile = null;
-$uploadMessage = null;
-$originalName = null;
+$prepopulate = null;
 
 // Retrieve Category names
 $categoryService = new CategoryService();
@@ -37,11 +34,18 @@ $categories = $categoryService->getCategories();
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate video upload
-    if (!empty($_POST['original-name']) && !empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
-        $tempFile = $_POST['temp-file'];
-        $originalName = trim($_POST['original-name']);
-        $uploadMessage = $originalName . ' - has been uploaded.';
+    // Validate file upload
+    if (
+        !empty($_POST['upload']['original-name'])
+        && !empty($_POST['upload']['original-size'])
+        && !empty($_POST['upload']['temp'])
+        && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'video')
+    ) {
+        $prepopulate = urlencode(json_encode(array(
+            'path' => $_POST['upload']['temp'],
+            'name' => trim($_POST['upload']['original-name']),
+            'size' => trim($_POST['upload']['original-size'])
+        )));
     } else {
         $errors['video'] = 'Invalid video upload';
     }
@@ -114,25 +118,26 @@ if (isset($_POST['submitted'])) {
         try {
             // Retrieve video filename and extension
             $video->filename = $videoService->generateFilename();
-            $video->originalExtension = Functions::getExtension($tempFile);
-
-            // Rename temp video file
-            Filesystem::rename($tempFile, UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension);
+            $video->originalExtension = Functions::getExtension($_POST['upload']['temp']);
 
             // Create record
             $video->userId = $adminUser->userId;
             $video->status = VideoMapper::PENDING_CONVERSION;
             $videoId = $videoMapper->save($video);
 
-            // Begin encoding
-            $cmd_output = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
-            $converter_cmd = 'nohup ' . $php_path . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $cmd_output . ' &';
-            exec($converter_cmd);
+            // Rename temp video file
+            Filesystem::rename(
+                $_POST['upload']['temp'],
+                UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension
+            );
+
+            // Begin transcoding
+            $commandOutput = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
+            $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $commandOutput . ' 2>&1 &';
+            exec($command);
 
             // Output message
-            $tempFile = null;
-            $uploadMessage = null;
-            $originalName = null;
+            $prepopulate = null;
             $message = 'Video has been created.';
             $message_type = 'alert-success';
             $video = null;
@@ -140,7 +145,7 @@ if (isset($_POST['submitted'])) {
             $message = $exception->getMessage();
             $message_type = 'alert-danger';
         }
-        
+
     } else {
         $message = 'The following errors were found. Please correct them and try again.';
         $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
@@ -154,41 +159,25 @@ include('header.php');
 
 ?>
 
-<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
-
 <h1>Add Video</h1>
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
 
-<form action="<?=ADMIN?>/videos_add.php" method="post">
+<form action="<?php echo ADMIN; ?>/videos_add.php" method="post">
 
     <div class="form-group select-file <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
         <label class="control-label">Video File:</label>
-        <div class="button button-browse">
-            <span>Browse</span>
-            <input id="upload" type="file" name="upload" />
-        </div>
-        <input type="button" class="button button-upload" value="Upload" />
-        <input type="hidden" name="upload-limit" value="<?=$config->videoSizeLimit?>" />
-        <input type="hidden" name="file-types" value="<?=htmlspecialchars(json_encode($config->acceptedVideoFormats))?>" />
-        <input type="hidden" name="upload-type" value="video" />
-        <input type="hidden" name="original-name" value="<?=htmlspecialchars($originalName)?>" />
-        <input type="hidden" name="temp-file" value="<?=$tempFile?>" />
-        <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
-    </div>
-
-    <?php $style = ($uploadMessage) ? 'display: block;' : ''; ?>
-    <div class="upload-complete" style="<?=$style?>"><?=$uploadMessage?></div>
-
-    <div id="upload_status">
-        <div class="title"></div>
-        <div class="progress">
-            <a href="" title="Cancel">Cancel</a>
-            <div class="meter">
-                <div class="fill"></div>
-            </div>
-            <div class="percentage">0%</div>
-        </div>
+        <input
+            class="uploader"
+            type="file"
+            name="upload"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+            data-text="<?php echo Language::getText('browse_files_button'); ?>"
+            data-limit="<?php echo $config->videoSizeLimit; ?>"
+            data-extensions="<?php echo urlencode(json_encode($config->acceptedVideoFormats)); ?>"
+            data-prepopulate="<?php echo urlencode(json_encode($prepopulate)); ?>"
+            data-type="video"
+        />
     </div>
 
     <div class="form-group <?=(isset($errors['title'])) ? 'has-error' : ''?>">

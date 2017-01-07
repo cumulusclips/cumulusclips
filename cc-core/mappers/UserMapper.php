@@ -55,7 +55,7 @@ class UserMapper extends MapperAbstract
     protected function _map($dbResults)
     {
         $user = new User();
-        $user->userId = $dbResults['user_id'];
+        $user->userId = (int) $dbResults['user_id'];
         $user->username = $dbResults['username'];
         $user->email = $dbResults['email'];
         $user->password = $dbResults['password'];
