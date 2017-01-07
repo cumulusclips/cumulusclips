@@ -97,11 +97,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'reset' && !empty($this->view-
 if (
     isset($_POST['submitted_avatar'])
     && !empty($_POST['upload']['temp'])
-    && preg_match(
-        '/^' . preg_quote($tempFilePrefix, '/') . '[0-9]+/',
-        $_POST['upload']['temp']
-    )
-    && file_exists($_POST['upload']['temp'])
+    && \App::isValidUpload($_POST['upload']['temp'], $this->view->vars->loggedInUser, 'image')
 ) {
 
     $this->view->vars->avatar_submit = true;

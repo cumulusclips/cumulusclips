@@ -407,6 +407,12 @@ UPDATE PROFILE
     margin-top: 15px;
 }
 
+#update_avatar .upload-progress .title {
+    width: 165px;
+    word-wrap: break-word;
+    display: inline-block;
+}
+
 
 
 

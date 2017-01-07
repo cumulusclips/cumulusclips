@@ -6,27 +6,26 @@ $this->addJs('fileupload.js');
 $this->setLayout('account');
 ?>
 
-<h1><?=Language::getText('upload_video_header')?></h1>
+<h1><?php echo Language::getText('upload_video_header'); ?></h1>
 
 <div class="message"></div>
 
-<p><?=Language::getText('upload_video_text')?></p>
-<p class="big"><?=Language::getText('filesize_limit')?>: <?=round($config->videoSizeLimit/1048576)?>MB</p>
-<p class="big"><?=Language::getText('upload_supported_formats') . ': ' . implode(', ', $config->acceptedVideoFormats)?></p>
+<p><?php echo Language::getText('upload_video_text'); ?></p>
+<p class="big"><?php echo Language::getText('filesize_limit'); ?>: <?=round($config->videoSizeLimit/1048576); ?>MB</p>
+<p class="big"><?php echo Language::getText('upload_supported_formats') . ': ' . implode(', ', $config->acceptedVideoFormats); ?></p>
 
-<form action="<?=HOST?>/account/upload/video/" method="post">
+<form action="<?php echo BASE_URL; ?>/account/upload/video/" method="post">
 
     <div class="uploader-wrapper">
         <input
             class="uploader"
             type="file"
             name="upload"
-            data-url="<?=HOST?>/ajax/upload/"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
             data-text="<?php echo Language::getText('browse_files_button'); ?>"
-            data-limit="<?php echo 1024*1024*1024*1; ?>"
-            data-extensions="<?php echo urlencode(json_encode(array('mp4'))); ?>"
+            data-limit="<?php echo $config->videoSizeLimit; ?>"
+            data-extensions="<?php echo urlencode(json_encode($config->acceptedVideoFormats)); ?>"
             data-type="video"
-            data-start-upload-button="<?=Language::getText('start_upload_button')?>"
             data-auto-submit="true"
         />
     </div>

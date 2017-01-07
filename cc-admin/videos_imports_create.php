@@ -19,7 +19,7 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $tempFile = null;
-$uploadMessage = null;
+$prepopulate = null;
 
 // Handle request for downloading meta data template
 if (isset($_GET['download'])) {
@@ -86,10 +86,18 @@ XML;
 if (isset($_POST['submitted'])) {
 
     // Validate meta data file upload
-    if (!empty($_POST['temp-file'])) {
-        if (file_exists($_POST['temp-file'])) {
-            $tempFile = $_POST['temp-file'];
-            $uploadMessage = 'Meta data file has been uploaded.';
+    if (!empty($_POST['upload']['temp'])) {
+        if (
+            !empty($_POST['upload']['original-name'])
+            && !empty($_POST['upload']['original-size'])
+            && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'library')
+        ) {
+            $tempFile = $_POST['upload']['temp'];
+            $prepopulate = urlencode(json_encode(array(
+                'path' => $_POST['upload']['temp'],
+                'name' => trim($_POST['upload']['original-name']),
+                'size' => trim($_POST['upload']['original-size'])
+            )));
         } else {
             $errors['meta'] = 'Invalid meta data upload';
         }
@@ -102,7 +110,7 @@ if (isset($_POST['submitted'])) {
 
         // Output message
         $tempFile = null;
-        $uploadMessage = null;
+        $prepopulate = null;
         $message = 'Import job (' . $jobId . ') has been created.';
         $message_type = 'alert-success';
 
@@ -117,8 +125,6 @@ $pageName = 'videos-imports-create';
 include('header.php');
 
 ?>
-
-<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
 
 <h1>Create New Video Import</h1>
 
@@ -138,33 +144,19 @@ include('header.php');
         of each imported video. If you wish to customize the meta data for your videos prior to
         importing, you may do so by providing a meta data XML file below.</p>
 
-    <div class="form-group select-file <?=(isset ($errors['video'])) ? 'has-error' : ''?>">
+
+    <div class="form-group <?=(isset ($errors['meta'])) ? 'has-error' : ''?>">
         <label class="control-label">Meta Data XML (Optional):</label>
-        <div class="button button-browse">
-            <span>Browse</span>
-            <input id="upload" type="file" name="upload" />
-        </div>
-        <input type="button" class="button button-upload" value="Upload" />
-        <input type="hidden" name="upload-limit" value="<?=$config->fileSizeLimit?>" />
-        <input type="hidden" name="file-types" value="*" />
-        <input type="hidden" name="upload-type" value="library" />
-        <input type="hidden" name="original-name" value="" />
-        <input type="hidden" name="temp-file" value="<?=$tempFile?>" />
-        <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
-    </div>
-
-    <?php $style = ($uploadMessage) ? 'display: block;' : ''; ?>
-    <div class="upload-complete" style="<?=$style?>"><?=$uploadMessage?></div>
-
-    <div id="upload_status">
-        <div class="title"></div>
-        <div class="progress">
-            <a href="" title="Cancel">Cancel</a>
-            <div class="meter">
-                <div class="fill"></div>
-            </div>
-            <div class="percentage">0%</div>
-        </div>
+        <input
+            class="uploader"
+            type="file"
+            name="upload"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+            data-text="<?php echo Language::getText('browse_files_button'); ?>"
+            data-limit="<?php echo $config->fileSizeLimit; ?>"
+            data-type="library"
+            data-prepopulate="<?php echo urlencode(json_encode($prepopulate)); ?>"
+        />
     </div>
 
     <p>Need a blank meta data XML template? You can <a href="<?php echo ADMIN; ?>/videos_imports_create.php?download">download one here</a>.</p>

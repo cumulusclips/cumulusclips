@@ -10,7 +10,7 @@
  *      - path: Absolute path to uploaded temp file
  *      - size: Filesize of uploaded temp file
  *      - name: Name of uploaded temp file
- * data-start-upload-button: string Optional - Default behavior is to automatically start uploading file once it is selected.
+ * data-upload-button: string Optional - Default behavior is to automatically start uploading file once it is selected.
  *      If this value is provided, a seperate button is displayed to begin upload. This value will be used as the text for
  *      the button.
  * data-auto-submit: boolean Optional - Default false. Whether or not to submit the parent form. If true, the parent form is
@@ -41,7 +41,7 @@ $(function(){
             var selectedFile = data.files[0];
             var filesizeLimit = Number($(this).data('limit'));
             var $uploadProgressWidget = getProgressWidget(this);
-            var autoStart = $(this).data('start-upload-button') ? false : true;
+            var autoStart = $(this).data('upload-button') ? false : true;
 
             // Validate file type
             if ($(this).data('extensions')) {
@@ -124,7 +124,6 @@ $(function(){
 
                 // Mark progress widget as complete
                 $uploadProgressWidget.find('.progress-track').addClass('hidden');
-                $uploadProgressWidget.find('.cancel').addClass('hidden');
                 $uploadProgressWidget.find('.glyphicon-ok').removeClass('hidden');
 
                 // Submit parent form if auto-submit is turned on
@@ -181,7 +180,7 @@ $(function(){
 
         var buttonText = $(uploader).data('text');
         var fieldName = $(uploader).attr('name');
-        var startUploadButtonText = $(uploader).data('start-upload-button');
+        var startUploadButtonText = $(uploader).data('upload-button');
 
         // Build uploader and progress widgets
         $(uploader).wrap('<div class="uploader-container uploader-' + fieldName + '"><div class="button button-browse"></div></div>')

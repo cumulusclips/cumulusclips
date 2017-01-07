@@ -349,7 +349,6 @@
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
         <cancel>Cancel</cancel>
-        <start_upload_button>Start Upload</start_upload_button>
 
         <!-- My Account / Upload - Complete Page -->
         <upload_complete_header>Upload Complete!</upload_complete_header>
@@ -573,7 +572,7 @@
         <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse_header instead -->
         <videos_header>Browse Videos</videos_header>
 
-        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use start_upload_button instead -->
+        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. -->
         <upload_video_button>Upload Video</upload_video_button>
 
     </terms>
