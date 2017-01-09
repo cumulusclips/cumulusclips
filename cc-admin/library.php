@@ -18,6 +18,7 @@ $url = ADMIN . '/library.php';
 $query_string = array();
 $message = null;
 $sub_header = null;
+$queryParams = array(':type' => \FileMapper::TYPE_LIBRARY);
 
 // Handle "Delete" file if requested
 if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
@@ -32,23 +33,23 @@ if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
 }
 
 // Determine which type (status) of file to display
-$query = "SELECT file_id FROM " . DB_PREFIX . $fileMapper::TABLE;
+$query = "SELECT file_id "
+    . " FROM " . DB_PREFIX . $fileMapper::TABLE
+    . " WHERE type = :type";
 
 // Handle search form
 if (isset($_POST['search_submitted'])&& !empty($_POST['search'])) {
     $like = trim($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " WHERE title LIKE :like";
+    $query .= " AND name LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
-    $queryParams = array(':like' => '%' . $like . '%');
+    $queryParams[':like'] = '%' . $like . '%';
 } else if (!empty($_GET['search'])) {
     $like = trim($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " WHERE title LIKE :like";
+    $query .= " AND name LIKE :like";
     $sub_header = "Search Results for: <em>$like</em>";
-    $queryParams = array(':like' => '%' . $like . '%');
-} else {
-    $queryParams = array();
+    $queryParams[':like'] = '%' . $like . '%';
 }
 
 // Retrieve total count
@@ -103,7 +104,7 @@ include('header.php');
     <table class="table table-striped">
         <thead>
             <tr>
-                <th class="title">Title</th>
+                <th class="name">Name</th>
                 <th class="url">URL</th>
                 <th>Filesize</th>
                 <th>Upload Date</th>
@@ -113,8 +114,8 @@ include('header.php');
         <?php foreach ($fileList as $file): ?>
 
             <tr>
-                <td class="title">
-                    <a href="<?=ADMIN?>/files_edit.php?id=<?=$file->fileId?>" class="h3"><?=$file->title?></a><br />
+                <td class="name">
+                    <a href="<?=ADMIN?>/files_edit.php?id=<?=$file->fileId?>" class="h3"><?=$file->name?></a><br />
                     <div class="record-actions">
                         <a href="<?=ADMIN?>/library_edit.php?id=<?=$file->fileId?>">Edit</a>
                         <a href="<?=$fileService->getUrl($file)?>" target="_ccsite">View file</a>
@@ -122,8 +123,8 @@ include('header.php');
                     </div>
                 </td>
                 <td class="url"><?=$fileService->getUrl($file)?></td>
-                <td><?=Functions::formatKiloBytes($file->filesize)?></td>
-                <td><?=date('m/d/Y', strtotime($file->dateCreated))?></td>
+                <td><?=Functions::formatBytes($file->filesize, 0)?></td>
+                <td><?php echo \Functions::gmtToLocal($file->dateCreated, 'm/d/Y'); ?></td>
             </tr>
 
         <?php endforeach; ?>

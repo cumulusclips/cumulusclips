@@ -44,18 +44,11 @@ if (isset($_POST['submitted'])) {
         $errors['file'] = 'Invalid file upload';
     }
 
-    // Validate title
-    if (!empty($_POST['title'])) {
-        $file->title = trim($_POST['title']);
+    // Validate name
+    if (!empty($_POST['name'])) {
+        $file->name = trim($_POST['name']);
     } else {
-        $errors['title'] = 'Invalid title';
-    }
-
-    // Validate description
-    if (!empty($_POST['description'])) {
-        $file->description = trim($_POST['description']);
-    } else {
-        $file->description = null;
+        $errors['name'] = 'Invalid name';
     }
 
     // Update file if no errors were made
@@ -65,7 +58,8 @@ if (isset($_POST['submitted'])) {
         $file->filename = $fileService->generateFilename();
         $file->userId = $adminUser->userId;
         $file->extension = Functions::getExtension($_POST['upload']['temp']);
-        $file->filesize = round(filesize($_POST['upload']['temp'])/1000);
+        $file->filesize = filesize($_POST['upload']['temp']);
+        $file->type = \FileMapper::TYPE_LIBRARY;
 
         try {
             // Move file to files directory
@@ -117,14 +111,9 @@ include('header.php');
         />
     </div>
 
-    <div class="form-group <?=(isset($errors['title'])) ? 'has-error' : ''?>">
-        <label class="control-label">Title:</label>
-        <input class="form-control" type="text" name="title" value="<?=(!empty($file->title)) ? htmlspecialchars($file->title) : ''?>" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Description:</label>
-        <textarea rows="7" cols="50" class="form-control" name="description"><?=(!empty($file->description)) ? htmlspecialchars($file->description) : ''?></textarea>
+    <div class="form-group <?=(isset($errors['name'])) ? 'has-error' : ''?>">
+        <label class="control-label">Name:</label>
+        <input class="form-control" type="text" name="name" value="<?=(!empty($file->name)) ? htmlspecialchars($file->name) : ''?>" />
     </div>
 
     <input type="hidden" name="submitted" value="TRUE" />

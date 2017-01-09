@@ -736,21 +736,21 @@ FILE UPLOAD WIDGET
     font-weight: bold;
 }
 
-.upload-progress .cancel {
+.upload-progress .remove {
     color: #999;
     margin-right: 5px;
 }
 
-.upload-progress .cancel .glyphicon {
+.upload-progress .remove .glyphicon {
     top: 2px;
 }
 
-.upload-progress .cancel:hover {
+.upload-progress .remove:hover {
     color: #777;
 }
 
-.upload-progress .cancel:focus,
-.upload-progress .cancel:active, {
+.upload-progress .remove:focus,
+.upload-progress .remove:active, {
     color: #555;
 }
 
@@ -797,7 +797,7 @@ FILE UPLOAD WIDGET
     width: 15%;
 }
 
-#library .table .title {
+#library .table .name {
     width: 40%;
 }
 

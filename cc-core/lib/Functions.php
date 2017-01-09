@@ -334,9 +334,9 @@ class Functions
      */
     public static function gmtToLocal($date_time, $format = 'Y-m-d G:i:s')
     {
-        $date = new DateTime ( $date_time , new DateTimeZone('UTC') );
-        $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
-        return $date->format ($format);
+        $date = ($date_time instanceof \DateTime) ? $date_time : new \DateTime($date_time, new \DateTimeZone('UTC'));
+        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return $date->format($format);
     }
 
     /**
@@ -408,28 +408,14 @@ class Functions
     }
 
     /**
-     * Formats given kilobytes into largest human readable unit size
-     * @param int $kiloBytes Kilobytes to be formatted
-     * @param int $precision (optional) The precision to be used when rounding the final output
-     * @return string Returns the formatted bytes in the calculated units with a units suffixed
-     */
-    public static function formatKiloBytes($kiloBytes, $precision = 2)
-    {
-        $base = log($kiloBytes, 1000);
-        $suffix = array("KB", "MB", "GB", "TB", "PT");
-        return round(pow(1000, $base - floor($base)), $precision) . $suffix[floor($base)];
-    }
-
-    /**
-     * Calculates filesize of given file in human readable format
+     * Formats bytes into a human readable format
      *
-     * @param string $file Path to file to calculate filesize for
-     * @param int $decimal Number of decimal places to include in filesize
-     * @return string Returns filesize
+     * @param int $bytes Total number of bytes
+     * @param int $decimal Number of decimal places to include result
+     * @return string Returns human readable formatted bytes
      */
-    public static function humanFilesize($file, $decimals = 2)
+    public static function formatBytes($bytes, $decimals = 2)
     {
-        $bytes = filesize($file);
         $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB');
         $factor = floor((strlen($bytes) - 1) / 3);
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . '' . @$size[$factor];

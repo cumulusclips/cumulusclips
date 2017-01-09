@@ -42,18 +42,11 @@ if (!empty($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate title
-    if (!empty($_POST['title'])) {
-        $file->title = trim($_POST['title']);
+    // Validate name
+    if (!empty($_POST['name'])) {
+        $file->name = trim($_POST['name']);
     } else {
-        $errors['title'] = 'Invalid title';
-    }
-
-    // Validate description
-    if (!empty($_POST['description'])) {
-        $file->description = trim($_POST['description']);
-    } else {
-        $file->description = null;
+        $errors['name'] = 'Invalid name';
     }
 
     // Update file if no errors were made
@@ -83,14 +76,9 @@ include ('header.php');
 
 <form action="<?=ADMIN?>/library_edit.php?id=<?=$file->fileId?>" method="post">
 
-    <div class="form-group <?=(isset ($errors['title'])) ? 'has-error' : ''?>">
-        <label class="control-label">Title:</label>
-        <input class="form-control" type="text" name="title" value="<?=htmlspecialchars($file->title)?>" />
-    </div>
-
-    <div class="form-group <?=(isset ($errors['description'])) ? 'has-error' : ''?>">
-        <label class="control-label">Description:</label>
-        <textarea rows="7" cols="50" class="form-control" name="description"><?=htmlspecialchars($file->description)?></textarea>
+    <div class="form-group <?=(isset ($errors['name'])) ? 'has-error' : ''?>">
+        <label class="control-label">Name:</label>
+        <input class="form-control" type="text" name="name" value="<?=htmlspecialchars($file->name)?>" />
     </div>
 
     <input type="hidden" name="submitted" value="TRUE" />
