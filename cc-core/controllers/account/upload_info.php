@@ -22,8 +22,15 @@ $this->view->vars->errors = array();
 $this->view->vars->message = null;
 $videoService = new VideoService();
 $videoMapper = new VideoMapper();
+$fileMapper = new \FileMapper();
+$fileService = new \FileService();
+$attachmentMapper = new \AttachmentMapper();
 $video = new Video();
 $this->view->vars->privateUrl = $videoService->generatePrivate();
+$newAttachmentFileIds = array();
+$newFiles = array();
+$message = null;
+$message_type = null;
 
 // Send user video upload page if upload has not been completed first
 if (!isset($_SESSION['upload'])) {
@@ -31,12 +38,86 @@ if (!isset($_SESSION['upload'])) {
     exit();
 }
 
+// Retrieve user's attachments
+$this->view->vars->userAttachments = $fileMapper->getMultipleByCustom(array(
+    'user_id' => $this->view->vars->loggedInUser->userId,
+    'type' => \FileMapper::TYPE_ATTACHMENT
+));
+
 // Retrieve Categories
 $categoryService = new CategoryService();
 $this->view->vars->categoryList = $categoryService->getCategories();
 
 // Handle upload form if submitted
 if (isset ($_POST['submitted'])) {
+
+    // Validate video attachments
+    if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
+
+        do {
+
+            foreach ($_POST['attachment'] as $attachment) {
+
+                if (!is_array($attachment)) {
+                    $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
+                    break 2;
+                }
+
+                // Determine if attachment is a new file upload or existing attachment
+                if (!empty($attachment['temp'])) {
+
+                    // New upload
+
+                    // Validate file upload info
+                    if (
+                        empty($attachment['name'])
+                        || empty($attachment['size'])
+                        || !is_numeric($attachment['size'])
+                        || !\App::isValidUpload($attachment['temp'], $this->view->vars->loggedInUser, 'library')
+                    ) {
+                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment_file');
+                        break 2;
+                    }
+
+                    // Create file
+                    $newFiles[] = array(
+                        'temp' => $attachment['temp'],
+                        'name' => $attachment['name'],
+                        'size' => $attachment['size']
+                    );
+
+                } elseif (!empty($attachment['file'])) {
+
+                    // Attaching existing file
+
+                    $file = $fileMapper->getById($attachment['file']);
+
+                    // Verify file exists and belongs to user
+                    if (
+                        !$file
+                        || $file->userId !== $this->view->vars->loggedInUser->userId
+                    ) {
+                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
+                        break 2;
+                    }
+
+                    // Verify attachment isn't already attached
+                    if (in_array($attachment['file'], $newAttachmentFileIds)) {
+                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment_duplicate');
+                        break 2;
+                    }
+
+                    // Create attachment entry
+                    $newAttachmentFileIds[] = $attachment['file'];
+
+                } else {
+                    $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
+                    break 2;
+                }
+            }
+
+        } while (false);
+    }
 
     // Validate Title
     if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
@@ -117,7 +198,33 @@ if (isset ($_POST['submitted'])) {
 
         try {
 
-            // Move temp file to raw video location
+            // Create files for uploaded attachments
+            foreach ($newFiles as $newFile) {
+
+                $file = new \File();
+                $file->filename = $fileService->generateFilename();
+                $file->name = $newFile['name'];
+                $file->type = \FileMapper::TYPE_ATTACHMENT;
+                $file->userId = $this->view->vars->loggedInUser->userId;
+                $file->extension = Functions::getExtension($newFile['temp']);
+                $file->filesize = filesize($newFile['temp']);
+
+                // Move file to files directory
+                Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
+
+                // Create record
+                $newAttachmentFileIds[] = $fileMapper->save($file);
+            }
+
+            // Create attachments
+            foreach ($newAttachmentFileIds as $fileId) {
+                $attachment = new \Attachment();
+                $attachment->videoId = $videoId;
+                $attachment->fileId = $fileId;
+                $attachmentMapper->save($attachment);
+            }
+
+            // Move temp video file to raw video location
             Filesystem::rename(
                 $_SESSION['upload']->temp,
                 UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension
@@ -145,6 +252,8 @@ if (isset ($_POST['submitted'])) {
 }
 
 $this->view->vars->video = $video;
+$this->view->vars->newFiles = $newFiles;
+$this->view->vars->newAttachmentFileIds = $newAttachmentFileIds;
 
 Plugin::triggerEvent('upload_info.end');
 

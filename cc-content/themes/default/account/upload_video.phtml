@@ -11,7 +11,7 @@ $this->setLayout('account');
 <div class="message"></div>
 
 <p><?php echo Language::getText('upload_video_text'); ?></p>
-<p class="big"><?php echo Language::getText('filesize_limit'); ?>: <?=round($config->videoSizeLimit/1048576); ?>MB</p>
+<p class="big"><?php echo Language::getText('filesize_limit'); ?>: <?php echo \Functions::formatBytes($config->videoSizeLimit, 0); ?></p>
 <p class="big"><?php echo Language::getText('upload_supported_formats') . ': ' . implode(', ', $config->acceptedVideoFormats); ?></p>
 
 <form action="<?php echo BASE_URL; ?>/account/upload/video/" method="post">

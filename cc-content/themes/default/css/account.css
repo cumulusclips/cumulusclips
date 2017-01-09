@@ -129,12 +129,12 @@ FILE UPLOAD
     font-weight: bold;
 }
 
-.upload-progress .cancel {
+.upload-progress .remove {
     color: #999;
     margin-right: 5px;
 }
 
-.upload-progress .cancel .glyphicon {
+.upload-progress .remove .glyphicon {
     width: 16px;
     height: 16px;
     display: inline-block;
@@ -142,12 +142,12 @@ FILE UPLOAD
     vertical-align: top;
 }
 
-.upload-progress .cancel:hover {
+.upload-progress .remove:hover {
     color: #777;
 }
 
-.upload-progress .cancel:focus,
-.upload-progress .cancel:active, {
+.upload-progress .remove:focus,
+.upload-progress .remove:active, {
     color: #555;
 }
 
@@ -236,57 +236,143 @@ UPLOAD - VIDEO
 UPLOAD - INFO
 ************/
 
-.account_upload_info .wide,
-.account_edit_video .wide {
-    width: 470px;
+.account_upload_info #main > .right {
+    width: 600px;
 }
 
-.account_upload_info .wide input[type="text"],
-.account_edit_video .wide input[type="text"] {
+.account_upload_info .tabs,
+.account_upload_info .tab_block  {
+    width: 100%;
+}
+
+.account_upload_info .tabs {
+    margin: 20px 0 30px;
+}
+
+.account_upload_info .tab_block {
+    box-sizing: border-box;
+}
+
+.account_upload_info .tab_block:after {
+    content: "";
+    height: 0;
+    display: block;
+    clear: both;
+}
+
+.account_upload_info .tab-container > .button {
+    float: right;
+    margin-top: 25px;
+}
+
+.account_upload_info .tab_block h2 {
+    margin: 5px  0 15px;
+}
+
+
+/** Basic Information Tab **/
+
+#basic-information {
+    display: block;
+}
+
+#basic-information input[type="text"] {
     width: 260px;
 }
 
-.account_upload_info select,
-.account_edit_video select {
+#basic-information select {
     width: 280px;
 }
 
-.account_upload_info textarea,
-.account_edit_video textarea {
-    width: 450px;
-    margin-bottom: 22px;
+#basic-information textarea {
+    width: 530px;
+    height: 120px;
 }
 
-input[type="checkbox"] {
+
+/** Video Attachments Tab **/
+
+#video-attachments p {
+    margin: 0 0 5px;
+}
+
+#video-attachments .add a {
+    padding-left: 20px;
+    background: url('../images/icon_add.png') no-repeat 0 1px;
+}
+
+#video-attachments .upload-form {
+    width: 485px;
+}
+
+#video-attachments h3 {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+}
+
+#video-attachments .remove {
+    margin-left: 5px;
+}
+
+#video-attachments ul {
+    border-radius: 3px;
+    background-color: #FFF;
+    width: 485px;
+}
+
+#video-attachments li {
+    border-top: 1px solid #DDD;
+}
+
+#video-attachments li:first-child {
+    border-top: none;
+}
+
+#video-attachments li a {
+    display: block;
+    font-weight: normal;
+    color: #555;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#video-attachments li .selected {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+#video-attachments li span {
+    float: right;
+}
+
+
+/** Advanced Settings Tab **/
+
+#advanced-settings input[type="checkbox"] {
     width: 20px;
 }
 
-input[type="checkbox"],
-input[type="checkbox"] + label,
-input[type="checkbox"] + label + em {
-    margin: 5px 0;
+#advanced-settings input[type="checkbox"],
+#advanced-settings input[type="checkbox"] + label,
+#advanced-settings input[type="checkbox"] + label + em {
+    margin: 0 0 10px;
     float: left;
 }
 
-input[type="checkbox"] + label + em {
+#advanced-settings input[type="checkbox"] + label + em {
     margin-left: 3px;
 }
 
-input[type="checkbox"] + label + em + br {
+#advanced-settings input[type="checkbox"] + label + em + br {
     clear: both;
 }
 
 #private_url {
-    margin: 5px 0 5px 20px;
+    margin: 0 0 10px 20px;
 }
 
 #private_url a {
     margin-left:15px;
-}
-
-.account_upload_info .form input[type="submit"],
-.account_edit_video .form input[type="submit"] {
-    margin-top: 15px;
 }
 
 

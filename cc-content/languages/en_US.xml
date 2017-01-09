@@ -349,6 +349,7 @@
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
         <cancel>Cancel</cancel>
+        <upload_video_button>Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
         <upload_complete_header>Upload Complete!</upload_complete_header>
@@ -389,6 +390,9 @@
         <error_description>Invalid description</error_description>
         <error_tags>Invalid tags</error_tags>
         <error_category>Invalid category</error_category>
+        <error_attachment>Invalid attachment</error_attachment>
+        <error_attachment_file>Invalid attachment file upload</error_attachment_file>
+        <error_attachment_duplicate>File is already attached</error_attachment_duplicate>
         <error_name>Invalid name</error_name>
         <error_comment_login>You must login to post comments.</error_comment_login>
         <error_comment>Invalid comment</error_comment>
@@ -571,9 +575,6 @@
 
         <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse_header instead -->
         <videos_header>Browse Videos</videos_header>
-
-        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. -->
-        <upload_video_button>Upload Video</upload_video_button>
 
     </terms>
 

@@ -26,6 +26,22 @@ class Functions
     }
 
     /**
+     * Filters an array based on the value of a given column
+     *
+     * @param mixed $searchValue The value to filter by
+     * @param string $column The column to filter by
+     * @param array $array List of objects or associative arrays to filter
+     * @return array Returns an array consiting of objects/arrays whose column value was a match
+     */
+    public static function arrayColumnFilter($searchValue, $column, array $array)
+    {
+        return array_values(array_filter($array, function($value) use ($column, $searchValue) {
+            $object = (object) $value;
+            return ($object->{$column} == $searchValue);
+        }));
+    }
+
+    /**
      * Create a slug based on given string
      * @param string $string
      * @return string URL/Slug version of string

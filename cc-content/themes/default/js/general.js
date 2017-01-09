@@ -609,6 +609,90 @@ $(document).ready(function(){
         event.preventDefault();
     });
 
+
+    // Cancel out of attachment form
+    $('#video-attachments').on('click', '.cancel', function(event){
+        $('#video-attachments .add').show();
+        $(this).parents('.attachment-form').addClass('hidden');
+        event.preventDefault();
+    });
+
+    // Discard attachment
+    $('#video-attachments').on('click', '.attachment .remove', function(event){
+
+        var $attachment = $(this).parents('.attachment');
+
+        // Update existing attachment list and set corresponding link as "unselected"
+        if ($attachment.hasClass('existing-file')) {
+            var fileId = $attachment.attr('id').replace(/^existing\-file\-/, '');
+            $('#select-existing-file-' + fileId).removeClass('selected');
+        }
+
+        $attachment.remove();
+        event.preventDefault();
+    });
+
+    // Display upload new attachments form
+    $('#video-attachments .new').on('click', function(event){
+        $('#video-attachments .add').hide();
+        $('#video-attachments .upload-form').removeClass('hidden');
+        event.preventDefault();
+    });
+
+    // Append uploaded attachment
+    $('#video-attachments').on('uploadcomplete', '.uploader', function(event){
+
+        $uploadWidget = getUploadWidget(this);
+
+        // Build attachment widget
+        var name = $uploadWidget.find('.name').val();
+        var size = $uploadWidget.find('.size').val();
+        var temp = $uploadWidget.find('.temp').val();
+        var index = $('#video-attachments .attachments .attachment').length;
+        var $attachment = buildAttachmentCard(index, name, size, temp);
+
+        // Append attachment
+        $('#video-attachments .attachments').append($attachment);
+
+        // Reset upload form
+        resetProgress($uploadWidget);
+    });
+
+    // Display existing attachments form
+    $('#video-attachments .existing').on('click', function(event){
+        $('#video-attachments .add').hide();
+        $('.existing-form').removeClass('hidden');
+
+        event.preventDefault();
+    });
+
+    // Select from existing attachments
+    $('#video-attachments .existing-form li a').on('click', function(event){
+
+        event.preventDefault();
+
+        var fileId = $(this).data('file');
+
+        // Remove attachment if "unselecting" file
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+            $('#existing-file-' + fileId).remove();
+            return;
+        }
+
+        // Build attachment widget
+        var name = $(this).attr('title');
+        var size = $(this).data('size');
+        var index = $('#video-attachments .attachments .attachment').length;
+        var $attachment = buildAttachmentCard(index, name, size, fileId);
+
+        // Mark as selected
+        $(this).addClass('selected');
+
+        // Append attachment
+        $('#video-attachments .attachments').append($attachment);
+    });
+
 }); // END jQuery
 
 
@@ -690,6 +774,48 @@ function formatBytes(bytes, precision)
     pwr = Math.min(pwr, units.length - 1);
     bytes /= Math.pow(1024, pwr);
     return Math.round(bytes, precision) + units[pwr];
+}
+
+/**
+ * Generates attachment card HTML to be appended to attachment list on video upload/edit page
+ *
+ * @param {Number} index Index of newly created attachment within list of attachments
+ * @param {String} name Full name of file to be attached
+ * @param {Number} size Size of attached file in bytes
+ * @param {Number|String} file If file is an existing attachment then file ID is expected, otherwise absolute path to upload temp file
+ * @return {jQuery} Returns jQuery object reprensenting attachment card
+ */
+function buildAttachmentCard(index, name, size, file)
+{
+    var fieldName = (typeof file === 'number') ? 'file' : 'temp';
+    var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
+    displayFilename += ' (' + formatBytes(size, 0) + ')';
+
+    // Build card
+    var $attachment = $('<div class="attachment">'
+
+        // Append form values
+        + '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
+        + '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
+        + '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
+
+        // Append progress bar template
+        + '<div class="upload-progress">'
+            + '<a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>'
+            + '<span class="title">' + displayFilename + '</span>'
+            + '<span class="pull-right glyphicon glyphicon-ok"></span>'
+        + '</div>'
+
+    + '</div>');
+
+    // Mark attachment as existing
+    if (typeof file === 'number') {
+        $attachment
+            .addClass('existing-file')
+            .attr('id', 'existing-file-' + file);
+    }
+
+    return $attachment;
 }
 
 /**

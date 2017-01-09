@@ -336,7 +336,7 @@ class Router
 
         $routes['get-private-code'] = new Route(array(
             'path' => 'private/get',
-            'location' => DOC_ROOT . '/cc-core/controllers/play.php',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
             'mappings' => array('get_private' => 'true'),
             'type' => Route::AGNOSTIC,
             'name' => 'get-private-code'
@@ -344,7 +344,7 @@ class Router
 
         $routes['play-private'] = new Route(array(
             'path' => 'private/videos/([a-z0-9]+)',
-            'location' => DOC_ROOT . '/cc-core/controllers/play.php',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
             'mappings' => array('private'),
             'name' => 'play-private',
             'canonical' => 'play'
