@@ -10,8 +10,8 @@ class FileService extends ServiceAbstract
     public function getUrl(File $file)
     {
         return HOST . "/cc-content/uploads/files/$file->filename.$file->extension";
-    } 
-    
+    }
+
     /**
      * Delete a file
      * @param File $file Instance of file to be deleted
@@ -22,7 +22,7 @@ class FileService extends ServiceAbstract
         // Delete file record
         $fileMapper = $this->_getMapper();
         $fileMapper->delete($file->fileId);
-        
+
         // Delete file from the filesystem
         try {
             Filesystem::delete(UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
@@ -55,6 +55,30 @@ class FileService extends ServiceAbstract
     {
         $userMapper = new UserMapper();
         return $userMapper->getUserById($file->userId);
+    }
+
+    /**
+     * Retrieves list of files attached to given video
+     *
+     * @param \Video $video The video to search for
+     * @return \File[] Returns list of files attached
+     */
+    public function getVideoAttachments(\Video $video)
+    {
+        // Fetch attachment entries
+        $attachmentMapper = new \AttachmentMapper();
+        $attachments = $attachmentMapper->getMultipleByCustom(array(
+            'video_id' => $video->videoId
+        ));
+
+        if (empty($attachments)) {
+            return array();
+        }
+
+        // Fetch files associated with attachment entries
+        $fileIds = \Functions::arrayColumn($attachments, 'fileId');
+        $fileMapper = new \FileMapper();
+        return $fileMapper->getFromList($fileIds);
     }
 
     /**

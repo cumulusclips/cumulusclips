@@ -393,6 +393,7 @@
         <error_attachment>Invalid attachment</error_attachment>
         <error_attachment_file>Invalid attachment file upload</error_attachment_file>
         <error_attachment_duplicate>File is already attached</error_attachment_duplicate>
+        <error_attachment_upload>We were unable to upload your video attachment. Please try again later. If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.</error_attachment_upload>
         <error_name>Invalid name</error_name>
         <error_comment_login>You must login to post comments.</error_comment_login>
         <error_comment>Invalid comment</error_comment>

@@ -12,15 +12,16 @@ $this->setLayout('account');
 
 <div class="message <?php echo $message_type ?: ''; ?>"><?php echo $message ?: ''; ?></div>
 
-<div class="tabs keepOne">
-    <a href="" data-block="basic-information" title="Basic Information">Basic Information</a>
-    <a href="" data-block="video-attachments" title="Attachments">Attachments</a>
-    <a href="" data-block="advanced-settings" title="Advanced Settings">Advanced Settings</a>
-</div>
+<!-- Begin Video Information Form -->
+<div class="video-information-form">
 
-<form action="<?=HOST?>/account/upload/info/" method="post">
+    <div class="tabs keepOne">
+        <a href="" data-block="basic-information" title="Basic Information">Basic Information</a>
+        <a href="" data-block="video-attachments" title="Attachments">Attachments</a>
+        <a href="" data-block="advanced-settings" title="Advanced Settings">Advanced Settings</a>
+    </div>
 
-<div class="tab-container">
+    <form action="<?=HOST?>/account/upload/info/" method="post">
 
 
     <!-- BEGIN Basic Information Tab -->
@@ -180,5 +181,7 @@ $this->setLayout('account');
     <input type="hidden" name="submitted" value="TRUE" />
     <input class="button" type="submit" name="button" value="<?=Language::getText('upload_video_button')?>" />
 
-    </div>
-</form>
+    </form>
+
+</div>
+<!-- END Video Information Form -->

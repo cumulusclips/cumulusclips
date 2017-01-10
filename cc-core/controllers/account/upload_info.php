@@ -29,8 +29,6 @@ $video = new Video();
 $this->view->vars->privateUrl = $videoService->generatePrivate();
 $newAttachmentFileIds = array();
 $newFiles = array();
-$message = null;
-$message_type = null;
 
 // Send user video upload page if upload has not been completed first
 if (!isset($_SESSION['upload'])) {
@@ -240,6 +238,7 @@ if (isset ($_POST['submitted'])) {
             exit();
 
         } catch (Exception $exception) {
+            App::alert('Error During Video Upload', $exception->getMessage());
             $this->view->vars->message = Language::getText('error_upload_system');
             $this->view->vars->message_type = 'errors';
         }

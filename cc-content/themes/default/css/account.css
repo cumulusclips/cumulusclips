@@ -236,36 +236,36 @@ UPLOAD - VIDEO
 UPLOAD - INFO
 ************/
 
-.account_upload_info #main > .right {
+.video-information-form {
     width: 600px;
 }
 
-.account_upload_info .tabs,
-.account_upload_info .tab_block  {
+.video-information-form .tabs,
+.video-information-form .tab_block  {
     width: 100%;
 }
 
-.account_upload_info .tabs {
+.video-information-form .tabs {
     margin: 20px 0 30px;
 }
 
-.account_upload_info .tab_block {
+.video-information-form .tab_block {
     box-sizing: border-box;
 }
 
-.account_upload_info .tab_block:after {
+.video-information-form .tab_block:after {
     content: "";
     height: 0;
     display: block;
     clear: both;
 }
 
-.account_upload_info .tab-container > .button {
+.video-information-form form > .button {
     float: right;
     margin-top: 25px;
 }
 
-.account_upload_info .tab_block h2 {
+.video-information-form .tab_block h2 {
     margin: 5px  0 15px;
 }
 

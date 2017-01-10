@@ -1,15 +1,35 @@
-<?php $this->setLayout('account'); ?>
+<?php
+
+$this->addJs('fileupload.jquery-ui.widget.js');
+$this->addJs('fileupload.iframe-transport.js');
+$this->addJs('fileupload.plugin.js');
+$this->addJs('fileupload.js');
+$this->setLayout('account');
+
+?>
 
 <h1><?=Language::getText('update_video_header')?></h1>
 
-<?php if ($message): ?>
-    <div class="message <?=$message_type?>"><?=$message?></div>
-<?php endif; ?>
+<p><a href="<?php echo BASE_URL; ?>/account/videos/"><?php echo Language::getText('back_to_videos')?></a></p>
 
-<div class="form wide">
+<div class="message <?php echo $message_type ?: ''; ?>"><?php echo $message ?: ''; ?></div>
 
-    <p><a href="<?=HOST?>/account/videos/"><?=Language::getText('back_to_videos')?></a></p><br />
-    <form action="<?=HOST?>/account/videos/edit/<?=$video->videoId?>/" method="post">
+<!-- Begin Video Information Form -->
+<div class="video-information-form">
+
+    <div class="tabs keepOne">
+        <a href="" data-block="basic-information" title="Basic Information">Basic Information</a>
+        <a href="" data-block="video-attachments" title="Attachments">Attachments</a>
+        <a href="" data-block="advanced-settings" title="Advanced Settings">Advanced Settings</a>
+    </div>
+
+    <form action="<?php echo BASE_URL; ?>/account/videos/edit/<?php echo $video->videoId; ?>/" method="post">
+
+
+    <!-- BEGIN Basic Information Tab -->
+    <div id="basic-information" class="form wide tab_block">
+
+        <h2>Basic Information</h2>
 
         <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
         <input class="text" type="text" name="title" value="<?=$video->title?>" />
@@ -28,6 +48,116 @@
         <label class="<?=(isset($errors['description'])) ? 'error' : ''?>"><?=Language::getText('description')?>:</label>
         <textarea class="text" name="description" rows="10" cols="45"><?=$video->description?></textarea>
 
+    </div>
+    <!-- END Basic Information Tab -->
+
+
+    <!-- BEGIN Video Attachments Tab -->
+    <div id="video-attachments" class="form wide tab_block">
+
+        <h2>Attachments</h2>
+
+        <div class="attachments">
+
+            <?php $attachmentCount = 0; ?>
+            <?php foreach ($newFiles as $newFile): ?>
+
+                <div class="attachment">
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+
+                    <div class="upload-progress">
+                        <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                        <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
+                        <span class="pull-right glyphicon glyphicon-ok"></span>
+                    </div>
+                </div>
+                <?php $attachmentCount++; ?>
+
+            <?php endforeach; ?>
+
+            <?php foreach ($attachmentFileIds as $fileId): ?>
+
+                <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
+
+                <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
+                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
+
+                    <div class="upload-progress">
+                        <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                        <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
+                        <span class="pull-right glyphicon glyphicon-ok"></span>
+                    </div>
+                </div>
+                <?php $attachmentCount++; ?>
+
+            <?php endforeach; ?>
+
+        </div>
+
+        <div class="add">
+            <p><a href="" class="new">Upload a new attachment</a></p>
+            <?php if (!empty($userAttachments)): ?>
+                <p><a href="" class="existing">Select from existing attachments</a></p>
+            <?php endif; ?>
+        </div>
+
+        <div class="upload-form attachment-form hidden">
+
+            <div class="header">
+                <h3>Upload New Attachment</h3>
+                &bull; <a href="" class="cancel">Cancel</a>
+            </div>
+
+            <input
+                class="uploader"
+                type="file"
+                name="upload"
+                data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+                data-text="<?php echo Language::getText('browse_files_button'); ?>"
+                data-limit="<?php echo $config->fileSizeLimit; ?>"
+                data-type="library"
+            />
+        </div>
+
+        <?php if (!empty($userAttachments)): ?>
+
+            <div class="attachment-form existing-form hidden">
+
+                <div class="header">
+                    <h3>Select Existing Attachment</h3>
+                    &bull; <a href="" class="cancel">Cancel</a>
+                </div>
+
+                <p>Choose a file from your existing attachments below:</p>
+
+                <ul>
+                    <?php foreach ($userAttachments as $file): ?>
+                        <li><a
+                            id="select-existing-file-<?php echo $file->fileId; ?>"
+                            class="<?php echo in_array($file->fileId, $attachmentFileIds) ? 'selected' : ''; ?>"
+                            href=""
+                            data-file="<?php echo $file->fileId; ?>"
+                            data-size="<?php echo $file->filesize; ?>"
+                            title="<?php echo $file->name; ?>"
+                        ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+        <?php endif; ?>
+
+    </div>
+    <!-- END Video Attachments Tab -->
+
+
+    <!-- BEGIN Advacned Settings Tab -->
+    <div id="advanced-settings" class="form wide tab_block">
+        <h2>Advanced Settings</h2>
+
         <input id="disable_embed" type="checkbox" name="disable_embed" value="1" <?=($video->disableEmbed) ? 'checked="checked"' : ''?> />
         <label for="disable_embed"><?=Language::getText('disable_embed')?></label> <em>(<?=Language::getText('disable_embed_description')?>)</em><br>
 
@@ -40,16 +170,20 @@
         <p id="private_url" class="<?=($video->private) ? '' : 'hide'?>">
             <label class="<?=(isset($errors['private_url'])) ? 'error' : ''?>"><?=Language::getText('private_url')?>:</label>
             <?=HOST?>/private/videos/<span><?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?></span>/
-
             <input type="hidden" name="private_url" value="<?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?>" />
             <a href="" class="small"><?=Language::getText('regenerate')?></a>
         </p>
 
         <input id="closeComments" type="checkbox" name="closeComments" value="1" <?=($video->commentsClosed == '1') ? 'checked="checked"' : ''?> />
-        <label for="closeComments"><?=Language::getText('closeComments')?></label> <em>(<?=Language::getText('closeCommentsDescription')?>)</em><br>
+        <label for="closeComments"><?=Language::getText('closeComments')?></label> <em>(<?=Language::getText('closeCommentsDescription')?>)</em>
+    </div>
+    <!-- END Advacned Settings Tab -->
 
-        <input type="hidden" name="submitted" value="TRUE" />
-        <input class="button" type="submit" name="button" value="<?=Language::getText('update_video_button')?>" />
+
+    <input type="hidden" name="submitted" value="TRUE" />
+    <input class="button" type="submit" name="button" value="<?php echo Language::getText('update_video_button'); ?>" />
+
     </form>
 
 </div>
+<!-- END Video Information Form -->
