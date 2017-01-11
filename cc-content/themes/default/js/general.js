@@ -76,7 +76,7 @@ $(document).ready(function(){
             if (agree && $(element).is('[type="submit"]')) {
                 $(element).parents('form').submit();
             } else {
-                window.location = $(this).attr('href');
+                window.location = $(element).attr('href');
             }
         }
 

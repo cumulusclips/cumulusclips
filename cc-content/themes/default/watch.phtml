@@ -84,6 +84,19 @@ $this->setLayout('full');
                     <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
                 <?php endforeach; ?>
             </p>
+            <?php if (!empty($attachments)): ?>
+                <p><strong><?=Language::getText('attachments')?>:</strong>
+                    <?php foreach ($attachments as $attachment): ?>
+                        <a
+                            class="attachment"
+                            href="<?php echo $this->getService('File')->getUrl($attachment); ?>"
+                            title="<?php echo $attachment->name; ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)"
+                        >
+                            <?php echo $attachment->name; ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)
+                        </a>
+                    <?php endforeach; ?>
+                </p>
+            <?php endif; ?>
         </div>
         <p><?=$video->description?></p>
     </div>

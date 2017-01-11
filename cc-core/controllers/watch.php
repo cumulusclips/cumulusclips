@@ -19,6 +19,7 @@ $commentService = new CommentService();
 $videoService = new VideoService();
 $ratingService = new RatingService();
 $playlistService = new \PlaylistService();
+$fileService = new \FileService();
 $this->view->vars->tags = null;
 $this->view->vars->playlist = null;
 $this->view->vars->playlistVideos = null;
@@ -54,6 +55,7 @@ $this->view->vars->rating = $ratingService->getRating($this->view->vars->video->
 $this->view->vars->meta->title = $this->view->vars->video->title;
 $this->view->vars->meta->keywords = implode (', ',$this->view->vars->video->tags);
 $this->view->vars->meta->description = $this->view->vars->video->description;
+$this->view->vars->attachments = $fileService->getVideoAttachments($video);
 
 // Retrieve user data if logged in
 if ($this->view->vars->loggedInUser) {

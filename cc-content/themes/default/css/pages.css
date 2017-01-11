@@ -315,9 +315,9 @@ SEARCH RESULTS
 
 
 
-/*********
-Watch VIDEO
-*********/
+/**********
+Watch Video
+**********/
 
 .watch #main .right {
     overflow: hidden;
@@ -439,6 +439,17 @@ Watch VIDEO
 
 #about .button_small {
     float: right;
+}
+
+#about strong + .attachment {
+    margin-left: 5px;
+}
+
+#about .attachment {
+    line-height: 1.5em;
+    margin-right: 13px;
+    padding-left: 14px;
+    background: url("../images/icon-paperclip.png") no-repeat 0 0;
 }
 
 #share {
