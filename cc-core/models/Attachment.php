@@ -18,11 +18,6 @@ class Attachment extends Model
     public $videoId;
 
     /**
-     * @var boolean Whether the attachment was made by a staff member
-     */
-    public $byStaff;
-
-    /**
      * @var \DateTime Time and date attachment was made
      */
     public $dateCreated;

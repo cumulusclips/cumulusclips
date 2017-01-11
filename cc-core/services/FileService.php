@@ -19,6 +19,11 @@ class FileService extends ServiceAbstract
      */
     public function delete(File $file)
     {
+        // Delete file attachments records
+        $attachmentMapper = new \AttachmentMapper();
+        $attachments = $attachmentMapper->getMultipleByCustom(array('file_id' => $file->fileId));
+        foreach ($attachments as $attachment) $attachmentMapper->delete($attachment->attachmentId);
+
         // Delete file record
         $fileMapper = $this->_getMapper();
         $fileMapper->delete($file->fileId);

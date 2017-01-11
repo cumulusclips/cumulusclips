@@ -415,6 +415,12 @@ class Router
             'name' => 'account-videos-edit'
         ));
 
+        $routes['account-attachments'] = new Route(array(
+            'path' => 'account/attachments',
+            'location' => DOC_ROOT . '/cc-core/controllers/account/attachments.php',
+            'name' => 'account-attachments'
+        ));
+
         $routes['account-playlists'] = new Route(array(
             'path' => 'account/playlists',
             'location' => DOC_ROOT . '/cc-core/controllers/account/playlists.php',

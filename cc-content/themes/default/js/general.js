@@ -65,11 +65,19 @@ $(document).ready(function(){
 
     // Attach confirm popup to confirm action links
     $(document).on('click', '.confirm', function(event) {
+
+        var element = this;
+
         // Code to execute once string is retrieved
-        var location = $(this).attr('href')
         var callback = function(confirmString){
+
             var agree = confirm(confirmString);
-            if (agree) window.location = location;
+
+            if (agree && $(element).is('[type="submit"]')) {
+                $(element).parents('form').submit();
+            } else {
+                window.location = $(this).attr('href');
+            }
         }
 
         // Retrieve confirm string

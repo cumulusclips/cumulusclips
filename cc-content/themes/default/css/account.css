@@ -71,6 +71,22 @@ GENERAL account STYLES
     color: #FFF;
 }
 
+.table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.table thead {
+    font-weight: bold;
+}
+
+.table td {
+    padding: 3px 0;
+    border-bottom: 1px solid #CCC;
+    vertical-align: middle;
+}
+
 
 
 
@@ -531,20 +547,8 @@ SUBSCRIPTIONS
 MESSAGES & INBOX
 ***************/
 
-#inbox {
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-#inbox thead {
-    font-weight: bold;
-}
-
 #inbox td {
-    padding: 3px 0;
     width: 70px;
-    border-bottom: 1px solid #CCC;
-    vertical-align: middle;
 }
 
 #inbox .subject {

@@ -220,6 +220,7 @@
         <manage_media>Manage Media</manage_media>
         <upload_video>Upload a Video</upload_video>
         <my_videos>My Videos</my_videos>
+        <account_menu_attachments>Attachments</account_menu_attachments>
         <my_playlists>My Playlists</my_playlists>
         <account_settings>Account Settings</account_settings>
         <update_profile>Update Member Profile</update_profile>
@@ -243,6 +244,12 @@
         <pending_conversion>Pending Conversion</pending_conversion>
         <processing>Processing</processing>
         <pending_approval>Pending Approval</pending_approval>
+
+        <!-- Account / Attachments Page -->
+        <attachments_header>Attachments</attachments_header>
+        <filesize>Filesize</filesize>
+        <delete_attachments_button>Delete Attachments</delete_attachments_button>
+        <no_attachments>No video attachments added yet</no_attachments>
 
         <!-- My Account / Playlists Page -->
         <playlists_header>My Playlists</playlists_header>
@@ -369,6 +376,7 @@
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
         <confirm_purge_messages>Selected messages will be permanently be deleted. Do you want to proceed?</confirm_purge_messages>
+        <confirm_delete_attachments>Selected files will be permanently be deleted and no longer attached to any videos. Do you want to proceed?</confirm_delete_attachments>
         <confirm_delete_message>Message will be permanently be deleted. Do you want to proceed?</confirm_delete_message>
 
         <error_username>Invalid username</error_username>
@@ -455,6 +463,7 @@
         <success_messages_purged>Messages successfully deleted!</success_messages_purged>
         <success_message_deleted>Message has been deleted.</success_message_deleted>
         <success_message_sent>Your message has been delivered.</success_message_sent>
+        <success_attachments_deleted>Attachments have been deleted.</success_attachments_deleted>
 
         <!-- Page Meta Tags -->
         <meta.index.title>CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.title>
@@ -528,6 +537,10 @@
         <meta.account_videos.title>My Videos</meta.account_videos.title>
         <meta.account_videos.keywords>My Videos, Videos</meta.account_videos.keywords>
         <meta.account_videos.description>View all videos uploaded by this member.</meta.account_videos.description>
+
+        <meta.account_attachments.title>Attachments</meta.account_attachments.title>
+        <meta.account_attachments.keywords>Attachments</meta.account_attachments.keywords>
+        <meta.account_attachments.description>View all attachments uploaded by this member.</meta.account_attachments.description>
 
         <meta.account_playlists.title>My Playlists</meta.account_playlists.title>
         <meta.account_playlists.keywords>My Playlists, Playlist</meta.account_playlists.keywords>
