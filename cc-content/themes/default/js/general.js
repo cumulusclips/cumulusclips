@@ -643,7 +643,7 @@ $(document).ready(function(){
     // Display upload new attachments form
     $('#video-attachments .new').on('click', function(event){
         $('#video-attachments .add').hide();
-        $('#video-attachments .upload-form').removeClass('hidden');
+        $('#video-attachments .attachment-form-upload').removeClass('hidden');
         event.preventDefault();
     });
 
@@ -669,13 +669,13 @@ $(document).ready(function(){
     // Display existing attachments form
     $('#video-attachments .existing').on('click', function(event){
         $('#video-attachments .add').hide();
-        $('.existing-form').removeClass('hidden');
+        $('.attachment-form-existing').removeClass('hidden');
 
         event.preventDefault();
     });
 
     // Select from existing attachments
-    $('#video-attachments .existing-form li a').on('click', function(event){
+    $('#video-attachments .attachment-form-existing li a').on('click', function(event){
 
         event.preventDefault();
 

@@ -103,7 +103,7 @@ $this->setLayout('account');
             <?php endif; ?>
         </div>
 
-        <div class="upload-form attachment-form hidden">
+        <div class="attachment-form attachment-form-upload hidden">
 
             <div class="header">
                 <h3>Upload New Attachment</h3>
@@ -113,7 +113,7 @@ $this->setLayout('account');
             <input
                 class="uploader"
                 type="file"
-                name="upload"
+                name="attachment-upload"
                 data-url="<?php echo BASE_URL; ?>/ajax/upload/"
                 data-text="<?php echo Language::getText('browse_files_button'); ?>"
                 data-limit="<?php echo $config->fileSizeLimit; ?>"
@@ -123,7 +123,7 @@ $this->setLayout('account');
 
         <?php if (!empty($userAttachments)): ?>
 
-            <div class="attachment-form existing-form hidden">
+            <div class="attachment-form attachment-form-existing hidden">
 
                 <div class="header">
                     <h3>Select Existing Attachment</h3>

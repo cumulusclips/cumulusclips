@@ -317,7 +317,7 @@ UPLOAD - INFO
     background: url('../images/icon_add.png') no-repeat 0 1px;
 }
 
-#video-attachments .upload-form {
+#video-attachments .attachment-form {
     width: 485px;
 }
 

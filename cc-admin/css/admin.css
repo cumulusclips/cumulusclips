@@ -501,6 +501,78 @@ VIDEO STYLES
 
 
 
+/*************
+Add/Edit Video
+*************/
+
+.tab-content-footer {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+
+/** Video Attachments Tab **/
+
+#video-attachments p {
+    margin: 0 0 5px;
+}
+
+#video-attachments .add i {
+    margin-right: 5px;
+}
+
+#video-attachments .attachment-form-upload {
+    width: 485px;
+}
+
+#video-attachments h4 {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    font-size: 14px;
+}
+
+#video-attachments .remove {
+    margin-left: 5px;
+}
+
+#video-attachments ul {
+    border-radius: 3px;
+    background-color: #FFF;
+    width: 485px;
+    padding: 0;
+    list-style: none;
+}
+
+#video-attachments li {
+    border-top: 1px solid #DDD;
+}
+
+#video-attachments li:first-child {
+    border-top: none;
+}
+
+#video-attachments li a {
+    display: block;
+    font-weight: normal;
+    color: #555;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#video-attachments li .selected {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+#video-attachments li span {
+    float: right;
+}
+
+
+
+
+
 /************
 MEMBER STYLES
 ************/
@@ -786,7 +858,11 @@ FILE UPLOAD WIDGET
 
 
 
-/** Library **/
+
+
+/******
+Library
+******/
 
 #library .table {
     table-layout: fixed;
@@ -809,7 +885,11 @@ FILE UPLOAD WIDGET
 
 
 
-/** Language **/
+
+
+/*******
+Language
+*******/
 
 #languages-edit table td {
     padding: 15px 10px;
@@ -835,7 +915,11 @@ FILE UPLOAD WIDGET
 
 
 
-/** Video Import **/
+
+
+/***********
+Video Import
+***********/
 
 #videos-imports .panel-body {
     padding: 0;

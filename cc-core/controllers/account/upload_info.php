@@ -208,7 +208,7 @@ if (isset ($_POST['submitted'])) {
                 $file->filesize = filesize($newFile['temp']);
 
                 // Move file to files directory
-                Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
+                Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/attachments/' . $file->filename . '.' . $file->extension);
 
                 // Create record
                 $newAttachmentFileIds[] = $fileMapper->save($file);

@@ -4,16 +4,20 @@ class FileService extends ServiceAbstract
 {
     /**
      * Retrieve URL to given file
+     *
      * @param File Instance of file who's URL is being retrieved
      * @return string Returns URL to file
      */
     public function getUrl(File $file)
     {
-        return HOST . "/cc-content/uploads/files/$file->filename.$file->extension";
+        return HOST . "/cc-content/uploads/files/"
+            . ($file->type === \FileMapper::TYPE_ATTACHMENT ? 'attachments' : 'library')
+            . '/' . "$file->filename.$file->extension";
     }
 
     /**
      * Delete a file
+     *
      * @param File $file Instance of file to be deleted
      * @return void File is deleted from database and the filesystem
      */
@@ -29,8 +33,9 @@ class FileService extends ServiceAbstract
         $fileMapper->delete($file->fileId);
 
         // Delete file from the filesystem
+        $basePath = UPLOAD_PATH . '/files/' . ($file->type === \FileMapper::TYPE_ATTACHMENT ? 'attachments' : 'library');
         try {
-            Filesystem::delete(UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
+            Filesystem::delete($basePath . '/' . $file->filename . '.' . $file->extension);
         } catch (Exception $e) {
             App::alert('Error During File Removal', "Unable to delete file for: $file->filename. The file has been removed from the database, but the file still remains on the filesystem. Error: " . $e->getMessage());
         }

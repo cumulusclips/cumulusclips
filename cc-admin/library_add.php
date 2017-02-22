@@ -63,7 +63,7 @@ if (isset($_POST['submitted'])) {
 
         try {
             // Move file to files directory
-            Filesystem::rename($_POST['upload']['temp'], UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
+            Filesystem::rename($_POST['upload']['temp'], UPLOAD_PATH . '/files/library/' . $file->filename . '.' . $file->extension);
 
             // Create record
             $fileId = $fileMapper->save($file);
