@@ -202,7 +202,7 @@ if (isset($_POST['submitted'])) {
         try {
 
             // Create files for uploaded attachments
-            foreach ($newFiles as $newFile) {
+            foreach ($newFiles as $key => $newFile) {
 
                 $file = new \File();
                 $file->filename = $fileService->generateFilename();
@@ -216,7 +216,8 @@ if (isset($_POST['submitted'])) {
                 Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/attachments/' . $file->filename . '.' . $file->extension);
 
                 // Create record
-                $newAttachmentFileIds[] = $fileMapper->save($file);
+                $newAttachmentFileIds[] = $attachmentFileIds[] = $fileMapper->save($file);
+                unset($newFiles[$key]);
             }
 
             // Determine which attachments are new and removed
