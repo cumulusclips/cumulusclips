@@ -66,79 +66,82 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-    // Validate video attachments
-    if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
+    if ($config->allowVideoAttachments) {
 
-        do {
+        // Validate video attachments
+        if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
 
-            foreach ($_POST['attachment'] as $attachment) {
+            do {
 
-                if (!is_array($attachment)) {
-                    $errors['attachment'] = Language::getText('error_attachment');
-                    break 2;
+                foreach ($_POST['attachment'] as $attachment) {
+
+                    if (!is_array($attachment)) {
+                        $errors['attachment'] = 'Invalid attachment';
+                        break 2;
+                    }
+
+                    // Determine if attachment is a new file upload or existing attachment
+                    if (!empty($attachment['temp'])) {
+
+                        // New upload
+
+                        // Validate file upload info
+                        if (
+                            empty($attachment['name'])
+                            || empty($attachment['size'])
+                            || !is_numeric($attachment['size'])
+                            || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
+                        ) {
+                            $errors['attachment'] = 'Invalid attachment file upload';
+                            break 2;
+                        }
+
+                        // Create file
+                        $newFiles[] = array(
+                            'temp' => $attachment['temp'],
+                            'name' => $attachment['name'],
+                            'size' => $attachment['size']
+                        );
+
+                    } elseif (!empty($attachment['file'])) {
+
+                        // Attaching existing file
+
+                        $file = $fileMapper->getById($attachment['file']);
+
+                        // Verify file exists and belongs to user
+                        if (
+                            !$file
+                            || $file->userId !== $adminUser->userId
+                        ) {
+                            $errors['attachment'] = 'Invalid attachment';
+                            break 2;
+                        }
+
+                        // Verify attachment isn't already attached
+                        if (in_array($attachment['file'], $newAttachmentFileIds)) {
+                            $errors['attachment'] = 'File is already attached';
+                            break 2;
+                        }
+
+                        // Create attachment entry
+                        $newAttachmentFileIds[] = $attachment['file'];
+
+                    } else {
+                        $errors['attachment'] = 'Invalid attachment';
+                        break 2;
+                    }
                 }
 
-                // Determine if attachment is a new file upload or existing attachment
-                if (!empty($attachment['temp'])) {
+                // Set attachment files to display on form
+                $attachmentFileIds = $newAttachmentFileIds;
 
-                    // New upload
+            } while (false);
 
-                    // Validate file upload info
-                    if (
-                        empty($attachment['name'])
-                        || empty($attachment['size'])
-                        || !is_numeric($attachment['size'])
-                        || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
-                    ) {
-                        $errors['attachment'] = Language::getText('error_attachment_file');
-                        break 2;
-                    }
-
-                    // Create file
-                    $newFiles[] = array(
-                        'temp' => $attachment['temp'],
-                        'name' => $attachment['name'],
-                        'size' => $attachment['size']
-                    );
-
-                } elseif (!empty($attachment['file'])) {
-
-                    // Attaching existing file
-
-                    $file = $fileMapper->getById($attachment['file']);
-
-                    // Verify file exists and belongs to user
-                    if (
-                        !$file
-                        || $file->userId !== $adminUser->userId
-                    ) {
-                        $errors['attachment'] = Language::getText('error_attachment');
-                        break 2;
-                    }
-
-                    // Verify attachment isn't already attached
-                    if (in_array($attachment['file'], $newAttachmentFileIds)) {
-                        $errors['attachment'] = Language::getText('error_attachment_duplicate');
-                        break 2;
-                    }
-
-                    // Create attachment entry
-                    $newAttachmentFileIds[] = $attachment['file'];
-
-                } else {
-                    $errors['attachment'] = Language::getText('error_attachment');
-                    break 2;
-                }
-            }
-
+        } else {
             // Set attachment files to display on form
             $attachmentFileIds = $newAttachmentFileIds;
-
-        } while (false);
-
-    } else {
-        // Set attachment files to display on form
-        $attachmentFileIds = $newAttachmentFileIds;
+        }
     }
 
     // Validate title
@@ -322,7 +325,9 @@ include ('header.php');
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="<?=(empty($tab) || $tab == 'basic') ? 'active' : ''?>"><a href="#basic" data-toggle="tab">Basic Information</a></li>
-        <li class="<?=($tab == 'video-attachments') ? 'active' : ''?>"><a href="#video-attachments" data-toggle="tab">Attachments</a></li>
+        <?php if ($config->allowVideoAttachments): ?>
+            <li class="<?=($tab == 'video-attachments') ? 'active' : ''?>"><a href="#video-attachments" data-toggle="tab">Attachments</a></li>
+        <?php endif; ?>
         <li class="<?=($tab == 'advanced') ? 'active' : ''?>"><a href="#advanced" data-toggle="tab">Advanced Settings</a></li>
     </ul>
 
@@ -375,106 +380,111 @@ include ('header.php');
         </div>
         <!-- END Basic Info Tab Pane -->
 
-        <!-- BEGIN Attachments Tab Pane -->
-        <div class="tab-pane <?=($tab == 'video-attachments') ? 'active' : ''?>" id="video-attachments">
 
-            <h3>Attachments</h3>
+        <?php if ($config->allowVideoAttachments): ?>
 
-            <div class="attachments">
+            <!-- BEGIN Attachments Tab Pane -->
+            <div class="tab-pane <?=($tab == 'video-attachments') ? 'active' : ''?>" id="video-attachments">
 
-                <?php $attachmentCount = 0; ?>
-                <?php foreach ($newFiles as $newFile): ?>
+                <h3>Attachments</h3>
 
-                    <div class="attachment">
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+                <div class="attachments">
 
-                        <div class="upload-progress">
-                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
-                            <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
-                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                    <?php $attachmentCount = 0; ?>
+                    <?php foreach ($newFiles as $newFile): ?>
+
+                        <div class="attachment">
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+
+                            <div class="upload-progress">
+                                <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                                <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
+                                <span class="pull-right glyphicon glyphicon-ok"></span>
+                            </div>
                         </div>
-                    </div>
-                    <?php $attachmentCount++; ?>
+                        <?php $attachmentCount++; ?>
 
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
 
-                <?php foreach ($attachmentFileIds as $fileId): ?>
+                    <?php foreach ($attachmentFileIds as $fileId): ?>
 
-                    <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
+                        <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
 
-                    <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
-                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
+                        <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
+                            <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
 
-                        <div class="upload-progress">
-                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
-                            <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
-                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                            <div class="upload-progress">
+                                <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                                <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
+                                <span class="pull-right glyphicon glyphicon-ok"></span>
+                            </div>
                         </div>
-                    </div>
-                    <?php $attachmentCount++; ?>
+                        <?php $attachmentCount++; ?>
 
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
 
-            </div>
-
-            <div class="add">
-                <p><a href="" class="new"><i class="fa fa-plus-circle"></i> Upload a new attachment</a></p>
-                <?php if (!empty($userAttachments)): ?>
-                    <p><a href="" class="existing"><i class="fa fa-plus-circle"></i> Select from existing attachments</a></p>
-                <?php endif; ?>
-            </div>
-
-            <div class="attachment-form attachment-form-upload hidden">
-
-                <div class="header">
-                    <h4>Upload New Attachment</h4>
-                    &bull; <a href="" class="cancel">Cancel</a>
                 </div>
 
-                <input
-                    class="uploader"
-                    type="file"
-                    name="attachment-upload"
-                    data-url="<?php echo BASE_URL; ?>/ajax/upload/"
-                    data-text="<?php echo Language::getText('browse_files_button'); ?>"
-                    data-limit="<?php echo $config->fileSizeLimit; ?>"
-                    data-type="library"
-                />
-            </div>
+                <div class="add">
+                    <p><a href="" class="new"><i class="fa fa-plus-circle"></i> Upload a new attachment</a></p>
+                    <?php if (!empty($userAttachments)): ?>
+                        <p><a href="" class="existing"><i class="fa fa-plus-circle"></i> Select from existing attachments</a></p>
+                    <?php endif; ?>
+                </div>
 
-            <?php if (!empty($userAttachments)): ?>
-
-                <div class="attachment-form attachment-form-existing hidden">
+                <div class="attachment-form attachment-form-upload hidden">
 
                     <div class="header">
-                        <h4>Select Existing Attachment</h4>
+                        <h4>Upload New Attachment</h4>
                         &bull; <a href="" class="cancel">Cancel</a>
                     </div>
 
-                    <p>Choose a file from your existing attachments below:</p>
-
-                    <ul>
-                        <?php foreach ($userAttachments as $file): ?>
-                            <li><a
-                                id="select-existing-file-<?php echo $file->fileId; ?>"
-                                class="<?php echo in_array($file->fileId, $attachmentFileIds) ? 'selected' : ''; ?>"
-                                href=""
-                                data-file="<?php echo $file->fileId; ?>"
-                                data-size="<?php echo $file->filesize; ?>"
-                                title="<?php echo $file->name; ?>"
-                            ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <input
+                        class="uploader"
+                        type="file"
+                        name="attachment-upload"
+                        data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+                        data-text="Browse"
+                        data-limit="<?php echo $config->fileSizeLimit; ?>"
+                        data-type="library"
+                    />
                 </div>
 
-            <?php endif; ?>
+                <?php if (!empty($userAttachments)): ?>
 
-        </div>
-        <!-- END Attachments Tab Pane -->
+                    <div class="attachment-form attachment-form-existing hidden">
+
+                        <div class="header">
+                            <h4>Select Existing Attachment</h4>
+                            &bull; <a href="" class="cancel">Cancel</a>
+                        </div>
+
+                        <p>Choose a file from your existing attachments below:</p>
+
+                        <ul>
+                            <?php foreach ($userAttachments as $file): ?>
+                                <li><a
+                                    id="select-existing-file-<?php echo $file->fileId; ?>"
+                                    class="<?php echo in_array($file->fileId, $attachmentFileIds) ? 'selected' : ''; ?>"
+                                    href=""
+                                    data-file="<?php echo $file->fileId; ?>"
+                                    data-size="<?php echo $file->filesize; ?>"
+                                    title="<?php echo $file->name; ?>"
+                                ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+
+                <?php endif; ?>
+
+            </div>
+            <!-- END Attachments Tab Pane -->
+
+        <?php endif; ?>
 
 
         <!-- BEGIN Advanced Settings Tab Pane -->

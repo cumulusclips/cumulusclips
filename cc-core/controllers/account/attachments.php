@@ -6,6 +6,8 @@ Plugin::triggerEvent('attachments.start');
 $userService = new UserService();
 $this->view->vars->loggedInUser = $userService->loginCheck();
 Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$config = Registry::get('config');
+if (!$config->allowVideoAttachments) App::throw404();
 
 // Establish page variables, objects, arrays, etc
 $db = Registry::get('db');

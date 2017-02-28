@@ -50,79 +50,82 @@ $attachmentFileIds = \Functions::arrayColumn($videoAttachments, 'fileId');
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate video attachments
-    if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
+    if ($config->allowVideoAttachments) {
 
-        do {
+        // Validate video attachments
+        if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
 
-            foreach ($_POST['attachment'] as $attachment) {
+            do {
 
-                if (!is_array($attachment)) {
-                    $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
-                    break 2;
-                }
+                foreach ($_POST['attachment'] as $attachment) {
 
-                // Determine if attachment is a new file upload or existing attachment
-                if (!empty($attachment['temp'])) {
-
-                    // New upload
-
-                    // Validate file upload info
-                    if (
-                        empty($attachment['name'])
-                        || empty($attachment['size'])
-                        || !is_numeric($attachment['size'])
-                        || !\App::isValidUpload($attachment['temp'], $this->view->vars->loggedInUser, 'library')
-                    ) {
-                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment_file');
-                        break 2;
-                    }
-
-                    // Create file
-                    $newFiles[] = array(
-                        'temp' => $attachment['temp'],
-                        'name' => $attachment['name'],
-                        'size' => $attachment['size']
-                    );
-
-                } elseif (!empty($attachment['file'])) {
-
-                    // Attaching existing file
-
-                    $file = $fileMapper->getById($attachment['file']);
-
-                    // Verify file exists and belongs to user
-                    if (
-                        !$file
-                        || $file->userId !== $this->view->vars->loggedInUser->userId
-                    ) {
+                    if (!is_array($attachment)) {
                         $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
                         break 2;
                     }
 
-                    // Verify attachment isn't already attached
-                    if (in_array($attachment['file'], $newAttachmentFileIds)) {
-                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment_duplicate');
+                    // Determine if attachment is a new file upload or existing attachment
+                    if (!empty($attachment['temp'])) {
+
+                        // New upload
+
+                        // Validate file upload info
+                        if (
+                            empty($attachment['name'])
+                            || empty($attachment['size'])
+                            || !is_numeric($attachment['size'])
+                            || !\App::isValidUpload($attachment['temp'], $this->view->vars->loggedInUser, 'library')
+                        ) {
+                            $this->view->vars->errors['attachment'] = Language::getText('error_attachment_file');
+                            break 2;
+                        }
+
+                        // Create file
+                        $newFiles[] = array(
+                            'temp' => $attachment['temp'],
+                            'name' => $attachment['name'],
+                            'size' => $attachment['size']
+                        );
+
+                    } elseif (!empty($attachment['file'])) {
+
+                        // Attaching existing file
+
+                        $file = $fileMapper->getById($attachment['file']);
+
+                        // Verify file exists and belongs to user
+                        if (
+                            !$file
+                            || $file->userId !== $this->view->vars->loggedInUser->userId
+                        ) {
+                            $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
+                            break 2;
+                        }
+
+                        // Verify attachment isn't already attached
+                        if (in_array($attachment['file'], $newAttachmentFileIds)) {
+                            $this->view->vars->errors['attachment'] = Language::getText('error_attachment_duplicate');
+                            break 2;
+                        }
+
+                        // Create attachment entry
+                        $newAttachmentFileIds[] = $attachment['file'];
+
+                    } else {
+                        $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
                         break 2;
                     }
-
-                    // Create attachment entry
-                    $newAttachmentFileIds[] = $attachment['file'];
-
-                } else {
-                    $this->view->vars->errors['attachment'] = Language::getText('error_attachment');
-                    break 2;
                 }
-            }
 
+                // Set attachment files to display on form
+                $attachmentFileIds = $newAttachmentFileIds;
+
+            } while (false);
+
+        } else {
             // Set attachment files to display on form
             $attachmentFileIds = $newAttachmentFileIds;
-
-        } while (false);
-
-    } else {
-        // Set attachment files to display on form
-        $attachmentFileIds = $newAttachmentFileIds;
+        }
     }
 
     // Validate title

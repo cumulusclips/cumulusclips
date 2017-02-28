@@ -65,6 +65,7 @@ $config->mobileUrl = HOST . '/cc-content/uploads/mobile';
 $config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
 $config->enableRegistrations = (boolean) Settings::get('user_registrations');
 $config->enableUserUploads = (boolean) Settings::get('user_uploads');
+$config->allowVideoAttachments = (boolean) Settings::get('video_attachments');
 $config->smtp = json_decode(Settings::get('smtp'));
 $config->from_name = Settings::get('from_name');
 $config->from_address = Settings::get('from_address');

@@ -50,7 +50,7 @@ $this->view->vars->categoryList = $categoryService->getCategories();
 if (isset ($_POST['submitted'])) {
 
     // Validate video attachments
-    if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
+    if ($config->allowVideoAttachments && isset($_POST['attachment']) && is_array($_POST['attachment'])) {
 
         do {
 

@@ -18,9 +18,11 @@ $this->setLayout('account');
 <div class="video-information-form">
 
     <div class="tabs keepOne">
-        <a href="" data-block="basic-information" title="Basic Information">Basic Information</a>
-        <a href="" data-block="video-attachments" title="Attachments">Attachments</a>
-        <a href="" data-block="advanced-settings" title="Advanced Settings">Advanced Settings</a>
+        <a href="" data-block="basic-information" title="<?php echo Language::getText('video_basic_tab'); ?>"><?php echo Language::getText('video_basic_tab'); ?></a>
+        <?php if ($config->allowVideoAttachments): ?>
+            <a href="" data-block="video-attachments" title="<?php echo Language::getText('video_attachments_tab'); ?>"><?php echo Language::getText('video_attachments_tab'); ?></a>
+        <?php endif; ?>
+        <a href="" data-block="advanced-settings" title="<?php echo Language::getText('video_advanced_tab'); ?>"><?php echo Language::getText('video_advanced_tab'); ?></a>
     </div>
 
     <form action="<?php echo BASE_URL; ?>/account/videos/edit/<?php echo $video->videoId; ?>/" method="post">
@@ -29,7 +31,7 @@ $this->setLayout('account');
     <!-- BEGIN Basic Information Tab -->
     <div id="basic-information" class="form wide tab_block">
 
-        <h2>Basic Information</h2>
+        <h2><?php echo Language::getText('video_basic_tab_header'); ?></h2>
 
         <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
         <input class="text" type="text" name="title" value="<?=$video->title?>" />
@@ -52,111 +54,116 @@ $this->setLayout('account');
     <!-- END Basic Information Tab -->
 
 
-    <!-- BEGIN Video Attachments Tab -->
-    <div id="video-attachments" class="form wide tab_block">
+    <?php if ($config->allowVideoAttachments): ?>
 
-        <h2>Attachments</h2>
+        <!-- BEGIN Video Attachments Tab -->
+        <div id="video-attachments" class="form wide tab_block">
 
-        <div class="attachments">
+            <h2><?php echo Language::getText('video_attachments_tab_header'); ?></h2>
 
-            <?php $attachmentCount = 0; ?>
-            <?php foreach ($newFiles as $newFile): ?>
+            <div class="attachments">
 
-                <div class="attachment">
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+                <?php $attachmentCount = 0; ?>
+                <?php foreach ($newFiles as $newFile): ?>
 
-                    <div class="upload-progress">
-                        <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
-                        <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
-                        <span class="pull-right glyphicon glyphicon-ok"></span>
+                    <div class="attachment">
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+
+                        <div class="upload-progress">
+                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                            <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
+                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                        </div>
                     </div>
-                </div>
-                <?php $attachmentCount++; ?>
+                    <?php $attachmentCount++; ?>
 
-            <?php endforeach; ?>
+                <?php endforeach; ?>
 
-            <?php foreach ($attachmentFileIds as $fileId): ?>
+                <?php foreach ($attachmentFileIds as $fileId): ?>
 
-                <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
+                    <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
 
-                <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
-                    <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
+                    <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
 
-                    <div class="upload-progress">
-                        <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
-                        <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
-                        <span class="pull-right glyphicon glyphicon-ok"></span>
+                        <div class="upload-progress">
+                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                            <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
+                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                        </div>
                     </div>
-                </div>
-                <?php $attachmentCount++; ?>
+                    <?php $attachmentCount++; ?>
 
-            <?php endforeach; ?>
+                <?php endforeach; ?>
 
-        </div>
-
-        <div class="add">
-            <p><a href="" class="new">Upload a new attachment</a></p>
-            <?php if (!empty($userAttachments)): ?>
-                <p><a href="" class="existing">Select from existing attachments</a></p>
-            <?php endif; ?>
-        </div>
-
-        <div class="attachment-form attachment-form-upload hidden">
-
-            <div class="header">
-                <h3>Upload New Attachment</h3>
-                &bull; <a href="" class="cancel">Cancel</a>
             </div>
 
-            <input
-                class="uploader"
-                type="file"
-                name="upload"
-                data-url="<?php echo BASE_URL; ?>/ajax/upload/"
-                data-text="<?php echo Language::getText('browse_files_button'); ?>"
-                data-limit="<?php echo $config->fileSizeLimit; ?>"
-                data-type="library"
-            />
-        </div>
+            <div class="add">
+                <p><a href="" class="new"><?php echo Language::getText('upload_new_attachment'); ?></a></p>
+                <?php if (!empty($userAttachments)): ?>
+                    <p><a href="" class="existing"><?php echo Language::getText('select_existing_attachment'); ?></a></p>
+                <?php endif; ?>
+            </div>
 
-        <?php if (!empty($userAttachments)): ?>
-
-            <div class="attachment-form attachment-form-existing hidden">
+            <div class="attachment-form attachment-form-upload hidden">
 
                 <div class="header">
-                    <h3>Select Existing Attachment</h3>
-                    &bull; <a href="" class="cancel">Cancel</a>
+                    <h3><?php echo Language::getText('upload_new_attachment_header'); ?></h3>
+                    &bull; <a href="" class="cancel"><?php echo Language::getText('cancel'); ?></a>
                 </div>
 
-                <p>Choose a file from your existing attachments below:</p>
-
-                <ul>
-                    <?php foreach ($userAttachments as $file): ?>
-                        <li><a
-                            id="select-existing-file-<?php echo $file->fileId; ?>"
-                            class="<?php echo in_array($file->fileId, $attachmentFileIds) ? 'selected' : ''; ?>"
-                            href=""
-                            data-file="<?php echo $file->fileId; ?>"
-                            data-size="<?php echo $file->filesize; ?>"
-                            title="<?php echo $file->name; ?>"
-                        ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
-                    <?php endforeach; ?>
-                </ul>
+                <input
+                    class="uploader"
+                    type="file"
+                    name="upload"
+                    data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+                    data-text="<?php echo Language::getText('browse_files_button'); ?>"
+                    data-limit="<?php echo $config->fileSizeLimit; ?>"
+                    data-type="library"
+                />
             </div>
 
-        <?php endif; ?>
+            <?php if (!empty($userAttachments)): ?>
 
-    </div>
-    <!-- END Video Attachments Tab -->
+                <div class="attachment-form attachment-form-existing hidden">
+
+                    <div class="header">
+                        <h3><?php echo Language::getText('select_existing_attachment_header'); ?></h3>
+                        &bull; <a href="" class="cancel"><?php echo Language::getText('cancel'); ?></a>
+                    </div>
+
+                    <p><?php echo Language::getText('select_existing_attachment_help'); ?></p>
+
+                    <ul>
+                        <?php foreach ($userAttachments as $file): ?>
+                            <li><a
+                                id="select-existing-file-<?php echo $file->fileId; ?>"
+                                class="<?php echo in_array($file->fileId, $attachmentFileIds) ? 'selected' : ''; ?>"
+                                href=""
+                                data-file="<?php echo $file->fileId; ?>"
+                                data-size="<?php echo $file->filesize; ?>"
+                                title="<?php echo $file->name; ?>"
+                            ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+        <!-- END Video Attachments Tab -->
+
+    <?php endif; ?>
 
 
     <!-- BEGIN Advacned Settings Tab -->
     <div id="advanced-settings" class="form wide tab_block">
-        <h2>Advanced Settings</h2>
+
+        <h2><?php echo Language::getText('video_advanced_tab_header'); ?></h2>
 
         <input id="disable_embed" type="checkbox" name="disable_embed" value="1" <?=($video->disableEmbed) ? 'checked="checked"' : ''?> />
         <label for="disable_embed"><?=Language::getText('disable_embed')?></label> <em>(<?=Language::getText('disable_embed_description')?>)</em><br>
