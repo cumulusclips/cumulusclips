@@ -107,6 +107,17 @@ try {
         );
     }
 
+    // Set read-only permissions for global users
+    try {
+        Filesystem::setPermissions($tempFile, 0644);
+    } catch (Exception $exception) {
+        App::alert('Error During File Upload', 'Permissions on uploaded file could not be updated');
+        throw new Exception(
+            Language::getText('error_upload_system', array('host' => HOST)),
+            \ApiResponse::HTTP_SERVER_ERROR
+        );
+    }
+
     // Send response
     $apiResponse = new \ApiResponse();
     $apiResponse->statusCode = \ApiResponse::HTTP_CREATED;

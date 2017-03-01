@@ -119,6 +119,7 @@ class Plugin
      * Instantiates plugin for given theme
      *
      * @param string $themeName Name of the theme whose plugin will be loaded
+     * @throws \Exception Thrown if theme plugin does not extend PluginAbstract
      */
     public static function loadThemePlugin($themeName)
     {
