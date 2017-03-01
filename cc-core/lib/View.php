@@ -57,6 +57,9 @@ class View
         // Load theme specific language entries
         Language::loadThemeLanguage($this->options->theme);
 
+        // Load theme's plugin
+        Plugin::loadThemePlugin($this->options->theme);
+
         // Load view helper
         $viewHelper = $this->getFallbackPath('helper.php');
         if ($viewHelper && file_exists($viewHelper)) include_once($viewHelper);
