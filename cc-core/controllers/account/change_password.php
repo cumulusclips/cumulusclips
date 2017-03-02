@@ -38,6 +38,10 @@ if ((isset($_POST['submitted']))) {
             $this->view->vars->loggedInUser->password = md5($password);
             $userMapper = new UserMapper();
             $userMapper->save($this->view->vars->loggedInUser);
+
+            // Generate new session id
+            session_regenerate_id(true);
+
             $this->view->vars->message = Language::GetText('success_password_updated');
             $this->view->vars->message_type = 'success';
         } else {

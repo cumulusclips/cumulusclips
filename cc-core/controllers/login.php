@@ -57,6 +57,10 @@ if (isset($_POST['submitted_login'])) {
     if ($this->view->vars->username && $this->view->vars->password) {
 
         if ($userService->login($this->view->vars->username, $this->view->vars->password)) {
+
+            // Generate new session id
+            session_regenerate_id(true);
+
             // Detect if post-login redirect was requested otherwise redirect to account index
             $url = ($this->view->vars->redirect) ? $this->view->vars->redirect : HOST . '/account/';
             $url = Plugin::triggerFilter('login_redirect', $url);
