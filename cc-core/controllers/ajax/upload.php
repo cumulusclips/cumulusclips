@@ -16,11 +16,11 @@
  */
 
 // Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
-Functions::redirectIf($loggedInUser, HOST . '/login/');
+$this->enforceAuth(false);
+$loggedInUser = $this->isAuth(false);
 
 // Establish page variables, objects, arrays, etc
+$userService = new UserService();
 $config = Registry::get('config');
 $validateExtension = true;
 $tempFile = UPLOAD_PATH . '/temp/' . $loggedInUser->userId . '-';

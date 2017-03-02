@@ -4,8 +4,7 @@ Plugin::triggerEvent('index.start');
 $this->view->vars->logout = false;
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Retrieve Featured Video
 $videoMapper = new VideoMapper();

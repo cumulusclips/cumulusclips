@@ -8,9 +8,8 @@ Plugin::triggerEvent('mobile_upload.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->enforceAuth(false);
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();

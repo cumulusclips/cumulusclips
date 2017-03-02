@@ -3,7 +3,6 @@
 Plugin::triggerEvent('system_error.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 Plugin::triggerEvent('system_error.end');

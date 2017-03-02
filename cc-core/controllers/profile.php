@@ -3,8 +3,10 @@
 Plugin::triggerEvent('profile.start');
 
 // Verify if user is logged in
+$this->view->vars->loggedInUser = $this->isAuth();
+
+// Establish page variables, objects, arrays, etc
 $userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
 $playlistService = new PlaylistService();
 
 // Verify Member was supplied

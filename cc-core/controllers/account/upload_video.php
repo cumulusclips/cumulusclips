@@ -7,9 +7,8 @@ $config = Registry::get('config');
 if (!$config->enableUserUploads) App::throw404();
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->enforceAuth(false);
+$this->view->vars->loggedInUser = $this->isAuth(false);
 
 // Establish page variables, objects, arrays, etc
 $tempFilePrefix = UPLOAD_PATH . '/temp/' . $this->view->vars->loggedInUser->userId . '-video-';

@@ -65,6 +65,7 @@
 
         <!-- Login Page -->
         <login_header>Login to your Account</login_header>
+        <session_expired>Your session has expired. Please log in again.</session_expired>
         <remember_me>Remember me</remember_me>
         <forgot_text>Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
         <email>E-mail</email>

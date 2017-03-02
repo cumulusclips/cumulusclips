@@ -7,9 +7,8 @@ $config = Registry::get('config');
 if (!$config->enableUserUploads) App::throw404();
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->enforceAuth();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $records_per_page = 9;

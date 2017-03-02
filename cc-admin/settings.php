@@ -19,6 +19,7 @@ $message = null;
 $data['sitename'] = Settings::get('sitename');
 $data['base_url'] = Settings::get('base_url');
 $data['admin_email'] = Settings::get('admin_email');
+$data['session_timeout'] = Settings::get('session_timeout');
 $data['user_uploads'] = Settings::get('user_uploads');
 $data['video_attachments'] = Settings::get('video_attachments');
 $data['auto_approve_videos'] = Settings::get('auto_approve_videos');
@@ -51,6 +52,13 @@ if (isset($_POST['submitted'])) {
         $data['admin_email'] = trim($_POST['admin_email']);
     } else {
         $errors['admin_email'] = 'Invalid admin email';
+    }
+
+    // Validate session timeout
+    if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 5) {
+        $data['session_timeout'] = $_POST['session_timeout'];
+    } else {
+        $errors['session_timeout'] = 'Minimum 5 minutes required for session timeout';
     }
 
     // Validate user_uploads
@@ -164,6 +172,12 @@ include ('header.php');
     <div class="form-group <?=(isset ($errors['admin_email'])) ? 'has-error' : ''?>">
         <label class="control-label">Admin Email:</label>
         <input class="form-control" type="text" name="admin_email" value="<?=$data['admin_email']?>" />
+    </div>
+
+    <div class="form-group <?=(isset ($errors['session_timeout'])) ? 'has-error' : ''?>">
+        <label class="control-label">Session Timeout:</label>
+        <input class="form-control" type="text" name="session_timeout" value="<?=$data['session_timeout']?>" />
+        <a class="more-info" title="Number of minutes before a logged in user is automatically logged out due to inactivity">More Info</a>
     </div>
 
     <div class="form-group <?=(isset ($errors['user_uploads'])) ? 'has-error' : ''?>">

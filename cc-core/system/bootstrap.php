@@ -49,20 +49,21 @@ define('HOST', Settings::get('base_url'));
 define('MOBILE_HOST', Settings::get('base_url') . '/m');
 
 $config = new stdClass();
-$config->baseUrl = HOST;
+$config->baseUrl = BASE_URL;
 $config->sitename = Settings::get('sitename');
 $config->roles = json_decode(Settings::get('roles'));
+$config->sessionTimeout = (int) Settings::get('session_timeout');
 $config->enableUploads = Settings::get('enable_uploads');
 $config->debugConversion = (boolean) Settings::get('debug_conversion');
 $config->videoSizeLimit = Settings::get('video_size_limit');
 $config->fileSizeLimit = Settings::get('file_size_limit');
 $config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v', '3gp');
 $config->acceptedImageFormats = array('png', 'jpeg', 'jpg', 'gif');
-$config->h264Url = HOST . '/cc-content/uploads/h264';
-$config->theoraUrl = HOST . '/cc-content/uploads/theora';
-$config->webmUrl = HOST . '/cc-content/uploads/webm';
-$config->mobileUrl = HOST . '/cc-content/uploads/mobile';
-$config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
+$config->h264Url = BASE_URL . '/cc-content/uploads/h264';
+$config->theoraUrl = BASE_URL . '/cc-content/uploads/theora';
+$config->webmUrl = BASE_URL . '/cc-content/uploads/webm';
+$config->mobileUrl = BASE_URL . '/cc-content/uploads/mobile';
+$config->thumbUrl = BASE_URL . '/cc-content/uploads/thumbs';
 $config->enableRegistrations = (boolean) Settings::get('user_registrations');
 $config->enableUserUploads = (boolean) Settings::get('user_uploads');
 $config->allowVideoAttachments = (boolean) Settings::get('video_attachments');
@@ -79,7 +80,7 @@ ini_set('session.use_cookies', true);
 ini_set('session.use_only_cookies', true);
 ini_set('session.use_trans_sid', true);
 ini_set('session.cookie_domain', parse_url(BASE_URL, PHP_URL_HOST));
-ini_set('session.cookie_path', parse_url(BASE_URL, PHP_URL_PATH));
+ini_set('session.cookie_path', parse_url(BASE_URL, PHP_URL_PATH) ?: '/');
 
 // Initialize language
 Language::init();

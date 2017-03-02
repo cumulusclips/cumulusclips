@@ -7,11 +7,11 @@ $config = Registry::get('config');
 if (!$config->enableRegistrations) App::throw404();
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
+$userService = new UserService();
 $password = null;
 $this->view->vars->message = null;
 $this->view->vars->data = array ();

@@ -1,8 +1,7 @@
 <?php
 
 // Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
+$loggedInUser = $this->isAuth();
 
 $this->view->options->disableView = true;
 $flagMapper = new FlagMapper();

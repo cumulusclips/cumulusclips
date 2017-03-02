@@ -3,8 +3,7 @@
 Plugin::triggerEvent('contact.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $this->view->vars->errors = array();
@@ -17,7 +16,7 @@ $config = Registry::get('config');
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
-	
+
     // Validate name
     if (!empty($_POST['name']) && !ctype_space($_POST['name'])) {
         $this->view->vars->name = trim($_POST['name']);

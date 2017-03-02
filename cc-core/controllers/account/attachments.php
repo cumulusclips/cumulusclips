@@ -3,9 +3,10 @@
 Plugin::triggerEvent('attachments.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->enforceAuth();
+$this->view->vars->loggedInUser = $this->isAuth();
+
+// Verify that video attachments are allowed
 $config = Registry::get('config');
 if (!$config->allowVideoAttachments) App::throw404();
 

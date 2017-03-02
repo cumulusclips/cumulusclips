@@ -3,9 +3,8 @@
 Plugin::triggerEvent('account.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->enforceAuth();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $this->view->vars->new_messages = null;

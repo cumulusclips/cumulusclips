@@ -3,10 +3,11 @@
 Plugin::triggerEvent('login.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
+// Establish page variables, objects, arrays, etc
+$userService = new UserService();
 $config = Registry::get('config');
 $this->view->vars->username = null;
 $this->view->vars->password = null;
@@ -114,6 +115,12 @@ if (isset($_POST['submitted_forgot'])) {
 // Set redirect location in form if requested
 if (!empty($_GET['redirect'])) {
     $this->view->vars->redirect = trim($_GET['redirect']);
+}
+
+// Display session expired message
+if (isset($_GET['session-expired'])) {
+    $this->view->vars->message = Language::getText('session_expired');
+    $this->view->vars->message_type = 'errors';
 }
 
 Plugin::triggerEvent('login.end');

@@ -1,8 +1,7 @@
 <?php
 
 // Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
+$loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
@@ -14,10 +13,10 @@ $comment = new Comment();
 // Verify a video was selected
 if (!empty($_POST['videoId'])) {
     $video = $videoMapper->getVideoById($_POST['videoId']);
-    
+
     // Check if video is valid
     if (!$video || $video->status != 'approved' || $video->commentsClosed) App::Throw404();
-    
+
     $comment->videoId = $video->videoId;
 } else {
     App::Throw404();

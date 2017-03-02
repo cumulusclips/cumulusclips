@@ -3,8 +3,7 @@
 Plugin::triggerEvent('members.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 $records_per_page = 12;
 $url = HOST . '/members';

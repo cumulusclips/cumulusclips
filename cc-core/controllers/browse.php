@@ -6,8 +6,7 @@ Plugin::triggerEvent('browse.start');
 Plugin::triggerEvent('videos.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->isAuth();
 
 // Establish page variables, objects, arrays, etc
 $load = array ('most-viewed', 'most-discussed', 'most-rated');

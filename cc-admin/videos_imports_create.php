@@ -144,6 +144,7 @@ include('header.php');
         of each imported video. If you wish to customize the meta data for your videos prior to
         importing, you may do so by providing a meta data XML file below.</p>
 
+    <p>Need a blank meta data XML template? You can <a href="<?php echo ADMIN; ?>/videos_imports_create.php?download">download one here</a>.</p>
 
     <div class="form-group <?=(isset ($errors['meta'])) ? 'has-error' : ''?>">
         <label class="control-label">Meta Data XML (Optional):</label>
@@ -159,7 +160,6 @@ include('header.php');
         />
     </div>
 
-    <p>Need a blank meta data XML template? You can <a href="<?php echo ADMIN; ?>/videos_imports_create.php?download">download one here</a>.</p>
 
     <input type="hidden" name="submitted" value="TRUE" />
     <input type="submit" class="button" value="Begin Import" />
