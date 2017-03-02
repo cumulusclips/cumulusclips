@@ -71,6 +71,16 @@ $config->from_name = Settings::get('from_name');
 $config->from_address = Settings::get('from_address');
 Registry::set('config', $config);
 
+// Session security ini values
+ini_set('session.name', 'EID');
+ini_set('session.use_strict_mode', true);
+ini_set('session.cookie_httponly', true);
+ini_set('session.use_cookies', true);
+ini_set('session.use_only_cookies', true);
+ini_set('session.use_trans_sid', true);
+ini_set('session.cookie_domain', parse_url(BASE_URL, PHP_URL_HOST));
+ini_set('session.cookie_path', parse_url(BASE_URL, PHP_URL_PATH));
+
 // Initialize language
 Language::init();
 
