@@ -17,6 +17,8 @@ $attachmentMapper = new \AttachmentMapper();
 $fileMapper = new \FileMapper();
 $page_title = 'Edit Video';
 $pageName = 'videos-edit';
+$message = null;
+$message_type = null;
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
@@ -66,239 +68,250 @@ Handle form if submitted
 
 if (isset ($_POST['submitted'])) {
 
-    if ($config->allowVideoAttachments) {
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        if ($config->allowVideoAttachments) {
 
-        // Validate video attachments
-        if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
+            // Validate video attachments
+            if (isset($_POST['attachment']) && is_array($_POST['attachment'])) {
 
-            do {
+                do {
 
-                foreach ($_POST['attachment'] as $attachment) {
+                    foreach ($_POST['attachment'] as $attachment) {
 
-                    if (!is_array($attachment)) {
-                        $errors['attachment'] = 'Invalid attachment';
-                        break 2;
-                    }
-
-                    // Determine if attachment is a new file upload or existing attachment
-                    if (!empty($attachment['temp'])) {
-
-                        // New upload
-
-                        // Validate file upload info
-                        if (
-                            empty($attachment['name'])
-                            || empty($attachment['size'])
-                            || !is_numeric($attachment['size'])
-                            || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
-                        ) {
-                            $errors['attachment'] = 'Invalid attachment file upload';
-                            break 2;
-                        }
-
-                        // Create file
-                        $newFiles[] = array(
-                            'temp' => $attachment['temp'],
-                            'name' => $attachment['name'],
-                            'size' => $attachment['size']
-                        );
-
-                    } elseif (!empty($attachment['file'])) {
-
-                        // Attaching existing file
-
-                        $file = $fileMapper->getById($attachment['file']);
-
-                        // Verify file exists and belongs to user
-                        if (
-                            !$file
-                            || $file->userId !== $adminUser->userId
-                        ) {
+                        if (!is_array($attachment)) {
                             $errors['attachment'] = 'Invalid attachment';
                             break 2;
                         }
 
-                        // Verify attachment isn't already attached
-                        if (in_array($attachment['file'], $newAttachmentFileIds)) {
-                            $errors['attachment'] = 'File is already attached';
+                        // Determine if attachment is a new file upload or existing attachment
+                        if (!empty($attachment['temp'])) {
+
+                            // New upload
+
+                            // Validate file upload info
+                            if (
+                                empty($attachment['name'])
+                                || empty($attachment['size'])
+                                || !is_numeric($attachment['size'])
+                                || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
+                            ) {
+                                $errors['attachment'] = 'Invalid attachment file upload';
+                                break 2;
+                            }
+
+                            // Create file
+                            $newFiles[] = array(
+                                'temp' => $attachment['temp'],
+                                'name' => $attachment['name'],
+                                'size' => $attachment['size']
+                            );
+
+                        } elseif (!empty($attachment['file'])) {
+
+                            // Attaching existing file
+
+                            $file = $fileMapper->getById($attachment['file']);
+
+                            // Verify file exists and belongs to user
+                            if (
+                                !$file
+                                || $file->userId !== $adminUser->userId
+                            ) {
+                                $errors['attachment'] = 'Invalid attachment';
+                                break 2;
+                            }
+
+                            // Verify attachment isn't already attached
+                            if (in_array($attachment['file'], $newAttachmentFileIds)) {
+                                $errors['attachment'] = 'File is already attached';
+                                break 2;
+                            }
+
+                            // Create attachment entry
+                            $newAttachmentFileIds[] = $attachment['file'];
+
+                        } else {
+                            $errors['attachment'] = 'Invalid attachment';
                             break 2;
                         }
-
-                        // Create attachment entry
-                        $newAttachmentFileIds[] = $attachment['file'];
-
-                    } else {
-                        $errors['attachment'] = 'Invalid attachment';
-                        break 2;
                     }
-                }
 
+                    // Set attachment files to display on form
+                    $attachmentFileIds = $newAttachmentFileIds;
+
+                } while (false);
+
+            } else {
                 // Set attachment files to display on form
                 $attachmentFileIds = $newAttachmentFileIds;
-
-            } while (false);
-
-        } else {
-            // Set attachment files to display on form
-            $attachmentFileIds = $newAttachmentFileIds;
-        }
-    }
-
-    // Validate title
-    if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
-        $video->title = trim($_POST['title']);
-    } else {
-        $errors['title'] = 'Invalid title';
-    }
-
-
-    // Validate description
-    if (!empty ($_POST['description']) && !ctype_space ($_POST['description'])) {
-        $video->description = trim ($_POST['description']);
-    } else {
-        $errors['description'] = 'Invalid description';
-    }
-
-
-    // Validate tags
-    if (!empty ($_POST['tags']) && !ctype_space ($_POST['tags'])) {
-        $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
-    } else {
-        $errors['tags'] = 'Invalid tags';
-    }
-
-
-    // Validate cat_id
-    if (!empty ($_POST['cat_id']) && is_numeric ($_POST['cat_id'])) {
-        $video->categoryId = $_POST['cat_id'];
-    } else {
-        $errors['cat_id'] = 'Invalid category';
-    }
-
-
-    // Validate disable embed
-    if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
-        $video->disableEmbed = true;
-    } else {
-        $video->disableEmbed = false;
-    }
-
-
-    // Validate gated
-    if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
-        $video->gated = true;
-    } else {
-        $video->gated = false;
-    }
-
-
-    // Validate private
-    if (!empty ($_POST['private']) && $_POST['private'] == '1') {
-        $video->private = true;
-
-        try {
-
-            // Validate private URL
-            if (empty ($_POST['private_url'])) throw new Exception ('error');
-            if (strlen ($_POST['private_url']) != 7) throw new Exception ('error');
-            $duplicateVideo = $videoMapper->getVideoByCustom(array('private_url' => $_POST['private_url']));
-            if ($duplicateVideo && $duplicateVideo->videoId != $video->videoId) throw new Exception ('error');
-
-            // Set private URL
-            $video->privateUrl = trim($_POST['private_url']);
-            $private_url = $video->privateUrl;
-
-        } catch (Exception $e) {
-            $errors['private_url'] = 'Invalid private URL';
-        }
-
-    } else {
-        $video->private = false;
-        $video->privateUrl = null;
-    }
-
-    // Validate close comments
-    if (!empty ($_POST['closeComments']) && $_POST['closeComments'] == '1') {
-        $video->commentsClosed = true;
-    } else {
-        $video->commentsClosed = false;
-    }
-
-    // Validate status
-    if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))) {
-        if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
-            $video->status = $newStatus = trim ($_POST['status']);
-        } else {
-            $errors['status'] = 'Invalid status';
-        }
-    }
-
-
-    // Update video if no errors were made
-    if (empty ($errors)) {
-
-        // Create files for uploaded attachments
-        foreach ($newFiles as $key => $newFile) {
-
-            $file = new \File();
-            $file->filename = $fileService->generateFilename();
-            $file->name = $newFile['name'];
-            $file->type = \FileMapper::TYPE_ATTACHMENT;
-            $file->userId = $adminUser->userId;
-            $file->extension = Functions::getExtension($newFile['temp']);
-            $file->filesize = filesize($newFile['temp']);
-
-            // Move file to files directory
-            Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/attachments/' . $file->filename . '.' . $file->extension);
-
-            // Create record
-            $newAttachmentFileIds[] = $attachmentFileIds[] = $fileMapper->save($file);
-            unset($newFiles[$key]);
-        }
-
-        // Determine which attachments are new and removed
-        $existingAttachmentFileIds = \Functions::arrayColumn($videoAttachments, 'fileId');
-        $removedAttachmentFileIds = array_diff($existingAttachmentFileIds, $newAttachmentFileIds);
-        $addedAttachmentFileIds = array_diff($newAttachmentFileIds, $existingAttachmentFileIds);
-
-        // Create new attachments
-        foreach ($addedAttachmentFileIds as $fileId) {
-            $attachment = new \Attachment();
-            $attachment->videoId = $video->videoId;
-            $attachment->fileId = $fileId;
-            $attachmentMapper->save($attachment);
-        }
-
-        // Remove discarded attachments
-        foreach ($removedAttachmentFileIds as $fileId) {
-            $attachment = $attachmentMapper->getByCustom(array('file_id' => $fileId));
-            $attachmentMapper->delete($attachment->attachmentId);
-        }
-
-        // Perform addional actions based on status change
-        if (isset($newStatus) && $newStatus != $video->status) {
-
-            // Handle "Approve" action
-            if ($newStatus == 'approved') {
-                $videoService->Approve('approve');
-            }
-
-            // Handle "Ban" action
-            else if ($newStatus == 'banned') {
-                $flagService = new FlagService();
-                $flagService->flagDecision($video, true);
             }
         }
 
-        $videoMapper->save($video);
-        $message = 'Video has been updated.';
-        $message_type = 'alert-success';
+        // Validate title
+        if (!empty ($_POST['title']) && !ctype_space ($_POST['title'])) {
+            $video->title = trim($_POST['title']);
+        } else {
+            $errors['title'] = 'Invalid title';
+        }
+
+
+        // Validate description
+        if (!empty ($_POST['description']) && !ctype_space ($_POST['description'])) {
+            $video->description = trim ($_POST['description']);
+        } else {
+            $errors['description'] = 'Invalid description';
+        }
+
+
+        // Validate tags
+        if (!empty ($_POST['tags']) && !ctype_space ($_POST['tags'])) {
+            $video->tags = preg_split('/,\s*/', trim($_POST['tags']));
+        } else {
+            $errors['tags'] = 'Invalid tags';
+        }
+
+
+        // Validate cat_id
+        if (!empty ($_POST['cat_id']) && is_numeric ($_POST['cat_id'])) {
+            $video->categoryId = $_POST['cat_id'];
+        } else {
+            $errors['cat_id'] = 'Invalid category';
+        }
+
+
+        // Validate disable embed
+        if (!empty ($_POST['disable_embed']) && $_POST['disable_embed'] == '1') {
+            $video->disableEmbed = true;
+        } else {
+            $video->disableEmbed = false;
+        }
+
+
+        // Validate gated
+        if (!empty ($_POST['gated']) && $_POST['gated'] == '1') {
+            $video->gated = true;
+        } else {
+            $video->gated = false;
+        }
+
+
+        // Validate private
+        if (!empty ($_POST['private']) && $_POST['private'] == '1') {
+            $video->private = true;
+
+            try {
+
+                // Validate private URL
+                if (empty ($_POST['private_url'])) throw new Exception ('error');
+                if (strlen ($_POST['private_url']) != 7) throw new Exception ('error');
+                $duplicateVideo = $videoMapper->getVideoByCustom(array('private_url' => $_POST['private_url']));
+                if ($duplicateVideo && $duplicateVideo->videoId != $video->videoId) throw new Exception ('error');
+
+                // Set private URL
+                $video->privateUrl = trim($_POST['private_url']);
+                $private_url = $video->privateUrl;
+
+            } catch (Exception $e) {
+                $errors['private_url'] = 'Invalid private URL';
+            }
+
+        } else {
+            $video->private = false;
+            $video->privateUrl = null;
+        }
+
+        // Validate close comments
+        if (!empty ($_POST['closeComments']) && $_POST['closeComments'] == '1') {
+            $video->commentsClosed = true;
+        } else {
+            $video->commentsClosed = false;
+        }
+
+        // Validate status
+        if (!in_array($video->status, array('processing', VideoMapper::PENDING_CONVERSION))) {
+            if (!empty ($_POST['status']) && !ctype_space ($_POST['status'])) {
+                $video->status = $newStatus = trim ($_POST['status']);
+            } else {
+                $errors['status'] = 'Invalid status';
+            }
+        }
+
+        // Update video if no errors were made
+        if (empty ($errors)) {
+
+            // Create files for uploaded attachments
+            foreach ($newFiles as $key => $newFile) {
+
+                $file = new \File();
+                $file->filename = $fileService->generateFilename();
+                $file->name = $newFile['name'];
+                $file->type = \FileMapper::TYPE_ATTACHMENT;
+                $file->userId = $adminUser->userId;
+                $file->extension = Functions::getExtension($newFile['temp']);
+                $file->filesize = filesize($newFile['temp']);
+
+                // Move file to files directory
+                Filesystem::rename($newFile['temp'], UPLOAD_PATH . '/files/attachments/' . $file->filename . '.' . $file->extension);
+
+                // Create record
+                $newAttachmentFileIds[] = $attachmentFileIds[] = $fileMapper->save($file);
+                unset($newFiles[$key]);
+            }
+
+            // Determine which attachments are new and removed
+            $existingAttachmentFileIds = \Functions::arrayColumn($videoAttachments, 'fileId');
+            $removedAttachmentFileIds = array_diff($existingAttachmentFileIds, $newAttachmentFileIds);
+            $addedAttachmentFileIds = array_diff($newAttachmentFileIds, $existingAttachmentFileIds);
+
+            // Create new attachments
+            foreach ($addedAttachmentFileIds as $fileId) {
+                $attachment = new \Attachment();
+                $attachment->videoId = $video->videoId;
+                $attachment->fileId = $fileId;
+                $attachmentMapper->save($attachment);
+            }
+
+            // Remove discarded attachments
+            foreach ($removedAttachmentFileIds as $fileId) {
+                $attachment = $attachmentMapper->getByCustom(array('file_id' => $fileId));
+                $attachmentMapper->delete($attachment->attachmentId);
+            }
+
+            // Perform addional actions based on status change
+            if (isset($newStatus) && $newStatus != $video->status) {
+
+                // Handle "Approve" action
+                if ($newStatus == 'approved') {
+                    $videoService->Approve('approve');
+                }
+
+                // Handle "Ban" action
+                else if ($newStatus == 'banned') {
+                    $flagService = new FlagService();
+                    $flagService->flagDecision($video, true);
+                }
+            }
+
+            $videoMapper->save($video);
+            $message = 'Video has been updated.';
+            $message_type = 'alert-success';
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+            $message_type = 'alert-danger';
+        }
+
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
-
 }
 
 // Retrieve user's attachments
@@ -306,6 +319,11 @@ $userAttachments = $fileMapper->getMultipleByCustom(array(
     'user_id' => $adminUser->userId,
     'type' => \FileMapper::TYPE_ATTACHMENT
 ));
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 include ('header.php');
@@ -525,6 +543,7 @@ include ('header.php');
 
     <div class="tab-content-footer">
         <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?=$formNonce?>" />
         <input type="submit" class="button" value="Update Video" />
     </div>
 

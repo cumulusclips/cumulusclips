@@ -50,111 +50,129 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate status
-    if (!empty($_POST['status'])) {
-        $user->status = trim($_POST['status']);
-    } else {
-        $errors['status'] = 'Invalid status';
-    }
-
-    // Validate role
-    if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
-        $user->role = trim($_POST['role']);
-    } else {
-        $errors['role'] = 'Invalid role';
-    }
-
-    // Validate Email
-    if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        $duplicateEmailUser = $userMapper->getUserByCustom(array('email' => $_POST['email']));
-        if (!$duplicateEmailUser || $duplicateEmailUser->userId == $user->userId) {
-            $user->email = $_POST['email'];
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate status
+        if (!empty($_POST['status'])) {
+            $user->status = trim($_POST['status']);
         } else {
-            $errors['email'] = 'Email is unavailable';
+            $errors['status'] = 'Invalid status';
         }
 
-    } else {
-        $errors['email'] = 'Invalid email address';
-    }
-
-    // Validate password
-    if (!empty($_POST['password'])) {
-        $password = trim($_POST['password']);
-    }
-
-    // Validate First Name
-    if (!empty($user->firstName) && $_POST['first_name'] == '') {
-        $user->firstName = '';
-    } elseif (!empty($_POST['first_name'])) {
-        $user->firstName = $_POST['first_name'];
-    }
-
-    // Validate Last Name
-    if (!empty($user->lastName) && $_POST['last_name'] == '') {
-        $user->lastName = '';
-    } elseif (!empty($_POST['last_name'])) {
-        $user->lastName = $_POST['last_name'];
-    }
-
-    // Validate website
-    if (!empty($user->website) && empty($_POST['website'])) {
-        $user->website = '';
-    } else if (!empty ($_POST['website'])) {
-        $website = $_POST['website'];
-        if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
-            $website = (empty($matches[1])) ? 'http://' . $website : $website;
-            $user->website = trim($website);
+        // Validate role
+        if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
+            $user->role = trim($_POST['role']);
         } else {
-            $errors['website'] = 'Invalid website';
+            $errors['role'] = 'Invalid role';
         }
-    }
 
-    // Validate About Me
-    if (!empty($user->aboutMe) && empty($_POST['about_me'])) {
-        $user->aboutMe = '';
-    } elseif (!empty($_POST['about_me'])) {
-        $user->aboutMe = $_POST['about_me'];
-    }
+        // Validate Email
+        if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9_\.\-]+@[a-z0-9][a-z0-9\.\-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
+            $duplicateEmailUser = $userMapper->getUserByCustom(array('email' => $_POST['email']));
+            if (!$duplicateEmailUser || $duplicateEmailUser->userId == $user->userId) {
+                $user->email = $_POST['email'];
+            } else {
+                $errors['email'] = 'Email is unavailable';
+            }
 
-    // Update User if no errors were found
-    if (empty($errors)) {
+        } else {
+            $errors['email'] = 'Invalid email address';
+        }
 
-        // Perform addional actions based on status change
-        if ($user->status != $user->status) {
+        // Validate password
+        if (!empty($_POST['password'])) {
+            $password = trim($_POST['password']);
+        }
 
-            switch ($user->status) {
+        // Validate First Name
+        if (!empty($user->firstName) && $_POST['first_name'] == '') {
+            $user->firstName = '';
+        } elseif (!empty($_POST['first_name'])) {
+            $user->firstName = $_POST['first_name'];
+        }
 
-                // Handle "Approve" action
-                case 'active':
-                    $userService->updateContentStatus($user, 'active');
-                    $userService->approve($user, 'approve');
-                    break;
+        // Validate Last Name
+        if (!empty($user->lastName) && $_POST['last_name'] == '') {
+            $user->lastName = '';
+        } elseif (!empty($_POST['last_name'])) {
+            $user->lastName = $_POST['last_name'];
+        }
 
-                // Handle "Ban" action
-                case 'banned':
-                    $userService->updateContentStatus($user, 'banned');
-                    $flagService = new FlagService();
-                    $flagService->flagDecision($user, true);
-                    break;
-
-                // Handle "Pending" or "New" action
-                case 'new':
-                case 'pending':
-                    $userService->updateContentStatus($user);
-                    break;
+        // Validate website
+        if (!empty($user->website) && empty($_POST['website'])) {
+            $user->website = '';
+        } else if (!empty ($_POST['website'])) {
+            $website = $_POST['website'];
+            if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+                $website = (empty($matches[1])) ? 'http://' . $website : $website;
+                $user->website = trim($website);
+            } else {
+                $errors['website'] = 'Invalid website';
             }
         }
 
-        if (isset($password)) $user->password = md5($user->password);
-        $message = 'Member has been updated.';
-        $message_type = 'alert-success';
-        $userMapper->save($user);
+        // Validate About Me
+        if (!empty($user->aboutMe) && empty($_POST['about_me'])) {
+            $user->aboutMe = '';
+        } elseif (!empty($_POST['about_me'])) {
+            $user->aboutMe = $_POST['about_me'];
+        }
+
+        // Update User if no errors were found
+        if (empty($errors)) {
+
+            // Perform addional actions based on status change
+            if ($user->status != $user->status) {
+
+                switch ($user->status) {
+
+                    // Handle "Approve" action
+                    case 'active':
+                        $userService->updateContentStatus($user, 'active');
+                        $userService->approve($user, 'approve');
+                        break;
+
+                    // Handle "Ban" action
+                    case 'banned':
+                        $userService->updateContentStatus($user, 'banned');
+                        $flagService = new FlagService();
+                        $flagService->flagDecision($user, true);
+                        break;
+
+                    // Handle "Pending" or "New" action
+                    case 'new':
+                    case 'pending':
+                        $userService->updateContentStatus($user);
+                        break;
+                }
+            }
+
+            if (isset($password)) $user->password = md5($user->password);
+            $message = 'Member has been updated.';
+            $message_type = 'alert-success';
+            $userMapper->save($user);
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br><br> - ' . implode('<br> - ', $errors);
+            $message_type = 'alert-danger';
+        }
+
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br><br> - ' . implode('<br> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 include ('header.php');
@@ -227,6 +245,7 @@ include ('header.php');
     </div>
 
     <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Update Member" />
 
 </form>

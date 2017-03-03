@@ -42,24 +42,42 @@ if (!empty($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate name
-    if (!empty($_POST['name'])) {
-        $file->name = trim($_POST['name']);
-    } else {
-        $errors['name'] = 'Invalid name';
-    }
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate name
+        if (!empty($_POST['name'])) {
+            $file->name = trim($_POST['name']);
+        } else {
+            $errors['name'] = 'Invalid name';
+        }
 
-    // Update file if no errors were made
-    if (empty($errors)) {
-        $fileMapper->save($file);
-        $message = 'File has been updated.';
-        $message_type = 'alert-success';
+        // Update file if no errors were made
+        if (empty($errors)) {
+            $fileMapper->save($file);
+            $message = 'File has been updated.';
+            $message_type = 'alert-success';
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+            $message_type = 'alert-danger';
+        }
+
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode ('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 include ('header.php');
@@ -81,7 +99,8 @@ include ('header.php');
         <input class="form-control" type="text" name="name" value="<?=htmlspecialchars($file->name)?>" />
     </div>
 
-    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Update File" />
 </form>
 

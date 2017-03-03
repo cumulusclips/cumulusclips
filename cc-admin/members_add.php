@@ -26,88 +26,106 @@ if ($adminUser->role != 'admin') {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate role
-    if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
-        $user->role = trim($_POST['role']);
-    } else {
-        $errors['role'] = 'Invalid role';
-    }
-
-    // Validate email
-    if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
-        $emailCheck = $userMapper->getUserByCustom(array('email' => $_POST['email']));
-        if (!$emailCheck) {
-            $user->email = trim($_POST['email']);
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate role
+        if (!empty($_POST['role']) && array_key_exists($_POST['role'], $allowedRoles)) {
+            $user->role = trim($_POST['role']);
         } else {
-            $errors['email'] = 'Email is unavailable';
+            $errors['role'] = 'Invalid role';
         }
-    } else {
-        $errors['email'] = 'Invalid email address';
-    }
 
-    // Validate Username
-    if (!empty($_POST['username'])) {
-        $usernameCheck = $userMapper->getUserByCustom(array('username' => $_POST['username']));
-        if (!$usernameCheck) {
-            $user->username = trim($_POST['username']);
+        // Validate email
+        if (!empty($_POST['email']) && preg_match('/^[a-z0-9][a-z0-9\._-]+@[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}$/i', $_POST['email'])) {
+            $emailCheck = $userMapper->getUserByCustom(array('email' => $_POST['email']));
+            if (!$emailCheck) {
+                $user->email = trim($_POST['email']);
+            } else {
+                $errors['email'] = 'Email is unavailable';
+            }
         } else {
-            $errors['username'] = 'Username is unavailable';
+            $errors['email'] = 'Invalid email address';
         }
-    } else {
-        $errors['username'] = 'Invalid username';
-    }
 
-    // Validate password
-    if (!empty($_POST['password'])) {
-        $user->password = trim($_POST['password']);
-    } else {
-        $errors['password'] = 'Invalid password';
-    }
-
-    // Validate first name
-    if (!empty($_POST['first_name'])) {
-        $user->firstName = trim($_POST['first_name']);
-    }
-
-    // Validate last name
-    if (!empty($_POST['last_name'])) {
-        $user->lastName = trim($_POST['last_name']);
-    }
-
-    // Validate website
-    if (!empty($_POST['website'])) {
-        $website = $_POST['website'];
-        if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
-            $website = (empty($matches[1]) ? 'http://' : '') . $website;
-            $user->website = trim($website);
+        // Validate Username
+        if (!empty($_POST['username'])) {
+            $usernameCheck = $userMapper->getUserByCustom(array('username' => $_POST['username']));
+            if (!$usernameCheck) {
+                $user->username = trim($_POST['username']);
+            } else {
+                $errors['username'] = 'Username is unavailable';
+            }
         } else {
-            $errors['website'] = 'Invalid website';
+            $errors['username'] = 'Invalid username';
         }
-    }
 
-    // Validate about me
-    if (!empty($_POST['about_me'])) {
-        $user->aboutMe = trim($_POST['about_me']);
-    }
+        // Validate password
+        if (!empty($_POST['password'])) {
+            $user->password = trim($_POST['password']);
+        } else {
+            $errors['password'] = 'Invalid password';
+        }
 
-    // Create user if no errors were found
-    if (empty($errors)) {
+        // Validate first name
+        if (!empty($_POST['first_name'])) {
+            $user->firstName = trim($_POST['first_name']);
+        }
 
-        // Create user
-        $newUser = $userService->create($user);
-        $userService->approve($newUser, 'create');
-        unset($user);
+        // Validate last name
+        if (!empty($_POST['last_name'])) {
+            $user->lastName = trim($_POST['last_name']);
+        }
 
-        // Output message
-        $message = 'Member has been added.';
-        $message_type = 'alert-success';
+        // Validate website
+        if (!empty($_POST['website'])) {
+            $website = $_POST['website'];
+            if (preg_match('/^(https?:\/\/)?[a-z0-9][a-z0-9\.-]+\.[a-z0-9]{2,4}.*$/i', $website, $matches)) {
+                $website = (empty($matches[1]) ? 'http://' : '') . $website;
+                $user->website = trim($website);
+            } else {
+                $errors['website'] = 'Invalid website';
+            }
+        }
+
+        // Validate about me
+        if (!empty($_POST['about_me'])) {
+            $user->aboutMe = trim($_POST['about_me']);
+        }
+
+        // Create user if no errors were found
+        if (empty($errors)) {
+
+            // Create user
+            $newUser = $userService->create($user);
+            $userService->approve($newUser, 'create');
+            unset($user);
+
+            // Output message
+            $message = 'Member has been added.';
+            $message_type = 'alert-success';
+
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br><br> - ' . implode('<br> - ', $errors);
+            $message_type = 'alert-danger';
+        }
 
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br><br> - ' . implode('<br> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'members-add';
@@ -172,7 +190,8 @@ include('header.php');
         <textarea name="about_me" rows="5" cols="50" class="form-control"><?=isset($user->aboutMe) ? htmlspecialchars($user->aboutMe) : ''?></textarea>
     </div>
 
-    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Create Member" />
 
 </form>

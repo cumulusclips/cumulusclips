@@ -18,32 +18,50 @@ $type = null;
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
-    
-    // Validate type
-    if (!empty($_POST['type']) && in_array($_POST['type'], array('css', 'js'))) {
-        $type = ($_POST['type'] == 'js') ? 'custom_js' : 'custom_css';
-        $friendlyType = ($_POST['type'] == 'js') ? 'JavaScript' : 'CSS';
+
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate type
+        if (!empty($_POST['type']) && in_array($_POST['type'], array('css', 'js'))) {
+            $type = ($_POST['type'] == 'js') ? 'custom_js' : 'custom_css';
+            $friendlyType = ($_POST['type'] == 'js') ? 'JavaScript' : 'CSS';
+        } else {
+            $errors = true;
+        }
+
+        // Validate customization content
+        if (empty($_POST['content'] )) {
+            $content = '';
+        } else {
+            $content = $_POST['content'];
+        }
+
+        // Update customizations if no errors were made
+        if (!$errors) {
+            Settings::set($type, $content);
+            $messageType = 'alert-success';
+            $message = 'Your ' . $friendlyType . ' customizations have been updated';
+        } else {
+            $messageType = 'alert-danger';
+            $message = 'Invalid customization type';
+        }
+
     } else {
-        $errors = true;
-    }
-    
-    // Validate customization content
-    if (empty($_POST['content'] )) {
-        $content = '';
-    } else {
-        $content = $_POST['content'];
-    }
-    
-    // Update customizations if no errors were made
-    if (!$errors) {
-        Settings::set($type, $content);
-        $messageType = 'alert-success';
-        $message = 'Your ' . $friendlyType . ' customizations have been updated';
-    } else {
+        $message = 'Expired or invalid session';
         $messageType = 'alert-danger';
-        $message = 'Invalid customization type';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'customizations';
@@ -71,7 +89,8 @@ include ('header.php');
             <form action="" method="post">
                 <textarea class="form-control" name="content"><?=htmlspecialchars(Settings::get('custom_css'))?></textarea>
                 <input type="hidden" name="type" value="css" />
-                <input type="hidden" name="submitted" value="true" />
+                <input type="hidden" value="yes" name="submitted" />
+                <input type="hidden" name="nonce" value="<?=$formNonce?>" />
                 <input type="submit" class="button" value="Update CSS" />
             </form>
         </div>
@@ -79,7 +98,8 @@ include ('header.php');
             <h3>Custom JavaScript</h3>
             <form action="" method="post">
                 <textarea class="form-control" name="content"><?=htmlspecialchars(Settings::get('custom_js'))?></textarea>
-                <input type="hidden" name="submitted" value="true" />
+                <input type="hidden" value="yes" name="submitted" />
+                <input type="hidden" name="nonce" value="<?=$formNonce?>" />
                 <input type="hidden" name="type" value="js" />
                 <input type="submit" class="button" value="Update JavaScript" />
             </form>

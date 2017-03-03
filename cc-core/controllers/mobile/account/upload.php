@@ -9,7 +9,7 @@ Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
 $this->enforceAuth(false);
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->view->vars->loggedInUser = $this->isAuth(false);
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();

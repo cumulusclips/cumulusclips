@@ -21,57 +21,75 @@ $admin_js[] = ADMIN . '/js/fileupload.js';
 // Handle Upload Form
 if (isset($_POST['submitted'])) {
 
-    // Validate file upload
+    // Validate form nonce token and submission speed
     if (
-        !empty($_POST['upload']['temp'])
-        && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'addon')
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
     ) {
+        // Validate file upload
+        if (
+            !empty($_POST['upload']['temp'])
+            && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'addon')
+        ) {
 
-        try {
-            // Create extraction directory
-            $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($_POST['upload']['temp'], '.zip');
-            Filesystem::createDir($extractionDirectory);
-            Filesystem::setPermissions($extractionDirectory, 0777);
+            try {
+                // Create extraction directory
+                $extractionDirectory = UPLOAD_PATH . '/temp/' .  basename($_POST['upload']['temp'], '.zip');
+                Filesystem::createDir($extractionDirectory);
+                Filesystem::setPermissions($extractionDirectory, 0777);
 
-            // Move zip to extraction directory
-            Filesystem::rename($_POST['upload']['temp'], $extractionDirectory . '/addon.zip');
+                // Move zip to extraction directory
+                Filesystem::rename($_POST['upload']['temp'], $extractionDirectory . '/addon.zip');
 
-            // Extract theme
-            Filesystem::extract($extractionDirectory . '/addon.zip');
+                // Extract theme
+                Filesystem::extract($extractionDirectory . '/addon.zip');
 
-            // Check for duplicates
-            $extractionDirectoryContents = array_diff(scandir($extractionDirectory), array('.', '..', 'addon.zip'));
-            $themeName = array_pop($extractionDirectoryContents);
-            if (file_exists(DOC_ROOT . '/cc-content/themes/' . $themeName)) {
-                throw new Exception("Theme cannot be added. It conflicts with another theme.");
+                // Check for duplicates
+                $extractionDirectoryContents = array_diff(scandir($extractionDirectory), array('.', '..', 'addon.zip'));
+                $themeName = array_pop($extractionDirectoryContents);
+                if (file_exists(DOC_ROOT . '/cc-content/themes/' . $themeName)) {
+                    throw new Exception("Theme cannot be added. It conflicts with another theme.");
+                }
+
+                // Copy theme contents to themes dir
+                Filesystem::copyDir($extractionDirectory . '/' . $themeName, THEMES_DIR . '/' . $themeName);
+
+                // Validate theme
+                if (!Functions::validTheme($themeName)) {
+                    throw new Exception("Theme contains errors. Please report this to it's developer");
+                }
+
+                // Clean up
+                Filesystem::delete($extractionDirectory);
+
+                // Display success message
+                $xml = simplexml_load_file(THEMES_DIR . '/' . $themeName . '/theme.xml');
+                $message = $xml->name . ' has been added.';
+                $message_type = 'alert-success';
+
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+                $message_type = 'alert-danger';
             }
 
-            // Copy theme contents to themes dir
-            Filesystem::copyDir($extractionDirectory . '/' . $themeName, THEMES_DIR . '/' . $themeName);
-
-            // Validate theme
-            if (!Functions::validTheme($themeName)) {
-                throw new Exception("Theme contains errors. Please report this to it's developer");
-            }
-
-            // Clean up
-            Filesystem::delete($extractionDirectory);
-
-            // Display success message
-            $xml = simplexml_load_file(THEMES_DIR . '/' . $themeName . '/theme.xml');
-            $message = $xml->name . ' has been added.';
-            $message_type = 'alert-success';
-
-        } catch (Exception $e) {
-            $message = $e->getMessage();
+        } else {
+            $message = 'Invalid file upload';
             $message_type = 'alert-danger';
         }
 
     } else {
-        $message = 'Invalid file upload';
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'themes-add';
@@ -103,6 +121,7 @@ to upload and add it to the system.</p>
     </div>
 
     <input type="hidden" name="submitted" value="true" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
 
 </form>
 

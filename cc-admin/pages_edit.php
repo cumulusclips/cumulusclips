@@ -47,57 +47,75 @@ foreach (glob(THEMES_DIR . '/' . $activeTheme .'/layouts/*.phtml') as $filename)
 // HANDLE FORM IF SUBMITTED
 if (isset($_POST['submitted'])) {
 
-    // Validate layout
-    if (!empty($_POST['layout']) && !ctype_space($_POST['layout'])) {
-        $page->layout = $_POST['layout'];
-    } else {
-        $errors['layout'] = "You didn't provide a valid layout";
-    }
-
-    // Validate status
-    if (!empty($_POST['status']) && in_array($_POST['status'], array ('published', 'draft'))) {
-        $page->status = $_POST['status'];
-    } else {
-        $errors['status'] = "You didn't provide a valid status";
-    }
-
-    // Validate title
-    if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
-        $page->title = trim ($_POST['title']);
-    } else {
-        $errors['title'] = "You didn't enter a valid title";
-    }
-
-    // Validate slug
-    if (!empty($_POST['slug']) && !ctype_space($_POST['slug'])) {
-        $slug = Functions::createSlug(trim($_POST['slug']));
-        if ($slug == $page->slug || (!$pageService->isReserved($slug) && !$pageMapper->getPageBySlug($slug))) {
-            $page->slug = $slug;
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate layout
+        if (!empty($_POST['layout']) && !ctype_space($_POST['layout'])) {
+            $page->layout = $_POST['layout'];
         } else {
-            $errors['slug'] = "URL is not available";
+            $errors['layout'] = "You didn't provide a valid layout";
         }
-    } else {
-        $errors['slug'] = "You didn't enter a valid URL";
-    }
 
-    // Validate content
-    if (!empty($_POST['content']) && !ctype_space($_POST['content'])) {
-        $page->content = trim($_POST['content']);
-    } else {
-        $data['content'] = '';
-    }
+        // Validate status
+        if (!empty($_POST['status']) && in_array($_POST['status'], array ('published', 'draft'))) {
+            $page->status = $_POST['status'];
+        } else {
+            $errors['status'] = "You didn't provide a valid status";
+        }
 
-    // Update record if no errors were found
-    if (empty($errors)) {
-        $pageMapper->save($page);
-        $message = 'Page has been updated';
-        $message_type = 'alert-success';
+        // Validate title
+        if (!empty($_POST['title']) && !ctype_space($_POST['title'])) {
+            $page->title = trim ($_POST['title']);
+        } else {
+            $errors['title'] = "You didn't enter a valid title";
+        }
+
+        // Validate slug
+        if (!empty($_POST['slug']) && !ctype_space($_POST['slug'])) {
+            $slug = Functions::createSlug(trim($_POST['slug']));
+            if ($slug == $page->slug || (!$pageService->isReserved($slug) && !$pageMapper->getPageBySlug($slug))) {
+                $page->slug = $slug;
+            } else {
+                $errors['slug'] = "URL is not available";
+            }
+        } else {
+            $errors['slug'] = "You didn't enter a valid URL";
+        }
+
+        // Validate content
+        if (!empty($_POST['content']) && !ctype_space($_POST['content'])) {
+            $page->content = trim($_POST['content']);
+        } else {
+            $data['content'] = '';
+        }
+
+        // Update record if no errors were found
+        if (empty($errors)) {
+            $pageMapper->save($page);
+            $message = 'Page has been updated';
+            $message_type = 'alert-success';
+        } else {
+            $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
+            $message .= implode('<br />- ', $errors);
+            $message_type = 'alert-danger';
+        }
+
     } else {
-        $message = 'Errors were found. Please correct the errors below and try again.<br /><br />- ';
-        $message .= implode('<br />- ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 include('header.php');
@@ -167,7 +185,8 @@ include('header.php');
     </div>
 
     <input type="hidden" name="pageId" value="<?=$page->pageId?>" />
-    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <a href="<?=HOST?>/page/?preview=<?=$page->pageId?>" class="button preview" target="_ccsite">Preview</a>
     <input type="submit" class="button" value="Update Page" />
 

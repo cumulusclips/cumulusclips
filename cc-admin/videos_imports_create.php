@@ -85,40 +85,58 @@ XML;
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate meta data file upload
-    if (!empty($_POST['upload']['temp'])) {
-        if (
-            !empty($_POST['upload']['original-name'])
-            && !empty($_POST['upload']['original-size'])
-            && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'library')
-        ) {
-            $tempFile = $_POST['upload']['temp'];
-            $prepopulate = urlencode(json_encode(array(
-                'path' => $_POST['upload']['temp'],
-                'name' => trim($_POST['upload']['original-name']),
-                'size' => trim($_POST['upload']['original-size'])
-            )));
-        } else {
-            $errors['meta'] = 'Invalid meta data upload';
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate meta data file upload
+        if (!empty($_POST['upload']['temp'])) {
+            if (
+                !empty($_POST['upload']['original-name'])
+                && !empty($_POST['upload']['original-size'])
+                && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'library')
+            ) {
+                $tempFile = $_POST['upload']['temp'];
+                $prepopulate = urlencode(json_encode(array(
+                    'path' => $_POST['upload']['temp'],
+                    'name' => trim($_POST['upload']['original-name']),
+                    'size' => trim($_POST['upload']['original-size'])
+                )));
+            } else {
+                $errors['meta'] = 'Invalid meta data upload';
+            }
         }
-    }
 
-    try {
+        try {
 
-        $jobId = \ImportManager::createImport($adminUser, $tempFile);
-        \Filesystem::delete($tempFile);
+            $jobId = \ImportManager::createImport($adminUser, $tempFile);
+            \Filesystem::delete($tempFile);
 
-        // Output message
-        $tempFile = null;
-        $prepopulate = null;
-        $message = 'Import job (' . $jobId . ') has been created.';
-        $message_type = 'alert-success';
+            // Output message
+            $tempFile = null;
+            $prepopulate = null;
+            $message = 'Import job (' . $jobId . ') has been created.';
+            $message_type = 'alert-success';
 
-    } catch (Exception $exception) {
-        $message = $exception->getMessage();
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $message_type = 'alert-danger';
+        }
+
+    } else {
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'videos-imports-create';
@@ -162,6 +180,7 @@ include('header.php');
 
 
     <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Begin Import" />
 
 </form>

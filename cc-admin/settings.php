@@ -31,103 +31,115 @@ $data['mobile_site'] = Settings::get('mobile_site');
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate sitename
-    if (!empty($_POST['sitename']) && !ctype_space($_POST['sitename'])) {
-        $data['sitename'] = trim($_POST['sitename']);
-    } else {
-        $errors['sitename'] = 'Invalid sitename';
-    }
-
-    // Validate base_url
-    $pattern = '/^https?:\/\/[a-z0-9][a-z0-9\.\-]+.*$/i';
-    if (!empty($_POST['base_url']) && preg_match($pattern, $_POST['base_url'])) {
-        $data['base_url'] = rtrim($_POST['base_url'], '/');
-    } else {
-        $errors['base_url'] = 'Invalid base url';
-    }
-
-    // Validate admin_email
-    $pattern = '/^[a-z0-9][a-z0-9\.\-]+@[a-z0-9][a-z0-9\.\-]+$/i';
-    if (!empty($_POST['admin_email']) && preg_match($pattern, $_POST['admin_email'])) {
-        $data['admin_email'] = trim($_POST['admin_email']);
-    } else {
-        $errors['admin_email'] = 'Invalid admin email';
-    }
-
-    // Validate session timeout
-    if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 5) {
-        $data['session_timeout'] = $_POST['session_timeout'];
-    } else {
-        $errors['session_timeout'] = 'Minimum 5 minutes required for session timeout';
-    }
-
-    // Validate user_uploads
-    if (isset($_POST['user_uploads']) && in_array($_POST['user_uploads'], array('1', '0'))) {
-        $data['user_uploads'] = $_POST['user_uploads'];
-
-        // Enable auto_approve_videos so that it's on when user_uploads is re-enabled
-        if ($data['user_uploads'] === '0') {
-            $data['auto_approve_videos'] = '1';
-        }
-
-    } else {
-        $errors['user_uploads'] = 'Invalid user upload option';
-    }
-
-    // Validate video_attachments
-    if (isset($_POST['video_attachments']) && in_array($_POST['video_attachments'], array('1', '0'))) {
-        $data['video_attachments'] = $_POST['video_attachments'];
-    } else {
-        $errors['video_attachments'] = 'Invalid video attachments option';
-    }
-
-    // Validate allow user registrations
-    if (isset($_POST['user_registrations']) && in_array($_POST['user_registrations'], array('1', '0'))) {
-        $data['user_registrations'] = $_POST['user_registrations'];
-
-        // Enable auto_approve_users so that it's on when user_registrations is re-enabled
-        if ($data['user_registrations'] === '0') {
-            $data['auto_approve_users'] = '1';
-        }
-
-    } else {
-        $errors['user_registrations'] = 'Invalid user registration option';
-    }
-
-    // Only validate if user uploads is enabled
-    if ($data['user_uploads'] === '1') {
-
-        // Validate auto_approve_videos
-        if (isset($_POST['auto_approve_videos']) && in_array($_POST['auto_approve_videos'], array('1', '0'))) {
-            $data['auto_approve_videos'] = $_POST['auto_approve_videos'];
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate sitename
+        if (!empty($_POST['sitename']) && !ctype_space($_POST['sitename'])) {
+            $data['sitename'] = trim($_POST['sitename']);
         } else {
-            $errors['auto_approve_videos'] = 'Invalid video approval option';
+            $errors['sitename'] = 'Invalid sitename';
         }
-    }
 
-    // Only validate if user registrations is enabled
-    if ($data['user_registrations'] === '1') {
-
-        // Validate auto_approve_users
-        if (isset($_POST['auto_approve_users']) && in_array($_POST['auto_approve_users'], array('1', '0'))) {
-            $data['auto_approve_users'] = $_POST['auto_approve_users'];
+        // Validate base_url
+        $pattern = '/^https?:\/\/[a-z0-9][a-z0-9\.\-]+.*$/i';
+        if (!empty($_POST['base_url']) && preg_match($pattern, $_POST['base_url'])) {
+            $data['base_url'] = rtrim($_POST['base_url'], '/');
         } else {
-            $errors['auto_approve_users'] = 'Invalid member approval option';
+            $errors['base_url'] = 'Invalid base url';
         }
-    }
 
-    // Validate auto_approve_comments
-    if (isset($_POST['auto_approve_comments']) && in_array($_POST['auto_approve_comments'], array('1', '0'))) {
-        $data['auto_approve_comments'] = $_POST['auto_approve_comments'];
-    } else {
-        $errors['auto_approve_comments'] = 'Invalid comment approval option';
-    }
+        // Validate admin_email
+        $pattern = '/^[a-z0-9][a-z0-9\.\-]+@[a-z0-9][a-z0-9\.\-]+$/i';
+        if (!empty($_POST['admin_email']) && preg_match($pattern, $_POST['admin_email'])) {
+            $data['admin_email'] = trim($_POST['admin_email']);
+        } else {
+            $errors['admin_email'] = 'Invalid admin email';
+        }
 
-    // Validate mobile site
-    if (isset($_POST['mobile_site']) && in_array($_POST['mobile_site'], array('1', '0'))) {
-        $data['mobile_site'] = $_POST['mobile_site'];
+        // Validate session timeout
+        if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 5) {
+            $data['session_timeout'] = $_POST['session_timeout'];
+        } else {
+            $errors['session_timeout'] = 'Minimum 5 minutes required for session timeout';
+        }
+
+        // Validate user_uploads
+        if (isset($_POST['user_uploads']) && in_array($_POST['user_uploads'], array('1', '0'))) {
+            $data['user_uploads'] = $_POST['user_uploads'];
+
+            // Enable auto_approve_videos so that it's on when user_uploads is re-enabled
+            if ($data['user_uploads'] === '0') {
+                $data['auto_approve_videos'] = '1';
+            }
+
+        } else {
+            $errors['user_uploads'] = 'Invalid user upload option';
+        }
+
+        // Validate video_attachments
+        if (isset($_POST['video_attachments']) && in_array($_POST['video_attachments'], array('1', '0'))) {
+            $data['video_attachments'] = $_POST['video_attachments'];
+        } else {
+            $errors['video_attachments'] = 'Invalid video attachments option';
+        }
+
+        // Validate allow user registrations
+        if (isset($_POST['user_registrations']) && in_array($_POST['user_registrations'], array('1', '0'))) {
+            $data['user_registrations'] = $_POST['user_registrations'];
+
+            // Enable auto_approve_users so that it's on when user_registrations is re-enabled
+            if ($data['user_registrations'] === '0') {
+                $data['auto_approve_users'] = '1';
+            }
+
+        } else {
+            $errors['user_registrations'] = 'Invalid user registration option';
+        }
+
+        // Only validate if user uploads is enabled
+        if ($data['user_uploads'] === '1') {
+
+            // Validate auto_approve_videos
+            if (isset($_POST['auto_approve_videos']) && in_array($_POST['auto_approve_videos'], array('1', '0'))) {
+                $data['auto_approve_videos'] = $_POST['auto_approve_videos'];
+            } else {
+                $errors['auto_approve_videos'] = 'Invalid video approval option';
+            }
+        }
+
+        // Only validate if user registrations is enabled
+        if ($data['user_registrations'] === '1') {
+
+            // Validate auto_approve_users
+            if (isset($_POST['auto_approve_users']) && in_array($_POST['auto_approve_users'], array('1', '0'))) {
+                $data['auto_approve_users'] = $_POST['auto_approve_users'];
+            } else {
+                $errors['auto_approve_users'] = 'Invalid member approval option';
+            }
+        }
+
+        // Validate auto_approve_comments
+        if (isset($_POST['auto_approve_comments']) && in_array($_POST['auto_approve_comments'], array('1', '0'))) {
+            $data['auto_approve_comments'] = $_POST['auto_approve_comments'];
+        } else {
+            $errors['auto_approve_comments'] = 'Invalid comment approval option';
+        }
+
+        // Validate mobile site
+        if (isset($_POST['mobile_site']) && in_array($_POST['mobile_site'], array('1', '0'))) {
+            $data['mobile_site'] = $_POST['mobile_site'];
+        } else {
+            $errors['mobile_site'] = 'Invalid mobile site value';
+        }
+
     } else {
-        $errors['mobile_site'] = 'Invalid mobile site value';
+        $errors['session'] = 'Expired or invalid session';
     }
 
     // Update video if no errors were made
@@ -144,6 +156,10 @@ if (isset($_POST['submitted'])) {
     }
 }
 
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'settings';
@@ -238,7 +254,8 @@ include ('header.php');
         </select>
     </div>
 
-    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Update Settings" />
 
 </form>

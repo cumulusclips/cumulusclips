@@ -90,87 +90,100 @@ if (isset($_POST['submitted_templates'])) {
 
     $activeTab = 'templates';
 
-    // Verify valid template was submitted
-    if (!empty($_POST['template']) && isset($templates[$_POST['template']])) {
-        $openPanel = $_POST['template'];
-        $template = $templates[$openPanel];
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Verify valid template was submitted
+        if (!empty($_POST['template']) && isset($templates[$_POST['template']])) {
+            $openPanel = $_POST['template'];
+            $template = $templates[$openPanel];
 
-        // Validate template subject
-        if (!empty($_POST['subject'])) {
-            $subject = trim($_POST['subject']);
-        } else {
-            $errors[] = 'Invalid email template subject line';
-        }
-
-        // Validate template body
-        if (!empty($_POST['body'])) {
-            $body = preg_replace("/\r\n|\r/", "\n", trim($_POST['body']));
-        } else {
-            $errors[] = 'Invalid email template body';
-        }
-
-        // Save template if no errors were found
-        if (empty($errors)) {
-
-            // Remove custom subject if given subject is same as original
-            if ($subject === $template->mailerTemplate->subject && $template->customSubject) {
-                $textMapper->delete($template->customSubject->textId);
-                $template->customSubject = false;
+            // Validate template subject
+            if (!empty($_POST['subject'])) {
+                $subject = trim($_POST['subject']);
+            } else {
+                $errors[] = 'Invalid email template subject line';
             }
 
-            // Save custom subject if it differs from original
-            if ($subject !== $template->mailerTemplate->subject) {
+            // Validate template body
+            if (!empty($_POST['body'])) {
+                $body = preg_replace("/\r\n|\r/", "\n", trim($_POST['body']));
+            } else {
+                $errors[] = 'Invalid email template body';
+            }
 
-                // Create custom subject entry if it doesn't exist
-                if (!$template->customSubject) {
-                    $template->customSubject = new Text();
-                    $template->customSubject->type = TextMapper::TYPE_SUBJECT;
-                    $template->customSubject->language = 'english';
-                    $template->customSubject->name = $openPanel;
+            // Save template if no errors were found
+            if (empty($errors)) {
+
+                // Remove custom subject if given subject is same as original
+                if ($subject === $template->mailerTemplate->subject && $template->customSubject) {
+                    $textMapper->delete($template->customSubject->textId);
+                    $template->customSubject = false;
                 }
 
-                // Save custom subject
-                $template->customSubject->content = $subject;
-                $textId = $textMapper->save($template->customSubject);
-                $template->customSubject = $textMapper->getById($textId);
-            }
+                // Save custom subject if it differs from original
+                if ($subject !== $template->mailerTemplate->subject) {
 
-            // Remove custom body if given body is same as original
-            if ($body === $template->mailerTemplate->body && $template->customBody) {
-                $textMapper->delete($template->customBody->textId);
-                $template->customBody = false;
-            }
+                    // Create custom subject entry if it doesn't exist
+                    if (!$template->customSubject) {
+                        $template->customSubject = new Text();
+                        $template->customSubject->type = TextMapper::TYPE_SUBJECT;
+                        $template->customSubject->language = 'english';
+                        $template->customSubject->name = $openPanel;
+                    }
 
-            // Save custom body if it differs from original
-            if ($body !== $template->mailerTemplate->body) {
-
-                // Create custom body entry if it doesn't exist
-                if (!$template->customBody) {
-                    $template->customBody = new Text();
-                    $template->customBody->type = TextMapper::TYPE_EMAIL_TEXT;
-                    $template->customBody->language = 'english';
-                    $template->customBody->name = $openPanel;
+                    // Save custom subject
+                    $template->customSubject->content = $subject;
+                    $textId = $textMapper->save($template->customSubject);
+                    $template->customSubject = $textMapper->getById($textId);
                 }
 
-                // Save custom body
-                $template->customBody->content = $body;
-                $textId = $textMapper->save($template->customBody);
-                $template->customBody = $textMapper->getById($textId);
+                // Remove custom body if given body is same as original
+                if ($body === $template->mailerTemplate->body && $template->customBody) {
+                    $textMapper->delete($template->customBody->textId);
+                    $template->customBody = false;
+                }
+
+                // Save custom body if it differs from original
+                if ($body !== $template->mailerTemplate->body) {
+
+                    // Create custom body entry if it doesn't exist
+                    if (!$template->customBody) {
+                        $template->customBody = new Text();
+                        $template->customBody->type = TextMapper::TYPE_EMAIL_TEXT;
+                        $template->customBody->language = 'english';
+                        $template->customBody->name = $openPanel;
+                    }
+
+                    // Save custom body
+                    $template->customBody->content = $body;
+                    $textId = $textMapper->save($template->customBody);
+                    $template->customBody = $textMapper->getById($textId);
+                }
+
+                $template->subject = $subject;
+                $template->body = $body;
+                $message = '"' . $template->mailerTemplate->name . '" has been updated.';
+                $messageType = 'alert-success';
+
+            } else {
+                $message = 'The following errors were found. Please correct them and try again.';
+                $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+                $messageType = 'alert-danger';
             }
 
-            $template->subject = $subject;
-            $template->body = $body;
-            $message = '"' . $template->mailerTemplate->name . '" has been updated.';
-            $messageType = 'alert-success';
-
         } else {
-            $message = 'The following errors were found. Please correct them and try again.';
-            $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+            $message = 'Invalid template';
             $messageType = 'alert-danger';
         }
 
     } else {
-        $message = 'Invalid template';
+        $message = 'Expired or invalid session';
         $messageType = 'alert-danger';
     }
 }
@@ -180,53 +193,66 @@ if (isset($_POST['submitted_alerts'])) {
 
     $activeTab = 'alerts';
 
-    // Validate video alerts
-    if (isset($_POST['alerts_videos']) && in_array($_POST['alerts_videos'], array('1', '0'))) {
-        $data['alerts_videos'] = $_POST['alerts_videos'];
-    } else {
-        $errors['alerts_videos'] = 'Invalid video alert option';
-    }
-
-    // Validate video imports alerts
-    if (isset($_POST['alerts_imports']) && in_array($_POST['alerts_imports'], array('1', '0'))) {
-        $data['alerts_imports'] = $_POST['alerts_imports'];
-    } else {
-        $errors['alerts_imports'] = 'Invalid video imports alert option';
-    }
-
-    // Validate video comment alerts
-    if (isset($_POST['alerts_comments']) && in_array($_POST['alerts_comments'], array('1', '0'))) {
-        $data['alerts_comments'] = $_POST['alerts_comments'];
-    } else {
-        $errors['alerts_comments'] = 'Invalid video comments alert option';
-    }
-
-    // Validate flagged content alerts
-    if (isset($_POST['alerts_flags']) && in_array($_POST['alerts_flags'], array('1', '0'))) {
-        $data['alerts_flags'] = $_POST['alerts_flags'];
-    } else {
-        $errors['alerts_flags'] = 'Invalid content flag alert option';
-    }
-
-    // Validate user signup alerts
-    if (isset($_POST['alerts_users']) && in_array($_POST['alerts_users'], array('1', '0'))) {
-        $data['alerts_users'] = $_POST['alerts_users'];
-    } else {
-        $errors['alerts_users'] = 'Invalid member signups alert option';
-    }
-
-    // Update video if no errors were made
-    if (empty($errors)) {
-        $data['smtp'] = json_encode($data['smtp']);
-        foreach ($data as $key => $value) {
-            Settings::set($key, $value);
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate video alerts
+        if (isset($_POST['alerts_videos']) && in_array($_POST['alerts_videos'], array('1', '0'))) {
+            $data['alerts_videos'] = $_POST['alerts_videos'];
+        } else {
+            $errors['alerts_videos'] = 'Invalid video alert option';
         }
-        $data['smtp'] = json_decode($data['smtp']);
-        $message = 'Settings have been updated.';
-        $messageType = 'alert-success';
+
+        // Validate video imports alerts
+        if (isset($_POST['alerts_imports']) && in_array($_POST['alerts_imports'], array('1', '0'))) {
+            $data['alerts_imports'] = $_POST['alerts_imports'];
+        } else {
+            $errors['alerts_imports'] = 'Invalid video imports alert option';
+        }
+
+        // Validate video comment alerts
+        if (isset($_POST['alerts_comments']) && in_array($_POST['alerts_comments'], array('1', '0'))) {
+            $data['alerts_comments'] = $_POST['alerts_comments'];
+        } else {
+            $errors['alerts_comments'] = 'Invalid video comments alert option';
+        }
+
+        // Validate flagged content alerts
+        if (isset($_POST['alerts_flags']) && in_array($_POST['alerts_flags'], array('1', '0'))) {
+            $data['alerts_flags'] = $_POST['alerts_flags'];
+        } else {
+            $errors['alerts_flags'] = 'Invalid content flag alert option';
+        }
+
+        // Validate user signup alerts
+        if (isset($_POST['alerts_users']) && in_array($_POST['alerts_users'], array('1', '0'))) {
+            $data['alerts_users'] = $_POST['alerts_users'];
+        } else {
+            $errors['alerts_users'] = 'Invalid member signups alert option';
+        }
+
+        // Update video if no errors were made
+        if (empty($errors)) {
+            $data['smtp'] = json_encode($data['smtp']);
+            foreach ($data as $key => $value) {
+                Settings::set($key, $value);
+            }
+            $data['smtp'] = json_decode($data['smtp']);
+            $message = 'Settings have been updated.';
+            $messageType = 'alert-success';
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+            $messageType = 'alert-danger';
+        }
+
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $messageType = 'alert-danger';
     }
 }
@@ -236,90 +262,108 @@ if (isset($_POST['submitted_config'])) {
 
     $activeTab = 'config';
 
-    // Validate from email name
-    if (!empty($_POST['from_name'])) {
-        if (!ctype_space($_POST['from_name'])) {
-            $data['from_name'] = trim($_POST['from_name']);
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+        // Validate from email name
+        if (!empty($_POST['from_name'])) {
+            if (!ctype_space($_POST['from_name'])) {
+                $data['from_name'] = trim($_POST['from_name']);
+            } else {
+                $errors['from_name'] = 'Invalid from name';
+            }
         } else {
-            $errors['from_name'] = 'Invalid from name';
+            $data['from_name'] = '';
         }
+
+        // Validate from email address
+        if (!empty($_POST['from_address'])) {
+            $pattern = '/^[a-z0-9][a-z0-9\.\-]+@[a-z0-9][a-z0-9\.\-]+$/i';
+            if (preg_match($pattern, $_POST['from_address'])) {
+                $data['from_address'] = trim($_POST['from_address']);
+            } else {
+                $errors['from_address'] = 'Invalid from email address';
+            }
+        } else {
+            $data['from_address'] = '';
+        }
+
+        // Validate smtp enabled option
+        if (isset($_POST['smtp_enabled']) && in_array($_POST['smtp_enabled'], array('1', '0'))) {
+            $data['smtp']->enabled = ($_POST['smtp_enabled'] == '1') ? true : false;
+            if (!$data['smtp']->enabled) {
+                $data['smtp']->host = $data['smtp_host'] = '';
+                $data['smtp']->port = $data['smtp_port'] = 25;
+                $data['smtp']->password = $data['smtp_password'] = '';
+                $data['smtp']->username = $data['smtp_username'] = '';
+            }
+        } else {
+            $errors['smtp_enabled'] = 'Invalid SMTP enablement option';
+        }
+
+        // Validate smtp auth settings if enabled
+        if ($data['smtp']->enabled) {
+
+            // Validate smtp host
+            $pattern = '/^[a-z0-9][a-z0-9\.\-]+$/i';
+            if (!empty($_POST['smtp_host']) && preg_match($pattern, $_POST['smtp_host'])) {
+                $data['smtp']->host = $data['smtp_host'] = trim($_POST['smtp_host']);
+            } else {
+                $errors['smtp_host'] = 'Invalid SMTP hostname';
+            }
+
+            // Validate smtp port
+            if (isset($_POST['smtp_port']) && is_numeric($_POST['smtp_port'])) {
+                $data['smtp']->port = $data['smtp_port'] = $_POST['smtp_port'];
+            } else {
+                $errors['smtp_port'] = 'Invalid SMTP port';
+            }
+
+            // Validate smtp username
+            if (!empty($_POST['smtp_username']) && !ctype_space($_POST['smtp_username'])) {
+                $data['smtp']->username = $data['smtp_username'] = trim($_POST['smtp_username']);
+            } else {
+                $errors['smtp_username'] = 'Invalid SMTP username';
+            }
+
+            // Validate smtp password
+            if (!empty ($_POST['smtp_password']) && !ctype_space ($_POST['smtp_password'])) {
+                $data['smtp']->password = $data['smtp_password'] = trim($_POST['smtp_password']);
+            } else {
+                $errors['smtp_password'] = 'Invalid SMTP password';
+            }
+        }
+
+        // Update video if no errors were made
+        if (empty($errors)) {
+            $data['smtp'] = json_encode($data['smtp']);
+            foreach ($data as $key => $value) {
+                Settings::set($key, $value);
+            }
+            $data['smtp'] = json_decode($data['smtp']);
+            $message = 'Settings have been updated.';
+            $messageType = 'alert-success';
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+            $messageType = 'alert-danger';
+        }
+
     } else {
-        $data['from_name'] = '';
-    }
-
-    // Validate from email address
-    if (!empty($_POST['from_address'])) {
-        $pattern = '/^[a-z0-9][a-z0-9\.\-]+@[a-z0-9][a-z0-9\.\-]+$/i';
-        if (preg_match($pattern, $_POST['from_address'])) {
-            $data['from_address'] = trim($_POST['from_address']);
-        } else {
-            $errors['from_address'] = 'Invalid from email address';
-        }
-    } else {
-        $data['from_address'] = '';
-    }
-
-    // Validate smtp enabled option
-    if (isset($_POST['smtp_enabled']) && in_array($_POST['smtp_enabled'], array('1', '0'))) {
-        $data['smtp']->enabled = ($_POST['smtp_enabled'] == '1') ? true : false;
-        if (!$data['smtp']->enabled) {
-            $data['smtp']->host = $data['smtp_host'] = '';
-            $data['smtp']->port = $data['smtp_port'] = 25;
-            $data['smtp']->password = $data['smtp_password'] = '';
-            $data['smtp']->username = $data['smtp_username'] = '';
-        }
-    } else {
-        $errors['smtp_enabled'] = 'Invalid SMTP enablement option';
-    }
-
-    // Validate smtp auth settings if enabled
-    if ($data['smtp']->enabled) {
-
-        // Validate smtp host
-        $pattern = '/^[a-z0-9][a-z0-9\.\-]+$/i';
-        if (!empty($_POST['smtp_host']) && preg_match($pattern, $_POST['smtp_host'])) {
-            $data['smtp']->host = $data['smtp_host'] = trim($_POST['smtp_host']);
-        } else {
-            $errors['smtp_host'] = 'Invalid SMTP hostname';
-        }
-
-        // Validate smtp port
-        if (isset($_POST['smtp_port']) && is_numeric($_POST['smtp_port'])) {
-            $data['smtp']->port = $data['smtp_port'] = $_POST['smtp_port'];
-        } else {
-            $errors['smtp_port'] = 'Invalid SMTP port';
-        }
-
-        // Validate smtp username
-        if (!empty($_POST['smtp_username']) && !ctype_space($_POST['smtp_username'])) {
-            $data['smtp']->username = $data['smtp_username'] = trim($_POST['smtp_username']);
-        } else {
-            $errors['smtp_username'] = 'Invalid SMTP username';
-        }
-
-        // Validate smtp password
-        if (!empty ($_POST['smtp_password']) && !ctype_space ($_POST['smtp_password'])) {
-            $data['smtp']->password = $data['smtp_password'] = trim($_POST['smtp_password']);
-        } else {
-            $errors['smtp_password'] = 'Invalid SMTP password';
-        }
-    }
-
-    // Update video if no errors were made
-    if (empty($errors)) {
-        $data['smtp'] = json_encode($data['smtp']);
-        foreach ($data as $key => $value) {
-            Settings::set($key, $value);
-        }
-        $data['smtp'] = json_decode($data['smtp']);
-        $message = 'Settings have been updated.';
-        $messageType = 'alert-success';
-    } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $messageType = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'settings-email';
@@ -393,6 +437,7 @@ include('header.php');
             <!-- END SMTP AUTH SETTINGS -->
 
             <input type="hidden" name="submitted_config" value="TRUE" />
+            <input type="hidden" name="nonce" value="<?=$formNonce?>" />
             <input type="submit" class="button" value="Update Settings" />
 
         </form>
@@ -448,6 +493,7 @@ include('header.php');
             </div>
 
             <input type="hidden" name="submitted_alerts" value="TRUE" />
+            <input type="hidden" name="nonce" value="<?=$formNonce?>" />
             <input type="submit" class="button" value="Update Settings" />
 
         </form>
@@ -494,6 +540,7 @@ include('header.php');
 
                             <input type="hidden" name="template" value="<?=$template->mailerTemplate->systemName?>" />
                             <input type="hidden" name="submitted_templates" value="TRUE" />
+                            <input type="hidden" name="nonce" value="<?=$formNonce?>" />
                             <input type="submit" class="button" value="Save Template" />
                         </form>
 
