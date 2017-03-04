@@ -64,7 +64,7 @@ if (isset($_POST['submitted'])) {
         }
 
         // Validate session timeout
-        if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 0) {
+        if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 5) {
             $data['session_timeout'] = $_POST['session_timeout'];
         } else {
             $errors['session_timeout'] = 'Minimum 5 minutes required for session timeout';
