@@ -4,9 +4,10 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::redirectIf($adminUser, HOST . '/login/');
+$authService->enforceTimeout(true);
+
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::redirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -90,9 +91,9 @@ include('header.php');
         </tr>
     </thead>
     <tbody>
-        
+
     <?php foreach ($main_site_themes as $theme): ?>
-        
+
         <tr class="theme">
             <td>
                 <p class="h3"><?=$theme->xml->name?></p>
@@ -111,15 +112,15 @@ include('header.php');
                 <?php if (!empty($theme->xml->description)): ?>
                     <p><?=$theme->xml->description?></p>
                 <?php endif; ?>
-                    
+
                 <?php if (!empty($theme->xml->author)): ?>
                     <p>By: <strong><?=$theme->xml->author?></strong></p>
                 <?php endif; ?>
             </td>
         </tr>
-        
+
     <?php endforeach; ?>
-        
+
     </tbody>
 </table>
 <!-- END MAIN SITE THEMES -->
@@ -137,9 +138,9 @@ include('header.php');
         </tr>
     </thead>
     <tbody>
-        
+
     <?php foreach ($mobile_themes as $theme): ?>
-        
+
         <tr class="theme">
             <td>
                 <p class="h3"><?=$theme->xml->name?></p>
@@ -158,15 +159,15 @@ include('header.php');
                 <?php if (!empty($theme->xml->description)): ?>
                     <p><?=$theme->xml->description?></p>
                 <?php endif; ?>
-                    
+
                 <?php if (!empty($theme->xml->author)): ?>
                     <p>By: <strong><?=$theme->xml->author?></strong></p>
                 <?php endif; ?>
             </td>
         </tr>
-        
+
     <?php endforeach; ?>
-        
+
     </tbody>
 </table>
 <!-- END MOBILE THEMES -->

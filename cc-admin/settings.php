@@ -4,9 +4,10 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
+$authService->enforceTimeout(true);
+
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::RedirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -63,7 +64,7 @@ if (isset($_POST['submitted'])) {
         }
 
         // Validate session timeout
-        if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 5) {
+        if (!empty($_POST['session_timeout']) && is_numeric($_POST['session_timeout']) && $_POST['session_timeout'] >= 0) {
             $data['session_timeout'] = $_POST['session_timeout'];
         } else {
             $errors['session_timeout'] = 'Minimum 5 minutes required for session timeout';

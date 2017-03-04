@@ -4,9 +4,10 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
+$authService->enforceTimeout(true);
+
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::RedirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -21,11 +22,11 @@ $enabledPlugins = Plugin::getEnabledPlugins();
 if (!empty($_GET['uninstall'])) {
     // Validate plugin
     if (Plugin::isPluginValid($_GET['uninstall']) && Plugin::isPluginInstalled($_GET['uninstall'])) {
-        
+
         // Load plugin
         $pluginName = $_GET['uninstall'];
-        $plugin = Plugin::getPlugin($pluginName); 
-        
+        $plugin = Plugin::getPlugin($pluginName);
+
         // Uninstall
         Plugin::uninstallPlugin($pluginName);
         $installedPlugins = Plugin::getInstalledPlugins();
@@ -46,14 +47,14 @@ if (!empty($_GET['uninstall'])) {
 
 // Handle "Install" plugin if requested
 elseif (!empty($_GET['install'])) {
-    
+
     // Validate plugin
     if (Plugin::isPluginValid($_GET['install']) && !Plugin::isPluginInstalled($_GET['install'])) {
-        
+
         // Load plugin
         $pluginName = $_GET['install'];
         $plugin = Plugin::getPlugin($pluginName);
-        
+
         // Install plugin
         Plugin::installPlugin($pluginName);
         $installedPlugins = Plugin::getInstalledPlugins();
@@ -140,7 +141,7 @@ include('header.php');
                 <tr>
                     <td>
                         <p class="h3"><?=$plugin->name?></p>
-                        
+
                         <?php if (Plugin::isPluginInstalled($plugin->getSystemName())): ?>
                             <p>
                                 <?php if (Plugin::isPluginEnabled($plugin->getSystemName()) && Plugin::hasSettingsMethod($plugin)): ?>
@@ -160,15 +161,15 @@ include('header.php');
                         <?php endif; ?>
                     </td>
                     <td>
-                        
+
                         <?php if (!empty($plugin->description)): ?>
                             <p><?=$plugin->description?></p>
                         <?php endif; ?>
-                        
+
                         <?php if (!empty($plugin->author)): ?>
                             By: <?=$plugin->author?>
                         <?php endif; ?>
-                            
+
                         <?php if (!empty($plugin->version)): ?>
                             <p><strong>Version:</strong> <?=$plugin->version?></p>
                         <?php endif; ?>
@@ -176,7 +177,7 @@ include('header.php');
                 </tr>
 
             <?php endforeach; ?>
-        
+
         </tbody>
     </table>
 

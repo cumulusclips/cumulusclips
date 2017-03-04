@@ -8,6 +8,12 @@ if (!headers_sent() && session_id() == '') {
     session_start();
 }
 
+// Verify if user is logged in
+$authService = new \AuthService();
+$authService->setTimeoutFlags();
+$authService->enforceAuth();
+$adminUser = $authService->getAuthUser();
+
 // Pre-Output Work
 define ('ADMIN', HOST . '/cc-admin');
 if (!headers_sent()) {

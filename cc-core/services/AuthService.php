@@ -3,6 +3,18 @@
 class AuthService extends ServiceAbstract
 {
     /**
+     * Sets flags that state whether an auth session is valid or expired
+     */
+    public function setTimeoutFlags()
+    {
+        $config = Registry::get('config');
+
+        // Set session timeout values
+        $_SESSION['session-expired'] = (!empty($_SESSION['timeout']) && $_SESSION['timeout'] < time());
+        $_SESSION['timeout'] = time() + ($config->sessionTimeout * 60);
+    }
+
+    /**
      * Determines if user is authenticated
      *
      * @param boolean $strict Whether to observe session expiration when checking for logged in user

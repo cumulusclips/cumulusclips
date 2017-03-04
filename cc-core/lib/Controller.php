@@ -17,14 +17,7 @@ class Controller
         // Start session
         if (!headers_sent() && session_id() == '') {
             session_start();
-
-            $timeout = $this->config->sessionTimeout * 60;
-
-            // Set session timeout values
-            $_SESSION['session-expired'] = (!empty($_SESSION['timeout']) && $_SESSION['timeout'] < time());
-            $_SESSION['timeout'] = time() + $timeout;
-
-            // var_dump($_SESSION);
+            $this->authService->setTimeoutFlags();
         }
 
         // Start view layer

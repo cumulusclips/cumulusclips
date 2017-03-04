@@ -3,10 +3,8 @@
 // Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
-// Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::redirectIf($adminUser, HOST . '/login/');
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::redirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc

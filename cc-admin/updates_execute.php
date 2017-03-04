@@ -3,10 +3,8 @@
 // Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
-// Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::redirectIf($adminUser, HOST . '/login/');
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::redirectIf($userService->checkPermissions('manage_settings', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -189,12 +187,12 @@ include('header.php');
 
     <h1>Update Complete!</h1>
     <p>You are now running the latest version of CumulusClips. Don't forget to re-enable all your plugins and themes.</p>
-    
+
 <?php else: ?>
-    
+
     <h1>Error During Update</h1>
     <p><?=$error?></p>
-    
+
 <?php endif; ?>
 
 <?php include('footer.php'); ?>
