@@ -40,6 +40,7 @@
         </select>
 
         <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('privacy_settings_button')?>" />
     </form>
 </div>

@@ -32,6 +32,7 @@ $this->SetLayout('account');
         <textarea class="text" name="about_me" rows="10" cols="45"><?=htmlspecialchars($loggedInUser->aboutMe)?></textarea>
 
         <input type="hidden" value="yes" name="submitted" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('profile_button')?>" />
     </form>
 </div>
@@ -63,6 +64,7 @@ $this->SetLayout('account');
             />
 
             <input type="hidden" name="submitted_avatar" value="true" />
+            <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         </form>
     </div>
 </div>

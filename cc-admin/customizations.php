@@ -25,7 +25,7 @@ if (isset($_POST['submitted'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Validate type
         if (!empty($_POST['type']) && in_array($_POST['type'], array('css', 'js'))) {

@@ -41,7 +41,7 @@ if (isset ($_POST['submitted'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Validate log encoding setting
         if (isset ($_POST['debug_conversion']) && in_array ($_POST['debug_conversion'], array ('1', '0'))) {

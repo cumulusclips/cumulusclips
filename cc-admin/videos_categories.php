@@ -26,7 +26,7 @@ if (isset($_POST['submitted_add'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         try {
             // Validate title
@@ -68,7 +68,7 @@ if (isset($_POST['submitted_edit'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Validate move category
         if (isset($_POST['move']) && is_numeric($_POST['move']) && $categoryMapper->getCategoryById($_POST['move'])) {

@@ -20,6 +20,7 @@
         <textarea class="text" name="message" cols="45" rows="10"><?=htmlspecialchars($msg)?></textarea>
 
         <input type="hidden" name="submitted" value="yes" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::GetText('message_send_button')?>" />
     </form>
 </div>

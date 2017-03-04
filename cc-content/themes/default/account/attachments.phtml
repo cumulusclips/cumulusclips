@@ -31,6 +31,7 @@
     </table>
     <div class="row_btn">
         <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button checkbox-disable confirm" data-checkbox="delete[]" data-node="confirm_delete_attachments" type="submit" name="button" value="<?php echo Language::getText('delete_attachments_button'); ?>" disabled="disabled" />
     </div>
     </form>

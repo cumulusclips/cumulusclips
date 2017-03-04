@@ -21,7 +21,7 @@ if (isset($_POST['submitted'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
 
         $this->view->vars->profile_submit = true;
@@ -85,7 +85,7 @@ if (isset($_POST['submitted'])) {
 
     } else {
         $this->view->vars->message = Language::getText('invalid_session');
-        $this->view->vars->message_type = 'alert-danger';
+        $this->view->vars->message_type = 'errors';
     }
 }
 
@@ -119,7 +119,7 @@ if (
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
 
         $this->view->vars->avatar_submit = true;
@@ -148,7 +148,7 @@ if (
 
     } else {
         $this->view->vars->message = Language::getText('invalid_session');
-        $this->view->vars->message_type = 'alert-danger';
+        $this->view->vars->message_type = 'errors';
     }
 }
 

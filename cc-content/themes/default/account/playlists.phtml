@@ -2,14 +2,14 @@
 <?php $playlistService = $this->getService('Playlist'); ?>
 
 <h1><?=Language::GetText('playlists_header')?></h1>
-        
+
 <?php if ($message): ?>
     <div class="message <?=$message_type?>"><?=$message?></div>
 <?php endif; ?>
-    
-    
+
+
 <div class="playlist-list">
-        
+
     <!-- Begin Favorites -->
     <div class="playlist <?=(empty($favoritesList->entries)) ? 'playlist-empty' : ''?>">
         <?php if (!empty($favoritesList->entries)): ?>
@@ -28,7 +28,7 @@
             <a href="<?=HOST?>/account/playlists/edit/<?=$favoritesList->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>
         </p>
     </div>
-    
+
     <!-- Begin Watch Later -->
     <div class="playlist <?=(empty($watchLaterList->entries)) ? 'playlist-empty' : ''?>">
         <?php if (!empty($watchLaterList->entries)): ?>
@@ -48,7 +48,7 @@
         </p>
     </div>
 </div>
- 
+
 <h2><?=Language::GetText('playlists')?></h2>
 <p><a class="showhide" data-block="createNewPlaylist" href=""><?=Language::GetText('create_new_playlist')?></a></p>
 
@@ -70,6 +70,7 @@
             </div>
             <input class="button" type="submit" value="<?=Language::GetText('create_playlist_button')?>" />
             <input type="hidden" name="submitted" value="true" />
+            <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         </form>
     </div>
 </div>

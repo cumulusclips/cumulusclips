@@ -96,7 +96,7 @@ if (isset($_POST['submitted_templates'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Verify valid template was submitted
         if (!empty($_POST['template']) && isset($templates[$_POST['template']])) {
@@ -199,7 +199,7 @@ if (isset($_POST['submitted_alerts'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Validate video alerts
         if (isset($_POST['alerts_videos']) && in_array($_POST['alerts_videos'], array('1', '0'))) {
@@ -268,7 +268,7 @@ if (isset($_POST['submitted_config'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
         // Validate from email name
         if (!empty($_POST['from_name'])) {

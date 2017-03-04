@@ -31,7 +31,7 @@ if (!empty($_POST['submitted'])) {
         && !empty($_SESSION['formNonce'])
         && !empty($_SESSION['formTime'])
         && $_POST['nonce'] == $_SESSION['formNonce']
-        && time() - $_SESSION['formTime'] >= 3
+        && time() - $_SESSION['formTime'] >= 2
     ) {
 
         // Validate playlist name
@@ -58,7 +58,7 @@ if (!empty($_POST['submitted'])) {
 
     } else {
         $this->view->vars->message = Language::getText('invalid_session');
-        $this->view->vars->message_type = 'alert-danger';
+        $this->view->vars->message_type = 'errors';
     }
 }
 
