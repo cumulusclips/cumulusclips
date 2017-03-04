@@ -18,6 +18,7 @@
         <textarea name="feedback" cols="40" rows="9"><?=(!empty($errors) && !empty($feedback)) ? htmlspecialchars($feedback) : ''?></textarea>
 
         <input type="hidden" value="TRUE" name="submitted" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('contact_button')?>" />
     </form>
 </div>

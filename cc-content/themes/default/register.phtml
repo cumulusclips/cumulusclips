@@ -25,7 +25,7 @@
         <input name="confirm" type="password" class="text" value="<?=(isset($errors, $user->password)) ? $user->password : ''?>" />
 
         <input type="hidden" name="submitted" value="TRUE" />
-        <input type="hidden" name="token" value="<?=$token?>" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('register_button')?>" />
     </form>
 
