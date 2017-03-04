@@ -10,7 +10,7 @@ $this->addJs('mousewheel.plugin.js');
 $this->setLayout('full');
 ?>
 
-<h1><?=$video->title?></h1>
+<h1><?php echo htmlspecialchars($video->title); ?></h1>
 
 <div class="left">
 
@@ -81,7 +81,7 @@ $this->setLayout('full');
             <p><strong><?=Language::getText('date_uploaded')?>:</strong> <?=date('m/d/Y', strtotime($video->dateCreated))?></p>
             <p><strong><?=Language::getText('tags')?>:</strong>
                 <?php foreach ($video->tags as $value): ?>
-                    <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?=$value?>"><?=$value?></a>&nbsp;&nbsp;
+                    <a href="<?=HOST?>/search/?keyword=<?=$value?>" title="<?php echo htmlspecialchars($value); ?>"><?php echo htmlspecialchars($value); ?></a>&nbsp;&nbsp;
                 <?php endforeach; ?>
             </p>
             <?php if (!empty($attachments)): ?>
@@ -90,15 +90,15 @@ $this->setLayout('full');
                         <a
                             class="attachment"
                             href="<?php echo $this->getService('File')->getUrl($attachment); ?>"
-                            title="<?php echo $attachment->name; ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)"
+                            title="<?php echo htmlspecialchars($attachment->name); ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)"
                         >
-                            <?php echo $attachment->name; ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)
+                            <?php echo htmlspecialchars($attachment->name); ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)
                         </a>
                     <?php endforeach; ?>
                 </p>
             <?php endif; ?>
         </div>
-        <p><?=$video->description?></p>
+        <p><?php echo htmlspecialchars($video->description); ?></p>
     </div>
 
 
@@ -114,8 +114,8 @@ $this->setLayout('full');
 
             <!-- FACEBOOK BUTTON -->
             <meta property="og:url" content="<?=$this->getService('Video')->getUrl($video)?>/" />
-            <meta property="og:title" content="<?=$video->title?>" />
-            <meta property="og:description" content="<?=$video->description?>" />
+            <meta property="og:title" content="<?php echo htmlspecialchars($video->title); ?>" />
+            <meta property="og:description" content="<?php echo htmlspecialchars($video->description); ?>" />
             <meta property="og:image" content="<?=$config->thumbUrl?>/<?=$video->filename?>.jpg" />
             <meta property="og:type" content="video" />
             <meta property="og:video" content="<?=$config->h264Url?>/<?=$video->filename?>.mp4">
@@ -126,7 +126,7 @@ $this->setLayout('full');
             <a class="facebook" href="https://www.facebook.com/dialog/share?app_id=<your_app_id>&display=popup&href=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&redirect_uri=<?=urlencode($this->getService('Video')->getUrl($video) . '/#facebook-share')?>" onClick="window.open(this.href, 'sharewindow','width=550,height=300');return false;">Share on Facebook</a>
 
             <!-- TWITTER BUTTON -->
-            <a class="twitter" href="" onClick="window.open('https://twitter.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&text=<?=urlencode(Functions::cutOff($video->description, 140))?>','sharewindow','width=650,height=400');return false;">Share on Twitter</a>
+            <a class="twitter" href="" onClick="window.open('https://twitter.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>&text=<?=urlencode(Functions::cutOff(htmlspecialchars($video->description), 140))?>','sharewindow','width=650,height=400');return false;">Share on Twitter</a>
 
             <!-- Google +BUTTON -->
             <a class="google" href="https://plus.google.com/share?url=<?=urlencode($this->getService('Video')->getUrl($video) . '/')?>" onClick="javascript:window.open(this.href, 'sharewindow', 'height=600,width=600');return false;">Share</a>
@@ -312,7 +312,7 @@ $this->setLayout('full');
 
                 <div class="video video_small <?=($playlistVideo->videoId == $video->videoId) ? 'active' : ''?>">
                     <div class="thumbnail">
-                        <a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>">
+                        <a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?php echo htmlspecialchars($playlistVideo->title); ?>">
                             <img width="100" height="56" src="<?=$config->thumbUrl?>/<?=$playlistVideo->filename?>.jpg" />
                         </a>
                         <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, \PlaylistMapper::TYPE_WATCH_LATER)->playlistId : ''; ?>
@@ -320,7 +320,7 @@ $this->setLayout('full');
                         <span class="duration"><?=$playlistVideo->duration?></span>
                     </div>
                     <div>
-                        <p><a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?=$playlistVideo->title?>"><?=$playlistVideo->title?></a></p>
+                        <p><a href="<?=$videoService->getUrl($playlistVideo)?>/?playlist=<?=$playlist->playlistId?>" title="<?php echo htmlspecialchars($playlistVideo->title); ?>"><?php echo htmlspecialchars($playlistVideo->title); ?></a></p>
                         <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$playlistVideo->username?>/" title="<?=$playlistVideo->username?>"><?=$playlistVideo->username?></a></p>
                         <p><strong><?=Language::getText('views')?>:</strong> <?=$playlistVideo->views?></p>
                     </div>
@@ -343,7 +343,7 @@ $this->setLayout('full');
             <?php foreach ($relatedVideos as $relatedVideo): ?>
                 <div class="video video_medium">
                     <div class="thumbnail">
-                        <a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>">
+                        <a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?php echo htmlspecialchars($relatedVideo->title); ?>">
                             <img width="125" height="70" src="<?=$config->thumbUrl?>/<?=$relatedVideo->filename?>.jpg" />
                         </a>
                         <?php $playlistId = ($loggedInUser) ? $this->getService('Playlist')->getUserSpecialPlaylist($loggedInUser, \PlaylistMapper::TYPE_WATCH_LATER)->playlistId : ''; ?>
@@ -351,7 +351,7 @@ $this->setLayout('full');
                         <span class="duration"><?=$relatedVideo->duration?></span>
                     </div>
                     <div>
-                        <p><a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?=$relatedVideo->title?>"><?=$relatedVideo->title?></a></p>
+                        <p><a href="<?=$videoService->getUrl($relatedVideo)?>/" title="<?php echo htmlspecialchars($relatedVideo->title); ?>"><?php echo htmlspecialchars($relatedVideo->title); ?></a></p>
                         <p><strong><?=Language::getText('by')?>:</strong> <a href="<?=HOST?>/members/<?=$relatedVideo->username?>/" title="<?=$relatedVideo->username?>"><?=$relatedVideo->username?></a></p>
                         <p><strong><?=Language::getText('views')?>:</strong> <?=$relatedVideo->views?></p>
                     </div>

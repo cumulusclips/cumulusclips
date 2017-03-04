@@ -82,16 +82,16 @@
     <?php foreach ($userPlaylists as $playlist): ?>
         <div class="playlist <?=(empty($playlist->entries)) ? 'playlist-empty' : ''?>">
             <?php if (!empty($playlist->entries)): ?>
-                <a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>">
+                <a href="<?=$playlistService->getUrl($playlist)?>" title="<?php echo htmlspecialchars($playlist->name); ?>">
                     <img width="165" height="92" src="<?=getPlaylistThumbnail($playlist)?>" />
                     <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
                     <span class="watch-all">Watch<br>All</span>
                 </a>
-                <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>"><?=$playlist->name?></a></p>
+                <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?php echo htmlspecialchars($playlist->name); ?>"><?php echo htmlspecialchars($playlist->name); ?></a></p>
             <?php else: ?>
                 <img src="<?=$this->options->themeUrl?>/images/playlist_placeholder.png" />
                 <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
-                <p class="title"><?=$playlist->name?></p>
+                <p class="title"><?php echo htmlspecialchars($playlist->name); ?></p>
             <?php endif; ?>
             <p class="actions small">
                 <a href="<?=HOST?>/account/playlists/edit/<?=$playlist->playlistId?>/" title="<?=Language::GetText('edit_playlist')?>"><?=Language::GetText('edit_playlist')?></a>

@@ -22,7 +22,7 @@
         <?php foreach ($userAttachments as $attachment): ?>
             <tr>
                 <td><input type="checkbox" name="delete[]" value="<?=$attachment->fileId?>" /></td>
-                <td><?php echo $attachment->name; ?></td>
+                <td><?php echo htmlspecialchars($attachment->name); ?></td>
                 <td><?php echo \Functions::formatBytes($attachment->filesize); ?></td>
                 <td><?php echo \Functions::gmtToLocal($attachment->dateCreated, 'm/d/Y')?></td>
             </tr>
