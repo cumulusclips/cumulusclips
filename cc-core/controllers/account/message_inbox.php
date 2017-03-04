@@ -17,19 +17,33 @@ $db = Registry::get('db');
 // Delete message (Request came from this page)
 if (isset ($_POST['submitted'])) {
 
-    // Verify messages were chosen
-    if (!empty ($_POST['delete']) && is_array ($_POST['delete'])) {
-        foreach($_POST['delete'] as $value){
-            $message = $messageMapper->getMessageByCustom(array(
-                'recipient' => $this->view->vars->loggedInUser->userId,
-                'message_id' => $value)
-            );
-            if ($message) {
-                $messageService->delete($message);
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+
+        // Verify messages were chosen
+        if (!empty ($_POST['delete']) && is_array ($_POST['delete'])) {
+            foreach($_POST['delete'] as $value){
+                $message = $messageMapper->getMessageByCustom(array(
+                    'recipient' => $this->view->vars->loggedInUser->userId,
+                    'message_id' => $value)
+                );
+                if ($message) {
+                    $messageService->delete($message);
+                }
             }
+            $this->view->vars->message = Language::getText('success_messages_purged');
+            $this->view->vars->message_type = 'success';
         }
-        $this->view->vars->message = Language::getText('success_messages_purged');
-        $this->view->vars->message_type = 'success';
+
+    } else {
+        $this->view->vars->message = Language::getText('invalid_session');
+        $this->view->vars->message_type = 'alert-danger';
     }
 
 // Delete message (Request came from view message page)
@@ -60,5 +74,10 @@ $messageResults = $db->fetchAll($query);
 $this->view->vars->messages = $messageMapper->getMessagesFromList(
     Functions::arrayColumn($messageResults, 'message_id')
 );
+
+// Generate new form nonce
+$this->view->vars->formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $this->view->vars->formNonce;
+$_SESSION['formTime'] = time();
 
 Plugin::triggerEvent('message_inbox.end');

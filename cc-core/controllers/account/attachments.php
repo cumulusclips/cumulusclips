@@ -21,24 +21,45 @@ $this->view->vars->message = null;
 $this->view->vars->messageType = null;
 
 // Handle Delete attachments form if submitted
-if (!empty($_POST['delete']) && is_array($_POST['delete'])) {
+if (isset($_POST['submitted'])) {
 
-    foreach($_POST['delete'] as $value){
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
 
-        $file = $fileMapper->getByCustom(array(
-            'user_id' => $this->view->vars->loggedInUser->userId,
-            'type' => \FileMapper::TYPE_ATTACHMENT,
-            'file_id' => $value
-        ));
+        if (!empty($_POST['delete']) && is_array($_POST['delete'])) {
 
-        // Deleter file
-        if ($file) {
-            $fileService->delete($file);
+            foreach($_POST['delete'] as $value){
+
+                $file = $fileMapper->getByCustom(array(
+                    'user_id' => $this->view->vars->loggedInUser->userId,
+                    'type' => \FileMapper::TYPE_ATTACHMENT,
+                    'file_id' => $value
+                ));
+
+                // Deleter file
+                if ($file) {
+                    $fileService->delete($file);
+                }
+            }
+
+            $this->view->vars->message = Language::getText('success_attachments_deleted');
+            $this->view->vars->messageType = 'success';
+
+        } else {
+            $this->view->vars->message = Language::getText('invalid_attachment');
+            $this->view->vars->message_type = 'alert-danger';
         }
-    }
 
-    $this->view->vars->message = Language::getText('success_attachments_deleted');
-    $this->view->vars->messageType = 'success';
+    } else {
+        $this->view->vars->message = Language::getText('invalid_session');
+        $this->view->vars->message_type = 'alert-danger';
+    }
 }
 
 // Retrieve total count
@@ -59,5 +80,10 @@ $fileResults = $db->fetchAll($query, $params);
 $this->view->vars->userAttachments = $fileMapper->getFromList(
     Functions::arrayColumn($fileResults, 'file_id')
 );
+
+// Generate new form nonce
+$this->view->vars->formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $this->view->vars->formNonce;
+$_SESSION['formTime'] = time();
 
 Plugin::triggerEvent('attachments.end');

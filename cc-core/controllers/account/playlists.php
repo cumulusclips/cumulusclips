@@ -21,29 +21,44 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
 
 // Handle create new playlist if submitted
 if (!empty($_POST['submitted'])) {
-    $playlist = new Playlist();
-    $playlist->userId = $this->view->vars->loggedInUser->userId;
 
-    // Validate playlist name
-    if (!empty($_POST['name'])) {
-        $playlist->name = trim($_POST['name']);
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 3
+    ) {
+
+        $playlist = new Playlist();
+        $playlist->userId = $this->view->vars->loggedInUser->userId;
+
+        // Validate playlist name
+        if (!empty($_POST['name'])) {
+            $playlist->name = trim($_POST['name']);
+        } else {
+            $this->view->vars->message = Language::GetText('error_playlist_name');
+            $this->view->vars->message_type = 'errors';
+        }
+
+        // Validate playlist visibility
+        if (!empty($_POST['visibility']) && $_POST['visibility'] == 'public') {
+            $playlist->public = true;
+        } else {
+            $playlist->public = false;
+        }
+
+        // Create playlist if no errors were found
+        if (!empty($playlist->name) && isset($playlist->public)) {
+            $playlistMapper->save($playlist);
+            $this->view->vars->message = Language::GetText('success_playlist_created');
+            $this->view->vars->message_type = 'success';
+        }
+
     } else {
-        $this->view->vars->message = Language::GetText('error_playlist_name');
-        $this->view->vars->message_type = 'errors';
-    }
-
-    // Validate playlist visibility
-    if (!empty($_POST['visibility']) && $_POST['visibility'] == 'public') {
-        $playlist->public = true;
-    } else {
-        $playlist->public = false;
-    }
-
-    // Create playlist if no errors were found
-    if (!empty($playlist->name) && isset($playlist->public)) {
-        $playlistMapper->save($playlist);
-        $this->view->vars->message = Language::GetText('success_playlist_created');
-        $this->view->vars->message_type = 'success';
+        $this->view->vars->message = Language::getText('invalid_session');
+        $this->view->vars->message_type = 'alert-danger';
     }
 }
 
@@ -64,3 +79,8 @@ foreach ($userLists as $playlist) {
             break;
     }
 }
+
+// Generate new form nonce
+$this->view->vars->formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $this->view->vars->formNonce;
+$_SESSION['formTime'] = time();
