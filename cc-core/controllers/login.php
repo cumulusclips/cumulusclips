@@ -3,7 +3,7 @@
 Plugin::triggerEvent('login.start');
 
 // Verify if user is logged in
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -66,15 +66,26 @@ if (isset($_POST['submitted_login'])) {
         // login if no errors were found
         if ($this->view->vars->username && $this->view->vars->password) {
 
-            if ($userService->login($this->view->vars->username, $this->view->vars->password)) {
+            if ($user = $this->authService->validateCredentials(
+                $this->view->vars->username,
+                $this->view->vars->password
+            )) {
 
                 // Generate new session id
                 session_regenerate_id(true);
+
+                $this->authService->login($user);
+
+                // Update user's last login date
+                $user->lastLogin = gmdate(DATE_FORMAT);
+                $userMapper = new \UserMapper();
+                $userMapper->save($user);
 
                 // Detect if post-login redirect was requested otherwise redirect to account index
                 $url = ($this->view->vars->redirect) ? $this->view->vars->redirect : HOST . '/account/';
                 $url = Plugin::triggerFilter('login_redirect', $url);
                 header('Location: ' . $url);
+
             } else {
                 $this->view->vars->message = Language::getText('error_invalid_login');
                 $this->view->vars->message_type = 'errors';

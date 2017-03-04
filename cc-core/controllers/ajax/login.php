@@ -1,7 +1,7 @@
 <?php
 
 // Verify if user is logged in
-$loggedInUser = $this->isAuth();
+$loggedInUser = $this->authService->getAuthUser();
 Functions::redirectIf(!$loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -26,7 +26,7 @@ if (!empty($_POST['password'])) {
 // login if no errors were found
 if ($username && $password) {
 
-    if ($userService->login($username, $password)) {
+    if ($this->authService->validateCredentials($username, $password)) {
         exit(json_encode(array(
             'result' => true,
             'message' => null,

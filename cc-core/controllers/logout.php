@@ -3,10 +3,9 @@
 $this->view->options->disableView = true;
 
 // Verify if user is logged in
-if ($this->isAuth()) {
+if ($this->authService->isAuth()) {
 
-    $userService = new UserService();
-    $userService->logout(); // Plugin Hook is within method
+    $this->authService->logout();
 
     // Generate new session id
     session_regenerate_id(true);

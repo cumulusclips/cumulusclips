@@ -1,7 +1,7 @@
 <?php
 
 // Verify if user is logged in
-$loggedInUser = $this->isAuth();
+$loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;

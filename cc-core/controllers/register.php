@@ -7,7 +7,7 @@ $config = Registry::get('config');
 if (!$config->enableRegistrations) App::throw404();
 
 // Verify if user is logged in
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc

@@ -3,7 +3,8 @@
 Plugin::triggerEvent('opt_out.start');
 
 // Verify if user is logged in
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 $userMapper = new UserMapper();
 

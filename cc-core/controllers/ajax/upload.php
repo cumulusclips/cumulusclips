@@ -16,8 +16,8 @@
  */
 
 // Verify if user is logged in
-$this->enforceAuth(false);
-$loggedInUser = $this->isAuth(false);
+$this->authService->enforceAuth();
+$loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $userService = new UserService();

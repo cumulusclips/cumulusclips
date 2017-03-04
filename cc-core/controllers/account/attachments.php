@@ -3,8 +3,9 @@
 Plugin::triggerEvent('attachments.start');
 
 // Verify if user is logged in
-$this->enforceAuth();
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceAuth();
+$this->authService->enforceTimeout(true);
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Verify that video attachments are allowed
 $config = Registry::get('config');

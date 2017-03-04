@@ -3,6 +3,8 @@
 class Controller
 {
     public $view;
+    public $config;
+    public $authService;
 
     /**
      * Create new controller instance
@@ -10,6 +12,7 @@ class Controller
     public function __construct()
     {
         $this->config = Registry::get('config');
+        $this->authService = new \AuthService();
 
         // Start session
         if (!headers_sent() && session_id() == '') {
@@ -20,6 +23,8 @@ class Controller
             // Set session timeout values
             $_SESSION['session-expired'] = (!empty($_SESSION['timeout']) && $_SESSION['timeout'] < time());
             $_SESSION['timeout'] = time() + $timeout;
+
+            // var_dump($_SESSION);
         }
 
         // Start view layer
@@ -42,45 +47,6 @@ class Controller
      */
     protected function _initView()
     {
-        $view = View::getInstance();
-        $this->view = $view;
-    }
-
-    /**
-     * Determines if user is authenticated
-     *
-     * @param boolean $strict Whether to observe session expiration when checking for logged in user
-     * @return \User|boolean Returns user if logged in, boolean false otherwise
-     */
-    protected function isAuth($strict = true)
-    {
-        $userService = new \UserService();
-        $loggedInUser = $userService->loginCheck();
-        return ($strict && $_SESSION['session-expired']) ? false : $loggedInUser;
-    }
-
-    /**
-     * Verifies user has a valid login session, redirects otherwise
-     *
-     * @param boolean $enforceTimeout Whether to redirect due to expired session
-     */
-    protected function enforceAuth($enforceTimeout = true)
-    {
-        if (!$this->isAuth(false)) {
-            header("Location: " . BASE_URL . '/login/');
-            exit();
-        }
-
-        // Verify if user's session has timed out
-        if ($enforceTimeout && $_SESSION['session-expired']) {
-
-            // Log user out
-            $userService = new \UserService();
-            $userService->logout();
-
-            // Redirect to login page with session message
-            header("Location: " . BASE_URL . '/login/?session-expired');
-            exit();
-        }
+        $this->view = View::getInstance();
     }
 }

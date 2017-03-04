@@ -10,8 +10,8 @@ $config = Registry::get('config');
 if (!$config->enableUserUploads) App::throw404();
 
 // Verify if user is logged in
-$this->enforceAuth(false);
-$this->view->vars->loggedInUser = $this->isAuth(false);
+$this->authService->enforceAuth();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 App::EnableUploadsCheck();

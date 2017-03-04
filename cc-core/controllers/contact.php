@@ -3,7 +3,8 @@
 Plugin::triggerEvent('contact.start');
 
 // Verify if user is logged in
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $this->view->vars->errors = array();

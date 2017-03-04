@@ -3,8 +3,9 @@
 Plugin::triggerEvent('change_password.start');
 
 // Verify if user is logged in
-$this->enforceAuth();
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceAuth();
+$this->authService->enforceTimeout(true);
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $this->view->vars->errors = array();

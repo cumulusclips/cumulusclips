@@ -15,6 +15,7 @@
 
         <input type="hidden" name="redirect" value="<?=urlencode($redirect)?>" />
         <input type="hidden" name="submitted_login" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('login_button')?>" />
 
     </form>
