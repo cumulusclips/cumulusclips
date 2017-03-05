@@ -644,6 +644,7 @@ class Router
             'path' => 'embed/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/embed.php',
             'mappings' => array('vid'),
+            'type' => Route::AGNOSTIC,
             'name' => 'embed'
         ));
 
