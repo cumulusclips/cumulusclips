@@ -8,8 +8,9 @@ Plugin::triggerEvent('mobile_my_videos.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
-$this->enforceAuth();
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceAuth();
+$this->authService->enforceTimeout(true);
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();

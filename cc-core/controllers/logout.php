@@ -3,7 +3,7 @@
 $this->view->options->disableView = true;
 
 // Verify if user is logged in
-if ($this->authService->isAuth()) {
+if ($this->authService->getAuthUser()) {
 
     $this->authService->logout();
 

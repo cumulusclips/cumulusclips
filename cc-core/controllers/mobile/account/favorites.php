@@ -4,8 +4,9 @@ Plugin::triggerEvent('mobile_favorites.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
-$this->enforceAuth();
-$this->view->vars->loggedInUser = $this->isAuth();
+$this->authService->enforceAuth();
+$this->authService->enforceTimeout(true);
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Retrieve playlist videos
 $playlistService = new PlaylistService();
