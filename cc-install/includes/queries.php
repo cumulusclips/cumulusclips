@@ -140,15 +140,13 @@ $_CREATE_FILES_TABLE = <<<CREATE_FILES_TABLE
 CREATE TABLE `{DB_PREFIX}files` (
   `file_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
+  `type` varchar(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `title` text NOT NULL,
-  `description` text,
+  `name` text NOT NULL,
   `filesize` bigint(20) NOT NULL,
   `extension` varchar(255) NOT NULL DEFAULT '',
-  `attachable` tinyint(1) NOT NULL DEFAULT '0',
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`file_id`),
-  KEY `tenant_id` (`user_id`),
   KEY `user_id` (`user_id`),
   KEY `filename` (`filename`)
 ) DEFAULT CHARSET=utf8;
@@ -309,7 +307,7 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('keep_original_video','1'),
 ('enable_encoding','1'),
 ('mobile_site','1'),
-('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvo_aacenc -ab 96k -ar 44100 -f mp4'),
+('h264_encoding_options','-vcodec libx264 -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec aac -ab 96k -ar 44100 -f mp4'),
 ('webm_encoding_enabled','0'),
 ('webm_encoding_options','-vcodec libvpx -vf "scale=min(640\\\,iw):trunc(ow/a/2)*2" -vb 800k -acodec libvorbis -ab 96k -ar 44100 -f webm'),
 ('theora_encoding_enabled','0'),
@@ -328,7 +326,10 @@ INSERT INTO `{DB_PREFIX}settings` (`name`,`value`) VALUES
 ('from_address',''),
 ('smtp','{"enabled":false,"host":"","port":25,"username":"","password":""}'),
 ('user_registrations', '1'),
-('user_uploads', '1')
+('user_uploads', '1'),
+('alerts_imports', '1'),
+('video_attachments', '1'),
+('session_timeout', '60')
 
 POPULATE_SETTINGS_TABLE;
 
@@ -434,6 +435,28 @@ CREATE_VIDEOS_TABLE;
 
 
 
+/* Table structure for table `attachments` */
+
+$_DROP_ATTACHMENTS_TABLE = <<<DROP_ATTACHMENTS_TABLE
+DROP TABLE IF EXISTS `{DB_PREFIX}attachments`
+DROP_ATTACHMENTS_TABLE;
+
+$_CREATE_ATTACHMENTS_TABLE = <<<CREATE_ATTACHMENTS_TABLE
+
+CREATE TABLE `{DB_PREFIX}attachments` (
+  `attachment_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `file_id` bigint(20) NOT NULL,
+  `video_id` bigint(20) NOT NULL,
+  `date_created` DATETIME NOT NULL,
+  PRIMARY KEY (`attachment_id`)
+) DEFAULT CHARSET=utf8
+
+CREATE_ATTACHMENTS_TABLE;
+
+
+
+
+
 $install_queries = array (
     $_DROP_CATEGORIES_TABLE,
     $_CREATE_CATEGORIES_TABLE,
@@ -467,7 +490,9 @@ $install_queries = array (
     $_DROP_USERS_TABLE,
     $_CREATE_USERS_TABLE,
     $_DROP_VIDEOS_TABLE,
-    $_CREATE_VIDEOS_TABLE
+    $_CREATE_VIDEOS_TABLE,
+    $_DROP_ATTACHMENTS_TABLE,
+    $_CREATE_ATTACHMENTS_TABLE
 );
 
 ?>
