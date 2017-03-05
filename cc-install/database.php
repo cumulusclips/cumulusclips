@@ -138,7 +138,7 @@ if (isset ($_POST['submitted'])) {
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/files/attachments', 0777);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/files/library', 0777);
             FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/avatars', 0777);
-            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/imports', 0777);
+            FilesystemInstaller::setPermissions(DOC_ROOT . '/cc-content/uploads/import', 0777);
 
 
             // Store information & redirect user
