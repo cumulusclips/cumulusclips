@@ -31,7 +31,16 @@ if (!headers_sent()) {
             'plugins'       => 0,
             'settings'      => 0
         );
-        setcookie ('cc_admin_settings', http_build_query ($cc_admin_settings));
+        $params = session_get_cookie_params();
+        setcookie(
+            'cc_admin_settings',
+            http_build_query($cc_admin_settings),
+            0,
+            rtrim($params["path"], '/') . '/cc-admin',
+            $params["domain"],
+            $params["secure"],
+            $params["httponly"]
+        );
     }
 }
 
