@@ -1,6 +1,6 @@
 <?php
 
-Plugin::triggerEvent('login.start');
+Plugin::triggerEvent('login.start', $this->view);
 
 // Verify if user is logged in
 $this->view->vars->loggedInUser = $this->authService->getAuthUser();
@@ -167,4 +167,4 @@ $this->view->vars->formNonce = md5(uniqid(rand(), true));
 $_SESSION['formNonce'] = $this->view->vars->formNonce;
 $_SESSION['formTime'] = time();
 
-Plugin::triggerEvent('login.end');
+Plugin::triggerEvent('login.end', $this->view);
