@@ -39,7 +39,7 @@ if (!headers_sent()) {
             rtrim($params["path"], '/') . '/cc-admin',
             $params["domain"],
             $params["secure"],
-            $params["httponly"]
+            false
         );
     }
 }
