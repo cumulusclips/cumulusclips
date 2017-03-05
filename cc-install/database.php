@@ -31,6 +31,14 @@ if (isset ($_POST['submitted'])) {
     }
 
 
+    // Validate port
+    if (!empty($_POST['name']) && is_numeric($_POST['port'])) {
+        $port = trim ($_POST['port']);
+    } else {
+        $errors['port'] = "A valid database port is needed";
+    }
+
+
     // Validate name
     if (!empty ($_POST['name']) && !ctype_space ($_POST['name'])) {
         $name = trim ($_POST['name']);
@@ -61,7 +69,7 @@ if (isset ($_POST['submitted'])) {
     } else {
         $prefix = '';
     }
-    
+
 
     // Execute queries if no form errors were found
     if (empty ($errors)) {
@@ -73,34 +81,33 @@ if (isset ($_POST['submitted'])) {
         try {
 
             // Connect to user's database server
-            $dbc = @mysql_connect ($hostname, $username, $password);
-            if (!$dbc) throw new Exception ("Unable to connect to the database server with the credentials you provided. Please verify they're correct and try again.");
-
-
-            // Select user's database for operation
-            $select = @mysql_select_db ($name, $dbc);
-            if (!$select) throw new Exception ("Unable to use database you specified. Please verify the name is correct and that you have access to it.");
-
+            $pdo = new PDO(
+                'mysql:host=' . $hostname . ';port=' . $port . ';dbname=' . $name,
+                $username,
+                $password,
+                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+            );
 
             // Perform install queries
             foreach ($install_queries as $query) {
-                $query = str_replace ('{DB_PREFIX}', $prefix, str_replace ("\n", '', ($query)));
-                $result = @mysql_query ($query);
-                if (!$result) throw new Exception ("Unable to execute queries. Please verify you have write access to the database.");
+                $sql = str_replace('{DB_PREFIX}', $prefix, str_replace("\n", '', ($query)));
+                $pdoStatement = $pdo->prepare($sql);
+                $pdoStatement->execute();
             }
 
 
             // Open temp config file and replace placeholders with actual values
             $config_file = INSTALL . '/includes/config.default.php';
             $config_content = @file_get_contents ($config_file);
-            
+
             // DB Values
             $config_content = preg_replace ('/{DB_HOST}/i', $hostname, $config_content);
+            $config_content = preg_replace ('/{DB_PORT}/i', $port, $config_content);
             $config_content = preg_replace ('/{DB_NAME}/i', $name, $config_content);
             $config_content = preg_replace ('/{DB_USER}/i', $username, $config_content);
             $config_content = preg_replace ('/{DB_PASS}/i', $password, $config_content);
             $config_content = preg_replace ('/{DB_PREFIX}/i', $prefix, $config_content);
-            
+
             // FTP Values
             $config_content = preg_replace ('/{FTP_HOST}/i', $settings->ftp_hostname, $config_content);
             $config_content = preg_replace ('/{FTP_USER}/i', $settings->ftp_username, $config_content);
@@ -134,6 +141,7 @@ if (isset ($_POST['submitted'])) {
 
             // Store information & redirect user
             $settings->db_hostname = $hostname;
+            $settings->db_port = $port;
             $settings->db_name = $name;
             $settings->db_username = $username;
             $settings->db_password = $password;
@@ -144,7 +152,9 @@ if (isset ($_POST['submitted'])) {
             exit();
 
         } catch (Exception $e) {
-            $error_msg = $e->getMessage();
+            $error_msg = '<p>Unable to perform database portion of installation. The following error occured: <br><br>'
+                . $e->getMessage()
+                . '</p>';
         }
 
     } else {

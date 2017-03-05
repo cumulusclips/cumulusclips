@@ -28,12 +28,11 @@ if (version_compare(phpversion(), '5.3.0') >= 0) {
 
 
 // Retrieve php-cli path
-@exec('whereis php', $whereis_results);
+exec('whereis php', $whereis_results);
 $whereis_results = explode (' ', preg_replace ('/^php:\s?/','', $whereis_results[0]));
 if (!empty ($whereis_results)) {
     foreach ($whereis_results as $phpExe) {
-        if (!is_executable($phpExe)) continue;
-        @exec($phpExe . ' -r "' . "echo 'cliBinary';" . '" 2>&1 | grep cliBinary', $phpCliResults);
+        exec($phpExe . ' --version 2>&1 | grep "(cli)"', $phpCliResults);
         $phpCliResults = implode(' ', $phpCliResults);
         if (!empty($phpCliResults)) {
             $settings->php = $phpExe;

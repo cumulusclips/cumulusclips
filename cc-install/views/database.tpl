@@ -21,6 +21,9 @@
                 <div class="row <?php echo (isset ($errors['hostname'])) ? 'errors' : ''; ?>"><label>*Database Host:</label><input type="text" class="text" name="hostname" value="<?php echo (isset ($hostname)) ? $hostname : 'localhost'; ?>" /></div>
                 <div class="row-shift">The hostname of your database server. If you're not sure just use localhost.</div>
 
+                <div class="row <?php echo (isset ($errors['port'])) ? 'errors' : ''; ?>"><label>*Database Port:</label><input type="text" class="text" name="port" value="<?php echo (isset ($port)) ? $port : '3306'; ?>" /></div>
+                <div class="row-shift">Connection port of your database server.</div>
+
                 <div class="row <?php echo (isset ($errors['name'])) ? 'errors' : ''; ?>"><label>*Database Name:</label><input type="text" class="text" name="name" value="<?php echo (isset ($name)) ? $name : ''; ?>" /></div>
                 <div class="row-shift">Name of your database.</div>
 
@@ -38,7 +41,7 @@
                     <input type="hidden" name="submitted" value="TRUE" />
                 </div>
                 </form>
-                
+
             </div>
 
         </div>
