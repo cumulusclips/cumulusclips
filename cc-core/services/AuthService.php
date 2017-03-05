@@ -100,7 +100,7 @@ class AuthService extends ServiceAbstract
      */
     public function enforceTimeout($redirectOnTimeout = false)
     {
-        if ($_SESSION['auth']->sessionExpired) {
+        if (!empty($_SESSION['auth']->sessionExpired)) {
 
             // Log user out
             $this->logout();

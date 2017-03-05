@@ -119,50 +119,45 @@ class UserService extends ServiceAbstract
 
     /**
      * Login a user
+     *
+     * @deprecated Depracated in 2.5, removed in 2.6. Use AuthService::validateCredentials/login instead
      * @param string $username Username of user to login
      * @param string $password Password of user to login
      * @return boolean User is logged in, returns true if login succeeded, false otherwise
      */
     public function login($username, $password)
     {
-        $userMapper = $this->_getMapper();
-        $user = $userMapper->getUserByCustom(array(
-            'username' => $username,
-            'password' => md5($password),
-            'status' => 'active'
-        ));
-        if ($user) {
-            $_SESSION['loggedInUserId'] = $user->userId;
-            $user->lastLogin = date(DATE_FORMAT);
-            $userMapper->save($user);
-            return true;
-        } else {
-            return false;
-        }
+        $authService = new \AuthService();
+        $user = $authService->validateCredentials($username, $password);
+
+        if (!$user) return false;
+
+        $authService->login($user);
+        return true;
     }
 
     /**
      *  Log a user out of website
+     *
+     * @deprecated Depracated in 2.5, removed in 2.6. Use AuthService::logout instead
      * @return void
      */
     public function logout()
     {
-        unset($_SESSION['loggedInUserId']);
+        $authService = new \AuthService();
+        return $authService->logout();
     }
 
     /**
      * Check if user is logged in, with optional redirect
      *
+     * @deprecated Depracated in 2.5, removed in 2.6. Use AuthService::getAuthUser instead
      * @return boolean|User Returns instance user if logged in, boolean false otherwise
      */
     public function loginCheck()
     {
-        $userMapper = $this->_getMapper();
-        if (!empty($_SESSION['loggedInUserId'])) {
-            return $userMapper->getUserById($_SESSION['loggedInUserId']);
-        } else {
-            return false;
-        }
+        $authService = new \AuthService();
+        return $authService->getAuthUser();
     }
 
     /**
@@ -174,18 +169,26 @@ class UserService extends ServiceAbstract
     public function checkPermissions($permission, $userToCheck = null)
     {
         $config = Registry::get('config');
+        $authService = new \AuthService();
+        $user = false;
 
         // Retrieve user information
-        if (!empty($userToCheck) && $userToCheck instanceof User) {
-            $user = $userToCheck;
-        } else if (!empty($userToCheck) && is_numeric($userToCheck)) {
-            $userMapper = $this->_getMapper();
-            $user = $userMapper->getUserById($userToCheck);
-        } else if ($loggedIn = $this->loginCheck()) {
-            $user = $loggedIn;
+        if (isset($userToCheck)) {
+
+            if ($userToCheck instanceof User) {
+                $user = $userToCheck;
+            } else if (is_numeric($userToCheck)) {
+                $userMapper = $this->_getMapper();
+                $user = $userMapper->getUserById($userToCheck);
+            } else {
+                throw new \InvalidArgumentException('Invalid value passed as user to check');
+            }
+
         } else {
-            return false;
+            $user = $authService->getAuthUser();
         }
+
+        if (!$user) return false;
 
         // Check for given permission in user's role
         if (isset($config->roles->{$user->role})) {
