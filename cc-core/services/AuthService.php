@@ -3,15 +3,28 @@
 class AuthService extends ServiceAbstract
 {
     /**
+     * @var int Session timeout in minutes
+     */
+    protected $sessionTimeout;
+
+    /**
+     * Instantiates auth service
+     */
+    public function __construct()
+    {
+        $config = Registry::get('config');
+        $this->sessionTimeout = $config->sessionTimeout;
+    }
+
+    /**
      * Sets flags that state whether an auth session is valid or expired
      */
     public function setTimeoutFlags()
     {
-        $config = Registry::get('config');
-
-        // Set session timeout values
-        $_SESSION['session-expired'] = (!empty($_SESSION['timeout']) && $_SESSION['timeout'] < time());
-        $_SESSION['timeout'] = time() + ($config->sessionTimeout * 60);
+        if (isset($_SESSION['auth'])) {
+            $_SESSION['auth']->sessionExpired = $_SESSION['auth']->timeout < time();
+            $_SESSION['auth']->timeout = time() + ($this->sessionTimeout * 60);
+        }
     }
 
     /**
@@ -23,8 +36,8 @@ class AuthService extends ServiceAbstract
     public function getAuthUser()
     {
         $userMapper = new \UserMapper();
-        if (isset($_SESSION['loggedInUserId'])) {
-            return $userMapper->getUserById($_SESSION['loggedInUserId']);
+        if (isset($_SESSION['auth'])) {
+            return $userMapper->getUserById($_SESSION['auth']->userId);
         } else {
             return false;
         }
@@ -54,7 +67,11 @@ class AuthService extends ServiceAbstract
      */
     public function login(\User $user)
     {
-        $_SESSION['loggedInUserId'] = $user->userId;
+        $_SESSION['auth'] = (object) array(
+            'userId' => $user->userId,
+            'sessionExpired' => false,
+            'timeout' => time() + ($this->sessionTimeout * 60)
+        );
     }
 
     /**
@@ -62,17 +79,7 @@ class AuthService extends ServiceAbstract
      */
     public function logout()
     {
-        unset($_SESSION['loggedInUserId']);
-    }
-
-    /**
-     * Sets session timeout values
-     */
-    public function setTimeoutValues()
-    {
-        $config = Registry::get('config');
-        $_SESSION['session-expired'] = (!empty($_SESSION['timeout']) && $_SESSION['timeout'] < time());
-        $_SESSION['timeout'] = time() + ($config->sessionTimeout * 60);
+        unset($_SESSION['auth']);
     }
 
     /**
@@ -80,7 +87,7 @@ class AuthService extends ServiceAbstract
      */
     public function enforceAuth()
     {
-        if (!isset($_SESSION['loggedInUserId'])) {
+        if (!isset($_SESSION['auth'])) {
             header("Location: " . BASE_URL . '/login/');
             exit();
         }
@@ -93,7 +100,7 @@ class AuthService extends ServiceAbstract
      */
     public function enforceTimeout($redirectOnTimeout = false)
     {
-        if ($_SESSION['session-expired']) {
+        if ($_SESSION['auth']->sessionExpired) {
 
             // Log user out
             $this->logout();

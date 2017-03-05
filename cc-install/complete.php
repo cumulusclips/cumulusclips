@@ -100,7 +100,7 @@ $_SESSION = array();
 session_destroy();
 
 
-// Authenticate admin user
+// Match session settings with script
 ini_set('session.name', 'EID');
 ini_set('session.use_strict_mode', true);
 ini_set('session.cookie_httponly', true);
@@ -109,8 +109,15 @@ ini_set('session.use_only_cookies', true);
 ini_set('session.use_trans_sid', true);
 ini_set('session.cookie_domain', parse_url($settings->base_url, PHP_URL_HOST));
 ini_set('session.cookie_path', parse_url($settings->base_url, PHP_URL_PATH) ?: '/');
+
+
+// Authenticate admin user
 session_start();
-$_SESSION['loggedInUserId'] = $id;
+$_SESSION['auth'] (object) array(
+    'userId' => $id,
+    'timeout' => time() + (60 * 60),
+    'sessionExpired' => false
+);
 
 
 // Direct user into admin panel
