@@ -55,7 +55,7 @@ if (isset($_POST['submitted'])) {
         }
 
         // Validate Username
-        if (!empty($_POST['username'])) {
+         if (!empty($_POST['username']) && preg_match('/^[a-z0-9]+$/i', $_POST['username'])) {
             $usernameCheck = $userMapper->getUserByCustom(array('username' => $_POST['username']));
             if (!$usernameCheck) {
                 $user->username = trim($_POST['username']);
