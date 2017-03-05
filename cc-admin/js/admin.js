@@ -580,8 +580,22 @@ function retrieveSettings(){
  * @return void Global settings object and cookie are updated
  */
 function updateSettings(name, value){
+
+    // Update setting
     cumulusClips.settings[name] = value;
-    $.cookie('cc_admin_settings',$.param(cumulusClips.settings));
+
+    // Set cookie options
+    var parser = document.createElement('a');
+    parser.href = cumulusClips.baseUrl;
+    var options = {
+        domain: parser.hostname,
+        secure: (parser.protocol === 'https:') ? true : false,
+        path: parser.pathname.replace(/\/$/, '') + '/cc-admin/',
+        expires: null,
+    };
+
+    // Save cookie
+    $.cookie('cc_admin_settings', $.param(cumulusClips.settings), options);
 }
 
 /**

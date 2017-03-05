@@ -80,7 +80,7 @@ ini_set('session.use_cookies', true);
 ini_set('session.use_only_cookies', true);
 ini_set('session.use_trans_sid', true);
 ini_set('session.cookie_domain', parse_url(BASE_URL, PHP_URL_HOST));
-ini_set('session.cookie_path', parse_url(BASE_URL, PHP_URL_PATH) ?: '/');
+ini_set('session.cookie_path', (parse_url(BASE_URL, PHP_URL_PATH) ?: '') . '/');
 
 // Initialize language
 Language::init();

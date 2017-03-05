@@ -14,6 +14,8 @@ $authService->setTimeoutFlags();
 $authService->enforceAuth();
 $adminUser = $authService->getAuthUser();
 
+
+
 // Pre-Output Work
 define ('ADMIN', HOST . '/cc-admin');
 if (!headers_sent()) {
@@ -36,7 +38,7 @@ if (!headers_sent()) {
             'cc_admin_settings',
             http_build_query($cc_admin_settings),
             0,
-            rtrim($params["path"], '/') . '/cc-admin',
+            rtrim($params["path"], '/') . '/cc-admin/',
             $params["domain"],
             $params["secure"],
             false
