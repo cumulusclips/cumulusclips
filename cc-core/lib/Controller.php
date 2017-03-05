@@ -19,9 +19,6 @@ class Controller
             session_start();
             $this->authService->setTimeoutFlags();
         }
-
-        // Start view layer
-        $this->_initView();
     }
 
     /**
@@ -30,16 +27,13 @@ class Controller
      */
     public function dispatch(Route $route)
     {
+        $this->view = new \View();
         $this->view->load($route);
-        include($route->location);
-        $this->view->render();
-    }
 
-    /**
-     * Setup view instance for use by controller
-     */
-    protected function _initView()
-    {
-        $this->view = View::getInstance();
+        // Execute controller
+        include($route->location);
+
+        // Render view for route
+        $this->view->render();
     }
 }

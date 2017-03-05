@@ -6,7 +6,6 @@ class View
     public $options;
     public $vars;
     protected $_body;
-    protected static $_view;
     protected $_route;
     protected $_js;
     protected $_css;
@@ -422,18 +421,6 @@ JS;
 
 //        define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
-    }
-
-    /**
-     * Retrieve an instance of a view
-     * @return View Returns existing view or new one if none has been created
-     */
-    public static function getInstance()
-    {
-        if (!self::$_view instanceof View) {
-            self::$_view = new View();
-        }
-        return self::$_view;
     }
 
     /**
