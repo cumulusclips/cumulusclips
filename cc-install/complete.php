@@ -113,7 +113,7 @@ ini_set('session.cookie_path', parse_url($settings->base_url, PHP_URL_PATH) ?: '
 
 // Authenticate admin user
 session_start();
-$_SESSION['auth'] (object) array(
+$_SESSION['auth'] = (object) array(
     'userId' => $id,
     'timeout' => time() + (60 * 60),
     'sessionExpired' => false
