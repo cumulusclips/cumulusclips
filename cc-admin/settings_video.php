@@ -132,7 +132,7 @@ if (isset ($_POST['submitted'])) {
 
         // Validate php-cli path
         if (empty ($_POST['php'])) {
-            @exec('whereis php', $whereis_results);
+            exec('whereis php', $whereis_results);
             $phpPaths = explode (' ', preg_replace ('/^php:\s?/','', $whereis_results[0]));
         } else if (!empty ($_POST['php']) && file_exists ($_POST['php'])) {
             $phpPaths = array(rtrim ($_POST['php'], '/'));
@@ -142,8 +142,7 @@ if (isset ($_POST['submitted'])) {
 
         $phpBinary = false;
         foreach ($phpPaths as $phpExe) {
-            if (!is_executable($phpExe)) continue;
-            @exec($phpExe . ' -r "' . "echo 'cliBinary';" . '" 2>&1 | grep cliBinary', $phpCliResults);
+            exec($phpExe . ' --version 2>&1 | grep "(cli)"', $phpCliResults);
             $phpCliResults = implode(' ', $phpCliResults);
             if (!empty($phpCliResults)) {
                 $phpCliBinary = $phpExe;
