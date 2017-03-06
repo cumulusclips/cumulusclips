@@ -1,6 +1,6 @@
----------------------
-CONTENTS OF THIS FILE
----------------------
+# CumulusClips Video CMS
+
+### CONTENTS OF THIS FILE
 
  * About CumulusClips
  * Server Requirements
@@ -8,65 +8,47 @@ CONTENTS OF THIS FILE
  * File Permissions
 
 
-
-
-
-------------------
-ABOUT CUMULUSCLIPS
-------------------
+### ABOUT CUMULUSCLIPS
 
 CumulusClips is an open source video content management platform capable of
 supporting from small video microsites to large scale video websites. For more
 information, see the CumulusClips website at http://cumulusclips.org/.
 
 
-
-
-
--------------------
-SERVER REQUIREMENTS
--------------------
+### SERVER REQUIREMENTS
 
 CumulusClips requires:
 
-- Linux operating system (Kernel 2.6.32 or greater)
-- Apache web server version 2.0 (or greater) (http://httpd.apache.org/)
-    - Apache mod_rewrite module
-- PHP 5.3 (or greater) (http://www.php.net/)
-- MySQL 5.0 (or greater) (http://www.mysql.com/)
+* Linux operating system (Kernel 2.6.32 or greater)
+* Apache web server version 2.0 (or greater) (http://httpd.apache.org/)
+  * Apache mod_rewrite module
+* PHP 5.3 (or greater) (http://www.php.net/)
+* MySQL 5.0 (or greater) (http://www.mysql.com/)
 
 
-
-
-
-----------------
-PHP REQUIREMENTS
-----------------
+### PHP REQUIREMENTS
 
 The following PHP modules are required:
 
-- GD
-- POSIX
-- SimpleXML
-- ZIP
-- CURL
+* GD
+* POSIX
+* SimpleXML
+* ZIP
+* CURL
 
 The following PHP settings are required:
 
+```
 short_open_tags = on
 upload_max_filesize = 110M
 post_max_size = 110M
 max_execution_time = 1500
 safe_mode = off
 register _globals = off
+```
 
 
-
-
-
-----------------
-FILE PERMISSIONS
-----------------
+### FILE PERMISSIONS
 
 CumulusClips needs to modify files occasionally. To do this it needs access
 to the filesystem. There are two options to achive this:

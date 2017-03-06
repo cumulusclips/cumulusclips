@@ -26,6 +26,22 @@ class Functions
     }
 
     /**
+     * Filters an array based on the value of a given column
+     *
+     * @param mixed $searchValue The value to filter by
+     * @param string $column The column to filter by
+     * @param array $array List of objects or associative arrays to filter
+     * @return array Returns an array consiting of objects/arrays whose column value was a match
+     */
+    public static function arrayColumnFilter($searchValue, $column, array $array)
+    {
+        return array_values(array_filter($array, function($value) use ($column, $searchValue) {
+            $object = (object) $value;
+            return ($object->{$column} == $searchValue);
+        }));
+    }
+
+    /**
      * Create a slug based on given string
      * @param string $string
      * @return string URL/Slug version of string
@@ -45,9 +61,8 @@ class Functions
      */
     public static function getExtension($filename)
     {
-        if (!strrpos($filename, '.')) return false;
-        $filename_sections = explode('.', $filename);
-        return strtolower(array_pop($filename_sections));
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        return (empty($extension)) ? false : strtolower($extension);
     }
 
     /**
@@ -335,9 +350,60 @@ class Functions
      */
     public static function gmtToLocal($date_time, $format = 'Y-m-d G:i:s')
     {
-        $date = new DateTime ( $date_time , new DateTimeZone('UTC') );
-        $date->setTimezone ( new DateTimeZone(date_default_timezone_get()) );
-        return $date->format ($format);
+        $date = ($date_time instanceof \DateTime) ? $date_time : new \DateTime($date_time, new \DateTimeZone('UTC'));
+        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return $date->format($format);
+    }
+
+    /**
+     * Calculates elapsed time between given dates
+     *
+     * @param \DateTime $dateStart Starting date
+     * @param \DateTime $dateEnd (optional) Ending date, uses "now" if ommited
+     * @return string Returns elapsed time in format "D Days HH:MM:SS"
+     */
+    public function getTimeSince(\DateTime $dateStart, \DateTime $dateEnd = null)
+    {
+        $display = '';
+
+        // Retrieve current date/time
+        $endDateTime = ($dateEnd) ?: new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $remainingSeconds = $endDateTime->getTimestamp() - $dateStart->getTimestamp();
+
+        // Generate days
+        if ($remainingSeconds >= 86400) {
+            $days = floor($remainingSeconds/86400);
+            $display = $days . ' Days ';
+            $remainingSeconds = $remainingSeconds%86400;
+        }
+
+        // Generate hours
+        if ($remainingSeconds >= 3600) {
+            $hours = floor($remainingSeconds/3600);
+            $display .= str_pad($hours, 2, "0", STR_PAD_LEFT) . ':';
+            $remainingSeconds = $remainingSeconds%3600;
+        } else {
+            $display .= '00:';
+        }
+
+        // Generate minutes
+        if ($remainingSeconds >= 60) {
+            $minutes = floor($remainingSeconds/60);
+            $display .= str_pad($minutes, 2, '0', STR_PAD_LEFT) . ':';
+            $remainingSeconds = $remainingSeconds%60;
+        } else {
+            $display .= '00:';
+        }
+
+        // Generate seconds
+        if ($remainingSeconds > 0) {
+            $display .= str_pad($remainingSeconds, 2, '0', STR_PAD_LEFT);
+        } else {
+            $display .= '00';
+        }
+
+        return $display;
     }
 
     /**
@@ -358,15 +424,16 @@ class Functions
     }
 
     /**
-     * Formats given kilobytes into largest human readable unit size
-     * @param int $kiloBytes Kilobytes to be formatted
-     * @param int $precision (optional) The precision to be used when rounding the final output
-     * @return string Returns the formatted bytes in the calculated units with a units suffixed
+     * Formats bytes into a human readable format
+     *
+     * @param int $bytes Total number of bytes
+     * @param int $decimal Number of decimal places to include result
+     * @return string Returns human readable formatted bytes
      */
-    public static function formatKiloBytes($kiloBytes, $precision = 2)
+    public static function formatBytes($bytes, $decimals = 2)
     {
-        $base = log($kiloBytes, 1000);
-        $suffix = array("KB", "MB", "GB", "TB", "PT");
-        return round(pow(1000, $base - floor($base)), $precision) . $suffix[floor($base)];
+        $size = array('B','KB','MB','GB','TB','PB','EB','ZB','YB');
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . '' . @$size[$factor];
     }
 }

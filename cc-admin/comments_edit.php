@@ -4,9 +4,10 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
+$authService->enforceTimeout(true);
+
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -47,49 +48,67 @@ if (isset($_GET['id']) && is_numeric($_GET['id']) && $_GET['id'] > 0) {
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate status
-    if (!empty($_POST['status']) && !ctype_space($_POST['status'])) {
-        $newCommentStatus = trim ($_POST['status']);
-    } else {
-        $errors['status'] = 'Invalid status';
-    }
-
-    // Validate comments
-    if (!empty($_POST['comments']) && !ctype_space($_POST['comments'])) {
-        $comment->comments = trim ($_POST['comments']);
-    } else {
-        $errors['comments'] = 'Invalid comments';
-    }
-
-    // Update record if no errors were found
-    if (empty($errors)) {
-
-        // Perform addional actions based on status change
-        if ($newCommentStatus != $comment->status) {
-            
-            $comment->status = $newCommentStatus;
-
-            // Handle "Approve" action
-            if ($comment->status == 'approved') {
-                $commentService->approve($comment, 'approve');
-            }
-
-            // Handle "Ban" action
-            else if ($comment->status == 'banned') {
-                $flagService = new FlagService();
-                $flagService->flagDecision($comment, true);
-            }
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 2
+    ) {
+        // Validate status
+        if (!empty($_POST['status']) && !ctype_space($_POST['status'])) {
+            $newCommentStatus = trim ($_POST['status']);
+        } else {
+            $errors['status'] = 'Invalid status';
         }
 
-        $message = 'Comment has been updated';
-        $message_type = 'alert-success';
-        $commentMapper->save($comment);
+        // Validate comments
+        if (!empty($_POST['comments']) && !ctype_space($_POST['comments'])) {
+            $comment->comments = trim ($_POST['comments']);
+        } else {
+            $errors['comments'] = 'Invalid comments';
+        }
+
+        // Update record if no errors were found
+        if (empty($errors)) {
+
+            // Perform addional actions based on status change
+            if ($newCommentStatus != $comment->status) {
+
+                $comment->status = $newCommentStatus;
+
+                // Handle "Approve" action
+                if ($comment->status == 'approved') {
+                    $commentService->approve($comment, 'approve');
+                }
+
+                // Handle "Ban" action
+                else if ($comment->status == 'banned') {
+                    $flagService = new FlagService();
+                    $flagService->flagDecision($comment, true);
+                }
+            }
+
+            $message = 'Comment has been updated';
+            $message_type = 'alert-success';
+            $commentMapper->save($comment);
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+            $message_type = 'alert-danger';
+        }
+
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 include('header.php');
@@ -128,6 +147,7 @@ include('header.php');
     </div>
 
     <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Update Comment" />
 
 </form>

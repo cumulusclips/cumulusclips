@@ -719,7 +719,8 @@ a.button {
     clear: both;
 }
 
-.hide {
+.hide,
+.hidden {
     display: none;
 }
 

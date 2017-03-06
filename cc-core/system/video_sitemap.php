@@ -61,8 +61,8 @@ if (empty($_GET['page'])) {
 
         $block->addChild('content_loc', $config->h264Url . '/' . $video->filename . '.mp4');
         $block->addChild('thumbnail_loc', $config->thumbUrl . '/' . $video->filename . '.jpg');
-        $block->addChild('title', $video->title);
-        $block->addChild('description', $video->description);
+        $block->addChild('title', '<![CDATA[' . $video->title . ']]');
+        $block->addChild('description', '<![CDATA[' . $video->description . ']]');
         $block->addChild('rating', $ratingService->getFiveScaleRating($video->videoId));
         $block->addChild('view_count', $video->views);
         $block->addChild('publication_date', date('Y-m-d', strtotime($video->dateCreated)));
@@ -75,7 +75,7 @@ if (empty($_GET['page'])) {
         $block->addChild('family_friendly', 'yes');
         $block->addChild('duration', Functions::durationInSeconds($video->duration));
     }
-    
+
 } else {
     App::throw404();
 }

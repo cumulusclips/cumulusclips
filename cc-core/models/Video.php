@@ -3,100 +3,105 @@
 class Video
 {
     /**
-     * @var int 
+     * @var int
      */
     public $videoId;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $filename;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $title;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $description;
-    
+
     /**
-     * @var array 
+     * @var array
      */
     public $tags;
-    
+
     /**
-     * @var int 
+     * @var int
      */
     public $categoryId;
-    
+
     /**
-     * @var int 
+     * @var int
      */
     public $userId;
-    
+
     /**
      * @var string
      */
     public $username;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $dateCreated;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $duration;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $status;
-    
+
     /**
-     * @var int 
+     * @var int
      */
     public $views;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $originalExtension;
-    
+
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $featured;
-    
+
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $gated;
-    
+
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $released;
-    
+
     /**
-     * @var boolean 
+     * @var int System PID for the video's transcoding process
+     */
+    public $jobId;
+
+    /**
+     * @var boolean
      */
     public $disableEmbed;
-    
+
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $private;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $privateUrl;
-    
+
     /**
      * @var boolean
      */

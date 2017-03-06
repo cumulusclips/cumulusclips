@@ -30,6 +30,7 @@
         <video_feed>Video Feed</video_feed>
         <contact>Contact</contact>
         <sitemap>Sitemap</sitemap>
+        <invalid_session>Expired or invalid session</invalid_session>
 
         <!-- Mobile -->
         <mobile_heading>{SITENAME} Mobile</mobile_heading>
@@ -64,6 +65,7 @@
 
         <!-- Login Page -->
         <login_header>Login to your Account</login_header>
+        <session_expired>Your session has expired. Please log in again.</session_expired>
         <remember_me>Remember me</remember_me>
         <forgot_text>Please enter you e-mail address on record with us, below. We will reset your password and send you your new login.</forgot_text>
         <email>E-mail</email>
@@ -93,7 +95,7 @@
         <contact_button>Contact Us</contact_button>
 
         <!-- Browse Videos Page -->
-        <videos_header>Browse Videos</videos_header>
+        <browse_header>Browse Videos</browse_header>
         <viewing>Viewing</viewing>
         <sorting>Sorting</sorting>
         <most_recent>Most Recent</most_recent>
@@ -127,10 +129,11 @@
         <videos_by>Videos By</videos_by>
         <go_to_profile>Go to Profile</go_to_profile>
 
-        <!-- Play Video Page -->
+        <!-- Watch Video Page -->
         <like>Like</like>
         <dislike>Dislike</dislike>
         <about>About</about>
+        <attachments>Attachments</attachments>
         <share>Share</share>
         <embed>Embed</embed>
         <embed_text>Copy and paste this code into your website or blog.</embed_text>
@@ -151,6 +154,7 @@
         <comments_header>Comments</comments_header>
         <view_all_comments>View All Comments</view_all_comments>
         <comments_total>Comments total</comments_total>
+        <no_comments>No comments have been posted for this video yet.</no_comments>
         <posted>Posted By</posted>
         <date_posted>Date Posted</date_posted>
         <comments_post_header>Post a Comment</comments_post_header>
@@ -218,6 +222,7 @@
         <manage_media>Manage Media</manage_media>
         <upload_video>Upload a Video</upload_video>
         <my_videos>My Videos</my_videos>
+        <account_menu_attachments>Attachments</account_menu_attachments>
         <my_playlists>My Playlists</my_playlists>
         <account_settings>Account Settings</account_settings>
         <update_profile>Update Member Profile</update_profile>
@@ -241,6 +246,12 @@
         <pending_conversion>Pending Conversion</pending_conversion>
         <processing>Processing</processing>
         <pending_approval>Pending Approval</pending_approval>
+
+        <!-- Account / Attachments Page -->
+        <attachments_header>Attachments</attachments_header>
+        <filesize>Filesize</filesize>
+        <delete_attachments_button>Delete Attachments</delete_attachments_button>
+        <no_attachments>No video attachments added yet</no_attachments>
 
         <!-- My Account / Playlists Page -->
         <playlists_header>My Playlists</playlists_header>
@@ -323,8 +334,21 @@
         <members_username>Member's username</members_username>
         <message_send_button>Send Message</message_send_button>
 
-        <!-- My Account / Upload - Video Information Page -->
-        <upload_header>Upload Step 1 - Video Information</upload_header>
+        <!-- My Account / Upload Video - Video Information Page -->
+        <upload_header>Upload Video - Video Information</upload_header>
+        <video_basic_tab>Basic Information</video_basic_tab>
+        <video_attachments_tab>Attachments</video_attachments_tab>
+        <video_advanced_tab>Advanced Settings</video_advanced_tab>
+        <video_basic_tab_header>Basic Information</video_basic_tab_header>
+        <video_attachments_tab_header>Attachments</video_attachments_tab_header>
+        <video_advanced_tab_header>Advanced Settings</video_advanced_tab_header>
+        <upload_new_attachment>Upload a new attachment</upload_new_attachment>
+        <upload_new_attachment_header>Upload New Attachment</upload_new_attachment_header>
+        <select_existing_attachment>Select from existing attachments</select_existing_attachment>
+        <select_existing_attachment_header>Select Existing Attachment</select_existing_attachment_header>
+        <select_existing_attachment_help>Choose a file from your existing attachments below:</select_existing_attachment_help>
+
+
         <title>Title</title>
         <description>Description</description>
         <tags>Tags</tags>
@@ -343,14 +367,14 @@
         <submit_button>Submit</submit_button>
 
         <!-- My Account / Upload - Video Upload Page -->
-        <upload_video_header>Upload Step 2 - Upload Video</upload_video_header>
+        <upload_video_header>Upload Video</upload_video_header>
         <upload_video_text>Select a video from your computer's hard drive. Please make sure the video does not violate any copyrights. We reserve the right to remove any video at any time, for any reason.</upload_video_text>
         <filesize_limit>Filesize limit is</filesize_limit>
         <cancel>Cancel</cancel>
         <upload_video_button>Upload Video</upload_video_button>
 
         <!-- My Account / Upload - Complete Page -->
-        <upload_complete_header>Upload Step 3 - Upload Complete!</upload_complete_header>
+        <upload_complete_header>Upload Complete!</upload_complete_header>
         <upload_complete_text>Your video has been successfully uploaded. Please allow several minutes for processing before it is available on {SITENAME} and {SITENAME} Mobile.</upload_complete_text>
 
 
@@ -367,6 +391,7 @@
         <confirm_delete_video>Video will be deleted permanently. This cannot be undone. Do you want to proceed?</confirm_delete_video>
         <confirm_reset_avatar>Your current avatar will be lost permanently. This cannot be undone. Do you want to proceed?</confirm_reset_avatar>
         <confirm_purge_messages>Selected messages will be permanently be deleted. Do you want to proceed?</confirm_purge_messages>
+        <confirm_delete_attachments>Selected files will be permanently be deleted and no longer attached to any videos. Do you want to proceed?</confirm_delete_attachments>
         <confirm_delete_message>Message will be permanently be deleted. Do you want to proceed?</confirm_delete_message>
 
         <error_username>Invalid username</error_username>
@@ -388,6 +413,12 @@
         <error_description>Invalid description</error_description>
         <error_tags>Invalid tags</error_tags>
         <error_category>Invalid category</error_category>
+        <error_attachment>Invalid attachment</error_attachment>
+        <error_attachment_file>Invalid attachment file upload</error_attachment_file>
+        <error_attachment_duplicate>File is already attached</error_attachment_duplicate>
+        <error_attachment_upload><![CDATA[
+            We were unable to upload your video attachment. Please try again later. If you continue to experience problems using this feature please <a href="{HOST}/contact/">contact us</a> for further assistance.
+        ]]></error_attachment_upload>
         <error_name>Invalid name</error_name>
         <error_comment_login>You must login to post comments.</error_comment_login>
         <error_comment>Invalid comment</error_comment>
@@ -398,6 +429,7 @@
         <error_flag_duplicate>You have already reported this content. Thank you for your assistance.</error_flag_duplicate>
         <error_favorite_own>You can't add your own video to your favorites.</error_favorite_own>
         <error_playlist_duplicate>Video is already in this playlist.</error_playlist_duplicate>
+        <error_playlist_video_not_found>Video is not found in playlist.</error_playlist_video_not_found>
         <error_playlist_name>Invalid playlist name</error_playlist_name>
         <error_subscribe_login>You must login to subscribe to members.</error_subscribe_login>
         <error_subscribe_own>You can't subscribe to yourself.</error_subscribe_own>
@@ -439,7 +471,8 @@
         <success_playlist_added_short>Video Added</success_playlist_added_short>
         <success_playlist_created>Playlist has been created.</success_playlist_created>
         <success_playlist_updated>Playlist has been updated.</success_playlist_updated>
-        <success_playlist_video_removed>Video removed from playlist.</success_playlist_video_removed>
+        <success_playlist_video_removed>Video removed from {LIST_NAME}.</success_playlist_video_removed>
+        <success_playlist_video_removed_short>Video Removed</success_playlist_video_removed_short>
         <success_playlist_deleted>Playlist has been deleted.</success_playlist_deleted>
         <success_profile_updated>Your profile has been successfully updated.</success_profile_updated>
         <success_privacy_updated>Your privacy settings have been updated.</success_privacy_updated>
@@ -447,15 +480,16 @@
         <success_messages_purged>Messages successfully deleted!</success_messages_purged>
         <success_message_deleted>Message has been deleted.</success_message_deleted>
         <success_message_sent>Your message has been delivered.</success_message_sent>
+        <success_attachments_deleted>Attachments have been deleted.</success_attachments_deleted>
 
         <!-- Page Meta Tags -->
         <meta.index.title>CumulusClips - Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.title>
         <meta.index.keywords>Free Video Sharing CMS, Free Video Sharing Script, Free Video Sharing Software, YouTube Clone Script</meta.index.keywords>
         <meta.index.description>Free video sharing cms software that allows you to have your own video sharing website and community</meta.index.description>
 
-        <meta.videos.title>Browse Videos:</meta.videos.title>
-        <meta.videos.keywords>Browse Videos, Browse, Videos</meta.videos.keywords>
-        <meta.videos.description>Browse videos on the video sharing community</meta.videos.description>
+        <meta.browse.title>Browse Videos:</meta.browse.title>
+        <meta.browse.keywords>Browse Videos, Browse, Videos</meta.browse.keywords>
+        <meta.browse.description>Browse videos on the video sharing community</meta.browse.description>
 
         <meta.members.title>Browse Members</meta.members.title>
         <meta.members.keywords>Browse Members, Browse, Members</meta.members.keywords>
@@ -501,17 +535,17 @@
         <meta.account_account.keywords>Welcome</meta.account_account.keywords>
         <meta.account_account.description>Welcome</meta.account_account.description>
 
-        <meta.account_upload.title>Upload Step 1 - Video Information</meta.account_upload.title>
-        <meta.account_upload.keywords>Upload Video, Step 1, Video Information</meta.account_upload.keywords>
-        <meta.account_upload.description>Upload Step 1 - Video Information.</meta.account_upload.description>
+        <meta.account_upload_video.title>Upload Video</meta.account_upload_video.title>
+        <meta.account_upload_video.keywords>Upload Video</meta.account_upload_video.keywords>
+        <meta.account_upload_video.description>Upload Video</meta.account_upload_video.description>
 
-        <meta.account_upload_video.title>Upload Step 2 - Upload Video</meta.account_upload_video.title>
-        <meta.account_upload_video.keywords>Upload Video, Step 2</meta.account_upload_video.keywords>
-        <meta.account_upload_video.description>Upload Step 2 - Upload Video.</meta.account_upload_video.description>
+        <meta.account_upload_info.title>Upload Video - Video Information</meta.account_upload_info.title>
+        <meta.account_upload_info.keywords>Upload Video, Video Information</meta.account_upload_info.keywords>
+        <meta.account_upload_info.description>Upload Video - Video Information.</meta.account_upload_info.description>
 
-        <meta.account_upload_complete.title>Upload Step 3 - Upload Complete!</meta.account_upload_complete.title>
-        <meta.account_upload_complete.keywords>Upload Video, Step 3, Upload Complete</meta.account_upload_complete.keywords>
-        <meta.account_upload_complete.description>Upload Step 3 - Upload Complete!</meta.account_upload_complete.description>
+        <meta.account_upload_complete.title>Upload Complete!</meta.account_upload_complete.title>
+        <meta.account_upload_complete.keywords>Upload Video, Upload Complete</meta.account_upload_complete.keywords>
+        <meta.account_upload_complete.description>Upload Complete!</meta.account_upload_complete.description>
 
         <meta.account_videos_edit.title>Edit Video</meta.account_videos_edit.title>
         <meta.account_videos_edit.keywords>Edit Video, Video Information</meta.account_videos_edit.keywords>
@@ -520,6 +554,10 @@
         <meta.account_videos.title>My Videos</meta.account_videos.title>
         <meta.account_videos.keywords>My Videos, Videos</meta.account_videos.keywords>
         <meta.account_videos.description>View all videos uploaded by this member.</meta.account_videos.description>
+
+        <meta.account_attachments.title>Attachments</meta.account_attachments.title>
+        <meta.account_attachments.keywords>Attachments</meta.account_attachments.keywords>
+        <meta.account_attachments.description>View all attachments uploaded by this member.</meta.account_attachments.description>
 
         <meta.account_playlists.title>My Playlists</meta.account_playlists.title>
         <meta.account_playlists.keywords>My Playlists, Playlist</meta.account_playlists.keywords>
@@ -564,6 +602,11 @@
         <meta.mobile_videos.title>Browse Videos</meta.mobile_videos.title>
 
         <meta.mobile_search.title>Search Videos</meta.mobile_search.title>
+
+
+        <!-- @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse_header instead -->
+        <videos_header>Browse Videos</videos_header>
+
     </terms>
 
 </language>

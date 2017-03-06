@@ -8,6 +8,7 @@
         <input type="password" name="password" value="" />
 
         <input type="hidden" name="submitted_login" value="true" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" value="<?=Language::getText('login_button')?>" />
     </form>
     <?php if ($config->enableRegistrations): ?>

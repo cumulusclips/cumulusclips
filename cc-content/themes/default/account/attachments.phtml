@@ -1,0 +1,45 @@
+<?php $this->SetLayout ('account'); ?>
+
+<h1><?php echo Language::getText('attachments_header'); ?></h1>
+
+<?php if ($message): ?>
+    <div class="message <?=$messageType?>"><?=$message?></div>
+<?php endif; ?>
+
+<?php if (count($userAttachments) > 0): ?>
+
+    <form action="<?=HOST?>/account/attachments/" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <td><?php echo Language::getText('delete'); ?></td>
+                <td><?php echo Language::getText('name'); ?></td>
+                <td><?php echo Language::getText('filesize'); ?></td>
+                <td><?php echo Language::getText('date'); ?></td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($userAttachments as $attachment): ?>
+            <tr>
+                <td><input type="checkbox" name="delete[]" value="<?=$attachment->fileId?>" /></td>
+                <td><?php echo htmlspecialchars($attachment->name); ?></td>
+                <td><?php echo \Functions::formatBytes($attachment->filesize); ?></td>
+                <td><?php echo \Functions::gmtToLocal($attachment->dateCreated, 'm/d/Y')?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="row_btn">
+        <input type="hidden" name="submitted" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
+        <input class="button checkbox-disable confirm" data-checkbox="delete[]" data-node="confirm_delete_attachments" type="submit" name="button" value="<?php echo Language::getText('delete_attachments_button'); ?>" disabled="disabled" />
+    </div>
+    </form>
+
+    <?=$pagination->paginate()?>
+
+<?php else: ?>
+    <div class="block">
+        <strong><?php echo Language::getText('no_attachments'); ?></strong>
+    </div>
+<?php endif; ?>

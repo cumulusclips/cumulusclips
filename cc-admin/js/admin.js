@@ -352,7 +352,211 @@ $(function(){
             .removeClass('glyphicon-minus')
             .addClass('glyphicon-plus');
     });
+
+    // Start duration counter for bulk video imports
+    if ($('#videos-imports .time-since').length) {
+
+        $('#videos-imports .time-since').each(function(index, element){
+
+            var self = this;
+            var startDateString = $(this).data('start');
+            var startDate = new Date(startDateString);
+
+            // Refresh counter each second
+            setInterval(function(){
+                $(self).text(timeSince(startDate));
+            }, 1000);
+        });
+    }
+
+    // Cancel out of attachment form
+    $('#video-attachments').on('click', '.cancel', function(event){
+        $('#video-attachments .add').show();
+        $(this).parents('.attachment-form').addClass('hidden');
+        event.preventDefault();
+    });
+
+    // Discard attachment
+    $('#video-attachments').on('click', '.attachment .remove', function(event){
+
+        var $attachment = $(this).parents('.attachment');
+
+        // Update existing attachment list and set corresponding link as "unselected"
+        if ($attachment.hasClass('existing-file')) {
+            var fileId = $attachment.attr('id').replace(/^existing\-file\-/, '');
+            $('#select-existing-file-' + fileId).removeClass('selected');
+        }
+
+        $attachment.remove();
+        event.preventDefault();
+    });
+
+    // Display upload new attachments form
+    $('#video-attachments .new').on('click', function(event){
+        $('#video-attachments .add').hide();
+        $('#video-attachments .attachment-form-upload').removeClass('hidden');
+        event.preventDefault();
+    });
+
+    // Append uploaded attachment
+    $('#video-attachments').on('uploadcomplete', '.uploader', function(event){
+
+        $uploadWidget = getUploadWidget(this);
+
+        // Build attachment widget
+        var name = $uploadWidget.find('.name').val();
+        var size = $uploadWidget.find('.size').val();
+        var temp = $uploadWidget.find('.temp').val();
+        var index = $('#video-attachments .attachments .attachment').length;
+        var $attachment = buildAttachmentCard(index, name, size, temp);
+
+        // Append attachment
+        $('#video-attachments .attachments').append($attachment);
+
+        // Reset upload form
+        resetProgress($uploadWidget);
+    });
+
+    // Display existing attachments form
+    $('#video-attachments .existing').on('click', function(event){
+        $('#video-attachments .add').hide();
+        $('.attachment-form-existing').removeClass('hidden');
+
+        event.preventDefault();
+    });
+
+    // Select from existing attachments
+    $('#video-attachments .attachment-form-existing li a').on('click', function(event){
+
+        event.preventDefault();
+
+        var fileId = $(this).data('file');
+
+        // Remove attachment if "unselecting" file
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+            $('#existing-file-' + fileId).remove();
+            return;
+        }
+
+        // Build attachment widget
+        var name = $(this).attr('title');
+        var size = $(this).data('size');
+        var index = $('#video-attachments .attachments .attachment').length;
+        var $attachment = buildAttachmentCard(index, name, size, fileId);
+
+        // Mark as selected
+        $(this).addClass('selected');
+
+        // Append attachment
+        $('#video-attachments .attachments').append($attachment);
+    });
 });
+
+/**
+ * Generates attachment card HTML to be appended to attachment list on video upload/edit page
+ *
+ * @param {Number} index Index of newly created attachment within list of attachments
+ * @param {String} name Full name of file to be attached
+ * @param {Number} size Size of attached file in bytes
+ * @param {Number|String} file If file is an existing attachment then file ID is expected, otherwise absolute path to upload temp file
+ * @return {jQuery} Returns jQuery object reprensenting attachment card
+ */
+function buildAttachmentCard(index, name, size, file)
+{
+    var fieldName = (typeof file === 'number') ? 'file' : 'temp';
+    var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
+    displayFilename += ' (' + formatBytes(size, 0) + ')';
+
+    // Build card
+    var $attachment = $('<div class="attachment">'
+
+        // Append form values
+        + '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
+        + '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
+        + '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
+
+        // Append progress bar template
+        + '<div class="upload-progress">'
+            + '<a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>'
+            + '<span class="title">' + displayFilename + '</span>'
+            + '<span class="pull-right glyphicon glyphicon-ok"></span>'
+        + '</div>'
+
+    + '</div>');
+
+    // Mark attachment as existing
+    if (typeof file === 'number') {
+        $attachment
+            .addClass('existing-file')
+            .attr('id', 'existing-file-' + file);
+    }
+
+    return $attachment;
+}
+
+/**
+ * Pads a string to the right with the given characted
+ *
+ * @param {String} string The string to be padded
+ * @param {Number} size The final desired length of the output string
+ * @param {String} character The string to pad with
+ * @return {String} Returns the original string with padding
+ */
+function padRight(string, size, character)
+{
+    var s = string + "";
+    while (s.length < size) s = character + s;
+    return s;
+}
+
+/**
+ * Calculates elapsed time since given date
+ *
+ * @param {Date} startDate Starting date
+ * @return {String} Returns elapsed time in format "D Days HH:MM:SS"
+ */
+function timeSince(startDate)
+{
+    var display = '';
+    var currentDate = new Date();
+    var diffMilliseconds = currentDate - startDate;
+    var remainingSeconds = Math.floor(diffMilliseconds/1000);
+
+    // Generate days
+    if (remainingSeconds >= 86400) {
+        var days = Math.floor(remainingSeconds/86400);
+        display += days + ' Days ';
+        remainingSeconds = remainingSeconds%86400;
+    }
+
+    // Generate hours
+    if (remainingSeconds >= 3600) {
+        var hours = Math.floor(remainingSeconds/3600);
+        display += padRight(hours, 2, '0') + ':';
+        remainingSeconds = remainingSeconds%3600;
+    } else {
+        display += '00:';
+    }
+
+    // Generate minutes
+    if (remainingSeconds >= 60) {
+        var minutes = Math.floor(remainingSeconds/60);
+        display += padRight(minutes, 2, '0') + ':';
+        remainingSeconds = remainingSeconds%60;
+    } else {
+        display += '00:';
+    }
+
+    // Generate seconds
+    if (remainingSeconds > 0) {
+        display += padRight(remainingSeconds, 2, '0');
+    } else {
+        display += '00';
+    }
+
+    return display;
+}
 
 /**
  * Retrieve the admin settings from the settings cookie
@@ -376,8 +580,22 @@ function retrieveSettings(){
  * @return void Global settings object and cookie are updated
  */
 function updateSettings(name, value){
+
+    // Update setting
     cumulusClips.settings[name] = value;
-    $.cookie('cc_admin_settings',$.param(cumulusClips.settings));
+
+    // Set cookie options
+    var parser = document.createElement('a');
+    parser.href = cumulusClips.baseUrl;
+    var options = {
+        domain: parser.hostname,
+        secure: (parser.protocol === 'https:') ? true : false,
+        path: parser.pathname.replace(/\/$/, '') + '/cc-admin/',
+        expires: null,
+    };
+
+    // Save cookie
+    $.cookie('cc_admin_settings', $.param(cumulusClips.settings), options);
 }
 
 /**

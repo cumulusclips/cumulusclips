@@ -15,6 +15,7 @@
 
         <input type="hidden" name="redirect" value="<?=urlencode($redirect)?>" />
         <input type="hidden" name="submitted_login" value="TRUE" />
+        <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
         <input class="button" type="submit" name="button" value="<?=Language::getText('login_button')?>" />
 
     </form>
@@ -30,11 +31,12 @@
     <form action="<?=HOST?>/login/" method="post">
     <h2><?=Language::getText('forgot_header')?></h2>
     <p><?=Language::getText('forgot_text')?></p>
-    
+
     <label class="<?=($forgot_submit && $message_type == 'errors') ? 'error' : ''?>"><?=Language::getText('email')?>:</label>
     <input type="text" id="email" name="email" />
 
     <input type="hidden" name="submitted_forgot" value="TRUE" />
+    <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
     <input class="button" type="submit" name="button" value="<?=Language::getText('forgot_button')?>" />
     </form>
 

@@ -79,15 +79,15 @@ if (isset ($_POST['submitted'])) {
         try {
             // Connect to FTP server
             if ($method == 'ftp') {
-                $stream = @ftp_connect ($hostname);
+                $stream = ftp_connect ($hostname);
             } else {
                 if (!function_exists('ftp_ssl_connect')) throw new Exception ("Your host doesn't support FTP over SSL connections.");
-                $stream = @ftp_ssl_connect ($hostname);
+                $stream = ftp_ssl_connect ($hostname);
             }
             if (!$stream) throw new Exception ("We were unable to connect to the FTP server you specified, please verify it is correct.");
 
             // Login to FTP server
-            $login = @ftp_login ($stream, $username, $password);
+            $login = ftp_login ($stream, $username, $password);
             if (!$login) {
                 $error_msg = "We were unable to login to the FTP server with the ";
                 $error_msg .= "credentials you specified. Please verify they're ";
@@ -97,10 +97,10 @@ if (isset ($_POST['submitted'])) {
 
             // Create test file
             $test_file = $path . '/ftp-test' . time();
-            if (!@ftp_chdir ($stream, $path)) throw new Exception ("We were unable to navigate to the CumulusClips directory. Please verify your ftp path is correct and your account has access.");
-            if (!@ftp_fput ($stream, $test_file, $handle, FTP_BINARY)) throw new Exception ("We were unable create a test file. Please verify your account has write access.");
-            if (!@ftp_delete ($stream, $test_file)) throw new Exception ("We were unable delete our test file. Please verify your account has the ability to delete files.");
-            @ftp_close ($stream);
+            if (!ftp_chdir ($stream, $path)) throw new Exception ("We were unable to navigate to the CumulusClips directory. Please verify your ftp path is correct and your account has access.");
+            if (!ftp_fput ($stream, $test_file, $handle, FTP_BINARY)) throw new Exception ("We were unable create a test file. Please verify your account has write access.");
+            if (!ftp_delete ($stream, $test_file)) throw new Exception ("We were unable delete our test file. Please verify your account has the ability to delete files.");
+            ftp_close ($stream);
             fclose ($handle);
 
             // Store information & redirect user
@@ -116,7 +116,7 @@ if (isset ($_POST['submitted'])) {
 
         } catch (Exception $e) {
             $error_msg = $e->getMessage();
-            @ftp_close ($stream);
+            ftp_close ($stream);
             fclose ($handle);
         }
     } else {

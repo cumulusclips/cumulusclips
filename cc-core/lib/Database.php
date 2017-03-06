@@ -5,7 +5,7 @@ class Database
     protected $_connection;
     protected $_fetchMode = PDO::FETCH_ASSOC;
     protected $_lastStatement;
-    
+
     public function __construct()
     {
         $this->_getConnection();
@@ -19,7 +19,7 @@ class Database
     protected function _connect()
     {
         try {
-            $this->_connection = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $this->_connection = new PDO('mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME, DB_USER, DB_PASS, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             return $this->_connection;
         } catch (Exception $exception) {
             exit('CC-ERROR-200 CumulusClips has encountered an error and cannot continue.');
@@ -31,7 +31,7 @@ class Database
         $this->_connection = null;
         return $this->_connect();
     }
-    
+
     public function basicQuery($sql)
     {
         $pdo = $this->_getConnection();
@@ -50,7 +50,7 @@ class Database
                 $date = date('D M d Y H:i:s');
                 App::Log(DATABASE_LOG, "[$date] [query] Query: $sql; Params: $params");
             }
-            
+
             $pdoStatement = $pdo->prepare($sql);
             $pdoStatement->execute($bindParams);
             $this->_lastStatement = $pdoStatement;
@@ -103,12 +103,12 @@ class Database
         $pdoStatement = $this->query($sql, $bindParams);
         return $pdoStatement->fetchAll($fetchMode);
     }
-    
+
     public function rowCount()
     {
         return $this->_lastStatement->rowCount();
     }
-    
+
     public function lastInsertId()
     {
         return $this->_connection->lastInsertId();

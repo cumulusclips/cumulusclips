@@ -71,6 +71,127 @@ GENERAL account STYLES
     color: #FFF;
 }
 
+.table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.table thead {
+    font-weight: bold;
+}
+
+.table td {
+    padding: 3px 0;
+    border-bottom: 1px solid #CCC;
+    vertical-align: middle;
+}
+
+
+
+
+
+/**********
+FILE UPLOAD
+**********/
+
+.uploader-container * {
+    box-sizing: border-box;
+}
+
+.uploader-container .button {
+    float: none;
+}
+
+.button-upload {
+    height: auto;
+    padding: 0 10px;
+    margin: 0 0 0 10px;
+    vertical-align: top;
+    float: none;
+}
+
+.button-browse {
+    height: auto;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+.button-browse input {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 200px;
+    opacity: 0;
+}
+
+.upload-progress {
+    font-family: arial;
+    background-color: #F0F0F0;
+    border: 3px solid #E1E1E1;
+    max-width: 465px;
+    margin: 7px 0 15px;
+    padding: 7px;
+    font-size: 13px;
+    box-sizing: content-box;
+}
+
+.upload-progress .title {
+    color: #005acc;
+    font-weight: bold;
+}
+
+.upload-progress .remove {
+    color: #999;
+    margin-right: 5px;
+}
+
+.upload-progress .remove .glyphicon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url("../images/cancel.png") no-repeat 0 0;
+    vertical-align: top;
+}
+
+.upload-progress .remove:hover {
+    color: #777;
+}
+
+.upload-progress .remove:focus,
+.upload-progress .remove:active, {
+    color: #555;
+}
+
+.upload-progress .glyphicon-ok {
+    color: #023e7b;
+    font-size: 16px;
+    background: url("../images/icon_check.png") no-repeat 0 0;
+    float: right;
+    width: 16px;
+    height: 12px;
+    margin-top: 2px;
+}
+
+.upload-progress .progress-track {
+    width: 145px;
+    height: 14px;
+    border: 1px solid #023e7b;
+    float: right;
+    padding: 1px;
+    margin-top: 1px;
+}
+
+.upload-progress .progress-fill {
+    background-color: #023e7b;
+    width: 0%;
+    height: 10px;
+}
+
 
 
 
@@ -115,156 +236,159 @@ MY ACCOUNT HOME
 
 
 
-/************
-UPLOAD - INFO
-************/
-
-.account_upload .wide,
-.account_edit_video .wide {
-    width: 470px;
-}
-
-.account_upload .wide input[type="text"],
-.account_edit_video .wide input[type="text"] {
-    width: 260px;
-}
-
-.account_upload select,
-.account_edit_video select {
-    width: 280px;
-}
-
-.account_upload textarea,
-.account_edit_video textarea {
-    width: 450px;
-    margin-bottom: 22px;
-}
-
-input[type="checkbox"] {
-    width: 20px;
-}
-
-input[type="checkbox"],
-input[type="checkbox"] + label,
-input[type="checkbox"] + label + em {
-    margin: 5px 0;
-    float: left;
-}
-
-input[type="checkbox"] + label + em {
-    margin-left: 3px;
-}
-
-input[type="checkbox"] + label + em + br {
-    clear: both;
-}
-
-#private_url {
-    margin: 5px 0 5px 20px;
-}
-
-#private_url a {
-    margin-left:15px;
-}
-
-.account_upload .form input[type="submit"],
-.account_edit_video .form input[type="submit"] {
-    margin-top: 15px;
-}
-
-
-
-
-
 /*************
 UPLOAD - VIDEO
 *************/
 
-.account_upload_video form[name="upload"] {
+.account_upload_video .uploader-container {
     margin-top: 15px;
 }
 
-#upload-select-file {
-    float: left;
-    margin-right: 15px;
-    height: auto;
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
+
+
+
+
+/************
+UPLOAD - INFO
+************/
+
+.video-information-form {
+    width: 600px;
 }
 
-#upload-select-file input {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
+.video-information-form .tabs,
+.video-information-form .tab_block  {
+    width: 100%;
+}
+
+.video-information-form .tabs {
+    margin: 20px 0 30px;
+}
+
+.video-information-form .tab_block {
+    box-sizing: border-box;
+}
+
+.video-information-form .tab_block:after {
+    content: "";
+    height: 0;
     display: block;
-    font-size: 200px;
-    opacity: 0;
-}
-
-#upload_status {
-    font-family: arial;
-    background-color: #F0F0F0;
-    border: 3px solid #E1E1E1;
-    margin: 10px 0;
-    padding: 10px;
-    width: 330px;
-    display: none;
-    font-size: 12px;
     clear: both;
 }
 
-#upload_status .title {
-    margin: 0 0 10px;
-}
-
-#upload_status .progress {
-    width: 330px;
-    overflow: hidden;
-}
-
-#upload_status a {
-    float: left;
-    display: block;
-    text-indent: -9999px;
-    background: url('../images/cancel.png') no-repeat 0 0;
-    height: 16px;
-    width: 16px;
-}
-
-#upload_status .meter {
-    width: 250px;
-    height: 10px;
-    background-color: #E1E1E1;
-    float: left;
-    margin: 3px 15px 0 14px;
-}
-
-#upload_status .fill {
-    background-color: #023e7b;
-    width: 0%;
-    height: 10px;
-}
-
-.ie9 #upload_status {
-    width: 285px;
-}
-
-.ie9 #upload_status .fill {
-    width: 100% !important;
-    background-color: #E1E1E1;
-}
-
-.ie9 #upload_status .in-progress {
-    background: url('../images/jquery-ui/animated-overlay.gif');
-    opacity: 0.3;
-}
-
-#upload_status .percentage {
-    width: 35px;
+.video-information-form form > .button {
     float: right;
-    line-height: 16px;
+    margin-top: 25px;
+}
+
+.video-information-form .tab_block h2 {
+    margin: 5px  0 15px;
+}
+
+
+/** Basic Information Tab **/
+
+#basic-information {
+    display: block;
+}
+
+#basic-information input[type="text"] {
+    width: 260px;
+}
+
+#basic-information select {
+    width: 280px;
+}
+
+#basic-information textarea {
+    width: 530px;
+    height: 120px;
+}
+
+
+/** Video Attachments Tab **/
+
+#video-attachments p {
+    margin: 0 0 5px;
+}
+
+#video-attachments .add a {
+    padding-left: 20px;
+    background: url('../images/icon_add.png') no-repeat 0 1px;
+}
+
+#video-attachments .attachment-form {
+    width: 485px;
+}
+
+#video-attachments h3 {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+}
+
+#video-attachments .remove {
+    margin-left: 5px;
+}
+
+#video-attachments ul {
+    border-radius: 3px;
+    background-color: #FFF;
+    width: 485px;
+}
+
+#video-attachments li {
+    border-top: 1px solid #DDD;
+}
+
+#video-attachments li:first-child {
+    border-top: none;
+}
+
+#video-attachments li a {
+    display: block;
+    font-weight: normal;
+    color: #555;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#video-attachments li .selected {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+#video-attachments li span {
+    float: right;
+}
+
+
+/** Advanced Settings Tab **/
+
+#advanced-settings input[type="checkbox"] {
+    width: 20px;
+}
+
+#advanced-settings input[type="checkbox"],
+#advanced-settings input[type="checkbox"] + label,
+#advanced-settings input[type="checkbox"] + label + em {
+    margin: 0 0 10px;
+    float: left;
+}
+
+#advanced-settings input[type="checkbox"] + label + em {
+    margin-left: 3px;
+}
+
+#advanced-settings input[type="checkbox"] + label + em + br {
+    clear: both;
+}
+
+#private_url {
+    margin: 0 0 10px 20px;
+}
+
+#private_url a {
+    margin-left:15px;
 }
 
 
@@ -385,9 +509,13 @@ UPDATE PROFILE
     margin-top: 15px;
 }
 
-#upload-select-file + .button {
-    float: none;
+#update_avatar .upload-progress .title {
+    width: 165px;
+    word-wrap: break-word;
+    display: inline-block;
 }
+
+
 
 
 
@@ -419,20 +547,8 @@ SUBSCRIPTIONS
 MESSAGES & INBOX
 ***************/
 
-#inbox {
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-#inbox thead {
-    font-weight: bold;
-}
-
 #inbox td {
-    padding: 3px 0;
     width: 70px;
-    border-bottom: 1px solid #CCC;
-    vertical-align: middle;
 }
 
 #inbox .subject {

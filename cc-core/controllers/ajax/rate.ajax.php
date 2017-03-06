@@ -3,8 +3,7 @@
 $this->view->options->disableView = true;
 
 // Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
+$loggedInUser = $this->authService->getAuthUser();
 
 // Verify a video was selected
 if (empty($_POST['video_id']) || !is_numeric ($_POST['video_id'])) App::Throw404();

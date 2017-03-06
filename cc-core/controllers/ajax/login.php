@@ -1,11 +1,12 @@
 <?php
 
 // Verify if user is logged in
-$userService = new UserService();
-$loggedInUser = $userService->loginCheck();
+$loggedInUser = $this->authService->getAuthUser();
 Functions::redirectIf(!$loggedInUser, HOST . '/account/');
-$this->view->options->disableView = true;
 
+// Establish page variables, objects, arrays, etc
+$userService = new UserService();
+$this->view->options->disableView = true;
 $username = null;
 $password = null;
 
@@ -25,7 +26,7 @@ if (!empty($_POST['password'])) {
 // login if no errors were found
 if ($username && $password) {
 
-    if ($userService->login($username, $password)) {
+    if ($this->authService->validateCredentials($username, $password)) {
         exit(json_encode(array(
             'result' => true,
             'message' => null,

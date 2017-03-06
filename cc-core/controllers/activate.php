@@ -3,10 +3,10 @@
 Plugin::triggerEvent('activate.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
+$userService = new UserService();
 Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/account/');
 $this->view->vars->message = null;
 
@@ -19,7 +19,7 @@ if (!empty($_GET['token'])) {
         $userService->approve($user, 'activate');
         if (Settings::get('auto_approve_users') == '1') {
             $this->view->vars->message = Language::getText('activate_success', array('host' => HOST));
-            $_SESSION['loggedInUserId'] = $user->userId;
+            $this->authService->login($user);
         } else {
             $this->view->vars->message = Language::getText('activate_approve');
         }

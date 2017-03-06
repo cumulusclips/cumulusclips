@@ -24,10 +24,10 @@ if (!empty($watchLaterPlaylistId)) $this->addMeta('watchLaterPlaylistId', $watch
     <p><strong><?=Language::GetText('profile_views')?>:</strong>&nbsp; <?=$member->views?></p>
     <p><strong><?=Language::GetText('subscribers')?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></p>
     <?php if (!empty ($member->website)): ?>
-        <p><strong><?=Language::GetText('website')?>:</strong>&nbsp; 
+        <p><strong><?=Language::GetText('website')?>:</strong>&nbsp;
         <a href="<?=$member->website?>" target="_blank" rel="nofollow"><?=Functions::CutOff ($member->website, 40);?></a></p>
     <?php endif; ?>
-    <p><?=nl2br($member->aboutMe)?></p>
+    <p><?php echo nl2br(htmlspecialchars($member->aboutMe)); ?></p>
 </div>
 <!-- END Member Avatar/Profile Information -->
 
@@ -61,12 +61,12 @@ if (!empty($watchLaterPlaylistId)) $this->addMeta('watchLaterPlaylistId', $watch
             <?php foreach ($playlist_list as $playlist): ?>
                 <div class="playlist <?=(empty($playlist->entries)) ? 'playlist-empty' : ''?>">
                     <?php if (!empty($playlist->entries)): ?>
-                        <a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>">
+                        <a href="<?=$playlistService->getUrl($playlist)?>" title="<?php echo htmlspecialchars($playlist->name); ?>">
                             <img width="165" height="92" src="<?=getPlaylistThumbnail($playlist)?>" />
                             <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>
                             <span class="watch-all">Watch<br>All</span>
                         </a>
-                        <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?=$playlist->name?>"><?=$playlist->name?></a></p>
+                        <p class="title"><a href="<?=$playlistService->getUrl($playlist)?>" title="<?php echo htmlspecialchars($playlist->name); ?>"><?php echo htmlspecialchars($playlist->name); ?></a></p>
                     <?php else: ?>
                         <img src="<?=$this->options->themeUrl?>/images/playlist_placeholder.png" />
                         <span class="video-count"><?=count($playlist->entries)?><br><?=Language::GetText('videos')?></span>

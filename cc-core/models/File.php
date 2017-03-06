@@ -3,47 +3,42 @@
 class File extends Model
 {
     /**
-     * @var int 
+     * @var int
      */
     public $fileId;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $filename;
 
     /**
-     * @var int 
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var int
      */
     public $userId;
-    
+
     /**
-     * @var string 
+     * @var string Name assigned to file
      */
-    public $title;
-    
+    public $name;
+
     /**
-     * @var string 
-     */
-    public $description;
-    
-    /**
-     * @var int Filesize in KB 
+     * @var int Filesize in bytes
      */
     public $filesize;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     public $extension;
-    
+
     /**
-     * @var boolean 
-     */
-    public $attachable;
-  
-    /**
-     * @var string 
+     * @var \DateTime
      */
     public $dateCreated;
 }

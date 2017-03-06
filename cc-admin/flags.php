@@ -4,9 +4,10 @@
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
 // Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::redirectIf($adminUser, HOST . '/login/');
+$authService->enforceTimeout(true);
+
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::redirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 
 // Establish page variables, objects, arrays, etc
@@ -75,7 +76,7 @@ if (!empty($_GET['ban']) && is_numeric($_GET['ban'])) {
 
 // Handle "Dismiss" flags
 else if (!empty($_GET['dismiss']) && is_numeric($_GET['dismiss'])) {
-    
+
     switch ($type) {
         case 'video':
             $contentObject = $videoMapper->getVideoById($_GET['dismiss']);
@@ -89,7 +90,7 @@ else if (!empty($_GET['dismiss']) && is_numeric($_GET['dismiss'])) {
             $contentObject = $commentMapper->getCommentById($_GET['dismiss']);
             break;
     }
-    
+
     if ($contentObject) {
         $flagService->flagDecision($contentObject, false);
         $message = 'Flags has been dismissed';

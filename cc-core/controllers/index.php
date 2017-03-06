@@ -4,8 +4,8 @@ Plugin::triggerEvent('index.start');
 $this->view->vars->logout = false;
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Retrieve Featured Video
 $videoMapper = new VideoMapper();
@@ -28,5 +28,10 @@ if (isset($_SESSION['logout'])) {
     unset($_SESSION['logout']);
     $this->view->vars->logout = true;
 }
+
+// Generate new form nonce
+$this->view->vars->formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $this->view->vars->formNonce;
+$_SESSION['formTime'] = time();
 
 Plugin::triggerEvent('index.end');

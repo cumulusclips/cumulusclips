@@ -17,39 +17,108 @@ $error_msg = null;
 
 
 ### Save provided information to the database
-$dbc = @mysql_connect ($settings->db_hostname, $settings->db_username, $settings->db_password);
-@mysql_select_db ($settings->db_name, $dbc);
+$pdo = new PDO(
+    'mysql:host=' . $settings->db_hostname . ';port=' . $settings->db_port . ';dbname=' . $settings->db_name,
+    $settings->db_username,
+    $settings->db_password,
+    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+);
 
 // Save settings
-$query = "INSERT INTO " . $settings->db_prefix . "settings (name, value) VALUES";
-$query .= " ('base_url', '$settings->base_url'),";
-$query .= " ('secret_key', '" . md5(time()) . "'),";
-$query .= " ('sitename', '" . mysql_real_escape_string ($settings->sitename) . "'),";
-$query .= " ('admin_email', '$settings->admin_email'),";
-$query .= " ('enable_uploads', '$settings->uploads_enabled'),";
-$query .= " ('ffmpeg', '$settings->ffmpeg'),";
-$query .= " ('qtfaststart', '$settings->qtfaststart'),";
-$query .= " ('php', '$settings->php')";
-$result = @mysql_query ($query);
+$bindParams = array(
+    ':baseUrl' => $settings->base_url,
+    ':secretKey' => md5(time()),
+    ':sitename' => $settings->sitename,
+    ':adminEmail' => $settings->admin_email,
+    ':enableUploads' => $settings->uploads_enabled,
+    ':ffmpeg' => $settings->ffmpeg,
+    ':qtfaststart' => $settings->qtfaststart,
+    ':php' => $settings->php
+);
+$query = <<<QUERY
+INSERT INTO {$settings->db_prefix}settings (name, value) VALUES
+    ('base_url', :baseUrl),
+    ('secret_key', :secretKey),
+    ('sitename', :sitename),
+    ('admin_email', :adminEmail),
+    ('enable_uploads', :enableUploads),
+    ('ffmpeg', :ffmpeg),
+    ('qtfaststart', :qtfaststart),
+    ('php', :php)
+QUERY;
+$pdoStatement = $pdo->prepare($query);
+$pdoStatement->execute($bindParams);
+
 
 // Save admin user
-$query = "INSERT INTO " . $settings->db_prefix . "users (username, password, email, date_created, status, role, released) VALUES";
-$query .= "('$settings->admin_username', '" . md5 ($settings->admin_password) . "', '$settings->admin_email', NOW(), 'active', 'admin', 1)";
-$result = @mysql_query ($query);
-$id = @mysql_insert_id();
+$bindParams = array(
+    ':username' => $settings->admin_username,
+    ':password' => md5($settings->admin_password),
+    ':email' => $settings->admin_email
+);
+$query = <<<QUERY
+INSERT INTO {$settings->db_prefix}users
+    (username, password, email, date_created, status, role, released) VALUES
+    (:username, :password, :email, NOW(), 'active', 'admin', 1)
+QUERY;
+$pdoStatement = $pdo->prepare($query);
+$pdoStatement->execute($bindParams);
+
+
+$id = $pdo->lastInsertId();
+$bindParams = array(':id' => $id);
+
 
 // Save admin user's privacy settings
-$query = "INSERT INTO " . $settings->db_prefix . "privacy (user_id) VALUES ($id)";
-$result = @mysql_query ($query);
+$query = "INSERT INTO {$settings->db_prefix}privacy (user_id) VALUES (:id)";
+$pdoStatement = $pdo->prepare($query);
+$pdoStatement->execute($bindParams);
 
-// Create admin user's favorites playlist
-$query = "INSERT INTO " . $settings->db_prefix . "playlists (user_id, public, type, date_created) VALUES ($id, 0, 'favorites', NOW())";
-$result = @mysql_query($query);
 
-// Create admin user's watch later playlist
-$query = "INSERT INTO " . $settings->db_prefix . "playlists (user_id, public, type, date_created) VALUES ($id, 0, 'watch_later', NOW())";
-$result = @mysql_query($query);
+// Create admin user's watch later & favorites playlist
+$query = <<<QUERY
+INSERT INTO {$settings->db_prefix}playlists (user_id, public, type, date_created) VALUES
+    (:id, 0, 'favorites', NOW()),
+    (:id, 0, 'watch_later', NOW())
+QUERY;
+$pdoStatement = $pdo->prepare($query);
+$pdoStatement->execute($bindParams);
 
-// Log user into admin panel
-$_SESSION['loggedInUserId'] = $id;
+
+// Destroy installer session
+$params = session_get_cookie_params();
+setcookie(
+    session_name(),
+    '',
+    time() - 42000,
+    $params["path"],
+    $params["domain"],
+    $params["secure"],
+    $params["httponly"]
+);
+$_SESSION = array();
+session_destroy();
+
+
+// Match session settings with script
+ini_set('session.name', 'EID');
+ini_set('session.use_strict_mode', true);
+ini_set('session.cookie_httponly', true);
+ini_set('session.use_cookies', true);
+ini_set('session.use_only_cookies', true);
+ini_set('session.use_trans_sid', true);
+ini_set('session.cookie_domain', parse_url($settings->base_url, PHP_URL_HOST));
+ini_set('session.cookie_path', (parse_url($settings->base_url, PHP_URL_PATH) ?: '') . '/');
+
+
+// Authenticate admin user
+session_start();
+$_SESSION['auth'] = (object) array(
+    'userId' => $id,
+    'timeout' => time() + (60 * 60),
+    'sessionExpired' => false
+);
+
+
+// Direct user into admin panel
 header ("Location: " . $settings->base_url . '/cc-admin/?first_run');

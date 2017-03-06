@@ -4,8 +4,8 @@ Plugin::triggerEvent('mobile_play.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $db = Registry::get('db');
@@ -17,7 +17,7 @@ $commentService = new CommentService();
 if (!empty($_GET['vid']) && $video = $videoMapper->getVideoByCustom(array('video_id' => $_GET['vid'], 'status' => 'approved'))) {
 
     $this->view->vars->video = $video;
-    
+
     // Prevent public URL access to private video for all users except owner
     if (
         ($this->view->vars->video->private == '1' && !$this->view->vars->loggedInUser)

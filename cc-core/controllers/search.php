@@ -3,8 +3,8 @@
 Plugin::triggerEvent('search.start');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $keyword = null;

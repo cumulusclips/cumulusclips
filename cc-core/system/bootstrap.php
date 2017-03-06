@@ -7,7 +7,7 @@ define('LOG', DOC_ROOT . '/cc-core/logs');
 define('CONVERSION_LOG', LOG . '/converter.log');
 define('DATABASE_LOG', LOG . '/database.log');
 define('UPLOAD_PATH', DOC_ROOT . '/cc-content/uploads');
-define('CURRENT_VERSION', '2.4.1');
+define('CURRENT_VERSION', '2.5.0');
 define('LOG_QUERIES', false);
 define('DATE_FORMAT', 'Y-m-d H:i:s');
 define('MOTHERSHIP_URL', 'http://mothership.cumulusclips.org');
@@ -38,34 +38,49 @@ Registry::set('db', $db);
 Settings::loadSettings();
 
 // General Site Settings from DB
-define('HOST', Settings::get('base_url'));
-define('MOBILE_HOST', Settings::get('base_url') . '/m');
+define('BASE_URL', Settings::get('base_url'));
+define('MOBILE_BASE_URL', Settings::get('base_url') . '/m');
 define('SECRET_KEY', Settings::get('secret_key'));
 
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use BASE_URL instead
+define('HOST', Settings::get('base_url'));
+
+// @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use MOBILE_BASE_URL instead
+define('MOBILE_HOST', Settings::get('base_url') . '/m');
+
 $config = new stdClass();
-$config->baseUrl = HOST;
+$config->baseUrl = BASE_URL;
 $config->sitename = Settings::get('sitename');
 $config->roles = json_decode(Settings::get('roles'));
+$config->sessionTimeout = (int) Settings::get('session_timeout');
 $config->enableUploads = Settings::get('enable_uploads');
 $config->debugConversion = (boolean) Settings::get('debug_conversion');
 $config->videoSizeLimit = Settings::get('video_size_limit');
 $config->fileSizeLimit = Settings::get('file_size_limit');
 $config->acceptedVideoFormats = array('flv', 'wmv', 'avi', 'ogg', 'mpg', 'mp4', 'mov', 'm4v', '3gp');
-$config->acceptedAvatarFormats = array('png', 'jpeg', 'jpg', 'gif');
-$config->h264Url = HOST . '/cc-content/uploads/h264';
-$config->theoraUrl = HOST . '/cc-content/uploads/theora';
-$config->webmUrl = HOST . '/cc-content/uploads/webm';
-$config->mobileUrl = HOST . '/cc-content/uploads/mobile';
-$config->thumbUrl = HOST . '/cc-content/uploads/thumbs';
+$config->acceptedImageFormats = array('png', 'jpeg', 'jpg', 'gif');
+$config->h264Url = BASE_URL . '/cc-content/uploads/h264';
+$config->theoraUrl = BASE_URL . '/cc-content/uploads/theora';
+$config->webmUrl = BASE_URL . '/cc-content/uploads/webm';
+$config->mobileUrl = BASE_URL . '/cc-content/uploads/mobile';
+$config->thumbUrl = BASE_URL . '/cc-content/uploads/thumbs';
 $config->enableRegistrations = (boolean) Settings::get('user_registrations');
 $config->enableUserUploads = (boolean) Settings::get('user_uploads');
+$config->allowVideoAttachments = (boolean) Settings::get('video_attachments');
 $config->smtp = json_decode(Settings::get('smtp'));
 $config->from_name = Settings::get('from_name');
 $config->from_address = Settings::get('from_address');
 Registry::set('config', $config);
 
-// Start session
-if (!headers_sent() && session_id() == '') @session_start();
+// Session security ini values
+ini_set('session.name', 'EID');
+ini_set('session.use_strict_mode', true);
+ini_set('session.cookie_httponly', true);
+ini_set('session.use_cookies', true);
+ini_set('session.use_only_cookies', true);
+ini_set('session.use_trans_sid', true);
+ini_set('session.cookie_domain', parse_url(BASE_URL, PHP_URL_HOST));
+ini_set('session.cookie_path', (parse_url(BASE_URL, PHP_URL_PATH) ?: '') . '/');
 
 // Initialize language
 Language::init();

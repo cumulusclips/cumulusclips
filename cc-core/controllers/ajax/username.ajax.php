@@ -1,10 +1,5 @@
 <?php
 
-// Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::redirectIf(!$this->view->vars->loggedInUser, HOST . '/login/');
-
 // Establish page variables, objects, arrays, etc
 $this->view->options->disableView = true;
 $userMapper = new UserMapper();

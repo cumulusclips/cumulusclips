@@ -4,12 +4,13 @@ Plugin::triggerEvent('mobile_index.start');
 Functions::redirectIf((boolean) Settings::get('mobile_site'), HOST . '/');
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-$this->view->vars->message = null;
-$this->view->vars->messageType = null;
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
+$userService = new UserService();
+$this->view->vars->message = null;
+$this->view->vars->messageType = null;
 $videoMapper = new VideoMapper();
 $config = Registry::get('config');
 $db = Registry::get('db');
@@ -37,7 +38,7 @@ if (isset($_GET['welcome']) && $this->view->vars->loggedInUser) {
 
 // Proccess logout
 if (isset($_GET['logout']) && $this->view->vars->loggedInUser) {
-    $userService->logout(); 
+    $userService->logout();
     $this->view->vars->loggedInUser = false;
     $this->view->vars->message = Language::getText('success_logout');
     $this->view->vars->messageType = 'success';

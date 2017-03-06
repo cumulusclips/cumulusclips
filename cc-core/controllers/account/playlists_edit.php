@@ -1,9 +1,9 @@
 <?php
 
 // Verify if user is logged in
-$userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
-Functions::RedirectIf($this->view->vars->loggedInUser, HOST . '/login/');
+$this->authService->enforceAuth();
+$this->authService->enforceTimeout(true);
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
 
 // Establish page variables, objects, arrays, etc
 $playlistMapper = new PlaylistMapper();
@@ -25,27 +25,41 @@ if (!empty($_GET['playlist_id']) && is_numeric ($_GET['playlist_id']) && $_GET['
 
 // Handle create new playlist if submitted
 if (!empty($_POST['submitted'])) {
-    
-    // Validate playlist name
-    if (!empty($_POST['name'])) {
-        $this->view->vars->playlist->name = trim($_POST['name']);
+
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 2
+    ) {
+
+        // Validate playlist name
+        if (!empty($_POST['name'])) {
+            $this->view->vars->playlist->name = trim($_POST['name']);
+        } else {
+            $this->view->vars->message = Language::GetText('error_playlist_name');
+            $this->view->vars->message_type = 'errors';
+        }
+
+        // Validate playlist visibility
+        if (!empty($_POST['visibility']) && $_POST['visibility'] == 'public') {
+            $this->view->vars->playlist->public = true;
+        } else {
+            $this->view->vars->playlist->public = false;
+        }
+
+        // Create playlist if no errors were found
+        if (!empty($this->view->vars->playlist->name) && isset($this->view->vars->playlist->public)) {
+            $playlistMapper->save($this->view->vars->playlist);
+            $this->view->vars->message = Language::GetText('success_playlist_updated');
+            $this->view->vars->message_type = 'success';
+        }
+
     } else {
-        $this->view->vars->message = Language::GetText('error_playlist_name');
+        $this->view->vars->message = Language::getText('invalid_session');
         $this->view->vars->message_type = 'errors';
-    }
-    
-    // Validate playlist visibility
-    if (!empty($_POST['visibility']) && $_POST['visibility'] == 'public') {
-        $this->view->vars->playlist->public = true;
-    } else {
-        $this->view->vars->playlist->public = false;
-    }
-    
-    // Create playlist if no errors were found
-    if (!empty($this->view->vars->playlist->name) && isset($this->view->vars->playlist->public)) {
-        $playlistMapper->save($this->view->vars->playlist);
-        $this->view->vars->message = Language::GetText('success_playlist_updated');
-        $this->view->vars->message_type = 'success';
     }
 }
 
@@ -58,6 +72,11 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
         $this->view->vars->message_type = 'success';
     }
 }
+
+// Generate new form nonce
+$this->view->vars->formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $this->view->vars->formNonce;
+$_SESSION['formTime'] = time();
 
 // Prepare page for render
 $this->view->vars->meta->title = Functions::Replace($this->view->vars->meta->title, array ('playlist_name' => $playlistService->getPlaylistName($this->view->vars->playlist)));

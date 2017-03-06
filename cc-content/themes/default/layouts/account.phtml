@@ -34,8 +34,12 @@
                     <p class="big"><?=Language::GetText('manage_media')?></p>
                     <ul>
                         <?php if ($config->enableUserUploads): ?>
-                            <li><a href="<?php echo HOST; ?>/account/upload/" title="<?=Language::GetText('upload_video')?>"><?=Language::GetText('upload_video')?></a></li>
+                            <li><a href="<?php echo HOST; ?>/account/upload/video/" title="<?=Language::GetText('upload_video')?>"><?=Language::GetText('upload_video')?></a></li>
                             <li><a href="<?php echo HOST; ?>/account/videos/" title="<?=Language::GetText('my_videos')?>"><?=Language::GetText('my_videos')?></a></li>
+
+                            <?php if ($config->allowVideoAttachments): ?>
+                                <li><a href="<?php echo HOST; ?>/account/attachments/" title="<?php echo Language::GetText('account_menu_attachments'); ?>"><?php echo Language::GetText('account_menu_attachments'); ?></a></li>
+                            <?php endif; ?>
                         <?php endif; ?>
                         <li><a href="<?php echo HOST; ?>/account/playlists/" title="<?=Language::GetText('my_playlists')?>"><?=Language::GetText('my_playlists')?></a></li>
                     </ul>

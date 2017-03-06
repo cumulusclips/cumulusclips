@@ -116,6 +116,28 @@ class Plugin
     }
 
     /**
+     * Instantiates plugin for given theme
+     *
+     * @param string $themeName Name of the theme whose plugin will be loaded
+     * @throws \Exception Thrown if theme plugin does not extend PluginAbstract
+     */
+    public static function loadThemePlugin($themeName)
+    {
+        // Load theme plugin if defined
+        $pluginPath = THEMES_DIR . '/' . $themeName . '/plugin/' . $themeName . '.php';
+        if (file_exists($pluginPath)) {
+
+            // Load theme plugin files
+            include_once($pluginPath);
+
+            // Initialize theme plugin
+            $themePlugin = new $themeName();
+            if (!$themePlugin instanceof PluginAbstract) throw new Exception('Plugins must extend PluginAbstract');
+            $themePlugin->load();
+        }
+    }
+
+    /**
      * Check if plugin is valid
      * @param string $pluginName Name of the plugin to validate
      * @return boolean Returns true if the plugin is valid, false otherwise

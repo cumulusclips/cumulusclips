@@ -3,10 +3,8 @@
 // Init application
 include_once(dirname(dirname(__FILE__)) . '/cc-core/system/admin.bootstrap.php');
 
-// Verify if user is logged in
-$userService = new UserService();
-$adminUser = $userService->loginCheck();
-Functions::RedirectIf($adminUser, HOST . '/login/');
+// Verify user can access admin panel
+$userService = new \UserService();
 Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 App::enableUploadsCheck();
 
@@ -23,72 +21,85 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.jquery-ui.widget.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.iframe-transport.js';
 $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
-$tempFile = null;
-$uploadMessage = null;
-$originalName = null;
-$filesize = null;
+$prepopulate = null;
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
 
-    // Validate file upload
-    if (!empty($_POST['original-name']) && !empty($_POST['filesize']) && !empty($_POST['temp-file']) && file_exists($_POST['temp-file'])) {
-        $filesize = $_POST['filesize'];
-        $tempFile = $_POST['temp-file'];
-        $originalName = trim($_POST['original-name']);
-        $uploadMessage = $originalName . ' - has been uploaded.';
-    } else {
-        $errors['file'] = 'Invalid file upload';
-    }
+    // Validate form nonce token and submission speed
+    if (
+        !empty($_POST['nonce'])
+        && !empty($_SESSION['formNonce'])
+        && !empty($_SESSION['formTime'])
+        && $_POST['nonce'] == $_SESSION['formNonce']
+        && time() - $_SESSION['formTime'] >= 2
+    ) {
+        // Validate file upload
+        if (
+            !empty($_POST['upload']['original-name'])
+            && !empty($_POST['upload']['original-size'])
+            && !empty($_POST['upload']['temp'])
+            && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'library')
+        ) {
+            $prepopulate = urlencode(json_encode(array(
+                'path' => $_POST['upload']['temp'],
+                'name' => trim($_POST['upload']['original-name']),
+                'size' => trim($_POST['upload']['original-size'])
+            )));
+        } else {
+            $errors['file'] = 'Invalid file upload';
+        }
 
-    // Validate title
-    if (!empty($_POST['title'])) {
-        $file->title = trim($_POST['title']);
-    } else {
-        $errors['title'] = 'Invalid title';
-    }
+        // Validate name
+        if (!empty($_POST['name'])) {
+            $file->name = trim($_POST['name']);
+        } else {
+            $errors['name'] = 'Invalid name';
+        }
 
-    // Validate description
-    if (!empty($_POST['description'])) {
-        $file->description = trim($_POST['description']);
-    } else {
-        $file->description = null;
-    }
+        // Update file if no errors were made
+        if (empty($errors)) {
 
-    // Update file if no errors were made
-    if (empty($errors)) {
+            // Add remaining file information
+            $file->filename = $fileService->generateFilename();
+            $file->userId = $adminUser->userId;
+            $file->extension = Functions::getExtension($_POST['upload']['temp']);
+            $file->filesize = filesize($_POST['upload']['temp']);
+            $file->type = \FileMapper::TYPE_LIBRARY;
 
-        // Add remaining file information
-        $file->filename = $fileService->generateFilename();
-        $file->userId = $adminUser->userId;
-        $file->extension = Functions::getExtension($tempFile);
-        $file->filesize = round($filesize/1000);
+            try {
+                // Move file to files directory
+                Filesystem::rename($_POST['upload']['temp'], UPLOAD_PATH . '/files/library/' . $file->filename . '.' . $file->extension);
 
-        try {
-            // Move file to files directory
-            Filesystem::rename($tempFile, UPLOAD_PATH . '/files/' . $file->filename . '.' . $file->extension);
-        
-            // Create record
-            $fileId = $fileMapper->save($file);
+                // Create record
+                $fileId = $fileMapper->save($file);
 
-            // Output message
-            $tempFile = null;
-            $uploadMessage = null;
-            $originalName = null;
-            $message = 'File has been created.';
-            $message_type = 'alert-success';
-            $file = null;
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
+                // Output message
+                $prepopulate = null;
+                $file = null;
+                $message = 'File has been created.';
+                $message_type = 'alert-success';
+            } catch (Exception $exception) {
+                $message = $exception->getMessage();
+                $message_type = 'alert-danger';
+            }
+
+        } else {
+            $message = 'The following errors were found. Please correct them and try again.';
+            $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
             $message_type = 'alert-danger';
         }
 
     } else {
-        $message = 'The following errors were found. Please correct them and try again.';
-        $message .= '<br /><br /> - ' . implode('<br /> - ', $errors);
+        $message = 'Expired or invalid session';
         $message_type = 'alert-danger';
     }
 }
+
+// Generate new form nonce
+$formNonce = md5(uniqid(rand(), true));
+$_SESSION['formNonce'] = $formNonce;
+$_SESSION['formTime'] = time();
 
 // Output Header
 $pageName = 'library-add';
@@ -96,55 +107,33 @@ include('header.php');
 
 ?>
 
-<!--[if IE 9 ]> <meta name="ie9" content="true" /> <![endif]-->
-
 <h1>Add New File</h1>
 
 <div class="alert <?=$message_type?>"><?=$message?></div>
 
-<form action="<?=ADMIN?>/library_add.php" method="post">
+<form action="<?php echo ADMIN; ?>/library_add.php" method="post">
 
-    <div class="form-group select-file <?=(isset ($errors['file'])) ? 'has-error' : ''?>">
+    <div class="form-group <?=(isset ($errors['file'])) ? 'has-error' : ''?>">
         <label class="control-label">File:</label>
-        <div class="button button-browse">
-            <span>Browse</span>
-            <input id="upload" type="file" name="upload" />
-        </div>
-        <input type="button" class="button button-upload" value="Upload" />
-        <input type="hidden" name="upload-limit" value="<?=$config->fileSizeLimit?>" />
-        <input type="hidden" name="filesize" value="<?=$filesize?>" />
-        <input type="hidden" name="file-types" value="*" />
-        <input type="hidden" name="upload-type" value="library" />
-        <input type="hidden" name="original-name" value="<?=htmlspecialchars($originalName)?>" />
-        <input type="hidden" name="temp-file" value="<?=$tempFile?>" />
-        <input type="hidden" name="upload-handler" value="<?=ADMIN?>/upload_ajax.php" />
+        <input
+            class="uploader"
+            type="file"
+            name="upload"
+            data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+            data-text="<?php echo Language::getText('browse_files_button'); ?>"
+            data-limit="<?php echo $config->fileSizeLimit; ?>"
+            data-type="library"
+            data-prepopulate="<?php echo urlencode(json_encode($prepopulate)); ?>"
+        />
     </div>
 
-    <?php $class = ($uploadMessage) ? 'show' : 'hidden'; ?>
-    <div class="upload-complete <?=$class?>"><?=$uploadMessage?></div>
-
-    <div id="upload_status">
-        <div class="title"></div>
-        <div class="progress">
-            <a href="" title="Cancel">Cancel</a>
-            <div class="meter">
-                <div class="fill"></div>
-            </div>
-            <div class="percentage">0%</div>
-        </div>
+    <div class="form-group <?=(isset($errors['name'])) ? 'has-error' : ''?>">
+        <label class="control-label">Name:</label>
+        <input class="form-control" type="text" name="name" value="<?=(!empty($file->name)) ? htmlspecialchars($file->name) : ''?>" />
     </div>
 
-    <div class="form-group <?=(isset($errors['title'])) ? 'has-error' : ''?>">
-        <label class="control-label">Title:</label>
-        <input class="form-control" type="text" name="title" value="<?=(!empty($file->title)) ? htmlspecialchars($file->title) : ''?>" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Description:</label>
-        <textarea rows="7" cols="50" class="form-control" name="description"><?=(!empty($file->description)) ? htmlspecialchars($file->description) : ''?></textarea>
-    </div>
-
-    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" value="yes" name="submitted" />
+    <input type="hidden" name="nonce" value="<?=$formNonce?>" />
     <input type="submit" class="button" value="Add File" />
 
 </form>

@@ -13,7 +13,7 @@ class VideoService extends ServiceAbstract
             return HOST . '/private/videos/' . $video->privateUrl;
         } else {
             $slug = Functions::createSlug($video->title);
-            return HOST . '/videos/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
+            return HOST . '/watch/' . $video->videoId . (!empty($slug) ? '/' . $slug : '');
         }
     }
 
@@ -217,6 +217,39 @@ class VideoService extends ServiceAbstract
             $mailer = new Mailer($config);
             $mailer->setTemplate('video_ready', $replacements);
             $mailer->Send($user->email);
+        }
+    }
+
+    /**
+     * Updates failed videos that are still marked as processing
+     */
+    public function updateFailedVideos()
+    {
+        $videoMapper = $this->_getMapper();
+
+        // Retrieve videos marked as processing
+        $processingVideos = $videoMapper->getMultipleVideosByCustom(array(
+            'status' => \VideoMapper::PROCESSING
+        ));
+
+        foreach ($processingVideos as $video) {
+
+            // Check if transcoder process is still running
+            $command = 'ps ' . $video->jobId . ' | grep "php.*encode\.php"';
+            $result = exec($command);
+
+            // Mark video as failed
+            if (empty($result)) {
+                $video->status = \VideoMapper::FAILED;
+                $video->jobId = null;
+                $videoMapper->save($video);
+
+                // Notify associated import job of video failure
+                $importJobId = \ImportManager::getAssociatedImport($video->videoId);
+                if ($importJobId) {
+                    \ImportManager::executeImport($importJobId);
+                }
+            }
         }
     }
 

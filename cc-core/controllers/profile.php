@@ -3,8 +3,11 @@
 Plugin::triggerEvent('profile.start');
 
 // Verify if user is logged in
+$this->authService->enforceTimeout();
+$this->view->vars->loggedInUser = $this->authService->getAuthUser();
+
+// Establish page variables, objects, arrays, etc
 $userService = new UserService();
-$this->view->vars->loggedInUser = $userService->loginCheck();
 $playlistService = new PlaylistService();
 
 // Verify Member was supplied
@@ -32,7 +35,7 @@ if ($this->view->vars->loggedInUser) {
 }
 
 // Retrieve Logged in user's 'Watch Later' playlist
-$this->view->vars->watchLaterPlaylistId = ($this->view->vars->loggedInUser) ? $playlistService->getUserSpecialPlaylist($this->view->vars->loggedInUser, 'watch_later')->playlistId : '';
+$this->view->vars->watchLaterPlaylistId = ($this->view->vars->loggedInUser) ? $playlistService->getUserSpecialPlaylist($this->view->vars->loggedInUser, \PlaylistMapper::TYPE_WATCH_LATER)->playlistId : '';
 
 // Count subscription
 $db = Registry::get('db');
@@ -57,7 +60,7 @@ if ($videoCount > 0) {
     $memberVideosResults = $db->fetchAll($query);
     $this->view->vars->videoList = $videoMapper->getVideosFromList(
         Functions::arrayColumn($memberVideosResults, 'video_id')
-    );  
+    );
 }
 
 // Retrieve user's playlists

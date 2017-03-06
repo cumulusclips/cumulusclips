@@ -130,12 +130,18 @@ class Router
             'name' => 'index'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse instead
+         */
         $routes['browse-videos'] = new Route(array(
             'path' => 'videos',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
             'name' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-paginated instead
+         */
         $routes['browse-videos-paginated'] = new Route(array(
             'path' => 'videos/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -144,6 +150,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-categories instead
+         */
         $routes['browse-videos-categories'] = new Route(array(
             'path' => 'videos/([a-z0-9\-]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -152,6 +161,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-categories-paginated instead
+         */
         $routes['browse-videos-categories-paginated'] = new Route(array(
             'path' => 'videos/([a-z0-9\-]+)/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -160,6 +172,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-sorted instead
+         */
         $routes['browse-videos-sorted'] = new Route(array(
             'path' => 'videos/(most-recent|most-viewed|most-discussed|most-rated)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -168,6 +183,9 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use browse-sorted-paginated instead
+         */
         $routes['browse-videos-sorted-paginated'] = new Route(array(
             'path' => 'videos/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/videos.php',
@@ -176,11 +194,67 @@ class Router
             'canonical' => 'browse-videos'
         ));
 
+        $routes['browse'] = new Route(array(
+            'path' => 'browse',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'name' => 'browse'
+        ));
+
+        $routes['browse-paginated'] = new Route(array(
+            'path' => 'browse/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('page'),
+            'name' => 'browse-paginated',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-categories'] = new Route(array(
+            'path' => 'browse/([a-z0-9\-]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('category'),
+            'name' => 'browse-categories',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-categories-paginated'] = new Route(array(
+            'path' => 'browse/([a-z0-9\-]+)/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('category', 'page'),
+            'name' => 'browse-categories-paginated',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-sorted'] = new Route(array(
+            'path' => 'browse/(most-recent|most-viewed|most-discussed|most-rated)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('load'),
+            'name' => 'browse-sorted',
+            'canonical' => 'browse'
+        ));
+
+        $routes['browse-sorted-paginated'] = new Route(array(
+            'path' => 'browse/(most-recent|most-viewed|most-discussed|most-rated)/page/([0-9]+)',
+            'location' => DOC_ROOT . '/cc-core/controllers/browse.php',
+            'mappings' => array('load', 'page'),
+            'name' => 'browse-sorted-paginated',
+            'canonical' => 'browse'
+        ));
+
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use watch instead
+         */
         $routes['play'] = new Route(array(
             'path' => 'videos/([0-9]+)(/[a-z0-9\-]+)?',
             'location' => DOC_ROOT . '/cc-core/controllers/play.php',
             'mappings' => array('vid'),
             'name' => 'play'
+        ));
+
+        $routes['watch'] = new Route(array(
+            'path' => 'watch/([0-9]+)(/[a-z0-9\-]+)?',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
+            'mappings' => array('video_id'),
+            'name' => 'watch'
         ));
 
         $routes['browse-members'] = new Route(array(
@@ -262,7 +336,7 @@ class Router
 
         $routes['get-private-code'] = new Route(array(
             'path' => 'private/get',
-            'location' => DOC_ROOT . '/cc-core/controllers/play.php',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
             'mappings' => array('get_private' => 'true'),
             'type' => Route::AGNOSTIC,
             'name' => 'get-private-code'
@@ -270,7 +344,7 @@ class Router
 
         $routes['play-private'] = new Route(array(
             'path' => 'private/videos/([a-z0-9]+)',
-            'location' => DOC_ROOT . '/cc-core/controllers/play.php',
+            'location' => DOC_ROOT . '/cc-core/controllers/watch.php',
             'mappings' => array('private'),
             'name' => 'play-private',
             'canonical' => 'play'
@@ -285,6 +359,9 @@ class Router
             'name' => 'account-index'
         ));
 
+        /**
+         * @deprecated Deprecated in 2.5.0, removed in 2.6.0. Use account-upload-info instead
+         */
         $routes['account-upload'] = new Route(array(
             'path' => 'account/upload',
             'location' => DOC_ROOT . '/cc-core/controllers/account/upload.php',
@@ -295,6 +372,12 @@ class Router
             'path' => 'account/upload/video',
             'location' => DOC_ROOT . '/cc-core/controllers/account/upload_video.php',
             'name' => 'account-upload-video'
+        ));
+
+        $routes['account-upload-info'] = new Route(array(
+            'path' => 'account/upload/info',
+            'location' => DOC_ROOT . '/cc-core/controllers/account/upload_info.php',
+            'name' => 'account-upload-info'
         ));
 
         $routes['account-upload-complete'] = new Route(array(
@@ -330,6 +413,12 @@ class Router
             'location' => DOC_ROOT . '/cc-core/controllers/account/videos_edit.php',
             'mappings' => array('vid'),
             'name' => 'account-videos-edit'
+        ));
+
+        $routes['account-attachments'] = new Route(array(
+            'path' => 'account/attachments',
+            'location' => DOC_ROOT . '/cc-core/controllers/account/attachments.php',
+            'name' => 'account-attachments'
         ));
 
         $routes['account-playlists'] = new Route(array(
@@ -555,6 +644,7 @@ class Router
             'path' => 'embed/([0-9]+)',
             'location' => DOC_ROOT . '/cc-core/controllers/embed.php',
             'mappings' => array('vid'),
+            'type' => Route::AGNOSTIC,
             'name' => 'embed'
         ));
 
@@ -644,23 +734,11 @@ class Router
             'name' => 'ajax-videos-more'
         ));
 
-        $routes['ajax-upload-avatar'] = new Route(array(
-            'path' => 'account/upload/avatar',
-            'location' => DOC_ROOT . '/cc-core/controllers/ajax/avatar.ajax.php',
-            'name' => 'ajax-upload-avatar'
-        ));
-
         $routes['ajax-upload'] = new Route(array(
             'path' => 'ajax/upload',
             'location' => DOC_ROOT . '/cc-core/controllers/ajax/upload.php',
             'type' => Route::AGNOSTIC,
             'name' => 'ajax-upload'
-        ));
-
-        $routes['ajax-upload-video'] = new Route(array(
-            'path' => 'account/upload/validate',
-            'location' => DOC_ROOT . '/cc-core/controllers/ajax/upload.ajax.php',
-            'name' => 'ajax-upload-video'
         ));
 
         $routes['ajax-username-exists'] = new Route(array(

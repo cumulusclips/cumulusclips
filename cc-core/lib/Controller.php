@@ -3,13 +3,22 @@
 class Controller
 {
     public $view;
+    public $config;
+    public $authService;
 
     /**
-     * Create new controller instance 
+     * Create new controller instance
      */
     public function __construct()
     {
-        $this->_initView();
+        $this->config = Registry::get('config');
+        $this->authService = new \AuthService();
+
+        // Start session
+        if (!headers_sent() && session_id() == '') {
+            session_start();
+            $this->authService->setTimeoutFlags();
+        }
     }
 
     /**
@@ -18,17 +27,13 @@ class Controller
      */
     public function dispatch(Route $route)
     {
+        $this->view = new \View();
         $this->view->load($route);
+
+        // Execute controller
         include($route->location);
+
+        // Render view for route
         $this->view->render();
-    }
-    
-    /**
-     * Setup view instance for use by controller
-     */
-    protected function _initView()
-    {
-        $view = View::getInstance();
-        $this->view = $view;
     }
 }

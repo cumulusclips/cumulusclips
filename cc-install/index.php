@@ -1,6 +1,6 @@
 <?php
 
-@session_start();
+session_start();
 
 // Retrieve base URL
 $PROTOCOL = (!empty ($_SERVER['HTTPS'])) ? 'https://' : 'http://';

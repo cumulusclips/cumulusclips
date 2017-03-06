@@ -3,6 +3,19 @@
 // Include Main Bootstrap
 include ('bootstrap.php');
 
+// Start session
+if (!headers_sent() && session_id() == '') {
+    session_start();
+}
+
+// Verify if user is logged in
+$authService = new \AuthService();
+$authService->setTimeoutFlags();
+$authService->enforceAuth();
+$adminUser = $authService->getAuthUser();
+
+
+
 // Pre-Output Work
 define ('ADMIN', HOST . '/cc-admin');
 if (!headers_sent()) {
@@ -20,7 +33,16 @@ if (!headers_sent()) {
             'plugins'       => 0,
             'settings'      => 0
         );
-        setcookie ('cc_admin_settings', http_build_query ($cc_admin_settings));
+        $params = session_get_cookie_params();
+        setcookie(
+            'cc_admin_settings',
+            http_build_query($cc_admin_settings),
+            0,
+            rtrim($params["path"], '/') . '/cc-admin/',
+            $params["domain"],
+            $params["secure"],
+            false
+        );
     }
 }
 
@@ -29,3 +51,7 @@ if (!isset ($_SESSION['updates_available'])) {
     $updates_available = Functions::UpdateCheck();
     $_SESSION['updates_available'] = ($updates_available) ? serialize ($updates_available) : false;
 }
+
+// Update any failed videos that are still marked processing
+$videoService = new \VideoService();
+$videoService->updateFailedVideos();

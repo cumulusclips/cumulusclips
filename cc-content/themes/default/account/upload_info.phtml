@@ -1,0 +1,194 @@
+<?php
+
+$this->addJs('fileupload.jquery-ui.widget.js');
+$this->addJs('fileupload.iframe-transport.js');
+$this->addJs('fileupload.plugin.js');
+$this->addJs('fileupload.js');
+$this->setLayout('account');
+
+?>
+
+<h1><?=Language::getText('upload_header')?></h1>
+
+<div class="message <?php echo $message_type ?: ''; ?>"><?php echo $message ?: ''; ?></div>
+
+<!-- Begin Video Information Form -->
+<div class="video-information-form">
+
+    <div class="tabs keepOne">
+        <a href="" data-block="basic-information" title="<?php echo Language::getText('video_basic_tab'); ?>"><?php echo Language::getText('video_basic_tab'); ?></a>
+        <?php if ($config->allowVideoAttachments): ?>
+            <a href="" data-block="video-attachments" title="<?php echo Language::getText('video_attachments_tab'); ?>"><?php echo Language::getText('video_attachments_tab'); ?></a>
+        <?php endif; ?>
+        <a href="" data-block="advanced-settings" title="<?php echo Language::getText('video_advanced_tab'); ?>"><?php echo Language::getText('video_advanced_tab'); ?></a>
+    </div>
+
+    <form action="<?=HOST?>/account/upload/info/" method="post">
+
+
+    <!-- BEGIN Basic Information Tab -->
+    <div id="basic-information" class="form wide tab_block">
+
+        <h2><?php echo Language::getText('video_basic_tab_header'); ?></h2>
+
+        <label class="<?=(isset($errors['title'])) ? 'error' : ''?>"><?=Language::getText('title')?>:</label>
+        <input class="text" type="text" name="title" value="<?=(!empty($video->title)) ? $video->title : ''?>" />
+
+        <label class="<?=(isset($errors['tags'])) ? 'error' : ''?>"><?=Language::getText('tags')?>:</label>
+        <input class="text" type="text" name="tags" value="<?=(!empty($video->tags)) ? implode(', ', $video->tags) : ''?>" />
+        <p class="hint"><?=Language::getText('comma_delimited')?></p>
+
+        <label class="<?=(isset($errors['cat_id'])) ? 'error' : ''?>"><?=Language::getText('category')?>:</label>
+        <select class="dropdown" name="cat_id">
+        <?php foreach ($categoryList as $category): ?>
+            <option<?=(!empty($video->categoryId) && $category->categoryId == $video->categoryId) ? ' selected="selected"' : ''?> value="<?=$category->categoryId?>"><?=$category->name?></option>
+        <?php endforeach; ?>
+        </select>
+
+        <label class="<?=(isset($errors['description'])) ? 'error' : ''?>"><?=Language::getText('description')?>:</label>
+        <textarea class="text" name="description" rows="10" cols="45"><?=(!empty($video->description)) ? $video->description : ''?></textarea>
+
+    </div>
+    <!-- END Basic Information Tab -->
+
+
+    <?php if ($config->allowVideoAttachments): ?>
+
+        <!-- BEGIN Video Attachments Tab -->
+        <div id="video-attachments" class="form wide tab_block">
+
+            <h2><?php echo Language::getText('video_attachments_tab_header'); ?></h2>
+
+            <div class="attachments">
+
+                <?php $attachmentCount = 0; ?>
+                <?php foreach ($newFiles as $newFile): ?>
+
+                    <div class="attachment">
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $newFile['name']; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $newFile['size']; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][temp]" value="<?php echo $newFile['temp']; ?>" />
+
+                        <div class="upload-progress">
+                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                            <span class="title"><?php echo $newFile['name']; ?> (<?php echo \Functions::formatBytes($newFile['size'],0); ?>)</span>
+                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                        </div>
+                    </div>
+                    <?php $attachmentCount++; ?>
+
+                <?php endforeach; ?>
+
+                <?php foreach ($newAttachmentFileIds as $fileId): ?>
+
+                    <?php $file = \Functions::arrayColumnFilter($fileId, 'fileId', $userAttachments); ?>
+
+                    <div class="attachment existing-file" id="existing-file-<?php echo $fileId; ?>">
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][name]" value="<?php echo $file[0]->name; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][size]" value="<?php echo $file[0]->filesize; ?>" />
+                        <input type="hidden" name="attachment[<?php echo $attachmentCount; ?>][file]" value="<?php echo $file[0]->fileId; ?>" />
+
+                        <div class="upload-progress">
+                            <a class="remove" href=""><span class="glyphicon glyphicon-remove"></span></a>
+                            <span class="title"><?php echo $file[0]->name; ?> (<?php echo \Functions::formatBytes($file[0]->filesize,0); ?>)</span>
+                            <span class="pull-right glyphicon glyphicon-ok"></span>
+                        </div>
+                    </div>
+                    <?php $attachmentCount++; ?>
+
+                <?php endforeach; ?>
+
+            </div>
+
+            <div class="add">
+                <p><a href="" class="new"><?php echo Language::getText('upload_new_attachment'); ?></a></p>
+                <?php if (!empty($userAttachments)): ?>
+                    <p><a href="" class="existing"><?php echo Language::getText('select_existing_attachment'); ?></a></p>
+                <?php endif; ?>
+            </div>
+
+            <div class="attachment-form attachment-form-upload hidden">
+
+                <div class="header">
+                    <h3><?php echo Language::getText('upload_new_attachment_header'); ?></h3>
+                    &bull; <a href="" class="cancel"><?php echo Language::getText('cancel'); ?></a>
+                </div>
+
+                <input
+                    class="uploader"
+                    type="file"
+                    name="attachment-upload"
+                    data-url="<?php echo BASE_URL; ?>/ajax/upload/"
+                    data-text="<?php echo Language::getText('browse_files_button'); ?>"
+                    data-limit="<?php echo $config->fileSizeLimit; ?>"
+                    data-type="library"
+                />
+            </div>
+
+            <?php if (!empty($userAttachments)): ?>
+
+                <div class="attachment-form attachment-form-existing hidden">
+
+                    <div class="header">
+                        <h3><?php echo Language::getText('select_existing_attachment_header'); ?></h3>
+                        &bull; <a href="" class="cancel"><?php echo Language::getText('cancel'); ?></a>
+                    </div>
+
+                    <p><?php echo Language::getText('select_existing_attachment_help'); ?></p>
+
+                    <ul>
+                        <?php foreach ($userAttachments as $file): ?>
+                            <li><a
+                                id="select-existing-file-<?php echo $file->fileId; ?>"
+                                class="<?php echo in_array($file->fileId, $newAttachmentFileIds) ? 'selected' : ''; ?>"
+                                href=""
+                                data-file="<?php echo $file->fileId; ?>"
+                                data-size="<?php echo $file->filesize; ?>"
+                                title="<?php echo $file->name; ?>"
+                            ><?php echo $file->name; ?> <span><?php echo \Functions::formatBytes($file->filesize, 0); ?></span></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+            <?php endif; ?>
+
+        </div>
+        <!-- END Video Attachments Tab -->
+
+    <?php endif; ?>
+
+
+    <!-- BEGIN Advacned Settings Tab -->
+    <div id="advanced-settings" class="form wide tab_block">
+        <h2><?php echo Language::getText('video_advanced_tab_header'); ?></h2>
+
+        <input id="disable_embed" type="checkbox" name="disable_embed" value="1" <?=(!empty($video->disableEmbed)) ? 'checked="checked"' : ''?> />
+        <label for="disable_embed"><?=Language::getText('disable_embed')?></label> <em>(<?=Language::getText('disable_embed_description')?>)</em><br>
+
+        <input id="gated_video" type="checkbox" name="gated" value="1" <?=(!empty($video->gated)) ? 'checked="checked"' : ''?> />
+        <label for="gated_video"><?=Language::getText('gated')?></label> <em>(<?=Language::getText('gated_description')?>)</em><br>
+
+        <input id="private_video" data-block="private_url" class="showhide" type="checkbox" name="private" value="1" <?=(!empty($video->private)) ? 'checked="checked"' : ''?> />
+        <label for="private_video"><?=Language::getText('private')?></label> <em>(<?=Language::getText('private_description')?>)</em><br>
+
+        <p id="private_url" class="<?=(!empty($video->private)) ? '' : 'hide'?>">
+            <label class="<?=(isset($errors['private_url'])) ? 'error' : ''?>"><?=Language::getText('private_url')?>:</label>
+            <?=HOST?>/private/videos/<span><?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?></span>/
+            <input type="hidden" name="private_url" value="<?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?>" />
+            <a href="" class="small"><?=Language::getText('regenerate')?></a>
+        </p>
+
+        <input id="closeComments" type="checkbox" name="closeComments" value="1" <?=(!empty($video->commentsClosed)) ? 'checked="checked"' : ''?> />
+        <label for="closeComments"><?=Language::getText('closeComments')?></label> <em>(<?=Language::getText('closeCommentsDescription')?>)</em>
+    </div>
+    <!-- END Advacned Settings Tab -->
+
+
+    <input type="hidden" name="submitted" value="TRUE" />
+    <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>" />
+    <input class="button" type="submit" name="button" value="<?=Language::getText('upload_video_button')?>" />
+
+    </form>
+
+</div>
+<!-- END Video Information Form -->

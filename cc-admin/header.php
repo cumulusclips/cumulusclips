@@ -10,11 +10,12 @@
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/tipsy/stylesheets/tipsy.css" />
 <?php Functions::adminOutputCss(); ?>
 <link rel="stylesheet" href="<?=ADMIN?>/extras/bootstrap-3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<?=ADMIN?>/extras/font-awesome-4.7.0/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="<?=ADMIN?>/css/admin.css?v<?=CURRENT_VERSION?>" />
 </head>
 <body>
-    
-    
+
+
 
 
 <header>
@@ -28,12 +29,12 @@
         </div>
     </div>
 </header>
-    
-<div class="container">  
-    
+
+<div class="container">
+
     <!-- Begin Sidebar -->
     <div id="sidebar">
-        
+
         <div class="menu">
             <?php $dashboardMenuOpen = Functions::isPanelOpen('dashboard'); ?>
             <a href="#menu-dashboard" data-toggle="collapse" class="icon-dashboard <?=($dashboardMenuOpen) ? '' : 'collapsed'?>"><span>Dashboard</span></a>
@@ -52,6 +53,7 @@
             <ul id="menu-videos" class="collapse <?=($videoMenuOpen) ? 'in' : ''?>">
                 <li class="<?=($pageName == 'videos') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos.php">Browse Videos</a></li>
                 <li class="<?=($pageName == 'videos-add') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_add.php">Add New Video</a></li>
+                <li class="<?=($pageName == 'videos-imports') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_imports.php">Video Imports</a></li>
                 <li class="<?=($pageName == 'videos-categories') ? 'active' : ''?>"><a href="<?=ADMIN?>/videos_categories.php">Video Categories</a></li>
             </ul>
         </div>
@@ -135,13 +137,13 @@
                 </ul>
             </div>
         <?php endif; ?>
-        
+
     </div>
     <!-- End Sidebar -->
 
     <!-- Begin Main Content -->
     <main id="<?=$pageName?>">
-        
+
     <?php if (!empty ($_SESSION['updates_available']) && !isset ($dont_show_update_prompt)): ?>
         <?php $updates_available = unserialize($_SESSION['updates_available']); ?>
         <div id="updates-available" class="alert alert-warning">
