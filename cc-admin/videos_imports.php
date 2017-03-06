@@ -180,7 +180,7 @@ include('header.php');
                                 <i class="fa fa-refresh fa-spin"></i> Transcoding
                             <?php endif; ?>
                         </td>
-                        <td><?php echo \Functions::humanFilesize(UPLOAD_PATH . '/temp/import-' . $jobId . '/' . $video->file, 1); ?></td>
+                        <td><?php echo \Functions::formatBytes(filesize(UPLOAD_PATH . '/temp/import-' . $jobId . '/' . $video->file), 1); ?></td>
                         <td><?php echo \Functions::cutOff($video->file, 30); ?></td>
                         <td><?php echo \Functions::cutOff($video->meta->title, 40); ?></td>
                     </tr>
