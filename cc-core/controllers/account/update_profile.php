@@ -135,7 +135,7 @@ if (
 
             // Update User
             $userMapper = new UserMapper();
-            $this->view->vars->loggedInUser->avatar = $filename;
+            $this->view->vars->loggedInUser->avatar = $filename . '.png';
             $userMapper->save($this->view->vars->loggedInUser);
 
             $this->view->vars->message = Language::getText('success_profile_updated');
