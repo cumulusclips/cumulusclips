@@ -42,7 +42,14 @@ try {
     if ($_POST['upload-type'] === 'video') {
 
         App::enableUploadsCheck();
-        if (!$config->enableUserUploads) App::throw404();
+
+        // Check if video uploads has been disabled for regular users
+        if (
+            !$config->enableUserUploads
+            && !in_array($loggedInUser->role, array('admin', 'mod'))
+        ) {
+            App::throw404();
+        }
 
         $maxFilesize = $config->videoSizeLimit;
         $extensionList = $config->acceptedVideoFormats;
