@@ -18,19 +18,6 @@ $db = Registry::get('db');
 $errors = array();
 $this->view->vars->private_url = $videoService->generatePrivate();
 
-// Retrieve video count
-$query = "SELECT COUNT(video_id) FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0'";
-$db->fetchRow($query);
-$this->view->vars->count = $db->rowCount();
-
-// Retrieve video list
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND gated = '0' ORDER BY video_id DESC LIMIT 20";
-$this->view->vars->videos = array();
-$videoResults = $db->fetchAll($query);
-$this->view->vars->videos = $videoMapper->getVideosFromList(
-    Functions::arrayColumn($videoResults, 'video_id')
-);
-
 // Retrieve Category names
 $categoryService = new CategoryService();
 $this->view->vars->categories = $categoryService->getCategories();
