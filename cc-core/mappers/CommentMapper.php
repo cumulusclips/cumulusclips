@@ -6,7 +6,7 @@ class CommentMapper extends MapperAbstract
     {
         return $this->getCommentByCustom(array('comment_id' => $commentId));
     }
-    
+
     public function getVideoCommentsById($videoId)
     {
         return $this->getMultipleCommentByCustom(array('video_id' => $videoId));
@@ -16,14 +16,14 @@ class CommentMapper extends MapperAbstract
     {
         $db = Registry::get('db');
         $query = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE ';
-        
+
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
             $query .= "$fieldName = :$fieldName AND ";
             $queryParams[":$fieldName"] = $value;
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
-        
+
         $dbResults = $db->fetchRow($query, $queryParams);
         if ($db->rowCount() > 0) {
             return $this->_map($dbResults);
@@ -31,12 +31,12 @@ class CommentMapper extends MapperAbstract
             return false;
         }
     }
-    
+
     public function getMultipleCommentsByCustom(array $params)
     {
         $db = Registry::get('db');
         $query = 'SELECT * FROM ' . DB_PREFIX . 'comments  WHERE ';
-        
+
         $queryParams = array();
         foreach ($params as $fieldName => $value) {
             $query .= "$fieldName = :$fieldName AND ";
@@ -44,7 +44,7 @@ class CommentMapper extends MapperAbstract
         }
         $query = preg_replace('/\sAND\s$/', '', $query);
         $dbResults = $db->fetchAll($query, $queryParams);
-        
+
         $commentsList = array();
         foreach($dbResults as $record) {
             $commentsList[] = $this->_map($record);
@@ -99,17 +99,17 @@ class CommentMapper extends MapperAbstract
                 ':released' => (isset($comment->released) && $comment->released === true) ? 1 : 0,
             );
         }
-            
+
         $db->query($query, $bindParams);
         $commentId = (!empty($comment->commentId)) ? $comment->commentId : $db->lastInsertId();
         return $commentId;
     }
-    
+
     public function getCommentsFromList(array $commentIds)
     {
         $commentList = array();
         if (empty($commentIds)) return $commentList;
-        
+
         $db = Registry::get('db');
         $inQuery = implode(',', array_fill(0, count($commentIds), '?'));
         $sql = 'SELECT * FROM ' . DB_PREFIX . 'comments WHERE comment_id IN (' . $inQuery . ')';
@@ -120,13 +120,13 @@ class CommentMapper extends MapperAbstract
         }
         return $commentList;
     }
-    
+
     public function delete($commentId)
     {
         $db = Registry::get('db');
         $db->query('DELETE FROM ' . DB_PREFIX . 'comments WHERE comment_id = :commentId', array(':commentId' => $commentId));
     }
-    
+
     public function getVideoCommentCount($videoId)
     {
         $db = Registry::get('db');
@@ -134,7 +134,7 @@ class CommentMapper extends MapperAbstract
         $result = $db->fetchRow($sql, array($videoId));
         return $result['count'];
     }
-    
+
     public function getThreadedCommentIds($videoId, $limit, $parentCommentId = 0, $offsetCommentId = 0)
     {
         $db = Registry::get('db');
@@ -152,7 +152,7 @@ class CommentMapper extends MapperAbstract
             $where .= ' AND comment_id > :offsetCommentId';
         }
 
-        $sql .= 'WHERE ' . $where . ' LIMIT ' . (int) $limit;
+        $sql .= 'WHERE ' . $where . ' ORDER BY date_created ASC LIMIT ' . (int) $limit;
         $result = $db->fetchAll($sql, $params);
         return Functions::arrayColumn($result, 'comment_id');
     }

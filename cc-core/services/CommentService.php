@@ -177,6 +177,7 @@ class CommentService extends ServiceAbstract
     {
         $commentCards = array();
         $commentList = $this->_getCommentThread($video->videoId, $limit, $offsetId);
+
         $commentMapper = $this->_getMapper();
         foreach ($commentList as $commentId) {
             $comment = $commentMapper->getCommentById($commentId);
@@ -251,6 +252,7 @@ class CommentService extends ServiceAbstract
     {
         $commentMapper = $this->_getMapper();
         $results = $commentMapper->getThreadedCommentIds($videoId, $limit, $parentId);
+
         foreach ($results as $childId) {
             if (count($thread) == $limit) break;
             $thread[] = $childId;
