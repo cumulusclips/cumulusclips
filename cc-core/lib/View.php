@@ -331,7 +331,7 @@ class View
         // Add theme preview JS
         if (isset($_GET['preview_theme'])) {
             $js_theme_preview = <<<JS
-<script type="text/javascript">';
+<script type="text/javascript">
     for (var i = 0; i < document.links.length; i++) {
         var link = document.links[i].href;
         var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
@@ -347,9 +347,8 @@ JS;
 
         // Add language preview JS
         if (defined('PREVIEW_LANG')) {
-
             $js_lang_preview = <<<JS
-<script type="text/javascript">';
+<script type="text/javascript">
     for (var i = 0; i < document.links.length; i++) {
         var link = document.links[i].href;
         var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
@@ -413,13 +412,10 @@ JS;
         $active_theme = ($isMobile) ? Settings::get('active_mobile_theme') : Settings::get('active_theme');
 
         // Check if 'Preview' theme was provided
-        $preview_theme = false;
-        if (isset ($_GET['preview_theme']) && Functions::ValidTheme ($_GET['preview_theme'])) {
+        if (isset($_GET['preview_theme']) && Functions::validTheme($_GET['preview_theme'])) {
             $active_theme = $_GET['preview_theme'];
-            $preview_theme = $_GET['preview_theme'];
         }
 
-//        define ('PREVIEW_THEME', $preview_theme);
         return $active_theme;
     }
 
