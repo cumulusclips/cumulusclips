@@ -645,19 +645,6 @@ String.prototype.truncate = function(length, decorator) {
     }
 }
 
-/**
- * Resets progress bar, enables browse button,
- * clears file title, and hides progress bar
- */
-function resetProgress()
-{
-    $('#upload_status .fill').removeClass('in-progress');
-    $('#upload_status').hide();
-    $('#upload_status .title').text('');
-    $('#upload_status .fill').css('width', '0%');
-    $('#upload_status .percentage').text('0%');
-}
-
 // Disable text selection on sidebar header links (<= IE8 fix)
 $.fn.disableSelection = function() {
     $(this).attr('unselectable', 'on')
