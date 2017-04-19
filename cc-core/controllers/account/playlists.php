@@ -1,5 +1,7 @@
 <?php
 
+Plugin::triggerEvent('playlists.start');
+
 // Verify if user is logged in
 $this->authService->enforceAuth();
 $this->authService->enforceTimeout(true);
@@ -85,3 +87,6 @@ foreach ($userLists as $playlist) {
 $this->view->vars->formNonce = md5(uniqid(rand(), true));
 $_SESSION['formNonce'] = $this->view->vars->formNonce;
 $_SESSION['formTime'] = time();
+
+Plugin::triggerEvent('playlists.end');
+

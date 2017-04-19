@@ -1,5 +1,7 @@
 <?php
 
+Plugin::triggerEvent('playlist_edit.start');
+
 // Verify if user is logged in
 $this->authService->enforceAuth();
 $this->authService->enforceTimeout(true);
@@ -68,7 +70,7 @@ if (!empty($_GET['remove']) && is_numeric ($_GET['remove']) && $_GET['remove'] >
     $video = $videoMapper->getVideoById($_GET['remove']);
     if ($video && $playlistService->checkListing($video, $this->view->vars->playlist)) {
         $this->view->vars->playlist = $playlistService->deleteVideo($video, $this->view->vars->playlist);
-        $this->view->vars->message = Language::GetText('success_playlist_video_removed');
+        $this->view->vars->message = Language::getText('success_playlist_video_removed', array('list_name' => $playlistService->getPlaylistName($this->view->vars->playlist)));
         $this->view->vars->message_type = 'success';
     }
 }
@@ -81,3 +83,5 @@ $_SESSION['formTime'] = time();
 // Prepare page for render
 $this->view->vars->meta->title = Functions::Replace($this->view->vars->meta->title, array ('playlist_name' => $playlistService->getPlaylistName($this->view->vars->playlist)));
 $this->view->vars->videoList = $playlistService->getPlaylistVideos($this->view->vars->playlist);
+
+Plugin::triggerEvent('playlist_edit.end');
