@@ -15,7 +15,7 @@ $page_title = 'Customizations';
 $errors = null;
 $message = null;
 $messageType = null;
-$type = null;
+$activeTab = 'custom_css';
 
 // Handle form if submitted
 if (isset($_POST['submitted'])) {
@@ -30,7 +30,7 @@ if (isset($_POST['submitted'])) {
     ) {
         // Validate type
         if (!empty($_POST['type']) && in_array($_POST['type'], array('css', 'js'))) {
-            $type = ($_POST['type'] == 'js') ? 'custom_js' : 'custom_css';
+            $activeTab = ($_POST['type'] == 'js') ? 'custom_js' : 'custom_css';
             $friendlyType = ($_POST['type'] == 'js') ? 'JavaScript' : 'CSS';
         } else {
             $errors = true;
@@ -45,7 +45,7 @@ if (isset($_POST['submitted'])) {
 
         // Update customizations if no errors were made
         if (!$errors) {
-            Settings::set($type, $content);
+            Settings::set($activeTab, $content);
             $messageType = 'alert-success';
             $message = 'Your ' . $friendlyType . ' customizations have been updated';
         } else {
@@ -79,13 +79,13 @@ include ('header.php');
 <div role="tabpanel">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li class="<?=(empty($type) || $type == 'custom_css') ? 'active' : ''?>"><a href="#custom_css" data-toggle="tab">CSS</a></li>
-        <li class="<?=($type == 'custom_js') ? 'active' : ''?>"><a href="#custom_js" data-toggle="tab">JavaScript</a></li>
+        <li class="<?=($activeTab == 'custom_css') ? 'active' : ''?>"><a href="#custom_css" data-toggle="tab">CSS</a></li>
+        <li class="<?=($activeTab == 'custom_js') ? 'active' : ''?>"><a href="#custom_js" data-toggle="tab">JavaScript</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div class="tab-pane <?=(empty($type) || $type == 'custom_css') ? 'active' : ''?>" id="custom_css">
+        <div class="tab-pane <?=($activeTab == 'custom_css') ? 'active' : ''?>" id="custom_css">
             <h3>Custom CSS</h3>
             <form action="" method="post">
                 <textarea class="form-control" name="content"><?=htmlspecialchars(Settings::get('custom_css'))?></textarea>
@@ -95,7 +95,7 @@ include ('header.php');
                 <input type="submit" class="button" value="Update CSS" />
             </form>
         </div>
-        <div class="tab-pane <?=($type == 'custom_js') ? 'active' : ''?>" id="custom_js">
+    <div class="tab-pane <?=($activeTab == 'custom_js') ? 'active' : ''?>" id="custom_js">
             <h3>Custom JavaScript</h3>
             <form action="" method="post">
                 <textarea class="form-control" name="content"><?=htmlspecialchars(Settings::get('custom_js'))?></textarea>
