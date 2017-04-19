@@ -66,7 +66,7 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
     $like = trim ($_POST['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE :like OR content LIKE :like";
+    $query .= " AND (title LIKE :like OR content LIKE :like)";
     $sub_header = "Search Results for: <em>$like</em>";
     $queryParams[':like'] = "%$like%";
 
@@ -74,7 +74,7 @@ if (isset ($_POST['search_submitted'])&& !empty ($_POST['search'])) {
 
     $like = trim ($_GET['search']);
     $query_string['search'] = $like;
-    $query .= " AND title LIKE :like OR content LIKE :like";
+    $query .= " AND (title LIKE :like OR content LIKE :like)";
     $sub_header = "Search Results for: <em>$like</em>";
     $queryParams[':like'] = "%$like%";
 
