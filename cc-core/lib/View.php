@@ -391,8 +391,8 @@ JS;
     public function writeMeta()
     {
         $this->addMeta('generator', 'CumulusClips');
-        if (!empty($this->vars->meta->keywords)) $this->addMeta('keywords', $this->vars->meta->keywords);
-        if (!empty($this->vars->meta->description)) $this->addMeta('description', $this->vars->meta->description);
+        if (!empty($this->vars->meta->keywords)) $this->addMeta('keywords', htmlentities($this->vars->meta->keywords));
+        if (!empty($this->vars->meta->description)) $this->addMeta('description', htmlentities($this->vars->meta->description));
 
         if (isset($this->_meta)) {
             foreach ($this->_meta as $_value) {
