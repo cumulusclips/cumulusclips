@@ -33,11 +33,6 @@ if (isset($_POST['submitted'])) {
 
         $this->view->vars->user = new User();
 
-        // Validate Post Speed
-        if (time()-$_SESSION['time'] < 5) {
-            $this->view->vars->errors['token'] = Language::getText('invalid_session');
-        }
-
         // Validate Username
         if (!empty($_POST['username']) && preg_match('/^[a-z0-9]+$/i', $_POST['username'])) {
             if (!$userMapper->getUserByUsername($_POST['username'])) {
