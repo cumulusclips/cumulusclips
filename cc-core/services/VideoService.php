@@ -184,12 +184,12 @@ class VideoService extends ServiceAbstract
         foreach ($subscriberList as $subscriber) {
             if ($privacyService->optCheck($subscriber, Privacy::NEW_VIDEO)) {
                 $replacements = array (
-                    'host'      => HOST,
-                    'sitename'  => $config->sitename,
-                    'email'     => $subscriber->email,
-                    'member'    => $subscriber->username,
-                    'title'     => $video->title,
-                    'video_url' => $this->getUrl($video)
+                    'host'        => HOST,
+                    'sitename'    => $config->sitename,
+                    'email'       => $subscriber->email,
+                    'member'      => $user->username,
+                    'title'       => $video->title,
+                    'video_url'   => $this->getUrl($video)
                 );
                 $mailer = new Mailer($config);
                 $mailer->setTemplate ('new_video', $replacements);
