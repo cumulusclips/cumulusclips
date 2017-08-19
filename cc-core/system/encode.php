@@ -383,7 +383,7 @@ try {
 
     $durationResultsCleaned = preg_replace('/^\s*Duration:\s*/', '', $durationResults[0]);
     preg_match ('/^[0-9]{2}:[0-9]{2}:[0-9]{2}/', $durationResultsCleaned, $duration);
-    $sec = Functions::durationInSeconds($duration[0]);
+    $sec = Functions::durationToSeconds($duration[0]);
 
     // Debug Log
     $config->debugConversion ? App::log(CONVERSION_LOG, "Duration in Seconds: $sec") : null;

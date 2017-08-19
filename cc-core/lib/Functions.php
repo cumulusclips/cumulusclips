@@ -113,14 +113,45 @@ class Functions
 
     /**
      * Format video duration into seconds
-     * @param string $duration in hh:mm:ss or mm:ss format
-     * @return integer Total seconds
+     *
+     * @deprecated Depracated in 2.5, removed in 2.6. Use self::durationToSeconds instead
      */
     public static function durationInSeconds($duration)
+    {
+        return static::durationToSeconds($duration);
+    }
+
+    /**
+     * Converts from duration format (hh:mm:ss) into seconds
+     *
+     * @param string $duration Duration in hh:mm:ss or mm:ss format
+     * @return integer Total seconds
+     */
+    public static function durationToSeconds($duration)
     {
         $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $duration);
         sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
         return $hours * 3600 + $minutes * 60 + $seconds;
+    }
+
+    /**
+     * Shortens duration format (hh:mm:ss) into display friendly duration format
+     *
+     * Extra "0" and ":" are trimmed up until a m:ss minimum
+     *
+     * @param string $duration The duration to be formatted
+     * @return string Returns formatted duration
+     */
+    public static function formatDuration($duration)
+    {
+        $newDuration = ltrim($duration, '0:');
+        if (strlen($newDuration) == 2) {
+            return '0:' . $newDuration;
+        } else if (strlen($newDuration) == 1) {
+            return '0:0' . $newDuration;
+        } else {
+            return $newDuration;
+        }
     }
 
     /**
@@ -404,23 +435,6 @@ class Functions
         }
 
         return $display;
-    }
-
-    /**
-     * Trims extraneous "0:" from the beginning of an hms formatted duration
-     * @param string $duration The duration to be trimmed
-     * @return string Returns duration without leading 0 & :
-     */
-    public static function formatDuration($duration)
-    {
-        $newDuration = ltrim($duration, '0:');
-        if (strlen($newDuration) == 2) {
-            return '0:' . $newDuration;
-        } else if (strlen($newDuration) == 1) {
-            return '0:0' . $newDuration;
-        } else {
-            return $newDuration;
-        }
     }
 
     /**

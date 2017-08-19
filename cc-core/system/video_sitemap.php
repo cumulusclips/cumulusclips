@@ -73,7 +73,7 @@ if (empty($_GET['page'])) {
 
         $block->addChild('category', $row['name']);
         $block->addChild('family_friendly', 'yes');
-        $block->addChild('duration', Functions::durationInSeconds($video->duration));
+        $block->addChild('duration', Functions::durationToSeconds($video->duration));
     }
 
 } else {
