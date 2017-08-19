@@ -29,11 +29,7 @@ if (isset($_POST['submitted'])) {
 
         // Validate uploaded video file
         if (!empty($_POST['upload']['temp'])
-            && preg_match(
-                '/^' . preg_quote($tempFilePrefix, '/') . '[0-9]+/',
-                $_POST['upload']['temp']
-            )
-            && file_exists($_POST['upload']['temp'])
+            && \App::isValidUpload($_POST['upload']['temp'], $this->view->vars->loggedInUser, 'video')
         ) {
             // Store uploaded file into session
             $_SESSION['upload'] = (object) array(
