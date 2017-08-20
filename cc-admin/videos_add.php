@@ -49,69 +49,65 @@ if (isset ($_POST['submitted'])) {
         // Validate video attachments
         if ($config->allowVideoAttachments && isset($_POST['attachment']) && is_array($_POST['attachment'])) {
 
-            do {
+            foreach ($_POST['attachment'] as $attachment) {
 
-                foreach ($_POST['attachment'] as $attachment) {
-
-                    if (!is_array($attachment)) {
-                        $errors['attachment'] = 'Invalid attachment';
-                        break 2;
-                    }
-
-                    // Determine if attachment is a new file upload or existing attachment
-                    if (!empty($attachment['temp'])) {
-
-                        // New upload
-
-                        // Validate file upload info
-                        if (
-                            empty($attachment['name'])
-                            || empty($attachment['size'])
-                            || !is_numeric($attachment['size'])
-                            || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
-                        ) {
-                            $errors['attachment'] = 'Invalid attachment file upload';
-                            break 2;
-                        }
-
-                        // Create file
-                        $newFiles[] = array(
-                            'temp' => $attachment['temp'],
-                            'name' => $attachment['name'],
-                            'size' => $attachment['size']
-                        );
-
-                    } elseif (!empty($attachment['file'])) {
-
-                        // Attaching existing file
-
-                        $file = $fileMapper->getById($attachment['file']);
-
-                        // Verify file exists and belongs to user
-                        if (
-                            !$file
-                            || $file->userId !== $adminUser->userId
-                        ) {
-                            $errors['attachment'] = 'Invalid attachment';
-                            break 2;
-                        }
-
-                        // Verify attachment isn't already attached
-                        if (in_array($attachment['file'], $newAttachmentFileIds)) {
-                            $errors['attachment'] = 'File is already attached';
-                            break 2;
-                        }
-
-                        // Create attachment entry
-                        $newAttachmentFileIds[] = $attachment['file'];
-
-                    } else {
-                        $errors['attachment'] = 'Invalid attachment';
-                        break 2;
-                    }
+                if (!is_array($attachment)) {
+                    $errors['attachment'] = 'Invalid attachment';
+                    break;
                 }
 
-            } while (false);
+                // Determine if attachment is a new file upload or existing attachment
+                if (!empty($attachment['temp'])) {
+
+                    // New upload
+
+                    // Validate file upload info
+                    if (
+                        empty($attachment['name'])
+                        || empty($attachment['size'])
+                        || !is_numeric($attachment['size'])
+                        || !\App::isValidUpload($attachment['temp'], $adminUser, 'library')
+                    ) {
+                        $errors['attachment'] = 'Invalid attachment file upload';
+                        break;
+                    }
+
+                    // Create file
+                    $newFiles[] = array(
+                        'temp' => $attachment['temp'],
+                        'name' => $attachment['name'],
+                        'size' => $attachment['size']
+                    );
+
+                } elseif (!empty($attachment['file'])) {
+
+                    // Attaching existing file
+
+                    $file = $fileMapper->getById($attachment['file']);
+
+                    // Verify file exists and belongs to user
+                    if (
+                        !$file
+                        || $file->userId !== $adminUser->userId
+                    ) {
+                        $errors['attachment'] = 'Invalid attachment';
+                        break;
+                    }
+
+                    // Verify attachment isn't already attached
+                    if (in_array($attachment['file'], $newAttachmentFileIds)) {
+                        $errors['attachment'] = 'File is already attached';
+                        break;
+                    }
+
+                    // Create attachment entry
+                    $newAttachmentFileIds[] = $attachment['file'];
+
+                } else {
+                    $errors['attachment'] = 'Invalid attachment';
+                    break;
+                }
+            }
         }
 
         // Validate file upload
