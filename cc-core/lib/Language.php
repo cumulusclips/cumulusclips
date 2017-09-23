@@ -43,11 +43,11 @@ class Language
 
         // Check if user selected language
         if (
-            isset($_SESSION['user_lang'])
-            && isset($installedLanguages->{$_SESSION['user_lang']})
-            && $installedLanguages->{$_SESSION['user_lang']}->active
+            isset($_COOKIE['user_lang'])
+            && isset($installedLanguages->{$_COOKIE['user_lang']})
+            && $installedLanguages->{$_COOKIE['user_lang']}->active
         ) {
-            $activeLanguage = $_SESSION['user_lang'];
+            $activeLanguage = $_COOKIE['user_lang'];
         }
 
         // Check if 'Preview' language was provided
