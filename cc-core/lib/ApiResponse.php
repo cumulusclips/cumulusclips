@@ -85,6 +85,7 @@ class ApiResponse
     {
         $statusCode = empty($response->statusCode) ? static::HTTP_SUCCESS : $response->statusCode;
         self::sendHeader($statusCode);
+        header('Content-Type: application/json');
         echo json_encode(array(
             'result' => $response->result,
             'message' => $response->message,
