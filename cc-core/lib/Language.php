@@ -367,7 +367,7 @@ class Language
      * @param string $languageFile The path to the language file to load
      * @return array Returns list of entries keyed by entry name
      */
-    public function loadEntries($languageFile)
+    public static function loadEntries($languageFile)
     {
         $entries = array();
 
