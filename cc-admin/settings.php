@@ -54,7 +54,7 @@ if (isset($_POST['submitted'])) {
             && filter_var($_POST['base_url'], FILTER_VALIDATE_URL, $filterRules)
             && preg_match('/^https?:/', $_POST['base_url'])
         ) {
-            $data['base_url'] = 'http://dev.cumulusclips.org.local';//rtrim($_POST['base_url'], '/');
+            $data['base_url'] = rtrim($_POST['base_url'], '/');
         } else {
             $errors['base_url'] = 'Invalid base url';
         }
