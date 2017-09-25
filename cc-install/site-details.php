@@ -23,8 +23,12 @@ $error_msg = null;
 if (isset ($_POST['submitted'])) {
 
     // Validate url
-    $pattern = '/^https?:\/\/[a-z0-9][a-z0-9\.\-]*[a-z0-9\/\_\.\-]*$/i';
-    if (!empty ($_POST['url']) && !ctype_space ($_POST['url']) && preg_match ($pattern, $_POST['url'])) {
+    $filterRules = FILTER_FLAG_SCHEME_REQUIRED & FILTER_FLAG_HOST_REQUIRED;
+    if (
+        !empty($_POST['url'])
+        && filter_var($_POST['url'], FILTER_VALIDATE_URL, $filterRules)
+        && preg_match('/^https?:/', $_POST['url'])
+    ) {
         $url = rtrim ($_POST['url'], '/');
     } else {
         $errors['url'] = "A valid base URL is needed";
