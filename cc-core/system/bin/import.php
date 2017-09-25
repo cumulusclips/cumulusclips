@@ -22,6 +22,12 @@ $importLog = LOG . '/import-' . $jobId . '.log';
 App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Running Import Script for Job ID: ' . $jobId);
 $manifest = \ImportManager::getManifest($jobId);
 
+// Verify import job is in progress
+App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Validating requested import job...');
+if ($manifest->status !== \ImportManager::JOB_PROGRESS) {
+    exit(sprintf('Cannot operate on import job "%s" that is not in progress', $jobId));
+}
+
 App::log($importLog, '[' . date('Y-m-d H:i:s T') . '] Checking if import job has an active video...');
 
 // Check if import job has an active video
