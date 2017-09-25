@@ -333,12 +333,14 @@ class View
             $js_theme_preview = <<<JS
 <script type="text/javascript">
     for (var i = 0; i < document.links.length; i++) {
-        var link = document.links[i].href;
-        var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
-        var query = (parts[2] || '');
-        var hash = parts[3] || '';
-        query = (query !== '' ? '&' : '?') + 'preview_theme={$_GET['preview_theme']}';
-        document.links[i].href = parts[1] + query + hash;
+        var anchor = document.createElement('a');
+        anchor.href = document.links[i].href;
+
+        // Append query string if link does not already have it
+        if (anchor.search.indexOf('preview_theme={$_GET['preview_theme']}') === -1) {
+            anchor.search += (anchor.search === '' ? '?' : '&') + 'preview_theme={$_GET['preview_theme']}';
+            document.links[i].href = anchor.href;
+        }
     }
 </script>
 JS;
@@ -347,15 +349,18 @@ JS;
 
         // Add language preview JS
         if (defined('PREVIEW_LANG')) {
+            $previewLang = PREVIEW_LANG;
             $js_lang_preview = <<<JS
 <script type="text/javascript">
     for (var i = 0; i < document.links.length; i++) {
-        var link = document.links[i].href;
-        var parts = link.match(/^(.*?)(\?.*?)?(#.*)?$/);
-        var query = (parts[2] || '');
-        var hash = parts[3] || '';
-        query = (query !== '' ? '&' : '?') + 'preview_theme={PREVIEW_LANG}';
-        document.links[i].href = parts[1] + query + hash;
+        var anchor = document.createElement('a');
+        anchor.href = document.links[i].href;
+
+        // Append query string if link does not already have it
+        if (anchor.search.indexOf('preview_lang={$previewLang}') === -1) {
+            anchor.search += (anchor.search === '' ? '?' : '&') + 'preview_lang={$previewLang}';
+            document.links[i].href = anchor.href;
+        }
     }
 </script>
 JS;
