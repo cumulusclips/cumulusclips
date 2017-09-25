@@ -18,14 +18,15 @@ class App
     /**
      * Load class from library
      * @param string $class The name of the class to be loaded
-     * @param string $path [optional] Path to the class' directory. Defaults to site LIB directory
      * @return void Includes the requested class into memory if not already loaded
      */
-    public static function loadClass($class, $path = '')
+    public static function loadClass($class)
     {
         if (!class_exists($class)) {
-            $path .= (!empty($path)) ? '/' : '';
-            include($path . "$class.php");
+            $file = stream_resolve_include_path($class . '.php');
+            if ($file) {
+                include($file);
+            }
         }
     }
 
@@ -140,30 +141,6 @@ class App
             header("Location: " . MOBILE_HOST . "/");
             exit();
         }
-    }
-
-    /**
-     * Determine which language should be used
-     * @return string Language to be used
-     */
-    public static function currentLang()
-    {
-        $preview_lang = false;
-        $default_lang = Settings::get('default_language');
-
-        // Check if user selected language
-        if (isset($_SESSION['user_lang']) && file_exists(DOC_ROOT . '/cc-content/languages/' . $_SESSION['user_lang'] . '.xml')) {
-            $default_lang = $_SESSION['user_lang'];
-        }
-
-        // Check if 'Preview' language was provided
-        if (isset($_GET['preview_lang']) && file_exists(DOC_ROOT . '/cc-content/languages/' . $_GET['preview_lang'] . '.xml')) {
-            $default_lang = $_GET['preview_lang'];
-            $preview_lang = $_GET['preview_lang'];
-        }
-
-        define('PREVIEW_LANG', $preview_lang);
-        return $default_lang;
     }
 
     /**
