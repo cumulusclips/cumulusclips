@@ -37,7 +37,7 @@ class Pagination {
 
     /**
      * Output paginated links
-     * @return mixed Returns the pagination block with links 
+     * @return mixed Returns the pagination block with links
      */
     public function Paginate() {
         if ($this->total <= $this->records_per_page) return '';
@@ -211,6 +211,7 @@ class Pagination {
         // Build url string from parts
         $string = $url['scheme'] . '://';
         $string .= $url['host'];
+        $string .= isset($url['port']) ? ':' . $url['port'] : '';
         $string .= $url['path'] . ($this->seo_friendly_url ? '/' : '');
         $string .= isset ($url['query']) ?  '?' . $url['query'] : '';
         return $string;
@@ -228,7 +229,7 @@ class Pagination {
     public function GetURL ($additional_query = null) {
         return $this->BuildURL ($this->GetPage(), $additional_query);
     }
-    
+
     /**
      * Determine whether pagination is to be displayed
      * @return boolean Returns true if pagination is to be displayed, false otherwise

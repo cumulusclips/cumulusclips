@@ -21,6 +21,7 @@ $admin_js[] = ADMIN . '/extras/fileupload/fileupload.plugin.js';
 $admin_js[] = ADMIN . '/js/fileupload.js';
 $tempFile = null;
 $prepopulate = null;
+$errors = null;
 
 // Handle request for downloading meta data template
 if (isset($_GET['download'])) {
@@ -102,29 +103,36 @@ if (isset($_POST['submitted'])) {
                 && \App::isValidUpload($_POST['upload']['temp'], $adminUser, 'library')
             ) {
                 $tempFile = $_POST['upload']['temp'];
-                $prepopulate = urlencode(json_encode(array(
+                $prepopulate = array(
                     'path' => $_POST['upload']['temp'],
                     'name' => trim($_POST['upload']['original-name']),
                     'size' => trim($_POST['upload']['original-size'])
-                )));
+                );
             } else {
-                $errors['meta'] = 'Invalid meta data upload';
+                $errors = 'Invalid meta data upload';
             }
         }
 
-        try {
+        if (!$errors) {
 
-            $jobId = \ImportManager::createImport($adminUser, $tempFile);
-            \Filesystem::delete($tempFile);
+            try {
 
-            // Output message
-            $tempFile = null;
-            $prepopulate = null;
-            $message = 'Import job (' . $jobId . ') has been created.';
-            $message_type = 'alert-success';
+                $jobId = \ImportManager::createImport($adminUser, $tempFile);
+                \Filesystem::delete($tempFile);
 
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
+                // Output message
+                $tempFile = null;
+                $prepopulate = null;
+                $message = 'Import job (' . $jobId . ') has been created.';
+                $message_type = 'alert-success';
+
+            } catch (Exception $exception) {
+                $message = $exception->getMessage();
+                $message_type = 'alert-danger';
+            }
+
+        } else {
+            $message = $errors;
             $message_type = 'alert-danger';
         }
 

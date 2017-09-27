@@ -19,7 +19,7 @@ $errors = array();
 $error_msg = null;
 
 // Check if Apache owns directories. If so, this means that native filesystem methods can be used and FTP isn't needed
-if (posix_getuid() == fileowner(DOC_ROOT) && is_writable(DOC_ROOT)) {
+if (posix_getuid() == fileowner(DOC_ROOT . '/cc-core/system') && is_writable(DOC_ROOT . '/cc-core/system')) {
     $settings->ftp_hostname = '';
     $settings->ftp_username = '';
     $settings->ftp_password = '';

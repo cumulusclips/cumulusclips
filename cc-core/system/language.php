@@ -21,7 +21,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'get') {
     // Set language to user's request
     $activeLanguages = Language::getActiveLanguages();
     if (isset($activeLanguages[$_GET['language']])) {
-        $_SESSION['user_lang'] = $_GET['language'];
+        setcookie(
+            'user_lang',
+            $_GET['language'],
+            0,
+            (parse_url(BASE_URL, PHP_URL_PATH) ?: '') . '/',
+            parse_url(BASE_URL, PHP_URL_HOST),
+            false,
+            true
+        );
     }
 
     // Redirect user to previous page
