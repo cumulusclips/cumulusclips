@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e8970b64-1e3d-47aa-b738-ea077ec30bc6" name="Local" url="http://127.0.0.1/cumulus">
+        <fileTransfer port="0" mountedRoot="/var/www/localhost/htdocs/cumulus" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
