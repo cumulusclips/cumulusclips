@@ -8,6 +8,8 @@ $userService = new \UserService();
 Functions::RedirectIf($userService->checkPermissions('admin_panel', $adminUser), HOST . '/account/');
 App::enableUploadsCheck();
 
+$ffmpegPath = Settings::get('ffmpeg');
+
 // Establish page variables, objects, arrays, etc
 $videoMapper = new VideoMapper();
 $videoService = new VideoService();
@@ -195,14 +197,14 @@ if (isset ($_POST['submitted'])) {
 
         // Verify no errors were found
         if (empty($errors)) {
-
             // Create video in system
             $video->userId = $adminUser->userId;
             //$video->filename = $videoService->generateFilename();
             $video->filename = Functions::getFilename($_POST['upload']['original-name']);
             $video->originalExtension = Functions::getExtension($_POST['upload']['temp']);
-            $video->status = VideoMapper::PENDING_CONVERSION;
+            //$video->status = VideoMapper::PENDING_CONVERSION;
             $videoId = $videoMapper->save($video);
+
 
             try {
 
@@ -239,18 +241,66 @@ if (isset ($_POST['submitted'])) {
                     UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension
                 );
 
-                // Begin transcoding
-                $commandOutput = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
-                $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' .  $commandOutput . ' 2>&1 &';
-                exec($command);
+                //Checking file is MP4 file
+                $command = "file ".UPLOAD_PATH . '/temp/' . $video->filename . '.mp4'." 2>&1 | grep MP4";
+                exec($command,$fileIsMp4);
 
-                // Output message
-                $prepopulate = null;
-                $message = 'Video has been created.';
-                $message_type = 'alert-success';
-                $video = null;
-                $newAttachmentFileIds = array();
-                $newFiles = array();
+                if (!empty($fileIsMp4)){
+
+                    //if we are dont needed conversion
+
+                    // Move file to files directory
+                    Filesystem::rename( UPLOAD_PATH . '/temp/' . $video->filename . '.' . $video->originalExtension,
+                        UPLOAD_PATH . '/h264/' . $video->filename . '.mp4');
+
+                    // Retrieve duration of raw video file.
+                    $durationCommand = "$ffmpegPath -i ".UPLOAD_PATH . '/h264/' . $video->filename . '.mp4'." 2>&1 | grep Duration:";
+                    exec($durationCommand, $durationResults);
+
+                    $durationResultsCleaned = preg_replace('/^\s*Duration:\s*/', '', $durationResults[0]);
+                    preg_match ('/^[0-9]{2}:[0-9]{2}:[0-9]{2}/', $durationResultsCleaned, $duration);
+
+                    $sec = Functions::durationToSeconds($duration[0]);
+                    $video->duration = Functions::formatDuration($duration[0]);
+                    // Calculate thumbnail position
+                    $thumbPosition = round ($sec / 10);
+
+                    // Create video thumbnail image
+                    $thumbCommand = "$ffmpegPath -i ".UPLOAD_PATH.'/h264/'.$video->filename .'.mp4'." -ss $thumbPosition -vf \"scale=min(640\,iw):trunc(ow/a/2)*2\" -t 1 -r 1 -f mjpeg ". UPLOAD_PATH.'/thumbs/'.$video->filename .'.jpg';
+                    exec($thumbCommand);    // Execute Thumb Creation Command
+
+                    // Activate & Release
+                    $video->status = VideoMapper::APPROVED;
+                    $video->released = true;
+                    $videoService->approve($video, 'activate');
+                    // Output message
+                    $prepopulate = null;
+                    $message = 'Video has been added.';
+                    $message_type = 'alert-success';
+                    $video = null;
+                    $newAttachmentFileIds = array();
+                    $newFiles = array();
+
+
+                }
+                else {
+
+                    $video->status = VideoMapper::PENDING_CONVERSION;
+                    // Begin transcoding
+                    $commandOutput = $config->debugConversion ? CONVERSION_LOG : '/dev/null';
+                    $command = 'nohup ' . Settings::get('php') . ' ' . DOC_ROOT . '/cc-core/system/encode.php --video="' . $videoId . '" >> ' . $commandOutput . ' 2>&1 &';
+                    exec($command);
+
+                    //------------------------------------------------------
+
+                    // Output message
+                    $prepopulate = null;
+                    $message = 'Video has been created.';
+                    $message_type = 'alert-success';
+                    $video = null;
+                    $newAttachmentFileIds = array();
+                    $newFiles = array();
+                }
 
             } catch (Exception $exception) {
                 $message = $exception->getMessage();
