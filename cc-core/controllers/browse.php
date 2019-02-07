@@ -23,7 +23,11 @@ $this->view->vars->category_list = $categoryService->getCategories();
 
 // Prepare for default sorting ('Most Recent Videos')
 $this->view->vars->sub_header = Language::GetText('most_recent');
-$query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC";
+if ($this->view->vars->loggedInUser) {
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND (private = '0' OR user_id=" . $this->view->vars->loggedInUser->userId . ") ORDER BY video_id DESC";
+} else {
+    $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY video_id DESC";
+}
 
 // Retrieve videos
 if (isset($_GET['category']) && preg_match('/[a-z0-9\-]+/i', $_GET['category'])) {
@@ -31,7 +35,11 @@ if (isset($_GET['category']) && preg_match('/[a-z0-9\-]+/i', $_GET['category']))
     $categoryMapper = new CategoryMapper();
     $category = $categoryMapper->getCategoryBySlug($_GET['category']);
     if ($category) {
-        $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND category_id = $category->categoryId ORDER BY video_id DESC";
+        if ($this->view->vars->loggedInUser) {
+            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND (private = '0' OR user_id=" . $this->view->vars->loggedInUser->userId . ") AND category_id = $category->categoryId ORDER BY video_id DESC";
+        } else {
+            $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' AND category_id = $category->categoryId ORDER BY video_id DESC";
+        }
         $this->view->vars->sub_header = $category->name;
         $url .= '/' . $_GET['category'];
     }
