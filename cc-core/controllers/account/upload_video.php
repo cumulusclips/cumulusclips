@@ -36,7 +36,8 @@ if (isset($_POST['submitted'])) {
                 'temp' => $_POST['upload']['temp'],
                 'time' => time()
             );
-
+            //Save original filename in SESSION
+            $_SESSION['original-filename'] = Functions::getFilename($_POST['upload']['original-name']);
             // Move to video information page
             header('Location: ' . HOST . '/account/upload/info/');
             exit();
@@ -50,6 +51,7 @@ if (isset($_POST['submitted'])) {
         $this->view->vars->message = Language::getText('invalid_session');
         $this->view->vars->message_type = 'errors';
     }
+    print_r($_SESSION);
 }
 
 // Generate new form nonce
