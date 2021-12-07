@@ -193,7 +193,8 @@ if (isset ($_POST['submitted'])) {
 
             // Create video in system
             $video->userId = $this->view->vars->loggedInUser->userId;
-            $video->filename = $videoService->generateFilename();
+            //Saving original Name
+            $video->filename = $_SESSION['original-filename'];
             $video->originalExtension = Functions::getExtension($_SESSION['upload']->temp);
             $video->status = VideoMapper::PENDING_CONVERSION;
             $_SESSION['upload']->videoId = $videoId = $videoMapper->save($video);
@@ -202,7 +203,6 @@ if (isset ($_POST['submitted'])) {
 
                 // Create files for uploaded attachments
                 foreach ($newFiles as $newFile) {
-
                     $file = new \File();
                     $file->filename = $fileService->generateFilename();
                     $file->name = $newFile['name'];

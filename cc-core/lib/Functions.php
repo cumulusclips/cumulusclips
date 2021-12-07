@@ -64,6 +64,25 @@ class Functions
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         return (empty($extension)) ? false : strtolower($extension);
     }
+    /**
+     * Extract the file name of the given file
+     * @param string $filename Filename to examine extension for
+     * @return string|boolean The file extension if one is present, boolean false
+     * if none is found.
+     */
+    public static function getFilename($filename)
+    {
+        $nameoffile = pathinfo($filename, PATHINFO_FILENAME);
+        $nameoffile = str_replace(" ", "_", $nameoffile);
+        $nameoffile = str_replace("(", "", $nameoffile);
+        $nameoffile = str_replace(")", "", $nameoffile);
+        $nameoffile = str_replace("[", "", $nameoffile);
+        $nameoffile = str_replace("]", "", $nameoffile);
+        $nameoffile = str_replace("&", "and_", $nameoffile);
+        $nameoffile = str_replace(".", "", $nameoffile);
+        $nameoffile = str_replace(";", "", $nameoffile);
+        return (empty($nameoffile)) ? false : $nameoffile;
+    }
 
     /**
      * Redirect user if based on a condition's value
